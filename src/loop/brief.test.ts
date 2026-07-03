@@ -64,6 +64,30 @@ describe("createLoopBrief", () => {
       returns_raw_paths: false,
     });
   });
+
+  it("omits unsafe outcome summaries from continuation prompts", () => {
+    const brief = createLoopBrief({
+      snapshot: loopSnapshot({
+        outcome: {
+          status: "unknown",
+          summary:
+            "Review summary should stay hidden sk-proj-secret /Users/example/private-project",
+          evidence_refs: ["pnpm test"],
+        },
+      }),
+    });
+
+    expect(brief.prompt).toContain(
+      "Outcome summary omitted because it may contain local paths or secrets.",
+    );
+    expect(brief.prompt).not.toContain("Review summary should stay hidden");
+    expect(brief.prompt).not.toContain("sk-proj-secret");
+    expect(brief.prompt).not.toContain("/Users/example");
+    expect(brief.privacy).toMatchObject({
+      returns_prompt_bodies: false,
+      returns_raw_paths: false,
+    });
+  });
 });
 
 function loopSnapshot(patch: Partial<LoopSnapshot>): LoopSnapshot {

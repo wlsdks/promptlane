@@ -141,6 +141,7 @@ export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
                       "latest_created_at",
                       "latest_outcome_status",
                       "recommendation",
+                      "continuation_command",
                     ],
                     properties: {
                       worktree: { type: "string" },
@@ -157,6 +158,7 @@ export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
                           "ready for continuation",
                         ],
                       },
+                      continuation_command: { type: "string" },
                     },
                     additionalProperties: false,
                   },

@@ -22,6 +22,10 @@ describe("LoopsView", () => {
     expect(html).toContain("review agent-loop-worktree before merge");
     expect(html).toContain("review before merge");
     expect(html).toContain("ready for continuation");
+    expect(html).toContain(
+      "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+    );
+    expect(html).toContain("Copy review brief");
     expect(html).toContain("agent-loop-worktree 2 snapshots / 2 sessions");
     expect(html).toContain("main-worktree 1 snapshot / 1 session");
     expect(html).toContain("Open agent-loop-worktree");
@@ -123,6 +127,8 @@ function loopList(): LoopListResponse {
               latest_created_at: "2026-07-04T01:00:00.000Z",
               latest_outcome_status: "unknown",
               recommendation: "review before merge",
+              continuation_command:
+                "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
             },
             {
               worktree: "main-worktree",
@@ -132,6 +138,8 @@ function loopList(): LoopListResponse {
               latest_created_at: "2026-07-03T01:00:00.000Z",
               latest_outcome_status: "passed",
               recommendation: "ready for continuation",
+              continuation_command:
+                "prompt-coach loop brief --worktree main-worktree",
             },
           ],
         },

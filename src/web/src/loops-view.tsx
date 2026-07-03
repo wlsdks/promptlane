@@ -17,6 +17,7 @@ export function LoopsView({
   loading,
   loops,
   onApproveMemoryCandidate,
+  onCopyCommandCenterBrief,
   onCopySelectedBrief,
   onSelectWorktree,
   worktreeDetail,
@@ -24,6 +25,9 @@ export function LoopsView({
   loading: boolean;
   loops?: LoopListResponse;
   onApproveMemoryCandidate?: () => Promise<void>;
+  onCopyCommandCenterBrief?: (
+    selection: CommandCenterBriefSelection,
+  ) => Promise<void>;
   onCopySelectedBrief?: (detail: LoopWorktreeResponse) => Promise<void>;
   onSelectWorktree?: (worktree: string) => Promise<void>;
   worktreeDetail?: LoopWorktreeResponse;
@@ -34,6 +38,12 @@ export function LoopsView({
   const [patchBusy, setPatchBusy] = useState(false);
   const [patchProposal, setPatchProposal] = useState<
     LoopInstructionPatchProposal | undefined
+  >();
+  const [commandCenterBriefBusy, setCommandCenterBriefBusy] = useState<
+    string | undefined
+  >();
+  const [commandCenterBriefCopied, setCommandCenterBriefCopied] = useState<
+    string | undefined
   >();
   const [selectedBriefBusy, setSelectedBriefBusy] = useState(false);
   const [selectedBriefCopied, setSelectedBriefCopied] = useState(false);
@@ -72,6 +82,21 @@ export function LoopsView({
       window.setTimeout(() => setSelectedBriefCopied(false), 2_500);
     } finally {
       setSelectedBriefBusy(false);
+    }
+  }
+
+  async function copyCommandCenterBrief(
+    selection: CommandCenterBriefSelection,
+  ): Promise<void> {
+    if (!onCopyCommandCenterBrief) return;
+
+    setCommandCenterBriefBusy(selection.worktree);
+    try {
+      await onCopyCommandCenterBrief(selection);
+      setCommandCenterBriefCopied(selection.worktree);
+      window.setTimeout(() => setCommandCenterBriefCopied(undefined), 2_500);
+    } finally {
+      setCommandCenterBriefBusy(undefined);
     }
   }
 
@@ -129,9 +154,34 @@ export function LoopsView({
               {loops.status.activity.command_center.review_items
                 .slice(0, 3)
                 .map((item) => (
-                  <p className="loops-status-line" key={item.worktree}>
-                    {item.worktree}: {item.recommendation}
-                  </p>
+                  <div className="loop-worktree-line" key={item.worktree}>
+                    <div>
+                      <p className="loops-status-line">
+                        {item.worktree}: {item.recommendation}
+                      </p>
+                      <code>{item.continuation_command}</code>
+                    </div>
+                    <button
+                      className="loop-copy-button"
+                      disabled={
+                        !onCopyCommandCenterBrief ||
+                        commandCenterBriefBusy === item.worktree
+                      }
+                      onClick={() =>
+                        void copyCommandCenterBrief({
+                          worktree: item.worktree,
+                          ...(item.branch ? { branch: item.branch } : {}),
+                        })
+                      }
+                      title={`Copy review brief for ${item.worktree}`}
+                      type="button"
+                    >
+                      <Copy aria-hidden size={15} />
+                      {commandCenterBriefCopied === item.worktree
+                        ? "Copied review brief"
+                        : "Copy review brief"}
+                    </button>
+                  </div>
                 ))}
             </div>
           )}
@@ -310,6 +360,11 @@ export function LoopsView({
     </section>
   );
 }
+
+export type CommandCenterBriefSelection = {
+  worktree: string;
+  branch?: string;
+};
 
 function pluralize(count: number, singular: string): string {
   return count === 1 ? singular : `${singular}s`;

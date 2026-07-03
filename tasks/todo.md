@@ -201,7 +201,10 @@
 - [x] Task 42 GREEN: `/api/v1/loops/brief`, `getSelectedLoopBrief`, selected detail copy action 구현
 - [x] Task 43 RED: multi-worktree command center summary가 shared status/CLI/MCP schema/web summary에 없어 focused tests 실패 확인
 - [x] Task 43 GREEN: `LoopdeckStatus.activity.command_center`, CLI status, MCP schema, web Loops summary 구현
-- [ ] 다음 slice: command-center review item selected brief shortcut 또는 merge-readiness evidence grouping 재선정
+- [x] Task 44 RED: command-center review item별 selected brief shortcut/command metadata가 없어 focused tests 실패 확인
+- [x] Task 44 GREEN: `continuation_command`, CLI/MCP schema, web `Copy review brief` action, App filtered brief copy 연결
+- [x] Task 44 PRIVACY: continuation brief outcome summary가 unsafe raw path/secret-looking text를 포함하면 출력하지 않도록 회귀 테스트와 필터 추가
+- [ ] 다음 slice: command-center merge-readiness evidence grouping 재선정
 
 ### 판단 기준
 

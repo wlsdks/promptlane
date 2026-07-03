@@ -433,7 +433,10 @@ function formatLoopStatus(status: LoopdeckStatus): string {
     ...(
       status.activity.command_center?.review_items
         .slice(0, 3)
-        .map((item) => `review ${item.worktree} ${item.recommendation}`) ?? []
+        .flatMap((item) => [
+          `review ${item.worktree} ${item.recommendation}`,
+          `command ${item.continuation_command}`,
+        ]) ?? []
     ),
     ...status.activity.worktrees
       .slice(0, 3)

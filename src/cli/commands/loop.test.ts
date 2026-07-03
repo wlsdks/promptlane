@@ -253,6 +253,9 @@ describe("loop CLI command", () => {
       "review primary-worktree ready for continuation",
     );
     expect(text).toContain(
+      "command prompt-coach loop brief --worktree primary-worktree",
+    );
+    expect(text).toContain(
       "worktree primary-worktree snapshots 1 sessions 1 latest passed",
     );
     expect(text).toContain(
@@ -327,10 +330,14 @@ describe("loop CLI command", () => {
           {
             worktree: "primary-worktree",
             recommendation: "ready for continuation",
+            continuation_command:
+              "prompt-coach loop brief --worktree primary-worktree",
           },
           {
             worktree: "other-worktree",
             recommendation: "ready for continuation",
+            continuation_command:
+              "prompt-coach loop brief --worktree other-worktree",
           },
         ],
       },

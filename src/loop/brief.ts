@@ -67,7 +67,7 @@ export function createLoopBrief(input: {
       `average prompt score: ${average}`,
       "",
       "## Current Loop State",
-      snapshot.outcome.summary,
+      safeOutcomeSummary(snapshot.outcome.summary),
       "",
       ...(input.compactBoundary
         ? [
@@ -101,6 +101,14 @@ export function createLoopBrief(input: {
       returns_raw_paths: false,
     },
   };
+}
+
+function safeOutcomeSummary(summary: string): string {
+  if (!summary.trim()) return "No loop outcome summary recorded.";
+  if (looksUnsafe(summary)) {
+    return "Outcome summary omitted because it may contain local paths or secrets.";
+  }
+  return summary;
 }
 
 function approvedMemoryLines(

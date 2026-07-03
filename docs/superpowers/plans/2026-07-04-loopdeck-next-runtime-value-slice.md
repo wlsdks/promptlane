@@ -138,5 +138,8 @@ Implementation checkpoint:
   multi-worktree review summary when multiple worktrees or sessions are active.
 - CLI `loop status`, MCP `get_loopdeck_status`, and the web Loops summary expose
   the same command center contract.
+- Command-center review items now include a safe `continuation_command`, CLI
+  `loop status` prints that command, MCP `get_loopdeck_status` schemas it, and
+  the web Loops summary can copy a filtered selected brief for each worktree.
 - The next runtime slice should decide whether command-center review items need
-  per-worktree selected brief shortcuts or merge-readiness evidence grouping.
+  merge-readiness evidence grouping before any future merge workflow.

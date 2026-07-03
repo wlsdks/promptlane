@@ -170,6 +170,8 @@ describe("createLoopdeckStatus", () => {
             latest_created_at: "2026-07-04T01:00:00.000Z",
             latest_outcome_status: "passed",
             recommendation: "ready for continuation",
+            continuation_command:
+              "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
           },
           {
             worktree: "main-worktree",
@@ -180,6 +182,8 @@ describe("createLoopdeckStatus", () => {
             latest_created_at: "2026-07-04T01:00:00.000Z",
             latest_outcome_status: "passed",
             recommendation: "ready for continuation",
+            continuation_command:
+              "prompt-coach loop brief --worktree main-worktree --branch codex/agent-loop-memory-design",
           },
         ],
       },
@@ -228,6 +232,8 @@ describe("createLoopdeckStatus", () => {
           sessions: 1,
           snapshots: 1,
           recommendation: "review before merge",
+          continuation_command:
+            "prompt-coach loop brief --worktree agent-loop-worktree --branch feature/agent-loop",
         },
         {
           worktree: "main-worktree",
@@ -238,6 +244,8 @@ describe("createLoopdeckStatus", () => {
           sessions: 1,
           snapshots: 1,
           recommendation: "ready for continuation",
+          continuation_command:
+            "prompt-coach loop brief --worktree main-worktree --branch main",
         },
       ],
     });

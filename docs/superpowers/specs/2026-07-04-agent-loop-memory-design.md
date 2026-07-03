@@ -1320,6 +1320,36 @@ Do not add:
 - prompt body, outcome summary, transcript, compact summary, raw path, API
   token, or provider credential output
 
+### Slice 4.41: Command Center Selected Brief Shortcuts
+
+Add:
+
+- `continuation_command` metadata on each command-center review item so Codex
+  and Claude Code can see the exact filtered `loop brief` command for that
+  worktree
+- CLI `loop status` output that prints each review item's continuation command
+- MCP `get_loopdeck_status` schema coverage for `continuation_command`
+- web command-center item `Copy review brief` actions that call the existing
+  selected worktree brief API with worktree/branch filters
+- App-level clipboard handling that reuses the existing local-only
+  `/api/v1/loops/brief` path instead of adding a new write surface
+- continuation brief privacy hardening: unsafe outcome summaries that contain
+  raw local paths or secret-looking tokens are omitted from generated prompts
+- focused domain, CLI, MCP schema, and web tests proving the shortcut metadata
+  does not include prompt bodies, outcome summaries, raw paths, transcripts,
+  compact summaries, API tokens, or provider credentials
+
+Do not add:
+
+- automatic merge, conflict resolution, branch checkout, or git writes
+- background worktree scanning
+- new database schema/index migration
+- external LLM calls or hidden agent evaluation
+- writes to `AGENTS.md`, `CLAUDE.md`, project docs, memory files, or git state
+- package, plugin, slash command, hook, or MCP server-name rename
+- prompt body, outcome summary, transcript, compact summary, raw path, API
+  token, or provider credential output
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

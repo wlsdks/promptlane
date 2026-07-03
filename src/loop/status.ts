@@ -53,6 +53,7 @@ export type LoopdeckStatusActivityWorktree = {
 export type LoopdeckStatusActivityCommandCenterItem =
   LoopdeckStatusActivityWorktree & {
     recommendation: "review before merge" | "ready for continuation";
+    continuation_command: string;
   };
 
 export type LoopdeckStatusActivityCommandCenter = {
@@ -179,6 +180,7 @@ function createCommandCenter(
       worktree.latest_outcome_status === "passed"
         ? ("ready for continuation" as const)
         : ("review before merge" as const),
+    continuation_command: continuationCommandForWorktree(worktree),
   }));
   const primary = reviewItems.find(
     (item) => item.recommendation === "review before merge",
@@ -191,6 +193,18 @@ function createCommandCenter(
       : "compare worktrees before merge",
     review_items: reviewItems,
   };
+}
+
+function continuationCommandForWorktree(
+  worktree: LoopdeckStatusActivityWorktree,
+): string {
+  return [
+    "prompt-coach loop brief",
+    `--worktree ${worktree.worktree}`,
+    worktree.branch ? `--branch ${worktree.branch}` : undefined,
+  ]
+    .filter((part): part is string => Boolean(part))
+    .join(" ");
 }
 
 function summarizeWorktreeActivity(

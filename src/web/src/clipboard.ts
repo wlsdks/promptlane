@@ -26,6 +26,7 @@ function copyTextWithSelection(text: string): boolean {
   textarea.style.left = "-9999px";
   textarea.style.top = "0";
   document.body.appendChild(textarea);
+  textarea.focus();
   textarea.select();
 
   try {

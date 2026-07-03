@@ -133,6 +133,7 @@ export type LoopListResponse = {
           latest_created_at: string;
           latest_outcome_status: string;
           recommendation: "review before merge" | "ready for continuation";
+          continuation_command: string;
         }>;
       };
     };

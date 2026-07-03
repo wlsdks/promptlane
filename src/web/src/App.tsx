@@ -66,7 +66,10 @@ import {
 import { CoachFeedbackPanel } from "./coach-feedback-panel.js";
 import { createPromptHabitCoach } from "./habit-coach.js";
 import { HabitCoachPanel } from "./habit-coach-panel.js";
-import { LoopsView } from "./loops-view.js";
+import {
+  LoopsView,
+  type CommandCenterBriefSelection,
+} from "./loops-view.js";
 import {
   createArchiveMeasurement,
   type ArchiveMeasurement,
@@ -472,9 +475,31 @@ export function App() {
       const copied = await copyTextToClipboard(brief.prompt);
       if (!copied) {
         setError("Could not copy selected loop brief.");
+        throw new Error("clipboard copy failed");
       }
     } catch {
       setError("Could not copy selected loop brief.");
+      throw new Error("selected loop brief copy failed");
+    }
+  }
+
+  async function copyCommandCenterLoopBrief(
+    selection: CommandCenterBriefSelection,
+  ): Promise<void> {
+    setError(undefined);
+    try {
+      const brief = await getSelectedLoopBrief({
+        worktree: selection.worktree,
+        ...(selection.branch ? { branch: selection.branch } : {}),
+      });
+      const copied = await copyTextToClipboard(brief.prompt);
+      if (!copied) {
+        setError("Could not copy command center loop brief.");
+        throw new Error("clipboard copy failed");
+      }
+    } catch {
+      setError("Could not copy command center loop brief.");
+      throw new Error("command center loop brief copy failed");
     }
   }
 
@@ -1081,6 +1106,9 @@ export function App() {
             loops={loops}
             loading={!loops}
             onApproveMemoryCandidate={() => approveLatestLoopMemory()}
+            onCopyCommandCenterBrief={(selection) =>
+              copyCommandCenterLoopBrief(selection)
+            }
             onCopySelectedBrief={(detail) => copySelectedLoopBrief(detail)}
             onSelectWorktree={(worktree) => openLoopWorktree(worktree)}
             worktreeDetail={loopWorktree}
