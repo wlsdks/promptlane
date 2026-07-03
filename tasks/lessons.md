@@ -22,3 +22,7 @@
 - redaction detector를 추가할 때는 단위 테스트뿐 아니라 cross-surface privacy regression fixture와 PRE_PUBLISH_PRIVACY_AUDIT의 grep pattern까지 같이 갱신한다. 셋이 어긋나면 publish 직전 grep이 leak를 못 잡는다.
 - 사용자 가시 에러 메시지(CLI, MCP, web API, hook)는 단순 label로 끝내지 말고 working example 또는 다음 명령을 한 줄 안내한다. 사용자가 README를 다시 열지 않게 한다.
 - privacy 회귀가 의심되는 server route 변경은 web UI/CLI/hook/MCP 4개 surface에서 모두 raw path/secret 미노출 검증한다.
+
+## 2026-07-04
+
+- 사용자가 구체적인 설계 문서 경로와 진행 지시를 줬으면 추가 승인 대기로 멈추지 않는다. 먼저 설계 문서를 작성하고, 외부 rename/배포처럼 되돌리기 어려운 작업만 별도 실행 계획과 리스크로 분리한다.

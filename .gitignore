@@ -13,6 +13,7 @@ tmp/
 .temp/
 
 # Runtime data
+.codegraph/
 .prompt-coach/
 .prompt-coach-*/
 prompt-coach-data/

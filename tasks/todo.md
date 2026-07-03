@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-04 Agent Loop Memory Design
+
+- [x] 2026년 7월 기준 Codex, Claude Code, OpenAI Agents, Anthropic context engineering, Google ADK, AGENTS.md 자료 확인
+- [x] 현재 prompt-coach의 MCP, hook, storage, adapter, web/CLI 표면과 확장 가능 지점 확인
+- [x] 프로젝트명 후보와 GitHub/npm rename 리스크 확인
+- [x] `docs/superpowers/specs/2026-07-04-agent-loop-memory-design.md` 설계 문서 작성
+- [x] 설계 문서 셀프리뷰와 기본 검증 실행
+
+### 판단 기준
+
+- Codex와 Claude Code는 부가 통합이 아니라 제품의 1급 실행 표면이어야 한다.
+- 제품명/저장소명 변경은 CLI/package/plugin/remote/docs migration을 포함해야 하며, 사용자가 원한 방향을 좁히지 않는다.
+- `prompt-coach`의 기존 privacy/local-first 원칙은 유지하되 제품 포지션은 prompt 단위에서 agent loop/worktree/session 단위로 확장한다.
+- 설계 문서는 실제 TDD 구현 계획으로 내려갈 수 있는 첫 slice를 포함해야 한다.
+
 ## 2026-05-04 Habit Coach Panel Extraction
 
 - [x] 기능/코드/UI 관점에서 다음 고효과 개선 후보 재점검
