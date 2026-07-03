@@ -7,6 +7,11 @@ import type {
 } from "../shared/schema.js";
 import type { LoopSnapshot } from "../loop/types.js";
 import type {
+  CompactBoundary,
+  CompactBoundaryListResult,
+  RecordCompactBoundaryInput,
+} from "./compact-boundaries.js";
+import type {
   CoachFeedbackEntry,
   CoachFeedbackRating,
   CoachFeedbackSummary,
@@ -119,6 +124,11 @@ export type LoopSnapshotStoragePort = {
     snapshotId: string,
     outcome: LoopOutcomeUpdate,
   ): LoopSnapshot | undefined;
+};
+
+export type CompactBoundaryStoragePort = {
+  recordCompactBoundary(input: RecordCompactBoundaryInput): CompactBoundary;
+  listCompactBoundaries(options?: { limit?: number }): CompactBoundaryListResult;
 };
 
 export type DeletePromptResult = {

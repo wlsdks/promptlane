@@ -32,8 +32,7 @@ import type {
 } from "../shared/schema.js";
 import { DAY_MS } from "../shared/time.js";
 import { getPromptCoachPaths, supportsPosixMode } from "./paths.js";
-import type {
-  AskEventStoragePort,
+import type { AskEventStoragePort, CompactBoundaryStoragePort,
   CreateImportJobInput,
   CreateImportRecordInput,
   CreateExportJobInput,
@@ -128,6 +127,7 @@ import { applyMigrations } from "./sqlite-migrations.js";
 import { createProjectKey } from "./project-id.js";
 import { projectLabel } from "./project-label.js";
 import * as loopSnapshots from "./loop-snapshots.js";
+import * as compactBoundaries from "./compact-boundaries.js";
 
 export type { PromptRow } from "./sqlite-rows.js";
 
@@ -139,7 +139,6 @@ export type SqlitePromptStorageOptions = {
 };
 
 export type AppliedMigration = { version: number; name: string };
-
 export type SqlitePromptStorage = PromptStoragePort &
   PromptReadStoragePort &
   ProjectPolicyStoragePort &
@@ -149,7 +148,7 @@ export type SqlitePromptStorage = PromptStoragePort &
   AgentPromptJudgmentStoragePort &
   CoachFeedbackStoragePort &
   JudgeScoreStoragePort &
-  AskEventStoragePort & LoopSnapshotStoragePort & {
+  AskEventStoragePort & LoopSnapshotStoragePort & CompactBoundaryStoragePort & {
     close(): void;
     getAppliedMigrations(): AppliedMigration[];
     listPromptRows(): PromptRow[];
@@ -199,6 +198,8 @@ export function createSqlitePromptStorage(
     getLatestLoopSnapshot: () => loopSnapshots.getLatestLoopSnapshot(db),
     listLoopSnapshots: (options = {}) => loopSnapshots.listLoopSnapshots(db, options),
     recordLoopOutcome: (snapshotId, outcome) => loopSnapshots.recordLoopOutcome(db, snapshotId, outcome),
+    recordCompactBoundary: (input) => compactBoundaries.recordCompactBoundary(db, input, { hmacSecret: options.hmacSecret, now: options.now?.() ?? new Date() }),
+    listCompactBoundaries: (options = {}) => compactBoundaries.listCompactBoundaries(db, options),
     listPrompts(options) {
       return listPrompts(db, options);
     },

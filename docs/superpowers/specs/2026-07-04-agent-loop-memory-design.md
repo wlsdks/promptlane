@@ -484,15 +484,20 @@ Add:
 
 - Stop hook loop collection (**implemented first under the current
   `prompt-coach` CLI/package name**)
-- PostCompact boundary metadata
-- setup dry-run preview
-- hook trust/setup docs
+- PreCompact/PostCompact boundary metadata (**implemented as metadata plus
+  optional HMAC content hash; raw summaries and custom instructions are not
+  stored**)
+- setup dry-run preview (**implemented for Stop/PreCompact/PostCompact hook
+  registration**)
+- hook trust/setup docs (**updated for metadata-only compact boundaries**)
 
 Verification:
 
 - hook output remains raw-free
 - failure is fail-open
 - hook can run from subdirectories by resolving git root
+- compact hooks do not store `custom_instructions`, `compact_summary`,
+  transcript bodies, or raw paths
 
 ### Slice 4: Web Loops View
 

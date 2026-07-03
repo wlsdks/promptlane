@@ -30,10 +30,12 @@ Code/Codex CLIs so the active agent can call coach/rewrite/judge tools. Use
 plain `prompt-coach setup` only when the user wants passive capture without
 coaching.
 
-Installed hooks use `UserPromptSubmit` for prompt capture/rewrite guidance and
-`Stop` for local Loopdeck snapshot collection. Stop snapshots are metadata-only:
-prompt ids, safe project labels, quality gaps, and outcome placeholders, not
-prompt bodies or raw paths.
+Installed hooks use `UserPromptSubmit` for prompt capture/rewrite guidance,
+`Stop` for local Loopdeck snapshot collection, and `PreCompact`/`PostCompact`
+for compact boundary metadata. Stop snapshots and compact boundaries are
+metadata-only: prompt ids, safe project labels, quality gaps, trigger values,
+and optional HMAC content hashes, not prompt bodies, raw paths, custom compact
+instructions, compact summaries, or transcript contents.
 
 After setup, ask the user to send one real coding prompt in Claude Code or
 Codex, then run `prompt-coach coach`. Use `doctor` and manual MCP registration

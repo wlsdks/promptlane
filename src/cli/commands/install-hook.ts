@@ -434,6 +434,16 @@ function ensureHook(
     command,
     isClaudePromptCoachHook,
   );
+  hooks.PreCompact = ensurePromptCoachHookGroups(
+    hooks.PreCompact ?? [],
+    command,
+    isClaudePromptCoachHook,
+  );
+  hooks.PostCompact = ensurePromptCoachHookGroups(
+    hooks.PostCompact ?? [],
+    command,
+    isClaudePromptCoachHook,
+  );
   if (options.sessionStartCommand) {
     hooks.SessionStart = ensureSessionStartHook(
       hooks.SessionStart ?? [],
@@ -458,6 +468,14 @@ function removeHook(
   );
   hooks.Stop = removePromptCoachHookGroups(
     hooks.Stop ?? [],
+    isClaudePromptCoachHook,
+  );
+  hooks.PreCompact = removePromptCoachHookGroups(
+    hooks.PreCompact ?? [],
+    isClaudePromptCoachHook,
+  );
+  hooks.PostCompact = removePromptCoachHookGroups(
+    hooks.PostCompact ?? [],
     isClaudePromptCoachHook,
   );
   hooks.SessionStart = removeSessionStartHook(
@@ -487,6 +505,16 @@ function ensureCodexHook(
     command,
     isCodexPromptCoachHook,
   );
+  hooks.PreCompact = ensurePromptCoachHookGroups(
+    hooks.PreCompact ?? [],
+    command,
+    isCodexPromptCoachHook,
+  );
+  hooks.PostCompact = ensurePromptCoachHookGroups(
+    hooks.PostCompact ?? [],
+    command,
+    isCodexPromptCoachHook,
+  );
   if (options.sessionStartCommand) {
     hooks.SessionStart = ensureSessionStartHook(
       hooks.SessionStart ?? [],
@@ -511,6 +539,14 @@ function removeCodexHook(
   );
   hooks.Stop = removePromptCoachHookGroups(
     hooks.Stop ?? [],
+    isCodexPromptCoachHook,
+  );
+  hooks.PreCompact = removePromptCoachHookGroups(
+    hooks.PreCompact ?? [],
+    isCodexPromptCoachHook,
+  );
+  hooks.PostCompact = removePromptCoachHookGroups(
+    hooks.PostCompact ?? [],
     isCodexPromptCoachHook,
   );
   hooks.SessionStart = removeSessionStartHook(

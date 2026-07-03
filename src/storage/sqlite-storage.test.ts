@@ -31,6 +31,52 @@ afterEach(() => {
 });
 
 describe("SQLite prompt storage", () => {
+  it("records compact boundaries without compact summaries, instructions, or raw paths", () => {
+    const dataDir = createTempDir();
+    initializePromptCoach({ dataDir });
+    const storage = createSqlitePromptStorage({
+      dataDir,
+      hmacSecret: "test-secret",
+      now: () => new Date("2026-07-04T01:00:00.000Z"),
+    });
+
+    const boundary = storage.recordCompactBoundary({
+      tool: "claude-code",
+      event_name: "PostCompact",
+      trigger: "manual",
+      session_id: "session-compact",
+      turn_id: "turn-compact",
+      cwd: "/Users/example/private-project",
+      content: "Summary of the compacted conversation with sk-proj-secret.",
+    });
+
+    expect(boundary).toMatchObject({
+      tool: "claude-code",
+      event_name: "PostCompact",
+      trigger: "manual",
+      session_id: "session-compact",
+      turn_id: "turn-compact",
+      cwd_label: "private-project",
+      privacy: {
+        local_only: true,
+        stores_prompt_bodies: false,
+        stores_raw_paths: false,
+        stores_compact_content: false,
+      },
+    });
+    expect(boundary.content_hash).toMatch(/^compact_[a-f0-9]{16}$/);
+    expect(storage.listCompactBoundaries({ limit: 10 }).items).toHaveLength(1);
+    expect(storage.getAppliedMigrations()).toContainEqual({
+      version: 17,
+      name: "017_compact_boundaries",
+    });
+    expect(JSON.stringify(boundary)).not.toContain("Summary of the compacted");
+    expect(JSON.stringify(boundary)).not.toContain("sk-proj-secret");
+    expect(JSON.stringify(boundary)).not.toContain("/Users/example");
+
+    storage.close();
+  });
+
   it("stores and reads privacy-safe loop snapshots", () => {
     const dataDir = createTempDir();
     initializePromptCoach({ dataDir });
@@ -192,6 +238,7 @@ describe("SQLite prompt storage", () => {
       { version: 14, name: "014_drop_dead_analysis_columns" },
       { version: 15, name: "015_prompt_ask_events" },
       { version: 16, name: "016_loop_snapshots" },
+      { version: 17, name: "017_compact_boundaries" },
     ]);
     const db = new Database(join(dataDir, "prompt-coach.sqlite"));
     try {

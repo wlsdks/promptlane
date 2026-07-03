@@ -189,6 +189,53 @@ describe("runClaudeCodeHook", () => {
     expect(serialized).not.toContain("Make this better");
     expect(serialized).not.toContain("/Users/example");
   });
+
+  it("records compact boundary metadata without storing compact content or posting to prompt ingest", async () => {
+    const dataDir = createTempDir();
+    initializePromptCoach({ dataDir });
+    const posted: unknown[] = [];
+
+    const result = await runClaudeCodeHook({
+      stdin: JSON.stringify({
+        hook_event_name: "PostCompact",
+        session_id: "session-compact",
+        cwd: "/Users/example/private-project",
+        transcript_path: "/Users/example/.claude/session.jsonl",
+        trigger: "manual",
+        compact_summary: "Summary containing sk-proj-secret and raw details.",
+      }),
+      dataDir,
+      postPayload: async (request) => {
+        posted.push(request);
+        return { ok: true, status: 200 };
+      },
+    });
+
+    const storage = openStorage(dataDir);
+    const boundaries = storage.listCompactBoundaries({ limit: 10 }).items;
+    storage.close();
+    const serialized = JSON.stringify({ result, boundaries });
+
+    expect(result).toEqual({ exitCode: 0, stdout: "", stderr: "" });
+    expect(posted).toHaveLength(0);
+    expect(boundaries[0]).toMatchObject({
+      tool: "claude-code",
+      event_name: "PostCompact",
+      trigger: "manual",
+      session_id: "session-compact",
+      cwd_label: "private-project",
+      privacy: {
+        local_only: true,
+        stores_prompt_bodies: false,
+        stores_raw_paths: false,
+        stores_compact_content: false,
+      },
+    });
+    expect(boundaries[0]?.content_hash).toMatch(/^compact_[a-f0-9]{16}$/);
+    expect(serialized).not.toContain("Summary containing");
+    expect(serialized).not.toContain("sk-proj-secret");
+    expect(serialized).not.toContain("/Users/example");
+  });
 });
 
 describe("runCodexHook", () => {
@@ -320,6 +367,49 @@ describe("runCodexHook", () => {
       },
     });
     expect(serialized).not.toContain("Make this better");
+    expect(serialized).not.toContain("/Users/example");
+  });
+
+  it("records pre-compact boundary metadata without storing custom instructions or posting to prompt ingest", async () => {
+    const dataDir = createTempDir();
+    initializePromptCoach({ dataDir });
+    const posted: unknown[] = [];
+
+    const result = await runCodexHook({
+      stdin: JSON.stringify({
+        hook_event_name: "PreCompact",
+        session_id: "session-compact",
+        turn_id: "turn-compact",
+        cwd: "/Users/example/private-project",
+        transcript_path: "/Users/example/.codex/session.jsonl",
+        trigger: "auto",
+        custom_instructions: "Keep the private token sk-proj-secret.",
+      }),
+      dataDir,
+      postPayload: async (request) => {
+        posted.push(request);
+        return { ok: true, status: 200 };
+      },
+    });
+
+    const storage = openStorage(dataDir);
+    const boundaries = storage.listCompactBoundaries({ limit: 10 }).items;
+    storage.close();
+    const serialized = JSON.stringify({ result, boundaries });
+
+    expect(result).toEqual({ exitCode: 0, stdout: "", stderr: "" });
+    expect(posted).toHaveLength(0);
+    expect(boundaries[0]).toMatchObject({
+      tool: "codex",
+      event_name: "PreCompact",
+      trigger: "auto",
+      session_id: "session-compact",
+      turn_id: "turn-compact",
+      cwd_label: "private-project",
+    });
+    expect(boundaries[0]?.content_hash).toMatch(/^compact_[a-f0-9]{16}$/);
+    expect(serialized).not.toContain("Keep the private token");
+    expect(serialized).not.toContain("sk-proj-secret");
     expect(serialized).not.toContain("/Users/example");
   });
 });

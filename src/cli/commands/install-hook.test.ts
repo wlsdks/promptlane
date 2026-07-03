@@ -40,6 +40,8 @@ describe("Claude Code hook install/uninstall", () => {
     expect(result.dryRun).toBe(true);
     expect(result.nextSettings.hooks.UserPromptSubmit).toHaveLength(1);
     expect(result.nextSettings.hooks.Stop).toHaveLength(1);
+    expect(result.nextSettings.hooks.PreCompact).toHaveLength(1);
+    expect(result.nextSettings.hooks.PostCompact).toHaveLength(1);
     expect(() => readFileSync(settingsPath, "utf8")).toThrow();
   });
 
@@ -70,6 +72,8 @@ describe("Claude Code hook install/uninstall", () => {
     expect(settings.hooks.Stop[0].hooks[0].command).toContain(
       "prompt-coach hook claude-code",
     );
+    expect(settings.hooks.PreCompact).toHaveLength(1);
+    expect(settings.hooks.PostCompact).toHaveLength(1);
     expect(settings.hooks.UserPromptSubmit[0].hooks[0].command).not.toContain(
       loadHookAuth(dataDir).ingest_token,
     );
@@ -159,6 +163,8 @@ describe("Codex hook install/uninstall", () => {
     expect(result.dryRun).toBe(true);
     expect(result.nextHooks.hooks.UserPromptSubmit).toHaveLength(1);
     expect(result.nextHooks.hooks.Stop).toHaveLength(1);
+    expect(result.nextHooks.hooks.PreCompact).toHaveLength(1);
+    expect(result.nextHooks.hooks.PostCompact).toHaveLength(1);
     expect(result.nextConfig).toContain("[features]");
     expect(result.nextConfig).toContain("hooks = true");
     expect(() => readFileSync(hooksPath, "utf8")).toThrow();
@@ -203,6 +209,8 @@ describe("Codex hook install/uninstall", () => {
     expect(hooks.hooks.Stop[1].hooks[0].command).toContain(
       "prompt-coach hook codex",
     );
+    expect(hooks.hooks.PreCompact).toHaveLength(1);
+    expect(hooks.hooks.PostCompact).toHaveLength(1);
     expect(hooks.hooks.UserPromptSubmit).toHaveLength(1);
     expect(hooks.hooks.UserPromptSubmit[0].hooks[0].command).toContain(
       "prompt-coach hook codex",

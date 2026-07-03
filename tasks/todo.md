@@ -83,6 +83,24 @@
 - 이번 slice는 hook 기반 수집까지만 포함하고 cron, web loops view, repo/package rename은 섞지 않는다.
 - Codex/Claude Code acceptance criteria 중 "Hook `Stop`: collect loop snapshot"을 현재 `prompt-coach` CLI/package 이름 아래에서 먼저 증명한다.
 
+## 2026-07-04 Compact Boundary Metadata Slice
+
+- [x] Task 1 RED: SQLite compact boundary storage 테스트가 missing method/migration으로 실패하는지 확인
+- [x] Task 1 GREEN: `compact_boundaries` migration과 storage port 구현
+- [x] Task 2 RED: Claude Code/Codex `PreCompact`/`PostCompact` hook wrapper 테스트가 prompt ingest 미사용 및 raw-free metadata 저장을 요구하는지 확인
+- [x] Task 2 GREEN: compact hook local-only boundary recorder 구현
+- [x] Task 3 RED: installer dry-run이 `PreCompact`/`PostCompact` hook 등록을 요구하는지 확인
+- [x] Task 3 GREEN: Claude/Codex installer, plugin hook, example settings에 compact hooks 추가
+- [x] Task 4: README/PLUGINS/spec/todo에 compact boundary 범위와 공식 hook 근거 반영
+- [ ] 다음 slice: loop status/brief에 compact boundary awareness 반영
+
+### 판단 기준
+
+- Compact hooks는 `custom_instructions`, `compact_summary`, transcript body, raw path를 저장하지 않고 safe metadata와 optional hash만 저장한다.
+- `PreCompact`/`PostCompact` lifecycle payload는 prompt ingest route로 보내지 않는다.
+- Hook output은 기존처럼 fail-open이며 stdout/stderr에 원문을 노출하지 않는다.
+- 이번 slice는 boundary metadata만 포함하고 compact summary 재주입, semantic memory, web UI는 다음 slice로 남긴다.
+
 ## 2026-05-04 Habit Coach Panel Extraction
 
 - [x] 기능/코드/UI 관점에서 다음 고효과 개선 후보 재점검
