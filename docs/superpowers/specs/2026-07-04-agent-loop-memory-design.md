@@ -1291,6 +1291,35 @@ Do not add:
 - prompt body, transcript, compact summary, raw path, API token, or provider
   credential output
 
+### Slice 4.40: Multi-Worktree Command Center Summary
+
+Add:
+
+- shared `LoopdeckStatus.activity.command_center` summary for review-before-merge
+  situations
+- raw-free review queue items derived from existing safe worktree metadata:
+  worktree label, branch, latest snapshot id/time, outcome status, sessions,
+  snapshots, and recommendation
+- CLI `loop status` text output that names the command center, primary action,
+  and top review items
+- MCP `get_loopdeck_status` output schema coverage for the command center
+- web Loops summary rendering that shows the command center before inline
+  worktree open actions
+- focused domain, CLI, MCP schema, and web tests proving the command center does
+  not include prompt bodies, outcome summaries, raw paths, transcripts, compact
+  summaries, API tokens, or provider credentials
+
+Do not add:
+
+- automatic merge, conflict resolution, or branch checkout
+- background worktree scanning
+- external LLM calls or hidden agent evaluation
+- write behavior to `AGENTS.md`, `CLAUDE.md`, project docs, memory files, or
+  git state
+- package, plugin, slash command, hook, or MCP server-name rename
+- prompt body, outcome summary, transcript, compact summary, raw path, API
+  token, or provider credential output
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.
@@ -1318,13 +1347,14 @@ Resolved for the first development phase:
 - Loop snapshots are stored in the local SQLite database first. Markdown export into a project is opt-in and deferred.
 - Codex and Claude Code plugin surfaces may keep separate packaging, but command text and workflow docs should eventually be generated from shared source to reduce drift.
 - Do not read Codex-managed private state. Worktree metadata starts from documented hooks, current cwd, git commands, and user-approved configuration.
+- Selected brief actions should move toward a broader multi-worktree command
+  center, but the first step is a read-only safe-metadata summary, not automatic
+  merge or conflict recommendation.
 
 Still open:
 
 - What exact product/package migration date should move from `prompt-coach` to `loopdeck`?
 - Should loop snapshots get a numeric "loop quality" score, or only structured outcome status and evidence?
-- Should selected brief actions later move into a broader multi-worktree command
-  center, or remain inline in worktree detail?
 
 ## 12. Decision
 

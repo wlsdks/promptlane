@@ -121,6 +121,20 @@ export type LoopListResponse = {
         latest_created_at: string;
         latest_outcome_status: string;
       }>;
+      command_center?: {
+        title: "Multi-worktree review";
+        primary_action: string;
+        review_items: Array<{
+          worktree: string;
+          branch?: string;
+          sessions: number;
+          snapshots: number;
+          latest_snapshot_id: string;
+          latest_created_at: string;
+          latest_outcome_status: string;
+          recommendation: "review before merge" | "ready for continuation";
+        }>;
+      };
     };
     project_memory: {
       approved_count: number;

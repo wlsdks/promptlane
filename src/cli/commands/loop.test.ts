@@ -247,6 +247,11 @@ describe("loop CLI command", () => {
     expect(text).toContain("active worktrees 2");
     expect(text).toContain("active sessions 2");
     expect(text).toContain("worktree review needed yes");
+    expect(text).toContain("command center Multi-worktree review");
+    expect(text).toContain("primary action compare worktrees before merge");
+    expect(text).toContain(
+      "review primary-worktree ready for continuation",
+    );
     expect(text).toContain(
       "worktree primary-worktree snapshots 1 sessions 1 latest passed",
     );
@@ -277,6 +282,14 @@ describe("loop CLI command", () => {
           sessions?: number;
           latest_outcome_status?: string;
         }>;
+        command_center?: {
+          title?: string;
+          primary_action?: string;
+          review_items?: Array<{
+            worktree?: string;
+            recommendation?: string;
+          }>;
+        };
       };
       project_memory?: { approved_count?: number; included_in_brief?: boolean };
       memory_candidate?: {
@@ -307,6 +320,20 @@ describe("loop CLI command", () => {
           latest_outcome_status: "passed",
         },
       ],
+      command_center: {
+        title: "Multi-worktree review",
+        primary_action: "compare worktrees before merge",
+        review_items: [
+          {
+            worktree: "primary-worktree",
+            recommendation: "ready for continuation",
+          },
+          {
+            worktree: "other-worktree",
+            recommendation: "ready for continuation",
+          },
+        ],
+      },
     });
     expect(parsed.project_memory).toEqual({
       approved_count: 1,

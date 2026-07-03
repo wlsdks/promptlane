@@ -424,6 +424,17 @@ function formatLoopStatus(status: LoopdeckStatus): string {
     `active worktrees ${status.activity.active_worktrees}`,
     `active sessions ${status.activity.active_sessions}`,
     `worktree review needed ${status.activity.needs_review ? "yes" : "no"}`,
+    status.activity.command_center
+      ? `command center ${status.activity.command_center.title}`
+      : undefined,
+    status.activity.command_center
+      ? `primary action ${status.activity.command_center.primary_action}`
+      : undefined,
+    ...(
+      status.activity.command_center?.review_items
+        .slice(0, 3)
+        .map((item) => `review ${item.worktree} ${item.recommendation}`) ?? []
+    ),
     ...status.activity.worktrees
       .slice(0, 3)
       .map(

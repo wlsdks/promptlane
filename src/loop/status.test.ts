@@ -157,7 +157,91 @@ describe("createLoopdeckStatus", () => {
           latest_outcome_status: "passed",
         },
       ],
+      command_center: {
+        title: "Multi-worktree review",
+        primary_action: "compare worktrees before merge",
+        review_items: [
+          {
+            worktree: "agent-loop-worktree",
+            branch: "codex/agent-loop-memory-design",
+            sessions: 1,
+            snapshots: 1,
+            latest_snapshot_id: "loop_latest",
+            latest_created_at: "2026-07-04T01:00:00.000Z",
+            latest_outcome_status: "passed",
+            recommendation: "ready for continuation",
+          },
+          {
+            worktree: "main-worktree",
+            branch: "codex/agent-loop-memory-design",
+            sessions: 1,
+            snapshots: 1,
+            latest_snapshot_id: "loop_previous",
+            latest_created_at: "2026-07-04T01:00:00.000Z",
+            latest_outcome_status: "passed",
+            recommendation: "ready for continuation",
+          },
+        ],
+      },
     });
+    expect(serialized).not.toContain("Make this better");
+    expect(serialized).not.toContain("/Users/example");
+    expect(serialized).not.toContain("sk-proj-secret");
+  });
+
+  it("builds a raw-free multi-worktree command center for merge review", () => {
+    const status = createLoopdeckStatus({
+      snapshots: [
+        loopSnapshot({
+          id: "loop_needs_review",
+          session_id: "session-two",
+          branch: "feature/agent-loop",
+          worktree_label: "agent-loop-worktree",
+          outcome: {
+            status: "unknown",
+            summary: "Investigate before merge",
+            evidence_refs: ["pnpm test"],
+          },
+        }),
+        loopSnapshot({
+          id: "loop_ready",
+          session_id: "session-one",
+          branch: "main",
+          worktree_label: "main-worktree",
+        }),
+      ],
+      compactBoundaries: [],
+      includeLatest: false,
+    });
+    const serialized = JSON.stringify(status);
+
+    expect(status.activity.command_center).toEqual({
+      title: "Multi-worktree review",
+      primary_action: "review agent-loop-worktree before merge",
+      review_items: [
+        {
+          worktree: "agent-loop-worktree",
+          branch: "feature/agent-loop",
+          latest_snapshot_id: "loop_needs_review",
+          latest_created_at: "2026-07-04T01:00:00.000Z",
+          latest_outcome_status: "unknown",
+          sessions: 1,
+          snapshots: 1,
+          recommendation: "review before merge",
+        },
+        {
+          worktree: "main-worktree",
+          branch: "main",
+          latest_snapshot_id: "loop_ready",
+          latest_created_at: "2026-07-04T01:00:00.000Z",
+          latest_outcome_status: "passed",
+          sessions: 1,
+          snapshots: 1,
+          recommendation: "ready for continuation",
+        },
+      ],
+    });
+    expect(serialized).not.toContain("Investigate before merge");
     expect(serialized).not.toContain("Make this better");
     expect(serialized).not.toContain("/Users/example");
     expect(serialized).not.toContain("sk-proj-secret");

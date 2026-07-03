@@ -41,6 +41,21 @@ describe("MCP stdio server", () => {
           }),
           expect.objectContaining({
             name: "get_loopdeck_status",
+            outputSchema: expect.objectContaining({
+              properties: expect.objectContaining({
+                activity: expect.objectContaining({
+                  properties: expect.objectContaining({
+                    command_center: expect.objectContaining({
+                      properties: expect.objectContaining({
+                        title: expect.any(Object),
+                        primary_action: expect.any(Object),
+                        review_items: expect.any(Object),
+                      }),
+                    }),
+                  }),
+                }),
+              }),
+            }),
           }),
           expect.objectContaining({
             name: "prepare_loop_brief",

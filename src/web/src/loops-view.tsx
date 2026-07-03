@@ -119,6 +119,22 @@ export function LoopsView({
           {loops.status.activity.needs_review && (
             <p className="loops-status-line">Worktree review needed</p>
           )}
+          {loops.status.activity.command_center && (
+            <div className="loop-memory-action">
+              <span>Command center</span>
+              <code>{loops.status.activity.command_center.title}</code>
+              <p className="loops-status-line">
+                {loops.status.activity.command_center.primary_action}
+              </p>
+              {loops.status.activity.command_center.review_items
+                .slice(0, 3)
+                .map((item) => (
+                  <p className="loops-status-line" key={item.worktree}>
+                    {item.worktree}: {item.recommendation}
+                  </p>
+                ))}
+            </div>
+          )}
           {loops.status.activity.worktrees.slice(0, 2).map((worktree) => (
             <div className="loop-worktree-line" key={worktree.worktree}>
               <p className="loops-status-line">

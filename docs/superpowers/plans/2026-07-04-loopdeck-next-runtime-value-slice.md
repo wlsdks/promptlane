@@ -122,5 +122,21 @@ Implementation checkpoint:
 - The latest-only behavior remains the default when no filters are provided.
 - Non-matching MCP filters return `not_found`.
 
-The next runtime slice should decide whether selected brief actions need a
-broader command center for comparing multiple worktrees before merge.
+Decision:
+
+- Selected brief actions should move into a broader command-center direction,
+  because concurrent Codex and Claude Code worktrees need a review-before-merge
+  view before any future merge workflow is credible.
+- The first command-center slice is read-only and uses only safe metadata that
+  already exists in `LoopdeckStatus.activity`.
+- Merge automation, branch checkout, conflict prediction, hidden external model
+  calls, and file writes remain out of scope.
+
+Implementation checkpoint:
+
+- `LoopdeckStatus.activity.command_center` now exposes a raw-free
+  multi-worktree review summary when multiple worktrees or sessions are active.
+- CLI `loop status`, MCP `get_loopdeck_status`, and the web Loops summary expose
+  the same command center contract.
+- The next runtime slice should decide whether command-center review items need
+  per-worktree selected brief shortcuts or merge-readiness evidence grouping.

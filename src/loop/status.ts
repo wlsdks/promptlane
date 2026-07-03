@@ -50,6 +50,17 @@ export type LoopdeckStatusActivityWorktree = {
   latest_outcome_status: LoopSnapshot["outcome"]["status"];
 };
 
+export type LoopdeckStatusActivityCommandCenterItem =
+  LoopdeckStatusActivityWorktree & {
+    recommendation: "review before merge" | "ready for continuation";
+  };
+
+export type LoopdeckStatusActivityCommandCenter = {
+  title: "Multi-worktree review";
+  primary_action: string;
+  review_items: LoopdeckStatusActivityCommandCenterItem[];
+};
+
 export type LoopdeckStatusActivity = {
   active_worktrees: number;
   active_sessions: number;
@@ -60,6 +71,7 @@ export type LoopdeckStatusActivity = {
     | "compare loop snapshots by worktree before merging agent output"
     | "continue current worktree loop";
   worktrees: LoopdeckStatusActivityWorktree[];
+  command_center?: LoopdeckStatusActivityCommandCenter;
 };
 
 export type LoopdeckStatus = {
@@ -142,6 +154,8 @@ export function summarizeLoopActivity(
   ).size;
   const needsReview = activeWorktrees > 1 || activeSessions > 1;
 
+  const worktrees = summarizeWorktreeActivity(snapshots);
+
   return {
     active_worktrees: activeWorktrees,
     active_sessions: activeSessions,
@@ -151,7 +165,31 @@ export function summarizeLoopActivity(
     next_action: needsReview
       ? "compare loop snapshots by worktree before merging agent output"
       : "continue current worktree loop",
-    worktrees: summarizeWorktreeActivity(snapshots),
+    worktrees,
+    ...(needsReview ? { command_center: createCommandCenter(worktrees) } : {}),
+  };
+}
+
+function createCommandCenter(
+  worktrees: LoopdeckStatusActivityWorktree[],
+): LoopdeckStatusActivityCommandCenter {
+  const reviewItems = worktrees.map((worktree) => ({
+    ...worktree,
+    recommendation:
+      worktree.latest_outcome_status === "passed"
+        ? ("ready for continuation" as const)
+        : ("review before merge" as const),
+  }));
+  const primary = reviewItems.find(
+    (item) => item.recommendation === "review before merge",
+  );
+
+  return {
+    title: "Multi-worktree review",
+    primary_action: primary
+      ? `review ${primary.worktree} before merge`
+      : "compare worktrees before merge",
+    review_items: reviewItems,
   };
 }
 

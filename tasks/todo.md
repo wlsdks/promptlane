@@ -199,7 +199,9 @@
 - [x] Task 41 GREEN: 공유 snapshot selector와 CLI/MCP filtered continuation brief selection 구현
 - [x] Task 42 RED: Web selected worktree detail filtered brief endpoint/client/action이 없어 focused tests 실패 확인
 - [x] Task 42 GREEN: `/api/v1/loops/brief`, `getSelectedLoopBrief`, selected detail copy action 구현
-- [ ] 다음 slice: multi-worktree command center 또는 merge-before-review workflow 재선정
+- [x] Task 43 RED: multi-worktree command center summary가 shared status/CLI/MCP schema/web summary에 없어 focused tests 실패 확인
+- [x] Task 43 GREEN: `LoopdeckStatus.activity.command_center`, CLI status, MCP schema, web Loops summary 구현
+- [ ] 다음 slice: command-center review item selected brief shortcut 또는 merge-readiness evidence grouping 재선정
 
 ### 판단 기준
 

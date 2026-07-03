@@ -123,6 +123,47 @@ export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
                 additionalProperties: false,
               },
             },
+            command_center: {
+              type: "object",
+              required: ["title", "primary_action", "review_items"],
+              properties: {
+                title: { type: "string", enum: ["Multi-worktree review"] },
+                primary_action: { type: "string" },
+                review_items: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    required: [
+                      "worktree",
+                      "sessions",
+                      "snapshots",
+                      "latest_snapshot_id",
+                      "latest_created_at",
+                      "latest_outcome_status",
+                      "recommendation",
+                    ],
+                    properties: {
+                      worktree: { type: "string" },
+                      branch: { type: "string" },
+                      sessions: { type: "integer", minimum: 0 },
+                      snapshots: { type: "integer", minimum: 0 },
+                      latest_snapshot_id: { type: "string" },
+                      latest_created_at: { type: "string" },
+                      latest_outcome_status: LOOP_OUTCOME_STATUS_SCHEMA,
+                      recommendation: {
+                        type: "string",
+                        enum: [
+                          "review before merge",
+                          "ready for continuation",
+                        ],
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                },
+              },
+              additionalProperties: false,
+            },
           },
           additionalProperties: false,
         },
