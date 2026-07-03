@@ -162,6 +162,16 @@ describe("createLoopdeckStatus", () => {
       command_center: {
         title: "Multi-worktree review",
         primary_action: "compare worktrees before merge",
+        review_packet: {
+          title: "Review-before-merge packet",
+          status: "ready",
+          summary: "2 ready, 0 needs review, 0 missing evidence",
+          next_action: "compare ready evidence before merge",
+          ready_count: 2,
+          needs_review_count: 0,
+          missing_evidence_count: 0,
+          actions: ["compare evidence before merge"],
+        },
         review_items: [
           {
             worktree: "agent-loop-worktree",
@@ -227,6 +237,17 @@ describe("createLoopdeckStatus", () => {
           branch: "main",
           worktree_label: "main-worktree",
         }),
+        loopSnapshot({
+          id: "loop_missing_evidence",
+          session_id: "session-three",
+          branch: "feature/missing-evidence",
+          worktree_label: "missing-evidence-worktree",
+          outcome: {
+            status: "passed",
+            summary: "Ready but no evidence should block merge review.",
+            evidence_refs: [],
+          },
+        }),
       ],
       compactBoundaries: [],
       includeLatest: false,
@@ -236,6 +257,20 @@ describe("createLoopdeckStatus", () => {
     expect(status.activity.command_center).toEqual({
       title: "Multi-worktree review",
       primary_action: "review agent-loop-worktree before merge",
+      review_packet: {
+        title: "Review-before-merge packet",
+        status: "blocked",
+        summary: "1 ready, 1 needs review, 1 missing evidence",
+        next_action: "record missing evidence before merge",
+        ready_count: 1,
+        needs_review_count: 1,
+        missing_evidence_count: 1,
+        actions: [
+          "record loop outcome evidence",
+          "review outcome before merge",
+          "compare evidence before merge",
+        ],
+      },
       review_items: [
         {
           worktree: "agent-loop-worktree",
@@ -271,6 +306,24 @@ describe("createLoopdeckStatus", () => {
             status: "ready",
             evidence: "evidence present",
             next_action: "compare evidence before merge",
+          },
+        },
+        {
+          worktree: "missing-evidence-worktree",
+          branch: "feature/missing-evidence",
+          latest_snapshot_id: "loop_missing_evidence",
+          latest_created_at: "2026-07-04T01:00:00.000Z",
+          latest_outcome_status: "passed",
+          evidence_count: 0,
+          sessions: 1,
+          snapshots: 1,
+          recommendation: "ready for continuation",
+          continuation_command:
+            "prompt-coach loop brief --worktree missing-evidence-worktree --branch feature/missing-evidence",
+          merge_readiness: {
+            status: "missing_evidence",
+            evidence: "missing evidence",
+            next_action: "record loop outcome evidence",
           },
         },
       ],

@@ -127,10 +127,62 @@ export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
             },
             command_center: {
               type: "object",
-              required: ["title", "primary_action", "review_items"],
+              required: [
+                "title",
+                "primary_action",
+                "review_packet",
+                "review_items",
+              ],
               properties: {
                 title: { type: "string", enum: ["Multi-worktree review"] },
                 primary_action: { type: "string" },
+                review_packet: {
+                  type: "object",
+                  required: [
+                    "title",
+                    "status",
+                    "summary",
+                    "next_action",
+                    "ready_count",
+                    "needs_review_count",
+                    "missing_evidence_count",
+                    "actions",
+                  ],
+                  properties: {
+                    title: {
+                      type: "string",
+                      enum: ["Review-before-merge packet"],
+                    },
+                    status: {
+                      type: "string",
+                      enum: ["ready", "needs_review", "blocked"],
+                    },
+                    summary: { type: "string" },
+                    next_action: {
+                      type: "string",
+                      enum: [
+                        "compare ready evidence before merge",
+                        "review non-passing worktrees before merge",
+                        "record missing evidence before merge",
+                      ],
+                    },
+                    ready_count: { type: "integer", minimum: 0 },
+                    needs_review_count: { type: "integer", minimum: 0 },
+                    missing_evidence_count: { type: "integer", minimum: 0 },
+                    actions: {
+                      type: "array",
+                      items: {
+                        type: "string",
+                        enum: [
+                          "compare evidence before merge",
+                          "review outcome before merge",
+                          "record loop outcome evidence",
+                        ],
+                      },
+                    },
+                  },
+                  additionalProperties: false,
+                },
                 review_items: {
                   type: "array",
                   items: {

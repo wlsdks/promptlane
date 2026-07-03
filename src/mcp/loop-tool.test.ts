@@ -74,6 +74,16 @@ describe("Loopdeck MCP tools", () => {
           },
         ],
         command_center: {
+          review_packet: {
+            title: "Review-before-merge packet",
+            status: "ready",
+            summary: "2 ready, 0 needs review, 0 missing evidence",
+            next_action: "compare ready evidence before merge",
+            ready_count: 2,
+            needs_review_count: 0,
+            missing_evidence_count: 0,
+            actions: ["compare evidence before merge"],
+          },
           review_items: [
             {
               worktree: "worktree-mcp",

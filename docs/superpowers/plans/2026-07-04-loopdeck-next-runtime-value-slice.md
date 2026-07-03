@@ -147,6 +147,11 @@ Implementation checkpoint:
 - CLI `loop status`, MCP `get_loopdeck_status`, and the web Loops summary now
   show whether each worktree is ready, needs review, or is missing evidence
   before any future merge workflow.
-- The next runtime slice should decide whether merge-readiness remains a
-  read-only review aid or becomes the input to an explicit review-before-merge
-  workflow.
+- `LoopdeckStatus.activity.command_center.review_packet` now aggregates those
+  readiness signals into a read-only review-before-merge packet with counts,
+  status, summary, next action, and safe action labels.
+- CLI `loop status`, MCP `get_loopdeck_status`, and the web Loops summary expose
+  the packet without reading diffs, checking out branches, calling external
+  models, or writing git/project state.
+- The next runtime slice should decide whether the review packet feeds an
+  explicit human checklist or a local merge decision journal.

@@ -20,6 +20,9 @@ describe("LoopsView", () => {
     expect(html).toContain("Command center");
     expect(html).toContain("Multi-worktree review");
     expect(html).toContain("review agent-loop-worktree before merge");
+    expect(html).toContain("Review packet ready");
+    expect(html).toContain("2 ready, 0 needs review, 0 missing evidence");
+    expect(html).toContain("Next compare ready evidence before merge");
     expect(html).toContain("review before merge");
     expect(html).toContain("ready for continuation");
     expect(html).toContain("Merge readiness needs_review");
@@ -122,6 +125,16 @@ function loopList(): LoopListResponse {
         command_center: {
           title: "Multi-worktree review",
           primary_action: "review agent-loop-worktree before merge",
+          review_packet: {
+            title: "Review-before-merge packet",
+            status: "ready",
+            summary: "2 ready, 0 needs review, 0 missing evidence",
+            next_action: "compare ready evidence before merge",
+            ready_count: 2,
+            needs_review_count: 0,
+            missing_evidence_count: 0,
+            actions: ["compare evidence before merge"],
+          },
           review_items: [
             {
               worktree: "agent-loop-worktree",

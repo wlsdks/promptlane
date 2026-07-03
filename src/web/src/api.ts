@@ -125,6 +125,23 @@ export type LoopListResponse = {
       command_center?: {
         title: "Multi-worktree review";
         primary_action: string;
+        review_packet: {
+          title: "Review-before-merge packet";
+          status: "ready" | "needs_review" | "blocked";
+          summary: string;
+          next_action:
+            | "compare ready evidence before merge"
+            | "review non-passing worktrees before merge"
+            | "record missing evidence before merge";
+          ready_count: number;
+          needs_review_count: number;
+          missing_evidence_count: number;
+          actions: Array<
+            | "compare evidence before merge"
+            | "review outcome before merge"
+            | "record loop outcome evidence"
+          >;
+        };
         review_items: Array<{
           worktree: string;
           branch?: string;

@@ -67,9 +67,24 @@ export type LoopdeckStatusActivityCommandCenterItem =
     merge_readiness: LoopdeckStatusActivityMergeReadiness;
   };
 
+export type LoopdeckStatusActivityReviewPacket = {
+  title: "Review-before-merge packet";
+  status: "ready" | "needs_review" | "blocked";
+  summary: string;
+  next_action:
+    | "compare ready evidence before merge"
+    | "review non-passing worktrees before merge"
+    | "record missing evidence before merge";
+  ready_count: number;
+  needs_review_count: number;
+  missing_evidence_count: number;
+  actions: LoopdeckStatusActivityMergeReadiness["next_action"][];
+};
+
 export type LoopdeckStatusActivityCommandCenter = {
   title: "Multi-worktree review";
   primary_action: string;
+  review_packet: LoopdeckStatusActivityReviewPacket;
   review_items: LoopdeckStatusActivityCommandCenterItem[];
 };
 
@@ -203,7 +218,52 @@ function createCommandCenter(
     primary_action: primary
       ? `review ${primary.worktree} before merge`
       : "compare worktrees before merge",
+    review_packet: createReviewPacket(reviewItems),
     review_items: reviewItems,
+  };
+}
+
+function createReviewPacket(
+  reviewItems: LoopdeckStatusActivityCommandCenterItem[],
+): LoopdeckStatusActivityReviewPacket {
+  const readyCount = reviewItems.filter(
+    (item) => item.merge_readiness.status === "ready",
+  ).length;
+  const needsReviewCount = reviewItems.filter(
+    (item) => item.merge_readiness.status === "needs_review",
+  ).length;
+  const missingEvidenceCount = reviewItems.filter(
+    (item) => item.merge_readiness.status === "missing_evidence",
+  ).length;
+  const status =
+    missingEvidenceCount > 0
+      ? ("blocked" as const)
+      : needsReviewCount > 0
+        ? ("needs_review" as const)
+        : ("ready" as const);
+  const nextAction =
+    status === "blocked"
+      ? ("record missing evidence before merge" as const)
+      : status === "needs_review"
+        ? ("review non-passing worktrees before merge" as const)
+        : ("compare ready evidence before merge" as const);
+  const actions = [
+    ...(missingEvidenceCount > 0
+      ? (["record loop outcome evidence"] as const)
+      : []),
+    ...(needsReviewCount > 0 ? (["review outcome before merge"] as const) : []),
+    ...(readyCount > 0 ? (["compare evidence before merge"] as const) : []),
+  ];
+
+  return {
+    title: "Review-before-merge packet",
+    status,
+    summary: `${readyCount} ready, ${needsReviewCount} needs review, ${missingEvidenceCount} missing evidence`,
+    next_action: nextAction,
+    ready_count: readyCount,
+    needs_review_count: needsReviewCount,
+    missing_evidence_count: missingEvidenceCount,
+    actions,
   };
 }
 

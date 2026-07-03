@@ -430,6 +430,15 @@ function formatLoopStatus(status: LoopdeckStatus): string {
     status.activity.command_center
       ? `primary action ${status.activity.command_center.primary_action}`
       : undefined,
+    status.activity.command_center
+      ? `review packet ${status.activity.command_center.review_packet.status}`
+      : undefined,
+    status.activity.command_center
+      ? `review packet summary ${status.activity.command_center.review_packet.summary}`
+      : undefined,
+    status.activity.command_center
+      ? `review packet next ${status.activity.command_center.review_packet.next_action}`
+      : undefined,
     ...(
       status.activity.command_center?.review_items
         .slice(0, 3)

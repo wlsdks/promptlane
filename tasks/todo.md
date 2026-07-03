@@ -207,7 +207,10 @@
 - [x] Task 45 RED: command-center review item에 merge-readiness/evidence grouping metadata가 없어 domain/web/CLI/MCP focused tests 실패 확인
 - [x] Task 45 GREEN: `evidence_count`와 `merge_readiness`를 shared status, CLI status, MCP schema, web Loops summary에 연결
 - [x] Task 45 PRIVACY: evidence refs 원문, unsafe raw path, outcome summary, prompt body가 status/summary surface에 노출되지 않는 회귀 테스트 유지
-- [ ] 다음 slice: merge-readiness를 사용한 review-before-merge workflow 설계 또는 web/API QA 보강 재선정
+- [x] Task 46 RED: command-center에 aggregate review-before-merge packet이 없어 domain/web/CLI/MCP focused tests 실패 확인
+- [x] Task 46 GREEN: `review_packet` status/summary/counts/actions를 shared status, CLI status, MCP schema, web Loops summary에 연결
+- [x] Task 46 PRIVACY: packet은 evidence refs 원문, outcome summary, prompt body, raw path를 포함하지 않는 safe aggregate metadata로 제한
+- [ ] 다음 slice: review packet 기반 explicit human checklist 또는 merge decision journal 설계 재선정
 
 ### 판단 기준
 

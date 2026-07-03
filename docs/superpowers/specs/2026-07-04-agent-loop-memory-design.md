@@ -1381,6 +1381,39 @@ Do not add:
 - prompt body, outcome summary, transcript, compact summary, raw path, API
   token, or provider credential output
 
+### Slice 4.43: Review-Before-Merge Packet
+
+Add:
+
+- `review_packet` metadata on `LoopdeckStatus.activity.command_center`, derived
+  only from existing command-center review items
+- aggregate packet status with explicit precedence:
+  - any missing evidence means `blocked`
+  - otherwise any non-passing worktree means `needs_review`
+  - otherwise all reviewed worktrees are `ready`
+- packet counts for ready, needs-review, and missing-evidence worktrees
+- packet summary and next action labels designed for Codex and Claude Code to
+  read before a human decides whether to merge or continue a worktree
+- CLI `loop status` output for packet status, summary, and next action
+- MCP `get_loopdeck_status` output schema coverage for the packet contract
+- web Loops command-center rendering for the packet summary
+- focused domain, CLI, MCP schema/runtime, and web tests proving the packet does
+  not reveal evidence ref strings, outcome summaries, prompt bodies, raw paths,
+  transcripts, compact summaries, API tokens, or provider credentials
+
+Do not add:
+
+- automatic merge, branch checkout, conflict prediction, diff inspection, or
+  git writes
+- raw evidence ref strings to status, command-center, packet, or web summary
+  output
+- hidden external model calls or background agent evaluation
+- new database schema/index migration
+- writes to `AGENTS.md`, `CLAUDE.md`, project docs, memory files, or git state
+- package, plugin, slash command, hook, or MCP server-name rename
+- prompt body, outcome summary, transcript, compact summary, raw path, API
+  token, or provider credential output
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

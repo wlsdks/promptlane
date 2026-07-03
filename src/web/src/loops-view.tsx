@@ -151,6 +151,17 @@ export function LoopsView({
               <p className="loops-status-line">
                 {loops.status.activity.command_center.primary_action}
               </p>
+              <p className="loops-status-line">
+                Review packet{" "}
+                {loops.status.activity.command_center.review_packet.status}
+              </p>
+              <p className="loops-status-line">
+                {loops.status.activity.command_center.review_packet.summary}
+              </p>
+              <p className="loops-status-line">
+                Next{" "}
+                {loops.status.activity.command_center.review_packet.next_action}
+              </p>
               {loops.status.activity.command_center.review_items
                 .slice(0, 3)
                 .map((item) => (

@@ -249,6 +249,13 @@ describe("loop CLI command", () => {
     expect(text).toContain("worktree review needed yes");
     expect(text).toContain("command center Multi-worktree review");
     expect(text).toContain("primary action compare worktrees before merge");
+    expect(text).toContain("review packet ready");
+    expect(text).toContain(
+      "review packet summary 2 ready, 0 needs review, 0 missing evidence",
+    );
+    expect(text).toContain(
+      "review packet next compare ready evidence before merge",
+    );
     expect(text).toContain(
       "review primary-worktree ready for continuation",
     );
@@ -291,6 +298,15 @@ describe("loop CLI command", () => {
         command_center?: {
           title?: string;
           primary_action?: string;
+          review_packet?: {
+            status?: string;
+            summary?: string;
+            next_action?: string;
+            ready_count?: number;
+            needs_review_count?: number;
+            missing_evidence_count?: number;
+            actions?: string[];
+          };
           review_items?: Array<{
             worktree?: string;
             recommendation?: string;
@@ -337,6 +353,15 @@ describe("loop CLI command", () => {
       command_center: {
         title: "Multi-worktree review",
         primary_action: "compare worktrees before merge",
+        review_packet: {
+          status: "ready",
+          summary: "2 ready, 0 needs review, 0 missing evidence",
+          next_action: "compare ready evidence before merge",
+          ready_count: 2,
+          needs_review_count: 0,
+          missing_evidence_count: 0,
+          actions: ["compare evidence before merge"],
+        },
         review_items: [
           {
             worktree: "primary-worktree",
