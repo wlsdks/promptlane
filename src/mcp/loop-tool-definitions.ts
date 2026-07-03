@@ -453,6 +453,22 @@ export const PROPOSE_INSTRUCTION_PATCH_TOOL_DEFINITION: PromptCoachMcpToolDefini
         requires_user_approval: { const: true },
         source_memory_id: { type: "string" },
         next_action: { type: "string" },
+        apply_gate: {
+          type: "object",
+          required: [
+            "web_apply_available",
+            "confirm_command",
+            "mcp_tool",
+            "reason",
+          ],
+          properties: {
+            web_apply_available: { const: false },
+            confirm_command: { type: "string" },
+            mcp_tool: { const: "apply_instruction_patch" },
+            reason: { type: "string" },
+          },
+          additionalProperties: false,
+        },
         privacy: {
           ...LOOP_TOOL_PRIVACY_SCHEMA,
           required: [
@@ -479,6 +495,7 @@ export const PROPOSE_INSTRUCTION_PATCH_TOOL_DEFINITION: PromptCoachMcpToolDefini
             "requires_user_approval",
             "source_memory_id",
             "next_action",
+            "apply_gate",
             "privacy",
           ],
         },

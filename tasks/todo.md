@@ -163,7 +163,9 @@
 - [x] Task 23 GREEN: `/api/v1/loops/instruction-patch`, `getLoopInstructionPatch()`, Loops summary review CTA/diff preview 구현
 - [x] Task 24 RED: dedicated plugin rename plan이 없어 slash command/plugin id rename compatibility gate를 증명하지 못하는 packaging focused test 실패 확인
 - [x] Task 24 GREEN: `2026-07-04-loopdeck-plugin-rename-plan.md`로 package/CLI/plugin/slash namespace/hook/MCP rename phases와 acceptance gates 고정
-- [ ] 다음 slice: web explicit instruction apply UX gate 또는 plugin rename plan을 issue slice로 분해
+- [x] Task 25 RED: instruction patch proposal에 web no-apply gate/CLI confirm command/MCP apply tool 계약이 없어 focused tests 실패 확인
+- [x] Task 25 GREEN: core proposal, MCP schema/result, API client type, web review panel에 explicit apply gate 연결
+- [ ] 다음 slice: plugin rename plan을 issue slice로 분해 또는 loop memory/worktree analysis surface 확장
 
 ### 판단 기준
 

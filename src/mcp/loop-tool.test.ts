@@ -337,6 +337,14 @@ describe("Loopdeck MCP tools", () => {
       target_file: "AGENTS.md",
       writes_files: false,
       requires_user_approval: true,
+      apply_gate: {
+        web_apply_available: false,
+        confirm_command:
+          "prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply",
+        mcp_tool: "apply_instruction_patch",
+        reason:
+          "web review does not write files; apply through CLI or MCP with explicit confirmation",
+      },
       privacy: {
         local_only: true,
         external_calls: false,

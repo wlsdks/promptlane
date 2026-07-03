@@ -152,6 +152,11 @@ export function LoopsView({
               AGENTS.md, CLAUDE.md, project docs, or memory files.
             </p>
           </div>
+          <div className="loop-apply-gate">
+            <span>Web apply unavailable</span>
+            <code>{patchProposal.apply_gate.confirm_command}</code>
+            <p>{patchProposal.apply_gate.reason}</p>
+          </div>
           <pre>{patchProposal.diff}</pre>
         </div>
       )}

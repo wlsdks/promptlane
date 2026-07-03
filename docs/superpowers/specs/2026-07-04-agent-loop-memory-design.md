@@ -904,6 +904,28 @@ Do not add:
 - hook marker rename
 - MCP server name rename
 
+### Slice 4.22: Web Instruction Apply Gate
+
+Add:
+
+- structured `apply_gate` on instruction patch proposals explaining that web
+  review cannot write files
+- CLI confirm command in that gate:
+  `prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply`
+- MCP apply tool name in that gate: `apply_instruction_patch`
+- web review panel copy that shows the gate and keeps the panel review-only
+- focused tests proving CLI/MCP/API/web client proposals expose the same gate
+  without prompt bodies, raw paths, transcripts, compact summaries, secrets, or
+  external LLM results
+
+Do not add:
+
+- web apply endpoint
+- web apply button
+- automatic instruction-file writes
+- editing any file outside `AGENTS.md` or `CLAUDE.md`
+- hidden external LLM calls
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

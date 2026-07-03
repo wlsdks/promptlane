@@ -753,7 +753,8 @@ The MCP server exposes twenty tools:
   `propose_instruction_patch target_file=AGENTS.md`.
 - `propose_instruction_patch`: propose a reviewable unified diff for adding the
   latest approved Loopdeck memory to `AGENTS.md` or `CLAUDE.md`. It returns the
-  patch text only and does not write files.
+  patch text and an explicit apply gate only; web review does not write files,
+  and application must go through CLI or MCP with explicit confirmation.
 - `apply_instruction_patch`: apply the latest approved Loopdeck memory to
   `AGENTS.md` or `CLAUDE.md` only when the caller explicitly confirms the file
   write. It is idempotent by source memory id and does not return raw paths.
@@ -765,7 +766,8 @@ The matching local CLI surface is `prompt-coach loop status`,
 `prompt-coach loop instruction-patch --target-file AGENTS.md` to generate the
 review-only instruction patch from the latest approved memory. Use
 `prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply`
-only after reviewing the proposal and intending to write the instruction file.
+only after reviewing the proposal and intending to write the instruction file;
+the web review panel intentionally has no apply button.
 `loop collect` also accepts `--source service` for explicit cron or LaunchAgent
 one-shot collection without creating hidden background automation. Users who
 want an opt-in macOS schedule can preview or install it with

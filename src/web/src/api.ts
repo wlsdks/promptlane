@@ -189,6 +189,12 @@ export type LoopInstructionPatchProposal = {
   requires_user_approval: true;
   source_memory_id: string;
   next_action: string;
+  apply_gate: {
+    web_apply_available: false;
+    confirm_command: string;
+    mcp_tool: "apply_instruction_patch";
+    reason: string;
+  };
   privacy: {
     local_only: true;
     external_calls: false;

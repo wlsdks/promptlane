@@ -235,10 +235,11 @@ prompt-coach storage only; instruction-file patches remain a separate explicit
 workflow. Its structured `next_actions` point agents to `prepare_loop_brief`
 and `propose_instruction_patch target_file=AGENTS.md`.
 `propose_instruction_patch` returns a reviewable unified diff for
-adding the latest approved memory to `AGENTS.md` or `CLAUDE.md`, but it never
-writes those files. `apply_instruction_patch` writes the latest approved memory
-only when `confirm_apply` is true, is idempotent by source memory id, and does
-not return raw paths.
+adding the latest approved memory to `AGENTS.md` or `CLAUDE.md`, plus an
+explicit apply gate. The web review panel does not write those files.
+`apply_instruction_patch` writes the latest approved memory only when
+`confirm_apply` is true, is idempotent by source memory id, and does not return
+raw paths.
 
 The local CLI mirrors that loop surface with `prompt-coach loop status`,
 `prompt-coach loop collect`, `prompt-coach loop brief`, and
@@ -247,7 +248,8 @@ The local CLI mirrors that loop surface with `prompt-coach loop status`,
 `prompt-coach loop instruction-patch --target-file AGENTS.md` to generate the
 review-only instruction patch. Use
 `prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply`
-only after reviewing the proposal and intending to write the file. Use
+only after reviewing the proposal and intending to write the file; the web
+review panel intentionally has no apply button. Use
 `prompt-coach loop collect --source service` as the explicit one-shot command
 for cron or LaunchAgent collection; it does not silently install a scheduler.
 The opt-in macOS schedule is `prompt-coach loop schedule install`; use

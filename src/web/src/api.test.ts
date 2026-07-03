@@ -238,6 +238,14 @@ describe("web api export client", () => {
             writes_files: false,
             requires_user_approval: true,
             source_memory_id: "mem_web",
+            apply_gate: {
+              web_apply_available: false,
+              confirm_command:
+                "prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply",
+              mcp_tool: "apply_instruction_patch",
+              reason:
+                "web review does not write files; apply through CLI or MCP with explicit confirmation",
+            },
             next_action:
               "review this patch proposal, then apply it manually only if the instruction belongs in the project",
             privacy: {
@@ -256,6 +264,14 @@ describe("web api export client", () => {
 
     expect(proposal.writes_files).toBe(false);
     expect(proposal.requires_user_approval).toBe(true);
+    expect(proposal.apply_gate).toEqual({
+      web_apply_available: false,
+      confirm_command:
+        "prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply",
+      mcp_tool: "apply_instruction_patch",
+      reason:
+        "web review does not write files; apply through CLI or MCP with explicit confirmation",
+    });
     expect(proposal.diff).toContain("+++ b/AGENTS.md");
     expect(fetchMock).toHaveBeenLastCalledWith(
       "/api/v1/loops/instruction-patch?target_file=AGENTS.md",
