@@ -90,14 +90,15 @@ export function registerLoopRoutes(
   server.get("/api/v1/loops/worktrees/:worktree", async (request) => {
     requireAppAccess(request, options.auth);
     const params = request.params as { worktree: string };
-    const query = request.query as { session_id?: string };
+    const query = request.query as { branch?: string; session_id?: string };
     const snapshots =
       options.storage
         .listLoopSnapshots?.({ limit: 100 })
         .items.filter(
           (snapshot) =>
             snapshot.worktree_label === params.worktree &&
-            (!query.session_id || snapshot.session_id === query.session_id),
+            (!query.session_id || snapshot.session_id === query.session_id) &&
+            (!query.branch || snapshot.branch === query.branch),
         ) ??
       [];
     const boundaries =
@@ -107,6 +108,7 @@ export function registerLoopRoutes(
       data: {
         worktree: params.worktree,
         ...(query.session_id ? { session_id: query.session_id } : {}),
+        ...(query.branch ? { branch: query.branch } : {}),
         items: snapshots.map((snapshot) => ({
           ...toLoopdeckStatusSnapshot(snapshot),
           compact_boundary: latestCompactBoundaryAfterSnapshot(

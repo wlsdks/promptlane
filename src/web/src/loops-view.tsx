@@ -202,6 +202,11 @@ export function LoopsView({
                 Session {worktreeDetail.session_id}
               </p>
             )}
+            {worktreeDetail.branch && (
+              <p className="loops-status-line">
+                Branch {worktreeDetail.branch}
+              </p>
+            )}
           </div>
           <div className="loop-row loop-row-head">
             <span>Loop</span>

@@ -436,6 +436,7 @@ describe("createServer P2 ingest boundary", () => {
     storage.loopSnapshots.push(loopSnapshot({ worktree_label: "worktree-web" }));
     storage.loopSnapshots.push(
       loopSnapshot({
+        branch: "feature/branch-filter",
         id: "loop_web_second",
         created_at: "2026-07-04T01:10:00.000Z",
         session_id: "session-web-two",
@@ -516,6 +517,34 @@ describe("createServer P2 ingest boundary", () => {
     expect(JSON.stringify(sessionBody)).not.toContain("loop_web\"");
     expect(JSON.stringify(sessionBody)).not.toContain("Make this better");
     expect(JSON.stringify(sessionBody)).not.toContain("/Users/example");
+
+    const branchResponse = await server.inject({
+      method: "GET",
+      url: "/api/v1/loops/worktrees/worktree-web?branch=feature%2Fbranch-filter",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+    });
+    const branchBody = branchResponse.json<{
+      data: {
+        branch?: string;
+        items: Array<{ id: string; branch?: string; worktree?: string }>;
+      };
+    }>();
+
+    expect(branchResponse.statusCode).toBe(200);
+    expect(branchBody.data.branch).toBe("feature/branch-filter");
+    expect(branchBody.data.items).toEqual([
+      expect.objectContaining({
+        branch: "feature/branch-filter",
+        id: "loop_web_second",
+        worktree: "worktree-web",
+      }),
+    ]);
+    expect(JSON.stringify(branchBody)).not.toContain("loop_web\"");
+    expect(JSON.stringify(branchBody)).not.toContain("Make this better");
+    expect(JSON.stringify(branchBody)).not.toContain("/Users/example");
   });
 
   it("returns a copy-ready loop brief without prompt bodies, compact summaries, or raw paths", async () => {

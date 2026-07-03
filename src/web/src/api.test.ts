@@ -228,6 +228,7 @@ describe("web api export client", () => {
     const { getLoopWorktree } = await import("./api.js");
 
     const detail = await getLoopWorktree("agent-loop-worktree", {
+      branch: "feature/branch-filter",
       sessionId: "session-web",
     });
 
@@ -242,7 +243,7 @@ describe("web api export client", () => {
       ],
     });
     expect(fetchMock).toHaveBeenLastCalledWith(
-      "/api/v1/loops/worktrees/agent-loop-worktree?session_id=session-web",
+      "/api/v1/loops/worktrees/agent-loop-worktree?session_id=session-web&branch=feature%2Fbranch-filter",
       {
         credentials: "same-origin",
       },

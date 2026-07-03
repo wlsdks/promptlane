@@ -41,6 +41,17 @@ describe("routing", () => {
       session: "session-web",
     });
 
+    stubLocation(
+      "/loops",
+      "?worktree=agent-loop-worktree&session=session-web&branch=feature%2Fbranch-filter",
+    );
+    expect(routeFromLocation()).toEqual({
+      branch: "feature/branch-filter",
+      name: "loops",
+      session: "session-web",
+      worktree: "agent-loop-worktree",
+    });
+
     stubLocation("/prompts/prompt%201");
     expect(routeFromLocation()).toEqual({ id: "prompt 1", name: "detail" });
   });
@@ -84,10 +95,13 @@ describe("routing", () => {
     );
     expect(
       pathForView({
+        branch: "feature/branch-filter",
         name: "loops",
         session: "session/web",
         worktree: "agent-loop-worktree",
       }),
-    ).toBe("/loops?worktree=agent-loop-worktree&session=session%2Fweb");
+    ).toBe(
+      "/loops?worktree=agent-loop-worktree&session=session%2Fweb&branch=feature%2Fbranch-filter",
+    );
   });
 });

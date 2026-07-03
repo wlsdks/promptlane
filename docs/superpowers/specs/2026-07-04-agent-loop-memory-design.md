@@ -1043,6 +1043,31 @@ Do not add:
 - automatic session merge/rebase/conflict recommendations
 - external LLM summarization
 
+### Slice 4.28: Worktree Drilldown Branch Filter
+
+Add:
+
+- optional `branch` query on `/api/v1/loops/worktrees/:worktree` to narrow the
+  drilldown to one existing safe snapshot branch
+- `getLoopWorktree(worktree, { branch })` client helper support, composable with
+  the existing `sessionId` option
+- `/loops?worktree=<safe-label>&session=<safe-session-id>&branch=<safe-branch>`
+  route parsing and URL generation
+- App deep-link restoration that passes the route branch to the worktree
+  drilldown API
+- selected worktree detail panel label showing the active branch filter
+- focused tests proving branch filtering excludes other sessions/worktrees
+  without exposing prompt bodies, raw paths, transcripts, compact summaries,
+  secrets, or external LLM results
+
+Do not add:
+
+- raw git remotes, repository paths, or unredacted cwd values
+- automatic merge/rebase/conflict recommendations
+- background branch scanning outside explicit loop snapshots
+- transcript, prompt body, compact summary, or evidence drilldown
+- external LLM summarization
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

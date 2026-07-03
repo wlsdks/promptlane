@@ -283,12 +283,16 @@ export function App() {
     }
     if (
       loopWorktree?.worktree === view.worktree &&
-      loopWorktree.session_id === view.session
+      loopWorktree.session_id === view.session &&
+      loopWorktree.branch === view.branch
     ) {
       return;
     }
 
-    void openLoopWorktree(view.worktree, { session: view.session });
+    void openLoopWorktree(view.worktree, {
+      branch: view.branch,
+      session: view.session,
+    });
   }, [loopWorktree?.worktree, view]);
 
   useEffect(() => {
@@ -426,21 +430,27 @@ export function App() {
 
   async function openLoopWorktree(
     worktree: string,
-    options: { session?: string } = {},
+    options: { branch?: string; session?: string } = {},
   ): Promise<void> {
     setError(undefined);
     try {
       setLoopWorktree(
-        await getLoopWorktree(worktree, { sessionId: options.session }),
+        await getLoopWorktree(worktree, {
+          branch: options.branch,
+          sessionId: options.session,
+        }),
       );
       if (
         view.name === "loops" &&
-        (view.worktree !== worktree || view.session !== options.session)
+        (view.worktree !== worktree ||
+          view.session !== options.session ||
+          view.branch !== options.branch)
       ) {
         navigate({
           name: "loops",
           worktree,
           ...(options.session ? { session: options.session } : {}),
+          ...(options.branch ? { branch: options.branch } : {}),
         });
       }
     } catch {

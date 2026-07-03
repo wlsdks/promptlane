@@ -774,9 +774,10 @@ labels, session counts, snapshot counts, and latest outcome status so agents can
 notice when recent snapshots span multiple worktrees or sessions before merging
 output. The web Loops view can open and deep-link a selected worktree detail
 panel backed by `/api/v1/loops/worktrees/:worktree`, still returning only safe
-loop metadata. That drilldown can be narrowed with an optional safe session
-query (`/loops?worktree=<safe-label>&session=<safe-session-id>`), backed by the
-API `session_id` filter.
+loop metadata. That drilldown can be narrowed with optional safe session and
+branch query state
+(`/loops?worktree=<safe-label>&session=<safe-session-id>&branch=<safe-branch>`),
+backed by the API `session_id` and `branch` filters.
 `loop collect` also accepts `--source service` for explicit cron or LaunchAgent
 one-shot collection without creating hidden background automation. Users who
 want an opt-in macOS schedule can preview or install it with

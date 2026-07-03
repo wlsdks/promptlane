@@ -256,8 +256,8 @@ latest outcome status so active agents can notice parallel work before merging
 or handing off. The web Loops view can open and deep-link a selected worktree
 detail panel through `/api/v1/loops/worktrees/:worktree`, still limited to safe
 loop metadata. The drilldown can also be narrowed with
-`/loops?worktree=<safe-label>&session=<safe-session-id>`, backed by the API
-`session_id` filter and still raw-free. Use
+`/loops?worktree=<safe-label>&session=<safe-session-id>&branch=<safe-branch>`,
+backed by the API `session_id` and `branch` filters and still raw-free. Use
 `prompt-coach loop collect --source service` as the explicit one-shot command
 for cron or LaunchAgent collection; it does not silently install a scheduler.
 The opt-in macOS schedule is `prompt-coach loop schedule install`; use

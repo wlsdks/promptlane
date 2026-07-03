@@ -175,7 +175,9 @@
 - [x] Task 29 GREEN: `View`/`pathForView`/`routeFromLocation`과 App 초기/클릭 흐름을 worktree query-state에 연결
 - [x] Task 30 RED: worktree drilldown을 session 단위로 좁히는 API/client/routing/UI focused tests 실패 확인
 - [x] Task 30 GREEN: `session_id` API query, `getLoopWorktree(..., { sessionId })`, `/loops?worktree=...&session=...`, active session label 연결
-- [ ] 다음 slice: plugin rename plan을 issue slice로 분해 또는 worktree drilldown에 branch 필터 추가 여부 결정
+- [x] Task 31 RED: worktree drilldown을 branch 단위로 좁히는 API/client/routing/UI focused tests 실패 확인
+- [x] Task 31 GREEN: `branch` API query, `getLoopWorktree(..., { branch })`, `/loops?worktree=...&session=...&branch=...`, active branch label 연결
+- [ ] 다음 slice: plugin rename plan을 issue slice로 분해
 
 ### 판단 기준
 
