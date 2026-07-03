@@ -32,6 +32,7 @@ describe("plugin packaging files", () => {
 
     expect(packageJson.name).toBe("prompt-coach");
     expect(packageJson.bin).toHaveProperty("prompt-coach");
+    expect(packageJson.bin.loopdeck).toBe("./dist/cli/index.js");
     expect(packageJson.description).toBe(
       "Local-first agent loop memory and meta-prompting workbench for Codex, Claude Code, and coding-agent workflows.",
     );
@@ -238,6 +239,7 @@ describe("plugin packaging files", () => {
 
     expect(packageJson.bin).toMatchObject({
       "prompt-coach": "./dist/cli/index.js",
+      loopdeck: "./dist/cli/index.js",
       "pc-claude": "./dist/cli/pc-claude.js",
       "pc-codex": "./dist/cli/pc-codex.js",
     });
@@ -248,6 +250,23 @@ describe("plugin packaging files", () => {
     expect(packageJson.files).toContain("docs/ARCHITECTURE.md");
     expect(packageJson.files).toContain("docs/PLUGINS.md");
     expect(packageJson.files).toContain("docs/LEGAL_USAGE_GUIDE.md");
+  });
+
+  it("documents loopdeck as a compatibility-preserving CLI alias", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+    const packageContents = readFileSync(
+      join(process.cwd(), "docs/PACKAGE_CONTENTS.md"),
+      "utf8",
+    );
+
+    for (const content of [readme, readmeKo, packageContents]) {
+      expect(content).toContain("loopdeck");
+      expect(content).toContain("prompt-coach");
+    }
+    expect(readme).toContain("loopdeck is a CLI alias");
+    expect(readmeKo).toContain("loopdeck는 CLI alias");
+    expect(packageContents).toContain("loopdeck alias");
   });
 
   it("restores executable mode for the npm CLI bin after server builds", () => {

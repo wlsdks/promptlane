@@ -744,6 +744,27 @@ Do not add:
 - automatic instruction-file writes
 - package or CLI alias migration
 
+### Slice 4.15: CLI Alias Migration
+
+Add:
+
+- `package.json#bin.loopdeck` pointing to the same compiled CLI entrypoint as
+  `prompt-coach`
+- packaging tests proving `prompt-coach` remains the package name and primary
+  compatibility command while `loopdeck` is available as a product-name CLI
+  alias
+- README and package contents docs explaining that existing scripts and plugin
+  commands should keep using `prompt-coach`, while new manual terminal workflows
+  may use `loopdeck`
+
+Do not add:
+
+- npm package rename
+- removal of `prompt-coach` bin
+- plugin command id rename
+- hook marker rename
+- MCP server name rename
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

@@ -20,6 +20,10 @@ prompt-coach coach
 
 Loopdeck is a developer tool that safely records prompts and loop metadata from AI coding tools such as Claude Code and Codex, helps you find them again, analyzes weak prompting patterns, and helps you write better follow-up requests. The current npm package and CLI command are still named `prompt-coach` during the compatibility window.
 
+The npm package now also installs `loopdeck`; loopdeck is a CLI alias for the same binary.
+Use `prompt-coach` in existing scripts and plugin commands; use `loopdeck` for
+new manual terminal workflows when you want the product-name command.
+
 It collects supported tool prompts locally, redacts sensitive values before storage, writes Markdown files, indexes them in SQLite, and serves a local web UI for search, review, archive scoring, prompt practice, analysis, deletion, and copy-based prompt improvement.
 
 This project is not affiliated with, endorsed by, or sponsored by Anthropic, OpenAI, or any other AI tool provider. Product names such as Claude Code and Codex are used only to describe compatibility.

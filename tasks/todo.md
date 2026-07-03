@@ -149,7 +149,9 @@
 - [x] Task 16 GREEN: `listLoopMemories({ projectId })`와 brief 호출부 project scoping으로 현재 snapshot project memory만 포함
 - [x] Task 17 RED: CLI/MCP/API/web status가 project-scoped approved memory count를 노출하지 않는 focused test 실패 확인
 - [x] Task 17 GREEN: `LoopdeckStatus.project_memory` count를 CLI `loop status`, MCP `get_loopdeck_status`, `/api/v1/loops`, web Loops summary에 raw-free로 연결
-- [ ] 다음 slice: package/CLI alias migration plan 또는 memory candidate UX/status refinement
+- [x] Task 18 RED: `package.json#bin.loopdeck`와 alias 문서가 누락된 packaging focused test 실패 확인
+- [x] Task 18 GREEN: `loopdeck` bin alias를 기존 CLI entrypoint에 연결하고 README/PACKAGE_CONTENTS에 compatibility 설명 추가
+- [ ] 다음 slice: memory candidate UX/status refinement 또는 plugin command alias migration plan
 
 ### 판단 기준
 

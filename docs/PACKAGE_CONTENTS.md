@@ -13,8 +13,9 @@ npm pack --dry-run --json
 
 The npm package intentionally includes:
 
-- `dist/cli`: the compiled `prompt-coach` CLI entrypoint plus experimental
-  `pc-claude` and `pc-codex` wrapper entrypoints
+- `dist/cli`: the compiled `prompt-coach` CLI entrypoint, the loopdeck alias
+  that points at the same binary, plus experimental `pc-claude` and
+  `pc-codex` wrapper entrypoints
 - `dist/server`: the compiled local Fastify server and web API
 - `dist/web`: the compiled React web UI assets
 - `dist/storage`, `dist/analysis`, `dist/hooks`, `dist/importer`,
