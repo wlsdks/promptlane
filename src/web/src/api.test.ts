@@ -68,6 +68,55 @@ describe("web api export client", () => {
     expect(JSON.stringify(loops)).not.toContain("/Users/example");
   });
 
+  it("gets a copy-ready Loopdeck brief without raw prompt or compact content", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            title: "Continue agent loop loop_web",
+            source_snapshot_id: "loop_web",
+            prompt:
+              "## Goal\nContinue the current coding-agent loop.\n\n## Compaction Boundary\nPostCompact at 2026-07-04T01:05:00.000Z.",
+            compact_boundary: {
+              id: "cmp_web",
+              created_at: "2026-07-04T01:05:00.000Z",
+              tool: "claude-code",
+              event_name: "PostCompact",
+              trigger: "auto",
+              after_latest_snapshot: true,
+            },
+            privacy: {
+              local_only: true,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+            },
+          },
+        }),
+      );
+    const { getLoopBrief } = await import("./api.js");
+
+    const brief = await getLoopBrief("loop_web");
+
+    expect(brief).toMatchObject({
+      title: "Continue agent loop loop_web",
+      source_snapshot_id: "loop_web",
+      compact_boundary: {
+        event_name: "PostCompact",
+        after_latest_snapshot: true,
+      },
+    });
+    expect(fetchMock).toHaveBeenLastCalledWith(
+      "/api/v1/loops/loop_web/brief",
+      {
+        credentials: "same-origin",
+      },
+    );
+    expect(JSON.stringify(brief)).not.toContain("Make this better");
+    expect(JSON.stringify(brief)).not.toContain("Compact summary");
+    expect(JSON.stringify(brief)).not.toContain("/Users/example");
+  });
+
   it("shares an in-flight csrf session request across parallel API calls", async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url === "/api/v1/session") {

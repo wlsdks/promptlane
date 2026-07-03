@@ -224,9 +224,9 @@ prints snapshot readiness, latest safe loop metadata, and compact refresh
 guidance without prompt bodies, compact summaries, custom compact instructions,
 or raw paths.
 The web Loops view uses the same privacy boundary for recent loop snapshots,
-empty state guidance, and compact refresh markers; it does not render prompt
-bodies, compact summaries, custom compact instructions, transcript bodies, or
-raw paths.
+empty state guidance, compact refresh markers, and copy-ready next loop briefs;
+it does not render prompt bodies, compact summaries, custom compact
+instructions, transcript bodies, or raw paths.
 `score_prompt` scores direct prompt text, a stored prompt id, or the latest
 stored prompt with the same local deterministic `0-100` Prompt Quality Score
 used by the web UI. The response also includes a per-criterion `breakdown`

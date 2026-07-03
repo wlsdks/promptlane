@@ -109,6 +109,18 @@ export type LoopListResponse = {
   };
 };
 
+export type LoopBrief = {
+  title: string;
+  prompt: string;
+  source_snapshot_id: string;
+  compact_boundary?: LoopSummary["compact_boundary"];
+  privacy: {
+    local_only: true;
+    returns_prompt_bodies: false;
+    returns_raw_paths: false;
+  };
+};
+
 export type PromptFilters = {
   query?: string;
   tool?: string;
@@ -578,6 +590,15 @@ export async function listLoops(): Promise<LoopListResponse> {
     credentials: "same-origin",
   });
   const body = (await response.json()) as { data: LoopListResponse };
+  return body.data;
+}
+
+export async function getLoopBrief(id: string): Promise<LoopBrief> {
+  await ensureSession();
+  const response = await fetch(`/api/v1/loops/${encodeURIComponent(id)}/brief`, {
+    credentials: "same-origin",
+  });
+  const body = (await response.json()) as { data: LoopBrief };
   return body.data;
 }
 

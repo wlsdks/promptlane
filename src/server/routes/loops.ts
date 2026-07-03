@@ -1,11 +1,15 @@
 import type { FastifyInstance } from "fastify";
 
-import { latestCompactBoundaryAfterSnapshot } from "../../loop/brief.js";
+import {
+  createLoopBrief,
+  latestCompactBoundaryAfterSnapshot,
+} from "../../loop/brief.js";
 import type {
   CompactBoundaryStoragePort,
   LoopSnapshotStoragePort,
 } from "../../storage/ports.js";
 import { requireAppAccess, type ServerAuthConfig } from "../auth.js";
+import { problem } from "../errors.js";
 
 export type LoopRouteOptions = {
   auth: ServerAuthConfig;
@@ -53,6 +57,31 @@ export function registerLoopRoutes(
           returns_compact_content: false,
         },
       },
+    };
+  });
+
+  server.get("/api/v1/loops/:id/brief", async (request) => {
+    requireAppAccess(request, options.auth);
+    const params = request.params as { id: string };
+    const snapshots =
+      options.storage.listLoopSnapshots?.({ limit: 100 }).items ?? [];
+    const snapshot = snapshots.find((item) => item.id === params.id);
+
+    if (!snapshot) {
+      throw problem(404, "Not Found", "Loop snapshot not found.", request.url);
+    }
+
+    const boundaries =
+      options.storage.listCompactBoundaries?.({ limit: 100 }).items ?? [];
+
+    return {
+      data: createLoopBrief({
+        snapshot,
+        compactBoundary: latestCompactBoundaryAfterSnapshot(
+          snapshot,
+          boundaries,
+        ),
+      }),
     };
   });
 }

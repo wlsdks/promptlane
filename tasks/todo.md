@@ -119,7 +119,9 @@
 - [x] Task 2 GREEN: sidebar Loops navigation과 dense loop list/empty state 구현
 - [x] Task 3: component-owned `loops-view.css`로 CSS line budget 유지
 - [x] Task 4: README/PLUGINS/spec/todo에 Web Loops first slice 범위와 한계 반영
-- [ ] 다음 slice: loop detail + next brief copy action 또는 CLI/MCP/web status model 공통화
+- [x] Task 5 RED: `/api/v1/loops/:id/brief`와 `getLoopBrief()`가 missing route/function으로 실패하는지 확인
+- [x] Task 5 GREEN: row-level `Copy brief` action이 privacy-safe continuation brief를 가져와 복사
+- [ ] 다음 slice: cron collection, semantic memory decision gate, brand migration, 또는 CLI/MCP/web status model 공통화
 
 ### 판단 기준
 
@@ -144,9 +146,10 @@
 ### Web Loops View 판단 기준
 
 - `/api/v1/loops`와 `/loops` view는 loop snapshot safe metadata만 표시한다.
-- 첫 web slice는 list, empty state, compact refresh marker까지만 포함한다.
+- 현재 web slice는 list, empty state, compact refresh marker, copy-ready next
+  brief action까지 포함한다.
 - prompt body, compact summary, custom instructions, transcript body, raw path는 API/화면/테스트 출력에 포함하지 않는다.
-- loop detail, next brief copy action, cron collection, semantic memory는 다음 slice로 남긴다.
+- raw prompt detail panel, cron collection, semantic memory는 다음 slice로 남긴다.
 
 ## 2026-05-04 Habit Coach Panel Extraction
 

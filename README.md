@@ -735,9 +735,9 @@ shows snapshot readiness, latest safe metadata, and compact refresh guidance
 without printing prompt bodies, compact summaries, custom compact instructions,
 or raw paths.
 The web UI also includes a Loops view for local snapshot readiness, recent loop
-metadata, and compact refresh markers. It does not render prompt bodies,
-compact summaries, custom compact instructions, transcript bodies, or raw
-paths.
+metadata, compact refresh markers, and a copy action for the next loop brief.
+It does not render prompt bodies, compact summaries, custom compact
+instructions, transcript bodies, or raw paths.
 - `prepare_agent_rewrite`: prepare one locally redacted prompt packet, local
   score metadata, local baseline draft, and rewrite contract so the active
   Claude Code/Codex/Gemini CLI session can semantically improve the prompt.

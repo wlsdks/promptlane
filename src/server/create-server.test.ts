@@ -363,6 +363,62 @@ describe("createServer P2 ingest boundary", () => {
     expect(serialized).not.toContain("/Users/example");
   });
 
+  it("returns a copy-ready loop brief without prompt bodies, compact summaries, or raw paths", async () => {
+    const storage = createMemoryStorage();
+    storage.loopSnapshots.push(loopSnapshot());
+    storage.compactBoundaries.push({
+      id: "cmp_web",
+      created_at: "2026-07-04T01:05:00.000Z",
+      tool: "claude-code",
+      event_name: "PostCompact",
+      trigger: "auto",
+      session_id: "session-web",
+      cwd_label: "private-project",
+      project_id: "proj_web",
+      content_hash: "compact_abcdef1234567890",
+      privacy: {
+        local_only: true,
+        stores_prompt_bodies: false,
+        stores_raw_paths: false,
+        stores_compact_content: false,
+      },
+    });
+    const server = createTestServer({ storage });
+
+    const response = await server.inject({
+      method: "GET",
+      url: "/api/v1/loops/loop_web/brief",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+    });
+    const serialized = JSON.stringify(response.json());
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toMatchObject({
+      data: {
+        title: "Continue agent loop loop_web",
+        source_snapshot_id: "loop_web",
+        compact_boundary: {
+          event_name: "PostCompact",
+          after_latest_snapshot: true,
+        },
+        privacy: {
+          local_only: true,
+          returns_prompt_bodies: false,
+          returns_raw_paths: false,
+        },
+      },
+    });
+    expect(response.json<{ data: { prompt: string } }>().data.prompt).toContain(
+      "prompt-coach loop collect again",
+    );
+    expect(serialized).not.toContain("Make this better");
+    expect(serialized).not.toContain("Compact summary with sk-proj-secret");
+    expect(serialized).not.toContain("/Users/example");
+  });
+
   it("requires app access and csrf before updating project policy", async () => {
     const storage = createMemoryStorage();
     const server = createTestServer({ storage });

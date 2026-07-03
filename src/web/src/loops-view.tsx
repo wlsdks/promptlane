@@ -1,4 +1,9 @@
+import { Copy, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+
 import type { LoopListResponse, LoopSummary } from "./api.js";
+import { getLoopBrief } from "./api.js";
+import { copyTextToClipboard } from "./clipboard.js";
 import { formatDate } from "./formatters.js";
 
 import "./loops-view.css";
@@ -67,6 +72,22 @@ export function LoopsView({
 
 function LoopRow({ loop }: { loop: LoopSummary }) {
   const needsRefresh = Boolean(loop.compact_boundary?.after_latest_snapshot);
+  const [copied, setCopied] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  async function copyNextBrief(): Promise<void> {
+    setBusy(true);
+    try {
+      const brief = await getLoopBrief(loop.id);
+      const didCopy = await copyTextToClipboard(brief.prompt);
+      if (!didCopy) return;
+
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2_500);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   return (
     <div className="loop-row">
@@ -110,6 +131,17 @@ function LoopRow({ loop }: { loop: LoopSummary }) {
             <code>prompt-coach loop brief</code>
           </>
         )}
+        <button
+          aria-label={`Copy next brief for ${loop.id}`}
+          className="loop-copy-button"
+          disabled={busy}
+          onClick={() => void copyNextBrief()}
+          title="Copy next brief"
+          type="button"
+        >
+          {copied ? <ShieldCheck size={15} /> : <Copy size={15} />}
+          {copied ? "Copied brief" : busy ? "Preparing..." : "Copy brief"}
+        </button>
       </div>
     </div>
   );

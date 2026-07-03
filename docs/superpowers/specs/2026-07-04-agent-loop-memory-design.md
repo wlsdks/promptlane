@@ -514,7 +514,8 @@ Add:
 - `/api/v1/loops` safe metadata endpoint (**implemented**)
 - loop list grouped by safe project/worktree/session metadata (**first list
   slice implemented**)
-- loop detail with next brief copy action
+- loop detail with next brief copy action (**implemented as a row-level copy
+  action backed by `/api/v1/loops/:id/brief`; no raw prompt detail panel yet**)
 - privacy-safe empty state and diagnostics (**first empty state implemented**)
 - compact boundary refresh marker when the latest loop snapshot is pre-compact
   (**implemented without compact summary/custom instruction replay**)
