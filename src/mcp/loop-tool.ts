@@ -118,7 +118,11 @@ export function prepareLoopBriefTool(
         snapshot,
         storage.listCompactBoundaries({ limit: 20 }).items,
       );
-      const brief = createLoopBrief({ snapshot, compactBoundary });
+      const brief = createLoopBrief({
+        snapshot,
+        compactBoundary,
+        approvedMemories: storage.listLoopMemories({ limit: 3 }).items,
+      });
       return {
         source: "latest",
         snapshot_id: snapshot.id,

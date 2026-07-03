@@ -106,6 +106,32 @@ describe("Loopdeck MCP tools", () => {
     expect(serialized).not.toContain("/Users/example");
   });
 
+  it("includes approved loop memory in continuation briefs", () => {
+    const dataDir = seedLoopSnapshot({
+      outcome: {
+        status: "passed",
+        summary:
+          "Shared status surfaces should use one model instead of duplicating readiness logic.",
+        evidence_refs: ["commit:11d8426", "test:pnpm test"],
+      },
+    });
+    recordLoopMemoryTool({ latest: true, approved_by: "user" }, { dataDir });
+
+    const result = prepareLoopBriefTool({}, { dataDir });
+    const serialized = JSON.stringify(result);
+
+    expect(result).toMatchObject({
+      source: "latest",
+      snapshot_id: "loop_mcp",
+    });
+    expect(result.prompt).toContain("## Approved Loop Memories");
+    expect(result.prompt).toContain(
+      "Shared status surfaces should use one model instead of duplicating readiness logic.",
+    );
+    expect(serialized).not.toContain("Make this better");
+    expect(serialized).not.toContain("/Users/example");
+  });
+
   it("includes compact boundary awareness in continuation briefs", () => {
     const dataDir = seedLoopSnapshot({ withCompactBoundary: true });
 

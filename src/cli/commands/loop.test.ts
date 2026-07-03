@@ -137,6 +137,31 @@ describe("loop CLI command", () => {
     expect(text).not.toContain("/Users/example");
   });
 
+  it("prints approved loop memories in the latest continuation brief", async () => {
+    const dataDir = createTempDir();
+    await seedPrompts(dataDir);
+    const snapshot = JSON.parse(
+      loopCollectForCli({
+        dataDir,
+        json: true,
+        cwdPrefix: "/Users/example/private-project",
+        now: new Date("2026-07-04T01:00:00.000Z"),
+        cwd: "/Users/example/private-project",
+      }),
+    ) as { id: string };
+    seedLoopOutcome(dataDir, snapshot.id);
+    loopMemoryApproveForCli({ dataDir, approvedBy: "user" });
+
+    const text = loopBriefForCli({ dataDir });
+
+    expect(text).toContain("## Approved Loop Memories");
+    expect(text).toContain(
+      "Scheduler lifecycle should stay plist-only unless the user explicitly asks for launchctl mutation.",
+    );
+    expect(text).not.toContain("Make this better");
+    expect(text).not.toContain("/Users/example");
+  });
+
   it("marks continuation briefs when compact happened after the latest snapshot", async () => {
     const dataDir = createTempDir();
     await seedPrompts(dataDir);

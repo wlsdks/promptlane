@@ -9,6 +9,7 @@ import { initializePromptCoach } from "../config/config.js";
 import type { LoopSnapshot } from "../loop/types.js";
 import { createServer } from "./create-server.js";
 import type { CompactBoundary } from "../storage/compact-boundaries.js";
+import type { LoopMemory } from "../storage/loop-memories.js";
 import type {
   ExportJob,
   ProjectInstructionReview,
@@ -431,6 +432,31 @@ describe("createServer P2 ingest boundary", () => {
     expect(serialized).not.toContain("Make this better");
     expect(serialized).not.toContain("Compact summary with sk-proj-secret");
     expect(serialized).not.toContain("/Users/example");
+  });
+
+  it("returns approved loop memory in copy-ready loop briefs", async () => {
+    const storage = createMemoryStorage();
+    storage.loopSnapshots.push(loopSnapshot());
+    storage.loopMemories.push(loopMemory());
+    const server = createTestServer({ storage });
+
+    const response = await server.inject({
+      method: "GET",
+      url: "/api/v1/loops/loop_web/brief",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+    });
+    const prompt = response.json<{ data: { prompt: string } }>().data.prompt;
+
+    expect(response.statusCode).toBe(200);
+    expect(prompt).toContain("## Approved Loop Memories");
+    expect(prompt).toContain(
+      "Keep web, CLI, MCP, and API loop status on the shared model.",
+    );
+    expect(prompt).not.toContain("/Users/example");
+    expect(prompt).not.toContain("sk-proj-secret");
   });
 
   it("requires app access and csrf before updating project policy", async () => {
@@ -1417,6 +1443,7 @@ function createMemoryStorage() {
   const instructionReviews = new Map<string, ProjectInstructionReview>();
   const loopSnapshots: LoopSnapshot[] = [];
   const compactBoundaries: CompactBoundary[] = [];
+  const loopMemories: LoopMemory[] = [];
   const coachFeedback: Array<{
     id: string;
     prompt_id: string;
@@ -1430,6 +1457,7 @@ function createMemoryStorage() {
     promptDetails: [] as PromptDetail[],
     loopSnapshots,
     compactBoundaries,
+    loopMemories,
     exportJobs,
     instructionReviews,
     policyForIngest: undefined as
@@ -1552,6 +1580,9 @@ function createMemoryStorage() {
     },
     listCompactBoundaries() {
       return { items: compactBoundaries };
+    },
+    listLoopMemories() {
+      return { items: loopMemories };
     },
     getPrompt(id: string) {
       return this.promptDetails.find((prompt) => prompt.id === id);
@@ -1705,6 +1736,25 @@ function loopSnapshot(): LoopSnapshot {
       local_only: true,
       stores_prompt_bodies: false,
       stores_raw_paths: false,
+    },
+  };
+}
+
+function loopMemory(): LoopMemory {
+  return {
+    id: "mem_web",
+    snapshot_id: "loop_web",
+    title: "Shared loop status",
+    statement: "Keep web, CLI, MCP, and API loop status on the shared model.",
+    evidence_refs: ["commit:11d8426", "test:pnpm test"],
+    approved_by: "user",
+    created_at: "2026-07-04T01:10:00.000Z",
+    privacy: {
+      local_only: true,
+      stores_prompt_bodies: false,
+      stores_raw_paths: false,
+      writes_instruction_files: false,
+      external_calls: false,
     },
   };
 }

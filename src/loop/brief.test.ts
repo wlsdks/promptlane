@@ -34,6 +34,36 @@ describe("createLoopBrief", () => {
     expect(brief.prompt).not.toContain("/Users/example");
     expect(brief.prompt).not.toContain("Make this better");
   });
+
+  it("includes approved loop memories without prompt bodies, raw paths, or secrets", () => {
+    const brief = createLoopBrief({
+      snapshot: loopSnapshot({}),
+      approvedMemories: [
+        {
+          id: "mem_safe",
+          statement:
+            "When a loop touches shared status surfaces, keep CLI, MCP, API, and web on one model.",
+          evidence_refs: [
+            "pnpm test",
+            "git diff --check",
+            "/Users/example/private-project/log.txt",
+            "sk-proj-secret",
+          ],
+        },
+      ],
+    });
+
+    expect(brief.prompt).toContain("## Approved Loop Memories");
+    expect(brief.prompt).toContain(
+      "- When a loop touches shared status surfaces, keep CLI, MCP, API, and web on one model. (evidence: pnpm test, git diff --check)",
+    );
+    expect(brief.prompt).not.toContain("/Users/example");
+    expect(brief.prompt).not.toContain("sk-proj-secret");
+    expect(brief.privacy).toMatchObject({
+      returns_prompt_bodies: false,
+      returns_raw_paths: false,
+    });
+  });
 });
 
 function loopSnapshot(patch: Partial<LoopSnapshot>): LoopSnapshot {

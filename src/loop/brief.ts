@@ -22,9 +22,16 @@ export type LoopBrief = {
   };
 };
 
+export type LoopBriefApprovedMemory = {
+  id: string;
+  statement: string;
+  evidence_refs: string[];
+};
+
 export function createLoopBrief(input: {
   snapshot: LoopSnapshot;
   compactBoundary?: LoopBriefCompactBoundary;
+  approvedMemories?: readonly LoopBriefApprovedMemory[];
 }): LoopBrief {
   const snapshot = input.snapshot;
   const gaps =
@@ -70,6 +77,7 @@ export function createLoopBrief(input: {
             "",
           ]
         : []),
+      ...approvedMemoryLines(input.approvedMemories ?? []),
       "## Prompt Habits To Improve",
       gaps,
       "",
@@ -93,6 +101,27 @@ export function createLoopBrief(input: {
       returns_raw_paths: false,
     },
   };
+}
+
+function approvedMemoryLines(
+  memories: readonly LoopBriefApprovedMemory[],
+): string[] {
+  const safeMemories = memories.filter((memory) => !looksUnsafe(memory.statement));
+  if (safeMemories.length === 0) return [];
+
+  return [
+    "## Approved Loop Memories",
+    ...safeMemories.map((memory) => {
+      const safeEvidenceRefs = memory.evidence_refs.filter(
+        (evidenceRef) => !looksUnsafe(evidenceRef),
+      );
+      const evidence = safeEvidenceRefs.length
+        ? ` (evidence: ${safeEvidenceRefs.join(", ")})`
+        : "";
+      return `- ${memory.statement}${evidence}`;
+    }),
+    "",
+  ];
 }
 
 export function latestCompactBoundaryAfterSnapshot(
@@ -126,3 +155,12 @@ type CompactBoundaryCandidate = {
   project_id: string;
   content_hash?: string;
 };
+
+function looksUnsafe(value: string): boolean {
+  return (
+    /(?:^|\s)\/Users\/[^\s]+/.test(value) ||
+    /(?:^|\s)\/home\/[^\s]+/.test(value) ||
+    /sk-[a-z0-9_-]{6,}/i.test(value) ||
+    /gh[pousr]_[a-z0-9_]{12,}/i.test(value)
+  );
+}

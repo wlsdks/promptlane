@@ -676,6 +676,28 @@ Do not add:
 - raw prompt detail panel
 - compact summary replay
 
+### Slice 4.12: Approved Memory In Continuation Briefs
+
+Add:
+
+- `createLoopBrief` optional approved memory input for local, raw-free memory
+  statements
+- CLI `prompt-coach loop brief` inclusion of latest approved loop memories
+- MCP `prepare_loop_brief` inclusion of latest approved loop memories
+- `/api/v1/loops/:id/brief` inclusion of latest approved loop memories
+- focused tests proving the brief includes memory statements and safe evidence
+  refs without prompt bodies, compact summaries, raw paths, transcripts, custom
+  instructions, or secret-looking tokens
+
+Do not add:
+
+- automatic AGENTS.md, CLAUDE.md, or project-doc writes
+- vector/embedding storage
+- hidden external LLM summarization
+- project-specific memory filtering until the storage model has an explicit
+  project relation
+- package or CLI alias migration
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

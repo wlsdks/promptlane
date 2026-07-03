@@ -143,7 +143,9 @@
 - [x] Task 14.1 GREEN: `createLoopdeckStatus` 공유 모델과 privacy-safe snapshot mapper 구현
 - [x] Task 14.2 RED: CLI/MCP/API/web loop status surfaces가 공유 status shape 없이 drift할 수 있음을 focused test로 고정
 - [x] Task 14.2 GREEN: CLI `loop status`, MCP `get_loopdeck_status`, `/api/v1/loops`, web Loops status header를 `src/loop/status.ts`로 연결
-- [ ] 다음 slice: package/CLI alias migration plan 또는 loop memory in continuation brief
+- [x] Task 15 RED: approved loop memory가 continuation brief에 포함되지 않는 CLI/MCP/API focused test 실패 확인
+- [x] Task 15 GREEN: `createLoopBrief`와 CLI `loop brief`, MCP `prepare_loop_brief`, `/api/v1/loops/:id/brief`가 최신 approved memory를 privacy-safe section으로 포함
+- [ ] 다음 slice: package/CLI alias migration plan 또는 loop memory filtering/project scoping
 
 ### 판단 기준
 
@@ -231,6 +233,14 @@
 - 공유 모델은 prompt body, compact summary, custom instructions, transcript body, raw path, secret-looking token을 입력으로 받거나 출력하지 않는다.
 - MCP surface는 `available_tools`만 추가하고 readiness 판단 자체는 shared model을 따른다.
 - Web API는 list item metadata와 별개로 `status` object를 반환해 web client가 list length로 상태를 재추론하지 않게 한다.
+- package/CLI alias migration은 이 slice에서 하지 않는다.
+
+### Approved Memory In Continuation Brief 판단 기준
+
+- CLI `prompt-coach loop brief`, MCP `prepare_loop_brief`, `/api/v1/loops/:id/brief`는 최신 approved `loop_memories`를 continuation prompt의 `Approved Loop Memories` 섹션에 포함한다.
+- memory section은 statement와 safe evidence refs만 포함한다.
+- prompt body, compact summary, custom instructions, transcript body, raw path, secret-looking token은 brief 출력에 포함하지 않는다.
+- memory inclusion은 read-only이며 AGENTS.md, CLAUDE.md, project docs, vector store를 쓰지 않는다.
 - package/CLI alias migration은 이 slice에서 하지 않는다.
 
 ## 2026-05-04 Habit Coach Panel Extraction

@@ -176,7 +176,12 @@ export function loopBriefForCli(options: LoopCliOptions = {}): string {
       snapshot,
       storage.listCompactBoundaries({ limit: 20 }).items,
     );
-    const brief = createLoopBrief({ snapshot, compactBoundary });
+    const approvedMemories = storage.listLoopMemories({ limit: 3 }).items;
+    const brief = createLoopBrief({
+      snapshot,
+      compactBoundary,
+      approvedMemories,
+    });
     return options.json
       ? JSON.stringify(brief, null, 2)
       : `${brief.title}\n\n${brief.prompt}`;

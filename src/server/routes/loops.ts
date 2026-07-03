@@ -10,6 +10,7 @@ import {
 } from "../../loop/status.js";
 import type {
   CompactBoundaryStoragePort,
+  LoopMemoryStoragePort,
   LoopSnapshotStoragePort,
 } from "../../storage/ports.js";
 import { requireAppAccess, type ServerAuthConfig } from "../auth.js";
@@ -17,7 +18,9 @@ import { problem } from "../errors.js";
 
 export type LoopRouteOptions = {
   auth: ServerAuthConfig;
-  storage: Partial<LoopSnapshotStoragePort & CompactBoundaryStoragePort>;
+  storage: Partial<
+    LoopSnapshotStoragePort & CompactBoundaryStoragePort & LoopMemoryStoragePort
+  >;
 };
 
 export function registerLoopRoutes(
@@ -80,6 +83,8 @@ export function registerLoopRoutes(
           snapshot,
           boundaries,
         ),
+        approvedMemories:
+          options.storage.listLoopMemories?.({ limit: 3 }).items ?? [],
       }),
     };
   });
