@@ -571,6 +571,26 @@ Do not add:
 - hidden external LLM calls for memory extraction
 - storing rejected unsafe summaries
 
+### Slice 4.7: Approved Memory Record
+
+Add:
+
+- local SQLite `loop_memories` records for user-approved memory candidates
+  (**implemented**)
+- CLI `prompt-coach loop memory-approve` to record the latest eligible
+  candidate after approval (**implemented**)
+- MCP `record_loop_memory` so Codex and Claude Code can persist approved loop
+  memory metadata without touching instruction files (**implemented**)
+- migration `018_loop_memories` and storage list/read contract (**implemented**)
+
+Do not add:
+
+- automatic AGENTS.md, CLAUDE.md, or project-doc edits
+- vector/embedding storage
+- raw prompt bodies, raw paths, transcripts, compact summaries, or external LLM
+  results
+- automatic approval of failed, unevidenced, or unsafe candidates
+
 ### Slice 5: Brand Migration
 
 Add:

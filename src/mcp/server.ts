@@ -22,11 +22,7 @@ import {
   COACH_PROMPT_TOOL_DEFINITION,
   GET_PROMPT_COACH_STATUS_TOOL_DEFINITION,
   IMPROVE_PROMPT_TOOL_DEFINITION,
-  GET_LOOPDECK_STATUS_TOOL_DEFINITION,
   PREPARE_AGENT_REWRITE_TOOL_DEFINITION,
-  PREPARE_LOOP_BRIEF_TOOL_DEFINITION,
-  PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION,
-  RECORD_LOOP_OUTCOME_TOOL_DEFINITION,
   PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION,
   PROMPT_COACH_MCP_TOOL_DEFINITIONS,
   RECORD_AGENT_REWRITE_TOOL_DEFINITION,
@@ -35,6 +31,13 @@ import {
   SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION,
   SCORE_PROMPT_TOOL_DEFINITION,
 } from "./score-tool-definitions.js";
+import {
+  GET_LOOPDECK_STATUS_TOOL_DEFINITION,
+  PREPARE_LOOP_BRIEF_TOOL_DEFINITION,
+  PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION,
+  RECORD_LOOP_MEMORY_TOOL_DEFINITION,
+  RECORD_LOOP_OUTCOME_TOOL_DEFINITION,
+} from "./loop-tool-definitions.js";
 import {
   coachPromptTool,
   getPromptCoachStatusTool,
@@ -51,10 +54,12 @@ import {
   getLoopdeckStatusTool,
   prepareLoopBriefTool,
   proposeLoopMemoryCandidateTool,
+  recordLoopMemoryTool,
   recordLoopOutcomeTool,
 } from "./loop-tool.js";
 import type {
   ProposeLoopMemoryCandidateToolArguments,
+  RecordLoopMemoryToolArguments,
   RecordLoopOutcomeToolArguments,
 } from "./loop-tool-types.js";
 import type {
@@ -120,6 +125,7 @@ type PromptCoachToolResult =
   | ReturnType<typeof prepareLoopBriefTool>
   | ReturnType<typeof recordLoopOutcomeTool>
   | ReturnType<typeof proposeLoopMemoryCandidateTool>
+  | ReturnType<typeof recordLoopMemoryTool>
   | ReturnType<typeof scorePromptArchiveTool>
   | ReturnType<typeof reviewProjectInstructionsTool>
   | ReturnType<typeof prepareAgentRewriteTool>
@@ -167,6 +173,8 @@ const PROMPT_COACH_MCP_TOOL_HANDLERS: Record<string, PromptCoachToolHandler> = {
       args as ProposeLoopMemoryCandidateToolArguments,
       options,
     ),
+  [RECORD_LOOP_MEMORY_TOOL_DEFINITION.name]: (args, options) =>
+    recordLoopMemoryTool(args as RecordLoopMemoryToolArguments, options),
   [SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION.name]: (args, options) =>
     scorePromptArchiveTool(args as ScorePromptArchiveToolArguments, options),
   [REVIEW_PROJECT_INSTRUCTIONS_TOOL_DEFINITION.name]: (args, options) =>

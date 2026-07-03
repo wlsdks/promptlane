@@ -52,6 +52,9 @@ describe("MCP stdio server", () => {
             name: "propose_loop_memory_candidate",
           }),
           expect.objectContaining({
+            name: "record_loop_memory",
+          }),
+          expect.objectContaining({
             name: "score_prompt_archive",
           }),
           expect.objectContaining({
@@ -83,7 +86,7 @@ describe("MCP stdio server", () => {
 
     const tools = (response?.result as { tools: Array<unknown> }).tools;
 
-    expect(tools).toHaveLength(17);
+    expect(tools).toHaveLength(18);
     for (const tool of tools.filter(
       (tool) =>
         ![
@@ -91,6 +94,7 @@ describe("MCP stdio server", () => {
           "record_agent_judgments",
           "record_clarifications",
           "record_loop_outcome",
+          "record_loop_memory",
         ].includes((tool as { name?: string }).name ?? ""),
     )) {
       expect(tool).toEqual(
@@ -126,6 +130,15 @@ describe("MCP stdio server", () => {
         }),
         expect.objectContaining({
           name: "record_loop_outcome",
+          annotations: expect.objectContaining({
+            destructiveHint: false,
+            idempotentHint: false,
+            openWorldHint: false,
+            readOnlyHint: false,
+          }),
+        }),
+        expect.objectContaining({
+          name: "record_loop_memory",
           annotations: expect.objectContaining({
             destructiveHint: false,
             idempotentHint: false,
@@ -245,6 +258,16 @@ describe("MCP stdio server", () => {
               eligible: expect.any(Object),
               reason: expect.any(Object),
               candidate: expect.any(Object),
+              privacy: expect.any(Object),
+            }),
+          }),
+        }),
+        expect.objectContaining({
+          name: "record_loop_memory",
+          outputSchema: expect.objectContaining({
+            properties: expect.objectContaining({
+              recorded: expect.any(Object),
+              memory: expect.any(Object),
               privacy: expect.any(Object),
             }),
           }),

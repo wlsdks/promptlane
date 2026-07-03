@@ -129,7 +129,9 @@
 - [x] Task 8 GREEN: `loop schedule status`와 `loop schedule uninstall` plist-only lifecycle 구현
 - [x] Task 9 RED: semantic memory decision gate와 CLI/MCP surface가 missing module/export/tool로 실패하는지 확인
 - [x] Task 9 GREEN: `decideLoopMemoryCandidate`, `loop memory-candidate`, `propose_loop_memory_candidate` 구현
-- [ ] 다음 slice: approved memory write workflow, brand migration, 또는 CLI/MCP/web status model 공통화
+- [x] Task 10 RED: approved memory storage/CLI/MCP가 missing method/export/tool로 실패하는지 확인
+- [x] Task 10 GREEN: `loop_memories`, `loop memory-approve`, `record_loop_memory` local-only 승인 저장 구현
+- [ ] 다음 slice: instruction-file patch proposal workflow, brand migration, 또는 CLI/MCP/web status model 공통화
 
 ### 판단 기준
 
@@ -157,7 +159,7 @@
 - 현재 web slice는 list, empty state, compact refresh marker, copy-ready next
   brief action까지 포함한다.
 - prompt body, compact summary, custom instructions, transcript body, raw path는 API/화면/테스트 출력에 포함하지 않는다.
-- raw prompt detail panel과 approved memory write workflow는 다음 slice로 남긴다.
+- raw prompt detail panel과 instruction-file patch proposal workflow는 다음 slice로 남긴다.
 
 ### Explicit Service Collection 판단 기준
 
@@ -177,6 +179,14 @@
 - `prompt-coach loop memory-candidate`와 MCP `propose_loop_memory_candidate`는 같은 결정 함수를 사용한다.
 - 결과는 prompt body, compact summary, custom instructions, transcript body, raw path를 출력하지 않는다.
 - AGENTS.md, CLAUDE.md, memory files, project docs에는 자동으로 쓰지 않는다.
+
+### Approved Memory Record 판단 기준
+
+- approved memory write는 local SQLite `loop_memories` 저장까지만 수행한다.
+- `prompt-coach loop memory-approve`와 MCP `record_loop_memory`는 latest eligible candidate를 재검증한 뒤 저장한다.
+- stored memory는 statement, safe evidence refs, approval actor, created_at, privacy metadata만 포함한다.
+- unsafe statement(raw path, secret-looking token)는 저장하지 않는다.
+- AGENTS.md, CLAUDE.md, project docs, vector store에는 쓰지 않는다.
 
 ## 2026-05-04 Habit Coach Panel Extraction
 

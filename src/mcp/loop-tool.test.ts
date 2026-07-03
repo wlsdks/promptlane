@@ -11,6 +11,7 @@ import {
   getLoopdeckStatusTool,
   prepareLoopBriefTool,
   proposeLoopMemoryCandidateTool,
+  recordLoopMemoryTool,
   recordLoopOutcomeTool,
 } from "./loop-tool.js";
 
@@ -201,6 +202,50 @@ describe("Loopdeck MCP tools", () => {
         returns_prompt_bodies: false,
         returns_raw_paths: false,
         auto_writes_memory: false,
+      },
+    });
+    expect(serialized).not.toContain("Make this better");
+    expect(serialized).not.toContain("/Users/example");
+  });
+
+  it("records a user-approved loop memory without writing instruction files", () => {
+    const dataDir = seedLoopSnapshot({
+      outcome: {
+        status: "passed",
+        summary:
+          "Scheduler lifecycle should stay plist-only unless the user explicitly asks for launchctl mutation.",
+        evidence_refs: ["commit:79cb39d", "test:pnpm test"],
+      },
+    });
+
+    const result = recordLoopMemoryTool(
+      {
+        latest: true,
+        approved_by: "user",
+      },
+      { dataDir },
+    );
+    const serialized = JSON.stringify(result);
+
+    expect(result).toMatchObject({
+      recorded: true,
+      memory: {
+        snapshot_id: "loop_mcp",
+        statement:
+          "Scheduler lifecycle should stay plist-only unless the user explicitly asks for launchctl mutation.",
+        evidence_refs: ["commit:79cb39d", "test:pnpm test"],
+        approved_by: "user",
+      },
+      next_action:
+        "Use this local memory as context in future loop briefs; writing AGENTS.md or CLAUDE.md still requires a separate explicit patch.",
+      privacy: {
+        local_only: true,
+        external_calls: false,
+        stores_prompt_bodies: false,
+        stores_raw_paths: false,
+        returns_prompt_bodies: false,
+        returns_raw_paths: false,
+        writes_instruction_files: false,
       },
     });
     expect(serialized).not.toContain("Make this better");

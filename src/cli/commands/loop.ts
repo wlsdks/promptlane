@@ -25,6 +25,7 @@ type LoopCliOptions = {
   now?: Date;
   source?: string;
   worktree?: string;
+  approvedBy?: string;
 };
 
 export function registerLoopCommand(program: Command): void {
@@ -71,6 +72,16 @@ export function registerLoopCommand(program: Command): void {
     .option("--json", "Print JSON.")
     .action((options: LoopCliOptions) => {
       console.log(loopMemoryCandidateForCli(options));
+    });
+
+  loop
+    .command("memory-approve")
+    .description("Record the latest eligible loop memory candidate after approval.")
+    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--approved-by <actor>", "Approval actor label.", "user")
+    .option("--json", "Print JSON.")
+    .action((options: LoopCliOptions) => {
+      console.log(loopMemoryApproveForCli(options));
     });
 
   registerLoopScheduleCommand(loop);
@@ -140,6 +151,46 @@ export function loopMemoryCandidateForCli(
     return options.json
       ? JSON.stringify(decision, null, 2)
       : formatLoopMemoryCandidate(decision);
+  });
+}
+
+export function loopMemoryApproveForCli(options: LoopCliOptions = {}): string {
+  return withStorage(options.dataDir, (storage) => {
+    const snapshot = storage.getLatestLoopSnapshot();
+    if (!snapshot) {
+      throw new UserError(
+        "No loop snapshot found. Run `prompt-coach loop collect` first.",
+      );
+    }
+
+    const decision = decideLoopMemoryCandidate(snapshot);
+    if (!decision.eligible || !decision.candidate) {
+      throw new UserError(
+        `Latest loop is not eligible for memory approval: ${decision.reason}.`,
+      );
+    }
+
+    const memory = storage.recordLoopMemory({
+      snapshot_id: snapshot.id,
+      title: decision.candidate.title,
+      statement: decision.candidate.statement,
+      evidence_refs: decision.candidate.evidence_refs,
+      approved_by: options.approvedBy ?? "user",
+    });
+    const result = {
+      recorded: true as const,
+      memory,
+      next_action: "use recorded memory as local context in future loop briefs",
+      privacy: {
+        ...memory.privacy,
+        returns_prompt_bodies: false,
+        returns_raw_paths: false,
+      },
+    };
+
+    return options.json
+      ? JSON.stringify(result, null, 2)
+      : formatLoopMemoryApproval(result);
   });
 }
 
@@ -251,6 +302,25 @@ function formatLoopMemoryCandidate(
   ]
     .filter((line): line is string => line !== undefined)
     .join("\n");
+}
+
+function formatLoopMemoryApproval(result: {
+  recorded: true;
+  memory: ReturnType<ReturnType<typeof createSqlitePromptStorage>["recordLoopMemory"]>;
+  next_action: string;
+}): string {
+  return [
+    "Loop memory recorded",
+    `id ${result.memory.id}`,
+    `snapshot ${result.memory.snapshot_id}`,
+    `approved by ${result.memory.approved_by}`,
+    `statement ${result.memory.statement}`,
+    `evidence ${result.memory.evidence_refs.join(", ")}`,
+    "",
+    `Next: ${result.next_action}`,
+    "",
+    "Privacy: local-only, no prompt bodies, no raw paths, no external calls, no instruction file writes.",
+  ].join("\n");
 }
 
 function createLoopStatus(storage: ReturnType<typeof createSqlitePromptStorage>) {

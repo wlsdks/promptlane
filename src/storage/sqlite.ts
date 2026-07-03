@@ -51,6 +51,7 @@ import type { AskEventStoragePort, CompactBoundaryStoragePort,
   JudgeScoreStoragePort,
   ListPromptsOptions,
   LoopSnapshotStoragePort,
+  LoopMemoryStoragePort,
   PromptDetail,
   ProjectListResult,
   ProjectInstructionReview,
@@ -128,6 +129,7 @@ import { createProjectKey } from "./project-id.js";
 import { projectLabel } from "./project-label.js";
 import * as loopSnapshots from "./loop-snapshots.js";
 import * as compactBoundaries from "./compact-boundaries.js";
+import * as loopMemories from "./loop-memories.js";
 
 export type { PromptRow } from "./sqlite-rows.js";
 
@@ -148,7 +150,7 @@ export type SqlitePromptStorage = PromptStoragePort &
   AgentPromptJudgmentStoragePort &
   CoachFeedbackStoragePort &
   JudgeScoreStoragePort &
-  AskEventStoragePort & LoopSnapshotStoragePort & CompactBoundaryStoragePort & {
+  AskEventStoragePort & LoopSnapshotStoragePort & CompactBoundaryStoragePort & LoopMemoryStoragePort & {
     close(): void;
     getAppliedMigrations(): AppliedMigration[];
     listPromptRows(): PromptRow[];
@@ -184,15 +186,11 @@ export function createSqlitePromptStorage(
     },
     getAppliedMigrations() {
       return db
-        .prepare(
-          "SELECT version, name FROM schema_migrations ORDER BY version ASC",
-        )
+        .prepare("SELECT version, name FROM schema_migrations ORDER BY version ASC")
         .all() as AppliedMigration[];
     },
     listPromptRows() {
-      return db
-        .prepare("SELECT * FROM prompts ORDER BY received_at DESC, id DESC")
-        .all() as PromptRow[];
+      return db.prepare("SELECT * FROM prompts ORDER BY received_at DESC, id DESC").all() as PromptRow[];
     },
     createLoopSnapshot: (input) => loopSnapshots.createLoopSnapshot(db, input),
     getLatestLoopSnapshot: () => loopSnapshots.getLatestLoopSnapshot(db),
@@ -200,6 +198,8 @@ export function createSqlitePromptStorage(
     recordLoopOutcome: (snapshotId, outcome) => loopSnapshots.recordLoopOutcome(db, snapshotId, outcome),
     recordCompactBoundary: (input) => compactBoundaries.recordCompactBoundary(db, input, { hmacSecret: options.hmacSecret, now: options.now?.() ?? new Date() }),
     listCompactBoundaries: (options = {}) => compactBoundaries.listCompactBoundaries(db, options),
+    recordLoopMemory: (input) => loopMemories.recordLoopMemory(db, input, options.now?.() ?? new Date()),
+    listLoopMemories: (options = {}) => loopMemories.listLoopMemories(db, options),
     listPrompts(options) {
       return listPrompts(db, options);
     },

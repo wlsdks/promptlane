@@ -12,6 +12,11 @@ import type {
   RecordCompactBoundaryInput,
 } from "./compact-boundaries.js";
 import type {
+  LoopMemory,
+  LoopMemoryListResult,
+  RecordLoopMemoryInput,
+} from "./loop-memories.js";
+import type {
   CoachFeedbackEntry,
   CoachFeedbackRating,
   CoachFeedbackSummary,
@@ -129,6 +134,11 @@ export type LoopSnapshotStoragePort = {
 export type CompactBoundaryStoragePort = {
   recordCompactBoundary(input: RecordCompactBoundaryInput): CompactBoundary;
   listCompactBoundaries(options?: { limit?: number }): CompactBoundaryListResult;
+};
+
+export type LoopMemoryStoragePort = {
+  recordLoopMemory(input: RecordLoopMemoryInput): LoopMemory;
+  listLoopMemories(options?: { limit?: number }): LoopMemoryListResult;
 };
 
 export type DeletePromptResult = {

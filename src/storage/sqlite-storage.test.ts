@@ -194,6 +194,74 @@ describe("SQLite prompt storage", () => {
     storage.close();
   });
 
+  it("records approved loop memories without prompt bodies or raw paths", () => {
+    const dataDir = createTempDir();
+    initializePromptCoach({ dataDir });
+    const storage = createSqlitePromptStorage({
+      dataDir,
+      hmacSecret: "test-secret",
+      now: () => new Date("2026-07-04T02:00:00.000Z"),
+    });
+
+    const memory = storage.recordLoopMemory({
+      snapshot_id: "loop_memory",
+      title: "Remember loop outcome for private-project",
+      statement:
+        "Scheduler lifecycle should stay plist-only unless the user explicitly asks for launchctl mutation.",
+      evidence_refs: ["commit:79cb39d", "test:pnpm test"],
+      approved_by: "user",
+    });
+
+    expect(memory).toMatchObject({
+      snapshot_id: "loop_memory",
+      title: "Remember loop outcome for private-project",
+      statement:
+        "Scheduler lifecycle should stay plist-only unless the user explicitly asks for launchctl mutation.",
+      evidence_refs: ["commit:79cb39d", "test:pnpm test"],
+      approved_by: "user",
+      privacy: {
+        local_only: true,
+        stores_prompt_bodies: false,
+        stores_raw_paths: false,
+        writes_instruction_files: false,
+        external_calls: false,
+      },
+    });
+    expect(storage.listLoopMemories({ limit: 10 }).items).toHaveLength(1);
+    expect(storage.getAppliedMigrations()).toContainEqual({
+      version: 18,
+      name: "018_loop_memories",
+    });
+    expect(JSON.stringify(memory)).not.toContain("/Users/example");
+    expect(JSON.stringify(memory)).not.toContain("Make this better");
+
+    storage.close();
+  });
+
+  it("rejects unsafe approved loop memory statements", () => {
+    const dataDir = createTempDir();
+    initializePromptCoach({ dataDir });
+    const storage = createSqlitePromptStorage({
+      dataDir,
+      hmacSecret: "test-secret",
+      now: () => new Date("2026-07-04T02:00:00.000Z"),
+    });
+
+    expect(() =>
+      storage.recordLoopMemory({
+        snapshot_id: "loop_memory",
+        title: "Unsafe memory",
+        statement:
+          "Use /Users/example/private-project with sk-proj-secret in every loop.",
+        evidence_refs: ["commit:79cb39d"],
+        approved_by: "user",
+      }),
+    ).toThrow("Loop memory statement must not include raw paths or secrets.");
+    expect(storage.listLoopMemories({ limit: 10 }).items).toHaveLength(0);
+
+    storage.close();
+  });
+
   it("initializes directories, applies migration, stores Markdown, indexes FTS, and deduplicates", async () => {
     const dataDir = createTempDir();
     initializePromptCoach({ dataDir });
@@ -239,6 +307,7 @@ describe("SQLite prompt storage", () => {
       { version: 15, name: "015_prompt_ask_events" },
       { version: 16, name: "016_loop_snapshots" },
       { version: 17, name: "017_compact_boundaries" },
+      { version: 18, name: "018_loop_memories" },
     ]);
     const db = new Database(join(dataDir, "prompt-coach.sqlite"));
     try {

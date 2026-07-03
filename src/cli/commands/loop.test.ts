@@ -11,6 +11,7 @@ import { createSqlitePromptStorage } from "../../storage/sqlite.js";
 import {
   loopBriefForCli,
   loopCollectForCli,
+  loopMemoryApproveForCli,
   loopMemoryCandidateForCli,
   loopStatusForCli,
 } from "./loop.js";
@@ -225,6 +226,49 @@ describe("loop CLI command", () => {
     expect(text).toContain("Loop memory candidate eligible");
     expect(text).toContain("reason passed_with_evidence");
     expect(text).toContain("Next: review and approve before writing memory");
+    expect(text).not.toContain("Make this better");
+    expect(text).not.toContain("/Users/example");
+  });
+
+  it("records an approved memory from the latest eligible candidate", async () => {
+    const dataDir = createTempDir();
+    await seedPrompts(dataDir);
+    const snapshot = JSON.parse(
+      loopCollectForCli({
+        dataDir,
+        json: true,
+        cwdPrefix: "/Users/example/private-project",
+        now: new Date("2026-07-04T01:00:00.000Z"),
+        cwd: "/Users/example/private-project",
+      }),
+    ) as { id: string };
+    seedLoopOutcome(dataDir, snapshot.id);
+
+    const json = loopMemoryApproveForCli({
+      dataDir,
+      json: true,
+      approvedBy: "user",
+    });
+    const parsed = JSON.parse(json) as {
+      recorded: boolean;
+      memory: { statement: string; evidence_refs: string[] };
+      privacy: { writes_instruction_files: boolean };
+    };
+
+    expect(parsed.recorded).toBe(true);
+    expect(parsed.memory.statement).toContain(
+      "Scheduler lifecycle should stay plist-only",
+    );
+    expect(parsed.memory.evidence_refs).toContain("commit:2a91de0");
+    expect(parsed.privacy.writes_instruction_files).toBe(false);
+    expect(json).not.toContain("Make this better");
+    expect(json).not.toContain("/Users/example");
+
+    const text = loopMemoryApproveForCli({ dataDir, approvedBy: "user" });
+
+    expect(text).toContain("Loop memory recorded");
+    expect(text).toContain("approved by user");
+    expect(text).toContain("Next: use recorded memory as local context");
     expect(text).not.toContain("Make this better");
     expect(text).not.toContain("/Users/example");
   });

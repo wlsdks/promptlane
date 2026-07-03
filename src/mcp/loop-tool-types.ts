@@ -22,6 +22,11 @@ export type ProposeLoopMemoryCandidateToolArguments = {
   latest?: boolean;
 };
 
+export type RecordLoopMemoryToolArguments = {
+  latest?: boolean;
+  approved_by: string;
+};
+
 export type LoopdeckToolPrivacy = {
   local_only: true;
   external_calls: false;
@@ -98,6 +103,31 @@ export type ProposeLoopMemoryCandidateToolResult =
         auto_writes_memory: false;
       };
     })
+  | {
+      is_error: true;
+      error_code: "invalid_input" | "not_found" | "storage_unavailable";
+      message: string;
+    };
+
+export type RecordLoopMemoryToolResult =
+  | {
+      recorded: true;
+      memory: {
+        id: string;
+        snapshot_id: string;
+        title: string;
+        statement: string;
+        evidence_refs: string[];
+        approved_by: string;
+        created_at: string;
+      };
+      next_action: string;
+      privacy: LoopdeckToolPrivacy & {
+        stores_prompt_bodies: false;
+        stores_raw_paths: false;
+        writes_instruction_files: false;
+      };
+    }
   | {
       is_error: true;
       error_code: "invalid_input" | "not_found" | "storage_unavailable";

@@ -309,3 +309,74 @@ export const PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION: PromptCoachMcpToolDe
       ],
     },
   } as const;
+
+export const RECORD_LOOP_MEMORY_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+  {
+    name: "record_loop_memory",
+    description:
+      "Record a user-approved Loopdeck memory from the latest eligible loop outcome. This writes only the approved candidate statement and safe evidence refs into local prompt-coach storage; it never writes AGENTS.md, CLAUDE.md, project docs, prompt bodies, raw paths, transcripts, compact summaries, or external LLM results.",
+    annotations: {
+      ...LOCAL_LOOP_WRITE_TOOL_ANNOTATIONS,
+      title: "Record approved Loopdeck memory",
+    },
+    inputSchema: {
+      type: "object",
+      required: ["approved_by"],
+      properties: {
+        latest: {
+          type: "boolean",
+          description:
+            "Use the latest local loop snapshot. Defaults to true; no other selection mode exists yet.",
+        },
+        approved_by: {
+          type: "string",
+          description:
+            "Actor label for the approval, for example user or maintainer. Must not be empty.",
+        },
+      },
+      additionalProperties: false,
+    },
+    outputSchema: {
+      type: "object",
+      properties: {
+        recorded: { const: true },
+        memory: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            snapshot_id: { type: "string" },
+            title: { type: "string" },
+            statement: { type: "string" },
+            evidence_refs: { type: "array", items: { type: "string" } },
+            approved_by: { type: "string" },
+            created_at: { type: "string" },
+          },
+        },
+        next_action: { type: "string" },
+        privacy: {
+          ...LOOP_TOOL_PRIVACY_SCHEMA,
+          required: [
+            ...LOOP_TOOL_PRIVACY_SCHEMA.required,
+            "stores_prompt_bodies",
+            "stores_raw_paths",
+            "writes_instruction_files",
+          ],
+          properties: {
+            ...LOOP_TOOL_PRIVACY_SCHEMA.properties,
+            stores_prompt_bodies: { const: false },
+            stores_raw_paths: { const: false },
+            writes_instruction_files: { const: false },
+          },
+        },
+        is_error: TOOL_ERROR_OUTPUT_SCHEMA.properties.is_error,
+        error_code: TOOL_ERROR_OUTPUT_SCHEMA.properties.error_code,
+        message: TOOL_ERROR_OUTPUT_SCHEMA.properties.message,
+      },
+      oneOf: [
+        {
+          required: ["recorded", "memory", "next_action", "privacy"],
+        },
+        TOOL_ERROR_OUTPUT_SCHEMA,
+      ],
+    },
+  } as const;
