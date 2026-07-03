@@ -24,6 +24,11 @@ describe("web api export client", () => {
                 approved_count: 1,
                 included_in_brief: true,
               },
+              memory_candidate: {
+                eligible: true,
+                reason: "passed_with_evidence",
+                next_action: "prompt-coach loop memory-approve",
+              },
               latest_snapshot: {
                 id: "loop_web",
                 created_at: "2026-07-04T01:00:00.000Z",
@@ -85,6 +90,11 @@ describe("web api export client", () => {
     expect(loops.status.project_memory).toEqual({
       approved_count: 1,
       included_in_brief: true,
+    });
+    expect(loops.status.memory_candidate).toEqual({
+      eligible: true,
+      reason: "passed_with_evidence",
+      next_action: "prompt-coach loop memory-approve",
     });
     expect(loops.items[0]).toMatchObject({
       id: "loop_web",

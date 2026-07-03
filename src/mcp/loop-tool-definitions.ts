@@ -86,6 +86,31 @@ export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
           },
           additionalProperties: false,
         },
+        memory_candidate: {
+          type: "object",
+          required: ["eligible", "reason", "next_action"],
+          properties: {
+            eligible: { type: "boolean" },
+            reason: {
+              type: "string",
+              enum: [
+                "passed_with_evidence",
+                "outcome_not_passed",
+                "missing_evidence",
+                "missing_summary",
+                "unsafe_summary",
+              ],
+            },
+            next_action: {
+              type: "string",
+              enum: [
+                "prompt-coach loop memory-approve",
+                "prompt-coach loop memory-candidate",
+              ],
+            },
+          },
+          additionalProperties: false,
+        },
         latest_snapshot: {
           type: "object",
           properties: {

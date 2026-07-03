@@ -14,7 +14,9 @@ describe("LoopsView", () => {
     expect(html).toContain("Loopdeck status ready");
     expect(html).toContain("Next: prompt-coach loop brief");
     expect(html).toContain("Approved memories 1");
+    expect(html).toContain("Memory candidate eligible");
     expect(html).not.toContain("Make this better");
+    expect(html).not.toContain("Safe memory statement");
     expect(html).not.toContain("Compact summary with sk-proj-secret");
     expect(html).not.toContain("/Users/example");
   });
@@ -28,6 +30,11 @@ function loopList(): LoopListResponse {
       project_memory: {
         approved_count: 1,
         included_in_brief: true,
+      },
+      memory_candidate: {
+        eligible: true,
+        reason: "passed_with_evidence",
+        next_action: "prompt-coach loop memory-approve",
       },
       latest_snapshot: loopSummary(),
       next_action: "prompt-coach loop brief",

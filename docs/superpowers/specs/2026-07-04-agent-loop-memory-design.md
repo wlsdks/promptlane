@@ -765,6 +765,31 @@ Do not add:
 - hook marker rename
 - MCP server name rename
 
+### Slice 4.16: Memory Candidate Status
+
+Add:
+
+- shared `LoopdeckStatus.memory_candidate` summary with only `eligible`,
+  `reason`, and `next_action`
+- CLI `prompt-coach loop status` text and JSON showing whether the latest loop
+  can be approved into local project memory
+- MCP `get_loopdeck_status` result and schema exposing the same raw-free
+  candidate summary
+- `/api/v1/loops` status payload exposing the same candidate summary for the
+  latest snapshot
+- web Loops summary header showing whether a candidate is eligible
+- focused tests proving status surfaces do not expose candidate statements,
+  evidence refs, prompt bodies, raw paths, compact summaries, or unrelated
+  project memory text
+
+Do not add:
+
+- memory statements or evidence refs to status payloads
+- automatic memory approval
+- automatic AGENTS.md or CLAUDE.md writes
+- hidden external LLM summarization
+- plugin command id rename
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

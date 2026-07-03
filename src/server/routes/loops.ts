@@ -8,6 +8,7 @@ import {
   createLoopdeckStatus,
   toLoopdeckStatusSnapshot,
 } from "../../loop/status.js";
+import { decideLoopMemoryCandidate } from "../../loop/memory-candidate.js";
 import type {
   CompactBoundaryStoragePort,
   LoopMemoryStoragePort,
@@ -42,6 +43,7 @@ export function registerLoopRoutes(
             projectId: latest.project_id,
           }).items.length ?? 0)
         : 0,
+      memoryCandidate: latest ? decideLoopMemoryCandidate(latest) : undefined,
     });
 
     return {

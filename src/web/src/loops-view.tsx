@@ -52,6 +52,14 @@ export function LoopsView({
           <p className="loops-status-line">
             Approved memories {loops.status.project_memory.approved_count}
           </p>
+          {loops.status.memory_candidate && (
+            <p className="loops-status-line">
+              Memory candidate{" "}
+              {loops.status.memory_candidate.eligible
+                ? "eligible"
+                : loops.status.memory_candidate.reason}
+            </p>
+          )}
           <p className="loops-status-line">Next: {loops.status.next_action}</p>
           <p>
             Recent local agent loops grouped by safe project metadata. Compact

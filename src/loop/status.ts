@@ -1,5 +1,6 @@
 import { latestCompactBoundaryAfterSnapshot } from "./brief.js";
 import type { LoopBriefCompactBoundary } from "./brief.js";
+import type { LoopMemoryCandidateDecision } from "./memory-candidate.js";
 import type { LoopSnapshot } from "./types.js";
 
 export type LoopdeckStatusLevel = "ready" | "empty";
@@ -31,10 +32,19 @@ export type LoopdeckStatusProjectMemory = {
   included_in_brief: boolean;
 };
 
+export type LoopdeckStatusMemoryCandidate = {
+  eligible: boolean;
+  reason: LoopMemoryCandidateDecision["reason"];
+  next_action:
+    | "prompt-coach loop memory-approve"
+    | "prompt-coach loop memory-candidate";
+};
+
 export type LoopdeckStatus = {
   status: LoopdeckStatusLevel;
   snapshot_count: number;
   project_memory: LoopdeckStatusProjectMemory;
+  memory_candidate?: LoopdeckStatusMemoryCandidate;
   latest_snapshot?: LoopdeckStatusSnapshot;
   latest_compact_boundary?: LoopBriefCompactBoundary;
   next_action: string;
@@ -51,6 +61,10 @@ export function createLoopdeckStatus(input: {
   compactBoundaries: readonly CompactBoundaryCandidate[];
   includeLatest?: boolean;
   projectMemoryCount?: number;
+  memoryCandidate?: Pick<
+    LoopMemoryCandidateDecision,
+    "eligible" | "reason" | "snapshot_id"
+  >;
 }): LoopdeckStatus {
   const latest = input.snapshots.at(0);
   const projectMemoryCount = input.projectMemoryCount ?? 0;
@@ -71,13 +85,36 @@ export function createLoopdeckStatus(input: {
       approved_count: projectMemoryCount,
       included_in_brief: Boolean(latest && projectMemoryCount > 0),
     },
+    ...(input.memoryCandidate
+      ? {
+          memory_candidate: toLoopdeckStatusMemoryCandidate(
+            input.memoryCandidate,
+          ),
+        }
+      : {}),
     ...(latest && input.includeLatest !== false
       ? { latest_snapshot: toLoopdeckStatusSnapshot(latest) }
       : {}),
     ...(compactBoundary ? { latest_compact_boundary: compactBoundary } : {}),
     next_action: nextAction,
-    next_actions: nextActionsForStatus({ hasSnapshots, compactBoundary }),
+    next_actions: nextActionsForStatus({
+      hasSnapshots,
+      compactBoundary,
+      memoryCandidate: input.memoryCandidate,
+    }),
     privacy: loopdeckStatusPrivacy(),
+  };
+}
+
+export function toLoopdeckStatusMemoryCandidate(
+  decision: Pick<LoopMemoryCandidateDecision, "eligible" | "reason">,
+): LoopdeckStatusMemoryCandidate {
+  return {
+    eligible: decision.eligible,
+    reason: decision.reason,
+    next_action: decision.eligible
+      ? "prompt-coach loop memory-approve"
+      : "prompt-coach loop memory-candidate",
   };
 }
 
@@ -114,6 +151,7 @@ export function loopdeckStatusPrivacy(): LoopdeckStatusPrivacy {
 function nextActionsForStatus(input: {
   hasSnapshots: boolean;
   compactBoundary?: LoopBriefCompactBoundary;
+  memoryCandidate?: Pick<LoopMemoryCandidateDecision, "eligible">;
 }): string[] {
   if (!input.hasSnapshots) {
     return [
@@ -123,14 +161,25 @@ function nextActionsForStatus(input: {
   }
 
   if (input.compactBoundary) {
-    return [
+    return withMemoryCandidateAction(input.memoryCandidate, [
       "Run prompt-coach loop collect again after compaction to refresh the snapshot.",
       "Then use prompt-coach loop brief or prepare_loop_brief for a continuation prompt.",
-    ];
+    ]);
   }
 
-  return [
+  return withMemoryCandidateAction(input.memoryCandidate, [
     "Use prompt-coach loop brief or prepare_loop_brief to get a copy-ready continuation prompt.",
     "Run prompt-coach loop collect again after the next agent turn to refresh the snapshot.",
+  ]);
+}
+
+function withMemoryCandidateAction(
+  memoryCandidate: Pick<LoopMemoryCandidateDecision, "eligible"> | undefined,
+  actions: string[],
+): string[] {
+  if (!memoryCandidate?.eligible) return actions;
+  return [
+    ...actions,
+    "Run prompt-coach loop memory-approve after reviewing the latest passed loop outcome.",
   ];
 }

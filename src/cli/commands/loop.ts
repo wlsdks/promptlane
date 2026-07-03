@@ -163,6 +163,9 @@ export function loopStatusForCli(options: LoopCliOptions = {}): string {
       projectMemoryCount: latest
         ? storage.listLoopMemories({ projectId: latest.project_id }).items.length
         : 0,
+      memoryCandidate: latest
+        ? decideLoopMemoryCandidate(latest)
+        : undefined,
     });
 
     return options.json ? JSON.stringify(status, null, 2) : formatLoopStatus(status);
@@ -370,6 +373,9 @@ function formatLoopStatus(status: LoopdeckStatus): string {
     `Loopdeck status ${status.status}`,
     `snapshots ${status.snapshot_count}`,
     `approved memories ${status.project_memory.approved_count}`,
+    status.memory_candidate
+      ? `memory candidate ${status.memory_candidate.eligible ? "eligible" : status.memory_candidate.reason}`
+      : "memory candidate none",
     status.latest_snapshot ? "latest loop" : "latest loop none",
     status.latest_snapshot
       ? `id ${status.latest_snapshot.id}`

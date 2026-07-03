@@ -79,6 +79,11 @@ describe("createLoopdeckStatus", () => {
       snapshots: [loopSnapshot()],
       compactBoundaries: [],
       projectMemoryCount: 2,
+      memoryCandidate: {
+        eligible: true,
+        reason: "passed_with_evidence",
+        snapshot_id: "loop_status",
+      },
     });
     const serialized = JSON.stringify(status);
 
@@ -86,9 +91,20 @@ describe("createLoopdeckStatus", () => {
       approved_count: 2,
       included_in_brief: true,
     });
+    expect(status.memory_candidate).toEqual({
+      eligible: true,
+      reason: "passed_with_evidence",
+      next_action: "prompt-coach loop memory-approve",
+    });
+    expect(status.next_actions).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("prompt-coach loop memory-approve"),
+      ]),
+    );
     expect(serialized).not.toContain(
       "Scheduler lifecycle should stay plist-only",
     );
+    expect(serialized).not.toContain("Safe summary only");
     expect(serialized).not.toContain("commit:2a91de0");
   });
 });

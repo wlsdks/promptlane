@@ -66,6 +66,9 @@ export function getLoopdeckStatusTool(
         projectMemoryCount: latest
           ? storage.listLoopMemories({ projectId: latest.project_id }).items.length
           : 0,
+        memoryCandidate: latest
+          ? decideLoopMemoryCandidate(latest)
+          : undefined,
       });
 
       return {

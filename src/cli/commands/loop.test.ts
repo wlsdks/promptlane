@@ -206,6 +206,7 @@ describe("loop CLI command", () => {
     expect(text).toContain("Loopdeck status ready");
     expect(text).toContain("snapshots 2");
     expect(text).toContain("approved memories 1");
+    expect(text).toContain("memory candidate eligible");
     expect(text).toContain("latest loop");
     expect(text).toContain("project private-project");
     expect(text).toContain("compact boundary PostCompact at 2026-07-04T01:05:00.000Z");
@@ -218,6 +219,11 @@ describe("loop CLI command", () => {
     const parsed = JSON.parse(json) as {
       latest_snapshot?: { outcome_status?: string };
       project_memory?: { approved_count?: number; included_in_brief?: boolean };
+      memory_candidate?: {
+        eligible?: boolean;
+        reason?: string;
+        next_action?: string;
+      };
       next_actions?: string[];
       privacy?: { returns_compact_content?: boolean };
     };
@@ -227,15 +233,22 @@ describe("loop CLI command", () => {
       approved_count: 1,
       included_in_brief: true,
     });
+    expect(parsed.memory_candidate).toEqual({
+      eligible: true,
+      reason: "passed_with_evidence",
+      next_action: "prompt-coach loop memory-approve",
+    });
     expect(parsed.next_actions).toEqual(
       expect.arrayContaining([
         expect.stringContaining("prompt-coach loop collect"),
+        expect.stringContaining("prompt-coach loop memory-approve"),
       ]),
     );
     expect(parsed.privacy?.returns_compact_content).toBe(false);
     expect(json).not.toContain(
       "Scheduler lifecycle should stay plist-only unless the user explicitly asks for launchctl mutation.",
     );
+    expect(json).not.toContain("commit:2a91de0");
     expect(json).not.toContain("This unrelated project memory should not appear");
   });
 

@@ -107,6 +107,18 @@ export type LoopListResponse = {
       approved_count: number;
       included_in_brief: boolean;
     };
+    memory_candidate?: {
+      eligible: boolean;
+      reason:
+        | "passed_with_evidence"
+        | "outcome_not_passed"
+        | "missing_evidence"
+        | "missing_summary"
+        | "unsafe_summary";
+      next_action:
+        | "prompt-coach loop memory-approve"
+        | "prompt-coach loop memory-candidate";
+    };
     latest_snapshot?: LoopSummary;
     latest_compact_boundary?: LoopSummary["compact_boundary"];
     next_action: string;

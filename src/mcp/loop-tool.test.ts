@@ -48,6 +48,11 @@ describe("Loopdeck MCP tools", () => {
         approved_count: 1,
         included_in_brief: true,
       },
+      memory_candidate: {
+        eligible: true,
+        reason: "passed_with_evidence",
+        next_action: "prompt-coach loop memory-approve",
+      },
       latest_snapshot: {
         id: "loop_mcp",
         tool: "codex",
@@ -73,6 +78,7 @@ describe("Loopdeck MCP tools", () => {
     expect(serialized).not.toContain(
       "Shared status surfaces should use one model instead of duplicating readiness logic.",
     );
+    expect(serialized).not.toContain("commit:11d8426");
     expect(serialized).not.toContain("This unrelated project memory should not appear");
   });
 

@@ -362,6 +362,11 @@ describe("createServer P2 ingest boundary", () => {
             approved_count: 1,
             included_in_brief: true,
           },
+          memory_candidate: {
+            eligible: false,
+            reason: "outcome_not_passed",
+            next_action: "prompt-coach loop memory-candidate",
+          },
           latest_snapshot: {
             id: "loop_web",
             outcome_status: "unknown",
