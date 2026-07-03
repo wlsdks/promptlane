@@ -26,7 +26,8 @@ new manual terminal workflows when you want the product-name command.
 Slash command and plugin id migration is gated by
 `docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md`; Claude Code
 slash commands remain under /prompt-coach:* until that compatibility plan is
-implemented.
+implemented. `/loopdeck:*` is a planned alias-only slash namespace, not the
+only namespace and not shipped as command files yet.
 
 It collects supported tool prompts locally, redacts sensitive values before storage, writes Markdown files, indexes them in SQLite, and serves a local web UI for search, review, archive scoring, prompt practice, analysis, deletion, and copy-based prompt improvement.
 
@@ -527,7 +528,10 @@ The Claude Code plugin provides slash commands:
 
 Claude Code slash commands remain under /prompt-coach:* during the Loopdeck
 migration. Existing plugin users can keep those commands, while manual terminal
-fallbacks can use the loopdeck CLI alias when preferred.
+fallbacks can use the loopdeck CLI alias when preferred. `/loopdeck:*` is a
+planned alias-only slash namespace for a later compatibility slice; this package
+does not ship `/loopdeck:*` command files yet, and `/prompt-coach:*` must remain
+available.
 
 `/prompt-coach:guard` opens an interactive picker (off / context / ask /
 block-and-copy) that flips the `UserPromptSubmit` rewrite-guard mode without

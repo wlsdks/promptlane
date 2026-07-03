@@ -220,6 +220,41 @@ describe("plugin packaging files", () => {
     expect(plugins).toContain("`loopdeck` CLI alias");
   });
 
+  it("documents /loopdeck:* as a future alias-only slash namespace without shipping command files yet", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+    const plugins = readFileSync(join(process.cwd(), "docs/PLUGINS.md"), "utf8");
+    const packageJson = readJson<{ name: string }>("package.json");
+    const claudeManifest = readJson<{ name: string; commands: string[] }>(
+      ".claude-plugin/plugin.json",
+    );
+    const codexManifest = readJson<{ name: string }>(
+      "plugins/prompt-coach/.codex-plugin/plugin.json",
+    );
+    const commandFiles = readdirSync(join(process.cwd(), "commands")).filter(
+      (file) => file.endsWith(".md"),
+    );
+
+    for (const content of [readme, readmeKo, plugins]) {
+      expect(content).toContain("/prompt-coach:*");
+      expect(content).toContain("/loopdeck:*");
+      expect(content).toContain("alias-only");
+    }
+    expect(commandFiles).not.toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/^loopdeck(?:-|:|\.|$)/),
+      ]),
+    );
+    expect(claudeManifest.commands).not.toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("loopdeck"),
+      ]),
+    );
+    expect(packageJson.name).toBe("prompt-coach");
+    expect(claudeManifest.name).toBe("prompt-coach");
+    expect(codexManifest.name).toBe("prompt-coach");
+  });
+
   it("keeps slash command and plugin rename behind a dedicated compatibility plan", () => {
     const plan = readFileSync(
       join(

@@ -181,7 +181,9 @@
 - [x] Task 32 GREEN: rename issue-slice plan을 R1-R7로 분해하고 package files/spec/todo에 연결
 - [x] Task 33 RED: runtime id inventory artifact가 없어 packaging focused test 실패 확인
 - [x] Task 33 GREEN: package/bin/plugin/command/hook/MCP runtime id inventory JSON을 추가하고 live manifest 비교 테스트로 잠금
-- [ ] 다음 slice: Slice R2 Alias-Only Command Docs 구현
+- [x] Task 34 RED: `/loopdeck:*` alias-only slash namespace docs 계약이 없어 packaging focused test 실패 확인
+- [x] Task 34 GREEN: README/README.ko/PLUGINS가 `/loopdeck:*`를 future alias-only namespace로 설명하고 command files/runtime ids는 유지
+- [ ] 다음 slice: Slice R3 Claude Code Dual Namespace Packaging 구현 여부와 호환성 gate 결정
 
 ### 판단 기준
 

@@ -1108,6 +1108,25 @@ Do not add:
 - prompt bodies, transcript text, compact summaries, raw paths, API tokens, or
   provider credentials
 
+### Slice 4.31: Alias-Only Slash Namespace Docs
+
+Add:
+
+- README, README.ko, and PLUGINS documentation that names `/loopdeck:*` as a
+  future alias-only slash namespace
+- packaging test coverage that proves the docs mention both `/prompt-coach:*`
+  and `/loopdeck:*` while package, plugin ids, and Claude Code command files
+  remain unchanged
+- compatibility wording that `/loopdeck:*` must not become the only namespace
+  and is not shipped as command files in this slice
+
+Do not add:
+
+- `/loopdeck:*` command files
+- Claude Code plugin manifest command entries for loopdeck aliases
+- package, plugin id, hook command, or MCP server-name changes
+- runtime command alias behavior
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

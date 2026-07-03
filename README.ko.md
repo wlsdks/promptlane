@@ -441,6 +441,12 @@ Claude Code plugin slash commands:
 /prompt-coach:open
 ```
 
+Loopdeck migration 중 Claude Code slash command는 `/prompt-coach:*`에
+남아 있습니다. `/loopdeck:*`는 다음 compatibility slice에서 검토할
+planned alias-only namespace이며, 현재 package는 `/loopdeck:*` command
+file을 ship하지 않습니다. 기존 `/prompt-coach:*` command는 계속 유지해야
+합니다.
+
 `/prompt-coach:guard`는 `off / context / ask / block-and-copy` 네 가지
 `UserPromptSubmit` rewrite-guard 모드를 인터랙티브 picker로 전환합니다.
 CLI 옵션을 외울 필요 없이 슬래시 명령 한 번으로 모드를 바꿀 수 있습니다.
