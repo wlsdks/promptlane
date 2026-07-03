@@ -171,7 +171,9 @@
 - [x] Task 27 GREEN: `LoopdeckStatus.activity.worktrees`를 safe worktree label, sessions, snapshots, latest outcome으로 CLI/MCP/API/web summary에 연결
 - [x] Task 28 RED: dedicated worktree drilldown API/client/UI가 없어 focused tests 실패 확인
 - [x] Task 28 GREEN: `/api/v1/loops/worktrees/:worktree`, `getLoopWorktree()`, Loops summary open action, selected worktree detail panel 구현
-- [ ] 다음 slice: plugin rename plan을 issue slice로 분해 또는 worktree drilldown을 route/query-state로 deep-link 가능하게 개선
+- [x] Task 29 RED: `/loops?worktree=...` query-state deep link가 복원되지 않는 routing focused test 실패 확인
+- [x] Task 29 GREEN: `View`/`pathForView`/`routeFromLocation`과 App 초기/클릭 흐름을 worktree query-state에 연결
+- [ ] 다음 slice: plugin rename plan을 issue slice로 분해 또는 worktree drilldown에 branch/session 필터 추가 여부 결정
 
 ### 판단 기준
 

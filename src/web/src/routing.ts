@@ -6,7 +6,7 @@ export type View =
   | { name: "detail"; id: string }
   | { name: "dashboard" }
   | { name: "coach" }
-  | { name: "loops" }
+  | { name: "loops"; worktree?: string }
   | { name: "scores" }
   | { name: "projects" }
   | { name: "mcp" }
@@ -25,7 +25,11 @@ export function routeFromLocation(): View {
   }
 
   if (window.location.pathname === "/loops") {
-    return { name: "loops" };
+    const worktree = new URLSearchParams(window.location.search).get("worktree");
+    return {
+      name: "loops",
+      ...(worktree ? { worktree } : {}),
+    };
   }
 
   if (window.location.pathname === "/scores") {
@@ -54,6 +58,23 @@ export function routeFromLocation(): View {
   }
 
   return { name: "list" };
+}
+
+export function pathForView(view: View): string {
+  if (view.name === "detail") return `/prompts/${encodeURIComponent(view.id)}`;
+  if (view.name === "dashboard") return "/dashboard";
+  if (view.name === "coach") return "/coach";
+  if (view.name === "scores") return "/scores";
+  if (view.name === "loops") {
+    if (!view.worktree) return "/loops";
+    const params = new URLSearchParams({ worktree: view.worktree });
+    return `/loops?${params.toString()}`;
+  }
+  if (view.name === "projects") return "/projects";
+  if (view.name === "mcp") return "/mcp";
+  if (view.name === "exports") return "/exports";
+  if (view.name === "settings") return "/settings";
+  return "/";
 }
 
 export function needsDashboardData(viewName: View["name"]): boolean {

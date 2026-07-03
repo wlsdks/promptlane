@@ -99,6 +99,7 @@ import {
   filtersFromLocation,
   needsArchiveScoreData,
   needsDashboardData,
+  pathForView,
   routeFromLocation,
   writeFiltersToLocation,
   type View,
@@ -277,6 +278,17 @@ export function App() {
   }, [loops, view.name]);
 
   useEffect(() => {
+    if (view.name !== "loops" || !view.worktree) {
+      return;
+    }
+    if (loopWorktree?.worktree === view.worktree) {
+      return;
+    }
+
+    void openLoopWorktree(view.worktree);
+  }, [loopWorktree?.worktree, view]);
+
+  useEffect(() => {
     if (view.name !== "detail") {
       setSelected(undefined);
       return;
@@ -413,6 +425,9 @@ export function App() {
     setError(undefined);
     try {
       setLoopWorktree(await getLoopWorktree(worktree));
+      if (view.name === "loops" && view.worktree !== worktree) {
+        navigate({ name: "loops", worktree });
+      }
     } catch {
       setError("Could not load loop worktree detail.");
     }
@@ -667,26 +682,7 @@ export function App() {
   }
 
   function navigate(next: View): void {
-    const path =
-      next.name === "detail"
-        ? `/prompts/${next.id}`
-        : next.name === "dashboard"
-          ? "/dashboard"
-          : next.name === "coach"
-            ? "/coach"
-            : next.name === "scores"
-              ? "/scores"
-              : next.name === "loops"
-                ? "/loops"
-                : next.name === "projects"
-                  ? "/projects"
-                  : next.name === "mcp"
-                    ? "/mcp"
-                    : next.name === "exports"
-                      ? "/exports"
-                      : next.name === "settings"
-                        ? "/settings"
-                        : "/";
+    const path = pathForView(next);
     window.history.pushState({}, "", path);
     setView(next);
   }

@@ -772,8 +772,9 @@ the web review panel intentionally has no apply button.
 include a raw-free worktree/session activity summary with per-worktree safe
 labels, session counts, snapshot counts, and latest outcome status so agents can
 notice when recent snapshots span multiple worktrees or sessions before merging
-output. The web Loops view can open a selected worktree detail panel backed by
-`/api/v1/loops/worktrees/:worktree`, still returning only safe loop metadata.
+output. The web Loops view can open and deep-link a selected worktree detail
+panel backed by `/api/v1/loops/worktrees/:worktree`, still returning only safe
+loop metadata.
 `loop collect` also accepts `--source service` for explicit cron or LaunchAgent
 one-shot collection without creating hidden background automation. Users who
 want an opt-in macOS schedule can preview or install it with

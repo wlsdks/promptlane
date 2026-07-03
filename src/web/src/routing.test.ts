@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   filtersFromLocation,
+  pathForView,
   routeFromLocation,
   writeFiltersToLocation,
 } from "./routing.js";
@@ -26,6 +27,12 @@ describe("routing", () => {
 
     stubLocation("/loops");
     expect(routeFromLocation()).toEqual({ name: "loops" });
+
+    stubLocation("/loops", "?worktree=agent-loop-worktree");
+    expect(routeFromLocation()).toEqual({
+      name: "loops",
+      worktree: "agent-loop-worktree",
+    });
 
     stubLocation("/prompts/prompt%201");
     expect(routeFromLocation()).toEqual({ id: "prompt 1", name: "detail" });
@@ -60,6 +67,13 @@ describe("routing", () => {
       {},
       "",
       "/?q=tests&tool=claude-code&gap=verification_criteria",
+    );
+  });
+
+  it("writes stable loop worktree URLs", () => {
+    expect(pathForView({ name: "loops" })).toBe("/loops");
+    expect(pathForView({ name: "loops", worktree: "agent loop/worktree" })).toBe(
+      "/loops?worktree=agent+loop%2Fworktree",
     );
   });
 });

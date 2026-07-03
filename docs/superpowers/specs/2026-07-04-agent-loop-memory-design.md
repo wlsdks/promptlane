@@ -996,6 +996,29 @@ Do not add:
 - persistent deep-link routing or query-state until a later slice
 - hidden external LLM summarization
 
+### Slice 4.26: Worktree Drilldown Query State
+
+Add:
+
+- `/loops?worktree=<safe-label>` route parsing so a selected worktree drilldown
+  can be reopened after refresh or shared into another local browser session
+- `pathForView({ name: "loops", worktree })` helper to keep URL generation in
+  the same routing module as parsing
+- App initialization that fetches the selected worktree detail when the route
+  includes `worktree`
+- Loops summary open action that updates browser history to the matching
+  query-state after fetching the selected worktree detail
+- focused tests proving URL parsing/generation preserves worktree labels without
+  introducing raw paths or prompt bodies into the route contract
+
+Do not add:
+
+- raw worktree paths in URLs
+- prompt body, transcript, compact summary, or evidence expansion in query-state
+- automatic cross-worktree comparison or merge recommendation
+- background scanning of uncollected worktrees
+- external LLM summarization
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

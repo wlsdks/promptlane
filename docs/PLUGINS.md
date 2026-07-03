@@ -253,9 +253,9 @@ review panel intentionally has no apply button. `get_loopdeck_status`,
 `/api/v1/loops`, and `prompt-coach loop status` include raw-free worktree and
 session activity counts plus per-worktree safe labels, snapshot counts, and
 latest outcome status so active agents can notice parallel work before merging
-or handing off. The web Loops view can open a selected worktree detail panel
-through `/api/v1/loops/worktrees/:worktree`, still limited to safe loop
-metadata. Use
+or handing off. The web Loops view can open and deep-link a selected worktree
+detail panel through `/api/v1/loops/worktrees/:worktree`, still limited to safe
+loop metadata. Use
 `prompt-coach loop collect --source service` as the explicit one-shot command
 for cron or LaunchAgent collection; it does not silently install a scheduler.
 The opt-in macOS schedule is `prompt-coach loop schedule install`; use
