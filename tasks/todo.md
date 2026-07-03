@@ -101,7 +101,15 @@
 - [x] Task 2 RED: `get_loopdeck_status` / `prepare_loop_brief`가 compact boundary awareness를 요구하도록 MCP 테스트 작성
 - [x] Task 2 GREEN: MCP status/brief result에 raw-free compact boundary metadata 추가
 - [x] Task 3: spec/README/PLUGINS에 compact boundary awareness 범위와 한계 반영
-- [ ] 다음 slice: compact-aware loop status CLI 또는 web Loops view 설계
+- [x] 다음 slice: compact-aware loop status CLI 또는 web Loops view 설계
+
+## 2026-07-04 Loop Status CLI Slice
+
+- [x] Task 1 RED: `prompt-coach loop status`가 missing export로 실패하는지 확인
+- [x] Task 1 GREEN: local loop snapshot readiness와 latest snapshot metadata를 표시하는 CLI status 구현
+- [x] Task 2 GREEN: 최신 snapshot 이후 compact boundary가 있으면 `prompt-coach loop collect` refresh action 표시
+- [x] Task 3: README/PLUGINS/spec/todo에 `loop status` 범위와 privacy contract 반영
+- [ ] 다음 slice: web Loops view 또는 CLI/MCP status 모델 공통화
 
 ### 판단 기준
 
@@ -116,6 +124,12 @@
 - 표시되는 boundary 정보는 event name, trigger, time, tool, id, optional hash 같은 safe metadata로 제한한다.
 - compact summary, custom instructions, transcript body, raw path는 CLI/MCP 출력과 테스트 결과에 노출하지 않는다.
 - 이번 slice는 "다시 collect할 필요가 있음"을 알려주는 awareness까지만 포함하고 summary 재주입, semantic memory, web UI는 다음 slice로 남긴다.
+
+### Loop Status CLI 판단 기준
+
+- `prompt-coach loop status`는 사람용 터미널 readiness surface이며 MCP `get_loopdeck_status`와 같은 local-first privacy 경계를 따른다.
+- 출력은 snapshot count, latest loop safe metadata, compact refresh action, next command만 포함한다.
+- prompt body, compact summary, custom instructions, transcript body, raw path는 text/JSON 출력에 포함하지 않는다.
 
 ## 2026-05-04 Habit Coach Panel Extraction
 

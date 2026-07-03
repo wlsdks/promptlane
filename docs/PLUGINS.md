@@ -217,6 +217,12 @@ it asks the user to refresh the snapshot instead of replaying compact summaries
 or custom compact instructions. `record_loop_outcome` writes only user-approved
 status, summary, and evidence references for a Loopdeck snapshot; it does not
 store prompt bodies, raw paths, or external LLM results.
+
+The local CLI mirrors that loop surface with `prompt-coach loop status`,
+`prompt-coach loop collect`, and `prompt-coach loop brief`. `loop status`
+prints snapshot readiness, latest safe loop metadata, and compact refresh
+guidance without prompt bodies, compact summaries, custom compact instructions,
+or raw paths.
 `score_prompt` scores direct prompt text, a stored prompt id, or the latest
 stored prompt with the same local deterministic `0-100` Prompt Quality Score
 used by the web UI. The response also includes a per-criterion `breakdown`

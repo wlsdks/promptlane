@@ -728,6 +728,12 @@ The MCP server exposes sixteen tools:
   compact instructions.
 - `record_loop_outcome`: store user-approved loop outcome metadata for a
   Loopdeck snapshot without storing prompt bodies or raw paths.
+
+The matching local CLI surface is `prompt-coach loop status`,
+`prompt-coach loop collect`, and `prompt-coach loop brief`. `loop status`
+shows snapshot readiness, latest safe metadata, and compact refresh guidance
+without printing prompt bodies, compact summaries, custom compact instructions,
+or raw paths.
 - `prepare_agent_rewrite`: prepare one locally redacted prompt packet, local
   score metadata, local baseline draft, and rewrite contract so the active
   Claude Code/Codex/Gemini CLI session can semantically improve the prompt.

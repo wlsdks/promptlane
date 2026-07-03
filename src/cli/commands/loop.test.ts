@@ -8,7 +8,7 @@ import { normalizeClaudeCodePayload } from "../../adapters/claude-code.js";
 import { initializePromptCoach } from "../../config/config.js";
 import { redactPrompt } from "../../redaction/redact.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
-import { loopBriefForCli, loopCollectForCli } from "./loop.js";
+import { loopBriefForCli, loopCollectForCli, loopStatusForCli } from "./loop.js";
 
 const tempDirs: string[] = [];
 
@@ -105,6 +105,41 @@ describe("loop CLI command", () => {
     expect(text).toContain("Run prompt-coach loop collect again");
     expect(text).not.toContain("Compact summary with sk-proj-secret");
     expect(text).not.toContain("/Users/example");
+  });
+
+  it("prints compact-aware loop status without prompt bodies or raw paths", async () => {
+    const dataDir = createTempDir();
+    await seedPrompts(dataDir);
+    loopCollectForCli({
+      dataDir,
+      cwdPrefix: "/Users/example/private-project",
+      now: new Date("2026-07-04T01:00:00.000Z"),
+      cwd: "/Users/example/private-project",
+    });
+    seedCompactBoundary(dataDir);
+
+    const text = loopStatusForCli({ dataDir });
+
+    expect(text).toContain("Loopdeck status ready");
+    expect(text).toContain("snapshots 1");
+    expect(text).toContain("latest loop");
+    expect(text).toContain("project private-project");
+    expect(text).toContain("compact boundary PostCompact at 2026-07-04T01:05:00.000Z");
+    expect(text).toContain("Next: prompt-coach loop collect");
+    expect(text).not.toContain("Make this better");
+    expect(text).not.toContain("Compact summary with sk-proj-secret");
+    expect(text).not.toContain("/Users/example");
+  });
+
+  it("prints empty loop status guidance", () => {
+    const dataDir = createTempDir();
+    initializePromptCoach({ dataDir });
+
+    const text = loopStatusForCli({ dataDir });
+
+    expect(text).toContain("Loopdeck status empty");
+    expect(text).toContain("snapshots 0");
+    expect(text).toContain("Next: prompt-coach loop collect");
   });
 });
 

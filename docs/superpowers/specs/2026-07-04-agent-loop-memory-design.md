@@ -449,6 +449,7 @@ Add:
 - `src/loop/snapshot.ts`
 - `src/loop/brief.ts`
 - storage port and SQLite migration for loop snapshots
+- CLI `prompt-coach loop status`
 - CLI `prompt-coach loop collect`
 - CLI `prompt-coach loop brief`
 - tests for privacy-safe snapshots and continuation brief generation
@@ -490,9 +491,10 @@ Add:
 - setup dry-run preview (**implemented for Stop/PreCompact/PostCompact hook
   registration**)
 - hook trust/setup docs (**updated for metadata-only compact boundaries**)
-- loop status and brief awareness (**implemented for CLI `loop brief`, MCP
-  `get_loopdeck_status`, and MCP `prepare_loop_brief`; it only reports safe
-  compact boundary metadata newer than the latest loop snapshot**)
+- loop status and brief awareness (**implemented for CLI `loop status`, CLI
+  `loop brief`, MCP `get_loopdeck_status`, and MCP `prepare_loop_brief`; it
+  only reports safe compact boundary metadata newer than the latest loop
+  snapshot**)
 
 Verification:
 
