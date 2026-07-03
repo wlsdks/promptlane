@@ -59,6 +59,7 @@ describe("MCP stdio server", () => {
                             "needs_review_count",
                             "missing_evidence_count",
                             "actions",
+                            "checklist",
                           ]),
                           properties: expect.objectContaining({
                             status: expect.objectContaining({
@@ -70,6 +71,15 @@ describe("MCP stdio server", () => {
                                 "review non-passing worktrees before merge",
                                 "record missing evidence before merge",
                               ],
+                            }),
+                            checklist: expect.objectContaining({
+                              items: expect.objectContaining({
+                                required: expect.arrayContaining([
+                                  "label",
+                                  "status",
+                                  "action",
+                                ]),
+                              }),
                             }),
                           }),
                         }),

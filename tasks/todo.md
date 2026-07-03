@@ -210,7 +210,10 @@
 - [x] Task 46 RED: command-center에 aggregate review-before-merge packet이 없어 domain/web/CLI/MCP focused tests 실패 확인
 - [x] Task 46 GREEN: `review_packet` status/summary/counts/actions를 shared status, CLI status, MCP schema, web Loops summary에 연결
 - [x] Task 46 PRIVACY: packet은 evidence refs 원문, outcome summary, prompt body, raw path를 포함하지 않는 safe aggregate metadata로 제한
-- [ ] 다음 slice: review packet 기반 explicit human checklist 또는 merge decision journal 설계 재선정
+- [x] Task 47 RED: review packet에 explicit human checklist가 없어 domain/web/CLI/MCP focused tests 실패 확인
+- [x] Task 47 GREEN: `review_packet.checklist`를 safe aggregate actions에서 생성하고 CLI/MCP/web에 read-only로 노출
+- [x] Task 47 PRIVACY: checklist는 label/status/action만 포함하고 evidence refs, outcome summary, prompt body, raw path를 포함하지 않음
+- [ ] 다음 slice: local merge decision journal 설계 여부 재선정
 
 ### 판단 기준
 

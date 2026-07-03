@@ -83,6 +83,13 @@ describe("Loopdeck MCP tools", () => {
             needs_review_count: 0,
             missing_evidence_count: 0,
             actions: ["compare evidence before merge"],
+            checklist: [
+              {
+                label: "Compare ready evidence before merge",
+                status: "required",
+                action: "compare evidence before merge",
+              },
+            ],
           },
           review_items: [
             {

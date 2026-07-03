@@ -153,5 +153,8 @@ Implementation checkpoint:
 - CLI `loop status`, MCP `get_loopdeck_status`, and the web Loops summary expose
   the packet without reading diffs, checking out branches, calling external
   models, or writing git/project state.
-- The next runtime slice should decide whether the review packet feeds an
-  explicit human checklist or a local merge decision journal.
+- `review_packet.checklist` now exposes a read-only human checklist derived from
+  safe aggregate actions, so Codex and Claude Code can tell the user what to do
+  before a merge decision without storing completion state.
+- The next runtime slice should decide whether to add a local merge decision
+  journal, and if so where its write/approval boundary belongs.

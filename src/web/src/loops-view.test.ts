@@ -23,6 +23,9 @@ describe("LoopsView", () => {
     expect(html).toContain("Review packet ready");
     expect(html).toContain("2 ready, 0 needs review, 0 missing evidence");
     expect(html).toContain("Next compare ready evidence before merge");
+    expect(html).toContain("Human checklist");
+    expect(html).toContain("Compare ready evidence before merge");
+    expect(html).toContain("required");
     expect(html).toContain("review before merge");
     expect(html).toContain("ready for continuation");
     expect(html).toContain("Merge readiness needs_review");
@@ -134,6 +137,13 @@ function loopList(): LoopListResponse {
             needs_review_count: 0,
             missing_evidence_count: 0,
             actions: ["compare evidence before merge"],
+            checklist: [
+              {
+                label: "Compare ready evidence before merge",
+                status: "required",
+                action: "compare evidence before merge",
+              },
+            ],
           },
           review_items: [
             {

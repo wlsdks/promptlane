@@ -257,6 +257,9 @@ describe("loop CLI command", () => {
       "review packet next compare ready evidence before merge",
     );
     expect(text).toContain(
+      "checklist Compare ready evidence before merge required",
+    );
+    expect(text).toContain(
       "review primary-worktree ready for continuation",
     );
     expect(text).toContain(
@@ -306,6 +309,11 @@ describe("loop CLI command", () => {
             needs_review_count?: number;
             missing_evidence_count?: number;
             actions?: string[];
+            checklist?: Array<{
+              label?: string;
+              status?: string;
+              action?: string;
+            }>;
           };
           review_items?: Array<{
             worktree?: string;
@@ -361,6 +369,13 @@ describe("loop CLI command", () => {
           needs_review_count: 0,
           missing_evidence_count: 0,
           actions: ["compare evidence before merge"],
+          checklist: [
+            {
+              label: "Compare ready evidence before merge",
+              status: "required",
+              action: "compare evidence before merge",
+            },
+          ],
         },
         review_items: [
           {

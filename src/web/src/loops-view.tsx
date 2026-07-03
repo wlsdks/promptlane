@@ -162,6 +162,16 @@ export function LoopsView({
                 Next{" "}
                 {loops.status.activity.command_center.review_packet.next_action}
               </p>
+              <div>
+                <p className="loops-status-line">Human checklist</p>
+                {loops.status.activity.command_center.review_packet.checklist.map(
+                  (item) => (
+                    <p className="loops-status-line" key={item.action}>
+                      {item.label} {item.status}
+                    </p>
+                  ),
+                )}
+              </div>
               {loops.status.activity.command_center.review_items
                 .slice(0, 3)
                 .map((item) => (

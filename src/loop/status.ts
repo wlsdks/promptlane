@@ -79,6 +79,14 @@ export type LoopdeckStatusActivityReviewPacket = {
   needs_review_count: number;
   missing_evidence_count: number;
   actions: LoopdeckStatusActivityMergeReadiness["next_action"][];
+  checklist: Array<{
+    label:
+      | "Record missing evidence before merge"
+      | "Review non-passing worktrees before merge"
+      | "Compare ready evidence before merge";
+    status: "required";
+    action: LoopdeckStatusActivityMergeReadiness["next_action"];
+  }>;
 };
 
 export type LoopdeckStatusActivityCommandCenter = {
@@ -254,6 +262,11 @@ function createReviewPacket(
     ...(needsReviewCount > 0 ? (["review outcome before merge"] as const) : []),
     ...(readyCount > 0 ? (["compare evidence before merge"] as const) : []),
   ];
+  const checklist = actions.map((action) => ({
+    label: checklistLabelForAction(action),
+    status: "required" as const,
+    action,
+  }));
 
   return {
     title: "Review-before-merge packet",
@@ -264,7 +277,20 @@ function createReviewPacket(
     needs_review_count: needsReviewCount,
     missing_evidence_count: missingEvidenceCount,
     actions,
+    checklist,
   };
+}
+
+function checklistLabelForAction(
+  action: LoopdeckStatusActivityMergeReadiness["next_action"],
+): LoopdeckStatusActivityReviewPacket["checklist"][number]["label"] {
+  if (action === "record loop outcome evidence") {
+    return "Record missing evidence before merge";
+  }
+  if (action === "review outcome before merge") {
+    return "Review non-passing worktrees before merge";
+  }
+  return "Compare ready evidence before merge";
 }
 
 function mergeReadinessForWorktree(

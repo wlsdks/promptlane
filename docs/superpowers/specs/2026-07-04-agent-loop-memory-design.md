@@ -1414,6 +1414,38 @@ Do not add:
 - prompt body, outcome summary, transcript, compact summary, raw path, API
   token, or provider credential output
 
+### Slice 4.44: Review Packet Human Checklist
+
+Add:
+
+- `review_packet.checklist` entries derived from the packet's safe aggregate
+  actions
+- checklist labels for the human merge-review path:
+  - record missing evidence before merge
+  - review non-passing worktrees before merge
+  - compare ready evidence before merge
+- read-only `required` status for each checklist item; completion persistence is
+  deferred to a later explicit journal slice
+- CLI `loop status` output for checklist labels and status
+- MCP `get_loopdeck_status` output schema coverage for checklist entries
+- web Loops command-center rendering for the human checklist
+- focused domain, CLI, MCP schema/runtime, and web tests proving checklist
+  entries do not reveal evidence ref strings, outcome summaries, prompt bodies,
+  raw paths, transcripts, compact summaries, API tokens, or provider credentials
+
+Do not add:
+
+- checklist write/complete state, merge decision journal, automatic merge,
+  branch checkout, conflict prediction, diff inspection, or git writes
+- raw evidence ref strings to status, command-center, packet, checklist, or web
+  summary output
+- hidden external model calls or background agent evaluation
+- new database schema/index migration
+- writes to `AGENTS.md`, `CLAUDE.md`, project docs, memory files, or git state
+- package, plugin, slash command, hook, or MCP server-name rename
+- prompt body, outcome summary, transcript, compact summary, raw path, API
+  token, or provider credential output
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

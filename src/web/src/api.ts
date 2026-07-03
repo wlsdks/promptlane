@@ -141,6 +141,17 @@ export type LoopListResponse = {
             | "review outcome before merge"
             | "record loop outcome evidence"
           >;
+          checklist: Array<{
+            label:
+              | "Compare ready evidence before merge"
+              | "Review non-passing worktrees before merge"
+              | "Record missing evidence before merge";
+            status: "required";
+            action:
+              | "compare evidence before merge"
+              | "review outcome before merge"
+              | "record loop outcome evidence";
+          }>;
         };
         review_items: Array<{
           worktree: string;

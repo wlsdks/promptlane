@@ -147,6 +147,7 @@ export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
                     "needs_review_count",
                     "missing_evidence_count",
                     "actions",
+                    "checklist",
                   ],
                   properties: {
                     title: {
@@ -178,6 +179,33 @@ export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
                           "review outcome before merge",
                           "record loop outcome evidence",
                         ],
+                      },
+                    },
+                    checklist: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        required: ["label", "status", "action"],
+                        properties: {
+                          label: {
+                            type: "string",
+                            enum: [
+                              "Compare ready evidence before merge",
+                              "Review non-passing worktrees before merge",
+                              "Record missing evidence before merge",
+                            ],
+                          },
+                          status: { type: "string", enum: ["required"] },
+                          action: {
+                            type: "string",
+                            enum: [
+                              "compare evidence before merge",
+                              "review outcome before merge",
+                              "record loop outcome evidence",
+                            ],
+                          },
+                        },
+                        additionalProperties: false,
                       },
                     },
                   },

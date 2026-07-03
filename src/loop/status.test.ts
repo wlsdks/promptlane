@@ -171,6 +171,13 @@ describe("createLoopdeckStatus", () => {
           needs_review_count: 0,
           missing_evidence_count: 0,
           actions: ["compare evidence before merge"],
+          checklist: [
+            {
+              label: "Compare ready evidence before merge",
+              status: "required",
+              action: "compare evidence before merge",
+            },
+          ],
         },
         review_items: [
           {
@@ -269,6 +276,23 @@ describe("createLoopdeckStatus", () => {
           "record loop outcome evidence",
           "review outcome before merge",
           "compare evidence before merge",
+        ],
+        checklist: [
+          {
+            label: "Record missing evidence before merge",
+            status: "required",
+            action: "record loop outcome evidence",
+          },
+          {
+            label: "Review non-passing worktrees before merge",
+            status: "required",
+            action: "review outcome before merge",
+          },
+          {
+            label: "Compare ready evidence before merge",
+            status: "required",
+            action: "compare evidence before merge",
+          },
         ],
       },
       review_items: [
