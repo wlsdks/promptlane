@@ -159,7 +159,9 @@
 - [x] Task 21 GREEN: CLI `loop memory-approve`와 MCP `record_loop_memory`에 brief/patch proposal 후속 명령을 추가하되 instruction file write는 하지 않음
 - [x] Task 22 RED: web Loops approval API/client/CTA가 없어 latest memory candidate를 승인할 수 없는 focused test 실패 확인
 - [x] Task 22 GREEN: CSRF-protected `/api/v1/loops/memory/approve`, `approveLoopMemory()`, Loops summary approval CTA, App refresh 연결, same-snapshot 중복 승인 방지
-- [ ] 다음 slice: web instruction patch review UX 또는 dedicated plugin rename plan
+- [x] Task 23 RED: web에서 latest approved memory의 instruction patch proposal을 review-only로 볼 수 없는 focused test 실패 확인
+- [x] Task 23 GREEN: `/api/v1/loops/instruction-patch`, `getLoopInstructionPatch()`, Loops summary review CTA/diff preview 구현
+- [ ] 다음 slice: web explicit instruction apply UX gate 또는 dedicated plugin rename plan
 
 ### 판단 기준
 

@@ -6,6 +6,10 @@ import {
   latestCompactBoundaryAfterSnapshot,
 } from "../../loop/brief.js";
 import {
+  parseInstructionPatchTarget,
+  proposeInstructionPatchFromMemory,
+} from "../../loop/instruction-patch.js";
+import {
   createLoopdeckStatus,
   toLoopdeckStatusSnapshot,
 } from "../../loop/status.js";
@@ -27,6 +31,10 @@ export type LoopRouteOptions = {
 
 const LoopMemoryApprovalBodySchema = z.object({
   approved_by: z.string().trim().min(1).max(80).optional(),
+});
+
+const LoopInstructionPatchQuerySchema = z.object({
+  target_file: z.enum(["AGENTS.md", "CLAUDE.md"]).optional(),
 });
 
 export function registerLoopRoutes(
@@ -109,6 +117,29 @@ export function registerLoopRoutes(
     };
   });
 
+  server.get("/api/v1/loops/instruction-patch", async (request) => {
+    requireAppAccess(request, options.auth);
+    const storage = requireLoopMemoryReadStorage(options.storage, request.url);
+    const query = LoopInstructionPatchQuerySchema.parse(request.query);
+    const targetFile = parseInstructionPatchTarget(
+      query.target_file ?? "AGENTS.md",
+    );
+    const memory = storage.listLoopMemories({ limit: 1 }).items.at(0);
+
+    if (!memory) {
+      throw problem(
+        404,
+        "Not Found",
+        "No loop memory found. Approve a Loopdeck memory first.",
+        request.url,
+      );
+    }
+
+    return {
+      data: proposeInstructionPatchFromMemory({ memory, targetFile }),
+    };
+  });
+
   server.post("/api/v1/loops/memory/approve", async (request) => {
     requireAppAccess(request, options.auth, { csrf: true });
     const storage = requireLoopMemoryApprovalStorage(options.storage, request.url);
@@ -175,6 +206,22 @@ export function registerLoopRoutes(
       },
     };
   });
+}
+
+function requireLoopMemoryReadStorage(
+  storage: LoopRouteOptions["storage"],
+  instance: string,
+): LoopMemoryStoragePort {
+  if (!storage.listLoopMemories) {
+    throw problem(
+      500,
+      "Internal Server Error",
+      "Loop memory storage is not configured.",
+      instance,
+    );
+  }
+
+  return storage as LoopMemoryStoragePort;
 }
 
 function requireLoopMemoryApprovalStorage(

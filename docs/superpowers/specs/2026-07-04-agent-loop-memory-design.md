@@ -858,6 +858,29 @@ Do not add:
 - external LLM calls
 - plugin rename or slash command namespace changes
 
+### Slice 4.20: Web Instruction Patch Review UX
+
+Add:
+
+- web API `GET /api/v1/loops/instruction-patch?target_file=AGENTS.md` for the
+  latest approved Loopdeck memory
+- server-side reuse of the same pure `proposeInstructionPatchFromMemory`
+  generator as CLI and MCP
+- web client `getLoopInstructionPatch()` helper
+- Loops summary CTA that fetches and displays a review-only unified diff after
+  an approved memory exists
+- focused tests proving the web path returns `writes_files: false`,
+  `requires_user_approval: true`, and does not expose prompt bodies, raw paths,
+  compact summaries, transcripts, or secrets
+
+Do not add:
+
+- automatic instruction-file writes
+- `apply_instruction_patch` from the web UI
+- editing any file outside `AGENTS.md` or `CLAUDE.md`
+- external LLM calls
+- plugin rename or slash command namespace changes
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

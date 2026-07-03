@@ -260,9 +260,10 @@ The web Loops view uses the same privacy boundary for recent loop snapshots,
 empty state guidance, compact refresh markers, and copy-ready next loop briefs;
 it can also record an eligible latest memory candidate through the local web
 session. That web approval only writes the local Loopdeck memory record;
-instruction-file changes still require the separate explicit patch/apply
-workflow. It does not render prompt bodies, compact summaries, custom compact
-instructions, transcript bodies, or raw paths.
+after approval, the same view can fetch a review-only AGENTS.md patch preview.
+Instruction-file writes still require the separate explicit apply workflow. It
+does not render prompt bodies, compact summaries, custom compact instructions,
+transcript bodies, or raw paths.
 `score_prompt` scores direct prompt text, a stored prompt id, or the latest
 stored prompt with the same local deterministic `0-100` Prompt Quality Score
 used by the web UI. The response also includes a per-criterion `breakdown`

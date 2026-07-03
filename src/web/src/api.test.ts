@@ -225,6 +225,49 @@ describe("web api export client", () => {
     expect(JSON.stringify(result)).not.toContain("sk-proj-secret");
   });
 
+  it("gets a review-only instruction patch proposal for the latest approved loop memory", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            target_file: "AGENTS.md",
+            patch_kind: "append_section",
+            title: "Append approved Loopdeck memory to AGENTS.md",
+            diff: "--- a/AGENTS.md\n+++ b/AGENTS.md\n@@\n+## Loopdeck Memories\n+  source_memory: mem_web\n",
+            writes_files: false,
+            requires_user_approval: true,
+            source_memory_id: "mem_web",
+            next_action:
+              "review this patch proposal, then apply it manually only if the instruction belongs in the project",
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+              writes_instruction_files: false,
+            },
+          },
+        }),
+      );
+    const { getLoopInstructionPatch } = await import("./api.js");
+
+    const proposal = await getLoopInstructionPatch({ targetFile: "AGENTS.md" });
+
+    expect(proposal.writes_files).toBe(false);
+    expect(proposal.requires_user_approval).toBe(true);
+    expect(proposal.diff).toContain("+++ b/AGENTS.md");
+    expect(fetchMock).toHaveBeenLastCalledWith(
+      "/api/v1/loops/instruction-patch?target_file=AGENTS.md",
+      {
+        credentials: "same-origin",
+      },
+    );
+    expect(JSON.stringify(proposal)).not.toContain("Make this better");
+    expect(JSON.stringify(proposal)).not.toContain("/Users/example");
+    expect(JSON.stringify(proposal)).not.toContain("sk-proj-secret");
+  });
+
   it("shares an in-flight csrf session request across parallel API calls", async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url === "/api/v1/session") {

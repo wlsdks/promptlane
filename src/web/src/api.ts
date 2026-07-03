@@ -180,6 +180,24 @@ export type LoopMemoryApprovalResult = {
   };
 };
 
+export type LoopInstructionPatchProposal = {
+  target_file: "AGENTS.md" | "CLAUDE.md";
+  patch_kind: "append_section";
+  title: string;
+  diff: string;
+  writes_files: false;
+  requires_user_approval: true;
+  source_memory_id: string;
+  next_action: string;
+  privacy: {
+    local_only: true;
+    external_calls: false;
+    returns_prompt_bodies: false;
+    returns_raw_paths: false;
+    writes_instruction_files: false;
+  };
+};
+
 export type PromptFilters = {
   query?: string;
   tool?: string;
@@ -680,6 +698,30 @@ export async function approveLoopMemory(options: {
   }
 
   const body = (await response.json()) as { data: LoopMemoryApprovalResult };
+  return body.data;
+}
+
+export async function getLoopInstructionPatch(options: {
+  targetFile?: "AGENTS.md" | "CLAUDE.md";
+} = {}): Promise<LoopInstructionPatchProposal> {
+  await ensureSession();
+  const params = new URLSearchParams({
+    target_file: options.targetFile ?? "AGENTS.md",
+  });
+  const response = await fetch(
+    `/api/v1/loops/instruction-patch?${params.toString()}`,
+    {
+      credentials: "same-origin",
+    },
+  );
+
+  if (!response.ok) {
+    await failApi(response, "Loop instruction patch proposal failed");
+  }
+
+  const body = (await response.json()) as {
+    data: LoopInstructionPatchProposal;
+  };
   return body.data;
 }
 

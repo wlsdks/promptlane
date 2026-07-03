@@ -622,6 +622,50 @@ describe("createServer P2 ingest boundary", () => {
     expect(duplicate.body).not.toContain("sk-proj-secret");
   });
 
+  it("returns a review-only instruction patch proposal for the latest approved web memory", async () => {
+    const storage = createMemoryStorage();
+    storage.loopSnapshots.push(loopSnapshot());
+    storage.loopMemories.push(loopMemory({ snapshot_id: "loop_web" }));
+    const server = createTestServer({ storage });
+
+    const response = await server.inject({
+      method: "GET",
+      url: "/api/v1/loops/instruction-patch?target_file=AGENTS.md",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+    });
+    const serialized = JSON.stringify(response.json());
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toMatchObject({
+      data: {
+        target_file: "AGENTS.md",
+        patch_kind: "append_section",
+        writes_files: false,
+        requires_user_approval: true,
+        source_memory_id: "mem_web",
+        privacy: {
+          local_only: true,
+          external_calls: false,
+          returns_prompt_bodies: false,
+          returns_raw_paths: false,
+          writes_instruction_files: false,
+        },
+      },
+    });
+    expect(response.json<{ data: { diff: string } }>().data.diff).toContain(
+      "+++ b/AGENTS.md",
+    );
+    expect(response.json<{ data: { diff: string } }>().data.diff).toContain(
+      "source_memory: mem_web",
+    );
+    expect(serialized).not.toContain("Make this better");
+    expect(serialized).not.toContain("/Users/example");
+    expect(serialized).not.toContain("sk-proj-secret");
+  });
+
   it("requires app access and csrf before updating project policy", async () => {
     const storage = createMemoryStorage();
     const server = createTestServer({ storage });

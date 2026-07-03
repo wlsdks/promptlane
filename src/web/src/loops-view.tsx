@@ -1,8 +1,12 @@
-import { Copy, ShieldCheck } from "lucide-react";
+import { Copy, FileText, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 
-import type { LoopListResponse, LoopSummary } from "./api.js";
-import { getLoopBrief } from "./api.js";
+import type {
+  LoopInstructionPatchProposal,
+  LoopListResponse,
+  LoopSummary,
+} from "./api.js";
+import { getLoopBrief, getLoopInstructionPatch } from "./api.js";
 import { copyTextToClipboard } from "./clipboard.js";
 import { formatDate } from "./formatters.js";
 
@@ -20,6 +24,10 @@ export function LoopsView({
   const items = loops?.items ?? [];
   const [approvalBusy, setApprovalBusy] = useState(false);
   const [approvalRecorded, setApprovalRecorded] = useState(false);
+  const [patchBusy, setPatchBusy] = useState(false);
+  const [patchProposal, setPatchProposal] = useState<
+    LoopInstructionPatchProposal | undefined
+  >();
 
   async function approveCandidate(): Promise<void> {
     if (!onApproveMemoryCandidate) return;
@@ -31,6 +39,17 @@ export function LoopsView({
       window.setTimeout(() => setApprovalRecorded(false), 2_500);
     } finally {
       setApprovalBusy(false);
+    }
+  }
+
+  async function reviewInstructionPatch(): Promise<void> {
+    setPatchBusy(true);
+    try {
+      setPatchProposal(
+        await getLoopInstructionPatch({ targetFile: "AGENTS.md" }),
+      );
+    } finally {
+      setPatchBusy(false);
     }
   }
 
@@ -96,6 +115,23 @@ export function LoopsView({
               </button>
             </div>
           )}
+          {loops.status.project_memory.approved_count > 0 && (
+            <div className="loop-memory-action">
+              <code>
+                prompt-coach loop instruction-patch --target-file AGENTS.md
+              </code>
+              <button
+                className="loop-copy-button"
+                disabled={patchBusy}
+                onClick={() => void reviewInstructionPatch()}
+                title="Review AGENTS.md instruction patch"
+                type="button"
+              >
+                <FileText size={15} />
+                {patchBusy ? "Preparing..." : "Review AGENTS.md patch"}
+              </button>
+            </div>
+          )}
           <p className="loops-status-line">Next: {loops.status.next_action}</p>
           <p>
             Recent local agent loops grouped by safe project metadata. Compact
@@ -106,6 +142,19 @@ export function LoopsView({
           No prompt bodies, raw paths, transcript content, or compact summaries.
         </div>
       </div>
+      {patchProposal && (
+        <div className="panel loop-patch-panel">
+          <div>
+            <span className="panel-eyebrow">Review only</span>
+            <h2>{patchProposal.title}</h2>
+            <p>
+              Requires explicit user approval. This preview does not write
+              AGENTS.md, CLAUDE.md, project docs, or memory files.
+            </p>
+          </div>
+          <pre>{patchProposal.diff}</pre>
+        </div>
+      )}
       <div className="loop-table panel">
         <div className="loop-row loop-row-head">
           <span>Loop</span>
