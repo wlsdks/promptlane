@@ -43,6 +43,21 @@
 - Loopdeck은 generic agent runtime이 아니라 Codex/Claude Code loop memory workbench로 좁힌다.
 - 기획서가 승인되기 전 package/CLI/repo/plugin rename과 hook/MCP/web 구현을 섞지 않는다.
 
+## 2026-07-04 Codex Dogfood Hook Noise Fix
+
+- [x] 실제 user-level Codex hook 설정 확인: `UserPromptSubmit` hook은 하나만 설치되어 있고 project-level hook 중복은 없음
+- [x] Serena 문자열 sweep: repo tracked source/docs에서 명시적 Serena 잔재 없음
+- [x] RED: Codex rewrite-guard context output이 hook stdout에 남아 사용자 화면에 보일 수 있음을 wrapper 테스트로 재현
+- [x] GREEN: Codex `additionalContext` rewrite guidance는 기본적으로 stdout을 비워 사용자-visible hook context 노이즈를 막음
+- [x] README/README.ko에 Codex stdout 노출 경계와 대체 확인 경로 문서화
+- [ ] 다음 dogfood slice: 실제 Codex prompt 1회 전송 후 archive/UI/doctor로 capture, duplicate display, MCP registration 상태를 end-to-end 확인
+
+### 판단 기준
+
+- 이번 수정은 Codex의 화면 노이즈를 줄이는 실사용 결함 수정이며, Claude Code의 기존 `UserPromptSubmit` context 출력 동작은 유지한다.
+- Codex `Stop`/compact lifecycle hook의 local-only 수집과 prompt ingest 경계는 변경하지 않는다.
+- `block-and-copy`처럼 decision이 필요한 hook 출력은 이번 수정에서 제거하지 않는다.
+
 ## 2026-07-04 Loop Snapshot Domain Slice
 
 - [x] Task 1 RED: loop snapshot builder 테스트가 missing module로 실패하는지 확인

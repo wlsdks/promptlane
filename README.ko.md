@@ -344,6 +344,16 @@ Codex도 같은 안전한 hook command 경로를 사용합니다. Codex plugin-l
 server가 꺼져 있거나 ingest가 실패하면 hook은 fail-open으로 prompt를 막지
 않습니다.
 
+Codex는 `UserPromptSubmit` hook stdout을 채팅 화면에 직접 보여줄 수
+있습니다. 화면을 어지럽히지 않기 위해 Codex의 `context` / `ask` rewrite
+guidance는 기본적으로 로컬에 capture만 하고 hook stdout으로 출력하지
+않습니다. 개선안을 보고 복사하려면 `prompt-coach coach`,
+`prompt-coach score`, 웹 UI, MCP tool을 사용합니다.
+
+Codex 설치는 fail-open `Stop`, `PreCompact`, `PostCompact` hook도 등록합니다.
+Stop/compact lifecycle 처리는 local-only이며 해당 payload를 prompt ingest
+route로 보내지 않습니다.
+
 `hooks.json`과 `config.toml` 변경 preview:
 
 ```sh

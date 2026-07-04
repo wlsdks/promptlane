@@ -121,7 +121,10 @@ async function runPromptCoachHook(
           }).catch(() => undefined);
         },
       });
-      stdout = rewriteOutput ? `${JSON.stringify(rewriteOutput)}\n` : "";
+      stdout =
+        rewriteOutput && shouldEmitRewriteOutput(tool, rewriteOutput)
+          ? `${JSON.stringify(rewriteOutput)}\n`
+          : "";
     }
   } catch {
     // Hooks must fail open and must not leak prompt text to stdout/stderr.
@@ -138,6 +141,25 @@ async function runPromptCoachHook(
   }
 
   return { exitCode: 0, stdout, stderr: "" };
+}
+
+function shouldEmitRewriteOutput(
+  tool: "claude-code" | "codex",
+  output: ReturnType<typeof createPromptRewriteGuardOutput>,
+): boolean {
+  if (!output) {
+    return false;
+  }
+
+  if (
+    tool === "codex" &&
+    "additionalContext" in output.hookSpecificOutput &&
+    output.suppressOutput
+  ) {
+    return false;
+  }
+
+  return true;
 }
 
 function recordCompactBoundaryFromHook(

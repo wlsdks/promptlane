@@ -414,6 +414,12 @@ hooks may vary by Codex version, `prompt-coach setup` / `install-hook` still
 writes the user-level hook config. If the local ingest server is unavailable or
 ingest fails, the hook fails open and does not block the prompt.
 
+Codex may render `UserPromptSubmit` hook stdout directly in the chat. To keep
+the agent surface readable, Codex `context` / `ask` rewrite guidance is captured
+locally but not printed to hook stdout by default. Use `prompt-coach coach`,
+`prompt-coach score`, the web UI, or the MCP tools when you want to review and
+copy an improved brief.
+
 The Codex install also registers fail-open `Stop`, `PreCompact`, and
 `PostCompact` hooks. Stop and compact lifecycle handling is local-only and does
 not post those payloads to the prompt ingest route.

@@ -278,7 +278,7 @@ describe("runCodexHook", () => {
     expect(JSON.stringify(result)).not.toContain(rawPrompt);
   });
 
-  it("emits suppressOutput=true on Codex rewrite-guard context output so the body stays out of the user-visible chat", async () => {
+  it("keeps Codex rewrite-guard context output empty so hook guidance stays out of the user-visible chat", async () => {
     const dataDir = createTempDir();
     initializePromptCoach({ dataDir });
 
@@ -292,16 +292,7 @@ describe("runCodexHook", () => {
       postPayload: async () => ({ ok: true, status: 200 }),
     });
 
-    const output = JSON.parse(result.stdout) as {
-      hookSpecificOutput: { hookEventName: string; additionalContext: string };
-      suppressOutput?: boolean;
-    };
-
-    expect(output.suppressOutput).toBe(true);
-    expect(output.hookSpecificOutput.hookEventName).toBe("UserPromptSubmit");
-    expect(output.hookSpecificOutput.additionalContext.length).toBeGreaterThan(
-      0,
-    );
+    expect(result).toEqual({ exitCode: 0, stdout: "", stderr: "" });
   });
 
   it("does not set suppressOutput on Claude Code rewrite-guard output (existing behavior)", async () => {
