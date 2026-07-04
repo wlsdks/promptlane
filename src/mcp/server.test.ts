@@ -6,6 +6,28 @@ import { describe, expect, it } from "vitest";
 import { handleMcpMessage } from "./server.js";
 
 describe("MCP stdio server", () => {
+  it("routes clarification answers through apply before optional record", async () => {
+    const response = await handleMcpMessage({
+      jsonrpc: "2.0",
+      id: "initialize-instructions",
+      method: "initialize",
+      params: {
+        protocolVersion: "2025-03-26",
+        capabilities: {},
+      },
+    });
+
+    const instructions = (response?.result as { instructions?: string })
+      .instructions;
+
+    expect(instructions).toContain(
+      "call apply_clarifications first to compose and show the final approval-ready draft in chat",
+    );
+    expect(instructions).toContain(
+      "call record_clarifications only if the user also wants to save that draft",
+    );
+  });
+
   it("declares prompt scoring tools through tools/list", async () => {
     const response = await handleMcpMessage({
       jsonrpc: "2.0",
