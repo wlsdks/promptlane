@@ -137,7 +137,11 @@
 - [x] Task 179 RED: loop row/table field가 `LoopsView`에 직접 남아 있어 source hygiene test 실패 확인
 - [x] Task 179 GREEN: `LoopWorktreeDetailRows`와 `LoopRows`로 row/table rendering을 이동하고 `LoopsView` 직접 row field 접근을 제거
 - [x] Task 179 PRIVACY: UI helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
-- [ ] 다음 slice: selected worktree copy action 또는 patch proposal panel rendering을 하나의 응집된 UI cleanup PR로 묶을지 결정
+- [x] Task 180 DECISION: 최근 helper extraction PR이 과하게 작아졌으므로 patch proposal panel, selected worktree copy action, loading/empty shell을 하나의 remaining shell cleanup PR로 묶는다
+- [x] Task 180 RED: remaining shell formatting이 `LoopsView`에 직접 남아 있어 source hygiene test 실패 확인
+- [x] Task 180 GREEN: `LoopInstructionPatchPanel`, `LoopSelectedBriefAction`, `LoopLoadingState`/`LoopEmptyState`로 남은 shell rendering을 이동하고 `LoopsView` 직접 shell 문자열/field 접근을 제거
+- [x] Task 180 PRIVACY: UI helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
+- [ ] 다음 slice: `LoopsView`가 orchestration-only에 충분히 가까워졌는지 확인하고, 추가 cleanup보다 다음 runtime/product slice로 넘어갈지 결정
 - [ ] 다음 dogfood slice: Codex native dialog fallback을 실제 OS dialog 또는 명시적 사용자 승인 하에 확인
 
 ### 판단 기준

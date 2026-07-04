@@ -1,4 +1,3 @@
-import { Copy } from "lucide-react";
 import { useState } from "react";
 
 import type {
@@ -8,7 +7,10 @@ import type {
 } from "./api.js";
 import { getLoopInstructionPatch } from "./api.js";
 import { LoopActivitySummary } from "./loop-activity-summary.js";
+import { LoopInstructionPatchPanel } from "./loop-instruction-patch-panel.js";
 import { LoopRows, LoopWorktreeDetailRows } from "./loop-rows.js";
+import { LoopSelectedBriefAction } from "./loop-selected-brief-action.js";
+import { LoopEmptyState, LoopLoadingState } from "./loop-shell-states.js";
 import { LoopWorktreeBoundaryReviewItems } from "./loop-worktree-boundary-review-items.js";
 import { LoopWorktreeCollectionFreshnessItems } from "./loop-worktree-collection-freshness-items.js";
 import { LoopWorktreeContinuationSafetyItems } from "./loop-worktree-continuation-safety-items.js";
@@ -109,26 +111,11 @@ export function LoopsView({
   }
 
   if (loading) {
-    return <section className="panel">Loading loop snapshots...</section>;
+    return <LoopLoadingState />;
   }
 
   if (!loops || items.length === 0) {
-    return (
-      <section className="panel loops-empty">
-        <div>
-          <span className="panel-eyebrow">Loopdeck</span>
-          <h2>No loop snapshots yet</h2>
-          <p>
-            Run <code>prompt-coach loop collect</code> after a Codex or Claude
-            Code turn to create the first local loop snapshot.
-          </p>
-        </div>
-        <div className="privacy-note">
-          Local-only. No prompt bodies, raw paths, or compact summaries are
-          shown here.
-        </div>
-      </section>
-    );
+    return <LoopEmptyState />;
   }
 
   return (
@@ -161,24 +148,7 @@ export function LoopsView({
           No prompt bodies, raw paths, transcript content, or compact summaries.
         </div>
       </div>
-      {patchProposal && (
-        <div className="panel loop-patch-panel">
-          <div>
-            <span className="panel-eyebrow">Review only</span>
-            <h2>{patchProposal.title}</h2>
-            <p>
-              Requires explicit user approval. This preview does not write
-              AGENTS.md, CLAUDE.md, project docs, or memory files.
-            </p>
-          </div>
-          <div className="loop-apply-gate">
-            <span>Web apply unavailable</span>
-            <code>{patchProposal.apply_gate.confirm_command}</code>
-            <p>{patchProposal.apply_gate.reason}</p>
-          </div>
-          <pre>{patchProposal.diff}</pre>
-        </div>
-      )}
+      <LoopInstructionPatchPanel proposal={patchProposal} />
       {worktreeDetail && (
         <div className="loop-table panel">
           <div className="loop-worktree-detail">
@@ -204,21 +174,18 @@ export function LoopsView({
               />
             </LoopWorktreeSelectedBriefGuidance>
             <LoopWorktreeMergeReviewSummary worktreeDetail={worktreeDetail} />
-            <div className="loop-memory-action">
-              <code>Continue {worktreeDetail.worktree}</code>
-              <button
-                className="loop-copy-button"
-                disabled={!onCopySelectedBrief || selectedBriefBusy}
-                onClick={() => void copySelectedBrief()}
-                title="Copy selected worktree continuation brief"
-                type="button"
-              >
-                <Copy aria-hidden size={15} />
-                {selectedBriefCopied
-                  ? "Copied selected brief"
-                  : "Copy selected brief"}
-              </button>
-            </div>
+            <LoopSelectedBriefAction
+              busy={selectedBriefBusy}
+              copied={selectedBriefCopied}
+              onCopySelectedBrief={
+                onCopySelectedBrief
+                  ? () => {
+                      void copySelectedBrief();
+                    }
+                  : undefined
+              }
+              worktreeDetail={worktreeDetail}
+            />
           </div>
           <LoopWorktreeDetailRows worktreeDetail={worktreeDetail} />
         </div>

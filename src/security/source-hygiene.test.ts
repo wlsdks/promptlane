@@ -379,4 +379,15 @@ describe("source hygiene", () => {
     expect(loopsView).not.toContain("outcome_status");
     expect(loopsView).not.toContain("compact_boundary");
   });
+
+  it("keeps remaining loop shell formatting outside LoopsView", () => {
+    const loopsView = readFileSync("src/web/src/loops-view.tsx", "utf8");
+
+    expect(loopsView).not.toContain("loop-patch-panel");
+    expect(loopsView).not.toContain("apply_gate");
+    expect(loopsView).not.toContain("confirm_command");
+    expect(loopsView).not.toContain("Copy selected brief");
+    expect(loopsView).not.toContain("Loading loop snapshots");
+    expect(loopsView).not.toContain("No loop snapshots yet");
+  });
 });
