@@ -1767,52 +1767,28 @@ export function LoopsView({
                 <code>
                   {worktreeDetail.review_packet_summary.command_hint.command}
                 </code>
-                <div className="loop-review-item">
-                  <p className="loops-status-line">
-                    {
-                      worktreeDetail.review_packet_summary.command_hint
-                        .provenance.label
-                    }
-                  </p>
-                  <p className="loops-status-line">
-                    {
-                      worktreeDetail.review_packet_summary.command_hint
-                        .provenance.source
-                    }
-                  </p>
-                  <p className="loops-status-line">
-                    {
-                      worktreeDetail.review_packet_summary.command_hint
-                        .provenance.reason
-                    }
-                  </p>
-                  <p className="loops-status-line">
-                    No command writes or external calls
-                  </p>
-                </div>
+                <LoopReviewItem
+                  footer="No command writes or external calls"
+                  lines={[
+                    worktreeDetail.review_packet_summary.command_hint.provenance
+                      .label,
+                    worktreeDetail.review_packet_summary.command_hint.provenance
+                      .source,
+                    worktreeDetail.review_packet_summary.command_hint.provenance
+                      .reason,
+                  ]}
+                />
                 {worktreeDetail.review_packet_summary
                   .missing_evidence_explanation && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.review_packet_summary
-                          .missing_evidence_explanation.label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.review_packet_summary
-                          .missing_evidence_explanation.reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      Next{" "}
-                      {
-                        worktreeDetail.review_packet_summary
-                          .missing_evidence_explanation.next_action
-                      }
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer={`Next ${worktreeDetail.review_packet_summary.missing_evidence_explanation.next_action}`}
+                    lines={[
+                      worktreeDetail.review_packet_summary
+                        .missing_evidence_explanation.label,
+                      worktreeDetail.review_packet_summary
+                        .missing_evidence_explanation.reason,
+                    ]}
+                  />
                 )}
               </div>
             )}
