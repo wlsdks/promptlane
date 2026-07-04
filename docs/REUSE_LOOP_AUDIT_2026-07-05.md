@@ -135,7 +135,9 @@ This reopens the saved redacted draft text in the current coach draft panel,
 so the operator can reuse the existing copy, save, feedback, and manual-copy
 fallback controls without auto-submitting the prompt or adding a new storage
 write path. Reopened drafts use the user-facing `Saved draft` badge rather
-than leaking the internal `saved-draft` mode enum into the UI.
+than leaking the internal `saved-draft` mode enum into the UI, and the save
+action changes to disabled `Already saved` copy so reopening a draft does not
+create a duplicate saved draft row.
 
 ## Decisions
 

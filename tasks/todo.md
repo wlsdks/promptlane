@@ -3536,4 +3536,11 @@
 - [x] RED: Add a focused label test proving `saved-draft` is not exposed as user-facing badge copy.
 - [x] GREEN: The coach draft badge now renders `Saved draft` for reopened saved drafts and `Copy draft` for generated drafts.
 - [x] VERIFY: Focused tests, browser E2E, full test/lint/build, pack dry-run, and diff check passed.
+- [x] INTEGRATE: PR #367 was merged to `main`; branch was pruned.
+
+## 2026-07-05 Reopened Saved Draft Save State
+
+- [x] RED: Add focused save-state coverage requiring reopened saved drafts to show `Already saved` and disable duplicate save.
+- [x] GREEN: The coach panel now disables the save action for reopened saved drafts while preserving normal save behavior for generated drafts.
+- [x] VERIFY: Focused tests, browser E2E, full test/lint/build, pack dry-run, and diff check passed.
 - [ ] INTEGRATE: Push one coherent PR, merge it after CI, and prune the branch.
