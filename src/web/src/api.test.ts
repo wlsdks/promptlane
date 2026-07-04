@@ -953,6 +953,19 @@ describe("web api export client", () => {
                 writes_files: false,
                 external_calls: false,
               },
+            continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_collection_post_submit_freshness_advisory:
+              {
+                label:
+                  "Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval post-submit collection post-submit freshness advisory",
+                advisory:
+                  "collect a new explicit loop snapshot after submission when post-submit retry renewed-memory-approval post-submit collection freshness is uncertain",
+                not_monitored:
+                  "Loopdeck does not monitor submitted state, agent responses, or post-submit retry renewed-memory-approval post-submit collection freshness after submit",
+                reason:
+                  "keeps post-submit retry renewed-memory-approval post-submit collection freshness review tied to explicit local snapshot collection",
+                writes_files: false,
+                external_calls: false,
+              },
             continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_merge_freshness_advisory:
               {
                 label:
@@ -1917,6 +1930,19 @@ describe("web api export client", () => {
           "Loopdeck does not approve submissions or verify post-submit retry renewed-memory-approval post-submit collection freshness before submit",
         reason:
           "keeps submission readiness separate from post-submit retry renewed-memory-approval post-submit collection freshness uncertainty review",
+        writes_files: false,
+        external_calls: false,
+      },
+    continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_collection_post_submit_freshness_advisory:
+      {
+        label:
+          "Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval post-submit collection post-submit freshness advisory",
+        advisory:
+          "collect a new explicit loop snapshot after submission when post-submit retry renewed-memory-approval post-submit collection freshness is uncertain",
+        not_monitored:
+          "Loopdeck does not monitor submitted state, agent responses, or post-submit retry renewed-memory-approval post-submit collection freshness after submit",
+        reason:
+          "keeps post-submit retry renewed-memory-approval post-submit collection freshness review tied to explicit local snapshot collection",
         writes_files: false,
         external_calls: false,
       },

@@ -1635,6 +1635,19 @@ describe("createServer P2 ingest boundary", () => {
             writes_files: false,
             external_calls: false,
           },
+        continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_collection_post_submit_freshness_advisory:
+          {
+            label:
+              "Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval post-submit collection post-submit freshness advisory",
+            advisory:
+              "collect a new explicit loop snapshot after submission when post-submit retry renewed-memory-approval post-submit collection freshness is uncertain",
+            not_monitored:
+              "Loopdeck does not monitor submitted state, agent responses, or post-submit retry renewed-memory-approval post-submit collection freshness after submit",
+            reason:
+              "keeps post-submit retry renewed-memory-approval post-submit collection freshness review tied to explicit local snapshot collection",
+            writes_files: false,
+            external_calls: false,
+          },
         source_of_truth_note: {
           label: "Source-of-truth note",
           local_memory_input:
