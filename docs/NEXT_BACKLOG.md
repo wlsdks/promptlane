@@ -122,8 +122,10 @@ investing in more refactors:
   `docs/MCP_COACH_LOOP_AUDIT_2026-07-05.md`. The flow works locally, but the
   canonical path should be documented as `score_prompt` -> `improve_prompt` ->
   ask user -> `apply_clarifications` -> optional `record_clarifications`.
-  Remaining follow-up: one interactive Claude Code or Codex session to verify
-  native ask UI handoff.
+  Safe native-dialog preflight and MCP elicitation smoke completed in
+  `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md`. Remaining follow-up: one
+  operator-approved interactive Claude Code or Codex session to verify the
+  real native ask UI handoff.
 - **Reuse loop audit**: first in-app Browser audit completed in
   `docs/REUSE_LOOP_AUDIT_2026-07-05.md`. Search, detail, and save-draft reuse
   worked; `Copy draft` failed in the Codex in-app Browser and needs a
@@ -158,7 +160,8 @@ Goal:
 
 Scope:
 
-- Use the existing native dialog preflight/smoke harnesses first.
+- Existing native dialog preflight/smoke harnesses have passed; use
+  `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md` as the evidence baseline.
 - Do not open OS dialogs unexpectedly from automated tests.
 - Treat this as integration evidence; do not block core loop-memory work on it.
 
