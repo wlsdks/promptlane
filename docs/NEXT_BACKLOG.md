@@ -118,11 +118,12 @@ The Phase 2 features are implemented; the open question is whether the
 flows feel right end to end. Two quick passes are worth scheduling before
 investing in more refactors:
 
-- **MCP coach loop audit**: run a real Claude Code session through
-  `score_prompt` → `improve_prompt` → `record_clarifications` → store, and
-  log every friction point that requires the user to context-switch (open
-  a terminal, run a CLI command, leave the agent). Outcome: a punch list of
-  copy/paste-shaped fixes.
+- **MCP coach loop audit**: first stdio MCP audit completed in
+  `docs/MCP_COACH_LOOP_AUDIT_2026-07-05.md`. The flow works locally, but the
+  canonical path should be documented as `score_prompt` -> `improve_prompt` ->
+  ask user -> `apply_clarifications` -> optional `record_clarifications`.
+  Remaining follow-up: one interactive Claude Code or Codex session to verify
+  native ask UI handoff.
 - **Reuse loop audit**: pick a stored high-score prompt, find it via the
   web UI search, and try to reuse it for a new task (copy → edit →
   resubmit). Note where the path breaks (e.g. is "copy this prompt"
@@ -132,6 +133,13 @@ investing in more refactors:
 These are user-perspective tasks rather than refactors. They should run in
 a fresh session with the explicit role of "user trying to do work" rather
 than "engineer touching code."
+
+Immediate follow-up from the stdio audit:
+
+- Update MCP instructions/docs so agents call `apply_clarifications` before
+  `record_clarifications` when they need to show the final draft in-chat.
+- Consider a repeatable `mcp-coach-loop-smoke` harness only after the doc fix,
+  so future audits do not depend on one-off scripts.
 
 ### 4. Codex Native Dialog Fallback Dogfood
 
