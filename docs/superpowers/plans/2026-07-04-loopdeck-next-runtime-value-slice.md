@@ -178,6 +178,9 @@ Implementation checkpoint:
   sourced from the existing command-center review item continuation command,
   without adding command execution, web write buttons, checklist completion
   state, merge automation, or git writes.
+- Selected worktree detail now includes a raw-free missing-evidence explanation
+  when the selected worktree is blocked, without returning evidence refs,
+  outcome summaries, prompt bodies, diffs, or git state.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free missing-evidence explanation when the selected worktree is blocked,
-  without returning evidence refs or outcome summaries.
+  raw-free reviewer checklist preview scoped to the selected worktree, without
+  adding checklist completion state or write tools.

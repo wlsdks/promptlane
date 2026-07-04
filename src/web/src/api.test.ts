@@ -255,6 +255,11 @@ describe("web api export client", () => {
                 command:
                   "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
               },
+              missing_evidence_explanation: {
+                label: "Missing evidence",
+                reason: "latest selected worktree outcome has no evidence refs",
+                next_action: "record loop outcome evidence",
+              },
             },
             items: [
               {
@@ -303,6 +308,11 @@ describe("web api export client", () => {
           label: "Copy review brief command",
           command:
             "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+        },
+        missing_evidence_explanation: {
+          label: "Missing evidence",
+          reason: "latest selected worktree outcome has no evidence refs",
+          next_action: "record loop outcome evidence",
         },
       },
       items: [

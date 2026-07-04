@@ -367,6 +367,30 @@ export function LoopsView({
                 <code>
                   {worktreeDetail.review_packet_summary.command_hint.command}
                 </code>
+                {worktreeDetail.review_packet_summary
+                  .missing_evidence_explanation && (
+                  <div>
+                    <p className="loops-status-line">
+                      {
+                        worktreeDetail.review_packet_summary
+                          .missing_evidence_explanation.label
+                      }
+                    </p>
+                    <p className="loops-status-line">
+                      {
+                        worktreeDetail.review_packet_summary
+                          .missing_evidence_explanation.reason
+                      }
+                    </p>
+                    <p className="loops-status-line">
+                      Next{" "}
+                      {
+                        worktreeDetail.review_packet_summary
+                          .missing_evidence_explanation.next_action
+                      }
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             <div className="loop-memory-action">

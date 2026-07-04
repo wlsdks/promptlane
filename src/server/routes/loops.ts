@@ -182,6 +182,16 @@ export function registerLoopRoutes(
                   label: "Copy review brief command",
                   command: reviewItem.continuation_command,
                 },
+                ...(reviewItem.merge_readiness.status === "missing_evidence"
+                  ? {
+                      missing_evidence_explanation: {
+                        label: "Missing evidence",
+                        reason:
+                          "latest selected worktree outcome has no evidence refs",
+                        next_action: reviewItem.merge_readiness.next_action,
+                      },
+                    }
+                  : {}),
               },
             }
           : {}),

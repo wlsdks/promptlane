@@ -81,6 +81,9 @@ describe("LoopsView", () => {
     expect(html).toContain(
       "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
     );
+    expect(html).toContain("Missing evidence");
+    expect(html).toContain("latest selected worktree outcome has no evidence refs");
+    expect(html).toContain("record loop outcome evidence");
     expect(html).toContain("loop_web");
     expect(html).toContain("passed");
     expect(html).not.toContain("Make this better");
@@ -286,6 +289,11 @@ function loopWorktree(): LoopWorktreeResponse {
         label: "Copy review brief command",
         command:
           "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+      },
+      missing_evidence_explanation: {
+        label: "Missing evidence",
+        reason: "latest selected worktree outcome has no evidence refs",
+        next_action: "record loop outcome evidence",
       },
     },
     items: [

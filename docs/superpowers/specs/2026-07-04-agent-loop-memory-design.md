@@ -1662,6 +1662,42 @@ Do not add:
 - hidden external model calls or background agent evaluation
 - package, plugin, slash command, hook, or MCP server-name rename
 
+### Slice 4.51: Selected Worktree Missing-Evidence Explanation
+
+Decision:
+
+- Selected worktree detail should explain a blocked `missing_evidence` state
+  without returning evidence refs, outcome summaries, prompt bodies, diffs, or
+  git state. The explanation is only a safe reason and next action derived from
+  the selected worktree merge-readiness status.
+- Do not show the explanation for `ready` or `needs_review` worktrees.
+
+Add:
+
+- optional `review_packet_summary.missing_evidence_explanation` when the
+  selected worktree merge readiness is `missing_evidence`
+- explanation fields:
+  - label: `Missing evidence`
+  - reason: `latest selected worktree outcome has no evidence refs`
+  - next_action: `record loop outcome evidence`
+- web API typing for the explanation
+- selected worktree detail rendering for the explanation
+- focused server/API/web tests proving the explanation remains read-only and
+  does not reveal prompt bodies, outcome summaries, evidence refs, raw paths,
+  transcripts, compact summaries, API tokens, provider credentials, external
+  calls, or git writes
+
+Do not add:
+
+- raw evidence refs, evidence counts beyond existing aggregate packet counts,
+  outcome summaries, prompt bodies, diffs, or transcript content
+- web or MCP write tools, command execution, merge actions, checklist
+  completion, or acknowledgements
+- merge/checkout/rebase/diff/conflict inspection
+- changes to command-center readiness or review packet status
+- hidden external model calls or background agent evaluation
+- package, plugin, slash command, hook, or MCP server-name rename
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

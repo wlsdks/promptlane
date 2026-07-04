@@ -828,6 +828,70 @@ describe("createServer P2 ingest boundary", () => {
     expect(serialized).not.toContain("sk-proj-secret");
   });
 
+  it("returns a raw-free missing-evidence explanation for blocked selected worktrees", async () => {
+    const storage = createMemoryStorage();
+    storage.loopSnapshots.push(
+      loopSnapshot({
+        id: "loop_missing_selected",
+        worktree_label: "blocked-worktree",
+        project_id: "proj_web",
+        outcome: {
+          status: "unknown",
+          summary:
+            "Unsafe missing evidence summary should stay hidden /Users/example/private sk-proj-secret",
+          evidence_refs: [],
+        },
+      }),
+    );
+    storage.loopSnapshots.push(
+      loopSnapshot({
+        id: "loop_ready_other",
+        worktree_label: "ready-worktree",
+        project_id: "proj_web",
+        outcome: {
+          status: "passed",
+          summary: "Ready outcome should stay hidden.",
+          evidence_refs: ["commit:ready"],
+        },
+      }),
+    );
+    const server = createTestServer({ storage });
+
+    const response = await server.inject({
+      method: "GET",
+      url: "/api/v1/loops/worktrees/blocked-worktree",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+    });
+    const serialized = JSON.stringify(response.json());
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toMatchObject({
+      data: {
+        worktree: "blocked-worktree",
+        review_packet_summary: {
+          status: "blocked",
+          summary: "1 ready, 0 needs review, 1 missing evidence",
+          next_action: "record missing evidence before merge",
+          merge_readiness: "missing_evidence",
+          worktree_action: "record loop outcome evidence",
+          missing_evidence_explanation: {
+            label: "Missing evidence",
+            reason: "latest selected worktree outcome has no evidence refs",
+            next_action: "record loop outcome evidence",
+          },
+        },
+      },
+    });
+    expect(serialized).not.toContain("Unsafe missing evidence summary");
+    expect(serialized).not.toContain("Ready outcome should stay hidden");
+    expect(serialized).not.toContain("commit:ready");
+    expect(serialized).not.toContain("/Users/example");
+    expect(serialized).not.toContain("sk-proj-secret");
+  });
+
   it("returns approved loop memory in copy-ready loop briefs", async () => {
     const storage = createMemoryStorage();
     storage.loopSnapshots.push(loopSnapshot());

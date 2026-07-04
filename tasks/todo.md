@@ -237,7 +237,11 @@
 - [x] Task 53 RED: selected detail API/UI에 `review_packet_summary.command_hint`가 없어 focused tests 실패 확인
 - [x] Task 53 GREEN: selected worktree detail API/type/UI에 command hint label/command를 read-only로 노출
 - [x] Task 53 PRIVACY: command hint는 기존 safe continuation command만 포함하고 prompt body/evidence refs/outcome summary/raw path/git write를 포함하지 않음
-- [ ] 다음 slice: selected worktree detail에 blocked 상태의 raw-free missing-evidence explanation을 추가할지 결정
+- [x] Task 54 DECISION: selected worktree detail은 blocked/missing_evidence 상태에서 raw-free explanation을 노출하고 evidence refs/outcome summary는 보류
+- [x] Task 54 RED: blocked selected detail API/UI에 `missing_evidence_explanation`이 없어 focused tests 실패 확인
+- [x] Task 54 GREEN: selected worktree detail API/type/UI에 Missing evidence label/reason/next_action을 optional read-only로 노출
+- [x] Task 54 PRIVACY: explanation은 safe reason/action만 포함하고 prompt body/evidence refs/outcome summary/raw path/git write를 포함하지 않음
+- [ ] 다음 slice: selected worktree detail에 raw-free reviewer checklist preview를 추가할지 결정
 
 ### 판단 기준
 

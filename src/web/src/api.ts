@@ -257,6 +257,11 @@ export type LoopWorktreeResponse = {
       label: "Copy review brief command";
       command: string;
     };
+    missing_evidence_explanation?: {
+      label: "Missing evidence";
+      reason: "latest selected worktree outcome has no evidence refs";
+      next_action: "record loop outcome evidence";
+    };
   };
   items: LoopSummary[];
   privacy: {
