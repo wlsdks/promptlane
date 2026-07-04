@@ -2291,6 +2291,46 @@ Do not add:
   secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.67: Selected Post-Handoff Reminder
+
+Decision:
+
+- Selected worktree detail should distinguish the next local action after a
+  continuation handoff: collect a new loop snapshot. This is not the same as
+  approving a loop memory or making a merge decision.
+- This is needed because the selected detail panel now describes the full
+  handoff path. Without a separate reminder, users and active agents can mistake
+  “collect next loop” for memory approval or merge readiness.
+
+Add:
+
+- top-level selected worktree detail `post_handoff_reminder` with:
+  - label: `Post-handoff reminder`
+  - collect_next:
+    `collect a new loop snapshot after the next agent turn`
+  - not_memory_approval:
+    `memory approval remains a separate explicit review`
+  - not_merge:
+    `merge remains a separate review-before-merge decision`
+  - reason:
+    `continuation handoff records the next loop before any memory approval or merge decision`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance
+- focused server/API/web tests proving the reminder is present
+
+Do not add:
+
+- memory approval, merge decision writes, checklist completion state, Codex or
+  Claude Code UI automation, hidden prompt submission, command execution, git
+  reads/writes, filesystem reads, transcript reads, background analysis,
+  external model calls, or new write tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

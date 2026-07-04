@@ -903,6 +903,16 @@ describe("createServer P2 ingest boundary", () => {
           writes_files: false,
           external_calls: false,
         },
+        post_handoff_reminder: {
+          label: "Post-handoff reminder",
+          collect_next: "collect a new loop snapshot after the next agent turn",
+          not_memory_approval: "memory approval remains a separate explicit review",
+          not_merge: "merge remains a separate review-before-merge decision",
+          reason:
+            "continuation handoff records the next loop before any memory approval or merge decision",
+          writes_files: false,
+          external_calls: false,
+        },
         review_packet_summary: {
           title: "Review-before-merge packet",
           status: "needs_review",

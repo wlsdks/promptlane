@@ -488,6 +488,31 @@ export function LoopsView({
                     </p>
                   </div>
                 )}
+                {worktreeDetail.post_handoff_reminder && (
+                  <div className="loop-review-item">
+                    <p className="loops-status-line">
+                      {worktreeDetail.post_handoff_reminder.label}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.post_handoff_reminder.collect_next}
+                    </p>
+                    <p className="loops-status-line">
+                      {
+                        worktreeDetail.post_handoff_reminder
+                          .not_memory_approval
+                      }
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.post_handoff_reminder.not_merge}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.post_handoff_reminder.reason}
+                    </p>
+                    <p className="loops-status-line">
+                      No post-handoff writes or external calls
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             {worktreeDetail.latest_decision && (

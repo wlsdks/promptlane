@@ -234,8 +234,11 @@ Implementation checkpoint:
 - Selected worktree detail now exposes a raw-free continuation handoff checklist:
   copy selected brief, paste into Codex or Claude Code, submit manually, then
   collect the next loop snapshot after the agent turn.
+- Selected worktree detail now includes a raw-free post-handoff reminder,
+  separating next loop snapshot collection from memory approval and merge
+  decisions.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free post-handoff reminder that distinguishes collecting a new loop
-  snapshot from approving memory or merging,
+  raw-free source-of-truth note that names the next loop snapshot as local memory
+  input rather than transcript import,
   without adding transcript content, prompt bodies, raw paths, git status reads,
   command execution, or write tools.

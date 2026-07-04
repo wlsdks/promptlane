@@ -135,6 +135,20 @@ describe("LoopsView", () => {
       "keeps continuation handoff explicit without automating agent UI or reading transcripts",
     );
     expect(html).toContain("No handoff checklist writes or external calls");
+    expect(html).toContain("Post-handoff reminder");
+    expect(html).toContain(
+      "collect a new loop snapshot after the next agent turn",
+    );
+    expect(html).toContain(
+      "memory approval remains a separate explicit review",
+    );
+    expect(html).toContain(
+      "merge remains a separate review-before-merge decision",
+    );
+    expect(html).toContain(
+      "continuation handoff records the next loop before any memory approval or merge decision",
+    );
+    expect(html).toContain("No post-handoff writes or external calls");
     expect(html).toContain("Continuation guidance");
     expect(html).toContain('class="loop-detail-section"');
     expect(html).toContain('class="loop-detail-section-title"');
@@ -436,6 +450,16 @@ function loopWorktree(): LoopWorktreeResponse {
       ],
       reason:
         "keeps continuation handoff explicit without automating agent UI or reading transcripts",
+      writes_files: false,
+      external_calls: false,
+    },
+    post_handoff_reminder: {
+      label: "Post-handoff reminder",
+      collect_next: "collect a new loop snapshot after the next agent turn",
+      not_memory_approval: "memory approval remains a separate explicit review",
+      not_merge: "merge remains a separate review-before-merge decision",
+      reason:
+        "continuation handoff records the next loop before any memory approval or merge decision",
       writes_files: false,
       external_calls: false,
     },
