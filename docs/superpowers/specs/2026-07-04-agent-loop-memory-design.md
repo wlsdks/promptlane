@@ -4008,6 +4008,71 @@ Do not add:
   result state, merge decision state, or secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.104: Post-Memory-Approval Retry Pre-Memory-Approval Freshness Advisory
+
+Decision:
+
+- Selected worktree detail should state that post-approval retry freshness
+  uncertainty should be reviewed before approving loop memory again.
+- This is needed because a retry after memory approval can make the previous
+  approval stale; any renewed memory approval should stay operator-controlled
+  and separate from automatic freshness verification or approval state.
+
+Add:
+
+- top-level selected worktree detail
+  `continuation_safety_post_memory_approval_retry_pre_memory_approval_freshness_advisory`
+  with:
+  - label:
+    `Post-memory-approval retry pre-memory-approval freshness advisory`
+  - advisory:
+    `review post-approval retry freshness uncertainty before approving loop memory again`
+  - not_decision:
+    `Loopdeck does not approve memory or verify post-approval retry freshness from this advisory`
+  - reason:
+    `keeps renewed memory approval separate from retry freshness uncertainty review`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance, immediately after the post-memory-approval retry freshness
+  uncertainty collection reminder
+- focused server/API/web tests proving the post-memory-approval retry
+  pre-memory-approval freshness advisory is present
+
+Do not add:
+
+- memory approval writes, memory approval state, renewed memory approval state,
+  approval result persistence, approval state synchronization, automatic
+  collection, automatic post-approval collection, automatic post-approval retry
+  collection, automatic renewed approval collection, freshness verification,
+  freshness result persistence, retry freshness result persistence,
+  post-approval retry freshness result persistence, freshness result detection,
+  freshness state synchronization, git status reads, transcript inspection,
+  agent UI monitoring, retry result persistence, post-approval retry result
+  persistence, retry success/failure detection, retry state synchronization,
+  retry outcome detection, collection command execution, collection result
+  persistence, post-approval collection result persistence, collection result
+  detection, collection state synchronization, background collection, hidden
+  recovery actions, submission event hooks, submitted state persistence, submit
+  automation, Enter key automation, button clicking, active window detection,
+  target-agent UI inspection, target content validation, paste success
+  verification, clipboard target validation, paste automation, persisted
+  destination state, persisted target state, safety approval state, Codex or
+  Claude Code UI automation, hidden prompt submission, command execution,
+  filesystem reads/writes, persisted review state, checklist completion state,
+  merge decision writes, background analysis, external model calls, or new write
+  tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, target
+  content, active-window titles, pasted content, paste result state, submitted
+  state, agent response content, collection result state, post-approval
+  collection result state, retry result state, post-approval retry result state,
+  retry outcome state, freshness result state, retry freshness result state,
+  post-approval retry freshness result state, memory approval state, renewed
+  memory approval state, approval result state, merge decision state, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

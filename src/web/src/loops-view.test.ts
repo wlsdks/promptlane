@@ -474,6 +474,21 @@ describe("LoopsView", () => {
     expect(html).toContain(
       "No post-memory-approval retry freshness uncertainty collection writes or external calls",
     );
+    expect(html).toContain(
+      "Post-memory-approval retry pre-memory-approval freshness advisory",
+    );
+    expect(html).toContain(
+      "review post-approval retry freshness uncertainty before approving loop memory again",
+    );
+    expect(html).toContain(
+      "Loopdeck does not approve memory or verify post-approval retry freshness from this advisory",
+    );
+    expect(html).toContain(
+      "keeps renewed memory approval separate from retry freshness uncertainty review",
+    );
+    expect(html).toContain(
+      "No post-memory-approval retry pre-memory-approval freshness advisory writes or external calls",
+    );
     expect(html).toContain("Paste destination");
     expect(html).toContain("Codex active request");
     expect(html).toContain("Claude Code active request");
@@ -1164,6 +1179,19 @@ function loopWorktree(): LoopWorktreeResponse {
           "Loopdeck does not verify post-approval retry freshness or start collection automatically",
         reason:
           "keeps post-approval retry freshness uncertainty resolution operator-triggered and local-first",
+        writes_files: false,
+        external_calls: false,
+      },
+    continuation_safety_post_memory_approval_retry_pre_memory_approval_freshness_advisory:
+      {
+        label:
+          "Post-memory-approval retry pre-memory-approval freshness advisory",
+        advisory:
+          "review post-approval retry freshness uncertainty before approving loop memory again",
+        not_decision:
+          "Loopdeck does not approve memory or verify post-approval retry freshness from this advisory",
+        reason:
+          "keeps renewed memory approval separate from retry freshness uncertainty review",
         writes_files: false,
         external_calls: false,
       },

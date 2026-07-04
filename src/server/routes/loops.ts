@@ -247,6 +247,8 @@ export function registerLoopRoutes(
                 continuationSafetyPostMemoryApprovalRetryFreshnessResultNonPersistenceNoteFor(),
               continuation_safety_post_memory_approval_retry_freshness_uncertainty_collection_reminder:
                 continuationSafetyPostMemoryApprovalRetryFreshnessUncertaintyCollectionReminderFor(),
+              continuation_safety_post_memory_approval_retry_pre_memory_approval_freshness_advisory:
+                continuationSafetyPostMemoryApprovalRetryPreMemoryApprovalFreshnessAdvisoryFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -1318,6 +1320,27 @@ function continuationSafetyPostMemoryApprovalRetryFreshnessUncertaintyCollection
       "Loopdeck does not verify post-approval retry freshness or start collection automatically",
     reason:
       "keeps post-approval retry freshness uncertainty resolution operator-triggered and local-first",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyPostMemoryApprovalRetryPreMemoryApprovalFreshnessAdvisoryFor(): {
+  label: "Post-memory-approval retry pre-memory-approval freshness advisory";
+  advisory: "review post-approval retry freshness uncertainty before approving loop memory again";
+  not_decision: "Loopdeck does not approve memory or verify post-approval retry freshness from this advisory";
+  reason: "keeps renewed memory approval separate from retry freshness uncertainty review";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Post-memory-approval retry pre-memory-approval freshness advisory",
+    advisory:
+      "review post-approval retry freshness uncertainty before approving loop memory again",
+    not_decision:
+      "Loopdeck does not approve memory or verify post-approval retry freshness from this advisory",
+    reason:
+      "keeps renewed memory approval separate from retry freshness uncertainty review",
     writes_files: false,
     external_calls: false,
   };
