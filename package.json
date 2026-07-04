@@ -60,6 +60,7 @@
     "scripts/browser-e2e.mjs",
     "scripts/hook-binary-smoke.mjs",
     "scripts/mcp-elicitation-smoke.mjs",
+    "scripts/mcp-native-dialog-preflight.mjs",
     "scripts/quality-gate.mjs",
     "scripts/release-smoke.mjs"
   ],
@@ -83,6 +84,7 @@
     "setup": "pnpm prompt-coach setup --profile coach --register-mcp --open-web",
     "smoke:hooks": "pnpm build && node scripts/hook-binary-smoke.mjs",
     "smoke:mcp-elicitation": "pnpm build && node scripts/mcp-elicitation-smoke.mjs",
+    "smoke:mcp-native-dialog": "pnpm build && node scripts/mcp-native-dialog-preflight.mjs",
     "smoke:release": "pnpm build && node scripts/release-smoke.mjs",
     "test": "vitest run"
   },

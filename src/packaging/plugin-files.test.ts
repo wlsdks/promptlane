@@ -658,6 +658,30 @@ describe("plugin packaging files", () => {
     expect(smoke).not.toContain("/Users/");
   });
 
+  it("ships a no-dialog MCP native fallback preflight smoke", () => {
+    const packageJson = readJson<{
+      files: string[];
+      scripts: Record<string, string>;
+    }>("package.json");
+    const smoke = readFileSync(
+      join(process.cwd(), "scripts/mcp-native-dialog-preflight.mjs"),
+      "utf8",
+    );
+
+    expect(packageJson.files).toContain(
+      "scripts/mcp-native-dialog-preflight.mjs",
+    );
+    expect(packageJson.scripts["smoke:mcp-native-dialog"]).toBe(
+      "pnpm build && node scripts/mcp-native-dialog-preflight.mjs",
+    );
+    expect(smoke).toContain("allow_native_dialog");
+    expect(smoke).toContain("interaction_status");
+    expect(smoke).toContain("unsupported");
+    expect(smoke).toContain("without opening an OS dialog");
+    expect(smoke).not.toContain("PROMPT_COACH_NATIVE_DIALOG=1");
+    expect(smoke).not.toContain("/Users/");
+  });
+
   it("documents Claude Code as a hook integration without embedding secrets", () => {
     const example = readJson<{
       hooks: {

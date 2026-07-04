@@ -45,7 +45,9 @@ The npm package intentionally includes:
 - Codex plugin artifacts under `plugins/prompt-coach`
 - local verification scripts: `scripts/benchmark.mjs`,
   `scripts/browser-e2e.mjs`, `scripts/hook-binary-smoke.mjs`,
-  `scripts/quality-gate.mjs`, and `scripts/release-smoke.mjs`
+  `scripts/mcp-elicitation-smoke.mjs`,
+  `scripts/mcp-native-dialog-preflight.mjs`, `scripts/quality-gate.mjs`, and
+  `scripts/release-smoke.mjs`
 
 ## Excluded
 

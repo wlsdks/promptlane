@@ -141,7 +141,10 @@
 - [x] Task 180 RED: remaining shell formatting이 `LoopsView`에 직접 남아 있어 source hygiene test 실패 확인
 - [x] Task 180 GREEN: `LoopInstructionPatchPanel`, `LoopSelectedBriefAction`, `LoopLoadingState`/`LoopEmptyState`로 남은 shell rendering을 이동하고 `LoopsView` 직접 shell 문자열/field 접근을 제거
 - [x] Task 180 PRIVACY: UI helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
-- [ ] 다음 slice: `LoopsView`가 orchestration-only에 충분히 가까워졌는지 확인하고, 추가 cleanup보다 다음 runtime/product slice로 넘어갈지 결정
+- [x] Task 181 DECISION: `LoopsView`는 orchestration-only에 충분히 가까워졌으므로 추가 UI cleanup보다 Codex native dialog fallback dogfood 준비로 이동
+- [x] Task 181 RED: dist MCP native dialog opt-in preflight harness/package script가 없어 packaging focused test 실패 확인
+- [x] Task 181 GREEN: `scripts/mcp-native-dialog-preflight.mjs`와 `smoke:mcp-native-dialog`를 추가해 `allow_native_dialog` public schema와 no-dialog metadata fallback을 dist MCP stdio에서 반복 검증
+- [x] Task 181 PRIVACY: preflight는 `allow_native_dialog=false`와 `PROMPT_COACH_NATIVE_DIALOG=0`으로 OS dialog를 열지 않고, prompt body 저장/external call/raw path/git read/write/transcript import를 추가하지 않음
 - [ ] 다음 dogfood slice: Codex native dialog fallback을 실제 OS dialog 또는 명시적 사용자 승인 하에 확인
 
 ### 판단 기준
