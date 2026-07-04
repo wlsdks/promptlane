@@ -189,6 +189,8 @@ export function registerLoopRoutes(
               }),
               copy_side_effects: copySideEffectsFor(),
               continuation_safety_group: continuationSafetyGroupFor(),
+              continuation_safety_ordering_note:
+                continuationSafetyOrderingNoteFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -671,6 +673,27 @@ function continuationSafetyGroupFor(): {
     includes: "copy, paste, review, collect, privacy, and merge gating notes",
     reason:
       "keeps the selected continuation path explicit without automating agents",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyOrderingNoteFor(): {
+  label: "Safety guidance order";
+  first: "review the continuation safety guidance before copying or pasting briefs";
+  then: "follow copy, paste, review, collect, privacy, and merge gating notes in order";
+  reason: "keeps continuation handoff reviewable before any manual agent submission";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Safety guidance order",
+    first:
+      "review the continuation safety guidance before copying or pasting briefs",
+    then:
+      "follow copy, paste, review, collect, privacy, and merge gating notes in order",
+    reason:
+      "keeps continuation handoff reviewable before any manual agent submission",
     writes_files: false,
     external_calls: false,
   };

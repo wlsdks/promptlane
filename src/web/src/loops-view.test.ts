@@ -125,6 +125,17 @@ describe("LoopsView", () => {
       "keeps the selected continuation path explicit without automating agents",
     );
     expect(html).toContain("No safety guidance writes or external calls");
+    expect(html).toContain("Safety guidance order");
+    expect(html).toContain(
+      "review the continuation safety guidance before copying or pasting briefs",
+    );
+    expect(html).toContain(
+      "follow copy, paste, review, collect, privacy, and merge gating notes in order",
+    );
+    expect(html).toContain(
+      "keeps continuation handoff reviewable before any manual agent submission",
+    );
+    expect(html).toContain("No ordering writes or external calls");
     expect(html).toContain("Paste destination");
     expect(html).toContain("Codex active request");
     expect(html).toContain("Claude Code active request");
@@ -513,6 +524,17 @@ function loopWorktree(): LoopWorktreeResponse {
       includes: "copy, paste, review, collect, privacy, and merge gating notes",
       reason:
         "keeps the selected continuation path explicit without automating agents",
+      writes_files: false,
+      external_calls: false,
+    },
+    continuation_safety_ordering_note: {
+      label: "Safety guidance order",
+      first:
+        "review the continuation safety guidance before copying or pasting briefs",
+      then:
+        "follow copy, paste, review, collect, privacy, and merge gating notes in order",
+      reason:
+        "keeps continuation handoff reviewable before any manual agent submission",
       writes_files: false,
       external_calls: false,
     },

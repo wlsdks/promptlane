@@ -890,6 +890,17 @@ describe("createServer P2 ingest boundary", () => {
           writes_files: false,
           external_calls: false,
         },
+        continuation_safety_ordering_note: {
+          label: "Safety guidance order",
+          first:
+            "review the continuation safety guidance before copying or pasting briefs",
+          then:
+            "follow copy, paste, review, collect, privacy, and merge gating notes in order",
+          reason:
+            "keeps continuation handoff reviewable before any manual agent submission",
+          writes_files: false,
+          external_calls: false,
+        },
         paste_destination: {
           label: "Paste destination",
           targets: ["Codex active request", "Claude Code active request"],

@@ -262,7 +262,11 @@ Implementation checkpoint:
   label, explaining that the following copy, paste, review, collect, privacy,
   and merge gating notes are read-only handoff boundaries for Codex and Claude
   Code continuation.
+- Selected worktree detail now includes a raw-free continuation safety ordering
+  note, explaining that operators should review the safety guidance before
+  copying or pasting selected continuation briefs.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free ordering note for the continuation safety guidance, without adding
-  transcript content, prompt bodies, raw paths, git status reads, command
-  execution, memory approval writes, merge writes, or external calls.
+  raw-free non-persistence note for continuation safety guidance review state,
+  without adding transcript content, prompt bodies, raw paths, git status reads,
+  command execution, checklist completion state, memory approval writes, merge
+  writes, or external calls.

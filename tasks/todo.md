@@ -333,7 +333,11 @@
 - [x] Task 77 RED: selected detail API/UI에 `continuation_safety_group`이 없어 focused server/API/web tests 실패 확인
 - [x] Task 77 GREEN: selected worktree detail API/type/UI에 Codex/Claude Code continuation safety scope, included notes, no automation/no write/no external flags를 read-only로 노출
 - [x] Task 77 PRIVACY: continuation safety group은 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/memory approval write/merge decision write/external call을 포함하지 않음
-- [ ] 다음 slice: selected detail panel의 continuation safety guidance ordering note를 raw-free로 별도 제공할지 결정
+- [x] Task 78 DECISION: continuation safety guidance ordering note는 copy/paste 전에 safety guidance를 먼저 검토해야 함을 명확히 하기 위해 필요하므로 raw-free로 제공
+- [x] Task 78 RED: selected detail API/UI에 `continuation_safety_ordering_note`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 78 GREEN: selected worktree detail API/type/UI에 review safety before copy/paste, follow notes in order, no-write/no-external flags를 read-only로 노출
+- [x] Task 78 PRIVACY: continuation safety ordering note는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/checklist completion state/memory approval write/merge decision write/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 continuation safety guidance review state가 저장되지 않는다는 non-persistence note를 raw-free로 별도 제공할지 결정
 
 ### 판단 기준
 

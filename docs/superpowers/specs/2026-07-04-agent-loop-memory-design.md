@@ -2605,6 +2605,43 @@ Do not add:
   secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.75: Selected Continuation Safety Ordering Note
+
+Decision:
+
+- Selected worktree detail should state that the continuation safety guidance is
+  reviewed before copying or pasting selected continuation briefs.
+- This is needed because the group label names the safety boundary, but does not
+  yet tell the operator which step comes first when continuing a Codex or Claude
+  Code loop.
+
+Add:
+
+- top-level selected worktree detail `continuation_safety_ordering_note` with:
+  - label: `Safety guidance order`
+  - first:
+    `review the continuation safety guidance before copying or pasting briefs`
+  - then:
+    `follow copy, paste, review, collect, privacy, and merge gating notes in order`
+  - reason:
+    `keeps continuation handoff reviewable before any manual agent submission`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance, immediately after the grouping label
+- focused server/API/web tests proving the ordering note is present
+
+Do not add:
+
+- Codex or Claude Code UI automation, hidden prompt submission, command
+  execution, git reads/writes, filesystem reads/writes, transcript import,
+  checklist completion state, background analysis, external model calls, memory
+  approval writes, merge decision writes, or new write tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.
