@@ -125,12 +125,20 @@ Current known large modules:
   queries or mappers here.
 - `src/storage/sqlite-json.ts`: defensive JSON decoding for SQLite JSON
   columns. Keep malformed data fail-safe and covered by unit tests.
+- Storage capability decisions are governed by
+  `docs/adr/0002-storage-capability-registry.md`: future storage-backed
+  routes and MCP tools should declare required capabilities at registration,
+  with a shared guard helper allowed as an intermediate migration step.
 - `src/mcp/score-tool-definitions.ts`: agent-facing MCP names, descriptions,
   input schemas, output schemas, and safety annotations.
 - `src/mcp/score-tool-types.ts`: argument/result TypeScript contracts for MCP
   handlers and tests.
 - `src/mcp/score-tool.ts`: MCP handler orchestration and privacy-safe result
   shaping. Do not add tool schemas here.
+- MCP layout decisions are governed by
+  `docs/adr/0001-mcp-per-tool-modules.md`: new tools default to per-tool
+  modules, while existing split-layout tools stay put until feature or
+  risk-driven work touches them.
 - `src/mcp/server.ts`: JSON-RPC stdio transport and tool-call routing only.
 - `src/hooks/rewrite-guard.ts`: hook decision logic only (mode dispatch,
   language detection, clipboard side effect, ask-mode trigger gate +

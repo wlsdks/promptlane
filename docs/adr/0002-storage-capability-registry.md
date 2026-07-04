@@ -1,7 +1,7 @@
 # 0002 — Storage Capability Registry
 
-- Status: Proposed
-- Date: 2026-05-08
+- Status: Accepted
+- Date: 2026-07-05
 - Tracks: Track A4 from the 2026-05-08 multi-track improvement pass
 
 ## Context
@@ -97,20 +97,59 @@ Cons: still pays the cost at every call site; just centralizes the failure
 shape. The "is the capability available" check still happens once per request
 instead of once at startup.
 
-## Recommendation
-
-Adopt **Option A**. The capability requirements are static per route/tool;
-checking them at registration makes the failure visible during boot rather
-than during a request. It also lets MCP filter out unavailable tools at
-`tools/list` time, giving agents a coherent picture of what they can do.
-
-Option C is acceptable as an intermediate step if Option A proves too
-invasive in one go.
-
 ## Decision
 
-Not yet made. This ADR exists so the next architecture review can act on it
-without re-deriving the friction signals. Until a decision is made, keep the
-existing inline guards but prefer adding new optional methods to the
-already-fully-supported SQLite backend rather than introducing more
-optionality.
+Adopt **Option A as the target architecture** with **Option C allowed as an
+intermediate migration step**.
+
+Storage capability requirements should be declared once at route/tool
+registration, not rediscovered inside every request handler. A route or MCP
+tool that requires `recordAskEvent`, project policy methods, project
+instruction review, loop snapshots, loop memories, or feedback summaries
+should declare that capability up front. Registration should fail with a clear
+local configuration error if the active storage backend lacks that capability.
+
+Until the registration-time helper exists, new code may use a shared
+`requireCapability` helper to centralize the failure shape. New hand-written
+`if (!storage.someMethod)` guards should not be added unless the call site is
+being preserved temporarily during migration.
+
+Option B is rejected. Making every port required would turn unsupported
+features into implementation stubs and move the failure later, which is worse
+for local-first reliability and harder for agent-facing MCP tools to explain.
+
+## Consequences
+
+- SQLite remains the fully supported storage backend and should implement every
+  production capability.
+- Test fakes and future alternate backends may implement only the capabilities
+  their surface declares, but the route/tool registration must make that
+  limitation explicit.
+- Server routes should return one coherent local configuration failure when a
+  required capability is missing.
+- MCP should not silently no-op writes when a capability is missing. Either
+  the tool should be absent from `tools/list`, or the handler should return a
+  structured `storage_unavailable`/configuration error.
+- Optional storage methods are still allowed in `src/storage/ports.ts`, but
+  optionality must represent backend capability, not an excuse for scattered
+  call-site policy.
+
+## Migration Gate
+
+Implement the registration-time capability helper when the next storage-backed
+route or MCP tool is added, or when an existing route/tool touches its storage
+guard for feature work.
+
+The helper should support this shape:
+
+```ts
+const storage = requireStorageCapabilities(options.storage, [
+  "recordAskEvent",
+  "getAskEventSummary",
+]);
+```
+
+For Fastify routes, missing capabilities should fail during route
+registration or server creation with a clear message. For MCP, the same
+capability declaration should feed the tool catalogue so unavailable write
+tools are not advertised as usable.

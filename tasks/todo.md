@@ -3280,12 +3280,12 @@
 
 ### Track A1 — MCP per-tool 마이그레이션 ADR
 
-- [ ] `docs/adr/0001-mcp-per-tool-modules.md` — 현재 split 양식과 신규 per-tool 양식 공존, 통일 vs 유지 결정.
-- [ ] 실제 마이그레이션은 ADR 합의 후 별도 PR.
+- [x] `docs/adr/0001-mcp-per-tool-modules.md` — 현재 split 양식과 신규 per-tool 양식 공존, 통일 vs 유지 결정.
+- [x] 실제 마이그레이션은 ADR 합의 후 별도 PR.
 
 ### Track A4 — Storage capability registry ADR
 
-- [ ] `docs/adr/0002-storage-capability-registry.md` — optional 메서드 가드 분산 문제, registry vs 현행 유지 결정.
+- [x] `docs/adr/0002-storage-capability-registry.md` — optional 메서드 가드 분산 문제, registry vs 현행 유지 결정.
 
 ### Track D — 신규 기능 brainstorming
 

@@ -1,12 +1,12 @@
 # 0001 — MCP Per-Tool Module Migration
 
-- Status: Proposed
-- Date: 2026-05-08
+- Status: Accepted
+- Date: 2026-07-05
 - Tracks: Track A1 from the 2026-05-08 multi-track improvement pass
 
 ## Context
 
-`src/mcp` currently hosts twelve agent-facing tools that follow two different
+`src/mcp` currently hosts twenty agent-facing tools that follow two different
 file layouts:
 
 - **Split layout** (the older one): `src/mcp/score-tool-definitions.ts` owns
@@ -14,17 +14,21 @@ file layouts:
   TypeScript argument/result contract; `src/mcp/score-tool.ts` owns the
   handler orchestration; `src/mcp/server.ts` owns JSON-RPC dispatch via
   `PROMPT_COACH_MCP_TOOL_HANDLERS`. The same axis applies to
-  `agent-judge-tool-*` and `agent-rewrite-tool-*`.
+  `agent-judge-tool-*`, `agent-rewrite-tool-*`, and `loop-tool-*`.
 
   Tools currently in this layout: `get_prompt_coach_status`, `score_prompt`,
   `improve_prompt`, `score_prompt_archive`, `review_project_instructions`,
   `coach_prompt`, `prepare_agent_judge_batch`, `record_agent_judgments`,
-  `prepare_agent_rewrite`, `record_agent_rewrite` (10 tools).
+  `prepare_agent_rewrite`, `record_agent_rewrite`, `get_loopdeck_status`,
+  `prepare_loop_brief`, `record_loop_outcome`,
+  `propose_loop_memory_candidate`, `record_loop_memory`,
+  `propose_instruction_patch`, `apply_instruction_patch` (17 tools).
 
 - **Per-tool layout** (the newer one): `src/mcp/apply-clarifications-tool.ts`,
   `src/mcp/record-clarifications-tool.ts`,
   `src/mcp/ask-clarifying-questions-tool.ts` each colocate the schema, the
-  TypeScript contract, and the handler in a single tool-shaped module.
+  TypeScript contract, and the handler in a single tool-shaped module (3
+  tools).
 
 Adding a new tool currently requires the contributor to know that:
 
@@ -101,21 +105,64 @@ Cons: side-effectful module imports; some teams treat that as an anti-pattern
 because the import order matters. We already do this in places, but it should
 be called out.
 
-## Recommendation
-
-Adopt **Option A in the short term, Option C in the medium term**. Option A
-removes the ambiguity for contributors today with no churn. Option C
-addresses the manual handler list without touching the legacy tools. Option B
-is held in reserve and only worth doing if the per-tool style ends up needing
-shared helpers that the split layout cannot reuse.
-
 ## Decision
 
-Not yet made. This ADR exists so the next architecture review does not have
-to re-discover the friction. Until a decision is made:
+Adopt **Option A now** and keep **Option C as the next migration target**.
 
-- New MCP tools should follow the per-tool layout
-  (`src/mcp/<tool-name>-tool.ts`).
-- Existing split-layout tools stay where they are.
-- Any change that touches both layouts in the same PR should reference this
-  ADR in the PR description.
+New MCP tools default to a per-tool module:
+
+```text
+src/mcp/<tool-name>-tool.ts
+```
+
+That module should own the tool definition, argument/result types, handler,
+and focused tests unless the tool is large enough to justify a local split.
+Existing split-layout tools stay where they are until a feature or risk-driven
+change touches them. Do not migrate the legacy split-layout tools only for
+style consistency.
+
+`src/mcp/server.ts` may keep the explicit `PROMPT_COACH_MCP_TOOL_HANDLERS`
+map for now. The next structural improvement is a registry that removes the
+manual definition/handler sync point without forcing a wholesale rewrite of
+the legacy tools. That registry must be explicit data, not import-time global
+mutation.
+
+Option B is rejected for the current phase. It creates too much churn in the
+highest-risk agent-facing surface and would obscure privacy review during the
+Loopdeck transition.
+
+## Consequences
+
+- New tools such as Loopdeck or clarification tools should be added as
+  per-tool modules.
+- Existing prompt scoring, archive scoring, project instruction review,
+  agent-judge, and agent-rewrite tools can remain in their split files.
+- When a PR changes the tool list, it must update the definition export and
+  server handler map together, or introduce the explicit registry first.
+- Reviewers should reject mixed layout churn that is not attached to a feature,
+  privacy fix, or registry migration.
+- The quality gate remains the enforcement rail for large MCP files; small
+  shared helpers are preferred over expanding `score-tool.ts`.
+
+## Migration Gate
+
+Implement Option C only when at least one of these is true:
+
+- a tool-list mismatch reaches review or CI;
+- a new tool would otherwise require touching more than two registry files;
+- `src/mcp/server.ts` grows because of dispatch plumbing rather than transport
+  behavior;
+- a packaging or MCP schema test needs a single authoritative tool catalogue.
+
+The registry shape should be close to:
+
+```ts
+type RegisteredPromptCoachTool = {
+  definition: PromptCoachMcpToolDefinition;
+  handler: PromptCoachToolHandler;
+};
+```
+
+Each tool module should export one `RegisteredPromptCoachTool`, and the MCP
+server should derive both `tools/list` and `tools/call` dispatch from that
+same array.
