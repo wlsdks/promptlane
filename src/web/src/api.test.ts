@@ -271,6 +271,15 @@ describe("web api export client", () => {
               writes_files: false,
               external_calls: false,
             },
+            command_filters: {
+              label: "Command filters",
+              selected_command_filters: ["worktree", "session", "branch"],
+              review_command_filters: ["worktree", "branch"],
+              reason:
+                "selected command reflects the current selection while review command reflects command-center review scope",
+              writes_files: false,
+              external_calls: false,
+            },
             latest_decision: {
               snapshot_id: "loop_web",
               worktree: "agent-loop-worktree",
@@ -400,6 +409,15 @@ describe("web api export client", () => {
           "copy the review packet command-center hint for merge review",
         reason:
           "selected continuation and review packet commands can differ when session or branch filters are active",
+        writes_files: false,
+        external_calls: false,
+      },
+      command_filters: {
+        label: "Command filters",
+        selected_command_filters: ["worktree", "session", "branch"],
+        review_command_filters: ["worktree", "branch"],
+        reason:
+          "selected command reflects the current selection while review command reflects command-center review scope",
         writes_files: false,
         external_calls: false,
       },

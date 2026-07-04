@@ -407,6 +407,31 @@ export function LoopsView({
                     </p>
                   </div>
                 )}
+                {worktreeDetail.command_filters && (
+                  <div className="loop-review-item">
+                    <p className="loops-status-line">
+                      {worktreeDetail.command_filters.label}
+                    </p>
+                    <p className="loops-status-line">
+                      Selected filters{" "}
+                      {worktreeDetail.command_filters.selected_command_filters.join(
+                        ", ",
+                      )}
+                    </p>
+                    <p className="loops-status-line">
+                      Review filters{" "}
+                      {worktreeDetail.command_filters.review_command_filters.join(
+                        ", ",
+                      )}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.command_filters.reason}
+                    </p>
+                    <p className="loops-status-line">
+                      No filter explanation writes or external calls
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             {worktreeDetail.latest_decision && (

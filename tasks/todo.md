@@ -285,7 +285,11 @@
 - [x] Task 65 RED: selected detail API/UI에 `command_distinction`이 없어 focused server/API/web tests 실패 확인
 - [x] Task 65 GREEN: selected worktree detail API/type/UI에 selected command role, review command role, difference reason, no-write flags를 read-only로 노출
 - [x] Task 65 PRIVACY: distinction은 command role 차이만 설명하고 prompt body/evidence refs/outcome summary/raw path/git read/write/external call을 포함하지 않음
-- [ ] 다음 slice: 각 visible command에 포함된 filter를 raw-free로 설명할지 결정
+- [x] Task 66 DECISION: selected detail의 visible command들이 어떤 filter category를 반영하는지 raw-free로 설명
+- [x] Task 66 RED: selected detail API/UI에 `command_filters`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 66 GREEN: selected worktree detail API/type/UI에 selected/review command filter categories와 no-write flags를 read-only로 노출
+- [x] Task 66 PRIVACY: filter explanation은 filter 이름만 포함하고 prompt body/evidence refs/outcome summary/raw path/git read/write/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 copy button side effects를 raw-free로 요약할지 결정
 
 ### 판단 기준
 

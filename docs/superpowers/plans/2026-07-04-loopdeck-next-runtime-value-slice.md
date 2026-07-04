@@ -221,7 +221,10 @@ Implementation checkpoint:
   from the review packet command hint, explaining that selected continuation
   follows selected worktree/session/branch filters while the review hint copies
   the command-center merge-review command.
+- Selected worktree detail now explains which filter categories are represented
+  in each visible command, using only filter names for selected continuation and
+  command-center review scope.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free explanation of which filters are represented in each visible command,
+  raw-free summary of copy-button side effects across the selected detail panel,
   without adding transcript content, prompt bodies, raw paths, git status reads,
   command execution, or write tools.

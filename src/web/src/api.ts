@@ -276,6 +276,18 @@ export type LoopWorktreeResponse = {
     writes_files: false;
     external_calls: false;
   };
+  command_filters?: {
+    label: "Command filters";
+    selected_command_filters:
+      | ["worktree"]
+      | ["worktree", "session"]
+      | ["worktree", "branch"]
+      | ["worktree", "session", "branch"];
+    review_command_filters: ["worktree"] | ["worktree", "branch"];
+    reason: "selected command reflects the current selection while review command reflects command-center review scope";
+    writes_files: false;
+    external_calls: false;
+  };
   latest_decision?: {
     snapshot_id: string;
     worktree: string;

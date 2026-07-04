@@ -2129,6 +2129,47 @@ Do not add:
   secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.63: Visible Command Filter Explanation
+
+Decision:
+
+- Selected worktree detail should show which filter categories are represented
+  in each visible command. This makes it easier to understand why the selected
+  continuation command can include session and branch filters while the review
+  command hint follows command-center review scope.
+- The explanation should expose only filter names, not raw paths, prompt
+  content, evidence refs, or hidden command execution state.
+
+Add:
+
+- top-level selected worktree detail `command_filters` with:
+  - label: `Command filters`
+  - selected_command_filters:
+    - `["worktree"]`
+    - `["worktree", "session"]`
+    - `["worktree", "branch"]`
+    - `["worktree", "session", "branch"]`
+  - review_command_filters:
+    - `["worktree"]`
+    - `["worktree", "branch"]`
+  - reason:
+    `selected command reflects the current selection while review command reflects command-center review scope`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering near command
+  distinction
+- focused server/API/web tests proving the filter explanation is present
+
+Do not add:
+
+- command execution, git reads/writes, filesystem reads, branch freshness
+  checks, merge approval, automatic command selection, checklist completion
+  state, external model calls, background scanning, or web write actions
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

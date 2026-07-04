@@ -861,6 +861,15 @@ describe("createServer P2 ingest boundary", () => {
           writes_files: false,
           external_calls: false,
         },
+        command_filters: {
+          label: "Command filters",
+          selected_command_filters: ["worktree"],
+          review_command_filters: ["worktree", "branch"],
+          reason:
+            "selected command reflects the current selection while review command reflects command-center review scope",
+          writes_files: false,
+          external_calls: false,
+        },
         review_packet_summary: {
           title: "Review-before-merge packet",
           status: "needs_review",

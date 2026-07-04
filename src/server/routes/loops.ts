@@ -182,6 +182,11 @@ export function registerLoopRoutes(
                 branch: query.branch,
               }),
               command_distinction: commandDistinctionFor(),
+              command_filters: commandFiltersFor({
+                hasSession: Boolean(query.session_id),
+                hasBranch: Boolean(query.branch),
+                reviewHasBranch: Boolean(reviewItem?.branch),
+              }),
             }
           : {}),
         ...(latestDecision
@@ -574,6 +579,48 @@ function commandDistinctionFor(): {
       "copy the review packet command-center hint for merge review",
     reason:
       "selected continuation and review packet commands can differ when session or branch filters are active",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function commandFiltersFor(input: {
+  hasSession: boolean;
+  hasBranch: boolean;
+  reviewHasBranch: boolean;
+}): {
+  label: "Command filters";
+  selected_command_filters:
+    | ["worktree"]
+    | ["worktree", "session"]
+    | ["worktree", "branch"]
+    | ["worktree", "session", "branch"];
+  review_command_filters: ["worktree"] | ["worktree", "branch"];
+  reason: "selected command reflects the current selection while review command reflects command-center review scope";
+  writes_files: false;
+  external_calls: false;
+} {
+  const selectedCommandFilters:
+    | ["worktree"]
+    | ["worktree", "session"]
+    | ["worktree", "branch"]
+    | ["worktree", "session", "branch"] =
+    input.hasSession && input.hasBranch
+      ? ["worktree", "session", "branch"]
+      : input.hasSession
+        ? ["worktree", "session"]
+        : input.hasBranch
+          ? ["worktree", "branch"]
+          : ["worktree"];
+
+  return {
+    label: "Command filters",
+    selected_command_filters: selectedCommandFilters,
+    review_command_filters: input.reviewHasBranch
+      ? ["worktree", "branch"]
+      : ["worktree"],
+    reason:
+      "selected command reflects the current selection while review command reflects command-center review scope",
     writes_files: false,
     external_calls: false,
   };
