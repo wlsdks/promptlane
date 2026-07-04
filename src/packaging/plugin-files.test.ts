@@ -368,6 +368,25 @@ describe("plugin packaging files", () => {
     expect(plugins).toContain("`loopdeck` CLI alias");
   });
 
+  it("keeps Loopdeck docs from describing product surfaces as prompt-coach storage or servers", () => {
+    const docs = [
+      readFileSync(join(process.cwd(), "README.md"), "utf8"),
+      readFileSync(join(process.cwd(), "docs/PLUGINS.md"), "utf8"),
+      readFileSync(
+        join(process.cwd(), "docs/REUSE_LOOP_AUDIT_2026-07-05.md"),
+        "utf8",
+      ),
+    ].join("\n");
+
+    expect(docs).toContain("local Loopdeck storage");
+    expect(docs).toContain("Loopdeck MCP server");
+    expect(docs).toContain("local Loopdeck web server");
+    expect(docs).not.toContain("local prompt-coach storage");
+    expect(docs).not.toContain("prompt-coach storage only");
+    expect(docs).not.toContain("prompt-coach MCP server");
+    expect(docs).not.toContain("local prompt-coach web server");
+  });
+
   it("documents /loopdeck:* as a future alias-only slash namespace without shipping command files yet", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");

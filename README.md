@@ -764,7 +764,7 @@ The MCP server exposes twenty tools:
   files, prompt bodies, raw paths, transcripts, compact summaries, or external
   LLM results.
 - `record_loop_memory`: record a user-approved Loopdeck memory from the latest
-  eligible candidate into local prompt-coach storage. It does not write
+  eligible candidate into local Loopdeck storage. It does not write
   AGENTS.md, CLAUDE.md, project docs, prompt bodies, raw paths, transcripts,
   compact summaries, or external LLM results. Its structured `next_actions`
   point agents to `prepare_loop_brief` and

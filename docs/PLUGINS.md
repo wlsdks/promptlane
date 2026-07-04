@@ -24,7 +24,7 @@ prompt-coach setup --profile coach --register-mcp --open-web
 The coach profile installs capture hooks, low-friction rewrite guidance through
 hook context, local server startup where supported, and the Claude Code status
 line when Claude Code is detected. `--register-mcp` is explicit consent to run
-the detected agent CLI registration commands for the prompt-coach MCP server,
+the detected agent CLI registration commands for the Loopdeck MCP server,
 which gives the active agent session access to coach/rewrite/judge tools. From a
 development checkout, run `pnpm setup`; it registers MCP with absolute Node +
 `dist/cli/index.js` paths so Codex does not require a global `prompt-coach`
@@ -236,7 +236,7 @@ or external LLM results.
 the latest passed loop outcome and safe evidence refs, then returns a
 user-reviewable candidate without writing memory or instruction files.
 `record_loop_memory` records a user-approved candidate into local
-prompt-coach storage only; instruction-file patches remain a separate explicit
+Loopdeck storage only; instruction-file patches remain a separate explicit
 workflow. Its structured `next_actions` point agents to `prepare_loop_brief`
 and `propose_instruction_patch target_file=AGENTS.md`.
 `propose_instruction_patch` returns a reviewable unified diff for

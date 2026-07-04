@@ -23,7 +23,7 @@ evaluation plus screenshot evidence.
 
 ## Path Tested
 
-1. Build and run the local prompt-coach web server with a temporary data dir.
+1. Build and run the local Loopdeck web server with a temporary data dir.
 2. Ingest a high-score stored prompt and a weak redaction fixture.
 3. Open the prompt archive in the Codex in-app Browser.
 4. Search for `apply_clarifications`.

@@ -61,6 +61,9 @@ describe("createPromptRewriteGuardOutput", () => {
     });
     expect("decision" in (output ?? {})).toBe(false);
     expect(output?.hookSpecificOutput.additionalContext).toContain(
+      "Loopdeck rewrite guidance",
+    );
+    expect(output?.hookSpecificOutput.additionalContext).not.toContain(
       "prompt-coach rewrite guidance",
     );
   });
@@ -113,10 +116,13 @@ describe("createPromptRewriteGuardOutput", () => {
     expect(output).toBeDefined();
     if (output && "hookSpecificOutput" in output && !("decision" in output)) {
       expect(output.hookSpecificOutput.additionalContext).toContain(
-        "prompt-coach 개선안 가이드",
+        "Loopdeck 개선안 가이드",
       );
       expect(output.hookSpecificOutput.additionalContext).not.toContain(
         "prompt-coach rewrite guidance",
+      );
+      expect(output.hookSpecificOutput.additionalContext).not.toContain(
+        "prompt-coach 개선안 가이드",
       );
     }
   });
