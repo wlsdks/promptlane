@@ -20,6 +20,9 @@ const cliPath = join(repoRoot, "dist", "cli", "index.js");
 const tempRoot = mkdtempSync(join(tmpdir(), "prompt-coach-browser-e2e-"));
 const dataDir = join(tempRoot, "data");
 const homeDir = join(tempRoot, "home");
+const screenshotDir = process.env.SCREENSHOT_DIR
+  ? resolve(process.env.SCREENSHOT_DIR)
+  : undefined;
 const rawPathPrefix = join(tempRoot, "workspace");
 const privateProjectDir = join(rawPathPrefix, "private-project");
 const rawSecret = "sk-proj-1234567890abcdef";
@@ -118,6 +121,7 @@ try {
   await page.getByRole("heading", { name: "Prompt archive" }).waitFor();
   await page.getByText("private-project").first().waitFor();
   await assertBrowserSafe(page, "archive");
+  await captureScreenshot(page, "archive-desktop");
   await assertText(
     page,
     "private-project",
@@ -155,6 +159,7 @@ try {
     "prompt-coach:prepare_agent_rewrite prompt_id=",
     "Detail should expose a stored prompt agent rewrite command.",
   );
+  await captureScreenshot(page, "detail-desktop");
   await page.locator(".prompt-comparison").first().waitFor();
   await page
     .locator('.prompt-comparison-heading:has-text("Original")')
@@ -250,6 +255,7 @@ try {
   );
   await assertChartVisible(page, "dashboard", 1);
   await assertBrowserSafe(page, "dashboard");
+  await captureScreenshot(page, "dashboard-desktop");
 
   await page.getByRole("button", { name: "Coach", exact: true }).click();
   await page.getByRole("heading", { name: "Prompt coach" }).waitFor();
@@ -304,6 +310,7 @@ try {
     "Coach should confirm that the next request brief was copied.",
   );
   await assertBrowserSafe(page, "coach");
+  await captureScreenshot(page, "coach-desktop");
 
   // The standalone Scores tab was dropped in PR #174 (dashboard nav-card
   // cleanup). Archive score review now lives inside the Dashboard panel and
@@ -319,6 +326,7 @@ try {
   await assertBrowserSafe(page, "projects");
   await page.getByRole("button", { name: "capture on" }).click();
   await page.getByRole("button", { name: "paused" }).waitFor();
+  await captureScreenshot(page, "projects-desktop");
 
   // MCP is now a sub-route of Settings (/mcp); the standalone sidebar
   // button is gone. Navigate via URL so the admin-fold <details> opens
@@ -376,6 +384,7 @@ try {
     "MCP page should expose project instruction review.",
   );
   await assertBrowserSafe(page, "mcp");
+  await captureScreenshot(page, "mcp-desktop");
 
   // Export is now a sub-route of Settings (/exports); same reason as MCP.
   await page.goto(`${serverBaseUrl}/exports`);
@@ -393,6 +402,7 @@ try {
     "[REDACTED:path]",
     "Export JSON preview should include anonymized paths.",
   );
+  await captureScreenshot(page, "exports-desktop");
 
   await page.getByRole("button", { name: "Settings" }).click();
   await page.getByRole("heading", { name: "Settings" }).waitFor();
@@ -404,6 +414,7 @@ try {
     "Settings should show masked local paths.",
   );
   await assertNotText(page, tempRoot, "Settings must not show raw temp paths.");
+  await captureScreenshot(page, "settings-desktop");
 
   await page.setViewportSize({ width: 390, height: 844 });
   const viewport = await page.evaluate(() => ({
@@ -414,6 +425,7 @@ try {
     viewport.scrollWidth <= viewport.innerWidth,
     `Mobile layout should not overflow horizontally. scrollWidth=${viewport.scrollWidth}, innerWidth=${viewport.innerWidth}.`,
   );
+  await captureScreenshot(page, "settings-mobile");
 
   assertEqual(
     consoleErrors.length,
@@ -545,6 +557,17 @@ async function assertBrowserSafe(page, label) {
   const text = await page.locator("body").innerText();
   assertNotIncludes(text, rawPathPrefix, `${label} must not show raw paths.`);
   assertNotIncludes(text, rawSecret, `${label} must not show raw secrets.`);
+}
+
+async function captureScreenshot(page, name) {
+  if (!screenshotDir) {
+    return;
+  }
+
+  mkdirSync(screenshotDir, { recursive: true });
+  const path = join(screenshotDir, `${name}.png`);
+  await page.screenshot({ path, fullPage: false });
+  console.log(`- captured ${path}`);
 }
 
 async function assertText(page, expected, message) {

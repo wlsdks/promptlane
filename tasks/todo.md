@@ -3306,5 +3306,5 @@
 
 ### Track E — UI 패트롤 셋업
 
-- [ ] `ui-patrol` 스킬로 cron 기반 디자인 자동 점검 셋업.
-- [ ] 운영 후 결과 확인.
+- [x] `ui-patrol` 스킬로 cron 기반 디자인 자동 점검 셋업.
+- [ ] 운영 후 첫 scheduled artifact 결과 확인.

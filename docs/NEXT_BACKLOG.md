@@ -179,9 +179,16 @@ Remaining scope:
 
 ### 6. UI Patrol Cron
 
-`ui-patrol` skill set up to keep design regressions visible across
-sessions. Low-touch operationally, but it should follow the next functional
-slice so it checks a current UI surface rather than old assumptions.
+`ui-patrol` is now wired as a scheduled GitHub Actions workflow plus a local
+`pnpm ui-patrol` command. It reuses the synthetic browser E2E flow and stores
+desktop/mobile screenshot artifacts through `SCREENSHOT_DIR` so visual
+regressions remain visible across sessions.
+
+Remaining scope:
+
+- Review the first scheduled artifact after it runs.
+- Add targeted visual assertions only when a real regression appears; keep the
+  patrol broad and low-touch by default.
 
 ## Explicit non-goals
 

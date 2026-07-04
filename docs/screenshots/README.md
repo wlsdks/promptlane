@@ -35,9 +35,27 @@
 - 1× DPI로 저장 (Retina 2× 캡처는 README 임베드 시 너무 큽니다).
 - gif/mp4가 아니라 정적 png. README는 첫 인상이고 빠른 로딩이 우선.
 
-## 자동화 후보
+## 자동 UI patrol
 
-`scripts/browser-e2e.mjs`가 이미 fixture 주입과 페이지 네비게이션을 합니다.
-같은 흐름에 `SCREENSHOT_DIR` 환경 변수를 추가해서 `page.screenshot()`을
-호출하는 옵션을 다음 iteration에서 추가할 수 있습니다. 지금은 capture
-정확성을 사람이 검수하는 단계라 수동 캡처를 우선합니다.
+`scripts/browser-e2e.mjs`는 fixture 주입과 페이지 네비게이션을 수행하며,
+`SCREENSHOT_DIR` 환경 변수가 있으면 다음 화면의 png를 저장합니다:
+
+- `archive-desktop.png`
+- `detail-desktop.png`
+- `dashboard-desktop.png`
+- `coach-desktop.png`
+- `projects-desktop.png`
+- `mcp-desktop.png`
+- `exports-desktop.png`
+- `settings-desktop.png`
+- `settings-mobile.png`
+
+로컬에서 같은 점검을 실행하려면:
+
+```sh
+SCREENSHOT_DIR="$(mktemp -d)" pnpm ui-patrol
+```
+
+GitHub Actions의 `ui-patrol` workflow는 매주 한 번, 그리고 수동 실행 시
+synthetic fixture로 이 점검을 실행하고 screenshot artifact를 업로드합니다.
+이 artifact는 제품 스크린샷 원본이 아니라 회귀 점검용 증거입니다.
