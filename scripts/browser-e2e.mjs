@@ -186,6 +186,46 @@ try {
   await page.getByRole("button", { name: "Copied" }).waitFor();
   await page.getByRole("button", { name: "Save draft" }).click();
   await page.getByRole("button", { name: "Saved" }).waitFor();
+  await page.getByRole("button", { name: "Copy saved draft" }).waitFor();
+  await page.evaluate(() => {
+    Object.defineProperty(window, "__promptCoachE2eClipboard", {
+      configurable: true,
+      value: {
+        clipboard: navigator.clipboard,
+        execCommand: document.execCommand,
+      },
+    });
+    Object.defineProperty(document, "execCommand", {
+      configurable: true,
+      value: () => false,
+    });
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: () => Promise.reject(new Error("clipboard denied")),
+      },
+    });
+  });
+  await page.getByRole("button", { name: "Copy saved draft" }).click();
+  await page.getByRole("textbox", { name: "Manual copy draft text" }).waitFor();
+  await assertText(
+    page,
+    "select the draft below and copy it manually",
+    "Detail should expose a manual-copy fallback when clipboard writes fail.",
+  );
+  await page.getByRole("button", { name: "Dismiss" }).click();
+  await page.evaluate(() => {
+    const clipboardState = window.__promptCoachE2eClipboard;
+    Object.defineProperty(document, "execCommand", {
+      configurable: true,
+      value: clipboardState.execCommand,
+    });
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: clipboardState.clipboard,
+    });
+    Reflect.deleteProperty(window, "__promptCoachE2eClipboard");
+  });
 
   // Lock in PR #161 — answering a clarifying-question textarea must flow
   // through Save into the persisted draft (and pill it as "From your answers").

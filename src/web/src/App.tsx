@@ -174,6 +174,14 @@ export function App() {
   const [savedImprovementId, setSavedImprovementId] = useState<
     string | undefined
   >();
+  const [manualCopyFallback, setManualCopyFallback] = useState<
+    | {
+        promptId: string;
+        title: string;
+        text: string;
+      }
+    | undefined
+  >();
 
   useEffect(() => {
     persistLanguage(language);
@@ -529,6 +537,7 @@ export function App() {
   async function copyPrompt(prompt: PromptDetail): Promise<void> {
     const copied = await copyTextToClipboard(prompt.markdown);
     if (copied) {
+      setManualCopyFallback(undefined);
       setCopiedPromptId(prompt.id);
       window.setTimeout(() => setCopiedPromptId(undefined), 3000);
       try {
@@ -552,11 +561,17 @@ export function App() {
   ): Promise<void> {
     const copied = await copyTextToClipboard(improvement.improved_prompt);
     if (copied) {
+      setManualCopyFallback(undefined);
       setCopiedImprovementId(prompt.id);
       window.setTimeout(() => setCopiedImprovementId(undefined), 3000);
       return;
     }
 
+    setManualCopyFallback({
+      promptId: prompt.id,
+      title: "Manual copy needed",
+      text: improvement.improved_prompt,
+    });
     setError("Could not copy the improvement draft.");
   }
 
@@ -566,10 +581,16 @@ export function App() {
   ): Promise<void> {
     const copied = await copyTextToClipboard(draft.draft_text);
     if (!copied) {
+      setManualCopyFallback({
+        promptId: prompt.id,
+        title: "Manual copy needed",
+        text: draft.draft_text,
+      });
       setError("Could not copy the improvement draft.");
       return;
     }
 
+    setManualCopyFallback(undefined);
     setCopiedImprovementId(prompt.id);
     window.setTimeout(() => setCopiedImprovementId(undefined), 3000);
     try {
@@ -1083,9 +1104,15 @@ export function App() {
             copied={selected?.id === copiedPromptId}
             copiedImprovement={selected?.id === copiedImprovementId}
             language={language}
+            manualCopyFallback={
+              selected?.id === manualCopyFallback?.promptId
+                ? manualCopyFallback
+                : undefined
+            }
             savedImprovement={selected?.id === savedImprovementId}
             onBookmark={toggleBookmark}
             onBack={() => navigate({ name: "list" })}
+            onCloseManualCopyFallback={() => setManualCopyFallback(undefined)}
             onCopy={copyPrompt}
             onCopyImprovement={copyImprovedPrompt}
             onCopySavedDraft={copySavedImprovementDraft}

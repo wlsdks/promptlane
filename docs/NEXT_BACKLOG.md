@@ -143,8 +143,9 @@ Immediate follow-up from the stdio audit:
 
 Immediate follow-up from the reuse audit:
 
-- Add a prompt-detail copy-failure fallback so users can still manually select
-  and reuse the improved draft when browser clipboard writes are unavailable.
+- Prompt-detail copy-failure fallback landed: when draft clipboard writes are
+  unavailable, the detail page shows a local manual-copy textarea for the
+  improved draft or saved draft.
 - Keep auto-submit out of scope; copy/fallback must remain local and
   approval-gated.
 

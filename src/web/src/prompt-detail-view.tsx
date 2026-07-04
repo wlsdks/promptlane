@@ -41,9 +41,11 @@ export function PromptDetailView({
   copied,
   copiedImprovement,
   language,
+  manualCopyFallback,
   savedImprovement,
   onBack,
   onBookmark,
+  onCloseManualCopyFallback,
   onCopy,
   onCopyImprovement,
   onCopySavedDraft,
@@ -57,9 +59,11 @@ export function PromptDetailView({
   copied: boolean;
   copiedImprovement: boolean;
   language: Language;
+  manualCopyFallback?: ManualCopyFallback;
   savedImprovement: boolean;
   onBack(): void;
   onBookmark(prompt: PromptDetail): void;
+  onCloseManualCopyFallback(): void;
   onCopy(prompt: PromptDetail): void;
   onCopyImprovement(prompt: PromptDetail, improvement: PromptImprovement): void;
   onCopySavedDraft(prompt: PromptDetail, draft: PromptImprovementDraft): void;
@@ -158,7 +162,9 @@ export function PromptDetailView({
           }
           onCopy={() => onCopyImprovement(prompt, improvement)}
           onCopySavedDraft={(draft) => onCopySavedDraft(prompt, draft)}
+          onCloseManualCopyFallback={onCloseManualCopyFallback}
           onSave={() => onSaveImprovement(prompt, improvement)}
+          manualCopyFallback={manualCopyFallback}
           originalPrompt={prompt.markdown}
           promptId={prompt.id}
           saved={savedImprovement}
@@ -215,11 +221,18 @@ export function PromptDetailView({
   );
 }
 
+export type ManualCopyFallback = {
+  title: string;
+  text: string;
+};
+
 function PromptCoachPanel({
   answersByAxis,
   copied,
   improvement,
+  manualCopyFallback,
   onAnswerChange,
+  onCloseManualCopyFallback,
   onCopy,
   onCopySavedDraft,
   onSave,
@@ -231,7 +244,9 @@ function PromptCoachPanel({
   answersByAxis: Partial<Record<PromptQualityCriterion, string>>;
   copied: boolean;
   improvement: PromptImprovement;
+  manualCopyFallback?: ManualCopyFallback;
   onAnswerChange(axis: PromptQualityCriterion, value: string): void;
+  onCloseManualCopyFallback(): void;
   onCopy(): void;
   onCopySavedDraft(draft: PromptImprovementDraft): void;
   onSave(): void;
@@ -314,6 +329,29 @@ function PromptCoachPanel({
           <FileText size={16} /> {saved ? "Saved" : "Save draft"}
         </button>
       </div>
+      {manualCopyFallback && (
+        <div className="manual-copy-fallback" role="status">
+          <div className="manual-copy-fallback-header">
+            <div>
+              <h3>{manualCopyFallback.title}</h3>
+              <p>
+                Clipboard access is unavailable here; select the draft below
+                and copy it manually.
+              </p>
+            </div>
+            <button onClick={onCloseManualCopyFallback} type="button">
+              Dismiss
+            </button>
+          </div>
+          <textarea
+            aria-label="Manual copy draft text"
+            className="manual-copy-text"
+            readOnly
+            rows={8}
+            value={manualCopyFallback.text}
+          />
+        </div>
+      )}
       <div
         className="coach-feedback"
         role="group"

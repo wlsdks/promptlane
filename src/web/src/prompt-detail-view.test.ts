@@ -15,6 +15,7 @@ describe("PromptDetailView", () => {
         savedImprovement: false,
         onBack: vi.fn(),
         onBookmark: vi.fn(),
+        onCloseManualCopyFallback: vi.fn(),
         onCopy: vi.fn(),
         onCopyImprovement: vi.fn(),
         onCopySavedDraft: vi.fn(),
@@ -30,6 +31,40 @@ describe("PromptDetailView", () => {
     expect(html).toContain("Saved drafts");
     expect(html).toContain("현재 HTML 파일을 브라우저에서 열어");
     expect(html).toContain("Copy saved draft");
+  });
+
+  it("renders a manual-copy fallback when draft clipboard copy fails", () => {
+    const html = renderToStaticMarkup(
+      createElement(PromptDetailView, {
+        copied: false,
+        copiedImprovement: false,
+        language: "ko",
+        manualCopyFallback: {
+          title: "Manual copy needed",
+          text: "## 목표\n현재 HTML 파일을 브라우저에서 열어 렌더링 상태를 확인해주세요.",
+        },
+        savedImprovement: false,
+        onBack: vi.fn(),
+        onBookmark: vi.fn(),
+        onCloseManualCopyFallback: vi.fn(),
+        onCopy: vi.fn(),
+        onCopyImprovement: vi.fn(),
+        onCopySavedDraft: vi.fn(),
+        onDelete: vi.fn(),
+        onNavigate: vi.fn(),
+        onOpenQualityGap: vi.fn(),
+        onSaveImprovement: vi.fn(),
+        prompt: buildPromptDetail(),
+        queueNavigation: {},
+      }),
+    );
+
+    expect(html).toContain("Manual copy needed");
+    expect(html).toContain("select the draft below and copy it manually");
+    expect(html).toContain("readOnly");
+    expect(html).toContain(
+      "현재 HTML 파일을 브라우저에서 열어 렌더링 상태를 확인해주세요.",
+    );
   });
 });
 

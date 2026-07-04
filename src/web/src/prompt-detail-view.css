@@ -408,6 +408,64 @@
   background: var(--color-overlay-2);
 }
 
+.manual-copy-fallback {
+  background: rgba(228, 184, 95, 0.1);
+  border: 1px solid rgba(228, 184, 95, 0.34);
+  border-radius: 10px;
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 10px;
+}
+
+.manual-copy-fallback-header {
+  align-items: start;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.manual-copy-fallback h3 {
+  color: var(--pm-text);
+  font-size: 13px;
+  line-height: 18px;
+  margin: 0;
+}
+
+.manual-copy-fallback p {
+  color: var(--pm-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+  margin: 2px 0 0;
+}
+
+.manual-copy-fallback button {
+  background: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 8px;
+  color: var(--pm-text);
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 650;
+  min-height: 30px;
+  padding: 0 10px;
+}
+
+.manual-copy-text {
+  background: var(--pm-code-bg);
+  border: 1px solid var(--pm-border);
+  border-radius: 8px;
+  color: var(--pm-text);
+  font-family: var(--pm-font-mono);
+  font-size: 12px;
+  line-height: 1.55;
+  min-height: 144px;
+  padding: 10px;
+  resize: vertical;
+  white-space: pre-wrap;
+  width: 100%;
+}
+
 .saved-drafts {
   border-top: 1px solid var(--pm-border);
   display: grid;
