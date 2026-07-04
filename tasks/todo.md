@@ -15,6 +15,17 @@
 - `prompt-coach`의 기존 privacy/local-first 원칙은 유지하되 제품 포지션은 prompt 단위에서 agent loop/worktree/session 단위로 확장한다.
 - 설계 문서는 실제 TDD 구현 계획으로 내려갈 수 있는 첫 slice를 포함해야 한다.
 
+## 2026-07-05 Package Publishing Docs Drift
+
+- [x] RED: package contents/publishing docs가 shipped `loopdeck` bin과 local verification scripts 목록에서 드리프트 나면 packaging test가 실패하도록 고정
+- [x] GREEN: `docs/PACKAGE_CONTENTS.md`에 shipped native-dialog approved harness와 ui-patrol script를 반영
+- [x] GREEN: `docs/NPM_PUBLISHING.md` publish checklist를 four-bin contract와 `loopdeck` alias에 맞게 갱신
+
+### 판단 기준
+
+- 설치/배포 문서는 `package.json#files`와 `package.json#bin`의 실제 공개 surface를 따라야 한다.
+- TODO-only 정리 PR을 만들지 않고, 테스트 가능한 package contract drift와 문서 수정을 같은 slice로 묶는다.
+
 ## 2026-07-04 Loop Snapshot CLI Implementation Plan
 
 - [x] 설계 문서의 Slice 1 범위를 CLI/storage/domain으로 제한

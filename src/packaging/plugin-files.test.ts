@@ -25,6 +25,38 @@ describe("plugin packaging files", () => {
     ]);
   });
 
+  it("keeps package contents and npm publishing docs aligned with shipped bins and scripts", () => {
+    const packageJson = readJson<{
+      bin: Record<string, string>;
+      files: string[];
+    }>("package.json");
+    const packageContents = readFileSync(
+      join(process.cwd(), "docs/PACKAGE_CONTENTS.md"),
+      "utf8",
+    );
+    const publishing = readFileSync(
+      join(process.cwd(), "docs/NPM_PUBLISHING.md"),
+      "utf8",
+    );
+
+    for (const scriptPath of [
+      "scripts/mcp-native-dialog-approved.mjs",
+      "scripts/ui-patrol.mjs",
+    ]) {
+      expect(packageJson.files).toContain(scriptPath);
+      expect(packageContents).toContain(scriptPath);
+    }
+
+    expect(packageJson.bin.loopdeck).toBe("./dist/cli/index.js");
+    expect(publishing).toContain("all four bin entries exist after build");
+    expect(publishing).toContain(
+      "`bin.loopdeck` → `dist/cli/index.js`",
+    );
+    expect(publishing).toContain("chmods all four");
+    expect(publishing).not.toContain("all three bin entries");
+    expect(publishing).not.toContain("chmods all three");
+  });
+
   it("brands product-facing package and plugin metadata as Loopdeck while preserving prompt-coach command ids", () => {
     const packageJson = readJson<{
       name: string;

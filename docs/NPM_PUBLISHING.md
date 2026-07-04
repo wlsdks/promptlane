@@ -90,12 +90,13 @@ HOME="$TMP_HOME" npm install -g --prefix "$TMP_PREFIX" "./$TARBALL"
       vitest in `src/shared/version.test.ts` enforces this on every run)
 - [ ] README is available in English and Korean and matches the actual feature set
 - [ ] package contents contain built CLI/server/web assets
-- [ ] all three bin entries exist after build:
+- [ ] all four bin entries exist after build:
   - `bin.prompt-coach` → `dist/cli/index.js`
+  - `bin.loopdeck` → `dist/cli/index.js`
   - `bin.pc-claude` → `dist/cli/pc-claude.js`
   - `bin.pc-codex` → `dist/cli/pc-codex.js`
 - [ ] each bin file is executable after build (`scripts/fix-bin-mode.mjs`
-      runs as part of `pnpm build:server` and chmods all three)
+      runs as part of `pnpm build:server` and chmods all four)
 - [ ] `pnpm pack:dry-run` excludes `dist/**/*.map` (source maps stay local)
 - [ ] full release checklist (`docs/RELEASE_CHECKLIST.md`) passes
 - [ ] pre-publish privacy audit (`docs/PRE_PUBLISH_PRIVACY_AUDIT.md`) passes
