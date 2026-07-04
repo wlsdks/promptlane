@@ -69,7 +69,10 @@
 - [x] GREEN: web detail UI의 saved drafts 섹션에 draft body preview와 `Copy saved draft` 액션을 추가해 local review/copy 흐름을 완성
 - [x] Dogfood: Playwright로 dogfood prompt detail에서 저장된 `clarifications-v1` draft 본문과 `Copy saved draft` 버튼이 실제 렌더링됨 확인
 - [x] Dogfood: Playwright click으로 `Copy saved draft`를 눌렀을 때 버튼 상태가 `Copied`로 바뀌고 clipboard에 답변 반영 draft 본문이 들어감 확인
-- [ ] 다음 dogfood slice: Claude Code native MCP routing 또는 saved draft copy의 별도 사용성 telemetry 필요 여부 결정
+- [x] Dogfood: `claude mcp list`와 `prompt-coach doctor claude-code --json`에서 `prompt-coach` MCP 등록/연결/last ingest 200 확인
+- [x] Dogfood: Claude Code 기본 Fable 5 실행은 usage credits 429로 막혔지만 `--model sonnet` 재시도에서 native `mcp__prompt-coach__score_prompt`/`improve_prompt` tool call 성공 확인
+- [x] Dogfood: Claude Code stream JSON에 `server_display_name: "prompt-coach"` tool_use metadata와 최종 "both tool calls succeeded" 보고가 남음 확인
+- [ ] 다음 dogfood slice: Claude Code native `record_clarifications` 또는 saved draft copy의 별도 사용성 telemetry 필요 여부 결정
 
 ### 판단 기준
 
@@ -84,6 +87,8 @@
 - Stored clarification 기록은 local archive write를 허용하지만 MCP 응답은 metadata-only여야 하며, 실제 draft body 검토와 복사는 local UI/CLI에서 사용자가 수행해야 한다.
 - Stored draft UI는 metadata만 보여주면 불충분하다. `record_clarifications`가 반환한 `draft_id` 이후 사용자는 local detail UI에서 draft body를 검토하고 복사할 수 있어야 한다.
 - Saved draft copy는 현재 local clipboard 성공과 버튼 상태까지만 확인한다. server-side prompt usage telemetry와 별도 draft usage telemetry는 다음 decision slice에서 privacy/value 기준으로 결정한다.
+- Claude Code native MCP routing은 `claude mcp list`의 health check만으로 완료 처리하지 않는다. 실제 `claude -p --output-format stream-json`에서 `mcp__prompt-coach__...` tool_use가 발생하고 성공한 기록이 있어야 한다.
+- Claude Code 모델/크레딧 실패는 integration 실패와 구분한다. 이번 검증에서는 Fable 5 usage credits 429는 별도 외부 상태이고, Sonnet 실행에서 prompt-coach MCP routing 자체는 성공했다.
 
 ## 2026-07-04 Loop Snapshot Domain Slice
 
