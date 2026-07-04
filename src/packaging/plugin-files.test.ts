@@ -185,6 +185,29 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "commands/guard.md"),
       "utf8",
     );
+    const commandDocs = [
+      setup,
+      status,
+      score,
+      coach,
+      buddy,
+      judge,
+      improveLast,
+      habits,
+      open,
+      guard,
+    ];
+
+    for (const command of commandDocs) {
+      const description = command.match(/^description: (?<text>.+)$/m)?.groups
+        ?.text;
+      const heading = command.match(/^# (?<text>.+)$/m)?.groups?.text;
+      expect(description).toContain("Loopdeck");
+      expect(description).not.toMatch(/\bprompt-coach\b/);
+      expect(heading).toContain("Loopdeck");
+      expect(heading).not.toContain("Prompt Memory");
+      expect(heading).not.toContain("Prompt-memory");
+    }
 
     expect(guard).toContain(
       "prompt-coach setup --profile coach --rewrite-guard <chosen>",

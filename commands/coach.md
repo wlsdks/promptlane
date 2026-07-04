@@ -1,9 +1,9 @@
 ---
-description: Run the full prompt-coach coach inside Claude Code
+description: Run the full Loopdeck coach inside Claude Code
 allowed-tools: Bash
 ---
 
-# Prompt Memory Coach
+# Loopdeck Coach
 
 Prefer the MCP tool when it is available:
 

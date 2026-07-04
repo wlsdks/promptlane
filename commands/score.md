@@ -1,9 +1,9 @@
 ---
-description: Score prompt-coach habits (latest prompt or accumulated archive)
+description: Score Loopdeck habits (latest prompt or accumulated archive)
 allowed-tools: Bash
 ---
 
-# Prompt Memory Score
+# Loopdeck Score
 
 This command covers both the latest captured prompt and the whole local
 archive. Pick the scope based on the user's request.

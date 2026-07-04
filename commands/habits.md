@@ -1,9 +1,9 @@
 ---
-description: Summarize recent prompt-coach habits and recurring gaps
+description: Summarize recent Loopdeck habits and recurring gaps
 allowed-tools: Bash
 ---
 
-# Prompt Memory Habits
+# Loopdeck Habits
 
 Prefer the MCP tool when it is available:
 

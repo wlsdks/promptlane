@@ -1,9 +1,9 @@
 ---
-description: Toggle the prompt-coach rewrite guard mode (off / context / ask / block-and-copy)
+description: Toggle the Loopdeck rewrite guard mode (off / context / ask / block-and-copy)
 allowed-tools: Bash, AskUserQuestion
 ---
 
-# Prompt-memory Rewrite Guard Picker
+# Loopdeck Rewrite Guard Picker
 
 This command flips the `UserPromptSubmit` rewrite guard between four modes
 without making the user remember CLI flags. Each mode controls what the hook

@@ -1,9 +1,9 @@
 ---
-description: Check prompt-coach capture health
+description: Check Loopdeck capture health
 allowed-tools: Bash
 ---
 
-# Prompt Memory Status
+# Loopdeck Status
 
 First check that the CLI is installed:
 

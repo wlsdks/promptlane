@@ -46,6 +46,16 @@
 - Codex와 Claude Code가 읽는 tool description은 Loopdeck 제품 방향을 보여야 한다.
 - `prompt-coach`는 command, tool, package, MCP server compatibility id로만 남긴다.
 
+## 2026-07-05 Loopdeck Claude Command Copy
+
+- [x] RED: Claude Code slash command frontmatter/heading이 `prompt-coach` 또는 Prompt Memory 제품명을 노출하면 packaging test가 실패하도록 고정
+- [x] GREEN: slash command description과 top-level heading은 Loopdeck-facing으로 갱신하고, 본문 command 예시는 compatibility runtime인 `prompt-coach`를 유지
+
+### 판단 기준
+
+- `/prompt-coach:*` namespace는 유지하지만 사용자가 보는 command copy는 Loopdeck 제품 방향을 보여야 한다.
+- 실행 명령, MCP tool name, package id 문맥의 `prompt-coach`는 유지한다.
+
 ## 2026-07-04 Loop Snapshot CLI Implementation Plan
 
 - [x] 설계 문서의 Slice 1 범위를 CLI/storage/domain으로 제한

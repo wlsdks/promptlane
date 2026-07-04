@@ -1,8 +1,8 @@
 ---
-description: Show the prompt-coach side-pane buddy command
+description: Show the Loopdeck side-pane buddy command
 ---
 
-# prompt-coach:buddy
+# Loopdeck Buddy
 
 Use this when the user wants an always-on prompt score companion while working
 inside Claude Code.

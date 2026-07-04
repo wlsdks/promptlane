@@ -1,9 +1,9 @@
 ---
-description: Open the local prompt-coach archive
+description: Open the local Loopdeck archive
 allowed-tools: Bash
 ---
 
-# Open Prompt Memory
+# Open Loopdeck
 
 Check whether the local server is already configured:
 

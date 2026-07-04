@@ -1,9 +1,9 @@
 ---
-description: Set up prompt-coach capture or the one-command coach profile
+description: Set up Loopdeck capture or the one-command coach profile
 allowed-tools: Bash, Read, AskUserQuestion
 ---
 
-# Set Up Prompt Memory
+# Set Up Loopdeck
 
 First check that the CLI is installed:
 
