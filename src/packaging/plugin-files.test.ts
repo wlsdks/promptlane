@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse as parseYaml } from "yaml";
@@ -25,6 +25,23 @@ describe("plugin packaging files", () => {
     ]);
   });
 
+  it("uses the packageManager-pinned pnpm for npm lifecycle build scripts", () => {
+    const packageJson = readJson<{
+      packageManager: string;
+      scripts: Record<string, string>;
+    }>("package.json");
+
+    expect(packageJson.packageManager).toBe("pnpm@10.18.0");
+    expect(packageJson.scripts["pack:dry-run"]).toBe(
+      "node scripts/pack-dry-run.mjs",
+    );
+    expect(packageJson.scripts.prepack).toBe("corepack pnpm build");
+    expect(packageJson.scripts.prepare).toBe("corepack pnpm build");
+    expect(existsSync(join(process.cwd(), "scripts/pack-dry-run.mjs"))).toBe(
+      true,
+    );
+  });
+
   it("keeps package contents and npm publishing docs aligned with shipped bins and scripts", () => {
     const packageJson = readJson<{
       bin: Record<string, string>;
@@ -40,6 +57,7 @@ describe("plugin packaging files", () => {
     );
 
     for (const scriptPath of [
+      "scripts/pack-dry-run.mjs",
       "scripts/mcp-native-dialog-approved.mjs",
       "scripts/ui-patrol.mjs",
     ]) {

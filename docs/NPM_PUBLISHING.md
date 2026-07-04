@@ -57,23 +57,26 @@ prompt-coach server
 Run on Node 22:
 
 ```sh
-pnpm format
-pnpm test
-pnpm lint
-pnpm build
-pnpm benchmark -- --json
-pnpm e2e:browser
-pnpm smoke:release
-pnpm pack:dry-run
+corepack pnpm format
+corepack pnpm test
+corepack pnpm lint
+corepack pnpm build
+corepack pnpm benchmark -- --json
+corepack pnpm e2e:browser
+corepack pnpm smoke:release
+corepack pnpm pack:dry-run
 git diff --check
 ```
 
 Recommended additional package smoke (uses the pack output filename
-instead of hardcoding the version so this stays correct after bumps):
+instead of hardcoding the version so this stays correct after bumps). Build
+first and use `--ignore-scripts` for the npm pack calls so lifecycle logs do
+not contaminate the JSON output:
 
 ```sh
-npm pack --dry-run
-TARBALL="$(npm pack --json | node -e 'process.stdin.on("data",d=>{const j=JSON.parse(d);console.log(j[0].filename)})')"
+corepack pnpm build
+npm pack --dry-run --ignore-scripts
+TARBALL="$(npm pack --json --ignore-scripts | node -e 'process.stdin.on("data",d=>{const j=JSON.parse(d);console.log(j[0].filename)})')"
 TMP_HOME="$(mktemp -d)"
 TMP_PREFIX="$(mktemp -d)"
 HOME="$TMP_HOME" npm install -g --prefix "$TMP_PREFIX" "./$TARBALL"
@@ -97,7 +100,7 @@ HOME="$TMP_HOME" npm install -g --prefix "$TMP_PREFIX" "./$TARBALL"
   - `bin.pc-codex` → `dist/cli/pc-codex.js`
 - [ ] each bin file is executable after build (`scripts/fix-bin-mode.mjs`
       runs as part of `pnpm build:server` and chmods all four)
-- [ ] `pnpm pack:dry-run` excludes `dist/**/*.map` (source maps stay local)
+- [ ] `corepack pnpm pack:dry-run` excludes `dist/**/*.map` (source maps stay local)
 - [ ] full release checklist (`docs/RELEASE_CHECKLIST.md`) passes
 - [ ] pre-publish privacy audit (`docs/PRE_PUBLISH_PRIVACY_AUDIT.md`) passes
 - [ ] npm account is authenticated
@@ -106,8 +109,8 @@ HOME="$TMP_HOME" npm install -g --prefix "$TMP_PREFIX" "./$TARBALL"
 
 ## Do Not Publish Yet If
 
-- `pnpm smoke:release` fails
-- `pnpm pack:dry-run` does not include `dist/cli`, `dist/server`, or `dist/web`
+- `corepack pnpm smoke:release` fails
+- `corepack pnpm pack:dry-run` does not include `dist/cli`, `dist/server`, or `dist/web`
 - npm reports that `prompt-coach` is already taken by another owner
 - the npm account cannot complete 2FA/OTP
 - README still claims a feature that is not implemented

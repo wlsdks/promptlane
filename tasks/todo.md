@@ -26,6 +26,21 @@
 - 설치/배포 문서는 `package.json#files`와 `package.json#bin`의 실제 공개 surface를 따라야 한다.
 - TODO-only 정리 PR을 만들지 않고, 테스트 가능한 package contract drift와 문서 수정을 같은 slice로 묶는다.
 
+## 2026-07-05 Corepack Pack Lifecycle
+
+- [x] ROOT CAUSE: direct `npm pack --dry-run`은 npm lifecycle에서 PATH의 pnpm 11을 잡아 `packageManager`가 고정한 pnpm 10.18.0과 다른 동작을 만들 수 있었다.
+- [x] ROOT CAUSE: pnpm script 안에서 실행한 npm은 pnpm-only config env를 상속해 `Unknown env config` warning을 출력했다.
+- [x] RED: packaging test가 `pack:dry-run`, `prepack`, `prepare`의 packageManager-pinned build/pack path를 요구하도록 고정했다.
+- [x] GREEN: npm lifecycle build script는 `corepack pnpm build`를 사용하고, `pack:dry-run`은 wrapper에서 pnpm-only npm env를 제거한 뒤 `npm pack --dry-run --ignore-scripts`를 실행한다.
+- [x] VERIFY: focused packaging test, `corepack pnpm pack:dry-run`, direct `npm pack --dry-run --ignore-scripts`, full gates를 통과했다.
+- [ ] INTEGRATE: PR merge와 branch prune까지 확인한다.
+
+### 판단 기준
+
+- npm lifecycle은 사용자의 PATH에 있는 다른 pnpm 버전에 의존하지 않는다.
+- 사람이 보는 dry-run은 warning 없이 안정적으로 실행하고, JSON package inspection은 build 후 `--ignore-scripts`로 lifecycle log contamination을 피한다.
+- 스크립트 변경, packaging contract test, publishing/package docs는 하나의 PR에 묶는다.
+
 ## 2026-07-05 Loopdeck MCP Storage Setup Copy
 
 - [x] RED: 중앙 MCP storage unavailable 메시지가 제품명 없이 `prompt-coach` archive만 말하면 실패하도록 고정

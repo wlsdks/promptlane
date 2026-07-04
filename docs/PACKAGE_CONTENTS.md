@@ -6,7 +6,15 @@ published to npm.
 Check the current package with:
 
 ```sh
-npm pack --dry-run --json
+corepack pnpm pack:dry-run
+```
+
+For machine-readable package inspection after the build already exists, skip
+lifecycle scripts so npm does not interleave build logs with JSON:
+
+```sh
+corepack pnpm build
+npm pack --dry-run --json --ignore-scripts
 ```
 
 ## Included
@@ -53,8 +61,9 @@ The npm package intentionally includes:
   `scripts/browser-e2e.mjs`, `scripts/hook-binary-smoke.mjs`,
   `scripts/mcp-coach-loop-smoke.mjs`, `scripts/mcp-elicitation-smoke.mjs`,
   `scripts/mcp-native-dialog-approved.mjs`,
-  `scripts/mcp-native-dialog-preflight.mjs`, `scripts/quality-gate.mjs`,
-  `scripts/release-smoke.mjs`, and `scripts/ui-patrol.mjs`
+  `scripts/mcp-native-dialog-preflight.mjs`, `scripts/pack-dry-run.mjs`,
+  `scripts/quality-gate.mjs`, `scripts/release-smoke.mjs`, and
+  `scripts/ui-patrol.mjs`
 
 ## Excluded
 
