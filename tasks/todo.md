@@ -389,7 +389,11 @@
 - [x] Task 91 RED: selected detail API/UI에 `continuation_safety_post_submission_collection_reminder_note`가 없어 focused server/API/web tests 실패 확인
 - [x] Task 91 GREEN: selected worktree detail API/type/UI에 explicit next loop snapshot collection reminder, no submission/transcript/agent UI activity background collection, no-write/no-external flags를 read-only로 노출
 - [x] Task 91 PRIVACY: continuation safety post-submission collection reminder note는 prompt body/evidence refs/outcome summary/raw path/target content/active-window title/pasted content/paste result state/submitted state/agent response content/collection result state/git read/write/transcript import/command execution/persisted review state/checklist completion state/memory approval write/merge decision write/external call을 포함하지 않음
-- [ ] 다음 slice: selected detail panel의 collection result non-persistence note를 raw-free로 별도 제공할지 결정
+- [x] Task 92 DECISION: collection result non-persistence note는 collection result state가 다음 explicit loop snapshot 기록 전까지 persist되지 않고 Loopdeck이 agent UI activity에서 collection result state를 store/sync/infer하지 않음을 명확히 하기 위해 필요하므로 raw-free로 제공
+- [x] Task 92 RED: selected detail API/UI에 `continuation_safety_collection_result_non_persistence_note`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 92 GREEN: selected worktree detail API/type/UI에 collection result not persisted until explicit snapshot, no store/sync/infer from agent UI activity, no-write/no-external flags를 read-only로 노출
+- [x] Task 92 PRIVACY: continuation safety collection result non-persistence note는 prompt body/evidence refs/outcome summary/raw path/target content/active-window title/pasted content/paste result state/submitted state/agent response content/collection result state/git read/write/transcript import/command execution/persisted review state/checklist completion state/memory approval write/merge decision write/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 collection retry boundary note를 raw-free로 별도 제공할지 결정
 
 ### 판단 기준
 

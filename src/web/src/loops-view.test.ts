@@ -279,6 +279,19 @@ describe("LoopsView", () => {
     expect(html).toContain(
       "No post-submission collection writes or external calls",
     );
+    expect(html).toContain("Collection result non-persistence");
+    expect(html).toContain(
+      "collection result is not persisted until the operator records the next explicit loop snapshot",
+    );
+    expect(html).toContain(
+      "Loopdeck does not store, sync, or infer collection result state from agent UI activity",
+    );
+    expect(html).toContain(
+      "keeps collection evidence tied to explicit local snapshot recording",
+    );
+    expect(html).toContain(
+      "No collection result persistence writes or external calls",
+    );
     expect(html).toContain("Paste destination");
     expect(html).toContain("Codex active request");
     expect(html).toContain("Claude Code active request");
@@ -809,6 +822,16 @@ function loopWorktree(): LoopWorktreeResponse {
       not_background:
         "Loopdeck does not start collection from submission, transcript changes, or agent UI activity",
       reason: "keeps post-submission collection operator-triggered and local-first",
+      writes_files: false,
+      external_calls: false,
+    },
+    continuation_safety_collection_result_non_persistence_note: {
+      label: "Collection result non-persistence",
+      result_scope:
+        "collection result is not persisted until the operator records the next explicit loop snapshot",
+      not_stored:
+        "Loopdeck does not store, sync, or infer collection result state from agent UI activity",
+      reason: "keeps collection evidence tied to explicit local snapshot recording",
       writes_files: false,
       external_calls: false,
     },

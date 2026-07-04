@@ -217,6 +217,8 @@ export function registerLoopRoutes(
                 continuationSafetySubmissionResultNonPersistenceNoteFor(),
               continuation_safety_post_submission_collection_reminder_note:
                 continuationSafetyPostSubmissionCollectionReminderNoteFor(),
+              continuation_safety_collection_result_non_persistence_note:
+                continuationSafetyCollectionResultNonPersistenceNoteFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -982,6 +984,26 @@ function continuationSafetyPostSubmissionCollectionReminderNoteFor(): {
       "Loopdeck does not start collection from submission, transcript changes, or agent UI activity",
     reason:
       "keeps post-submission collection operator-triggered and local-first",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyCollectionResultNonPersistenceNoteFor(): {
+  label: "Collection result non-persistence";
+  result_scope: "collection result is not persisted until the operator records the next explicit loop snapshot";
+  not_stored: "Loopdeck does not store, sync, or infer collection result state from agent UI activity";
+  reason: "keeps collection evidence tied to explicit local snapshot recording";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Collection result non-persistence",
+    result_scope:
+      "collection result is not persisted until the operator records the next explicit loop snapshot",
+    not_stored:
+      "Loopdeck does not store, sync, or infer collection result state from agent UI activity",
+    reason: "keeps collection evidence tied to explicit local snapshot recording",
     writes_files: false,
     external_calls: false,
   };
