@@ -2,46 +2,18 @@ import { spawnSync } from "node:child_process";
 import { platform } from "node:os";
 
 import {
-  DEFAULT_MIN_SCORE,
-  evaluatePromptCoaching,
-} from "../analysis/coaching-thresholds.js";
-import { clampScore } from "../shared/clamp-score.js";
+  decideCoachingAction,
+  isAcknowledgment,
+} from "../analysis/coaching-decision.js";
 import { HOOK_COPY } from "./rewrite-guard-copy.js";
+
+export { isAcknowledgment } from "../analysis/coaching-decision.js";
 
 export type PromptRewriteGuardMode =
   | "off"
   | "block-and-copy"
   | "context"
   | "ask";
-
-const ASK_MIN_LENGTH = 30;
-const ASK_MAX_SCORE = 60;
-
-// Korean has no ASCII word boundary, so `\b` does not match between Hangul
-// characters. STRICT roots must end the token (followed by space,
-// punctuation, or end-of-string) so "응" reads as ack but "응답" does not.
-// LOOSE roots may carry the usual Korean particle suffixes (으로/에/은/는/도
-// etc.) since they are still acknowledgment intent ("다음으로 가자").
-const STRICT_ACK_TAIL = String.raw`(?:\s|[!?.,]|$)`;
-const ACK_PATTERNS: readonly RegExp[] = [
-  /^[ㅇㅎㄴㅋㅠㅜ]+\s*[!?.]*$/,
-  // Strict: must terminate after the root. 왜/뭐 are interrogatives that
-  // usually start a real question ("왜 안되지", "뭐가 잘못된 거지"), not
-  // an acknowledgment, so they are not listed here.
-  new RegExp(`^(응|어|네|아니|아뇨)${STRICT_ACK_TAIL}`),
-  // Loose: particle suffixes allowed.
-  /^(좋아|좋네|좋습니다|됐어|됐다|괜찮|훌륭)/,
-  /^(고마워|감사|땡큐)/,
-  /^(다음|진행|계속|넘어가)/,
-  /^(그래|그러면|그럼|그렇구나|그렇네|아하|음+|일단)/,
-  /^(그만|멈춰|취소|되돌려)/,
-  // English acknowledgments / meta-control.
-  /^(yes|yeah|yep|nope|no|ok|okay|sure|fine|alright)\b/i,
-  /^(thanks|thx|ty)\b/i,
-  /^(next|continue|proceed|go(?:\s|$)|stop|cancel|undo)\b/i,
-  /^(perfect|great|nice|cool|awesome|got it)\b/i,
-  /^let'?s\b/i,
-];
 
 export type AskEventReport = {
   tool: "claude-code" | "codex";
@@ -99,55 +71,27 @@ export type PromptRewriteGuardOutput =
       suppressOutput?: true;
     };
 
-export function isAcknowledgment(prompt: string): boolean {
-  const trimmed = prompt.trim();
-  if (trimmed.length === 0) {
-    return true;
-  }
-
-  return ACK_PATTERNS.some((pattern) => pattern.test(trimmed));
-}
-
 export function createPromptRewriteGuardOutput(
   payload: unknown,
   options: PromptRewriteGuardOptions = {},
 ): PromptRewriteGuardOutput | undefined {
-  const mode = options.mode ?? "off";
-  if (mode === "off") {
-    return undefined;
-  }
-
   const prompt = readSubmittedPrompt(payload);
-  const minScore = normalizeMinScore(options.minScore);
-  const evaluation = evaluatePromptCoaching(prompt, {
-    minScore,
+  const decision = decideCoachingAction(prompt, {
+    mode: options.mode ?? "off",
+    minScore: options.minScore,
     language: options.language,
     now: options.now,
   });
 
-  if (!evaluation.needed) {
+  if (decision.action === "none") {
     return undefined;
   }
 
-  const { analysis, improvement, language } = evaluation;
+  const { analysis, improvement, language } = decision;
   const createdAt = (options.now ?? new Date()).toISOString();
   const copy = HOOK_COPY[language];
 
-  if (mode === "ask") {
-    // Ask mode is conservative: only fire when the prompt is meaningfully
-    // long, scored low enough to plausibly be a real ambiguous request,
-    // and not a leading acknowledgment / meta-control message. Length and
-    // ack guards keep "ㅇㅇ", "고마워", "다음으로 가자" from triggering
-    // a clarifying-question prompt.
-    if (
-      prompt.trim().length < ASK_MIN_LENGTH ||
-      analysis.quality_score.value >= ASK_MAX_SCORE ||
-      isAcknowledgment(prompt) ||
-      improvement.clarifying_questions.length === 0
-    ) {
-      return undefined;
-    }
-
+  if (decision.action === "ask") {
     const sectionLabels =
       language === "ko"
         ? {
@@ -181,9 +125,7 @@ export function createPromptRewriteGuardOutput(
           tool: options.tool ?? "claude-code",
           score: analysis.quality_score.value,
           band: analysis.quality_score.band,
-          missing_axes: improvement.clarifying_questions.map(
-            (question) => question.axis,
-          ),
+          missing_axes: decision.missingAxes,
           language,
           prompt_length: prompt.trim().length,
           triggered_at: createdAt,
@@ -216,7 +158,7 @@ export function createPromptRewriteGuardOutput(
     };
   }
 
-  if (mode === "context") {
+  if (decision.action === "context") {
     return {
       hookSpecificOutput: {
         hookEventName: "UserPromptSubmit",
@@ -245,7 +187,7 @@ export function createPromptRewriteGuardOutput(
       copy.blockedReason(
         analysis.quality_score.value,
         analysis.quality_score.band,
-        minScore,
+        decision.minScore,
       ),
       copied ? copy.clipboardHit : copy.clipboardMiss,
       "",
@@ -284,14 +226,6 @@ function readSubmittedPrompt(payload: unknown): string {
 
   const prompt = (payload as { prompt?: unknown }).prompt;
   return typeof prompt === "string" ? prompt : "";
-}
-
-function normalizeMinScore(value: number | undefined): number {
-  if (value === undefined || !Number.isFinite(value)) {
-    return DEFAULT_MIN_SCORE;
-  }
-
-  return clampScore(value);
 }
 
 function copyTextToClipboard(text: string): boolean {

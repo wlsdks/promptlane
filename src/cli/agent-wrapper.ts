@@ -3,9 +3,8 @@ import { spawnSync, type SpawnSyncReturns } from "node:child_process";
 import { createInterface } from "node:readline/promises";
 import { stdin as defaultStdin, stdout as defaultStdout } from "node:process";
 
-import { analyzePrompt } from "../analysis/analyze.js";
+import { decideCoachingAction } from "../analysis/coaching-decision.js";
 import { DEFAULT_MIN_SCORE } from "../analysis/coaching-thresholds.js";
-import { improvePrompt } from "../analysis/improve.js";
 import { clampScore } from "../shared/clamp-score.js";
 import { UserError } from "./user-error.js";
 
@@ -468,54 +467,50 @@ async function selectPromptReplacement(options: {
   score: number;
   reason: "mode_off" | "above_threshold" | "rewritten";
 }> {
-  const createdAt = options.now.toISOString();
-  const analysis = analyzePrompt({ prompt: options.prompt, createdAt });
-  if (options.wrapper.mode === "off") {
+  const decision = decideCoachingAction(options.prompt, {
+    mode: options.wrapper.mode === "off" ? "off" : "block-and-copy",
+    minScore: options.wrapper.minScore,
+    language: options.wrapper.language,
+    now: options.now,
+  });
+
+  if (decision.action === "none") {
     return {
       selectedPrompt: options.prompt,
-      score: analysis.quality_score.value,
-      reason: "mode_off",
-    };
-  }
-  if (analysis.quality_score.value >= options.wrapper.minScore) {
-    return {
-      selectedPrompt: options.prompt,
-      score: analysis.quality_score.value,
-      reason: "above_threshold",
+      score: decision.score ?? 0,
+      reason:
+        decision.reason === "above_threshold" ? "above_threshold" : "mode_off",
     };
   }
 
-  const improvement = improvePrompt({
-    prompt: options.prompt,
-    createdAt,
-    language: options.wrapper.language,
-  });
   if (options.wrapper.mode === "auto" || options.wrapper.dryRun) {
     return {
-      selectedPrompt: improvement.improved_prompt,
-      score: analysis.quality_score.value,
+      selectedPrompt: decision.improvement.improved_prompt,
+      score: decision.score,
       reason: "rewritten",
     };
   }
   if (!options.isTTY) {
     return {
       selectedPrompt: options.prompt,
-      score: analysis.quality_score.value,
+      score: decision.score,
       reason: "mode_off",
     };
   }
 
   const approved = await askForApproval({
-    prompt: improvement.improved_prompt,
-    score: analysis.quality_score.value,
+    prompt: decision.improvement.improved_prompt,
+    score: decision.score,
     threshold: options.wrapper.minScore,
     stdin: options.stdin,
     stdout: options.stdout,
   });
 
   return {
-    selectedPrompt: approved ? improvement.improved_prompt : options.prompt,
-    score: analysis.quality_score.value,
+    selectedPrompt: approved
+      ? decision.improvement.improved_prompt
+      : options.prompt,
+    score: decision.score,
     reason: approved ? "rewritten" : "mode_off",
   };
 }

@@ -3271,11 +3271,12 @@
 
 ### Track A3 — Coaching decision 모듈 (PR 후보)
 
-- [ ] 실패 테스트: rewrite-guard와 agent-wrapper가 같은 입력에 같은 (action, copy, score) 반환.
-- [ ] `src/analysis/coaching-decision.ts` — `decideCoachingAction(prompt, context) → CoachingAction`.
-- [ ] DEFAULT_MIN_SCORE, ask-mode trigger 조건, language detection을 한 곳에 모은다.
-- [ ] rewrite-guard, agent-wrapper, MCP coach handler 모두 본 모듈 호출.
-- [ ] 회귀 테스트, 검증 게이트, 별도 브랜치 + PR.
+- [x] 실패 테스트: rewrite-guard와 agent-wrapper가 같은 입력에 같은 (action, copy, score) 반환.
+- [x] `src/analysis/coaching-decision.ts` — `decideCoachingAction(prompt, context) → CoachingAction`.
+- [x] DEFAULT_MIN_SCORE, ask-mode trigger 조건, language detection을 한 곳에 모은다.
+- [x] rewrite-guard와 agent-wrapper는 본 모듈 호출. MCP coach handler는 다음 slice.
+- [x] 회귀 테스트, 검증 게이트, 별도 브랜치 + PR.
+- [ ] MCP coach handler도 `decideCoachingAction` 기반으로 next_action/clarifying_questions 판단을 공유.
 
 ### Track A1 — MCP per-tool 마이그레이션 ADR
 

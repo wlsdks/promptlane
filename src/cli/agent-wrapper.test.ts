@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { Writable } from "node:stream";
 import { describe, expect, it, vi } from "vitest";
 
@@ -177,6 +178,16 @@ describe("agent wrapper", () => {
     expect(
       parseWrapperArgs("claude", ["--pc-mode", "off", "fix"]).wrapper.mode,
     ).toBe("off");
+  });
+
+  it("routes prompt scoring and improvement through the shared coaching decision module", () => {
+    const source = readFileSync(new URL("./agent-wrapper.ts", import.meta.url), {
+      encoding: "utf8",
+    });
+
+    expect(source).toContain("decideCoachingAction");
+    expect(source).not.toContain("analyzePrompt");
+    expect(source).not.toContain("improvePrompt");
   });
 });
 
