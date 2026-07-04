@@ -1,4 +1,4 @@
-import { Copy, FileText, ShieldCheck } from "lucide-react";
+import { Copy, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 
 import type {
@@ -10,7 +10,7 @@ import type {
 import { getLoopBrief, getLoopInstructionPatch } from "./api.js";
 import { copyTextToClipboard } from "./clipboard.js";
 import { formatDate } from "./formatters.js";
-import { LoopCommandCenterSummary } from "./loop-command-center-summary.js";
+import { LoopActivitySummary } from "./loop-activity-summary.js";
 import { LoopWorktreeBoundaryReviewItems } from "./loop-worktree-boundary-review-items.js";
 import { LoopWorktreeCollectionFreshnessItems } from "./loop-worktree-collection-freshness-items.js";
 import { LoopWorktreeContinuationSafetyItems } from "./loop-worktree-continuation-safety-items.js";
@@ -142,101 +142,18 @@ export function LoopsView({
           <p className="loops-status-line">
             Loopdeck status {loops.status.status}
           </p>
-          <p className="loops-status-line">
-            Approved memories {loops.status.project_memory.approved_count}
-          </p>
-          <p className="loops-status-line">
-            Active worktrees {loops.status.activity.active_worktrees}
-          </p>
-          <p className="loops-status-line">
-            Active sessions {loops.status.activity.active_sessions}
-          </p>
-          {loops.status.activity.needs_review && (
-            <p className="loops-status-line">Worktree review needed</p>
-          )}
-          <LoopCommandCenterSummary
-            activity={loops.status.activity}
-            busyWorktree={commandCenterBriefBusy}
-            copiedWorktree={commandCenterBriefCopied}
+          <LoopActivitySummary
+            approvalBusy={approvalBusy}
+            approvalRecorded={approvalRecorded}
+            commandCenterBriefBusy={commandCenterBriefBusy}
+            commandCenterBriefCopied={commandCenterBriefCopied}
+            onApproveMemoryCandidate={approveCandidate}
             onCopyCommandCenterBrief={copyCommandCenterBrief}
+            onReviewInstructionPatch={reviewInstructionPatch}
+            onSelectWorktree={onSelectWorktree}
+            patchBusy={patchBusy}
+            status={loops.status}
           />
-          {loops.status.activity.recent_decisions &&
-            loops.status.activity.recent_decisions.length > 0 && (
-              <div>
-                <p className="loops-status-line">Recent decisions</p>
-                {loops.status.activity.recent_decisions.map((decision) => (
-                  <p
-                    className="loops-status-line"
-                    key={`${decision.snapshot_id}:${decision.created_at}`}
-                  >
-                    {decision.worktree} {decision.decision} {decision.reason}
-                  </p>
-                ))}
-              </div>
-            )}
-          {loops.status.activity.worktrees.slice(0, 2).map((worktree) => (
-            <div className="loop-worktree-line" key={worktree.worktree}>
-              <p className="loops-status-line">
-                {worktree.worktree} {worktree.snapshots}{" "}
-                {pluralize(worktree.snapshots, "snapshot")} /{" "}
-                {worktree.sessions} {pluralize(worktree.sessions, "session")}
-              </p>
-              <button
-                className="loop-copy-button"
-                disabled={!onSelectWorktree}
-                onClick={() => void onSelectWorktree?.(worktree.worktree)}
-                title={`Open ${worktree.worktree}`}
-                type="button"
-              >
-                Open {worktree.worktree}
-              </button>
-            </div>
-          ))}
-          {loops.status.memory_candidate && (
-            <p className="loops-status-line">
-              Memory candidate{" "}
-              {loops.status.memory_candidate.eligible
-                ? "eligible"
-                : loops.status.memory_candidate.reason}
-            </p>
-          )}
-          {loops.status.memory_candidate?.eligible && (
-            <div className="loop-memory-action">
-              <code>{loops.status.memory_candidate.next_action}</code>
-              <button
-                className="loop-copy-button"
-                disabled={approvalBusy || !onApproveMemoryCandidate}
-                onClick={() => void approveCandidate()}
-                title="Approve latest loop memory candidate"
-                type="button"
-              >
-                <ShieldCheck size={15} />
-                {approvalRecorded
-                  ? "Memory approved"
-                  : approvalBusy
-                    ? "Approving..."
-                    : "Approve memory"}
-              </button>
-            </div>
-          )}
-          {loops.status.project_memory.approved_count > 0 && (
-            <div className="loop-memory-action">
-              <code>
-                prompt-coach loop instruction-patch --target-file AGENTS.md
-              </code>
-              <button
-                className="loop-copy-button"
-                disabled={patchBusy}
-                onClick={() => void reviewInstructionPatch()}
-                title="Review AGENTS.md instruction patch"
-                type="button"
-              >
-                <FileText size={15} />
-                {patchBusy ? "Preparing..." : "Review AGENTS.md patch"}
-              </button>
-            </div>
-          )}
-          <p className="loops-status-line">Next: {loops.status.next_action}</p>
           <p>
             Recent local agent loops grouped by safe project metadata. Compact
             markers show when a fresh snapshot should be collected.
@@ -364,10 +281,6 @@ export type CommandCenterBriefSelection = {
   worktree: string;
   branch?: string;
 };
-
-function pluralize(count: number, singular: string): string {
-  return count === 1 ? singular : `${singular}s`;
-}
 
 function LoopRow({ loop }: { loop: LoopSummary }) {
   const needsRefresh = Boolean(loop.compact_boundary?.after_latest_snapshot);

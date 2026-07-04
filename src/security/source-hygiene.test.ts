@@ -357,4 +357,16 @@ describe("source hygiene", () => {
     expect(loopsView).not.toContain("decision_advisory");
     expect(loopsView).not.toContain("continuation_command");
   });
+
+  it("keeps activity summary formatting outside LoopsView", () => {
+    const loopsView = readFileSync("src/web/src/loops-view.tsx", "utf8");
+
+    expect(loopsView).not.toContain("project_memory");
+    expect(loopsView).not.toContain("approved_count");
+    expect(loopsView).not.toContain("active_worktrees");
+    expect(loopsView).not.toContain("active_sessions");
+    expect(loopsView).not.toContain("needs_review");
+    expect(loopsView).not.toContain("recent_decisions");
+    expect(loopsView).not.toContain("memory_candidate");
+  });
 });
