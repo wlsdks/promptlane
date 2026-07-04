@@ -113,7 +113,11 @@
 - [x] Task 173 RED: 해당 8개 field가 `LoopsView`에 직접 남아 있어 source hygiene test 실패 확인
 - [x] Task 173 GREEN: `LoopWorktreeMemoryCollectionItems`로 8개 item을 이동하고 `LoopsView` 직접 field 접근을 제거
 - [x] Task 173 PRIVACY: UI helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
-- [ ] 다음 slice: selected-detail remaining boundary/privacy/review helper cluster를 같은 기준으로 helper 분리할지 결정
+- [x] Task 174 DECISION: 최근 review item helper PR이 너무 작게 쪼개졌으므로 이번 slice는 selected-detail boundary/privacy/review 9개 item과 merge review packet summary를 한 PR 단위로 묶는다
+- [x] Task 174 RED: boundary/privacy/review field와 review packet field가 `LoopsView`에 직접 남아 있어 source hygiene test 실패 확인
+- [x] Task 174 GREEN: `LoopWorktreeBoundaryReviewItems`와 `LoopWorktreeMergeReviewSummary`로 하단 review 영역을 이동하고 `LoopsView` 직접 field 접근을 제거
+- [x] Task 174 PRIVACY: UI helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
+- [ ] 다음 slice: `selected_brief_action` 아래 command distinction/filter/copy side-effect formatting을 helper로 묶되, 최소 2-3개 관련 UI cleanup을 한 PR에 합치는 기준으로 진행
 - [ ] 다음 dogfood slice: Codex native dialog fallback을 실제 OS dialog 또는 명시적 사용자 승인 하에 확인
 
 ### 판단 기준

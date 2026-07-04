@@ -11,10 +11,12 @@ import { getLoopBrief, getLoopInstructionPatch } from "./api.js";
 import { copyTextToClipboard } from "./clipboard.js";
 import { formatDate } from "./formatters.js";
 import { LoopReviewItem } from "./loop-review-item.js";
+import { LoopWorktreeBoundaryReviewItems } from "./loop-worktree-boundary-review-items.js";
 import { LoopWorktreeCollectionFreshnessItems } from "./loop-worktree-collection-freshness-items.js";
 import { LoopWorktreeContinuationSafetyItems } from "./loop-worktree-continuation-safety-items.js";
 import { LoopWorktreeMemoryCollectionItems } from "./loop-worktree-memory-collection-items.js";
 import { LoopWorktreeMemoryApprovalRetryRenewedItems } from "./loop-worktree-memory-approval-retry-renewed-items.js";
+import { LoopWorktreeMergeReviewSummary } from "./loop-worktree-merge-review-summary.js";
 import { LoopWorktreeRenewedMemoryApprovalItems } from "./loop-worktree-renewed-memory-approval-items.js";
 
 import "./loops-view.css";
@@ -443,107 +445,9 @@ export function LoopsView({
                 <LoopWorktreeRenewedMemoryApprovalItems
                   worktreeDetail={worktreeDetail}
                 />
-                {worktreeDetail.paste_destination && (
-                  <LoopReviewItem
-                    footer="No automatic submission, file writes, or external calls"
-                    lines={[
-                      worktreeDetail.paste_destination.label,
-                      worktreeDetail.paste_destination.targets.join(" or "),
-                      worktreeDetail.paste_destination.instruction,
-                      worktreeDetail.paste_destination.reason,
-                    ]}
-                  />
-                )}
-                {worktreeDetail.handoff_checklist && (
-                  <LoopReviewItem
-                    footer="No handoff checklist writes or external calls"
-                    lines={[
-                      worktreeDetail.handoff_checklist.label,
-                      ...worktreeDetail.handoff_checklist.steps,
-                      worktreeDetail.handoff_checklist.reason,
-                    ]}
-                  />
-                )}
-                {worktreeDetail.post_handoff_reminder && (
-                  <LoopReviewItem
-                    footer="No post-handoff writes or external calls"
-                    lines={[
-                      worktreeDetail.post_handoff_reminder.label,
-                      worktreeDetail.post_handoff_reminder.collect_next,
-                      worktreeDetail.post_handoff_reminder.not_memory_approval,
-                      worktreeDetail.post_handoff_reminder.not_merge,
-                      worktreeDetail.post_handoff_reminder.reason,
-                    ]}
-                  />
-                )}
-                {worktreeDetail.source_of_truth_note && (
-                  <LoopReviewItem
-                    footer="No transcript storage, file writes, or external calls"
-                    lines={[
-                      worktreeDetail.source_of_truth_note.label,
-                      worktreeDetail.source_of_truth_note.local_memory_input,
-                      worktreeDetail.source_of_truth_note.not_transcript_import,
-                      worktreeDetail.source_of_truth_note.reason,
-                    ]}
-                  />
-                )}
-                {worktreeDetail.privacy_boundary_note && (
-                  <LoopReviewItem
-                    footer="Local only, no file writes or external calls"
-                    lines={[
-                      worktreeDetail.privacy_boundary_note.label,
-                      worktreeDetail.privacy_boundary_note.storage_scope,
-                      worktreeDetail.privacy_boundary_note.does_not_store,
-                      worktreeDetail.privacy_boundary_note.reason,
-                    ]}
-                  />
-                )}
-                {worktreeDetail.operator_review_gate && (
-                  <LoopReviewItem
-                    footer="No automatic submission, file writes, or external calls"
-                    lines={[
-                      worktreeDetail.operator_review_gate.label,
-                      worktreeDetail.operator_review_gate.review_step,
-                      worktreeDetail.operator_review_gate.manual_submit,
-                      worktreeDetail.operator_review_gate.does_not,
-                    ]}
-                  />
-                )}
-                {worktreeDetail.collection_responsibility_note && (
-                  <LoopReviewItem
-                    footer="No automatic collection, file writes, or external calls"
-                    lines={[
-                      worktreeDetail.collection_responsibility_note.label,
-                      worktreeDetail.collection_responsibility_note
-                        .responsible_party,
-                      worktreeDetail.collection_responsibility_note.trigger,
-                      worktreeDetail.collection_responsibility_note.does_not,
-                    ]}
-                  />
-                )}
-                {worktreeDetail.pre_merge_advisory && (
-                  <LoopReviewItem
-                    footer="No merge decision writes, file writes, or external calls"
-                    lines={[
-                      worktreeDetail.pre_merge_advisory.label,
-                      worktreeDetail.pre_merge_advisory.hold_merge,
-                      worktreeDetail.pre_merge_advisory.reason,
-                      worktreeDetail.pre_merge_advisory.not_memory_approval,
-                    ]}
-                  />
-                )}
-                {worktreeDetail.post_collection_review_note && (
-                  <LoopReviewItem
-                    footer="No memory writes, merge decision writes, or external calls"
-                    lines={[
-                      worktreeDetail.post_collection_review_note.label,
-                      worktreeDetail.post_collection_review_note.review_step,
-                      worktreeDetail.post_collection_review_note
-                        .before_memory_approval,
-                      worktreeDetail.post_collection_review_note.before_merge,
-                    ]}
-                  />
-                )}
+                <LoopWorktreeBoundaryReviewItems
+                  worktreeDetail={worktreeDetail}
+                />
               </div>
             )}
             {worktreeDetail.latest_decision && (
@@ -552,98 +456,7 @@ export function LoopsView({
                 {worktreeDetail.latest_decision.reason}
               </p>
             )}
-            {worktreeDetail.review_packet_summary && (
-              <div className="loop-detail-section">
-                <p className="loop-detail-section-title">
-                  Merge review guidance
-                </p>
-                <p className="loops-status-line">Review packet summary</p>
-                <p className="loops-status-line">
-                  {worktreeDetail.review_packet_summary.summary}
-                </p>
-                <p className="loops-status-line">
-                  Next {worktreeDetail.review_packet_summary.next_action}
-                </p>
-                <p className="loops-status-line">
-                  Worktree action{" "}
-                  {worktreeDetail.review_packet_summary.worktree_action}
-                </p>
-                <div className="loop-review-grid">
-                  <LoopReviewItem
-                    footer={`${worktreeDetail.review_packet_summary.readiness_summary.status} ${worktreeDetail.review_packet_summary.readiness_summary.reason}`}
-                    lines={[
-                      worktreeDetail.review_packet_summary.readiness_summary
-                        .label,
-                    ]}
-                  />
-                  <LoopReviewItem
-                    footer={`Merge gate ${worktreeDetail.review_packet_summary.brief_rationale.merge_gate}`}
-                    lines={[
-                      worktreeDetail.review_packet_summary.brief_rationale
-                        .label,
-                      worktreeDetail.review_packet_summary.brief_rationale
-                        .reason,
-                      `Next ${worktreeDetail.review_packet_summary.brief_rationale.next_action}`,
-                    ]}
-                  />
-                  <LoopReviewItem
-                    footer={`${worktreeDetail.review_packet_summary.evidence_count_explanation.count} ${worktreeDetail.review_packet_summary.evidence_count_explanation.reason}`}
-                    lines={[
-                      "Evidence guidance",
-                      worktreeDetail.review_packet_summary
-                        .evidence_count_explanation.label,
-                    ]}
-                  />
-                </div>
-                {worktreeDetail.review_packet_summary
-                  .reviewer_checklist_preview.length > 0 && (
-                  <LoopReviewItem
-                    footer={
-                      worktreeDetail.review_packet_summary.reviewer_checklist_preview.at(
-                        -1,
-                      )
-                        ? `${worktreeDetail.review_packet_summary.reviewer_checklist_preview.at(-1)?.label} ${worktreeDetail.review_packet_summary.reviewer_checklist_preview.at(-1)?.status}`
-                        : "Reviewer checklist preview"
-                    }
-                    lines={[
-                      "Reviewer checklist preview",
-                      ...worktreeDetail.review_packet_summary.reviewer_checklist_preview
-                        .slice(0, -1)
-                        .map((item) => `${item.label} ${item.status}`),
-                    ]}
-                  />
-                )}
-                <p className="loops-status-line">
-                  {worktreeDetail.review_packet_summary.command_hint.label}
-                </p>
-                <code>
-                  {worktreeDetail.review_packet_summary.command_hint.command}
-                </code>
-                <LoopReviewItem
-                  footer="No command writes or external calls"
-                  lines={[
-                    worktreeDetail.review_packet_summary.command_hint.provenance
-                      .label,
-                    worktreeDetail.review_packet_summary.command_hint.provenance
-                      .source,
-                    worktreeDetail.review_packet_summary.command_hint.provenance
-                      .reason,
-                  ]}
-                />
-                {worktreeDetail.review_packet_summary
-                  .missing_evidence_explanation && (
-                  <LoopReviewItem
-                    footer={`Next ${worktreeDetail.review_packet_summary.missing_evidence_explanation.next_action}`}
-                    lines={[
-                      worktreeDetail.review_packet_summary
-                        .missing_evidence_explanation.label,
-                      worktreeDetail.review_packet_summary
-                        .missing_evidence_explanation.reason,
-                    ]}
-                  />
-                )}
-              </div>
-            )}
+            <LoopWorktreeMergeReviewSummary worktreeDetail={worktreeDetail} />
             <div className="loop-memory-action">
               <code>Continue {worktreeDetail.worktree}</code>
               <button

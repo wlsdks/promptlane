@@ -303,4 +303,30 @@ describe("source hygiene", () => {
       "continuation_safety_post_memory_approval_retry_pre_memory_approval_freshness_advisory",
     );
   });
+
+  it("keeps selected-detail boundary review formatting outside LoopsView", () => {
+    const loopsView = readFileSync("src/web/src/loops-view.tsx", "utf8");
+
+    expect(loopsView).not.toContain("paste_destination");
+    expect(loopsView).not.toContain("handoff_checklist");
+    expect(loopsView).not.toContain("post_handoff_reminder");
+    expect(loopsView).not.toContain("source_of_truth_note");
+    expect(loopsView).not.toContain("privacy_boundary_note");
+    expect(loopsView).not.toContain("operator_review_gate");
+    expect(loopsView).not.toContain("collection_responsibility_note");
+    expect(loopsView).not.toContain("pre_merge_advisory");
+    expect(loopsView).not.toContain("post_collection_review_note");
+  });
+
+  it("keeps selected-detail merge review packet formatting outside LoopsView", () => {
+    const loopsView = readFileSync("src/web/src/loops-view.tsx", "utf8");
+
+    expect(loopsView).not.toContain("review_packet_summary");
+    expect(loopsView).not.toContain("readiness_summary");
+    expect(loopsView).not.toContain("brief_rationale");
+    expect(loopsView).not.toContain("evidence_count_explanation");
+    expect(loopsView).not.toContain("reviewer_checklist_preview");
+    expect(loopsView).not.toContain("command_hint");
+    expect(loopsView).not.toContain("missing_evidence_explanation");
+  });
 });
