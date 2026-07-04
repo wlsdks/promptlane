@@ -115,6 +115,11 @@ export const ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION: PromptCoachMcpToolDefinit
           description:
             "How long to wait for the elicitation answer before falling back to metadata-only output. Defaults to 60000.",
         },
+        allow_native_dialog: {
+          type: "boolean",
+          description:
+            "Opt in to a local OS-native dialog fallback when the MCP client does not advertise elicitation support. Defaults to false unless PROMPT_COACH_NATIVE_DIALOG=1 is set.",
+        },
       },
       additionalProperties: false,
     },

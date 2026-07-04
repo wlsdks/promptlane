@@ -84,6 +84,10 @@
 - [x] Dogfood: Claude Code 2.1.199 `claude -p --model sonnet --output-format stream-json`에서 native `mcp__prompt-coach__ask_clarifying_questions` tool call 성공 확인
 - [x] Dogfood: Claude Code ask/elicitation print-mode 실행은 사용자가 1000ms 안에 답하지 않아 `interaction_status=declined`, `answers_count=0`, `clarifying_questions=2`, `requires_user_approval=true` metadata fallback으로 종료됨 확인
 - [x] Docs: 비대화형 Claude Code print-mode에서는 MCP routing 성공과 사용자 답변 수집 성공을 분리해서 보고하고, `declined` fallback 시 native ask UI로 다시 묻도록 README/README.ko에 명시
+- [x] RED: `ask_clarifying_questions` 타입/문서는 `allow_native_dialog`를 지원하지만 공개 MCP `tools/list` input schema에 없어 strict Codex/Claude client가 native dialog opt-in을 보낼 수 없음을 server test로 재현
+- [x] GREEN: `ask_clarifying_questions` public input schema에 `allow_native_dialog` boolean opt-in을 추가하고 test 고정
+- [x] Dogfood: dist MCP stdio `tools/list`에서 `allow_native_dialog`가 노출되고 `additionalProperties=false`를 유지함 확인
+- [x] Dogfood: 새 `codex exec` 세션에서 native `mcp__prompt_coach.ask_clarifying_questions`를 `allow_native_dialog=false`로 호출해 schema error 없이 `interaction_status=declined`, `answers_count=0`, `clarifying_questions=yes`로 완료됨 확인
 - [ ] 다음 dogfood slice: interactive Claude Code ask UI 또는 Codex native dialog fallback을 실제 사용자 입력 포함 경로로 확인
 
 ### 판단 기준
@@ -103,6 +107,7 @@
 - Claude Code 모델/크레딧 실패는 integration 실패와 구분한다. 이번 검증에서는 Fable 5 usage credits 429는 별도 외부 상태이고, Sonnet 실행에서 prompt-coach MCP routing 자체는 성공했다.
 - Claude Code의 stored clarification write flow는 MCP 응답에서는 metadata-only를 유지하고, draft body 검토는 local archive/UI/CLI로 넘어가야 한다.
 - Claude Code `ask_clarifying_questions` print-mode dogfood는 MCP routing 성공 여부와 실제 사용자 답변 수집 여부를 분리한다. `interaction_status=declined`는 tool failure가 아니라 답변 미수집 fallback이며, 다음 단계는 agent native ask UI 또는 interactive session에서 답을 받아 `apply_clarifications`/`record_clarifications`로 이어가는 것이다.
+- Codex native dialog fallback을 문서화하려면 `allow_native_dialog`가 public MCP schema에 있어야 한다. internal TypeScript-only argument는 실제 strict MCP client 통합으로 간주하지 않는다.
 
 ## 2026-07-04 Loop Snapshot Domain Slice
 

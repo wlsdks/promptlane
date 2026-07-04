@@ -35,6 +35,13 @@ describe("MCP stdio server", () => {
           }),
           expect.objectContaining({
             name: "ask_clarifying_questions",
+            inputSchema: expect.objectContaining({
+              properties: expect.objectContaining({
+                allow_native_dialog: expect.objectContaining({
+                  type: "boolean",
+                }),
+              }),
+            }),
           }),
           expect.objectContaining({
             name: "record_clarifications",
