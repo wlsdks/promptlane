@@ -765,7 +765,11 @@
 - [x] Task 166 RED: post-submit collection result/uncertainty 2개 field가 `LoopsView`에 직접 남아 있어 source hygiene test 실패 확인
 - [x] Task 166 GREEN: 해당 result/uncertainty item을 `LoopWorktreeRenewedMemoryApprovalItems`로 이동하고 `LoopsView` 직접 field 접근을 제거
 - [x] Task 166 PRIVACY: UI helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
-- [ ] 다음 slice: post-submit freshness advisory long inline `LoopReviewItem` props를 helper로 추가 분리할지 결정
+- [x] Task 167 DECISION: post-submit freshness advisory long inline `LoopReviewItem` props는 같은 renewed-memory-approval safety cluster라 기존 helper에 추가 분리
+- [x] Task 167 RED: post-submit freshness advisory field가 `LoopsView`에 직접 남아 있어 source hygiene test 실패 확인
+- [x] Task 167 GREEN: 해당 freshness advisory item을 `LoopWorktreeRenewedMemoryApprovalItems`로 이동하고 `LoopsView` 직접 field 접근을 제거
+- [x] Task 167 PRIVACY: UI helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
+- [ ] 다음 slice: renewed-memory-approval pre-submit/pre-paste freshness advisory long inline `LoopReviewItem` props를 helper로 추가 분리할지 결정
 
 ### 판단 기준
 

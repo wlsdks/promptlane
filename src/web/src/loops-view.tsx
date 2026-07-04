@@ -1322,25 +1322,6 @@ export function LoopsView({
                     ]}
                   />
                 )}
-                {worktreeDetail.continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_freshness_advisory && (
-                  <LoopReviewItem
-                    footer="No post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval post-submit freshness advisory writes or external calls"
-                    lines={[
-                        worktreeDetail
-                          .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_freshness_advisory
-                          .label,
-                        worktreeDetail
-                          .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_freshness_advisory
-                          .advisory,
-                        worktreeDetail
-                          .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_freshness_advisory
-                          .not_automated,
-                        worktreeDetail
-                          .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_freshness_advisory
-                          .reason,
-                    ]}
-                  />
-                )}
                 {worktreeDetail.paste_destination && (
                   <LoopReviewItem
                     footer="No automatic submission, file writes, or external calls"
