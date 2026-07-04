@@ -579,6 +579,21 @@ describe("LoopsView", () => {
     expect(html).toContain(
       "No post-memory-approval retry renewed-memory-approval pre-paste freshness advisory writes or external calls",
     );
+    expect(html).toContain(
+      "Post-memory-approval retry renewed-memory-approval pre-submit freshness advisory",
+    );
+    expect(html).toContain(
+      "review renewed-memory-approval freshness uncertainty before submitting in Codex or Claude Code",
+    );
+    expect(html).toContain(
+      "Loopdeck does not approve submissions or verify renewed-memory-approval freshness before submit",
+    );
+    expect(html).toContain(
+      "keeps submission readiness separate from renewed-memory-approval freshness uncertainty review",
+    );
+    expect(html).toContain(
+      "No post-memory-approval retry renewed-memory-approval pre-submit freshness advisory writes or external calls",
+    );
     expect(html).toContain("Paste destination");
     expect(html).toContain("Codex active request");
     expect(html).toContain("Claude Code active request");
@@ -1360,6 +1375,19 @@ function loopWorktree(): LoopWorktreeResponse {
           "Loopdeck does not approve paste targets or verify renewed-memory-approval freshness before paste",
         reason:
           "keeps paste readiness separate from renewed-memory-approval freshness uncertainty review",
+        writes_files: false,
+        external_calls: false,
+      },
+    continuation_safety_post_memory_approval_retry_renewed_memory_approval_pre_submit_freshness_advisory:
+      {
+        label:
+          "Post-memory-approval retry renewed-memory-approval pre-submit freshness advisory",
+        advisory:
+          "review renewed-memory-approval freshness uncertainty before submitting in Codex or Claude Code",
+        not_decision:
+          "Loopdeck does not approve submissions or verify renewed-memory-approval freshness before submit",
+        reason:
+          "keeps submission readiness separate from renewed-memory-approval freshness uncertainty review",
         writes_files: false,
         external_calls: false,
       },

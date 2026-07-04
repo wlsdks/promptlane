@@ -1302,6 +1302,19 @@ describe("createServer P2 ingest boundary", () => {
             writes_files: false,
             external_calls: false,
           },
+        continuation_safety_post_memory_approval_retry_renewed_memory_approval_pre_submit_freshness_advisory:
+          {
+            label:
+              "Post-memory-approval retry renewed-memory-approval pre-submit freshness advisory",
+            advisory:
+              "review renewed-memory-approval freshness uncertainty before submitting in Codex or Claude Code",
+            not_decision:
+              "Loopdeck does not approve submissions or verify renewed-memory-approval freshness before submit",
+            reason:
+              "keeps submission readiness separate from renewed-memory-approval freshness uncertainty review",
+            writes_files: false,
+            external_calls: false,
+          },
         paste_destination: {
           label: "Paste destination",
           targets: ["Codex active request", "Claude Code active request"],

@@ -261,6 +261,8 @@ export function registerLoopRoutes(
                 continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPreHandoffFreshnessAdvisoryFor(),
               continuation_safety_post_memory_approval_retry_renewed_memory_approval_pre_paste_freshness_advisory:
                 continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPrePasteFreshnessAdvisoryFor(),
+              continuation_safety_post_memory_approval_retry_renewed_memory_approval_pre_submit_freshness_advisory:
+                continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPreSubmitFreshnessAdvisoryFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -1485,6 +1487,28 @@ function continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPrePasteF
       "Loopdeck does not approve paste targets or verify renewed-memory-approval freshness before paste",
     reason:
       "keeps paste readiness separate from renewed-memory-approval freshness uncertainty review",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPreSubmitFreshnessAdvisoryFor(): {
+  label: "Post-memory-approval retry renewed-memory-approval pre-submit freshness advisory";
+  advisory: "review renewed-memory-approval freshness uncertainty before submitting in Codex or Claude Code";
+  not_decision: "Loopdeck does not approve submissions or verify renewed-memory-approval freshness before submit";
+  reason: "keeps submission readiness separate from renewed-memory-approval freshness uncertainty review";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label:
+      "Post-memory-approval retry renewed-memory-approval pre-submit freshness advisory",
+    advisory:
+      "review renewed-memory-approval freshness uncertainty before submitting in Codex or Claude Code",
+    not_decision:
+      "Loopdeck does not approve submissions or verify renewed-memory-approval freshness before submit",
+    reason:
+      "keeps submission readiness separate from renewed-memory-approval freshness uncertainty review",
     writes_files: false,
     external_calls: false,
   };

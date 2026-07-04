@@ -406,8 +406,13 @@ Implementation checkpoint:
   operator reviews renewed-memory-approval freshness uncertainty before pasting
   into Codex or Claude Code, without Loopdeck approving paste targets or
   verifying freshness before paste.
+- Selected worktree detail now includes a raw-free post-memory-approval retry
+  renewed-memory-approval pre-submit freshness advisory, explaining that the
+  operator reviews renewed-memory-approval freshness uncertainty before
+  submitting in Codex or Claude Code, without Loopdeck approving submissions or
+  verifying freshness before submit.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free post-memory-approval retry renewed-memory-approval pre-submit
+  raw-free post-memory-approval retry renewed-memory-approval post-submit
   freshness advisory, without
   adding transcript content, prompt bodies, raw paths, target contents,
   active-window titles, pasted content, paste result state, submitted state,
@@ -419,5 +424,5 @@ Implementation checkpoint:
   verification, automatic collection, collection command execution, retry
   automation, git status reads, command execution, persisted review state,
   checklist completion state, paste target state, handoff approval state,
-  memory approval writes, memory approval state, merge writes, merge decision
-  state, or external calls.
+  submission approval state, memory approval writes, memory approval state,
+  merge writes, merge decision state, or external calls.
