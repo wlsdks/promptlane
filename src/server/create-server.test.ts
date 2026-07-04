@@ -1648,6 +1648,19 @@ describe("createServer P2 ingest boundary", () => {
             writes_files: false,
             external_calls: false,
           },
+        continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_collection_freshness_result_non_persistence_note:
+          {
+            label:
+              "Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval post-submit collection freshness result non-persistence",
+            not_stored:
+              "post-submit retry renewed-memory-approval post-submit collection freshness result stays outside Loopdeck until the next explicit loop snapshot",
+            not_detected:
+              "Loopdeck does not detect, store, or sync post-submit retry renewed-memory-approval post-submit collection freshness result state",
+            reason:
+              "keeps post-submit retry renewed-memory-approval post-submit collection freshness evidence tied to explicit local snapshot recording",
+            writes_files: false,
+            external_calls: false,
+          },
         source_of_truth_note: {
           label: "Source-of-truth note",
           local_memory_input:

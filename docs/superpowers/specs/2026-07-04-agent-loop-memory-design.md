@@ -6192,6 +6192,75 @@ Do not add:
   handoff approval state, submission approval state, or secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.135: Post-Memory-Approval Retry Renewed-Memory-Approval Post-Submit Retry Renewed-Memory-Approval Post-Submit Collection Freshness Result Non-Persistence Note
+
+Decision:
+
+- Selected worktree detail should clarify that post-submit retry
+  renewed-memory-approval post-submit collection freshness result state stays
+  outside Loopdeck until the next explicit loop snapshot.
+- This is needed because the post-submit collection post-submit freshness
+  advisory asks the operator to collect a new explicit loop snapshot when
+  freshness is uncertain, but Loopdeck must not detect, store, sync, or infer
+  freshness result state.
+
+Add:
+
+- top-level selected worktree detail
+  `continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_collection_freshness_result_non_persistence_note`
+  with:
+  - label:
+    `Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval post-submit collection freshness result non-persistence`
+  - not_stored:
+    `post-submit retry renewed-memory-approval post-submit collection freshness result stays outside Loopdeck until the next explicit loop snapshot`
+  - not_detected:
+    `Loopdeck does not detect, store, or sync post-submit retry renewed-memory-approval post-submit collection freshness result state`
+  - reason:
+    `keeps post-submit retry renewed-memory-approval post-submit collection freshness evidence tied to explicit local snapshot recording`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance, immediately after post-submit retry renewed-memory-approval
+  post-submit collection post-submit freshness advisory and before paste
+  destination guidance
+- focused server/API/web tests proving it is present
+
+Do not add:
+
+- freshness result persistence, freshness result synchronization, freshness
+  result verification, freshness monitoring state, collection result
+  persistence, collection result synchronization, collection result
+  verification, post-submit collection result persistence, post-submit
+  collection result verification, post-submit retry renewed-memory approval
+  post-submit collection result persistence, submitted state persistence,
+  submitted state synchronization, agent response monitoring, agent response
+  persistence, automatic collection, collection command execution, retry
+  automation, retry command execution, git status reads, transcript inspection,
+  agent UI monitoring, active window detection, target-agent UI inspection,
+  paste automation, submit automation, Enter key automation, button clicking,
+  hidden prompt submission, safety approval state, submission approval,
+  submission decision persistence, memory approval writes, memory approval
+  state, renewed memory approval state, approval result persistence, approval
+  state synchronization, paste target state, paste result state, persisted
+  review state, checklist completion state, external model calls, filesystem
+  reads/writes, or new write tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, target
+  content, active-window titles, pasted content, paste result state, submitted
+  state, agent response content, collection result state, post-submit
+  collection result state, post-submit retry result state, retry success/failure
+  state, post-submit retry freshness result state, post-submit retry freshness
+  uncertainty collection result state, post-submit retry renewed memory approval
+  state, post-submit retry renewed-memory-approval collection result state,
+  post-submit retry renewed-memory-approval post-submit collection result
+  state, post-submit retry renewed-memory-approval post-submit collection
+  uncertainty result state, post-submit retry renewed-memory-approval
+  post-submit collection freshness result state, uncertainty result state,
+  freshness result state, retry freshness result state, approval result state,
+  memory approval state, renewed memory approval state, merge decision state,
+  handoff approval state, submission approval state, or secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.
