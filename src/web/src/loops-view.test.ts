@@ -182,6 +182,17 @@ describe("LoopsView", () => {
       "does not auto-submit prompts, execute commands, write files, or change merge state",
     );
     expect(html).toContain("No automatic submission, file writes, or external calls");
+    expect(html).toContain("Collection responsibility");
+    expect(html).toContain(
+      "operator collects the next loop snapshot after the agent turn",
+    );
+    expect(html).toContain(
+      "collection starts only when the operator runs the loop collection flow",
+    );
+    expect(html).toContain(
+      "does not watch transcripts, scrape agent UI, or collect in the background",
+    );
+    expect(html).toContain("No automatic collection, file writes, or external calls");
     expect(html).toContain("Continuation guidance");
     expect(html).toContain('class="loop-detail-section"');
     expect(html).toContain('class="loop-detail-section-title"');
@@ -527,6 +538,18 @@ function loopWorktree(): LoopWorktreeResponse {
       does_not:
         "does not auto-submit prompts, execute commands, write files, or change merge state",
       auto_submit: false,
+      writes_files: false,
+      external_calls: false,
+    },
+    collection_responsibility_note: {
+      label: "Collection responsibility",
+      responsible_party:
+        "operator collects the next loop snapshot after the agent turn",
+      trigger:
+        "collection starts only when the operator runs the loop collection flow",
+      does_not:
+        "does not watch transcripts, scrape agent UI, or collect in the background",
+      automatic_collection: false,
       writes_files: false,
       external_calls: false,
     },

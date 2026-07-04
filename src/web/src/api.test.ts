@@ -363,6 +363,18 @@ describe("web api export client", () => {
               writes_files: false,
               external_calls: false,
             },
+            collection_responsibility_note: {
+              label: "Collection responsibility",
+              responsible_party:
+                "operator collects the next loop snapshot after the agent turn",
+              trigger:
+                "collection starts only when the operator runs the loop collection flow",
+              does_not:
+                "does not watch transcripts, scrape agent UI, or collect in the background",
+              automatic_collection: false,
+              writes_files: false,
+              external_calls: false,
+            },
             latest_decision: {
               snapshot_id: "loop_web",
               worktree: "agent-loop-worktree",
@@ -578,6 +590,18 @@ describe("web api export client", () => {
         does_not:
           "does not auto-submit prompts, execute commands, write files, or change merge state",
         auto_submit: false,
+        writes_files: false,
+        external_calls: false,
+      },
+      collection_responsibility_note: {
+        label: "Collection responsibility",
+        responsible_party:
+          "operator collects the next loop snapshot after the agent turn",
+        trigger:
+          "collection starts only when the operator runs the loop collection flow",
+        does_not:
+          "does not watch transcripts, scrape agent UI, or collect in the background",
+        automatic_collection: false,
         writes_files: false,
         external_calls: false,
       },

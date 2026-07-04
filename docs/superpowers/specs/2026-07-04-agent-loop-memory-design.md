@@ -2450,6 +2450,45 @@ Do not add:
   secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.71: Selected Collection Responsibility Note
+
+Decision:
+
+- Selected worktree detail should show who is responsible for collecting the
+  next loop snapshot after continuation handoff. It should state that the
+  operator runs the loop collection flow after the agent turn.
+- This is needed because the handoff checklist says to collect the next
+  snapshot, but does not explicitly prevent misreading Loopdeck as a background
+  transcript watcher or agent UI scraper.
+
+Add:
+
+- top-level selected worktree detail `collection_responsibility_note` with:
+  - label: `Collection responsibility`
+  - responsible_party:
+    `operator collects the next loop snapshot after the agent turn`
+  - trigger:
+    `collection starts only when the operator runs the loop collection flow`
+  - does_not:
+    `does not watch transcripts, scrape agent UI, or collect in the background`
+  - automatic_collection: `false`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance
+- focused server/API/web tests proving the note is present
+
+Do not add:
+
+- background transcript watching, agent UI scraping, automatic collection,
+  command execution, git reads/writes, filesystem reads/writes, merge-state
+  mutation, checklist completion state, background analysis, external model
+  calls, memory approval writes, merge decision writes, or new write tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

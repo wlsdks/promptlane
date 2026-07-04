@@ -317,7 +317,11 @@
 - [x] Task 73 RED: selected detail API/UI에 `operator_review_gate`가 없어 focused server/API/web tests 실패 확인
 - [x] Task 73 GREEN: selected worktree detail API/type/UI에 operator review before submit, manual Codex/Claude Code submit, no auto-submit/no command/no write/no merge mutation flags를 read-only로 노출
 - [x] Task 73 PRIVACY: operator review gate는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript read/command execution/automatic submission/external call을 포함하지 않음
-- [ ] 다음 slice: selected detail panel의 continuation handoff 이후 collection responsibility note를 raw-free로 별도 제공할지 결정
+- [x] Task 74 DECISION: collection responsibility note는 continuation handoff 이후 next loop snapshot 수집 책임과 트리거를 명확히 하기 위해 필요하므로 raw-free로 제공
+- [x] Task 74 RED: selected detail API/UI에 `collection_responsibility_note`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 74 GREEN: selected worktree detail API/type/UI에 operator collects next snapshot, collection starts only through operator-run loop collection flow, no transcript watch/no agent UI scrape/no background collect flags를 read-only로 노출
+- [x] Task 74 PRIVACY: collection responsibility note는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript watching/agent UI scraping/background collection/command execution/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 continuation handoff 이후 pre-merge advisory를 raw-free로 별도 제공할지 결정
 
 ### 판단 기준
 

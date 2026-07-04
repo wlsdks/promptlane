@@ -247,7 +247,11 @@ Implementation checkpoint:
 - Selected worktree detail now includes a raw-free operator review gate,
   explaining that copied continuation briefs remain operator-reviewed and
   manually submitted in Codex or Claude Code.
+- Selected worktree detail now includes a raw-free collection responsibility
+  note, explaining that the operator explicitly collects the next loop snapshot
+  after the agent turn and that Loopdeck does not watch transcripts or scrape
+  agent UI in the background.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free collection responsibility note after continuation handoff,
+  raw-free pre-merge advisory after continuation handoff,
   without adding transcript content, prompt bodies, raw paths, git status reads,
   command execution, memory approval writes, merge writes, or external calls.

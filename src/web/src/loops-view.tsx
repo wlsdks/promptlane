@@ -573,6 +573,28 @@ export function LoopsView({
                     </p>
                   </div>
                 )}
+                {worktreeDetail.collection_responsibility_note && (
+                  <div className="loop-review-item">
+                    <p className="loops-status-line">
+                      {worktreeDetail.collection_responsibility_note.label}
+                    </p>
+                    <p className="loops-status-line">
+                      {
+                        worktreeDetail.collection_responsibility_note
+                          .responsible_party
+                      }
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.collection_responsibility_note.trigger}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.collection_responsibility_note.does_not}
+                    </p>
+                    <p className="loops-status-line">
+                      No automatic collection, file writes, or external calls
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             {worktreeDetail.latest_decision && (

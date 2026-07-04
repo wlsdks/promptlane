@@ -194,6 +194,7 @@ export function registerLoopRoutes(
               source_of_truth_note: sourceOfTruthNoteFor(),
               privacy_boundary_note: privacyBoundaryNoteFor(),
               operator_review_gate: operatorReviewGateFor(),
+              collection_responsibility_note: collectionResponsibilityNoteFor(),
             }
           : {}),
         ...(latestDecision
@@ -784,6 +785,29 @@ function operatorReviewGateFor(): {
     does_not:
       "does not auto-submit prompts, execute commands, write files, or change merge state",
     auto_submit: false,
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function collectionResponsibilityNoteFor(): {
+  label: "Collection responsibility";
+  responsible_party: "operator collects the next loop snapshot after the agent turn";
+  trigger: "collection starts only when the operator runs the loop collection flow";
+  does_not: "does not watch transcripts, scrape agent UI, or collect in the background";
+  automatic_collection: false;
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Collection responsibility",
+    responsible_party:
+      "operator collects the next loop snapshot after the agent turn",
+    trigger:
+      "collection starts only when the operator runs the loop collection flow",
+    does_not:
+      "does not watch transcripts, scrape agent UI, or collect in the background",
+    automatic_collection: false,
     writes_files: false,
     external_calls: false,
   };
