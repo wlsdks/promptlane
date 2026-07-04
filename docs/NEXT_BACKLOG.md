@@ -52,6 +52,14 @@ Current goal audit:
   `fast-uri`.
 - PR #346 removed the pnpm package-field warning by moving build approvals to
   `pnpm-workspace.yaml`.
+- PR #357 made the Codex plugin hook installation setup-driven so plugin
+  discovery does not duplicate user-level hooks installed by
+  `prompt-coach setup`.
+- PR #358 refreshed the reuse-copy audit after the local manual-copy fallback
+  landed.
+- PR #359 strengthened browser E2E so both `Copy draft` and
+  `Copy saved draft` force clipboard failure and verify the local manual-copy
+  fallback.
 
 Decision:
 
@@ -177,8 +185,9 @@ Immediate follow-up from the reuse audit:
 - Prompt-detail copy-failure fallback landed: when draft clipboard writes are
   unavailable, the detail page shows a local manual-copy textarea for the
   improved draft or saved draft.
-- `corepack pnpm e2e:browser` forces clipboard writes to fail and verifies the
-  manual-copy fallback without requiring real clipboard permissions.
+- `corepack pnpm e2e:browser` forces clipboard writes to fail for both
+  `Copy draft` and `Copy saved draft`, and verifies the manual-copy fallback
+  without requiring real clipboard permissions.
 - Keep auto-submit out of scope; copy/fallback must remain local and
   approval-gated.
 

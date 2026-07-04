@@ -24,7 +24,7 @@ Verified repository state:
 - Runtime compatibility IDs: package, CLI, hook command, Claude Code slash
   namespace, and canonical MCP server remain `prompt-coach`
 - Latest merged main commit at audit time:
-  `abfcef2 fix: make codex plugin hooks setup-driven (#357)`
+  `d6dfcc4 test: cover both reuse copy fallbacks (#359)`
 - Open PRs at audit time: none
 - Local and remote `main` matched at audit time
 
@@ -56,6 +56,12 @@ Verified CI and operational evidence:
 - PR #357 made Codex plugin hooks setup-driven by removing active bundled
   plugin hooks, so explicit `prompt-coach setup` remains the hook installation
   path and setup-installed user hooks are not duplicated by plugin discovery.
+- PR #358 refreshed the reuse-copy audit after the local manual-copy fallback
+  landed, so the original clipboard failure is no longer tracked as an open
+  implementation gap.
+- PR #359 strengthened browser E2E coverage by forcing clipboard failure on
+  both `Copy draft` and `Copy saved draft` and verifying the same local
+  manual-copy fallback path for both actions.
 - `ui-patrol` workflow_dispatch run `28717201110` failed before #341 because
   the GitHub runner did not have Chromium installed.
 - `ui-patrol` workflow_dispatch run `28717406758` succeeded after #341.
@@ -63,7 +69,7 @@ Verified CI and operational evidence:
   archive, detail, dashboard, coach, projects, MCP, exports, settings desktop,
   and settings mobile.
 - The first scheduled `ui-patrol` run has not appeared yet in the latest
-  workflow history inspected after #357.
+  workflow history inspected after #359.
 - `corepack pnpm e2e:browser` on `codex/reuse-copy-fallback-audit-refresh`
   forced clipboard writes to fail and verified the prompt detail manual-copy
   fallback for saved improvement drafts.
@@ -81,8 +87,8 @@ Verified CI and operational evidence:
 | Loop data model | Loop snapshot and memory schema contracts exist and runtime slices have landed. | `docs/LOOP-SNAPSHOT-SCHEMA.md`, loop CLI/MCP/web implementation, status and selected worktree slices | Satisfied for MVP loop metadata model |
 | Privacy/local-first boundary | Prompt bodies stay in redacted archive; loop surfaces are raw-free; write paths are explicit. | `docs/LOOPDECK.md`, storage/server/MCP tests, route capability guard cleanup, MCP smoke audits | Satisfied for implemented paths |
 | AGENTS.md/CLAUDE.md/harness docs | Cross-agent and Claude-specific instruction boundaries are separated. | `AGENTS.md`, `CLAUDE.md`, `docs/INSTRUCTION-FILES.md`, `docs/AGENT-HARNESS.md` | Satisfied for current compatibility window |
-| Technical risk handling | Storage capability guard work, CI UI patrol evidence, dependency security cleanup, pnpm build-approval settings, and Codex hook de-duplication reduced known reliability gaps. | ADR 0002, PR #340, PR #341, PR #345, PR #346, PR #357, `docs/NEXT_BACKLOG.md` | Active and improving |
-| TDD implementation slices | Recent slices used focused RED tests, local gates, PR CI, and squash merges. | PR #340 through #357 tests/CI; `tasks/todo.md` | Satisfied for recent slices |
+| Technical risk handling | Storage capability guard work, CI UI patrol evidence, dependency security cleanup, pnpm build-approval settings, Codex hook de-duplication, and reuse fallback E2E coverage reduced known reliability gaps. | ADR 0002, PR #340, PR #341, PR #345, PR #346, PR #357, PR #359, `docs/NEXT_BACKLOG.md` | Active and improving |
+| TDD implementation slices | Recent slices used focused RED tests, local gates, PR CI, and squash merges. | PR #340 through #359 tests/CI; `tasks/todo.md` | Satisfied for recent slices |
 | Reuse copy fallback | Clipboard-write failure now opens a local manual-copy fallback instead of leaving the user at a dead end. | `src/web/src/App.tsx`, `src/web/src/prompt-detail-view.test.ts`, `scripts/browser-e2e.mjs`, `corepack pnpm e2e:browser` | Satisfied for automated coverage; fresh in-app Browser UX pass remains useful |
 | UI patrol scheduled artifact | Manual workflow dispatch is verified; first scheduled cron artifact has not occurred yet. | Run `28717406758`; `.github/workflows/ui-patrol.yml` cron | Not yet complete as a scheduled-run requirement |
 | Codex native dialog fallback | Safe no-dialog preflight, MCP elicitation smoke, and approval-gated harness refusal are verified; real OS/native ask UI dogfood is not run. | `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md`, `scripts/mcp-native-dialog-approved.mjs`, `package.json` | Pending explicit operator approval for the answered dialog run |

@@ -3455,3 +3455,9 @@
 - [x] DECISION: The audit claims current and saved improvement drafts both have local manual-copy fallback, so browser E2E should force clipboard failure on both actions.
 - [x] GREEN: `scripts/browser-e2e.mjs` now uses shared clipboard failure helpers and verifies `Copy draft` plus `Copy saved draft` fallback paths.
 - [x] VERIFY: Run browser E2E, full test/lint/build/pack dry-run gates, push a coherent PR, merge, and prune the branch.
+
+## 2026-07-05 Loopdeck Audit Refresh After Fallback Coverage
+
+- [x] EVIDENCE: `main` is at `d6dfcc4` after PR #359, no open PRs, and no scheduled `ui-patrol` run has appeared yet.
+- [x] DOCS: Refresh `NEXT_BACKLOG` and `LOOPDECK_GOAL_AUDIT_2026-07-05.md` so they cite PR #358/#359 reuse fallback coverage instead of the stale #357/#346 state.
+- [x] VERIFY: Run docs/search checks plus full test/lint/build/pack dry-run gates, push a coherent PR, merge, and prune the branch.
