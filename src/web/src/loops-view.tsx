@@ -10,6 +10,7 @@ import type {
 import { getLoopBrief, getLoopInstructionPatch } from "./api.js";
 import { copyTextToClipboard } from "./clipboard.js";
 import { formatDate } from "./formatters.js";
+import { LoopReviewItem } from "./loop-review-item.js";
 
 import "./loops-view.css";
 
@@ -452,104 +453,53 @@ export function LoopsView({
                   </div>
                 )}
                 {worktreeDetail.continuation_safety_group && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {worktreeDetail.continuation_safety_group.label}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.continuation_safety_group.scope}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.continuation_safety_group.includes}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.continuation_safety_group.reason}
-                    </p>
-                    <p className="loops-status-line">
-                      No safety guidance writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No safety guidance writes or external calls"
+                    lines={[
+                      worktreeDetail.continuation_safety_group.label,
+                      worktreeDetail.continuation_safety_group.scope,
+                      worktreeDetail.continuation_safety_group.includes,
+                      worktreeDetail.continuation_safety_group.reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_ordering_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_ordering_note
-                          .label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_ordering_note
-                          .first
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.continuation_safety_ordering_note.then}
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_ordering_note
-                          .reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No ordering writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No ordering writes or external calls"
+                    lines={[
+                      worktreeDetail.continuation_safety_ordering_note.label,
+                      worktreeDetail.continuation_safety_ordering_note.first,
+                      worktreeDetail.continuation_safety_ordering_note.then,
+                      worktreeDetail.continuation_safety_ordering_note.reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_non_persistence_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_non_persistence_note
-                          .label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_non_persistence_note
-                          .state
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_non_persistence_note
-                          .reminder
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_non_persistence_note
-                          .reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No safety review state storage or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No safety review state storage or external calls"
+                    lines={[
+                      worktreeDetail.continuation_safety_non_persistence_note
+                        .label,
+                      worktreeDetail.continuation_safety_non_persistence_note
+                        .state,
+                      worktreeDetail.continuation_safety_non_persistence_note
+                        .reminder,
+                      worktreeDetail.continuation_safety_non_persistence_note
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_recheck_cue && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {worktreeDetail.continuation_safety_recheck_cue.label}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.continuation_safety_recheck_cue.trigger}
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_recheck_cue
-                          .instruction
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.continuation_safety_recheck_cue.reason}
-                    </p>
-                    <p className="loops-status-line">
-                      No re-check writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No re-check writes or external calls"
+                    lines={[
+                      worktreeDetail.continuation_safety_recheck_cue.label,
+                      worktreeDetail.continuation_safety_recheck_cue.trigger,
+                      worktreeDetail.continuation_safety_recheck_cue
+                        .instruction,
+                      worktreeDetail.continuation_safety_recheck_cue.reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_copy_feedback_reminder && (
                   <div className="loop-review-item">
