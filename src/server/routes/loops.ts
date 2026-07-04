@@ -259,6 +259,8 @@ export function registerLoopRoutes(
                 continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPreMergeFreshnessAdvisoryFor(),
               continuation_safety_post_memory_approval_retry_renewed_memory_approval_pre_handoff_freshness_advisory:
                 continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPreHandoffFreshnessAdvisoryFor(),
+              continuation_safety_post_memory_approval_retry_renewed_memory_approval_pre_paste_freshness_advisory:
+                continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPrePasteFreshnessAdvisoryFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -1461,6 +1463,28 @@ function continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPreHandof
       "Loopdeck does not approve handoffs or verify renewed-memory-approval freshness before handoff",
     reason:
       "keeps continuation handoff separate from renewed-memory-approval freshness uncertainty review",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPrePasteFreshnessAdvisoryFor(): {
+  label: "Post-memory-approval retry renewed-memory-approval pre-paste freshness advisory";
+  advisory: "review renewed-memory-approval freshness uncertainty before pasting into Codex or Claude Code";
+  not_decision: "Loopdeck does not approve paste targets or verify renewed-memory-approval freshness before paste";
+  reason: "keeps paste readiness separate from renewed-memory-approval freshness uncertainty review";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label:
+      "Post-memory-approval retry renewed-memory-approval pre-paste freshness advisory",
+    advisory:
+      "review renewed-memory-approval freshness uncertainty before pasting into Codex or Claude Code",
+    not_decision:
+      "Loopdeck does not approve paste targets or verify renewed-memory-approval freshness before paste",
+    reason:
+      "keeps paste readiness separate from renewed-memory-approval freshness uncertainty review",
     writes_files: false,
     external_calls: false,
   };
