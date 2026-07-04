@@ -568,6 +568,14 @@ export type LoopWorktreeResponse = {
     writes_files: false;
     external_calls: false;
   };
+  continuation_safety_post_memory_approval_retry_renewed_memory_approval_pre_merge_freshness_advisory?: {
+    label: "Post-memory-approval retry renewed-memory-approval pre-merge freshness advisory";
+    advisory: "review renewed-memory-approval freshness uncertainty before merge decisions";
+    not_decision: "Loopdeck does not approve merges or verify renewed-memory-approval freshness before merge";
+    reason: "keeps merge readiness separate from renewed-memory-approval freshness uncertainty review";
+    writes_files: false;
+    external_calls: false;
+  };
   paste_destination?: {
     label: "Paste destination";
     targets: ["Codex active request", "Claude Code active request"];

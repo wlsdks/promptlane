@@ -680,6 +680,19 @@ describe("web api export client", () => {
                 writes_files: false,
                 external_calls: false,
               },
+            continuation_safety_post_memory_approval_retry_renewed_memory_approval_pre_merge_freshness_advisory:
+              {
+                label:
+                  "Post-memory-approval retry renewed-memory-approval pre-merge freshness advisory",
+                advisory:
+                  "review renewed-memory-approval freshness uncertainty before merge decisions",
+                not_decision:
+                  "Loopdeck does not approve merges or verify renewed-memory-approval freshness before merge",
+                reason:
+                  "keeps merge readiness separate from renewed-memory-approval freshness uncertainty review",
+                writes_files: false,
+                external_calls: false,
+              },
             paste_destination: {
               label: "Paste destination",
               targets: ["Codex active request", "Claude Code active request"],
@@ -1296,20 +1309,33 @@ describe("web api export client", () => {
           writes_files: false,
           external_calls: false,
         },
-      continuation_safety_post_memory_approval_retry_renewed_memory_approval_collection_uncertainty_reminder:
-        {
-          label:
-            "Post-memory-approval retry renewed-memory-approval collection uncertainty reminder",
+    continuation_safety_post_memory_approval_retry_renewed_memory_approval_collection_uncertainty_reminder:
+      {
+        label:
+          "Post-memory-approval retry renewed-memory-approval collection uncertainty reminder",
           reminder:
             "collect a new explicit loop snapshot when renewed-memory-approval collection result is uncertain",
           not_automated:
             "Loopdeck does not verify renewed-memory-approval collection result or start collection automatically",
           reason:
             "keeps renewed-memory-approval collection uncertainty resolution operator-triggered and local-first",
-          writes_files: false,
-          external_calls: false,
-        },
-      paste_destination: {
+        writes_files: false,
+        external_calls: false,
+      },
+    continuation_safety_post_memory_approval_retry_renewed_memory_approval_pre_merge_freshness_advisory:
+      {
+        label:
+          "Post-memory-approval retry renewed-memory-approval pre-merge freshness advisory",
+        advisory:
+          "review renewed-memory-approval freshness uncertainty before merge decisions",
+        not_decision:
+          "Loopdeck does not approve merges or verify renewed-memory-approval freshness before merge",
+        reason:
+          "keeps merge readiness separate from renewed-memory-approval freshness uncertainty review",
+        writes_files: false,
+        external_calls: false,
+      },
+    paste_destination: {
         label: "Paste destination",
         targets: ["Codex active request", "Claude Code active request"],
         instruction:
