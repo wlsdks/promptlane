@@ -44,7 +44,7 @@
       "Stop",
       "UserPromptSubmit"
     ],
-    "required_command_substring": "prompt-coach hook codex",
+    "required_command_substring": "hook codex",
     "fail_open_required": true
   },
   "mcp": {

@@ -252,7 +252,9 @@ describe("plugin packaging files", () => {
     expect(skill).toContain("Use this skill when the user wants Codex to work with Loopdeck");
     expect(skill).toContain("The compatibility CLI command remains `prompt-coach`");
     for (const command of hookCommands) {
-      expect(command).toContain("prompt-coach hook codex");
+      expect(command).toContain("PROMPT_COACH_HOOK");
+      expect(command).toContain("prompt-coach hook");
+      expect(command).toContain("hook codex");
       expect(command).toContain("|| true");
       expect(command).not.toContain("loopdeck hook codex");
     }

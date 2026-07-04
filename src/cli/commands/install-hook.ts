@@ -72,10 +72,17 @@ export type CodexHookInstallResult = {
 const PROMPT_COACH_MARKER = "prompt-coach hook claude-code";
 const CODEX_PROMPT_COACH_MARKER = "prompt-coach hook codex";
 const LEGACY_CODEX_PROMPT_MEMORY_MARKER = "prompt-memory hook codex";
+const CODEX_PROMPT_COACH_STOP_MARKER = "prompt-coach hook stop codex";
+const CODEX_PROMPT_COACH_PRE_COMPACT_MARKER =
+  "prompt-coach hook pre-compact codex";
+const CODEX_PROMPT_COACH_POST_COMPACT_MARKER =
+  "prompt-coach hook post-compact codex";
 const PROMPT_COACH_SESSION_MARKER =
   "prompt-coach hook session-start claude-code";
 const CODEX_PROMPT_COACH_SESSION_MARKER =
   "prompt-coach hook session-start codex";
+const LEGACY_CODEX_PROMPT_MEMORY_SESSION_MARKER =
+  "prompt-memory hook session-start codex";
 const CODEX_HOOKS_FEATURE_KEY = "hooks";
 
 export function registerInstallHookCommands(program: Command): void {
@@ -288,6 +295,18 @@ export function installCodexHook(
     currentHooks,
     buildCodexHookCommand(options.dataDir, options),
     {
+      stopCommand: buildCodexLifecycleHookCommand(
+        CODEX_PROMPT_COACH_STOP_MARKER,
+        options.dataDir,
+      ),
+      preCompactCommand: buildCodexLifecycleHookCommand(
+        CODEX_PROMPT_COACH_PRE_COMPACT_MARKER,
+        options.dataDir,
+      ),
+      postCompactCommand: buildCodexLifecycleHookCommand(
+        CODEX_PROMPT_COACH_POST_COMPACT_MARKER,
+        options.dataDir,
+      ),
       sessionStartCommand: options.openWeb
         ? buildSessionStartHookCommand("codex", options.dataDir)
         : undefined,
@@ -491,7 +510,12 @@ function removeHook(
 function ensureCodexHook(
   settings: CodexHooksSettings,
   command: string,
-  options: { sessionStartCommand?: string } = {},
+  options: {
+    stopCommand: string;
+    preCompactCommand: string;
+    postCompactCommand: string;
+    sessionStartCommand?: string;
+  },
 ): CodexHooksSettings & { hooks: Record<string, ClaudeHookGroup[]> } {
   const hooks = { ...(settings.hooks ?? {}) };
   hooks.UserPromptSubmit = ensurePromptCoachHookGroups(
@@ -501,24 +525,23 @@ function ensureCodexHook(
   );
   hooks.Stop = ensurePromptCoachHookGroups(
     hooks.Stop ?? [],
-    command,
-    isCodexPromptCoachHook,
+    options.stopCommand,
+    isCodexStopHook,
   );
   hooks.PreCompact = ensurePromptCoachHookGroups(
     hooks.PreCompact ?? [],
-    command,
-    isCodexPromptCoachHook,
+    options.preCompactCommand,
+    isCodexPreCompactHook,
   );
   hooks.PostCompact = ensurePromptCoachHookGroups(
     hooks.PostCompact ?? [],
-    command,
-    isCodexPromptCoachHook,
+    options.postCompactCommand,
+    isCodexPostCompactHook,
   );
   if (options.sessionStartCommand) {
-    hooks.SessionStart = ensureSessionStartHook(
+    hooks.SessionStart = ensureCodexSessionStartHook(
       hooks.SessionStart ?? [],
       options.sessionStartCommand,
-      CODEX_PROMPT_COACH_SESSION_MARKER,
     );
   }
 
@@ -538,19 +561,19 @@ function removeCodexHook(
   );
   hooks.Stop = removePromptCoachHookGroups(
     hooks.Stop ?? [],
-    isCodexPromptCoachHook,
+    isCodexStopHook,
   );
   hooks.PreCompact = removePromptCoachHookGroups(
     hooks.PreCompact ?? [],
-    isCodexPromptCoachHook,
+    isCodexPreCompactHook,
   );
   hooks.PostCompact = removePromptCoachHookGroups(
     hooks.PostCompact ?? [],
-    isCodexPromptCoachHook,
+    isCodexPostCompactHook,
   );
-  hooks.SessionStart = removeSessionStartHook(
+  hooks.SessionStart = removePromptCoachHookGroups(
     hooks.SessionStart ?? [],
-    CODEX_PROMPT_COACH_SESSION_MARKER,
+    isCodexSessionStartHook,
   );
 
   return {
@@ -627,6 +650,44 @@ function ensureSessionStartHook(
       return { ...hook, command, timeout: 5 };
     }),
   }));
+
+  if (!found) {
+    next.push({
+      hooks: [
+        {
+          type: "command",
+          command,
+          timeout: 5,
+        },
+      ],
+    });
+  }
+
+  return next;
+}
+
+function ensureCodexSessionStartHook(
+  groups: ClaudeHookGroup[],
+  command: string,
+): ClaudeHookGroup[] {
+  let found = false;
+  const next = [...groups]
+    .map((group) => ({
+      ...group,
+      hooks: group.hooks.flatMap((hook) => {
+        if (!isCodexSessionStartHook(hook.command)) {
+          return [hook];
+        }
+
+        if (found) {
+          return [];
+        }
+
+        found = true;
+        return [{ ...hook, command, timeout: 5 }];
+      }),
+    }))
+    .filter((group) => group.hooks.length > 0);
 
   if (!found) {
     next.push({
@@ -759,6 +820,13 @@ function buildSessionStartHookCommand(
   )} ${shellQuote(cliEntryPath())} hook session-start ${tool}${dataDirArg} --open-web`;
 }
 
+function buildCodexLifecycleHookCommand(marker: string, dataDir?: string): string {
+  const dataDirArg = dataDir ? ` --data-dir ${JSON.stringify(dataDir)}` : "";
+  return `${markerAssignment(marker)} ${shellQuote(
+    process.execPath,
+  )} ${shellQuote(cliEntryPath())} hook codex${dataDirArg}`;
+}
+
 function buildRewriteGuardArgs(
   options: Pick<
     HookInstallOptions,
@@ -799,6 +867,34 @@ function isCodexPromptCoachHook(command: string): boolean {
   return (
     command.includes(CODEX_PROMPT_COACH_MARKER) ||
     command.includes(LEGACY_CODEX_PROMPT_MEMORY_MARKER)
+  );
+}
+
+function isCodexStopHook(command: string): boolean {
+  return (
+    command.includes(CODEX_PROMPT_COACH_STOP_MARKER) ||
+    isCodexPromptCoachHook(command)
+  );
+}
+
+function isCodexPreCompactHook(command: string): boolean {
+  return (
+    command.includes(CODEX_PROMPT_COACH_PRE_COMPACT_MARKER) ||
+    isCodexPromptCoachHook(command)
+  );
+}
+
+function isCodexPostCompactHook(command: string): boolean {
+  return (
+    command.includes(CODEX_PROMPT_COACH_POST_COMPACT_MARKER) ||
+    isCodexPromptCoachHook(command)
+  );
+}
+
+function isCodexSessionStartHook(command: string): boolean {
+  return (
+    command.includes(CODEX_PROMPT_COACH_SESSION_MARKER) ||
+    command.includes(LEGACY_CODEX_PROMPT_MEMORY_SESSION_MARKER)
   );
 }
 
