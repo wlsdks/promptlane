@@ -25,7 +25,7 @@ Use `prompt-coach` in existing scripts and plugin commands; use `loopdeck` for
 new manual terminal workflows when you want the product-name command.
 Slash command and plugin id migration is gated by
 `docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md`; Claude Code
-slash commands remain under /prompt-coach:* until that compatibility plan is
+slash commands remain under `/prompt-coach:*` until that compatibility plan is
 implemented. `/loopdeck:*` is a planned alias-only slash namespace, not the
 only namespace and not shipped as command files yet.
 
@@ -94,7 +94,7 @@ This repository is pre-release software.
 
 ## Requirements
 
-- Node.js `>=22 <25`
+- Node.js `>=22.12 <25`
 - pnpm `10.x`
 - A platform supported by `better-sqlite3`
 
@@ -532,7 +532,7 @@ The Claude Code plugin provides slash commands:
 /prompt-coach:open
 ```
 
-Claude Code slash commands remain under /prompt-coach:* during the Loopdeck
+Claude Code slash commands remain under `/prompt-coach:*` during the Loopdeck
 migration. Existing plugin users can keep those commands, while manual terminal
 fallbacks can use the loopdeck CLI alias when preferred. `/loopdeck:*` is a
 planned alias-only slash namespace for a later compatibility slice; this package
@@ -735,13 +735,13 @@ The MCP server exposes twenty tools:
   3. Otherwise returns `clarifying_questions` metadata
      (`interaction_status: unsupported|declined|timeout`).
      Never auto-submits a rewrite.
-  In non-interactive Claude Code print runs (`claude -p`), the MCP tool can be
-  routed successfully but still return `interaction_status: declined` when no
-  user answer is provided. Treat that as a safe fallback: ask the returned
-  `clarifying_questions` through the agent's native ask UI, call
-  `apply_clarifications` first to compose and show the final approval-ready
-  draft in chat, and call `record_clarifications` only if the user also wants
-  to save that draft against a stored prompt.
+     In non-interactive Claude Code print runs (`claude -p`), the MCP tool can be
+     routed successfully but still return `interaction_status: declined` when no
+     user answer is provided. Treat that as a safe fallback: ask the returned
+     `clarifying_questions` through the agent's native ask UI, call
+     `apply_clarifications` first to compose and show the final approval-ready
+     draft in chat, and call `record_clarifications` only if the user also wants
+     to save that draft against a stored prompt.
 - `record_clarifications`: persist the user's verbatim answers and the
   resulting draft against a stored prompt in the local archive
   (`prompt_improvement_drafts`). Returns metadata only (`draft_id`,

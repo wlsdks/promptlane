@@ -10,7 +10,7 @@
   },
   "packageManager": "pnpm@10.18.0",
   "engines": {
-    "node": ">=22 <25"
+    "node": ">=22.12 <25"
   },
   "bin": {
     "prompt-coach": "./dist/cli/index.js",
@@ -98,7 +98,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^11.10.0",
-    "commander": "^14.0.3",
+    "commander": "^15.0.0",
     "fastify": "^5.8.5",
     "recharts": "^3.9.2",
     "yaml": "^2.9.0",

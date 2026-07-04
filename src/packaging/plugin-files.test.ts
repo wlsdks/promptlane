@@ -13,6 +13,7 @@ describe("plugin packaging files", () => {
       description: string;
       repository: { url: string };
       bin: Record<string, string>;
+      engines: { node: string };
     }>("package.json");
     const claudeManifest = readJson<{
       name: string;
@@ -38,6 +39,13 @@ describe("plugin packaging files", () => {
     );
     expect(packageJson.repository.url).toBe(
       "https://github.com/wlsdks/loopdeck.git",
+    );
+    expect(packageJson.engines.node).toBe(">=22.12 <25");
+    expect(readFileSync(join(process.cwd(), "README.md"), "utf8")).toContain(
+      "Node.js `>=22.12 <25`",
+    );
+    expect(readFileSync(join(process.cwd(), "README.ko.md"), "utf8")).toContain(
+      "Node.js `>=22.12 <25`",
     );
 
     for (const manifest of [claudeManifest, codexManifest]) {
@@ -274,7 +282,7 @@ describe("plugin packaging files", () => {
     );
 
     expect(readme).toContain(
-      "Claude Code slash commands remain under /prompt-coach:*",
+      "Claude Code slash commands remain under `/prompt-coach:*`",
     );
     expect(readme).toContain("use the loopdeck CLI alias");
     expect(plugins).toContain(
@@ -504,7 +512,7 @@ describe("plugin packaging files", () => {
     expect(readiness).not.toContain("Make this better");
     expect(readiness).not.toContain("sk-proj");
     expect(readiness).not.toContain("/Users/");
-    expect(readme).toContain("slash commands remain under /prompt-coach:*");
+    expect(readme).toContain("slash commands remain under `/prompt-coach:*`");
     expect(plugins).toContain("`/prompt-coach:*` remains required");
     expect(readme).not.toMatch(/deprecated/i);
     expect(plugins).not.toMatch(/deprecated/i);

@@ -81,7 +81,7 @@ prompt-coach doctor codex
 
 ## 요구사항
 
-- Node.js `>=22 <25`
+- Node.js `>=22.12 <25`
 - pnpm `10.x`
 - `better-sqlite3`가 지원하는 플랫폼
 
