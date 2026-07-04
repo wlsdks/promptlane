@@ -336,6 +336,17 @@ describe("LoopsView", () => {
       "keeps freshness evidence tied to explicit local snapshot recording",
     );
     expect(html).toContain("No freshness result persistence writes or external calls");
+    expect(html).toContain("Freshness uncertainty collection reminder");
+    expect(html).toContain(
+      "collect a new explicit loop snapshot when evidence freshness is uncertain",
+    );
+    expect(html).toContain(
+      "Loopdeck does not verify freshness or start collection automatically",
+    );
+    expect(html).toContain(
+      "keeps freshness uncertainty resolution operator-triggered and local-first",
+    );
+    expect(html).toContain("No freshness uncertainty collection writes or external calls");
     expect(html).toContain("Paste destination");
     expect(html).toContain("Codex active request");
     expect(html).toContain("Claude Code active request");
@@ -916,6 +927,17 @@ function loopWorktree(): LoopWorktreeResponse {
       not_stored:
         "Loopdeck does not detect, store, or sync freshness result state",
       reason: "keeps freshness evidence tied to explicit local snapshot recording",
+      writes_files: false,
+      external_calls: false,
+    },
+    continuation_safety_freshness_uncertainty_collection_reminder: {
+      label: "Freshness uncertainty collection reminder",
+      reminder:
+        "collect a new explicit loop snapshot when evidence freshness is uncertain",
+      not_automated:
+        "Loopdeck does not verify freshness or start collection automatically",
+      reason:
+        "keeps freshness uncertainty resolution operator-triggered and local-first",
       writes_files: false,
       external_calls: false,
     },

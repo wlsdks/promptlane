@@ -227,6 +227,8 @@ export function registerLoopRoutes(
                 continuationSafetyCollectionEvidenceFreshnessBoundaryNoteFor(),
               continuation_safety_freshness_result_non_persistence_note:
                 continuationSafetyFreshnessResultNonPersistenceNoteFor(),
+              continuation_safety_freshness_uncertainty_collection_reminder:
+                continuationSafetyFreshnessUncertaintyCollectionReminderFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -1092,6 +1094,27 @@ function continuationSafetyFreshnessResultNonPersistenceNoteFor(): {
     not_stored:
       "Loopdeck does not detect, store, or sync freshness result state",
     reason: "keeps freshness evidence tied to explicit local snapshot recording",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyFreshnessUncertaintyCollectionReminderFor(): {
+  label: "Freshness uncertainty collection reminder";
+  reminder: "collect a new explicit loop snapshot when evidence freshness is uncertain";
+  not_automated: "Loopdeck does not verify freshness or start collection automatically";
+  reason: "keeps freshness uncertainty resolution operator-triggered and local-first";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Freshness uncertainty collection reminder",
+    reminder:
+      "collect a new explicit loop snapshot when evidence freshness is uncertain",
+    not_automated:
+      "Loopdeck does not verify freshness or start collection automatically",
+    reason:
+      "keeps freshness uncertainty resolution operator-triggered and local-first",
     writes_files: false,
     external_calls: false,
   };
