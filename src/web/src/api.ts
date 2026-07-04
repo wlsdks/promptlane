@@ -253,6 +253,10 @@ export type LoopWorktreeResponse = {
       | "compare evidence before merge"
       | "review outcome before merge"
       | "record loop outcome evidence";
+    command_hint: {
+      label: "Copy review brief command";
+      command: string;
+    };
   };
   items: LoopSummary[];
   privacy: {

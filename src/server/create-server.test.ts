@@ -812,6 +812,11 @@ describe("createServer P2 ingest boundary", () => {
           worktree: "review-worktree",
           merge_readiness: "needs_review",
           worktree_action: "review outcome before merge",
+          command_hint: {
+            label: "Copy review brief command",
+            command:
+              "prompt-coach loop brief --worktree review-worktree --branch codex/agent-loop-memory-design",
+          },
         },
       },
     });

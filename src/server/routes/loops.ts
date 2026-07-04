@@ -178,6 +178,10 @@ export function registerLoopRoutes(
                 worktree: reviewItem.worktree,
                 merge_readiness: reviewItem.merge_readiness.status,
                 worktree_action: reviewItem.merge_readiness.next_action,
+                command_hint: {
+                  label: "Copy review brief command",
+                  command: reviewItem.continuation_command,
+                },
               },
             }
           : {}),

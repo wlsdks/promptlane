@@ -250,6 +250,11 @@ describe("web api export client", () => {
               worktree: "agent-loop-worktree",
               merge_readiness: "needs_review",
               worktree_action: "review outcome before merge",
+              command_hint: {
+                label: "Copy review brief command",
+                command:
+                  "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+              },
             },
             items: [
               {
@@ -294,6 +299,11 @@ describe("web api export client", () => {
         status: "needs_review",
         summary: "1 ready, 1 needs review, 0 missing evidence",
         worktree: "agent-loop-worktree",
+        command_hint: {
+          label: "Copy review brief command",
+          command:
+            "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+        },
       },
       items: [
         {

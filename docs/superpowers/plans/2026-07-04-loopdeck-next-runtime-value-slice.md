@@ -174,7 +174,10 @@ Implementation checkpoint:
 - Selected worktree detail now includes a raw-free review packet summary,
   packet next action, and selected worktree action through
   `/api/v1/loops/worktrees/:worktree`, API typing, and the web detail panel.
+- Selected worktree detail now includes a CLI-equivalent read-only command hint
+  sourced from the existing command-center review item continuation command,
+  without adding command execution, web write buttons, checklist completion
+  state, merge automation, or git writes.
 - The next runtime slice should decide whether selected worktree detail needs a
-  CLI-equivalent read-only command hint for the review packet, without adding
-  web write buttons, checklist completion state, merge automation, or git
-  writes.
+  raw-free missing-evidence explanation when the selected worktree is blocked,
+  without returning evidence refs or outcome summaries.

@@ -233,7 +233,11 @@
 - [x] Task 52 RED: selected detail API/UI에 `review_packet_summary`가 없어 focused tests 실패 확인
 - [x] Task 52 GREEN: selected worktree detail API/type/UI에 review packet summary, packet next action, worktree action을 노출
 - [x] Task 52 PRIVACY: review packet summary는 aggregate status/summary/action만 포함하고 prompt body/evidence refs/outcome summary/raw path/git write를 포함하지 않음
-- [ ] 다음 slice: selected worktree detail에 CLI-equivalent read-only command hint를 추가할지 결정
+- [x] Task 53 DECISION: selected worktree detail은 기존 command-center continuation command를 read-only command hint로 노출하고 실행 버튼은 보류
+- [x] Task 53 RED: selected detail API/UI에 `review_packet_summary.command_hint`가 없어 focused tests 실패 확인
+- [x] Task 53 GREEN: selected worktree detail API/type/UI에 command hint label/command를 read-only로 노출
+- [x] Task 53 PRIVACY: command hint는 기존 safe continuation command만 포함하고 prompt body/evidence refs/outcome summary/raw path/git write를 포함하지 않음
+- [ ] 다음 slice: selected worktree detail에 blocked 상태의 raw-free missing-evidence explanation을 추가할지 결정
 
 ### 판단 기준
 

@@ -361,6 +361,12 @@ export function LoopsView({
                   Worktree action{" "}
                   {worktreeDetail.review_packet_summary.worktree_action}
                 </p>
+                <p className="loops-status-line">
+                  {worktreeDetail.review_packet_summary.command_hint.label}
+                </p>
+                <code>
+                  {worktreeDetail.review_packet_summary.command_hint.command}
+                </code>
               </div>
             )}
             <div className="loop-memory-action">

@@ -1629,6 +1629,39 @@ Do not add:
 - hidden external model calls or background agent evaluation
 - package, plugin, slash command, hook, or MCP server-name rename
 
+### Slice 4.50: Selected Worktree Review Command Hint
+
+Decision:
+
+- Selected worktree detail should expose a CLI-equivalent read-only command hint
+  for the selected review packet context. This lets Codex, Claude Code, and the
+  web UI see the exact continuation command for the reviewed worktree without
+  adding a write-capable button or hidden execution path.
+- Reuse the existing command-center review item `continuation_command`; do not
+  introduce a second command-building rule.
+
+Add:
+
+- `review_packet_summary.command_hint` with:
+  - label: `Copy review brief command`
+  - command: existing selected worktree `continuation_command`
+- web API typing for the command hint
+- selected worktree detail rendering for the command hint label and command
+- focused server/API/web tests proving the hint remains read-only and does not
+  reveal prompt bodies, outcome summaries, evidence refs, raw paths,
+  transcripts, compact summaries, API tokens, provider credentials, external
+  calls, or git writes
+
+Do not add:
+
+- web or MCP write tools, command execution, merge actions, checklist
+  completion, or acknowledgements
+- a second command formatter separate from the command-center review item
+- merge/checkout/rebase/diff/conflict inspection
+- changes to command-center readiness or review packet status
+- hidden external model calls or background agent evaluation
+- package, plugin, slash command, hook, or MCP server-name rename
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.
