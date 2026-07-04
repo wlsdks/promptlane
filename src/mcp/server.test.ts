@@ -58,6 +58,8 @@ describe("MCP stdio server", () => {
     expect(joinedDescriptions).not.toContain("prompt-coach archive");
     expect(joinedDescriptions).not.toContain("prompt-coach storage");
     expect(joinedDescriptions).toContain("prompt-coach MCP tool");
+    expect(JSON.stringify(tools)).toContain("Loopdeck status preflight");
+    expect(JSON.stringify(tools)).not.toContain("Prompt-memory status preflight");
   });
 
   it("declares prompt scoring tools through tools/list", async () => {

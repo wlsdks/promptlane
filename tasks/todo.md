@@ -56,6 +56,16 @@
 - `/prompt-coach:*` namespace는 유지하지만 사용자가 보는 command copy는 Loopdeck 제품 방향을 보여야 한다.
 - 실행 명령, MCP tool name, package id 문맥의 `prompt-coach`는 유지한다.
 
+## 2026-07-05 Loopdeck CLI Coach Copy
+
+- [x] RED: CLI `coach`/`buddy` text output과 MCP status preflight title이 Prompt Memory/Prompt-memory 제품명을 노출하면 실패하도록 고정
+- [x] GREEN: user-facing CLI headings와 setup-needed headline/title은 Loopdeck으로 갱신하고, 실행 command 예시는 `prompt-coach` compatibility runtime을 유지
+
+### 판단 기준
+
+- CLI와 MCP가 직접 보여주는 제목/상태 문구는 Loopdeck 제품 방향을 사용한다.
+- command 이름, slash namespace, MCP server/tool compatibility id 문맥의 `prompt-coach`는 유지한다.
+
 ## 2026-07-04 Loop Snapshot CLI Implementation Plan
 
 - [x] 설계 문서의 Slice 1 범위를 CLI/storage/domain으로 제한

@@ -78,7 +78,8 @@ describe("coach CLI", () => {
 
     const text = coachPromptForCli({ dataDir });
 
-    expect(text).toContain("Prompt Memory Coach");
+    expect(text).toContain("Loopdeck Coach");
+    expect(text).not.toContain("Prompt Memory Coach");
     expect(text).toContain("Latest prompt");
     expect(text).toContain("Next actions");
     expect(text).toContain("Agent commands");
@@ -199,7 +200,8 @@ describe("coach CLI", () => {
 
     const text = coachPromptForCli({ dataDir });
 
-    expect(text).toContain("Prompt-memory is not ready yet.");
+    expect(text).toContain("Loopdeck is not ready yet.");
+    expect(text).not.toContain("Prompt-memory is not ready yet.");
     expect(text).toContain("prompt-coach start");
     expect(text).toContain("prompt-coach setup --profile coach --register-mcp");
     expect(text).toContain("prompt-coach server");

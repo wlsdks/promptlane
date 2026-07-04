@@ -96,7 +96,7 @@ export const GET_PROMPT_COACH_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefiniti
       "Check whether the local Loopdeck archive is initialized and has captured prompts before calling scoring tools. Use this first when the user asks if prompt-coach is working, whether Claude Code/Codex prompts are being captured, or which prompt-coach MCP tool to call next. Returns local readiness, safe counts, latest prompt metadata, available tool names, and next actions. It never returns prompt bodies, raw absolute paths, secrets, or external LLM results.",
     annotations: {
       ...LOCAL_READ_ONLY_TOOL_ANNOTATIONS,
-      title: "Prompt-memory status preflight",
+      title: "Loopdeck status preflight",
     },
     inputSchema: {
       type: "object",
