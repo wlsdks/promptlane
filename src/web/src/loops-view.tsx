@@ -513,6 +513,28 @@ export function LoopsView({
                     </p>
                   </div>
                 )}
+                {worktreeDetail.source_of_truth_note && (
+                  <div className="loop-review-item">
+                    <p className="loops-status-line">
+                      {worktreeDetail.source_of_truth_note.label}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.source_of_truth_note.local_memory_input}
+                    </p>
+                    <p className="loops-status-line">
+                      {
+                        worktreeDetail.source_of_truth_note
+                          .not_transcript_import
+                      }
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.source_of_truth_note.reason}
+                    </p>
+                    <p className="loops-status-line">
+                      No transcript storage, file writes, or external calls
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             {worktreeDetail.latest_decision && (

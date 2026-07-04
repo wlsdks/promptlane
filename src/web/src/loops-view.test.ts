@@ -149,6 +149,17 @@ describe("LoopsView", () => {
       "continuation handoff records the next loop before any memory approval or merge decision",
     );
     expect(html).toContain("No post-handoff writes or external calls");
+    expect(html).toContain("Source-of-truth note");
+    expect(html).toContain(
+      "next loop snapshot is the source of truth for local loop memory",
+    );
+    expect(html).toContain(
+      "transcript import is not used as the source of truth",
+    );
+    expect(html).toContain(
+      "Loopdeck records explicit loop snapshots instead of importing agent transcripts",
+    );
+    expect(html).toContain("No transcript storage, file writes, or external calls");
     expect(html).toContain("Continuation guidance");
     expect(html).toContain('class="loop-detail-section"');
     expect(html).toContain('class="loop-detail-section-title"');
@@ -460,6 +471,18 @@ function loopWorktree(): LoopWorktreeResponse {
       not_merge: "merge remains a separate review-before-merge decision",
       reason:
         "continuation handoff records the next loop before any memory approval or merge decision",
+      writes_files: false,
+      external_calls: false,
+    },
+    source_of_truth_note: {
+      label: "Source-of-truth note",
+      local_memory_input:
+        "next loop snapshot is the source of truth for local loop memory",
+      not_transcript_import:
+        "transcript import is not used as the source of truth",
+      reason:
+        "Loopdeck records explicit loop snapshots instead of importing agent transcripts",
+      stores_transcripts: false,
       writes_files: false,
       external_calls: false,
     },

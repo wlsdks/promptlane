@@ -305,7 +305,11 @@
 - [x] Task 70 RED: selected detail API/UI에 `post_handoff_reminder`가 없어 focused server/API/web tests 실패 확인
 - [x] Task 70 GREEN: selected worktree detail API/type/UI에 next loop collect, memory approval separate review, merge separate decision을 read-only로 노출
 - [x] Task 70 PRIVACY: post-handoff reminder는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript read/command execution/external call을 포함하지 않음
-- [ ] 다음 slice: selected detail panel의 source-of-truth note가 next loop snapshot을 transcript import가 아닌 local memory input으로 설명하도록 raw-free 제공할지 결정
+- [x] Task 71 DECISION: source-of-truth note는 next loop snapshot을 transcript import가 아닌 local memory input으로 설명하기 위해 필요하므로 raw-free로 제공
+- [x] Task 71 RED: selected detail API/UI에 `source_of_truth_note`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 71 GREEN: selected worktree detail API/type/UI에 next loop snapshot source-of-truth, no transcript import, no transcript storage flags를 read-only로 노출
+- [x] Task 71 PRIVACY: source-of-truth note는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript storage/transcript import/command execution/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 source-of-truth model에 대한 privacy boundary note를 raw-free로 별도 제공할지 결정
 
 ### 판단 기준
 

@@ -2331,6 +2331,46 @@ Do not add:
   secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.68: Selected Source-of-Truth Note
+
+Decision:
+
+- Selected worktree detail should state that the next loop snapshot is the
+  source of truth for local loop memory. It should explicitly say this is not a
+  transcript import flow.
+- This is needed because Loopdeck is becoming an agent loop memory workbench,
+  not a transcript vault. The selected detail panel must keep the local-first
+  memory boundary visible during Codex/Claude Code continuation handoff.
+
+Add:
+
+- top-level selected worktree detail `source_of_truth_note` with:
+  - label: `Source-of-truth note`
+  - local_memory_input:
+    `next loop snapshot is the source of truth for local loop memory`
+  - not_transcript_import:
+    `transcript import is not used as the source of truth`
+  - reason:
+    `Loopdeck records explicit loop snapshots instead of importing agent transcripts`
+  - stores_transcripts: `false`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance
+- focused server/API/web tests proving the note is present
+
+Do not add:
+
+- transcript import, transcript storage, prompt body storage, compact summary
+  import, memory approval writes, merge decision writes, Codex or Claude Code UI
+  automation, hidden prompt submission, command execution, git reads/writes,
+  filesystem reads, background analysis, external model calls, or new write
+  tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

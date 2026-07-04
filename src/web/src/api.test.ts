@@ -327,6 +327,18 @@ describe("web api export client", () => {
               writes_files: false,
               external_calls: false,
             },
+            source_of_truth_note: {
+              label: "Source-of-truth note",
+              local_memory_input:
+                "next loop snapshot is the source of truth for local loop memory",
+              not_transcript_import:
+                "transcript import is not used as the source of truth",
+              reason:
+                "Loopdeck records explicit loop snapshots instead of importing agent transcripts",
+              stores_transcripts: false,
+              writes_files: false,
+              external_calls: false,
+            },
             latest_decision: {
               snapshot_id: "loop_web",
               worktree: "agent-loop-worktree",
@@ -508,6 +520,18 @@ describe("web api export client", () => {
         not_merge: "merge remains a separate review-before-merge decision",
         reason:
           "continuation handoff records the next loop before any memory approval or merge decision",
+        writes_files: false,
+        external_calls: false,
+      },
+      source_of_truth_note: {
+        label: "Source-of-truth note",
+        local_memory_input:
+          "next loop snapshot is the source of truth for local loop memory",
+        not_transcript_import:
+          "transcript import is not used as the source of truth",
+        reason:
+          "Loopdeck records explicit loop snapshots instead of importing agent transcripts",
+        stores_transcripts: false,
         writes_files: false,
         external_calls: false,
       },
