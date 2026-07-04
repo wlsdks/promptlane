@@ -60,6 +60,10 @@ Current goal audit:
 - PR #359 strengthened browser E2E so both `Copy draft` and
   `Copy saved draft` force clipboard failure and verify the local manual-copy
   fallback.
+- PR #361 stabilized package dry-run lifecycle behavior by pinning npm
+  lifecycle builds through `corepack pnpm`, adding a warning-free
+  `pack:dry-run` wrapper, and keeping publishing/package docs aligned with
+  `npm pack --ignore-scripts` inspection.
 
 Decision:
 
@@ -87,6 +91,9 @@ Rationale:
 - Security and package-manager hygiene should remain tightly scoped: update the
   smallest dependency/config surface that removes the alert or warning, then
   prove it with audit, install/build/pack, and CI.
+- Release checklists should follow the same package lifecycle contract as
+  `docs/NPM_PUBLISHING.md` and `docs/PACKAGE_CONTENTS.md`; avoid allowing
+  public beta gates to drift back to PATH-dependent bare `pnpm` commands.
 
 ## Prioritized Queue
 

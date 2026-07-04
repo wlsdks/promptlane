@@ -75,6 +75,45 @@ describe("plugin packaging files", () => {
     expect(publishing).not.toContain("chmods all three");
   });
 
+  it("keeps the release checklist aligned with package lifecycle and shipped scripts", () => {
+    const packageJson = readJson<{
+      files: string[];
+      scripts: Record<string, string>;
+    }>("package.json");
+    const releaseChecklist = readFileSync(
+      join(process.cwd(), "docs/RELEASE_CHECKLIST.md"),
+      "utf8",
+    );
+
+    for (const command of [
+      "corepack pnpm format",
+      "corepack pnpm test",
+      "corepack pnpm lint",
+      "corepack pnpm build",
+      "corepack pnpm pack:dry-run",
+      "corepack pnpm benchmark -- --json",
+      "corepack pnpm e2e:browser",
+      "corepack pnpm smoke:release",
+    ]) {
+      expect(releaseChecklist).toContain(`\`${command}\``);
+    }
+
+    expect(packageJson.scripts["pack:dry-run"]).toBe(
+      "node scripts/pack-dry-run.mjs",
+    );
+    expect(releaseChecklist).toContain(
+      "wrapper strips pnpm-only npm env before `npm pack`",
+    );
+
+    for (const scriptPath of packageJson.files.filter(
+      (filePath) => filePath.startsWith("scripts/") && filePath.endsWith(".mjs"),
+    )) {
+      expect(releaseChecklist).toContain(`\`${scriptPath}\``);
+    }
+
+    expect(releaseChecklist).not.toContain("Confirm `pnpm pack:dry-run`");
+  });
+
   it("brands product-facing package and plugin metadata as Loopdeck while preserving prompt-coach command ids", () => {
     const packageJson = readJson<{
       name: string;

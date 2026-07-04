@@ -33,13 +33,25 @@
 - [x] RED: packaging test가 `pack:dry-run`, `prepack`, `prepare`의 packageManager-pinned build/pack path를 요구하도록 고정했다.
 - [x] GREEN: npm lifecycle build script는 `corepack pnpm build`를 사용하고, `pack:dry-run`은 wrapper에서 pnpm-only npm env를 제거한 뒤 `npm pack --dry-run --ignore-scripts`를 실행한다.
 - [x] VERIFY: focused packaging test, `corepack pnpm pack:dry-run`, direct `npm pack --dry-run --ignore-scripts`, full gates를 통과했다.
-- [ ] INTEGRATE: PR merge와 branch prune까지 확인한다.
+- [x] INTEGRATE: PR merge와 branch prune까지 확인했다.
 
 ### 판단 기준
 
 - npm lifecycle은 사용자의 PATH에 있는 다른 pnpm 버전에 의존하지 않는다.
 - 사람이 보는 dry-run은 warning 없이 안정적으로 실행하고, JSON package inspection은 build 후 `--ignore-scripts`로 lifecycle log contamination을 피한다.
 - 스크립트 변경, packaging contract test, publishing/package docs는 하나의 PR에 묶는다.
+
+## 2026-07-05 Release Checklist Package Lifecycle
+
+- [x] RED: release checklist가 package lifecycle command와 shipped script allowlist에서 드리프트 나면 packaging test가 실패하도록 고정했다.
+- [x] GREEN: `docs/RELEASE_CHECKLIST.md`를 `corepack pnpm` gate, wrapper contract, 전체 shipped verification scripts 목록에 맞춘다.
+- [x] VERIFY: focused packaging test와 full gates를 통과했다.
+- [ ] INTEGRATE: PR merge와 branch prune까지 확인한다.
+
+### 판단 기준
+
+- public beta checklist는 `docs/NPM_PUBLISHING.md`, `docs/PACKAGE_CONTENTS.md`, `package.json#files`, `package.json#scripts`와 같은 release contract를 공유한다.
+- 새 checklist/audit 상태 갱신은 독립 문서 PR로 쪼개지 않고 package lifecycle drift test와 함께 묶는다.
 
 ## 2026-07-05 Loopdeck MCP Storage Setup Copy
 

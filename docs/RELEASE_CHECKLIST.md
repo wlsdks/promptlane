@@ -21,19 +21,19 @@ Use this checklist before publishing a public beta or npm package.
 
 ## Verification
 
-- [ ] `pnpm format`
-- [ ] `pnpm test`
-- [ ] `pnpm lint`
-- [ ] `pnpm build`
-- [ ] `pnpm pack:dry-run`
-- [ ] `pnpm benchmark -- --json`
-- [ ] `pnpm e2e:browser`
-- [ ] `pnpm smoke:release`
+- [ ] `corepack pnpm format`
+- [ ] `corepack pnpm test`
+- [ ] `corepack pnpm lint`
+- [ ] `corepack pnpm build`
+- [ ] `corepack pnpm pack:dry-run`
+- [ ] `corepack pnpm benchmark -- --json`
+- [ ] `corepack pnpm e2e:browser`
+- [ ] `corepack pnpm smoke:release`
 - [ ] `git diff --check`
 
 ## Package Contents
 
-Confirm `pnpm pack:dry-run` includes:
+Confirm `corepack pnpm pack:dry-run` includes:
 
 - [ ] built CLI files under `dist/cli` (including `pc-claude.js`, `pc-codex.js`)
 - [ ] built server files under `dist/server`
@@ -60,10 +60,22 @@ Confirm `pnpm pack:dry-run` includes:
 - [ ] `plugins/` and `integrations/` directories
 - [ ] `scripts/benchmark.mjs`
 - [ ] `scripts/browser-e2e.mjs`
+- [ ] `scripts/hook-binary-smoke.mjs`
+- [ ] `scripts/mcp-coach-loop-smoke.mjs`
+- [ ] `scripts/mcp-elicitation-smoke.mjs`
+- [ ] `scripts/mcp-native-dialog-approved.mjs`
+- [ ] `scripts/mcp-native-dialog-preflight.mjs`
+- [ ] `scripts/pack-dry-run.mjs`
 - [ ] `scripts/quality-gate.mjs`
 - [ ] `scripts/release-smoke.mjs`
+- [ ] `scripts/ui-patrol.mjs`
 
-Confirm `pnpm pack:dry-run` excludes:
+Confirm `corepack pnpm pack:dry-run` uses the local wrapper:
+
+- [ ] wrapper strips pnpm-only npm env before `npm pack`
+- [ ] wrapper runs `npm pack --dry-run --ignore-scripts` after build
+
+Confirm `corepack pnpm pack:dry-run` excludes:
 
 - [ ] no `dist/**/*.map` files (source maps stay local-only)
 - [ ] no `src/`, `node_modules/`, `coverage/`, `tests/`, `.github/`
@@ -108,7 +120,7 @@ Confirm `pnpm pack:dry-run` excludes:
 
 ## Manual Smoke
 
-`pnpm smoke:release` automates the core local smoke path below with an isolated temporary data directory and HOME.
+`corepack pnpm smoke:release` automates the core local smoke path below with an isolated temporary data directory and HOME.
 
 - [ ] `prompt-coach init`
 - [ ] `prompt-coach server`

@@ -24,7 +24,7 @@ Verified repository state:
 - Runtime compatibility IDs: package, CLI, hook command, Claude Code slash
   namespace, and canonical MCP server remain `prompt-coach`
 - Latest merged main commit at audit time:
-  `d6dfcc4 test: cover both reuse copy fallbacks (#359)`
+  `67ce01d fix: stabilize package dry run lifecycle (#361)`
 - Open PRs at audit time: none
 - Local and remote `main` matched at audit time
 
@@ -62,6 +62,10 @@ Verified CI and operational evidence:
 - PR #359 strengthened browser E2E coverage by forcing clipboard failure on
   both `Copy draft` and `Copy saved draft` and verifying the same local
   manual-copy fallback path for both actions.
+- PR #361 stabilized package dry-run lifecycle behavior by using
+  `corepack pnpm build` for npm lifecycle builds, replacing `pack:dry-run`
+  with a wrapper that strips pnpm-only npm env before `npm pack`, and updating
+  package publishing/package contents docs.
 - `ui-patrol` workflow_dispatch run `28717201110` failed before #341 because
   the GitHub runner did not have Chromium installed.
 - `ui-patrol` workflow_dispatch run `28717406758` succeeded after #341.
@@ -87,7 +91,7 @@ Verified CI and operational evidence:
 | Loop data model | Loop snapshot and memory schema contracts exist and runtime slices have landed. | `docs/LOOP-SNAPSHOT-SCHEMA.md`, loop CLI/MCP/web implementation, status and selected worktree slices | Satisfied for MVP loop metadata model |
 | Privacy/local-first boundary | Prompt bodies stay in redacted archive; loop surfaces are raw-free; write paths are explicit. | `docs/LOOPDECK.md`, storage/server/MCP tests, route capability guard cleanup, MCP smoke audits | Satisfied for implemented paths |
 | AGENTS.md/CLAUDE.md/harness docs | Cross-agent and Claude-specific instruction boundaries are separated. | `AGENTS.md`, `CLAUDE.md`, `docs/INSTRUCTION-FILES.md`, `docs/AGENT-HARNESS.md` | Satisfied for current compatibility window |
-| Technical risk handling | Storage capability guard work, CI UI patrol evidence, dependency security cleanup, pnpm build-approval settings, Codex hook de-duplication, and reuse fallback E2E coverage reduced known reliability gaps. | ADR 0002, PR #340, PR #341, PR #345, PR #346, PR #357, PR #359, `docs/NEXT_BACKLOG.md` | Active and improving |
+| Technical risk handling | Storage capability guard work, CI UI patrol evidence, dependency security cleanup, pnpm build-approval settings, package dry-run lifecycle stabilization, Codex hook de-duplication, and reuse fallback E2E coverage reduced known reliability gaps. | ADR 0002, PR #340, PR #341, PR #345, PR #346, PR #357, PR #359, PR #361, `docs/NEXT_BACKLOG.md` | Active and improving |
 | TDD implementation slices | Recent slices used focused RED tests, local gates, PR CI, and squash merges. | PR #340 through #359 tests/CI; `tasks/todo.md` | Satisfied for recent slices |
 | Reuse copy fallback | Clipboard-write failure now opens a local manual-copy fallback instead of leaving the user at a dead end. | `src/web/src/App.tsx`, `src/web/src/prompt-detail-view.test.ts`, `scripts/browser-e2e.mjs`, `corepack pnpm e2e:browser` | Satisfied for automated coverage; fresh in-app Browser UX pass remains useful |
 | UI patrol scheduled artifact | Manual workflow dispatch is verified; first scheduled cron artifact has not occurred yet. | Run `28717406758`; `.github/workflows/ui-patrol.yml` cron | Not yet complete as a scheduled-run requirement |
