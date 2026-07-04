@@ -3514,4 +3514,12 @@
 - [x] GREEN: Loop read routes now require loop snapshot, compact boundary, loop memory, and merge decision storage through the shared capability helper.
 - [x] PRIVACY: Missing capability responses use one raw-free local configuration problem and do not expose method names or local paths.
 - [x] VERIFY: Run focused tests and full local gates.
+- [x] INTEGRATE: PR #364 was merged to `main`; branch was pruned.
+
+## 2026-07-05 Reuse Copy Saved Draft Fallback Label
+
+- [x] EVIDENCE: Fresh Codex in-app Browser pass confirmed search/detail reuse, current draft copy fallback, saved draft persistence, saved draft copy fallback, and no fake token/temp path exposure in visible states.
+- [x] RED: Add a focused copy-failure message test requiring saved-draft copy failure to use `Could not copy the saved draft.`
+- [x] GREEN: `copySavedImprovementDraft` now uses the saved-draft-specific helper message while preserving the same local manual-copy fallback textarea.
+- [x] VERIFY: Run focused tests and full local gates.
 - [ ] INTEGRATE: Push a coherent PR, merge it after CI, and prune the branch.

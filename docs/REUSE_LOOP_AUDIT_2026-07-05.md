@@ -111,6 +111,20 @@ Current status: resolved for repeatable automated coverage. A fresh manual pass
 in the Codex in-app Browser is still useful as user-experience evidence, but
 the original missing fallback is no longer an open implementation gap.
 
+Follow-up manual pass:
+
+- A fresh Codex in-app Browser pass on 2026-07-05 confirmed the real browser
+  clipboard bridge still leaves clipboard text empty for `Copy draft`, and the
+  page now opens the local manual-copy fallback with a read-only
+  `Manual copy draft text` textarea.
+- The same pass confirmed `Save draft` creates a saved draft row and
+  `Copy saved draft` opens the same local manual-copy fallback when clipboard
+  writes are unavailable.
+- The saved-draft failure path now uses the saved-draft-specific message
+  `Could not copy the saved draft.` instead of reusing the current-draft error.
+- The page did not expose the fake API token or temporary local path in the
+  archive, detail, or fallback state checked during the pass.
+
 ### P2 - Search and saved-draft reuse are usable but not yet a full fork flow
 
 What worked: search found the reusable prompt, detail showed the improved
@@ -131,8 +145,5 @@ fork/edit/resubmit more explicit.
 
 ## Recommended Next Slices
 
-1. Re-run this audit in the Codex in-app Browser as a manual user-flow pass,
-   confirming the fallback feels clear when the real browser bridge rejects
-   clipboard writes.
-2. Consider a later explicit "fork into draft" flow only if user-flow evidence
+1. Consider a later explicit "fork into draft" flow only if user-flow evidence
    shows that copy/save is not enough for repeated reuse.

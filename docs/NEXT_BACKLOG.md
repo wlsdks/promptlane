@@ -70,6 +70,10 @@ Current goal audit:
 - PR #363 aligned README contributor verification gates with the same
   `corepack pnpm pack:dry-run` wrapper and added packaging coverage so README
   examples do not drift back to PATH-dependent bare `pnpm` package checks.
+- PR #364 moved loop read routes onto the shared storage capability guard, so
+  missing loop snapshot, compact boundary, memory, or merge-decision storage
+  fails with one raw-free local configuration problem instead of an empty
+  Loopdeck status.
 
 Decision:
 
@@ -142,10 +146,6 @@ MCP catalogue decision PR:
 
 Next capability PR:
 
-- Loop read routes should use the same shared capability guard as other
-  storage-backed routes. Missing loop snapshot, compact boundary, memory, or
-  merge-decision methods must return one raw-free local configuration problem
-  instead of silently returning an empty Loopdeck status.
 - Avoid a broad MCP registry rewrite unless the next MCP tool or schema change
   already touches the registration surface.
 - If registration changes become necessary, introduce a small registry that
@@ -184,9 +184,10 @@ investing in more refactors:
 - **Reuse loop audit**: first in-app Browser audit completed in
   `docs/REUSE_LOOP_AUDIT_2026-07-05.md`. Search, detail, and save-draft reuse
   worked; the original `Copy draft` clipboard failure now has a local-only
-  manual-copy fallback for current and saved improvement drafts. The remaining
-  follow-up is a fresh manual Codex in-app Browser pass to judge whether the
-  fallback is clear enough in the real clipboard bridge failure mode.
+  manual-copy fallback for current and saved improvement drafts. A fresh Codex
+  in-app Browser pass confirmed the real clipboard bridge still rejects copy
+  writes, the manual-copy fallback appears for both current and saved drafts,
+  and the saved-draft failure message is now specific to that action.
 
 These are user-perspective tasks rather than refactors. They should run in
 a fresh session with the explicit role of "user trying to do work" rather
@@ -208,6 +209,9 @@ Immediate follow-up from the reuse audit:
 - `corepack pnpm e2e:browser` forces clipboard writes to fail for both
   `Copy draft` and `Copy saved draft`, and verifies the manual-copy fallback
   without requiring real clipboard permissions.
+- The Codex in-app Browser pass now verifies the same fallback against the real
+  clipboard bridge failure mode and keeps fake token/path content out of the
+  visible archive, detail, and fallback states.
 - Keep auto-submit out of scope; copy/fallback must remain local and
   approval-gated.
 

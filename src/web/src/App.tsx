@@ -83,6 +83,7 @@ import {
   ScoreDistributionChart,
 } from "./charts.js";
 import { copyTextToClipboard } from "./clipboard.js";
+import { copyFailureMessage } from "./copy-fallback-messages.js";
 import {
   daysAgoDateInput,
   formatDate,
@@ -566,7 +567,7 @@ export function App() {
       title: "Manual copy needed",
       text: improvement.improved_prompt,
     });
-    setError("Could not copy the improvement draft.");
+    setError(copyFailureMessage("improvement"));
   }
 
   async function copySavedImprovementDraft(
@@ -580,7 +581,7 @@ export function App() {
         title: "Manual copy needed",
         text: draft.draft_text,
       });
-      setError("Could not copy the improvement draft.");
+      setError(copyFailureMessage("saved-draft"));
       return;
     }
 

@@ -24,7 +24,7 @@ Verified repository state:
 - Runtime compatibility IDs: package, CLI, hook command, Claude Code slash
   namespace, and canonical MCP server remain `prompt-coach`
 - Latest merged main commit at audit time:
-  `11a7810 docs: align readme package gate with lifecycle (#363)`
+  `82eaa92 fix: guard loop read storage capabilities (#364)`
 - Open PRs at audit time: none
 - Local and remote `main` matched at audit time
 
@@ -72,6 +72,10 @@ Verified CI and operational evidence:
 - PR #363 aligned README contributor verification gates with the same
   `corepack pnpm pack:dry-run` wrapper and added packaging regression coverage
   to keep README package checks aligned with the lifecycle wrapper.
+- PR #364 moved loop read routes onto the shared storage capability guard, so
+  missing loop snapshot, compact boundary, memory, or merge-decision storage
+  fails with one raw-free local configuration problem instead of an empty
+  Loopdeck status.
 - `ui-patrol` workflow_dispatch run `28717201110` failed before #341 because
   the GitHub runner did not have Chromium installed.
 - `ui-patrol` workflow_dispatch run `28717406758` succeeded after #341.
@@ -86,6 +90,10 @@ Verified CI and operational evidence:
 - `corepack pnpm e2e:browser` on `codex/reuse-copy-fallback-e2e-coverage`
   now forces clipboard writes to fail separately for `Copy draft` and
   `Copy saved draft`, verifying both manual-copy fallback paths.
+- A fresh Codex in-app Browser reuse pass confirmed the real clipboard bridge
+  still rejects `Copy draft` and `Copy saved draft`, both actions open the
+  local manual-copy fallback, and the saved-draft failure path now uses a
+  saved-draft-specific error message.
 
 ## Requirement Audit
 
@@ -97,9 +105,9 @@ Verified CI and operational evidence:
 | Loop data model | Loop snapshot and memory schema contracts exist and runtime slices have landed. | `docs/LOOP-SNAPSHOT-SCHEMA.md`, loop CLI/MCP/web implementation, status and selected worktree slices | Satisfied for MVP loop metadata model |
 | Privacy/local-first boundary | Prompt bodies stay in redacted archive; loop surfaces are raw-free; write paths are explicit. | `docs/LOOPDECK.md`, storage/server/MCP tests, route capability guard cleanup, MCP smoke audits | Satisfied for implemented paths |
 | AGENTS.md/CLAUDE.md/harness docs | Cross-agent and Claude-specific instruction boundaries are separated. | `AGENTS.md`, `CLAUDE.md`, `docs/INSTRUCTION-FILES.md`, `docs/AGENT-HARNESS.md` | Satisfied for current compatibility window |
-| Technical risk handling | Storage capability guard work, CI UI patrol evidence, dependency security cleanup, pnpm build-approval settings, package dry-run lifecycle stabilization, release/README checklist drift guards, Codex hook de-duplication, and reuse fallback E2E coverage reduced known reliability gaps. | ADR 0002, PR #340, PR #341, PR #345, PR #346, PR #357, PR #359, PR #361, PR #362, PR #363, `docs/NEXT_BACKLOG.md` | Active and improving |
+| Technical risk handling | Storage capability guard work, CI UI patrol evidence, dependency security cleanup, pnpm build-approval settings, package dry-run lifecycle stabilization, release/README checklist drift guards, Codex hook de-duplication, and reuse fallback E2E plus in-app Browser coverage reduced known reliability gaps. | ADR 0002, PR #340, PR #341, PR #345, PR #346, PR #357, PR #359, PR #361, PR #362, PR #363, PR #364, `docs/NEXT_BACKLOG.md` | Active and improving |
 | TDD implementation slices | Recent slices used focused RED tests, local gates, PR CI, and squash merges. | PR #340 through #359 tests/CI; `tasks/todo.md` | Satisfied for recent slices |
-| Reuse copy fallback | Clipboard-write failure now opens a local manual-copy fallback instead of leaving the user at a dead end. | `src/web/src/App.tsx`, `src/web/src/prompt-detail-view.test.ts`, `scripts/browser-e2e.mjs`, `corepack pnpm e2e:browser` | Satisfied for automated coverage; fresh in-app Browser UX pass remains useful |
+| Reuse copy fallback | Clipboard-write failure now opens a local manual-copy fallback instead of leaving the user at a dead end, including the real Codex in-app Browser clipboard failure mode. | `src/web/src/App.tsx`, `src/web/src/prompt-detail-view.test.ts`, `scripts/browser-e2e.mjs`, `corepack pnpm e2e:browser`, fresh Codex in-app Browser pass | Satisfied for automated and manual in-app Browser coverage |
 | UI patrol scheduled artifact | Manual workflow dispatch is verified; first scheduled cron artifact has not occurred yet. | Run `28717406758`; `.github/workflows/ui-patrol.yml` cron | Not yet complete as a scheduled-run requirement |
 | Codex native dialog fallback | Safe no-dialog preflight, MCP elicitation smoke, and approval-gated harness refusal are verified; real OS/native ask UI dogfood is not run. | `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md`, `scripts/mcp-native-dialog-approved.mjs`, `package.json` | Pending explicit operator approval for the answered dialog run |
 | MCP registry follow-up | Decision is documented to wait until a new MCP tool/schema change touches registration. | ADR 0001, `docs/NEXT_BACKLOG.md` | Deferred by design |
