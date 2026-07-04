@@ -111,6 +111,7 @@ import {
   type View,
   type WorkspaceSection,
 } from "./routing.js";
+import { useSelectedPromptQuery } from "./selected-prompt-query.js";
 
 const LIVE_MEASUREMENT_REFRESH_MS = 12_000;
 export function App() {
@@ -126,7 +127,6 @@ export function App() {
   );
   const [prompts, setPrompts] = useState<PromptSummary[]>([]);
   const [nextCursor, setNextCursor] = useState<string | undefined>();
-  const [selected, setSelected] = useState<PromptDetail | undefined>();
   const [health, setHealth] = useState<
     { ok: boolean; version: string } | undefined
   >();
@@ -182,6 +182,11 @@ export function App() {
       }
     | undefined
   >();
+  const { selected, setSelected } = useSelectedPromptQuery({
+    loadPrompt: getPrompt,
+    onError: setError,
+    view,
+  });
 
   useEffect(() => {
     persistLanguage(language);
@@ -308,17 +313,6 @@ export function App() {
       session: view.session,
     });
   }, [loopWorktree?.worktree, view]);
-
-  useEffect(() => {
-    if (view.name !== "detail") {
-      setSelected(undefined);
-      return;
-    }
-
-    void getPrompt(view.id)
-      .then(setSelected)
-      .catch(() => setError("Could not find the prompt."));
-  }, [view]);
 
   const visibleTitle = useMemo(() => {
     if (view.name === "settings") return "Settings";

@@ -167,11 +167,15 @@ Scope:
 
 ### 5. `App.tsx` Query-Hook Extraction
 
-Held during the Track A grilling because the value is technical-debt
-reduction rather than feature gain. Worth scheduling once the user-flow
-audits surface a concrete "this UI behavior was hard to add because of
-App.tsx" signal. Until that lands, the file size budget and existing
-component split keep it manageable.
+First slice landed after the reuse-flow audits showed prompt detail copy and
+save state still had to be threaded through `App.tsx`: selected prompt detail
+loading is now isolated behind a focused query hook.
+
+Remaining scope:
+
+- Continue extracting only when a user-flow change touches the relevant state
+  boundary.
+- Favor small hooks with focused tests over a broad `App.tsx` rewrite.
 
 ### 6. UI Patrol Cron
 
