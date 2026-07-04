@@ -6,6 +6,7 @@ import {
   Copy,
   FileText,
   GitCompare,
+  RefreshCw,
   Star,
   Tags,
   ThumbsDown,
@@ -35,6 +36,7 @@ import { JudgeScorePanel } from "./judge-score-panel.js";
 import { SafeMarkdown } from "./markdown.js";
 import { PromptAgentActionsPanel } from "./prompt-agent-actions.js";
 import { isQualityGapKey, qualityGapLabel } from "./quality-options.js";
+import { improvementFromSavedDraft } from "./saved-draft-improvement.js";
 import "./prompt-detail-view.css";
 
 export function PromptDetailView({
@@ -82,9 +84,16 @@ export function PromptDetailView({
   const [answersByAxis, setAnswersByAxis] = useState<
     Partial<Record<PromptQualityCriterion, string>>
   >({});
+  const [reopenedDraftId, setReopenedDraftId] = useState<string | undefined>();
 
   const improvement = useMemo<PromptImprovement | undefined>(() => {
     if (!prompt) return undefined;
+    const reopenedDraft = prompt.improvement_drafts.find(
+      (draft) => draft.id === reopenedDraftId,
+    );
+    if (reopenedDraft) {
+      return improvementFromSavedDraft(reopenedDraft);
+    }
     const answers = Object.entries(answersByAxis)
       .filter(
         ([, value]) => typeof value === "string" && value.trim().length > 0,
@@ -105,7 +114,11 @@ export function PromptDetailView({
     // Tag the improvement so saved-draft pills surface "From your answers"
     // and the local archive can distinguish user-driven drafts from auto rewrites.
     return { ...composed, analyzer: "clarifications-v1" as const };
-  }, [prompt, language, answersByAxis]);
+  }, [prompt, language, answersByAxis, reopenedDraftId]);
+
+  useEffect(() => {
+    setReopenedDraftId(undefined);
+  }, [prompt?.id]);
 
   if (!prompt || !improvement) {
     return <div className="panel empty">Loading prompt details.</div>;
@@ -157,13 +170,18 @@ export function PromptDetailView({
           answersByAxis={answersByAxis}
           copied={copiedImprovement}
           improvement={improvement}
-          onAnswerChange={(axis, value) =>
-            setAnswersByAxis((current) => ({ ...current, [axis]: value }))
-          }
+          onAnswerChange={(axis, value) => {
+            setReopenedDraftId(undefined);
+            setAnswersByAxis((current) => ({ ...current, [axis]: value }));
+          }}
           onCopy={() => onCopyImprovement(prompt, improvement)}
           onCopySavedDraft={(draft) => onCopySavedDraft(prompt, draft)}
           onCloseManualCopyFallback={onCloseManualCopyFallback}
           onSave={() => onSaveImprovement(prompt, improvement)}
+          onUseSavedDraft={(draft) => {
+            setAnswersByAxis({});
+            setReopenedDraftId(draft.id);
+          }}
           manualCopyFallback={manualCopyFallback}
           originalPrompt={prompt.markdown}
           promptId={prompt.id}
@@ -236,6 +254,7 @@ function PromptCoachPanel({
   onCopy,
   onCopySavedDraft,
   onSave,
+  onUseSavedDraft,
   originalPrompt,
   promptId,
   saved,
@@ -250,6 +269,7 @@ function PromptCoachPanel({
   onCopy(): void;
   onCopySavedDraft(draft: PromptImprovementDraft): void;
   onSave(): void;
+  onUseSavedDraft(draft: PromptImprovementDraft): void;
   originalPrompt: string;
   promptId: string;
   saved: boolean;
@@ -412,13 +432,22 @@ function PromptCoachPanel({
                 </p>
               </div>
               <pre className="saved-draft-preview">{draft.draft_text}</pre>
-              <button
-                className="saved-draft-copy-button"
-                onClick={() => onCopySavedDraft(draft)}
-                type="button"
-              >
-                <Copy size={14} /> {copied ? "Copied" : "Copy saved draft"}
-              </button>
+              <div className="saved-draft-actions">
+                <button
+                  className="saved-draft-use-button"
+                  onClick={() => onUseSavedDraft(draft)}
+                  type="button"
+                >
+                  <RefreshCw size={14} /> Use as current draft
+                </button>
+                <button
+                  className="saved-draft-copy-button"
+                  onClick={() => onCopySavedDraft(draft)}
+                  type="button"
+                >
+                  <Copy size={14} /> {copied ? "Copied" : "Copy saved draft"}
+                </button>
+              </div>
             </article>
           ))}
         </div>

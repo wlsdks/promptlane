@@ -125,15 +125,16 @@ Follow-up manual pass:
 - The page did not expose the fake API token or temporary local path in the
   archive, detail, or fallback state checked during the pass.
 
-### P2 - Search and saved-draft reuse are usable but not yet a full fork flow
+### P2 - Saved drafts can be reopened as the current draft
 
 What worked: search found the reusable prompt, detail showed the improved
 draft, and `Save draft` persisted it locally.
 
-What is missing: there is no explicit "fork into draft" action. The current
-mental model is "copy or save the current improved draft." That is acceptable
-for the MVP, but a future Loopdeck-oriented reuse workflow could make
-fork/edit/resubmit more explicit.
+Follow-up implementation: saved draft rows now expose `Use as current draft`.
+This reopens the saved redacted draft text in the current coach draft panel,
+so the operator can reuse the existing copy, save, feedback, and manual-copy
+fallback controls without auto-submitting the prompt or adding a new storage
+write path.
 
 ## Decisions
 
@@ -145,5 +146,5 @@ fork/edit/resubmit more explicit.
 
 ## Recommended Next Slices
 
-1. Consider a later explicit "fork into draft" flow only if user-flow evidence
-   shows that copy/save is not enough for repeated reuse.
+1. Re-run the reuse flow in a real browser after this slice is merged to
+   confirm the reopened current draft behaves correctly with clipboard fallback.

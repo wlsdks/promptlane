@@ -217,10 +217,33 @@ try {
   // through Save into the persisted draft (and pill it as "From your answers").
   const clarifyInput = page.locator(".clarifying-question-input").first();
   if ((await clarifyInput.count()) > 0) {
-    await clarifyInput.fill("Run pnpm test and confirm 0 failures end-to-end.");
+    const savedClarification =
+      "Run pnpm test and confirm 0 failures end-to-end.";
+    const unsavedClarification = "Run only the browser regression path.";
+    await clarifyInput.fill(savedClarification);
     await page.getByRole("button", { name: "Save draft" }).click();
     await page.getByRole("button", { name: "Saved" }).waitFor();
     await page.locator(".saved-draft-source-clarifications").first().waitFor();
+    await clarifyInput.fill(unsavedClarification);
+    await assertText(
+      page,
+      unsavedClarification,
+      "Detail should update the current draft while editing clarification answers.",
+    );
+    await page
+      .getByRole("button", { name: "Use as current draft" })
+      .first()
+      .click();
+    await assertText(
+      page,
+      savedClarification,
+      "Detail should reopen a saved draft as the current improvement draft.",
+    );
+    await assertNotText(
+      page,
+      unsavedClarification,
+      "Reopening a saved draft should replace the unsaved generated draft.",
+    );
   }
 
   await page.getByRole("button", { name: "Dashboard" }).click();

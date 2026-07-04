@@ -187,7 +187,9 @@ investing in more refactors:
   manual-copy fallback for current and saved improvement drafts. A fresh Codex
   in-app Browser pass confirmed the real clipboard bridge still rejects copy
   writes, the manual-copy fallback appears for both current and saved drafts,
-  and the saved-draft failure message is now specific to that action.
+  and the saved-draft failure message is now specific to that action. The
+  current reuse slice adds a `Use as current draft` action so saved drafts can
+  be reopened in the active coach panel without automatic resubmission.
 
 These are user-perspective tasks rather than refactors. They should run in
 a fresh session with the explicit role of "user trying to do work" rather

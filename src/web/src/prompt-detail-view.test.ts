@@ -30,6 +30,7 @@ describe("PromptDetailView", () => {
 
     expect(html).toContain("Saved drafts");
     expect(html).toContain("현재 HTML 파일을 브라우저에서 열어");
+    expect(html).toContain("Use as current draft");
     expect(html).toContain("Copy saved draft");
   });
 

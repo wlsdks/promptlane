@@ -58,7 +58,7 @@
 - [x] RED: README/README.ko 개발 gate가 package dry-run wrapper 대신 bare `pnpm pack:dry-run`을 안내하면 packaging test가 실패하도록 고정했다.
 - [x] GREEN: README/README.ko 개발 gate를 `corepack pnpm` 기준과 `docs/PACKAGE_CONTENTS.md` wrapper contract에 맞춘다.
 - [x] VERIFY: focused packaging test와 full gates를 통과했다.
-- [ ] INTEGRATE: PR merge와 branch prune까지 확인한다.
+- [x] INTEGRATE: PR #363이 `main`에 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 
@@ -3522,4 +3522,11 @@
 - [x] RED: Add a focused copy-failure message test requiring saved-draft copy failure to use `Could not copy the saved draft.`
 - [x] GREEN: `copySavedImprovementDraft` now uses the saved-draft-specific helper message while preserving the same local manual-copy fallback textarea.
 - [x] VERIFY: Run focused tests and full local gates.
-- [ ] INTEGRATE: Push a coherent PR, merge it after CI, and prune the branch.
+- [x] INTEGRATE: PR #365 was merged to `main`; branch was pruned.
+
+## 2026-07-05 Reuse Saved Draft As Current Draft
+
+- [x] RED: Add focused tests requiring saved drafts to reopen as the current improvement draft and expose a visible `Use as current draft` action.
+- [x] GREEN: Saved draft rows can now reopen their redacted draft text as the current coach draft without adding a new storage API or auto-submission path.
+- [x] VERIFY: Focused tests, full test/lint/build, browser E2E, pack dry-run, and diff check passed.
+- [ ] INTEGRATE: Push one coherent PR, merge it after CI, and prune the branch.

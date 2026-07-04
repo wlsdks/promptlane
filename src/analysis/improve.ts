@@ -26,7 +26,7 @@ export type ClarifyingQuestion = {
 };
 
 export type PromptImprovement = {
-  mode: "copy";
+  mode: "copy" | "saved-draft";
   requires_user_approval: true;
   summary: string;
   improved_prompt: string;
