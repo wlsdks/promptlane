@@ -50,6 +50,6 @@ describe("source hygiene", () => {
       loopsView.match(/<div className="loop-review-item">/g) ?? []
     ).length;
 
-    expect(rawReviewItemCount).toBeLessThanOrEqual(58);
+    expect(rawReviewItemCount).toBeLessThanOrEqual(55);
   });
 });
