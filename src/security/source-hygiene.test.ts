@@ -102,4 +102,15 @@ describe("source hygiene", () => {
       "continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_collection_freshness_uncertainty_collection_reminder",
     );
   });
+
+  it("keeps post-submit collection result and uncertainty detail formatting outside LoopsView", () => {
+    const loopsView = readFileSync("src/web/src/loops-view.tsx", "utf8");
+
+    expect(loopsView).not.toContain(
+      "continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_collection_result_non_persistence_note",
+    );
+    expect(loopsView).not.toContain(
+      "continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_collection_uncertainty_reminder",
+    );
+  });
 });
