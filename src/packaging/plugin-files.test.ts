@@ -443,6 +443,27 @@ describe("plugin packaging files", () => {
     expect(docs).not.toContain("local prompt-coach web server");
   });
 
+  it("keeps the Loopdeck goal audit aligned with merged saved-draft reuse slices", () => {
+    const audit = readFileSync(
+      join(process.cwd(), "docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md"),
+      "utf8",
+    );
+    const backlog = readFileSync(
+      join(process.cwd(), "docs/NEXT_BACKLOG.md"),
+      "utf8",
+    );
+
+    for (const expected of ["PR #366", "PR #367", "PR #368"]) {
+      expect(audit).toContain(expected);
+      expect(backlog).toContain(expected);
+    }
+    expect(audit).toContain("Already saved");
+    expect(audit).toContain("Saved draft");
+    expect(audit).not.toContain("The current reuse slice adds");
+    expect(audit).not.toContain("| Active slice |");
+    expect(backlog).not.toContain("current reuse slice adds");
+  });
+
   it("documents /loopdeck:* as a future alias-only slash namespace without shipping command files yet", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
