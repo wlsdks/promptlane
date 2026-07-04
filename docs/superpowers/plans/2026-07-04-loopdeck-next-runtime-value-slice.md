@@ -356,14 +356,18 @@ Implementation checkpoint:
   collection retry boundary note, explaining that the operator reruns the
   explicit post-approval loop collection flow when retry is needed, without
   Loopdeck automatically retrying commands or hidden recovery actions.
+- Selected worktree detail now includes a raw-free post-memory-approval retry
+  outcome non-persistence note, explaining that post-approval retry outcome
+  state stays outside Loopdeck until the next explicit loop snapshot, without
+  Loopdeck detecting, storing, or syncing retry success or failure state.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free post-memory-approval retry outcome non-persistence note, without
+  raw-free post-memory-approval retry evidence freshness boundary note, without
   adding transcript content, prompt bodies, raw paths, target contents,
   active-window titles, pasted content, paste result state, submitted state,
   agent response content, collection result state, post-approval collection
-  result state, retry result state, post-approval retry result state, freshness
-  result state, approval result state, freshness verification, automatic
-  collection, collection command execution, retry automation, git status reads,
-  command execution, persisted review state, checklist completion state, memory
-  approval writes, memory approval state, merge writes, merge decision state, or
-  external calls.
+  result state, retry result state, post-approval retry result state, retry
+  outcome state, freshness result state, approval result state, freshness
+  verification, automatic collection, collection command execution, retry
+  automation, git status reads, command execution, persisted review state,
+  checklist completion state, memory approval writes, memory approval state,
+  merge writes, merge decision state, or external calls.
