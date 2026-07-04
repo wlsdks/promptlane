@@ -59,7 +59,9 @@
 - [x] RED: UI selected action이 안내하는 `score_prompt include_suggestions=true`가 MCP schema에 없어 strict client에서 깨질 수 있음을 server test로 재현
 - [x] GREEN: `score_prompt` MCP input schema에 `include_suggestions`를 추가해 UI action command와 tool schema를 일치시킴
 - [x] Dogfood: MCP stdio로 selected prompt `score_prompt prompt_id=... include_suggestions=true`와 `improve_prompt prompt_id=...` 호출 성공 확인
-- [ ] 다음 dogfood slice: 실제 Codex/Claude Code 안에서 MCP action command를 호출해 native tool routing과 ask-first UX 확인
+- [x] Dogfood: 새 `codex exec` 세션에서 native `prompt-coach` MCP `score_prompt`/`improve_prompt` tool call 완료 확인
+- [x] Dogfood: native `improve_prompt` 결과가 `clarifying_questions`와 ask-first `next_action`을 반환하고 자동 제출하지 않음 확인
+- [ ] 다음 dogfood slice: Claude Code native MCP routing 또는 Codex native ask UI까지 이어지는 clarification answer/apply flow 확인
 
 ### 판단 기준
 
@@ -69,6 +71,7 @@
 - Codex/Claude Code MCP는 낡은 `prompt-memory` command가 아니라 `prompt-coach` 이름과 현재 dist entrypoint로 연결되어야 한다.
 - Archive, UI, MCP 검증은 prompt body/raw path를 외부로 보내지 않고 local-only 경로에서 수행한다.
 - Selected prompt MCP action은 UI에 표시되는 command, MCP tool schema, 실제 tool-call 동작이 서로 일치해야 한다.
+- Native tool routing 검증은 현재 실행 중인 thread tool exposure가 아니라 새 agent session에서 실제 `mcp_tool_call` 이벤트가 발생했는지로 판단한다.
 
 ## 2026-07-04 Loop Snapshot Domain Slice
 
