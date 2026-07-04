@@ -772,6 +772,37 @@ describe("plugin packaging files", () => {
     expect(command).not.toMatch(/PROMPT_COACH_TOKEN|Bearer|token=/i);
   });
 
+  it("maps bundled Codex plugin hook events to the correct prompt-coach lifecycle markers", () => {
+    const hooks = readJson<{
+      hooks: Record<
+        "UserPromptSubmit" | "Stop" | "PreCompact" | "PostCompact",
+        Array<{
+          hooks: Array<{ type: string; command: string; timeout: number }>;
+        }>
+      >;
+    }>("plugins/prompt-coach/hooks.json");
+
+    const commandFor = (
+      event: "UserPromptSubmit" | "Stop" | "PreCompact" | "PostCompact",
+    ): string => hooks.hooks[event][0]?.hooks[0]?.command ?? "";
+
+    expect(commandFor("UserPromptSubmit")).toContain(
+      'PROMPT_COACH_HOOK="prompt-coach hook codex"',
+    );
+    expect(commandFor("Stop")).toContain(
+      'PROMPT_COACH_HOOK="prompt-coach hook stop codex"',
+    );
+    expect(commandFor("PreCompact")).toContain(
+      'PROMPT_COACH_HOOK="prompt-coach hook pre-compact codex"',
+    );
+    expect(commandFor("PostCompact")).toContain(
+      'PROMPT_COACH_HOOK="prompt-coach hook post-compact codex"',
+    );
+    expect(commandFor("UserPromptSubmit")).not.toContain("hook stop codex");
+    expect(commandFor("Stop")).not.toContain("hook pre-compact codex");
+    expect(commandFor("PreCompact")).not.toContain("hook post-compact codex");
+  });
+
   it("ships a hook binary compatibility smoke for prompt-coach and loopdeck entrypoints", () => {
     const packageJson = readJson<{
       bin: Record<string, string>;
