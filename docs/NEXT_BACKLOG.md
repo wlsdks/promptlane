@@ -64,6 +64,9 @@ Current goal audit:
   lifecycle builds through `corepack pnpm`, adding a warning-free
   `pack:dry-run` wrapper, and keeping publishing/package docs aligned with
   `npm pack --ignore-scripts` inspection.
+- PR #362 aligned the public release checklist with the same package lifecycle
+  contract and added a packaging guard so shipped scripts and dry-run commands
+  cannot drift quietly.
 
 Decision:
 
@@ -94,6 +97,9 @@ Rationale:
 - Release checklists should follow the same package lifecycle contract as
   `docs/NPM_PUBLISHING.md` and `docs/PACKAGE_CONTENTS.md`; avoid allowing
   public beta gates to drift back to PATH-dependent bare `pnpm` commands.
+- README contributor gates should follow the same rule: use `corepack pnpm`
+  for release/build/package verification, while preserving `prompt-coach`
+  as the compatibility runtime in user-facing command examples.
 
 ## Prioritized Queue
 

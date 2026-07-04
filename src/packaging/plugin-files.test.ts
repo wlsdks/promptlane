@@ -114,6 +114,16 @@ describe("plugin packaging files", () => {
     expect(releaseChecklist).not.toContain("Confirm `pnpm pack:dry-run`");
   });
 
+  it("keeps README verification gates aligned with the package dry-run wrapper", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+
+    for (const content of [readme, readmeKo]) {
+      expect(content).toContain("corepack pnpm pack:dry-run");
+      expect(content).not.toContain("\npnpm pack:dry-run\n");
+    }
+  });
+
   it("brands product-facing package and plugin metadata as Loopdeck while preserving prompt-coach command ids", () => {
     const packageJson = readJson<{
       name: string;

@@ -742,14 +742,15 @@ rm -rf ~/.prompt-coach
 전체 로컬 gate:
 
 ```sh
-pnpm format
-pnpm test
-pnpm lint
-pnpm build
-pnpm pack:dry-run
+corepack pnpm format
+corepack pnpm test
+corepack pnpm lint
+corepack pnpm build
+corepack pnpm pack:dry-run
 ```
 
-dry-run package에는 built CLI, built web assets, README, release documentation이 포함되어야 합니다.
+dry-run package는 `docs/PACKAGE_CONTENTS.md`에 기록된 local wrapper를 사용합니다.
+package에는 built CLI, built web assets, README, release documentation이 포함되어야 합니다.
 
 publish 전 [Package contents](docs/PACKAGE_CONTENTS.md)와 [Pre-publish privacy audit](docs/PRE_PUBLISH_PRIVACY_AUDIT.md)를 확인하세요.
 

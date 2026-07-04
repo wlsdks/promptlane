@@ -46,12 +46,24 @@
 - [x] RED: release checklist가 package lifecycle command와 shipped script allowlist에서 드리프트 나면 packaging test가 실패하도록 고정했다.
 - [x] GREEN: `docs/RELEASE_CHECKLIST.md`를 `corepack pnpm` gate, wrapper contract, 전체 shipped verification scripts 목록에 맞춘다.
 - [x] VERIFY: focused packaging test와 full gates를 통과했다.
-- [ ] INTEGRATE: PR merge와 branch prune까지 확인한다.
+- [x] INTEGRATE: PR merge와 branch prune까지 확인했다.
 
 ### 판단 기준
 
 - public beta checklist는 `docs/NPM_PUBLISHING.md`, `docs/PACKAGE_CONTENTS.md`, `package.json#files`, `package.json#scripts`와 같은 release contract를 공유한다.
 - 새 checklist/audit 상태 갱신은 독립 문서 PR로 쪼개지 않고 package lifecycle drift test와 함께 묶는다.
+
+## 2026-07-05 README Package Lifecycle Gate
+
+- [x] RED: README/README.ko 개발 gate가 package dry-run wrapper 대신 bare `pnpm pack:dry-run`을 안내하면 packaging test가 실패하도록 고정했다.
+- [x] GREEN: README/README.ko 개발 gate를 `corepack pnpm` 기준과 `docs/PACKAGE_CONTENTS.md` wrapper contract에 맞춘다.
+- [x] VERIFY: focused packaging test와 full gates를 통과했다.
+- [ ] INTEGRATE: PR merge와 branch prune까지 확인한다.
+
+### 판단 기준
+
+- README의 contributor-facing local gate는 release checklist와 package contents 문서의 package lifecycle contract를 따라야 한다.
+- 사용자 설치 명령, compatibility runtime id, plugin/slash/MCP command 예시는 `prompt-coach`를 유지한다.
 
 ## 2026-07-05 Loopdeck MCP Storage Setup Copy
 

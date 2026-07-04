@@ -1031,14 +1031,16 @@ Use your configured `--data-dir` path if you initialized prompt-coach somewhere 
 Run the full local gate:
 
 ```sh
-pnpm format
-pnpm test
-pnpm lint
-pnpm build
-pnpm pack:dry-run
+corepack pnpm format
+corepack pnpm test
+corepack pnpm lint
+corepack pnpm build
+corepack pnpm pack:dry-run
 ```
 
-The dry-run package should include built CLI files, built web assets, README, and release documentation.
+The dry-run package uses the local wrapper documented in
+`docs/PACKAGE_CONTENTS.md`; it should include built CLI files, built web
+assets, README, and release documentation.
 
 See [Package contents](docs/PACKAGE_CONTENTS.md) before publishing to confirm
 which files ship to npm, and [Pre-publish privacy audit](docs/PRE_PUBLISH_PRIVACY_AUDIT.md)
