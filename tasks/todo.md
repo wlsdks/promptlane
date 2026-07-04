@@ -902,7 +902,7 @@
 - [x] Task 169 RED: renewed-memory-approval helper에 `renderReviewItem`이 없고 long field access count가 높아 source hygiene test 실패 확인
 - [x] Task 169 GREEN: private `renderReviewItem`으로 17개 review item 렌더링을 통합하고 helper를 117줄로 축소
 - [x] Task 169 PRIVACY: UI rendering helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
-- [ ] 다음 slice: 다른 `LoopsView` safety cluster를 같은 기준으로 helper 분리할지 결정
+- [x] 다음 slice: 다른 `LoopsView` safety cluster를 같은 기준으로 helper 분리할지 결정
 
 ### 판단 기준
 
