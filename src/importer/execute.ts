@@ -24,6 +24,7 @@ export type ImportExecuteOptions = {
   redactionMode: RedactionPolicy;
   defaultCwd: string;
   resumeJobId?: string;
+  maxPromptLength?: number;
   now?: () => Date;
 };
 
@@ -110,6 +111,7 @@ export async function executeImport(
       const event = toImportedPromptEvent(candidate, options, job);
       const ingest = await ingestPrompt(storage, event, {
         redactionMode: options.redactionMode,
+        maxPromptLength: options.maxPromptLength,
       });
 
       if (!ingest.stored) {
@@ -154,10 +156,15 @@ export async function executeImport(
 }
 
 function importSkipCode(
-  reason: "project_policy" | "policy_lookup_failed" | "redaction_rejected",
+  reason:
+    | "project_policy"
+    | "policy_lookup_failed"
+    | "redaction_rejected"
+    | "prompt_too_large",
 ): string {
   if (reason === "project_policy") return "project_capture_disabled";
   if (reason === "policy_lookup_failed") return "policy_lookup_failed";
+  if (reason === "prompt_too_large") return "prompt_too_large";
   return "redaction_rejected";
 }
 

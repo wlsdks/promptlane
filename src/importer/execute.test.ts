@@ -118,4 +118,28 @@ describe("executeImport reject mode", () => {
 
     expect(storage.storePrompt).toHaveBeenCalledTimes(1);
   });
+
+  it("skips prompts over the shared ingest length limit before storage", async () => {
+    const file = writeManualJsonl([
+      "short prompt",
+      "this imported prompt is too long for the configured ingest limit",
+    ]);
+
+    const result = await executeImport(storage, {
+      file,
+      sourceType: "manual-jsonl",
+      redactionMode: "mask",
+      defaultCwd: "/Users/me/proj",
+      maxPromptLength: 20,
+    });
+
+    expect(result.imported_count).toBe(1);
+    expect(result.skipped_count).toBe(1);
+    expect(result.error_count).toBe(0);
+
+    const skipped = storage.__records.find((r) => r.status === "skipped");
+    expect(skipped?.error_code).toBe("prompt_too_large");
+
+    expect(storage.storePrompt).toHaveBeenCalledTimes(1);
+  });
 });

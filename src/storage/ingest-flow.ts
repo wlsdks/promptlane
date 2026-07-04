@@ -10,6 +10,7 @@ export type IngestPromptStorage = PromptStoragePort &
 
 export type IngestPromptOptions = {
   redactionMode: RedactionPolicy;
+  maxPromptLength?: number;
 };
 
 export type IngestPromptResult =
@@ -21,7 +22,11 @@ export type IngestPromptResult =
     }
   | {
       stored: false;
-      reason: "project_policy" | "policy_lookup_failed" | "redaction_rejected";
+      reason:
+        | "project_policy"
+        | "policy_lookup_failed"
+        | "redaction_rejected"
+        | "prompt_too_large";
     };
 
 export async function ingestPrompt(
@@ -35,6 +40,12 @@ export async function ingestPrompt(
   }
   if (policy?.capture_disabled) {
     return { stored: false, reason: "project_policy" };
+  }
+  if (
+    options.maxPromptLength !== undefined &&
+    event.prompt.length > options.maxPromptLength
+  ) {
+    return { stored: false, reason: "prompt_too_large" };
   }
 
   const redaction = redactPrompt(event.prompt, options.redactionMode);

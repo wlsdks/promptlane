@@ -144,6 +144,7 @@ async function importExecuteForCli(options: ImportCliOptions): Promise<string> {
       executeImport(storage, {
         defaultCwd: process.cwd(),
         file: options.file!,
+        maxPromptLength: 100_000,
         redactionMode: config.redaction_mode,
         resumeJobId: options.resume,
         sourceType,

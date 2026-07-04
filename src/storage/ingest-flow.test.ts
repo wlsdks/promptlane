@@ -95,6 +95,18 @@ describe("ingestPrompt", () => {
     expect(storage.storePrompt).not.toHaveBeenCalled();
   });
 
+  it("returns reason=prompt_too_large before redaction or storage", async () => {
+    const storage = buildStorage();
+    const result = await ingestPrompt(
+      storage,
+      buildEvent({ prompt: "this prompt is too long" }),
+      { redactionMode: "mask", maxPromptLength: 10 },
+    );
+
+    expect(result).toEqual({ stored: false, reason: "prompt_too_large" });
+    expect(storage.storePrompt).not.toHaveBeenCalled();
+  });
+
   it("still stores sensitive prompts when redactionMode is mask", async () => {
     const storage = buildStorage();
     const sensitive = "AKIA0123456789ABCDEF and password=secret123";

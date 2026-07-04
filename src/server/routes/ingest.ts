@@ -114,16 +114,6 @@ async function handlePromptIngest(
     );
   }
 
-  if (event.prompt.length > options.maxPromptLength) {
-    throw problem(
-      413,
-      "Payload Too Large",
-      "Prompt length limit exceeded.",
-      instance,
-      [{ field: "prompt", message: "too_large" }],
-    );
-  }
-
   if (isExcluded(event.cwd, options.excludedProjectRoots)) {
     return {
       data: {
@@ -136,9 +126,19 @@ async function handlePromptIngest(
 
   const result = await ingestPrompt(options.storage, event, {
     redactionMode: options.redactionMode,
+    maxPromptLength: options.maxPromptLength,
   });
 
   if (!result.stored) {
+    if (result.reason === "prompt_too_large") {
+      throw problem(
+        413,
+        "Payload Too Large",
+        "Prompt length limit exceeded.",
+        instance,
+        [{ field: "prompt", message: "too_large" }],
+      );
+    }
     if (result.reason === "policy_lookup_failed") {
       return {
         data: {

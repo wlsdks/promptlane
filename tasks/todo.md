@@ -3264,10 +3264,10 @@
 
 ### Track A2 — Ingest pipeline 순수 함수 추출 (PR 후보)
 
-- [ ] 실패 테스트: importer 경로에서도 max prompt length 초과 시 store 차단.
-- [ ] `src/storage/ingest-flow.ts` — `ingestPrompt(event, options) → result` 순수 함수 추출.
-- [ ] `server/routes/ingest.ts` + `importer/execute.ts` 모두 동일 함수 호출.
-- [ ] 회귀 테스트, 검증 게이트, 별도 브랜치 + PR.
+- [x] 실패 테스트: importer 경로에서도 max prompt length 초과 시 store 차단.
+- [x] `src/storage/ingest-flow.ts` — `ingestPrompt(event, options) → result` 순수 함수 추출.
+- [x] `server/routes/ingest.ts` + `importer/execute.ts` 모두 동일 함수 호출.
+- [x] 회귀 테스트, 검증 게이트, 별도 브랜치 + PR.
 
 ### Track A3 — Coaching decision 모듈 (PR 후보)
 
