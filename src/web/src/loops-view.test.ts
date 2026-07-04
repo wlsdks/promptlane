@@ -205,6 +205,17 @@ describe("LoopsView", () => {
       "keeps retry control with the operator before any Codex or Claude Code paste",
     );
     expect(html).toContain("No copy retry writes or external calls");
+    expect(html).toContain("Pre-paste confirmation");
+    expect(html).toContain(
+      "operator confirms the copied brief and target agent request before paste",
+    );
+    expect(html).toContain(
+      "confirmation does not submit prompts or approve safety review",
+    );
+    expect(html).toContain(
+      "keeps the final handoff check manual before Codex or Claude Code receives the brief",
+    );
+    expect(html).toContain("No pre-paste confirmation writes or external calls");
     expect(html).toContain("Paste destination");
     expect(html).toContain("Codex active request");
     expect(html).toContain("Claude Code active request");
@@ -672,6 +683,17 @@ function loopWorktree(): LoopWorktreeResponse {
         "Loopdeck does not automatically retry clipboard writes or submit prompts",
       reason:
         "keeps retry control with the operator before any Codex or Claude Code paste",
+      writes_files: false,
+      external_calls: false,
+    },
+    continuation_safety_pre_paste_confirmation_note: {
+      label: "Pre-paste confirmation",
+      confirmation:
+        "operator confirms the copied brief and target agent request before paste",
+      not_submission:
+        "confirmation does not submit prompts or approve safety review",
+      reason:
+        "keeps the final handoff check manual before Codex or Claude Code receives the brief",
       writes_files: false,
       external_calls: false,
     },

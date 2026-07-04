@@ -365,7 +365,11 @@
 - [x] Task 85 RED: selected detail API/UI에 `continuation_safety_copy_retry_note`가 없어 focused server/API/web tests 실패 확인
 - [x] Task 85 GREEN: selected worktree detail API/type/UI에 manual retry scope, no automatic clipboard retry/prompt submission, no-write/no-external flags를 read-only로 노출
 - [x] Task 85 PRIVACY: continuation safety copy retry note는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/persisted review state/checklist completion state/memory approval write/merge decision write/external call을 포함하지 않음
-- [ ] 다음 slice: selected detail panel의 selected-brief pre-paste confirmation note를 raw-free로 별도 제공할지 결정
+- [x] Task 86 DECISION: selected-brief pre-paste confirmation note는 paste 전에 copied brief와 target agent request를 operator가 확인해야 하며 prompt submission/safety approval이 아님을 명확히 하기 위해 필요하므로 raw-free로 제공
+- [x] Task 86 RED: selected detail API/UI에 `continuation_safety_pre_paste_confirmation_note`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 86 GREEN: selected worktree detail API/type/UI에 copied brief/target agent request confirmation, not submission/safety approval, no-write/no-external flags를 read-only로 노출
+- [x] Task 86 PRIVACY: continuation safety pre-paste confirmation note는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/persisted review state/checklist completion state/memory approval write/merge decision write/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 selected-brief target-agent check note를 raw-free로 별도 제공할지 결정
 
 ### 판단 기준
 

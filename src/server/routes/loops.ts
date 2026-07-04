@@ -205,6 +205,8 @@ export function registerLoopRoutes(
                 continuationSafetyCopyFeedbackFailureNoteFor(),
               continuation_safety_copy_retry_note:
                 continuationSafetyCopyRetryNoteFor(),
+              continuation_safety_pre_paste_confirmation_note:
+                continuationSafetyPrePasteConfirmationNoteFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -846,6 +848,27 @@ function continuationSafetyCopyRetryNoteFor(): {
       "Loopdeck does not automatically retry clipboard writes or submit prompts",
     reason:
       "keeps retry control with the operator before any Codex or Claude Code paste",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyPrePasteConfirmationNoteFor(): {
+  label: "Pre-paste confirmation";
+  confirmation: "operator confirms the copied brief and target agent request before paste";
+  not_submission: "confirmation does not submit prompts or approve safety review";
+  reason: "keeps the final handoff check manual before Codex or Claude Code receives the brief";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Pre-paste confirmation",
+    confirmation:
+      "operator confirms the copied brief and target agent request before paste",
+    not_submission:
+      "confirmation does not submit prompts or approve safety review",
+    reason:
+      "keeps the final handoff check manual before Codex or Claude Code receives the brief",
     writes_files: false,
     external_calls: false,
   };

@@ -2916,6 +2916,45 @@ Do not add:
   secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.83: Selected Brief Pre-Paste Confirmation Note
+
+Decision:
+
+- Selected worktree detail should state that the operator confirms the copied
+  brief and target agent request before paste.
+- This is needed because final handoff confirmation should not be mistaken for
+  prompt submission, safety approval, or persisted review state.
+
+Add:
+
+- top-level selected worktree detail
+  `continuation_safety_pre_paste_confirmation_note` with:
+  - label: `Pre-paste confirmation`
+  - confirmation:
+    `operator confirms the copied brief and target agent request before paste`
+  - not_submission:
+    `confirmation does not submit prompts or approve safety review`
+  - reason:
+    `keeps the final handoff check manual before Codex or Claude Code receives the brief`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance, immediately after the copy retry note
+- focused server/API/web tests proving the pre-paste confirmation note is present
+
+Do not add:
+
+- paste automation, target-agent UI inspection, persisted confirmation state,
+  safety approval state, Codex or Claude Code UI automation, hidden prompt
+  submission, command execution, git reads/writes, filesystem reads/writes,
+  transcript import, persisted review state, checklist completion state,
+  background analysis, external model calls, memory approval writes, merge
+  decision writes, or new write tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

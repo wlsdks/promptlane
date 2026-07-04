@@ -288,8 +288,12 @@ Implementation checkpoint:
   note, explaining that retrying the selected brief copy is a manual operator
   action and Loopdeck does not automatically retry clipboard writes or submit
   prompts.
+- Selected worktree detail now includes a raw-free selected-brief pre-paste
+  confirmation note, explaining that the operator confirms the copied brief
+  and target agent request before paste, without submitting prompts or
+  approving safety review.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free selected-brief pre-paste confirmation note, without adding
+  raw-free selected-brief target-agent check note, without adding
   transcript content, prompt bodies, raw paths, git status reads, command
   execution, persisted review state, checklist completion state, memory
   approval writes, merge writes, or external calls.
