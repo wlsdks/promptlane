@@ -329,4 +329,13 @@ describe("source hygiene", () => {
     expect(loopsView).not.toContain("command_hint");
     expect(loopsView).not.toContain("missing_evidence_explanation");
   });
+
+  it("keeps selected brief command guidance formatting outside LoopsView", () => {
+    const loopsView = readFileSync("src/web/src/loops-view.tsx", "utf8");
+
+    expect(loopsView).not.toContain("selected_brief_action");
+    expect(loopsView).not.toContain("command_distinction");
+    expect(loopsView).not.toContain("command_filters");
+    expect(loopsView).not.toContain("copy_side_effects");
+  });
 });
