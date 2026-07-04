@@ -567,9 +567,9 @@ Use `pnpm prompt-coach buddy --once` for a one-shot text snapshot, or
 `pnpm prompt-coach buddy --json` for automation.
 
 The Codex package under `plugins/prompt-coach` contains a `.codex-plugin`
-manifest, fail-open `UserPromptSubmit`, `Stop`, `PreCompact`, and
-`PostCompact` hooks, and a small skill that helps Codex install, diagnose, and
-use the local archive.
+manifest and a small skill that helps Codex install, diagnose, and use the local
+archive. It does not bundle active Codex hooks; `prompt-coach setup` installs
+user-level hooks explicitly so plugin and setup hooks do not both fire.
 
 Claude Code prompt capture is exposed through its documented hook settings, so
 `integrations/claude-code/settings.example.json` is provided as a manual example.

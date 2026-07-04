@@ -34,18 +34,7 @@
     "manifest_name": "prompt-coach",
     "display_name": "Loopdeck",
     "install_path": "plugins/prompt-coach",
-    "hooks_file": "plugins/prompt-coach/hooks.json"
-  },
-  "hooks": {
-    "file": "plugins/prompt-coach/hooks.json",
-    "events": [
-      "PostCompact",
-      "PreCompact",
-      "Stop",
-      "UserPromptSubmit"
-    ],
-    "required_command_substring": "hook codex",
-    "fail_open_required": true
+    "hook_install": "prompt-coach setup --profile coach --register-mcp --open-web"
   },
   "mcp": {
     "canonical_server_name": "prompt-coach",

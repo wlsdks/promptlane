@@ -15,9 +15,9 @@ Loopdeck stores coding-agent prompts and loop metadata locally. It redacts
 sensitive values before writing Markdown files, indexes the archive in SQLite,
 and exposes a local web UI at `http://127.0.0.1:17373`.
 
-The plugin hook is fail-open and expects the `prompt-coach` CLI to be available
-on `PATH`. For the most useful local setup, run the coach profile from the
-installed package:
+The plugin does not install active hooks by itself. Run the coach profile from
+the installed package so Loopdeck writes one explicit user-level hook
+configuration:
 
 ```sh
 prompt-coach start
@@ -31,7 +31,7 @@ Code/Codex CLIs so the active agent can call coach/rewrite/judge tools. Use
 plain `prompt-coach setup` only when the user wants passive capture without
 coaching.
 
-Installed hooks use `UserPromptSubmit` for prompt capture/rewrite guidance,
+Setup-installed hooks use `UserPromptSubmit` for prompt capture/rewrite guidance,
 `Stop` for local Loopdeck snapshot collection, and `PreCompact`/`PostCompact`
 for compact boundary metadata. Stop snapshots and compact boundaries are
 metadata-only: prompt ids, safe project labels, quality gaps, trigger values,
@@ -129,7 +129,9 @@ Use these workflows before sending the user to the web UI:
 - One-command setup: prefer
   `prompt-coach setup --profile coach --register-mcp --open-web` over asking
   the user to install hooks, rewrite guidance, status line, and MCP registration
-  separately. In a cloned checkout, prefer `pnpm setup`. For a new user, show
+  separately. Use `prompt-coach install-hook codex` only for focused manual
+  repair when setup cannot be rerun. In a cloned checkout, prefer `pnpm setup`.
+  For a new user, show
   `prompt-coach start` first so the happy path stays
   `setup -> one real prompt -> coach`.
 - Initial prompt wrapper: when the user wants one-click rewrite before launching

@@ -121,7 +121,6 @@ Required evidence:
 - `.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 - `plugins/prompt-coach/.codex-plugin/plugin.json`
-- `plugins/prompt-coach/hooks.json`
 - `plugins/prompt-coach/skills/prompt-coach/SKILL.md`
 - `commands/*.md`
 - `README.md`

@@ -20,7 +20,6 @@
     "local-first"
   ],
   "skills": "./skills/",
-  "hooks": "./hooks.json",
   "interface": {
     "displayName": "Loopdeck",
     "shortDescription": "Loopdeck local-first agent loop memory for coding-agent workflows",

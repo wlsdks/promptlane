@@ -52,8 +52,8 @@ Scope:
 - inventory `.claude-plugin/plugin.json#name`
 - inventory `plugins/prompt-coach/.codex-plugin/plugin.json#name`
 - inventory command docs under `commands/*.md`
-- inventory hook commands under `plugins/prompt-coach/hooks.json` and install
-  examples
+- inventory hook install examples under README, plugin docs, and setup command
+  docs
 - inventory MCP server-name examples in README and plugin docs
 
 TDD proof:
@@ -133,7 +133,7 @@ Scope:
 - update user-facing display copy in `plugins/prompt-coach/**`
 - keep `plugins/prompt-coach/.codex-plugin/plugin.json#name` as `prompt-coach`
   unless a later major rename slice approves an id change
-- keep `plugins/prompt-coach/hooks.json` command compatibility
+- keep setup-installed hook command compatibility
 - update Codex plugin docs and smoke instructions
 
 TDD proof:

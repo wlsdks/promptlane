@@ -478,7 +478,7 @@ pnpm prompt-coach buddy
 
 한 번만 확인하려면 `pnpm prompt-coach buddy --once`, 자동화에는 `pnpm prompt-coach buddy --json`을 사용합니다.
 
-Codex package는 `.codex-plugin` manifest, fail-open `UserPromptSubmit` hook, 로컬 archive를 설치/진단/사용하도록 돕는 skill을 포함합니다.
+Codex package는 `.codex-plugin` manifest와 로컬 archive를 설치/진단/사용하도록 돕는 skill을 포함합니다. active Codex hook은 번들하지 않으며, plugin hook과 setup hook이 동시에 실행되지 않도록 `prompt-coach setup`이 user-level hook을 명시적으로 설치합니다.
 
 ## CLI
 

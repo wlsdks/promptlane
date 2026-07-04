@@ -59,15 +59,12 @@ plugins/prompt-coach
 It includes:
 
 - `.codex-plugin/plugin.json` for plugin metadata
-- `hooks.json` for fail-open Codex `UserPromptSubmit`, `Stop`,
-  `PreCompact`, and `PostCompact` hooks
 - `skills/prompt-coach/SKILL.md` so Codex can help install, diagnose, and use
   the archive
 
-The plugin hook expects `prompt-coach` to be available on `PATH`. This keeps the
-plugin portable, but it means `prompt-coach setup` remains the reliable path for
-normal users because setup records an absolute CLI command and can configure the
-local service.
+The Codex plugin does not bundle active Codex hooks; setup installs user-level hooks explicitly. This prevents plugin-managed hooks and setup-installed hooks from both firing for the same `UserPromptSubmit` event. `prompt-coach setup`
+remains the reliable path for normal users because setup records an absolute CLI
+command and can configure the local service.
 
 ## Claude Code Plugin
 

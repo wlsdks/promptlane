@@ -3420,6 +3420,12 @@
 - [x] `ui-patrol` 스킬로 cron 기반 디자인 자동 점검 셋업.
 - [x] `workflow_dispatch` run `28717406758`에서 GitHub Actions ui-patrol 성공 및 screenshot artifact 9개 업로드 확인.
 - [ ] 운영 후 첫 scheduled artifact 결과 확인.
+## 2026-07-05 Codex Plugin Setup-Driven Hooks
+
+- [x] RED: Add packaging regressions that the Codex marketplace plugin does not bundle active hooks and points users through explicit `prompt-coach setup`.
+- [x] GREEN: Remove active bundled Codex hooks from the plugin manifest/package docs while preserving setup-installed user-level hooks.
+- [x] VERIFY: Run focused packaging tests, full gates, push a coherent PR, merge, and prune the branch.
+
 ## 2026-07-05 Codex Plugin Hook Event Mapping
 
 - [x] RED: Add packaging regression coverage that each bundled Codex plugin hook event uses the matching `PROMPT_COACH_HOOK` lifecycle marker.

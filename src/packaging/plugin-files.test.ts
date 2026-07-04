@@ -253,10 +253,10 @@ describe("plugin packaging files", () => {
     expect(open).toContain("http://127.0.0.1:17373");
   });
 
-  it("ships a Codex plugin manifest that points at bundled hooks and skills", () => {
+  it("ships a Codex plugin manifest that is setup-driven instead of bundling active hooks", () => {
     const manifest = readJson<{
       name: string;
-      hooks: string;
+      hooks?: string;
       skills: string;
       interface: {
         displayName: string;
@@ -266,7 +266,7 @@ describe("plugin packaging files", () => {
     }>("plugins/prompt-coach/.codex-plugin/plugin.json");
 
     expect(manifest.name).toBe("prompt-coach");
-    expect(manifest.hooks).toBe("./hooks.json");
+    expect(manifest.hooks).toBeUndefined();
     expect(manifest.skills).toBe("./skills/");
     expect(manifest.interface.displayName).toBe("Loopdeck");
     expect(manifest.interface.category).toBe("Coding");
@@ -291,10 +291,10 @@ describe("plugin packaging files", () => {
     );
   });
 
-  it("uses Loopdeck-facing Codex plugin copy while preserving prompt-coach ids and hook commands", () => {
+  it("uses Loopdeck-facing Codex plugin copy while preserving prompt-coach ids and setup-driven hook commands", () => {
     const manifest = readJson<{
       name: string;
-      hooks: string;
+      hooks?: string;
       skills: string;
       interface: {
         displayName: string;
@@ -303,19 +303,13 @@ describe("plugin packaging files", () => {
         defaultPrompt: string[];
       };
     }>("plugins/prompt-coach/.codex-plugin/plugin.json");
-    const hooks = readJson<{
-      hooks: Record<string, Array<{ hooks: Array<{ command: string }> }>>;
-    }>("plugins/prompt-coach/hooks.json");
     const skill = readFileSync(
       join(process.cwd(), "plugins/prompt-coach/skills/prompt-coach/SKILL.md"),
       "utf8",
     );
-    const hookCommands = Object.values(hooks.hooks)
-      .flatMap((entries) => entries.flatMap((entry) => entry.hooks))
-      .map((hook) => hook.command);
 
     expect(manifest.name).toBe("prompt-coach");
-    expect(manifest.hooks).toBe("./hooks.json");
+    expect(manifest.hooks).toBeUndefined();
     expect(manifest.skills).toBe("./skills/");
     expect(manifest.interface.displayName).toBe("Loopdeck");
     expect(manifest.interface.shortDescription).toContain("Loopdeck");
@@ -342,13 +336,8 @@ describe("plugin packaging files", () => {
     expect(skill).toContain(
       "The compatibility CLI command remains `prompt-coach`",
     );
-    for (const command of hookCommands) {
-      expect(command).toContain("PROMPT_COACH_HOOK");
-      expect(command).toContain("prompt-coach hook");
-      expect(command).toContain("hook codex");
-      expect(command).toContain("|| true");
-      expect(command).not.toContain("loopdeck hook codex");
-    }
+    expect(skill).toContain("prompt-coach setup --profile coach");
+    expect(skill).toContain("prompt-coach install-hook codex");
   });
 
   it("documents plugin command namespace compatibility during the Loopdeck migration", () => {
@@ -659,10 +648,8 @@ describe("plugin packaging files", () => {
     const codexManifest = readJson<{
       name: string;
       interface: { displayName: string };
+      hooks?: string;
     }>("plugins/prompt-coach/.codex-plugin/plugin.json");
-    const hooks = readJson<{
-      hooks: Record<string, Array<{ hooks: Array<{ command: string }> }>>;
-    }>("plugins/prompt-coach/hooks.json");
     const inventory = readJson<{
       schema_version: 1;
       package: {
@@ -678,11 +665,7 @@ describe("plugin packaging files", () => {
         manifest_name: string;
         display_name: string;
         install_path: string;
-      };
-      hooks: {
-        file: string;
-        events: string[];
-        required_command_substring: string;
+        hook_install: string;
       };
       mcp: {
         canonical_server_name: string;
@@ -697,10 +680,6 @@ describe("plugin packaging files", () => {
       .filter((file) => file.endsWith(".md"))
       .map((file) => `./commands/${file}`)
       .sort();
-    const hookEvents = Object.keys(hooks.hooks).sort();
-    const hookCommands = Object.values(hooks.hooks)
-      .flatMap((entries) => entries.flatMap((entry) => entry.hooks))
-      .map((hook) => hook.command);
 
     expect(packageJson.files).toContain(inventoryPath);
     expect(inventory.schema_version).toBe(1);
@@ -728,11 +707,10 @@ describe("plugin packaging files", () => {
       codexManifest.interface.displayName,
     );
     expect(inventory.codex_plugin.install_path).toBe("plugins/prompt-coach");
-    expect(inventory.hooks.file).toBe("plugins/prompt-coach/hooks.json");
-    expect(inventory.hooks.events.slice().sort()).toEqual(hookEvents);
-    for (const command of hookCommands) {
-      expect(command).toContain(inventory.hooks.required_command_substring);
-    }
+    expect(codexManifest.hooks).toBeUndefined();
+    expect(inventory.codex_plugin.hook_install).toBe(
+      "prompt-coach setup --profile coach --register-mcp --open-web",
+    );
     expect(inventory.mcp.canonical_server_name).toBe("prompt-coach");
     expect(inventory.mcp.command).toBe("prompt-coach mcp");
     expect(inventory.mcp.docs).toEqual(
@@ -757,50 +735,36 @@ describe("plugin packaging files", () => {
     expect(JSON.stringify(inventory)).not.toContain("/Users/");
   });
 
-  it("ships a fail-open Codex prompt hook without embedding secrets", () => {
-    const hooks = readJson<{
-      hooks: {
-        UserPromptSubmit: Array<{
-          hooks: Array<{ type: string; command: string; timeout: number }>;
-        }>;
-      };
-    }>("plugins/prompt-coach/hooks.json");
-
-    const command = hooks.hooks.UserPromptSubmit[0]?.hooks[0]?.command ?? "";
-    expect(command).toContain("prompt-coach hook codex");
-    expect(command).toContain("|| true");
-    expect(command).not.toMatch(/PROMPT_COACH_TOKEN|Bearer|token=/i);
-  });
-
-  it("maps bundled Codex plugin hook events to the correct prompt-coach lifecycle markers", () => {
-    const hooks = readJson<{
-      hooks: Record<
-        "UserPromptSubmit" | "Stop" | "PreCompact" | "PostCompact",
-        Array<{
-          hooks: Array<{ type: string; command: string; timeout: number }>;
-        }>
-      >;
-    }>("plugins/prompt-coach/hooks.json");
-
-    const commandFor = (
-      event: "UserPromptSubmit" | "Stop" | "PreCompact" | "PostCompact",
-    ): string => hooks.hooks[event][0]?.hooks[0]?.command ?? "";
-
-    expect(commandFor("UserPromptSubmit")).toContain(
-      'PROMPT_COACH_HOOK="prompt-coach hook codex"',
+  it("does not ship active Codex plugin hooks that can duplicate setup-installed hooks", () => {
+    const manifest = readJson<{ hooks?: string }>(
+      "plugins/prompt-coach/.codex-plugin/plugin.json",
     );
-    expect(commandFor("Stop")).toContain(
-      'PROMPT_COACH_HOOK="prompt-coach hook stop codex"',
+    const pluginsDoc = readFileSync(
+      join(process.cwd(), "docs/PLUGINS.md"),
+      "utf8",
     );
-    expect(commandFor("PreCompact")).toContain(
-      'PROMPT_COACH_HOOK="prompt-coach hook pre-compact codex"',
+    const renamePlan = readFileSync(
+      join(
+        process.cwd(),
+        "docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md",
+      ),
+      "utf8",
     );
-    expect(commandFor("PostCompact")).toContain(
-      'PROMPT_COACH_HOOK="prompt-coach hook post-compact codex"',
+    const renameIssueSlices = readFileSync(
+      join(
+        process.cwd(),
+        "docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-issue-slices.md",
+      ),
+      "utf8",
     );
-    expect(commandFor("UserPromptSubmit")).not.toContain("hook stop codex");
-    expect(commandFor("Stop")).not.toContain("hook pre-compact codex");
-    expect(commandFor("PreCompact")).not.toContain("hook post-compact codex");
+
+    expect(manifest.hooks).toBeUndefined();
+    expect(pluginsDoc).toContain(
+      "does not bundle active Codex hooks; setup installs user-level hooks explicitly",
+    );
+    expect(pluginsDoc).not.toContain("hooks.json for fail-open Codex");
+    expect(renamePlan).not.toContain("plugins/prompt-coach/hooks.json");
+    expect(renameIssueSlices).not.toContain("plugins/prompt-coach/hooks.json");
   });
 
   it("ships a hook binary compatibility smoke for prompt-coach and loopdeck entrypoints", () => {
