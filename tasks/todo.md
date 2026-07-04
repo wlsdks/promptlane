@@ -3289,8 +3289,9 @@
 
 ### Track D — 신규 기능 brainstorming
 
-- [ ] PRD_PHASE2 + Track A 결과 + Phase 2 backlog를 input으로 다음 우선순위 토론.
-- [ ] 결과는 PRD 갱신 또는 후속 PR 후보로.
+- [x] PRD_PHASE2 + Track A 결과 + Phase 2 backlog를 input으로 다음 우선순위 토론.
+- [x] 결과는 PRD 갱신 또는 후속 PR 후보로.
+- [ ] 다음 구현 후보: ADR 0002 기반 storage capability negotiation helper를 route registration 경계에 도입.
 
 ### Track E — UI 패트롤 셋업
 

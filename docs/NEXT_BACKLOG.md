@@ -1,24 +1,104 @@
-# Next Backlog (post 2026-05-08 multi-track session)
+# Next Backlog
 
-This is the prioritized "what to pick up next" list after the multi-track
-session that landed Tracks B/C/A2/A3 as PRs and Tracks A1/A4 as Proposed
-ADRs. It is intentionally short. The PRD itself
-(`docs/PRD.md`, `docs/PRD_PHASE2.md`) and the completion audit
-(`docs/PRD2_COMPLETION_AUDIT.md`) remain the source of truth for product
-scope; this file is the operational queue.
+Last updated: 2026-07-05
 
-## What we know is done
+This is the prioritized "what to pick up next" list after the Loopdeck planning
+and architecture decision pass. It is intentionally short. The PRD itself
+(`docs/PRD.md`, `docs/PRD_PHASE2.md`), the completion audit
+(`docs/PRD2_COMPLETION_AUDIT.md`), and the Loopdeck design spec
+(`docs/superpowers/specs/2026-07-04-agent-loop-memory-design.md`) remain the
+source of truth for product scope; this file is the operational queue.
+
+## What We Know Is Done
 
 - Phase 2 product scope is implemented for the local public beta candidate
   (see `docs/PRD2_COMPLETION_AUDIT.md`).
 - Per-session 2026-05-08 deliveries: CLI `UserError` discipline (PR #237),
   service CLI plain-text + launchctl error mapping (PR #238), ingest
   pipeline extracted with importer redaction-reject fix (PR #239), shared
-  coaching threshold module (PR #240), ADRs 0001 and 0002 (PR #241).
+  coaching threshold module (PR #240), ADRs 0001 and 0002 proposed in PR #241
+  and accepted in PR #318.
+- Loopdeck direction is active while the public npm package, CLI command,
+  Claude Code slash commands, Codex plugin id, hook command, and canonical MCP
+  server name remain `prompt-coach` during the compatibility window.
+- The first Loopdeck runtime slices have landed: loop snapshots, continuation
+  briefs, compact boundary awareness, worktree/session/branch selected
+  continuation, command-center summaries, local merge decision metadata,
+  instruction patch proposals, and explicit AGENTS.md/CLAUDE.md apply gates.
+- ADR 0001 and ADR 0002 are now accepted. New MCP tools default to per-tool
+  modules, and storage capability negotiation is the target architecture for
+  future storage-backed routes/tools.
 
-## Prioritized queue
+## Current Priority Decision
 
-### 1. User-flow validation passes (high signal, low cost)
+The next implementation work should favor reliability and agent-loop
+continuity over more product naming work.
+
+Decision:
+
+1. Implement storage capability negotiation first.
+2. Then improve the MCP tool registry only when the next MCP tool or schema
+   change touches the registration surface.
+3. Keep Codex native dialog fallback as dogfood/integration evidence, not a
+   blocking core feature.
+4. Keep UI patrol as an operational follow-up after the next functional slice.
+
+Rationale:
+
+- Loopdeck now has enough agent-loop runtime surface that storage-backed
+  features should fail clearly at registration instead of varying by route or
+  MCP handler.
+- Capability negotiation directly protects local-first reliability for Codex
+  and Claude Code integrations.
+- MCP registry cleanup is valuable, but ADR 0001 deliberately avoids a broad
+  rewrite until a tool-list change creates real pressure.
+- More rename or plugin alias work has lower product value than making the
+  current `prompt-coach` compatibility runtime safer and easier to extend.
+
+## Prioritized Queue
+
+### 1. Storage Capability Negotiation (next implementation PR)
+
+Goal:
+
+- Introduce a shared capability guard so storage-backed Fastify routes and
+  future MCP tools declare required storage methods through one path.
+
+Scope for the first PR:
+
+- Add a small helper under `src/storage/` or `src/server/` that narrows storage
+  objects by required method names and returns one consistent local
+  configuration error.
+- Replace the hand-written guards in project routes and coach-feedback routes.
+- Keep behavior equivalent: missing capabilities still fail locally and do not
+  expose prompt bodies, raw paths, tokens, or instruction file contents.
+- Do not filter MCP `tools/list` in the first PR unless the helper boundary
+  stays small; leave MCP catalogue filtering as the second capability slice.
+
+Acceptance:
+
+- focused route tests prove missing capabilities produce the same safe failure
+  shape;
+- existing project and coach-feedback route tests keep passing;
+- full `corepack pnpm test`, `corepack pnpm lint`, `corepack pnpm build`,
+  `corepack pnpm pack:dry-run`, and `git diff --check` pass.
+
+### 2. MCP Registry Follow-Up (only when registration changes)
+
+Goal:
+
+- Remove the manual definition/handler sync risk identified by ADR 0001 without
+  migrating every legacy split-layout tool.
+
+Scope:
+
+- Introduce an explicit data registry only when a new MCP tool, schema change,
+  or capability-filtered catalogue work already touches `src/mcp/server.ts`.
+- Do not use import-time global mutation.
+- Derive `tools/list` and `tools/call` dispatch from the same registered tool
+  list.
+
+### 3. User-Flow Validation Passes
 
 The Phase 2 features are implemented; the open question is whether the
 flows feel right end to end. Two quick passes are worth scheduling before
@@ -39,28 +119,20 @@ These are user-perspective tasks rather than refactors. They should run in
 a fresh session with the explicit role of "user trying to do work" rather
 than "engineer touching code."
 
-### 2. ADR-0001 Option A — codify MCP per-tool default
+### 4. Codex Native Dialog Fallback Dogfood
 
-Smallest concrete refactor in the queue. Options are recorded in
-`docs/adr/0001-mcp-per-tool-modules.md`. Action items:
+Goal:
 
-- Add a one-paragraph rule to `docs/ARCHITECTURE.md` stating that new MCP
-  tools default to the per-tool layout
-  (`src/mcp/<tool-name>-tool.ts`).
-- Optionally introduce `src/mcp/registry.ts` (Option C) to remove the
-  manual `PROMPT_COACH_MCP_TOOL_HANDLERS` literal in `server.ts`. Keep the
-  legacy `score-tool-*.ts` files in place.
+- Prove, with explicit operator approval, whether Codex native dialog fallback
+  can collect answers cleanly in the real desktop/CLI flow.
 
-### 3. ADR-0002 implementation — capability negotiation
+Scope:
 
-Medium-cost refactor. Options are recorded in
-`docs/adr/0002-storage-capability-registry.md`. Pre-work: list every
-optional storage method consumed today and the failure mode each call site
-chose. Then introduce a small `requireCapabilities(storage, [...])`
-helper at route registration time. Stretch: extend the same idea to MCP
-tool registration so `tools/list` filters out unavailable tools.
+- Use the existing native dialog preflight/smoke harnesses first.
+- Do not open OS dialogs unexpectedly from automated tests.
+- Treat this as integration evidence; do not block core loop-memory work on it.
 
-### 4. `App.tsx` query-hook extraction (Track A candidate 5)
+### 5. `App.tsx` Query-Hook Extraction
 
 Held during the Track A grilling because the value is technical-debt
 reduction rather than feature gain. Worth scheduling once the user-flow
@@ -68,10 +140,11 @@ audits surface a concrete "this UI behavior was hard to add because of
 App.tsx" signal. Until that lands, the file size budget and existing
 component split keep it manageable.
 
-### 5. UI patrol cron (Track E)
+### 6. UI Patrol Cron
 
 `ui-patrol` skill set up to keep design regressions visible across
-sessions. Low-touch operationally.
+sessions. Low-touch operationally, but it should follow the next functional
+slice so it checks a current UI surface rather than old assumptions.
 
 ## Explicit non-goals
 
@@ -83,3 +156,6 @@ sessions. Low-touch operationally.
   exists to consume them.
 - The CLI `--json` raw `cwd` field on `list/search/show` is design intent
   for automation/restore; do not redact it.
+- Do not add hidden background transcript scraping, hidden external LLM calls,
+  automatic prompt resubmission, automatic merge actions, or automatic
+  AGENTS.md/CLAUDE.md writes.
