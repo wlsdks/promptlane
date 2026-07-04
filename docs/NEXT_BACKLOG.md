@@ -67,6 +67,9 @@ Current goal audit:
 - PR #362 aligned the public release checklist with the same package lifecycle
   contract and added a packaging guard so shipped scripts and dry-run commands
   cannot drift quietly.
+- PR #363 aligned README contributor verification gates with the same
+  `corepack pnpm pack:dry-run` wrapper and added packaging coverage so README
+  examples do not drift back to PATH-dependent bare `pnpm` package checks.
 
 Decision:
 
@@ -139,6 +142,10 @@ MCP catalogue decision PR:
 
 Next capability PR:
 
+- Loop read routes should use the same shared capability guard as other
+  storage-backed routes. Missing loop snapshot, compact boundary, memory, or
+  merge-decision methods must return one raw-free local configuration problem
+  instead of silently returning an empty Loopdeck status.
 - Avoid a broad MCP registry rewrite unless the next MCP tool or schema change
   already touches the registration surface.
 - If registration changes become necessary, introduce a small registry that

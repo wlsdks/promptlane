@@ -62,6 +62,14 @@ type LoopMemoryApprovalRouteStorage = Pick<
 > &
   Pick<LoopMemoryStoragePort, "recordLoopMemory" | "listLoopMemories">;
 
+type LoopReadRouteStorage = Pick<
+  LoopSnapshotStoragePort,
+  "listLoopSnapshots"
+> &
+  Pick<CompactBoundaryStoragePort, "listCompactBoundaries"> &
+  Pick<LoopMemoryStoragePort, "listLoopMemories"> &
+  Pick<LoopMergeDecisionStoragePort, "listLoopMergeDecisions">;
+
 const LoopMemoryApprovalBodySchema = z.object({
   approved_by: z.string().trim().min(1).max(80).optional(),
 });
@@ -82,16 +90,15 @@ export function registerLoopRoutes(
 ): void {
   server.get("/api/v1/loops", async (request) => {
     requireAppAccess(request, options.auth);
+    const storage = requireLoopReadStorage(options.storage, request.url);
 
-    const snapshots =
-      options.storage.listLoopSnapshots?.({ limit: 100 }).items ?? [];
-    const boundaries =
-      options.storage.listCompactBoundaries?.({ limit: 100 }).items ?? [];
+    const snapshots = storage.listLoopSnapshots({ limit: 100 }).items;
+    const boundaries = storage.listCompactBoundaries({ limit: 100 }).items;
     const latest = snapshots.at(0);
     const projectMemories = latest
-      ? (options.storage.listLoopMemories?.({
+      ? storage.listLoopMemories({
           projectId: latest.project_id,
-        }).items ?? [])
+        }).items
       : [];
     const status = createLoopdeckStatus({
       snapshots,
@@ -103,10 +110,10 @@ export function registerLoopRoutes(
           : undefined,
       mergeDecisions:
         latest
-          ? (options.storage.listLoopMergeDecisions?.({
+          ? storage.listLoopMergeDecisions({
               limit: 3,
               projectId: latest.project_id,
-            }).items ?? [])
+            }).items
           : [],
     });
 
@@ -136,10 +143,10 @@ export function registerLoopRoutes(
 
   server.get("/api/v1/loops/worktrees/:worktree", async (request) => {
     requireAppAccess(request, options.auth);
+    const storage = requireLoopReadStorage(options.storage, request.url);
     const params = request.params as { worktree: string };
     const query = request.query as { branch?: string; session_id?: string };
-    const allSnapshots =
-      options.storage.listLoopSnapshots?.({ limit: 100 }).items ?? [];
+    const allSnapshots = storage.listLoopSnapshots({ limit: 100 }).items;
     const snapshots =
       allSnapshots.filter(
         (snapshot) =>
@@ -147,12 +154,11 @@ export function registerLoopRoutes(
           (!query.session_id || snapshot.session_id === query.session_id) &&
           (!query.branch || snapshot.branch === query.branch),
       ) ?? [];
-    const boundaries =
-      options.storage.listCompactBoundaries?.({ limit: 100 }).items ?? [];
+    const boundaries = storage.listCompactBoundaries({ limit: 100 }).items;
     const latestSnapshot = snapshots.at(0);
     const latestDecision = latestSnapshot
-      ? options.storage
-          .listLoopMergeDecisions?.({
+      ? storage
+          .listLoopMergeDecisions({
             limit: 1,
             projectId: latestSnapshot.project_id,
             worktree: params.worktree,
@@ -160,10 +166,10 @@ export function registerLoopRoutes(
           .items.at(0)
       : undefined;
     const mergeDecisions = latestSnapshot
-      ? (options.storage.listLoopMergeDecisions?.({
+      ? storage.listLoopMergeDecisions({
           limit: 3,
           projectId: latestSnapshot.project_id,
-        }).items ?? [])
+        }).items
       : [];
     const reviewStatus = latestSnapshot
       ? createLoopdeckStatus({
@@ -418,14 +424,14 @@ export function registerLoopRoutes(
 
   server.get("/api/v1/loops/brief", async (request) => {
     requireAppAccess(request, options.auth);
+    const storage = requireLoopReadStorage(options.storage, request.url);
     const query = LoopBriefSelectionQuerySchema.parse(request.query);
     const selection = {
       worktree: query.worktree,
       sessionId: query.session_id,
       branch: query.branch,
     };
-    const snapshots =
-      options.storage.listLoopSnapshots?.({ limit: 100 }).items ?? [];
+    const snapshots = storage.listLoopSnapshots({ limit: 100 }).items;
     const snapshot = hasLoopSnapshotSelection(selection)
       ? selectLoopSnapshot(snapshots, selection)
       : snapshots.at(0);
@@ -441,8 +447,7 @@ export function registerLoopRoutes(
       );
     }
 
-    const boundaries =
-      options.storage.listCompactBoundaries?.({ limit: 100 }).items ?? [];
+    const boundaries = storage.listCompactBoundaries({ limit: 100 }).items;
 
     return {
       data: createLoopBrief({
@@ -452,27 +457,26 @@ export function registerLoopRoutes(
           boundaries,
         ),
         approvedMemories:
-          options.storage.listLoopMemories?.({
+          storage.listLoopMemories({
             projectId: snapshot.project_id,
             limit: 3,
-          }).items ?? [],
+          }).items,
       }),
     };
   });
 
   server.get("/api/v1/loops/:id/brief", async (request) => {
     requireAppAccess(request, options.auth);
+    const storage = requireLoopReadStorage(options.storage, request.url);
     const params = request.params as { id: string };
-    const snapshots =
-      options.storage.listLoopSnapshots?.({ limit: 100 }).items ?? [];
+    const snapshots = storage.listLoopSnapshots({ limit: 100 }).items;
     const snapshot = snapshots.find((item) => item.id === params.id);
 
     if (!snapshot) {
       throw problem(404, "Not Found", "Loop snapshot not found.", request.url);
     }
 
-    const boundaries =
-      options.storage.listCompactBoundaries?.({ limit: 100 }).items ?? [];
+    const boundaries = storage.listCompactBoundaries({ limit: 100 }).items;
 
     return {
       data: createLoopBrief({
@@ -482,10 +486,10 @@ export function registerLoopRoutes(
           boundaries,
         ),
         approvedMemories:
-          options.storage.listLoopMemories?.({
+          storage.listLoopMemories({
             projectId: snapshot.project_id,
             limit: 3,
-          }).items ?? [],
+          }).items,
       }),
     };
   });
@@ -2175,6 +2179,22 @@ function requireLoopMemoryReadStorage(
     label: "Loop memory storage",
     instance,
   });
+}
+
+function requireLoopReadStorage(
+  storage: LoopRouteOptions["storage"],
+  instance: string,
+): LoopReadRouteStorage {
+  return requireStorageCapabilities(
+    storage,
+    [
+      "listLoopSnapshots",
+      "listCompactBoundaries",
+      "listLoopMemories",
+      "listLoopMergeDecisions",
+    ],
+    { label: "Loop read storage", instance },
+  );
 }
 
 function requireLoopMemoryApprovalStorage(

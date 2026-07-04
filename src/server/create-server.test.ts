@@ -468,6 +468,34 @@ describe("createServer P2 ingest boundary", () => {
     expect(serialized).not.toContain("Other project decision should not appear");
   });
 
+  it("returns the shared storage capability problem when loop read storage is unavailable", async () => {
+    const storage = createMemoryStorage();
+    delete (storage as Partial<typeof storage>).listLoopSnapshots;
+    const server = createTestServer({ storage });
+
+    const response = await server.inject({
+      method: "GET",
+      url: "/api/v1/loops",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+    });
+
+    expect(response.statusCode).toBe(500);
+    expect(response.headers["content-type"]).toContain(
+      "application/problem+json",
+    );
+    expect(response.json()).toMatchObject({
+      status: 500,
+      title: "Internal Server Error",
+      detail: "Loop read storage is not configured.",
+      instance: "/api/v1/loops",
+    });
+    expect(response.body).not.toContain("listLoopSnapshots");
+    expect(response.body).not.toContain("/Users/");
+  });
+
   it("returns a worktree drilldown without prompt bodies or raw paths", async () => {
     const storage = createMemoryStorage();
     storage.loopSnapshots.push(

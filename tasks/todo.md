@@ -3500,3 +3500,18 @@
 - [x] EVIDENCE: `main` is at `d6dfcc4` after PR #359, no open PRs, and no scheduled `ui-patrol` run has appeared yet.
 - [x] DOCS: Refresh `NEXT_BACKLOG` and `LOOPDECK_GOAL_AUDIT_2026-07-05.md` so they cite PR #358/#359 reuse fallback coverage instead of the stale #357/#346 state.
 - [x] VERIFY: Run docs/search checks plus full test/lint/build/pack dry-run gates, push a coherent PR, merge, and prune the branch.
+
+## 2026-07-05 Package Dry-Run Lifecycle Gates
+
+- [x] RED/GREEN: Stabilize `pack:dry-run` through a wrapper that strips pnpm-only npm env and pins lifecycle builds through `corepack pnpm build`.
+- [x] DOCS: Align npm publishing, package contents, release checklist, README, and README.ko package gates with `corepack pnpm pack:dry-run`.
+- [x] GUARDS: Add packaging tests that keep release checklist and README package verification commands aligned with the wrapper.
+- [x] INTEGRATE: PR #361, PR #362, and PR #363 were merged to `main`; branches were pruned.
+
+## 2026-07-05 Loop Read Storage Capability Guard
+
+- [x] RED: `/api/v1/loops` returns 200 with an empty Loopdeck state when `listLoopSnapshots` is missing.
+- [x] GREEN: Loop read routes now require loop snapshot, compact boundary, loop memory, and merge decision storage through the shared capability helper.
+- [x] PRIVACY: Missing capability responses use one raw-free local configuration problem and do not expose method names or local paths.
+- [x] VERIFY: Run focused tests and full local gates.
+- [ ] INTEGRATE: Push a coherent PR, merge it after CI, and prune the branch.
