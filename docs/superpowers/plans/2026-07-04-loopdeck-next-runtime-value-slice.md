@@ -244,7 +244,10 @@ Implementation checkpoint:
   explaining that Loopdeck stores loop metadata in the local database and
   Markdown archive only, without prompt bodies, transcripts, raw paths, or
   provider credentials.
+- Selected worktree detail now includes a raw-free operator review gate,
+  explaining that copied continuation briefs remain operator-reviewed and
+  manually submitted in Codex or Claude Code.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free operator review gate note for continuation handoff,
+  raw-free collection responsibility note after continuation handoff,
   without adding transcript content, prompt bodies, raw paths, git status reads,
   command execution, memory approval writes, merge writes, or external calls.

@@ -351,6 +351,18 @@ describe("web api export client", () => {
               writes_files: false,
               external_calls: false,
             },
+            operator_review_gate: {
+              label: "Operator review gate",
+              review_step:
+                "operator reviews the copied continuation brief before submitting",
+              manual_submit:
+                "submission remains manual in Codex or Claude Code",
+              does_not:
+                "does not auto-submit prompts, execute commands, write files, or change merge state",
+              auto_submit: false,
+              writes_files: false,
+              external_calls: false,
+            },
             latest_decision: {
               snapshot_id: "loop_web",
               worktree: "agent-loop-worktree",
@@ -555,6 +567,17 @@ describe("web api export client", () => {
           "does not store prompt bodies, transcripts, raw paths, or provider credentials",
         reason: "keeps source-of-truth loop memory local-first and reviewable",
         local_only: true,
+        writes_files: false,
+        external_calls: false,
+      },
+      operator_review_gate: {
+        label: "Operator review gate",
+        review_step:
+          "operator reviews the copied continuation brief before submitting",
+        manual_submit: "submission remains manual in Codex or Claude Code",
+        does_not:
+          "does not auto-submit prompts, execute commands, write files, or change merge state",
+        auto_submit: false,
         writes_files: false,
         external_calls: false,
       },

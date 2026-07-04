@@ -171,6 +171,17 @@ describe("LoopsView", () => {
       "keeps source-of-truth loop memory local-first and reviewable",
     );
     expect(html).toContain("Local only, no file writes or external calls");
+    expect(html).toContain("Operator review gate");
+    expect(html).toContain(
+      "operator reviews the copied continuation brief before submitting",
+    );
+    expect(html).toContain(
+      "submission remains manual in Codex or Claude Code",
+    );
+    expect(html).toContain(
+      "does not auto-submit prompts, execute commands, write files, or change merge state",
+    );
+    expect(html).toContain("No automatic submission, file writes, or external calls");
     expect(html).toContain("Continuation guidance");
     expect(html).toContain('class="loop-detail-section"');
     expect(html).toContain('class="loop-detail-section-title"');
@@ -505,6 +516,17 @@ function loopWorktree(): LoopWorktreeResponse {
         "does not store prompt bodies, transcripts, raw paths, or provider credentials",
       reason: "keeps source-of-truth loop memory local-first and reviewable",
       local_only: true,
+      writes_files: false,
+      external_calls: false,
+    },
+    operator_review_gate: {
+      label: "Operator review gate",
+      review_step:
+        "operator reviews the copied continuation brief before submitting",
+      manual_submit: "submission remains manual in Codex or Claude Code",
+      does_not:
+        "does not auto-submit prompts, execute commands, write files, or change merge state",
+      auto_submit: false,
       writes_files: false,
       external_calls: false,
     },

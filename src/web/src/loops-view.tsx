@@ -554,6 +554,25 @@ export function LoopsView({
                     </p>
                   </div>
                 )}
+                {worktreeDetail.operator_review_gate && (
+                  <div className="loop-review-item">
+                    <p className="loops-status-line">
+                      {worktreeDetail.operator_review_gate.label}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.operator_review_gate.review_step}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.operator_review_gate.manual_submit}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.operator_review_gate.does_not}
+                    </p>
+                    <p className="loops-status-line">
+                      No automatic submission, file writes, or external calls
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             {worktreeDetail.latest_decision && (

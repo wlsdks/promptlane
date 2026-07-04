@@ -193,6 +193,7 @@ export function registerLoopRoutes(
               post_handoff_reminder: postHandoffReminderFor(),
               source_of_truth_note: sourceOfTruthNoteFor(),
               privacy_boundary_note: privacyBoundaryNoteFor(),
+              operator_review_gate: operatorReviewGateFor(),
             }
           : {}),
         ...(latestDecision
@@ -761,6 +762,28 @@ function privacyBoundaryNoteFor(): {
       "does not store prompt bodies, transcripts, raw paths, or provider credentials",
     reason: "keeps source-of-truth loop memory local-first and reviewable",
     local_only: true,
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function operatorReviewGateFor(): {
+  label: "Operator review gate";
+  review_step: "operator reviews the copied continuation brief before submitting";
+  manual_submit: "submission remains manual in Codex or Claude Code";
+  does_not: "does not auto-submit prompts, execute commands, write files, or change merge state";
+  auto_submit: false;
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Operator review gate",
+    review_step:
+      "operator reviews the copied continuation brief before submitting",
+    manual_submit: "submission remains manual in Codex or Claude Code",
+    does_not:
+      "does not auto-submit prompts, execute commands, write files, or change merge state",
+    auto_submit: false,
     writes_files: false,
     external_calls: false,
   };

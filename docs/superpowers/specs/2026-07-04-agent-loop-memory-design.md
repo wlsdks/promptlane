@@ -2411,6 +2411,45 @@ Do not add:
   secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.70: Selected Operator Review Gate
+
+Decision:
+
+- Selected worktree detail should show an operator review gate for continuation
+  handoff. It should state that the copied continuation brief is reviewed by the
+  operator before manual submission in Codex or Claude Code.
+- This is needed because paste destination and handoff checklist explain where
+  the brief goes, but the UI should also make clear that Loopdeck does not
+  automatically submit or execute the handoff.
+
+Add:
+
+- top-level selected worktree detail `operator_review_gate` with:
+  - label: `Operator review gate`
+  - review_step:
+    `operator reviews the copied continuation brief before submitting`
+  - manual_submit:
+    `submission remains manual in Codex or Claude Code`
+  - does_not:
+    `does not auto-submit prompts, execute commands, write files, or change merge state`
+  - auto_submit: `false`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance
+- focused server/API/web tests proving the gate is present
+
+Do not add:
+
+- Codex or Claude Code UI automation, hidden prompt submission, command
+  execution, git reads/writes, filesystem reads, merge-state mutation, checklist
+  completion state, background analysis, external model calls, memory approval
+  writes, merge decision writes, or new write tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

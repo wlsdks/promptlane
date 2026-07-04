@@ -344,6 +344,15 @@ export type LoopWorktreeResponse = {
     writes_files: false;
     external_calls: false;
   };
+  operator_review_gate?: {
+    label: "Operator review gate";
+    review_step: "operator reviews the copied continuation brief before submitting";
+    manual_submit: "submission remains manual in Codex or Claude Code";
+    does_not: "does not auto-submit prompts, execute commands, write files, or change merge state";
+    auto_submit: false;
+    writes_files: false;
+    external_calls: false;
+  };
   latest_decision?: {
     snapshot_id: string;
     worktree: string;

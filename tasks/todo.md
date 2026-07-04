@@ -313,7 +313,11 @@
 - [x] Task 72 RED: selected detail API/UI에 `privacy_boundary_note`가 없어 focused server/API/web tests 실패 확인
 - [x] Task 72 GREEN: selected worktree detail API/type/UI에 local DB/Markdown archive storage scope, no prompt bodies/transcripts/raw paths/provider credentials, local-only flags를 read-only로 노출
 - [x] Task 72 PRIVACY: privacy boundary note는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript storage/transcript import/credential handling/command execution/external call을 포함하지 않음
-- [ ] 다음 slice: selected detail panel의 continuation handoff에 operator review gate note를 raw-free로 별도 제공할지 결정
+- [x] Task 73 DECISION: operator review gate는 continuation handoff가 자동 제출이 아니라 사용자 검토 후 수동 제출임을 명확히 하기 위해 필요하므로 raw-free로 제공
+- [x] Task 73 RED: selected detail API/UI에 `operator_review_gate`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 73 GREEN: selected worktree detail API/type/UI에 operator review before submit, manual Codex/Claude Code submit, no auto-submit/no command/no write/no merge mutation flags를 read-only로 노출
+- [x] Task 73 PRIVACY: operator review gate는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript read/command execution/automatic submission/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 continuation handoff 이후 collection responsibility note를 raw-free로 별도 제공할지 결정
 
 ### 판단 기준
 
