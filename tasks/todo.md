@@ -3420,6 +3420,12 @@
 - [x] `ui-patrol` 스킬로 cron 기반 디자인 자동 점검 셋업.
 - [x] `workflow_dispatch` run `28717406758`에서 GitHub Actions ui-patrol 성공 및 screenshot artifact 9개 업로드 확인.
 - [ ] 운영 후 첫 scheduled artifact 결과 확인.
+## 2026-07-05 Codex Plugin Hook Event Mapping
+
+- [x] RED: Add packaging regression coverage that each bundled Codex plugin hook event uses the matching `PROMPT_COACH_HOOK` lifecycle marker.
+- [x] GREEN: Fix `plugins/prompt-coach/hooks.json` so `UserPromptSubmit`, `Stop`, `PreCompact`, and `PostCompact` no longer point at shifted markers.
+- [ ] VERIFY: Run focused packaging tests, full gates, push a coherent PR, merge, and prune the branch.
+
 ## 2026-07-05 Loopdeck Hook And Docs Copy
 
 - [x] RED: Add regression coverage for rewrite-guard hook context headers and docs copy that should describe product surfaces as Loopdeck while preserving `prompt-coach` command/id compatibility.
