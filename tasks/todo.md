@@ -26,6 +26,16 @@
 - 설치/배포 문서는 `package.json#files`와 `package.json#bin`의 실제 공개 surface를 따라야 한다.
 - TODO-only 정리 PR을 만들지 않고, 테스트 가능한 package contract drift와 문서 수정을 같은 slice로 묶는다.
 
+## 2026-07-05 Loopdeck MCP Storage Setup Copy
+
+- [x] RED: 중앙 MCP storage unavailable 메시지가 제품명 없이 `prompt-coach` archive만 말하면 실패하도록 고정
+- [x] GREEN: agent-facing setup 오류는 `Local Loopdeck archive`를 쓰고, 실행 command는 compatibility runtime인 `prompt-coach init`로 유지
+
+### 판단 기준
+
+- MCP tool 결과처럼 Codex/Claude Code가 직접 읽는 제품-facing 문구는 Loopdeck 방향을 반영한다.
+- 설치/호환성 command, package id, MCP server id는 `prompt-coach` compatibility window를 유지한다.
+
 ## 2026-07-04 Loop Snapshot CLI Implementation Plan
 
 - [x] 설계 문서의 Slice 1 범위를 CLI/storage/domain으로 제한

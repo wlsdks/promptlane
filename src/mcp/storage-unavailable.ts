@@ -4,5 +4,5 @@ export function storageUnavailableMessage(error: unknown): string {
       ? ` Reason: ${error.code}.`
       : "";
 
-  return `Local prompt-coach archive is not available. Run \`prompt-coach init\` first or pass --data-dir.${reason}`;
+  return `Local Loopdeck archive is not available. Run \`prompt-coach init\` first or pass --data-dir.${reason}`;
 }
