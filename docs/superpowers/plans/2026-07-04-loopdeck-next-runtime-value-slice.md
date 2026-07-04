@@ -452,9 +452,14 @@ Implementation checkpoint:
   advisory, explaining that the operator reviews post-submit retry freshness
   uncertainty before approving loop memory again, without Loopdeck approving
   memory or verifying freshness from the advisory.
+- Selected worktree detail now includes a raw-free post-memory-approval retry
+  renewed-memory-approval post-submit retry renewed-memory-approval collection
+  reminder, explaining that the operator collects a new explicit loop snapshot
+  after approving loop memory again after post-submit retry, without Loopdeck
+  starting collection from hidden approval signals.
 - The next runtime slice should decide whether selected worktree detail needs a
   raw-free post-memory-approval retry renewed-memory-approval post-submit
-  retry renewed-memory-approval collection reminder, without
+  retry renewed-memory-approval collection result non-persistence note, without
   adding transcript content, prompt bodies, raw paths, target contents,
   active-window titles, pasted content, paste result state, submitted state,
   agent response content, collection result state, post-approval collection

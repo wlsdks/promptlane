@@ -279,6 +279,8 @@ export function registerLoopRoutes(
                 continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPostSubmitRetryFreshnessUncertaintyCollectionReminderFor(),
               continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_pre_memory_approval_freshness_advisory:
                 continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPostSubmitRetryPreMemoryApprovalFreshnessAdvisoryFor(),
+              continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_collection_reminder:
+                continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPostSubmitRetryRenewedMemoryApprovalCollectionReminderFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -1701,6 +1703,28 @@ function continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPostSubmi
       "Loopdeck does not approve memory or verify post-submit retry freshness from this advisory",
     reason:
       "keeps renewed memory approval separate from post-submit retry freshness uncertainty review",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPostSubmitRetryRenewedMemoryApprovalCollectionReminderFor(): {
+  label: "Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval collection reminder";
+  reminder: "collect a new explicit loop snapshot after approving loop memory again after post-submit retry";
+  not_automated: "Loopdeck does not start collection from post-submit retry renewed memory approval or hidden approval signals";
+  reason: "keeps post-submit retry renewed-memory-approval collection operator-triggered and local-first";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label:
+      "Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval collection reminder",
+    reminder:
+      "collect a new explicit loop snapshot after approving loop memory again after post-submit retry",
+    not_automated:
+      "Loopdeck does not start collection from post-submit retry renewed memory approval or hidden approval signals",
+    reason:
+      "keeps post-submit retry renewed-memory-approval collection operator-triggered and local-first",
     writes_files: false,
     external_calls: false,
   };
