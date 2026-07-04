@@ -789,6 +789,21 @@ describe("LoopsView", () => {
     expect(html).toContain(
       "No post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval pre-handoff freshness advisory writes or external calls",
     );
+    expect(html).toContain(
+      "Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval pre-paste freshness advisory",
+    );
+    expect(html).toContain(
+      "review post-submit retry renewed-memory-approval freshness uncertainty before pasting into Codex or Claude Code",
+    );
+    expect(html).toContain(
+      "Loopdeck does not approve paste targets or verify post-submit retry renewed-memory-approval freshness before paste",
+    );
+    expect(html).toContain(
+      "keeps paste readiness separate from post-submit retry renewed-memory-approval freshness uncertainty review",
+    );
+    expect(html).toContain(
+      "No post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval pre-paste freshness advisory writes or external calls",
+    );
     expect(html).toContain("Paste destination");
     expect(html).toContain("Codex active request");
     expect(html).toContain("Claude Code active request");
@@ -1752,6 +1767,19 @@ function loopWorktree(): LoopWorktreeResponse {
           "Loopdeck does not approve handoffs or verify post-submit retry renewed-memory-approval freshness before handoff",
         reason:
           "keeps continuation handoff separate from post-submit retry renewed-memory-approval freshness uncertainty review",
+        writes_files: false,
+        external_calls: false,
+      },
+    continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_paste_freshness_advisory:
+      {
+        label:
+          "Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval pre-paste freshness advisory",
+        advisory:
+          "review post-submit retry renewed-memory-approval freshness uncertainty before pasting into Codex or Claude Code",
+        not_decision:
+          "Loopdeck does not approve paste targets or verify post-submit retry renewed-memory-approval freshness before paste",
+        reason:
+          "keeps paste readiness separate from post-submit retry renewed-memory-approval freshness uncertainty review",
         writes_files: false,
         external_calls: false,
       },
