@@ -429,7 +429,11 @@
 - [x] Task 101 RED: selected detail API/UI에 `continuation_safety_post_memory_approval_collection_result_non_persistence_note`가 없어 focused server/API/web tests 실패 확인
 - [x] Task 101 GREEN: selected worktree detail API/type/UI에 post-approval collection result outside Loopdeck until explicit snapshot, no detect/store/sync, no-write/no-external flags를 read-only로 노출
 - [x] Task 101 PRIVACY: continuation safety post-memory-approval collection result non-persistence note는 prompt body/evidence refs/outcome summary/raw path/target content/active-window title/pasted content/paste result state/submitted state/agent response content/collection result state/post-approval collection result state/retry result state/freshness result state/merge decision state/memory approval state/approval result state/git read/write/transcript import/command execution/persisted review state/checklist completion state/memory approval write/merge decision write/external call을 포함하지 않음
-- [ ] 다음 slice: selected detail panel의 post-memory-approval collection retry boundary note를 raw-free로 별도 제공할지 결정
+- [x] Task 102 DECISION: post-memory-approval collection retry boundary note는 retry가 operator가 explicit post-approval loop collection flow를 다시 실행하는 수동 경계이며 Loopdeck이 collection command나 hidden recovery action을 자동 retry하지 않음을 명확히 하기 위해 필요하므로 raw-free로 제공
+- [x] Task 102 RED: selected detail API/UI에 `continuation_safety_post_memory_approval_collection_retry_boundary_note`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 102 GREEN: selected worktree detail API/type/UI에 manual explicit post-approval collection retry, no automatic collection command retry/hidden recovery, no-write/no-external flags를 read-only로 노출
+- [x] Task 102 PRIVACY: continuation safety post-memory-approval collection retry boundary note는 prompt body/evidence refs/outcome summary/raw path/target content/active-window title/pasted content/paste result state/submitted state/agent response content/collection result state/post-approval collection result state/retry result state/post-approval retry result state/freshness result state/merge decision state/memory approval state/approval result state/git read/write/transcript import/command execution/persisted review state/checklist completion state/memory approval write/merge decision write/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 post-memory-approval retry outcome non-persistence note를 raw-free로 별도 제공할지 결정
 
 ### 판단 기준
 

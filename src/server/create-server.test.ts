@@ -1149,6 +1149,18 @@ describe("createServer P2 ingest boundary", () => {
             writes_files: false,
             external_calls: false,
           },
+        continuation_safety_post_memory_approval_collection_retry_boundary_note:
+          {
+            label: "Post-memory-approval collection retry boundary",
+            retry:
+              "operator reruns the explicit post-approval loop collection flow when retry is needed",
+            not_automated:
+              "Loopdeck does not automatically retry post-approval collection commands or hidden recovery actions",
+            reason:
+              "keeps post-approval collection retry control local and operator-triggered",
+            writes_files: false,
+            external_calls: false,
+          },
         paste_destination: {
           label: "Paste destination",
           targets: ["Codex active request", "Claude Code active request"],

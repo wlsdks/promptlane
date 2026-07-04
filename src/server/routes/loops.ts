@@ -237,6 +237,8 @@ export function registerLoopRoutes(
                 continuationSafetyPostMemoryApprovalCollectionReminderFor(),
               continuation_safety_post_memory_approval_collection_result_non_persistence_note:
                 continuationSafetyPostMemoryApprovalCollectionResultNonPersistenceNoteFor(),
+              continuation_safety_post_memory_approval_collection_retry_boundary_note:
+                continuationSafetyPostMemoryApprovalCollectionRetryBoundaryNoteFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -1203,6 +1205,27 @@ function continuationSafetyPostMemoryApprovalCollectionResultNonPersistenceNoteF
       "Loopdeck does not detect, store, or sync post-approval collection result state",
     reason:
       "keeps post-approval collection evidence tied to explicit local snapshot recording",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyPostMemoryApprovalCollectionRetryBoundaryNoteFor(): {
+  label: "Post-memory-approval collection retry boundary";
+  retry: "operator reruns the explicit post-approval loop collection flow when retry is needed";
+  not_automated: "Loopdeck does not automatically retry post-approval collection commands or hidden recovery actions";
+  reason: "keeps post-approval collection retry control local and operator-triggered";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Post-memory-approval collection retry boundary",
+    retry:
+      "operator reruns the explicit post-approval loop collection flow when retry is needed",
+    not_automated:
+      "Loopdeck does not automatically retry post-approval collection commands or hidden recovery actions",
+    reason:
+      "keeps post-approval collection retry control local and operator-triggered",
     writes_files: false,
     external_calls: false,
   };

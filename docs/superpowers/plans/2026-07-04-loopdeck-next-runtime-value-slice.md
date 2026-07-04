@@ -352,13 +352,18 @@ Implementation checkpoint:
   collection result non-persistence note, explaining that post-approval
   collection result state stays outside Loopdeck until the next explicit loop
   snapshot, without Loopdeck detecting, storing, or syncing that result state.
+- Selected worktree detail now includes a raw-free post-memory-approval
+  collection retry boundary note, explaining that the operator reruns the
+  explicit post-approval loop collection flow when retry is needed, without
+  Loopdeck automatically retrying commands or hidden recovery actions.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free post-memory-approval collection retry boundary note, without adding
-  transcript content, prompt bodies, raw paths, target contents, active-window
-  titles, pasted content, paste result state, submitted state, agent response
-  content, collection result state, post-approval collection result state, retry
-  result state, freshness result state, approval result state, freshness
-  verification, automatic collection, collection command execution, retry
-  automation, git status reads, command execution, persisted review state,
-  checklist completion state, memory approval writes, memory approval state,
-  merge writes, merge decision state, or external calls.
+  raw-free post-memory-approval retry outcome non-persistence note, without
+  adding transcript content, prompt bodies, raw paths, target contents,
+  active-window titles, pasted content, paste result state, submitted state,
+  agent response content, collection result state, post-approval collection
+  result state, retry result state, post-approval retry result state, freshness
+  result state, approval result state, freshness verification, automatic
+  collection, collection command execution, retry automation, git status reads,
+  command execution, persisted review state, checklist completion state, memory
+  approval writes, memory approval state, merge writes, merge decision state, or
+  external calls.

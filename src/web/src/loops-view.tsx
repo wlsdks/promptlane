@@ -1272,6 +1272,42 @@ export function LoopsView({
                     </p>
                   </div>
                 )}
+                {worktreeDetail.continuation_safety_post_memory_approval_collection_retry_boundary_note && (
+                  <div className="loop-review-item">
+                    <p className="loops-status-line">
+                      {
+                        worktreeDetail
+                          .continuation_safety_post_memory_approval_collection_retry_boundary_note
+                          .label
+                      }
+                    </p>
+                    <p className="loops-status-line">
+                      {
+                        worktreeDetail
+                          .continuation_safety_post_memory_approval_collection_retry_boundary_note
+                          .retry
+                      }
+                    </p>
+                    <p className="loops-status-line">
+                      {
+                        worktreeDetail
+                          .continuation_safety_post_memory_approval_collection_retry_boundary_note
+                          .not_automated
+                      }
+                    </p>
+                    <p className="loops-status-line">
+                      {
+                        worktreeDetail
+                          .continuation_safety_post_memory_approval_collection_retry_boundary_note
+                          .reason
+                      }
+                    </p>
+                    <p className="loops-status-line">
+                      No post-memory-approval collection retry writes or
+                      external calls
+                    </p>
+                  </div>
+                )}
                 {worktreeDetail.paste_destination && (
                   <div className="loop-review-item">
                     <p className="loops-status-line">

@@ -399,6 +399,21 @@ describe("LoopsView", () => {
     expect(html).toContain(
       "No post-memory-approval collection result persistence writes or external calls",
     );
+    expect(html).toContain(
+      "Post-memory-approval collection retry boundary",
+    );
+    expect(html).toContain(
+      "operator reruns the explicit post-approval loop collection flow when retry is needed",
+    );
+    expect(html).toContain(
+      "Loopdeck does not automatically retry post-approval collection commands or hidden recovery actions",
+    );
+    expect(html).toContain(
+      "keeps post-approval collection retry control local and operator-triggered",
+    );
+    expect(html).toContain(
+      "No post-memory-approval collection retry writes or external calls",
+    );
     expect(html).toContain("Paste destination");
     expect(html).toContain("Codex active request");
     expect(html).toContain("Claude Code active request");
@@ -1032,6 +1047,17 @@ function loopWorktree(): LoopWorktreeResponse {
         writes_files: false,
         external_calls: false,
       },
+    continuation_safety_post_memory_approval_collection_retry_boundary_note: {
+      label: "Post-memory-approval collection retry boundary",
+      retry:
+        "operator reruns the explicit post-approval loop collection flow when retry is needed",
+      not_automated:
+        "Loopdeck does not automatically retry post-approval collection commands or hidden recovery actions",
+      reason:
+        "keeps post-approval collection retry control local and operator-triggered",
+      writes_files: false,
+      external_calls: false,
+    },
     paste_destination: {
       label: "Paste destination",
       targets: ["Codex active request", "Claude Code active request"],
