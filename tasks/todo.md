@@ -373,7 +373,11 @@
 - [x] Task 87 RED: selected detail API/UI에 `continuation_safety_target_agent_check_note`가 없어 focused server/API/web tests 실패 확인
 - [x] Task 87 GREEN: selected worktree detail API/type/UI에 active request box check, no agent UI/target content inspection, no-write/no-external flags를 read-only로 노출
 - [x] Task 87 PRIVACY: continuation safety target-agent check note는 prompt body/evidence refs/outcome summary/raw path/target content/active-window title/git read/write/transcript import/command execution/persisted review state/checklist completion state/memory approval write/merge decision write/external call을 포함하지 않음
-- [ ] 다음 slice: selected detail panel의 paste destination verification boundary note를 raw-free로 별도 제공할지 결정
+- [x] Task 88 DECISION: paste destination verification boundary note는 paste destination이 Codex/Claude Code 안에서 operator가 수동 선택하는 경계이며 Loopdeck이 active window/target content/paste success를 verify하지 않음을 명확히 하기 위해 필요하므로 raw-free로 제공
+- [x] Task 88 RED: selected detail API/UI에 `continuation_safety_paste_destination_boundary_note`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 88 GREEN: selected worktree detail API/type/UI에 manual paste destination boundary, no active-window/target-content/paste-success verification, no-write/no-external flags를 read-only로 노출
+- [x] Task 88 PRIVACY: continuation safety paste destination boundary note는 prompt body/evidence refs/outcome summary/raw path/target content/active-window title/pasted content/paste result state/git read/write/transcript import/command execution/persisted review state/checklist completion state/memory approval write/merge decision write/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 manual submission boundary note를 raw-free로 별도 제공할지 결정
 
 ### 판단 기준
 

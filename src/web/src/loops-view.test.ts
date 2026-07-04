@@ -227,6 +227,19 @@ describe("LoopsView", () => {
       "keeps target selection manual before any continuation handoff",
     );
     expect(html).toContain("No target-agent check writes or external calls");
+    expect(html).toContain("Paste destination boundary");
+    expect(html).toContain(
+      "paste destination is a manual operator choice in Codex or Claude Code",
+    );
+    expect(html).toContain(
+      "Loopdeck does not verify active windows, target contents, or paste success",
+    );
+    expect(html).toContain(
+      "keeps destination verification outside Loopdeck automation before submission",
+    );
+    expect(html).toContain(
+      "No paste destination boundary writes or external calls",
+    );
     expect(html).toContain("Paste destination");
     expect(html).toContain("Codex active request");
     expect(html).toContain("Claude Code active request");
@@ -715,6 +728,17 @@ function loopWorktree(): LoopWorktreeResponse {
       not_inspection:
         "Loopdeck does not inspect agent UI state or target contents",
       reason: "keeps target selection manual before any continuation handoff",
+      writes_files: false,
+      external_calls: false,
+    },
+    continuation_safety_paste_destination_boundary_note: {
+      label: "Paste destination boundary",
+      boundary:
+        "paste destination is a manual operator choice in Codex or Claude Code",
+      not_verified:
+        "Loopdeck does not verify active windows, target contents, or paste success",
+      reason:
+        "keeps destination verification outside Loopdeck automation before submission",
       writes_files: false,
       external_calls: false,
     },

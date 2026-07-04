@@ -2996,6 +2996,50 @@ Do not add:
   content, active-window titles, or secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.85: Paste Destination Verification Boundary Note
+
+Decision:
+
+- Selected worktree detail should state that paste destination verification is
+  a manual operator boundary in Codex or Claude Code.
+- This is needed because destination guidance should not be mistaken for active
+  window detection, target content validation, paste success verification, or
+  hidden agent UI automation.
+
+Add:
+
+- top-level selected worktree detail
+  `continuation_safety_paste_destination_boundary_note` with:
+  - label: `Paste destination boundary`
+  - boundary:
+    `paste destination is a manual operator choice in Codex or Claude Code`
+  - not_verified:
+    `Loopdeck does not verify active windows, target contents, or paste success`
+  - reason:
+    `keeps destination verification outside Loopdeck automation before submission`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance, immediately after the target-agent check note
+- focused server/API/web tests proving the paste destination boundary note is
+  present
+
+Do not add:
+
+- active window detection, target-agent UI inspection, target content
+  validation, paste success verification, clipboard target validation, paste
+  automation, persisted destination state, persisted target state, safety
+  approval state, Codex or Claude Code UI automation, hidden prompt submission,
+  command execution, git reads/writes, filesystem reads/writes, transcript
+  import, persisted review state, checklist completion state, background
+  analysis, external model calls, memory approval writes, merge decision writes,
+  or new write tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, target
+  content, active-window titles, pasted content, paste result state, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

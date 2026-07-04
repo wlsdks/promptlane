@@ -209,6 +209,8 @@ export function registerLoopRoutes(
                 continuationSafetyPrePasteConfirmationNoteFor(),
               continuation_safety_target_agent_check_note:
                 continuationSafetyTargetAgentCheckNoteFor(),
+              continuation_safety_paste_destination_boundary_note:
+                continuationSafetyPasteDestinationBoundaryNoteFor(),
               paste_destination: pasteDestinationFor(),
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
@@ -891,6 +893,27 @@ function continuationSafetyTargetAgentCheckNoteFor(): {
     not_inspection:
       "Loopdeck does not inspect agent UI state or target contents",
     reason: "keeps target selection manual before any continuation handoff",
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function continuationSafetyPasteDestinationBoundaryNoteFor(): {
+  label: "Paste destination boundary";
+  boundary: "paste destination is a manual operator choice in Codex or Claude Code";
+  not_verified: "Loopdeck does not verify active windows, target contents, or paste success";
+  reason: "keeps destination verification outside Loopdeck automation before submission";
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Paste destination boundary",
+    boundary:
+      "paste destination is a manual operator choice in Codex or Claude Code",
+    not_verified:
+      "Loopdeck does not verify active windows, target contents, or paste success",
+    reason:
+      "keeps destination verification outside Loopdeck automation before submission",
     writes_files: false,
     external_calls: false,
   };
