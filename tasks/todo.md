@@ -56,7 +56,10 @@
 - [x] Dogfood: Codex `UserPromptSubmit` capture `prmt_20260704_101950_a5aa324a10c7`를 list/show/score/open으로 확인
 - [x] Dogfood: MCP stdio `tools/list`, `get_prompt_coach_status`, `score_prompt_archive` 호출이 통과하고 dogfood prompt id가 low-score list에 포함됨 확인
 - [x] Dogfood: Playwright로 detail UI를 열어 codex, 10/100 weak, 원문, 개선안, MCP/CLI action 렌더링 확인
-- [ ] 다음 dogfood slice: 실제 Codex/Claude Code 안에서 MCP action command를 호출해 selected prompt score/improve 흐름 확인
+- [x] RED: UI selected action이 안내하는 `score_prompt include_suggestions=true`가 MCP schema에 없어 strict client에서 깨질 수 있음을 server test로 재현
+- [x] GREEN: `score_prompt` MCP input schema에 `include_suggestions`를 추가해 UI action command와 tool schema를 일치시킴
+- [x] Dogfood: MCP stdio로 selected prompt `score_prompt prompt_id=... include_suggestions=true`와 `improve_prompt prompt_id=...` 호출 성공 확인
+- [ ] 다음 dogfood slice: 실제 Codex/Claude Code 안에서 MCP action command를 호출해 native tool routing과 ask-first UX 확인
 
 ### 판단 기준
 
@@ -65,6 +68,7 @@
 - `block-and-copy`처럼 decision이 필요한 hook 출력은 이번 수정에서 제거하지 않는다.
 - Codex/Claude Code MCP는 낡은 `prompt-memory` command가 아니라 `prompt-coach` 이름과 현재 dist entrypoint로 연결되어야 한다.
 - Archive, UI, MCP 검증은 prompt body/raw path를 외부로 보내지 않고 local-only 경로에서 수행한다.
+- Selected prompt MCP action은 UI에 표시되는 command, MCP tool schema, 실제 tool-call 동작이 서로 일치해야 한다.
 
 ## 2026-07-04 Loop Snapshot Domain Slice
 

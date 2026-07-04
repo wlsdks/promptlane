@@ -183,9 +183,9 @@ export const SCORE_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
       },
       latest: {
         type: "boolean",
-        description:
-          "Set true to score the latest stored prompt in the local prompt-coach archive.",
+        description: "Score the latest stored prompt in the local archive.",
       },
+      include_suggestions: { type: "boolean" },
     },
     additionalProperties: false,
   },

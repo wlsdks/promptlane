@@ -536,6 +536,33 @@ describe("MCP stdio server", () => {
     });
   });
 
+  it("declares include_suggestions for score_prompt selected prompt action compatibility", async () => {
+    const response = await handleMcpMessage({
+      jsonrpc: "2.0",
+      id: "tools-include-suggestions",
+      method: "tools/list",
+      params: {},
+    });
+
+    const tools = (
+      response as {
+        result: {
+          tools: Array<{
+            name: string;
+            inputSchema: {
+              properties: Record<string, unknown>;
+            };
+          }>;
+        };
+      }
+    ).result.tools;
+    const scorePrompt = tools.find((tool) => tool.name === "score_prompt");
+
+    expect(scorePrompt?.inputSchema.properties).toHaveProperty(
+      "include_suggestions",
+    );
+  });
+
   it("returns structured MCP content for improve_prompt calls", async () => {
     const response = await handleMcpMessage({
       jsonrpc: "2.0",
