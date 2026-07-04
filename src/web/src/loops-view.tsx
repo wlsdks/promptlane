@@ -13,6 +13,7 @@ import { formatDate } from "./formatters.js";
 import { LoopWorktreeBoundaryReviewItems } from "./loop-worktree-boundary-review-items.js";
 import { LoopWorktreeCollectionFreshnessItems } from "./loop-worktree-collection-freshness-items.js";
 import { LoopWorktreeContinuationSafetyItems } from "./loop-worktree-continuation-safety-items.js";
+import { LoopWorktreeDetailHeader } from "./loop-worktree-detail-header.js";
 import { LoopWorktreeMemoryCollectionItems } from "./loop-worktree-memory-collection-items.js";
 import { LoopWorktreeMemoryApprovalRetryRenewedItems } from "./loop-worktree-memory-approval-retry-renewed-items.js";
 import { LoopWorktreeMergeReviewSummary } from "./loop-worktree-merge-review-summary.js";
@@ -338,43 +339,7 @@ export function LoopsView({
       {worktreeDetail && (
         <div className="loop-table panel">
           <div className="loop-worktree-detail">
-            <span className="panel-eyebrow">Worktree detail</span>
-            <h2>{worktreeDetail.worktree}</h2>
-            {worktreeDetail.session_id && (
-              <p className="loops-status-line">
-                Session {worktreeDetail.session_id}
-              </p>
-            )}
-            {worktreeDetail.branch && (
-              <p className="loops-status-line">
-                Branch {worktreeDetail.branch}
-              </p>
-            )}
-            <div>
-              <p className="loops-status-line">
-                {worktreeDetail.selection_scope.label}
-              </p>
-              <p className="loops-status-line">
-                {worktreeDetail.selection_scope.reason}
-              </p>
-              <p className="loops-status-line">
-                Next {worktreeDetail.selection_scope.next_action}
-              </p>
-            </div>
-            {worktreeDetail.snapshot_age && (
-              <div>
-                <p className="loops-status-line">
-                  {worktreeDetail.snapshot_age.label}
-                </p>
-                <p className="loops-status-line">
-                  {worktreeDetail.snapshot_age.status}{" "}
-                  {worktreeDetail.snapshot_age.reason}
-                </p>
-                <p className="loops-status-line">
-                  Next {worktreeDetail.snapshot_age.next_action}
-                </p>
-              </div>
-            )}
+            <LoopWorktreeDetailHeader worktreeDetail={worktreeDetail} />
             <LoopWorktreeSelectedBriefGuidance worktreeDetail={worktreeDetail}>
               <LoopWorktreeContinuationSafetyItems
                 worktreeDetail={worktreeDetail}
@@ -395,12 +360,6 @@ export function LoopsView({
                 worktreeDetail={worktreeDetail}
               />
             </LoopWorktreeSelectedBriefGuidance>
-            {worktreeDetail.latest_decision && (
-              <p className="loops-status-line">
-                Latest decision {worktreeDetail.latest_decision.decision}{" "}
-                {worktreeDetail.latest_decision.reason}
-              </p>
-            )}
             <LoopWorktreeMergeReviewSummary worktreeDetail={worktreeDetail} />
             <div className="loop-memory-action">
               <code>Continue {worktreeDetail.worktree}</code>

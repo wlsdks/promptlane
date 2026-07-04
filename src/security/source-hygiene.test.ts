@@ -338,4 +338,13 @@ describe("source hygiene", () => {
     expect(loopsView).not.toContain("command_filters");
     expect(loopsView).not.toContain("copy_side_effects");
   });
+
+  it("keeps worktree detail header formatting outside LoopsView", () => {
+    const loopsView = readFileSync("src/web/src/loops-view.tsx", "utf8");
+
+    expect(loopsView).not.toContain("session_id");
+    expect(loopsView).not.toContain("selection_scope");
+    expect(loopsView).not.toContain("snapshot_age");
+    expect(loopsView).not.toContain("latest_decision");
+  });
 });

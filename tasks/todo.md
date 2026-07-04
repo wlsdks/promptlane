@@ -121,7 +121,11 @@
 - [x] Task 175 RED: selected brief command guidance field가 `LoopsView`에 직접 남아 있어 source hygiene test 실패 확인
 - [x] Task 175 GREEN: `LoopWorktreeSelectedBriefGuidance`로 continuation guidance와 관련 review item을 이동하고 `LoopsView` 직접 field 접근을 제거
 - [x] Task 175 PRIVACY: UI helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
-- [ ] 다음 slice: worktree detail header/selection/snapshot-age/latest-decision 영역 또는 command-center summary 영역을 하나의 응집된 UI cleanup PR로 묶을지 결정
+- [x] Task 176 DECISION: worktree detail header/selection/snapshot-age/latest-decision은 selected worktree status header 영역이므로 한 helper로 묶는다
+- [x] Task 176 RED: header/status field가 `LoopsView`에 직접 남아 있어 source hygiene test 실패 확인
+- [x] Task 176 GREEN: `LoopWorktreeDetailHeader`로 header/status rendering을 이동하고 `LoopsView` 직접 field 접근을 제거
+- [x] Task 176 PRIVACY: UI helper extraction만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
+- [ ] 다음 slice: command-center summary/review packet/worktree preview 영역을 하나의 응집된 UI cleanup PR로 묶을지 결정
 - [ ] 다음 dogfood slice: Codex native dialog fallback을 실제 OS dialog 또는 명시적 사용자 승인 하에 확인
 
 ### 판단 기준
