@@ -2371,6 +2371,46 @@ Do not add:
   secret-looking tokens
 - package/plugin/slash/hook/MCP rename work
 
+### Slice 4.69: Selected Privacy Boundary Note
+
+Decision:
+
+- Selected worktree detail should show the privacy boundary for the
+  source-of-truth model. It should say that Loopdeck stores local loop metadata
+  in the local database and Markdown archive, while not storing prompt bodies,
+  transcripts, raw paths, or provider credentials.
+- This is needed because the source-of-truth note explains what should count as
+  memory input, but not which private materials stay out of that memory model.
+
+Add:
+
+- top-level selected worktree detail `privacy_boundary_note` with:
+  - label: `Privacy boundary`
+  - storage_scope:
+    `stores loop metadata in the local database and Markdown archive only`
+  - does_not_store:
+    `does not store prompt bodies, transcripts, raw paths, or provider credentials`
+  - reason:
+    `keeps source-of-truth loop memory local-first and reviewable`
+  - local_only: `true`
+  - writes_files: `false`
+  - external_calls: `false`
+- web API typing and selected worktree detail rendering inside continuation
+  guidance
+- focused server/API/web tests proving the boundary note is present
+
+Do not add:
+
+- transcript import, transcript storage, prompt body storage, compact summary
+  import, provider credential handling, memory approval writes, merge decision
+  writes, Codex or Claude Code UI automation, hidden prompt submission, command
+  execution, git reads/writes, filesystem reads, background analysis, external
+  model calls, or new write tools
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, or
+  secret-looking tokens
+- package/plugin/slash/hook/MCP rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.

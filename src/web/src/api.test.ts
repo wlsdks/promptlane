@@ -339,6 +339,18 @@ describe("web api export client", () => {
               writes_files: false,
               external_calls: false,
             },
+            privacy_boundary_note: {
+              label: "Privacy boundary",
+              storage_scope:
+                "stores loop metadata in the local database and Markdown archive only",
+              does_not_store:
+                "does not store prompt bodies, transcripts, raw paths, or provider credentials",
+              reason:
+                "keeps source-of-truth loop memory local-first and reviewable",
+              local_only: true,
+              writes_files: false,
+              external_calls: false,
+            },
             latest_decision: {
               snapshot_id: "loop_web",
               worktree: "agent-loop-worktree",
@@ -532,6 +544,17 @@ describe("web api export client", () => {
         reason:
           "Loopdeck records explicit loop snapshots instead of importing agent transcripts",
         stores_transcripts: false,
+        writes_files: false,
+        external_calls: false,
+      },
+      privacy_boundary_note: {
+        label: "Privacy boundary",
+        storage_scope:
+          "stores loop metadata in the local database and Markdown archive only",
+        does_not_store:
+          "does not store prompt bodies, transcripts, raw paths, or provider credentials",
+        reason: "keeps source-of-truth loop memory local-first and reviewable",
+        local_only: true,
         writes_files: false,
         external_calls: false,
       },

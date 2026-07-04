@@ -192,6 +192,7 @@ export function registerLoopRoutes(
               handoff_checklist: handoffChecklistFor(),
               post_handoff_reminder: postHandoffReminderFor(),
               source_of_truth_note: sourceOfTruthNoteFor(),
+              privacy_boundary_note: privacyBoundaryNoteFor(),
             }
           : {}),
         ...(latestDecision
@@ -738,6 +739,28 @@ function sourceOfTruthNoteFor(): {
     reason:
       "Loopdeck records explicit loop snapshots instead of importing agent transcripts",
     stores_transcripts: false,
+    writes_files: false,
+    external_calls: false,
+  };
+}
+
+function privacyBoundaryNoteFor(): {
+  label: "Privacy boundary";
+  storage_scope: "stores loop metadata in the local database and Markdown archive only";
+  does_not_store: "does not store prompt bodies, transcripts, raw paths, or provider credentials";
+  reason: "keeps source-of-truth loop memory local-first and reviewable";
+  local_only: true;
+  writes_files: false;
+  external_calls: false;
+} {
+  return {
+    label: "Privacy boundary",
+    storage_scope:
+      "stores loop metadata in the local database and Markdown archive only",
+    does_not_store:
+      "does not store prompt bodies, transcripts, raw paths, or provider credentials",
+    reason: "keeps source-of-truth loop memory local-first and reviewable",
+    local_only: true,
     writes_files: false,
     external_calls: false,
   };

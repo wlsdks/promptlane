@@ -160,6 +160,17 @@ describe("LoopsView", () => {
       "Loopdeck records explicit loop snapshots instead of importing agent transcripts",
     );
     expect(html).toContain("No transcript storage, file writes, or external calls");
+    expect(html).toContain("Privacy boundary");
+    expect(html).toContain(
+      "stores loop metadata in the local database and Markdown archive only",
+    );
+    expect(html).toContain(
+      "does not store prompt bodies, transcripts, raw paths, or provider credentials",
+    );
+    expect(html).toContain(
+      "keeps source-of-truth loop memory local-first and reviewable",
+    );
+    expect(html).toContain("Local only, no file writes or external calls");
     expect(html).toContain("Continuation guidance");
     expect(html).toContain('class="loop-detail-section"');
     expect(html).toContain('class="loop-detail-section-title"');
@@ -483,6 +494,17 @@ function loopWorktree(): LoopWorktreeResponse {
       reason:
         "Loopdeck records explicit loop snapshots instead of importing agent transcripts",
       stores_transcripts: false,
+      writes_files: false,
+      external_calls: false,
+    },
+    privacy_boundary_note: {
+      label: "Privacy boundary",
+      storage_scope:
+        "stores loop metadata in the local database and Markdown archive only",
+      does_not_store:
+        "does not store prompt bodies, transcripts, raw paths, or provider credentials",
+      reason: "keeps source-of-truth loop memory local-first and reviewable",
+      local_only: true,
       writes_files: false,
       external_calls: false,
     },

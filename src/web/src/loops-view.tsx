@@ -535,6 +535,25 @@ export function LoopsView({
                     </p>
                   </div>
                 )}
+                {worktreeDetail.privacy_boundary_note && (
+                  <div className="loop-review-item">
+                    <p className="loops-status-line">
+                      {worktreeDetail.privacy_boundary_note.label}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.privacy_boundary_note.storage_scope}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.privacy_boundary_note.does_not_store}
+                    </p>
+                    <p className="loops-status-line">
+                      {worktreeDetail.privacy_boundary_note.reason}
+                    </p>
+                    <p className="loops-status-line">
+                      Local only, no file writes or external calls
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             {worktreeDetail.latest_decision && (

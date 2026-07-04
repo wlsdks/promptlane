@@ -309,7 +309,11 @@
 - [x] Task 71 RED: selected detail API/UI에 `source_of_truth_note`가 없어 focused server/API/web tests 실패 확인
 - [x] Task 71 GREEN: selected worktree detail API/type/UI에 next loop snapshot source-of-truth, no transcript import, no transcript storage flags를 read-only로 노출
 - [x] Task 71 PRIVACY: source-of-truth note는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript storage/transcript import/command execution/external call을 포함하지 않음
-- [ ] 다음 slice: selected detail panel의 source-of-truth model에 대한 privacy boundary note를 raw-free로 별도 제공할지 결정
+- [x] Task 72 DECISION: privacy boundary note는 source-of-truth model의 local DB/Markdown archive 범위와 저장 금지 데이터를 명확히 하기 위해 필요하므로 raw-free로 제공
+- [x] Task 72 RED: selected detail API/UI에 `privacy_boundary_note`가 없어 focused server/API/web tests 실패 확인
+- [x] Task 72 GREEN: selected worktree detail API/type/UI에 local DB/Markdown archive storage scope, no prompt bodies/transcripts/raw paths/provider credentials, local-only flags를 read-only로 노출
+- [x] Task 72 PRIVACY: privacy boundary note는 prompt body/evidence refs/outcome summary/raw path/git read/write/transcript storage/transcript import/credential handling/command execution/external call을 포함하지 않음
+- [ ] 다음 slice: selected detail panel의 continuation handoff에 operator review gate note를 raw-free로 별도 제공할지 결정
 
 ### 판단 기준
 

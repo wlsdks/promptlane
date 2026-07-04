@@ -335,6 +335,15 @@ export type LoopWorktreeResponse = {
     writes_files: false;
     external_calls: false;
   };
+  privacy_boundary_note?: {
+    label: "Privacy boundary";
+    storage_scope: "stores loop metadata in the local database and Markdown archive only";
+    does_not_store: "does not store prompt bodies, transcripts, raw paths, or provider credentials";
+    reason: "keeps source-of-truth loop memory local-first and reviewable";
+    local_only: true;
+    writes_files: false;
+    external_calls: false;
+  };
   latest_decision?: {
     snapshot_id: string;
     worktree: string;

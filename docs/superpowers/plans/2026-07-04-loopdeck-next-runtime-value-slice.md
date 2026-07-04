@@ -240,7 +240,11 @@ Implementation checkpoint:
 - Selected worktree detail now includes a raw-free source-of-truth note,
   explaining that the next loop snapshot is local loop memory input rather than
   a transcript import.
+- Selected worktree detail now includes a raw-free privacy boundary note,
+  explaining that Loopdeck stores loop metadata in the local database and
+  Markdown archive only, without prompt bodies, transcripts, raw paths, or
+  provider credentials.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free privacy boundary note for this source-of-truth model,
+  raw-free operator review gate note for continuation handoff,
   without adding transcript content, prompt bodies, raw paths, git status reads,
   command execution, memory approval writes, merge writes, or external calls.
