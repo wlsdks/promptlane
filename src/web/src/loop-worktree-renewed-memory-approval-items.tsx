@@ -84,6 +84,82 @@ export function LoopWorktreeRenewedMemoryApprovalItems({
           ]}
         />
       )}
+      {worktreeDetail.continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_merge_freshness_advisory && (
+        <LoopReviewItem
+          footer="No post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval pre-merge freshness advisory writes or external calls"
+          lines={[
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_merge_freshness_advisory
+              .label,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_merge_freshness_advisory
+              .advisory,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_merge_freshness_advisory
+              .not_decision,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_merge_freshness_advisory
+              .reason,
+          ]}
+        />
+      )}
+      {worktreeDetail.continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_handoff_freshness_advisory && (
+        <LoopReviewItem
+          footer="No post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval pre-handoff freshness advisory writes or external calls"
+          lines={[
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_handoff_freshness_advisory
+              .label,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_handoff_freshness_advisory
+              .advisory,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_handoff_freshness_advisory
+              .not_decision,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_handoff_freshness_advisory
+              .reason,
+          ]}
+        />
+      )}
+      {worktreeDetail.continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_paste_freshness_advisory && (
+        <LoopReviewItem
+          footer="No post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval pre-paste freshness advisory writes or external calls"
+          lines={[
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_paste_freshness_advisory
+              .label,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_paste_freshness_advisory
+              .advisory,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_paste_freshness_advisory
+              .not_decision,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_paste_freshness_advisory
+              .reason,
+          ]}
+        />
+      )}
+      {worktreeDetail.continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_submit_freshness_advisory && (
+        <LoopReviewItem
+          footer="No post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval pre-submit freshness advisory writes or external calls"
+          lines={[
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_submit_freshness_advisory
+              .label,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_submit_freshness_advisory
+              .advisory,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_submit_freshness_advisory
+              .not_decision,
+            worktreeDetail
+              .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_submit_freshness_advisory
+              .reason,
+          ]}
+        />
+      )}
       {worktreeDetail.continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_collection_pre_merge_freshness_advisory && (
         <LoopReviewItem
           footer="No post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval post-submit collection pre-merge freshness advisory writes or external calls"

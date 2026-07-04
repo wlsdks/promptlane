@@ -121,4 +121,21 @@ describe("source hygiene", () => {
       "continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_post_submit_freshness_advisory",
     );
   });
+
+  it("keeps renewed memory approval freshness boundary detail formatting outside LoopsView", () => {
+    const loopsView = readFileSync("src/web/src/loops-view.tsx", "utf8");
+
+    expect(loopsView).not.toContain(
+      "continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_merge_freshness_advisory",
+    );
+    expect(loopsView).not.toContain(
+      "continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_handoff_freshness_advisory",
+    );
+    expect(loopsView).not.toContain(
+      "continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_paste_freshness_advisory",
+    );
+    expect(loopsView).not.toContain(
+      "continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_renewed_memory_approval_pre_submit_freshness_advisory",
+    );
+  });
 });
