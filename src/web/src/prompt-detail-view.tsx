@@ -33,6 +33,7 @@ import {
 import { formatDate } from "./formatters.js";
 import type { Language } from "./i18n.js";
 import { improvementModeLabel } from "./improvement-mode-label.js";
+import { improvementSaveState } from "./improvement-save-state.js";
 import { JudgeScorePanel } from "./judge-score-panel.js";
 import { SafeMarkdown } from "./markdown.js";
 import { PromptAgentActionsPanel } from "./prompt-agent-actions.js";
@@ -285,6 +286,7 @@ function PromptCoachPanel({
       setFeedback("error");
     });
   };
+  const saveState = improvementSaveState(improvement.mode, saved);
   return (
     <section className="coach-panel" aria-label="Prompt improvement draft">
       <div className="analysis-header">
@@ -346,8 +348,13 @@ function PromptCoachPanel({
         <button className="coach-copy-button" onClick={onCopy} type="button">
           <Copy size={16} /> {copied ? "Copied" : "Copy draft"}
         </button>
-        <button className="coach-save-button" onClick={onSave} type="button">
-          <FileText size={16} /> {saved ? "Saved" : "Save draft"}
+        <button
+          className="coach-save-button"
+          disabled={saveState.disabled}
+          onClick={onSave}
+          type="button"
+        >
+          <FileText size={16} /> {saveState.label}
         </button>
       </div>
       {manualCopyFallback && (

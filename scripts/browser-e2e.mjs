@@ -244,6 +244,14 @@ try {
       "Saved draft",
       "Detail should label reopened saved drafts with user-facing copy.",
     );
+    const reopenedSaveButton = page.getByRole("button", {
+      name: "Already saved",
+    });
+    await reopenedSaveButton.waitFor();
+    assert(
+      await reopenedSaveButton.isDisabled(),
+      "Reopened saved drafts should not expose a second save action.",
+    );
     await assertNotText(
       page,
       unsavedClarification,
