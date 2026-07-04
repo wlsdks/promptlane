@@ -502,168 +502,81 @@ export function LoopsView({
                   />
                 )}
                 {worktreeDetail.continuation_safety_copy_feedback_reminder && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_reminder.label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_reminder
-                          .feedback_scope
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_reminder.next_step
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_reminder.reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No copy feedback reminder writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No copy feedback reminder writes or external calls"
+                    lines={[
+                      worktreeDetail.continuation_safety_copy_feedback_reminder
+                        .label,
+                      worktreeDetail.continuation_safety_copy_feedback_reminder
+                        .feedback_scope,
+                      worktreeDetail.continuation_safety_copy_feedback_reminder
+                        .next_step,
+                      worktreeDetail.continuation_safety_copy_feedback_reminder
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_copy_feedback_accessibility_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_accessibility_note
-                          .label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_accessibility_note
-                          .visible_label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_accessibility_note
-                          .assistive_feedback
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_accessibility_note
-                          .reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No accessibility feedback writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No accessibility feedback writes or external calls"
+                    lines={[
+                      worktreeDetail
+                        .continuation_safety_copy_feedback_accessibility_note
+                        .label,
+                      worktreeDetail
+                        .continuation_safety_copy_feedback_accessibility_note
+                        .visible_label,
+                      worktreeDetail
+                        .continuation_safety_copy_feedback_accessibility_note
+                        .assistive_feedback,
+                      worktreeDetail
+                        .continuation_safety_copy_feedback_accessibility_note
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_copy_feedback_timeout_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_timeout_note.label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_timeout_note
-                          .timeout_scope
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_timeout_note
-                          .not_state
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_timeout_note.reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No copy feedback timeout writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No copy feedback timeout writes or external calls"
+                    lines={[
+                      worktreeDetail.continuation_safety_copy_feedback_timeout_note
+                        .label,
+                      worktreeDetail.continuation_safety_copy_feedback_timeout_note
+                        .timeout_scope,
+                      worktreeDetail.continuation_safety_copy_feedback_timeout_note
+                        .not_state,
+                      worktreeDetail.continuation_safety_copy_feedback_timeout_note
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_copy_feedback_failure_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_failure_note.label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_failure_note
-                          .failure_scope
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_failure_note
-                          .not_state
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_copy_feedback_failure_note.reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No copy feedback failure writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No copy feedback failure writes or external calls"
+                    lines={[
+                      worktreeDetail.continuation_safety_copy_feedback_failure_note
+                        .label,
+                      worktreeDetail.continuation_safety_copy_feedback_failure_note
+                        .failure_scope,
+                      worktreeDetail.continuation_safety_copy_feedback_failure_note
+                        .not_state,
+                      worktreeDetail.continuation_safety_copy_feedback_failure_note
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_copy_retry_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_copy_retry_note
-                          .label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_copy_retry_note
-                          .retry_scope
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_copy_retry_note
-                          .not_automatic
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.continuation_safety_copy_retry_note
-                          .reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No copy retry writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No copy retry writes or external calls"
+                    lines={[
+                      worktreeDetail.continuation_safety_copy_retry_note.label,
+                      worktreeDetail.continuation_safety_copy_retry_note
+                        .retry_scope,
+                      worktreeDetail.continuation_safety_copy_retry_note
+                        .not_automatic,
+                      worktreeDetail.continuation_safety_copy_retry_note.reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_pre_paste_confirmation_note && (
                   <div className="loop-review-item">
