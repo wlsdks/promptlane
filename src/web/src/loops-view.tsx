@@ -666,179 +666,99 @@ export function LoopsView({
                   />
                 )}
                 {worktreeDetail.continuation_safety_post_submission_collection_reminder_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_post_submission_collection_reminder_note
-                          .label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_post_submission_collection_reminder_note
-                          .reminder
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_post_submission_collection_reminder_note
-                          .not_background
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_post_submission_collection_reminder_note
-                          .reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No post-submission collection writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No post-submission collection writes or external calls"
+                    lines={[
+                      worktreeDetail
+                        .continuation_safety_post_submission_collection_reminder_note
+                        .label,
+                      worktreeDetail
+                        .continuation_safety_post_submission_collection_reminder_note
+                        .reminder,
+                      worktreeDetail
+                        .continuation_safety_post_submission_collection_reminder_note
+                        .not_background,
+                      worktreeDetail
+                        .continuation_safety_post_submission_collection_reminder_note
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_collection_result_non_persistence_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_result_non_persistence_note
-                          .label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_result_non_persistence_note
-                          .result_scope
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_result_non_persistence_note
-                          .not_stored
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_result_non_persistence_note
-                          .reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No collection result persistence writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No collection result persistence writes or external calls"
+                    lines={[
+                      worktreeDetail
+                        .continuation_safety_collection_result_non_persistence_note
+                        .label,
+                      worktreeDetail
+                        .continuation_safety_collection_result_non_persistence_note
+                        .result_scope,
+                      worktreeDetail
+                        .continuation_safety_collection_result_non_persistence_note
+                        .not_stored,
+                      worktreeDetail
+                        .continuation_safety_collection_result_non_persistence_note
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_collection_retry_boundary_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_retry_boundary_note
-                          .label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_retry_boundary_note
-                          .retry
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_retry_boundary_note
-                          .not_automated
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_retry_boundary_note
-                          .reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No collection retry writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No collection retry writes or external calls"
+                    lines={[
+                      worktreeDetail
+                        .continuation_safety_collection_retry_boundary_note
+                        .label,
+                      worktreeDetail
+                        .continuation_safety_collection_retry_boundary_note
+                        .retry,
+                      worktreeDetail
+                        .continuation_safety_collection_retry_boundary_note
+                        .not_automated,
+                      worktreeDetail
+                        .continuation_safety_collection_retry_boundary_note
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_retry_outcome_non_persistence_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_retry_outcome_non_persistence_note
-                          .label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_retry_outcome_non_persistence_note
-                          .outcome_scope
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_retry_outcome_non_persistence_note
-                          .not_stored
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_retry_outcome_non_persistence_note
-                          .reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No retry outcome persistence writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No retry outcome persistence writes or external calls"
+                    lines={[
+                      worktreeDetail
+                        .continuation_safety_retry_outcome_non_persistence_note
+                        .label,
+                      worktreeDetail
+                        .continuation_safety_retry_outcome_non_persistence_note
+                        .outcome_scope,
+                      worktreeDetail
+                        .continuation_safety_retry_outcome_non_persistence_note
+                        .not_stored,
+                      worktreeDetail
+                        .continuation_safety_retry_outcome_non_persistence_note
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_collection_evidence_freshness_boundary_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_evidence_freshness_boundary_note
-                          .label
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_evidence_freshness_boundary_note
-                          .freshness_check
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_evidence_freshness_boundary_note
-                          .not_verified
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail
-                          .continuation_safety_collection_evidence_freshness_boundary_note
-                          .reason
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      No freshness verification writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No freshness verification writes or external calls"
+                    lines={[
+                      worktreeDetail
+                        .continuation_safety_collection_evidence_freshness_boundary_note
+                        .label,
+                      worktreeDetail
+                        .continuation_safety_collection_evidence_freshness_boundary_note
+                        .freshness_check,
+                      worktreeDetail
+                        .continuation_safety_collection_evidence_freshness_boundary_note
+                        .not_verified,
+                      worktreeDetail
+                        .continuation_safety_collection_evidence_freshness_boundary_note
+                        .reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.continuation_safety_freshness_result_non_persistence_note && (
                   <div className="loop-review-item">
