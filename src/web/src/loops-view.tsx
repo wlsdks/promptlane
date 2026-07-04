@@ -1636,64 +1636,38 @@ export function LoopsView({
                   />
                 )}
                 {worktreeDetail.privacy_boundary_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {worktreeDetail.privacy_boundary_note.label}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.privacy_boundary_note.storage_scope}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.privacy_boundary_note.does_not_store}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.privacy_boundary_note.reason}
-                    </p>
-                    <p className="loops-status-line">
-                      Local only, no file writes or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="Local only, no file writes or external calls"
+                    lines={[
+                      worktreeDetail.privacy_boundary_note.label,
+                      worktreeDetail.privacy_boundary_note.storage_scope,
+                      worktreeDetail.privacy_boundary_note.does_not_store,
+                      worktreeDetail.privacy_boundary_note.reason,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.operator_review_gate && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {worktreeDetail.operator_review_gate.label}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.operator_review_gate.review_step}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.operator_review_gate.manual_submit}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.operator_review_gate.does_not}
-                    </p>
-                    <p className="loops-status-line">
-                      No automatic submission, file writes, or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No automatic submission, file writes, or external calls"
+                    lines={[
+                      worktreeDetail.operator_review_gate.label,
+                      worktreeDetail.operator_review_gate.review_step,
+                      worktreeDetail.operator_review_gate.manual_submit,
+                      worktreeDetail.operator_review_gate.does_not,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.collection_responsibility_note && (
-                  <div className="loop-review-item">
-                    <p className="loops-status-line">
-                      {worktreeDetail.collection_responsibility_note.label}
-                    </p>
-                    <p className="loops-status-line">
-                      {
-                        worktreeDetail.collection_responsibility_note
-                          .responsible_party
-                      }
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.collection_responsibility_note.trigger}
-                    </p>
-                    <p className="loops-status-line">
-                      {worktreeDetail.collection_responsibility_note.does_not}
-                    </p>
-                    <p className="loops-status-line">
-                      No automatic collection, file writes, or external calls
-                    </p>
-                  </div>
+                  <LoopReviewItem
+                    footer="No automatic collection, file writes, or external calls"
+                    lines={[
+                      worktreeDetail.collection_responsibility_note.label,
+                      worktreeDetail.collection_responsibility_note
+                        .responsible_party,
+                      worktreeDetail.collection_responsibility_note.trigger,
+                      worktreeDetail.collection_responsibility_note.does_not,
+                    ]}
+                  />
                 )}
                 {worktreeDetail.pre_merge_advisory && (
                   <div className="loop-review-item">

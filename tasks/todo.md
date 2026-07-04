@@ -725,7 +725,11 @@
 - [x] Task 156 RED: raw `loop-review-item` markup count가 16개라 source hygiene test의 13개 이하 기준 실패 확인
 - [x] Task 156 GREEN: handoff checklist, post-handoff reminder, source-of-truth note markup을 `LoopReviewItem`으로 전환해 raw markup count를 13개로 감소
 - [x] Task 156 PRIVACY: UI markup refactor만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
-- [ ] 다음 slice: selected detail panel 후반의 privacy/operator/collection responsibility raw `loop-review-item` markup을 `LoopReviewItem`으로 추가 전환할지 결정
+- [x] Task 157 DECISION: selected detail panel 후반의 privacy/operator/collection responsibility raw `loop-review-item` markup은 같은 read-only line/footer 구조라 `LoopReviewItem`으로 계속 전환
+- [x] Task 157 RED: raw `loop-review-item` markup count가 13개라 source hygiene test의 10개 이하 기준 실패 확인
+- [x] Task 157 GREEN: privacy boundary note, operator review gate, collection responsibility note markup을 `LoopReviewItem`으로 전환해 raw markup count를 10개로 감소
+- [x] Task 157 PRIVACY: UI markup refactor만 수행하며 API field, 저장 state, prompt body/evidence refs/outcome summary/raw path/git read/write/transcript import/command execution/external call을 추가하지 않음
+- [ ] 다음 slice: selected detail panel 후반의 merge/post-collection/review packet raw `loop-review-item` markup을 `LoopReviewItem`으로 추가 전환할지 결정
 
 ### 판단 기준
 
