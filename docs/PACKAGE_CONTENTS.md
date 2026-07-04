@@ -52,8 +52,9 @@ The npm package intentionally includes:
 - local verification scripts: `scripts/benchmark.mjs`,
   `scripts/browser-e2e.mjs`, `scripts/hook-binary-smoke.mjs`,
   `scripts/mcp-coach-loop-smoke.mjs`, `scripts/mcp-elicitation-smoke.mjs`,
-  `scripts/mcp-native-dialog-preflight.mjs`, `scripts/quality-gate.mjs`, and
-  `scripts/release-smoke.mjs`
+  `scripts/mcp-native-dialog-approved.mjs`,
+  `scripts/mcp-native-dialog-preflight.mjs`, `scripts/quality-gate.mjs`,
+  `scripts/release-smoke.mjs`, and `scripts/ui-patrol.mjs`
 
 ## Excluded
 
