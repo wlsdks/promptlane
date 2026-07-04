@@ -282,6 +282,14 @@ describe("web api export client", () => {
                 reason: "latest selected worktree outcome is not passing",
                 next_action: "review outcome before merge",
               },
+              brief_rationale: {
+                label: "Brief rationale",
+                merge_readiness: "needs_review",
+                reason:
+                  "selected brief continues review work without marking it merge-ready",
+                next_action: "copy selected continuation brief",
+                merge_gate: "review outcome before merge",
+              },
               evidence_count_explanation: {
                 label: "Evidence count",
                 count: 2,
@@ -380,6 +388,14 @@ describe("web api export client", () => {
           status: "needs_review",
           reason: "latest selected worktree outcome is not passing",
           next_action: "review outcome before merge",
+        },
+        brief_rationale: {
+          label: "Brief rationale",
+          merge_readiness: "needs_review",
+          reason:
+            "selected brief continues review work without marking it merge-ready",
+          next_action: "copy selected continuation brief",
+          merge_gate: "review outcome before merge",
         },
         evidence_count_explanation: {
           label: "Evidence count",

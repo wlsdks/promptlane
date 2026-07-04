@@ -265,7 +265,11 @@
 - [x] Task 60 RED: selected detail API/UI에 `selected_brief_action`이 없어 focused tests 실패 확인
 - [x] Task 60 GREEN: selected worktree detail API/type/UI에 Selected brief action reason/command/no-write flags를 read-only로 노출
 - [x] Task 60 PRIVACY: action rationale은 selected filters 기반 CLI command와 safe flags만 포함하고 prompt body/evidence refs/outcome summary/raw path/git read/write/external call을 포함하지 않음
-- [ ] 다음 slice: selected worktree detail에 raw-free merge-readiness-to-brief rationale을 추가할지 결정
+- [x] Task 61 DECISION: selected brief는 continuation handoff이고 merge approval이 아니므로 readiness별 merge gate를 별도 rationale로 노출
+- [x] Task 61 RED: selected detail API/UI에 `review_packet_summary.brief_rationale`이 없어 focused tests 실패 확인
+- [x] Task 61 GREEN: selected worktree detail API/type/UI에 Brief rationale reason/next action/merge gate를 read-only로 노출
+- [x] Task 61 PRIVACY: rationale은 readiness status/action만 포함하고 prompt body/evidence refs/outcome summary/raw path/git read/write/external call을 포함하지 않음
+- [ ] 다음 slice: selected worktree detail guidance를 compact section structure로 정리할지 결정
 
 ### 판단 기준
 

@@ -203,7 +203,10 @@ Implementation checkpoint:
 - Selected worktree detail now includes a raw-free selected brief action
   rationale, including the CLI-equivalent filtered brief command and explicit
   no-file-write/no-external-call flags.
+- Selected worktree detail now includes a raw-free merge-readiness-to-brief
+  rationale, so users can see that copying a selected brief continues the loop
+  without satisfying the separate merge gate.
 - The next runtime slice should decide whether selected worktree detail needs a
-  raw-free merge-readiness-to-brief rationale, without adding transcript
-  content, prompt bodies, raw paths, git status reads, command execution, or
-  write tools.
+  compact section structure for the growing selected-detail guidance, without
+  adding transcript content, prompt bodies, raw paths, git status reads,
+  command execution, or write tools.

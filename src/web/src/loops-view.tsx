@@ -420,6 +420,31 @@ export function LoopsView({
                 </div>
                 <div>
                   <p className="loops-status-line">
+                    {worktreeDetail.review_packet_summary.brief_rationale.label}
+                  </p>
+                  <p className="loops-status-line">
+                    {
+                      worktreeDetail.review_packet_summary.brief_rationale
+                        .reason
+                    }
+                  </p>
+                  <p className="loops-status-line">
+                    Next{" "}
+                    {
+                      worktreeDetail.review_packet_summary.brief_rationale
+                        .next_action
+                    }
+                  </p>
+                  <p className="loops-status-line">
+                    Merge gate{" "}
+                    {
+                      worktreeDetail.review_packet_summary.brief_rationale
+                        .merge_gate
+                    }
+                  </p>
+                </div>
+                <div>
+                  <p className="loops-status-line">
                     {
                       worktreeDetail.review_packet_summary
                         .evidence_count_explanation.label

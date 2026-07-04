@@ -208,6 +208,9 @@ export function registerLoopRoutes(
                 readiness_summary: readinessSummaryFor(
                   reviewItem.merge_readiness,
                 ),
+                brief_rationale: briefRationaleFor(
+                  reviewItem.merge_readiness,
+                ),
                 evidence_count_explanation: evidenceCountExplanationFor(
                   reviewItem.evidence_count,
                 ),
@@ -588,6 +591,48 @@ function readinessSummaryFor(
     status: mergeReadiness.status,
     reason: "selected worktree has recorded evidence and passing outcome",
     next_action: mergeReadiness.next_action,
+  };
+}
+
+function briefRationaleFor(
+  mergeReadiness: LoopdeckStatusActivityMergeReadiness,
+): {
+  label: "Brief rationale";
+  merge_readiness: LoopdeckStatusActivityMergeReadiness["status"];
+  reason:
+    | "selected brief continues a ready worktree after evidence comparison"
+    | "selected brief continues review work without marking it merge-ready"
+    | "selected brief can continue evidence collection before merge";
+  next_action: "copy selected continuation brief";
+  merge_gate: LoopdeckStatusActivityMergeReadiness["next_action"];
+} {
+  if (mergeReadiness.status === "missing_evidence") {
+    return {
+      label: "Brief rationale",
+      merge_readiness: mergeReadiness.status,
+      reason: "selected brief can continue evidence collection before merge",
+      next_action: "copy selected continuation brief",
+      merge_gate: mergeReadiness.next_action,
+    };
+  }
+
+  if (mergeReadiness.status === "needs_review") {
+    return {
+      label: "Brief rationale",
+      merge_readiness: mergeReadiness.status,
+      reason:
+        "selected brief continues review work without marking it merge-ready",
+      next_action: "copy selected continuation brief",
+      merge_gate: mergeReadiness.next_action,
+    };
+  }
+
+  return {
+    label: "Brief rationale",
+    merge_readiness: mergeReadiness.status,
+    reason: "selected brief continues a ready worktree after evidence comparison",
+    next_action: "copy selected continuation brief",
+    merge_gate: mergeReadiness.next_action,
   };
 }
 

@@ -97,6 +97,12 @@ describe("LoopsView", () => {
     expect(html).toContain("Readiness summary");
     expect(html).toContain("latest selected worktree outcome is not passing");
     expect(html).toContain("review outcome before merge");
+    expect(html).toContain("Brief rationale");
+    expect(html).toContain(
+      "selected brief continues review work without marking it merge-ready",
+    );
+    expect(html).toContain("Next copy selected continuation brief");
+    expect(html).toContain("Merge gate review outcome before merge");
     expect(html).toContain("Evidence count");
     expect(html).toContain("2 selected worktree has evidence refs recorded");
     expect(html).toContain("Reviewer checklist preview");
@@ -339,6 +345,14 @@ function loopWorktree(): LoopWorktreeResponse {
         status: "needs_review",
         reason: "latest selected worktree outcome is not passing",
         next_action: "review outcome before merge",
+      },
+      brief_rationale: {
+        label: "Brief rationale",
+        merge_readiness: "needs_review",
+        reason:
+          "selected brief continues review work without marking it merge-ready",
+        next_action: "copy selected continuation brief",
+        merge_gate: "review outcome before merge",
       },
       evidence_count_explanation: {
         label: "Evidence count",

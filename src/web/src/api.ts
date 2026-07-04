@@ -302,6 +302,19 @@ export type LoopWorktreeResponse = {
         | "review outcome before merge"
         | "record loop outcome evidence";
     };
+    brief_rationale: {
+      label: "Brief rationale";
+      merge_readiness: "ready" | "needs_review" | "missing_evidence";
+      reason:
+        | "selected brief continues a ready worktree after evidence comparison"
+        | "selected brief continues review work without marking it merge-ready"
+        | "selected brief can continue evidence collection before merge";
+      next_action: "copy selected continuation brief";
+      merge_gate:
+        | "compare evidence before merge"
+        | "review outcome before merge"
+        | "record loop outcome evidence";
+    };
     evidence_count_explanation: {
       label: "Evidence count";
       count: number;

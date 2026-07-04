@@ -1954,6 +1954,48 @@ Do not add:
   external model calls
 - package, plugin, slash command, hook, or MCP server-name rename
 
+### Slice 4.58: Merge-Readiness-To-Brief Rationale
+
+Decision:
+
+- Selected worktree detail should explicitly connect selected merge-readiness
+  state to the selected brief action.
+- The selected brief is a continuation handoff, not a merge approval. When the
+  selected worktree needs review or evidence, the UI/API should make clear that
+  copying the brief can continue work while the merge gate remains separate.
+- This rationale should be derived only from existing safe merge-readiness
+  metadata. It should not inspect evidence contents, diffs, git state,
+  filesystem state, prompt bodies, or transcript content.
+
+Add:
+
+- `review_packet_summary.brief_rationale` with:
+  - label: `Brief rationale`
+  - merge_readiness:
+    - `ready`
+    - `needs_review`
+    - `missing_evidence`
+  - reason:
+    - `selected brief continues a ready worktree after evidence comparison`
+    - `selected brief continues review work without marking it merge-ready`
+    - `selected brief can continue evidence collection before merge`
+  - next_action: `copy selected continuation brief`
+  - merge_gate: selected worktree readiness next action
+- web API typing and selected worktree detail rendering near readiness summary
+- focused server/API/web tests proving selected brief action and merge gate stay
+  separate
+
+Do not add:
+
+- command execution, merge approval, checklist completion, acknowledgements,
+  file writes, git state reads, filesystem reads, branch checkout,
+  diff/conflict inspection, merge automation, or background scanning
+- prompt bodies, transcript content, compact summaries, outcome summaries,
+  evidence refs, evidence bodies, raw paths, provider credentials, or
+  secret-looking tokens
+- web or MCP write tools, external model calls, package/plugin/slash/hook/MCP
+  rename work
+
 ## 10. First Implementation Plan Boundary
 
 The first implementation plan should cover only Slice 1.
