@@ -61,7 +61,10 @@
 - [x] Dogfood: MCP stdio로 selected prompt `score_prompt prompt_id=... include_suggestions=true`와 `improve_prompt prompt_id=...` 호출 성공 확인
 - [x] Dogfood: 새 `codex exec` 세션에서 native `prompt-coach` MCP `score_prompt`/`improve_prompt` tool call 완료 확인
 - [x] Dogfood: native `improve_prompt` 결과가 `clarifying_questions`와 ask-first `next_action`을 반환하고 자동 제출하지 않음 확인
-- [ ] 다음 dogfood slice: Claude Code native MCP routing 또는 Codex native ask UI까지 이어지는 clarification answer/apply flow 확인
+- [x] Dogfood: MCP stdio `apply_clarifications`로 사용자 답변을 적용하면 copy/manual approval draft가 생성되고 local-only/no-external 경계를 유지함 확인
+- [x] Dogfood: MCP stdio `record_clarifications`는 stored prompt id에 답변 기반 draft를 저장하되 응답에는 prompt body, draft body, user answer text를 반환하지 않음 확인
+- [x] Dogfood: 새 `codex exec` 세션에서 native `prompt-coach` MCP `improve_prompt` -> `record_clarifications` tool call이 완료되고 manual review/copy 흐름을 유지함 확인
+- [ ] 다음 dogfood slice: Claude Code native MCP routing 또는 stored clarification draft를 local UI/CLI에서 검토하고 복사하는 end-to-end 흐름 확인
 
 ### 판단 기준
 
@@ -72,6 +75,8 @@
 - Archive, UI, MCP 검증은 prompt body/raw path를 외부로 보내지 않고 local-only 경로에서 수행한다.
 - Selected prompt MCP action은 UI에 표시되는 command, MCP tool schema, 실제 tool-call 동작이 서로 일치해야 한다.
 - Native tool routing 검증은 현재 실행 중인 thread tool exposure가 아니라 새 agent session에서 실제 `mcp_tool_call` 이벤트가 발생했는지로 판단한다.
+- Direct `apply_clarifications`는 현재 입력받은 prompt text로 copy draft를 반환하는 즉석 도구이고, stored prompt 기반 raw-free MCP 응답은 `record_clarifications`로 검증한다.
+- Stored clarification 기록은 local archive write를 허용하지만 MCP 응답은 metadata-only여야 하며, 실제 draft body 검토와 복사는 local UI/CLI에서 사용자가 수행해야 한다.
 
 ## 2026-07-04 Loop Snapshot Domain Slice
 
