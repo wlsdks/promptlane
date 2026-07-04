@@ -32,6 +32,7 @@ import {
 } from "./api.js";
 import { formatDate } from "./formatters.js";
 import type { Language } from "./i18n.js";
+import { improvementModeLabel } from "./improvement-mode-label.js";
 import { JudgeScorePanel } from "./judge-score-panel.js";
 import { SafeMarkdown } from "./markdown.js";
 import { PromptAgentActionsPanel } from "./prompt-agent-actions.js";
@@ -291,7 +292,7 @@ function PromptCoachPanel({
           <p className="eyebrow">Prompt coach</p>
           <h2>Improvement draft for manual resubmission</h2>
         </div>
-        <span className="badge">{improvement.mode}</span>
+        <span className="badge">{improvementModeLabel(improvement.mode)}</span>
       </div>
       <p className="analysis-summary">{improvement.summary}</p>
       <div

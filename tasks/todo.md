@@ -3529,4 +3529,11 @@
 - [x] RED: Add focused tests requiring saved drafts to reopen as the current improvement draft and expose a visible `Use as current draft` action.
 - [x] GREEN: Saved draft rows can now reopen their redacted draft text as the current coach draft without adding a new storage API or auto-submission path.
 - [x] VERIFY: Focused tests, full test/lint/build, browser E2E, pack dry-run, and diff check passed.
+- [x] INTEGRATE: PR #366 was merged to `main`; branch was pruned.
+
+## 2026-07-05 Saved Draft Mode Label
+
+- [x] RED: Add a focused label test proving `saved-draft` is not exposed as user-facing badge copy.
+- [x] GREEN: The coach draft badge now renders `Saved draft` for reopened saved drafts and `Copy draft` for generated drafts.
+- [x] VERIFY: Focused tests, browser E2E, full test/lint/build, pack dry-run, and diff check passed.
 - [ ] INTEGRATE: Push one coherent PR, merge it after CI, and prune the branch.

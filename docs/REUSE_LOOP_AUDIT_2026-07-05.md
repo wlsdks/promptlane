@@ -134,7 +134,8 @@ Follow-up implementation: saved draft rows now expose `Use as current draft`.
 This reopens the saved redacted draft text in the current coach draft panel,
 so the operator can reuse the existing copy, save, feedback, and manual-copy
 fallback controls without auto-submitting the prompt or adding a new storage
-write path.
+write path. Reopened drafts use the user-facing `Saved draft` badge rather
+than leaking the internal `saved-draft` mode enum into the UI.
 
 ## Decisions
 

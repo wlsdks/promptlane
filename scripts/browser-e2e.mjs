@@ -239,10 +239,20 @@ try {
       savedClarification,
       "Detail should reopen a saved draft as the current improvement draft.",
     );
+    await assertText(
+      page,
+      "Saved draft",
+      "Detail should label reopened saved drafts with user-facing copy.",
+    );
     await assertNotText(
       page,
       unsavedClarification,
       "Reopening a saved draft should replace the unsaved generated draft.",
+    );
+    await assertNotText(
+      page,
+      "saved-draft",
+      "Detail should not expose the saved-draft enum as visible UI copy.",
     );
   }
 
