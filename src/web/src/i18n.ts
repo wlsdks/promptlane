@@ -645,7 +645,7 @@ const UI_TRANSLATIONS: Record<string, string> = {
     "Claude Code 또는 Codex에 프롬프트 습관 점수를 요청하기 전에 로컬 아카이브 상태를 불러오세요.",
   "Use the status tool first so the agent can confirm capture, scoring, and privacy readiness.":
     "에이전트가 수집, 점수화, 개인정보 준비 상태를 확인할 수 있도록 먼저 status tool을 사용하세요.",
-  "Start the local prompt-coach server before using Claude Code or Codex MCP tools.":
+  "Start the local Loopdeck server before using Claude Code or Codex MCP tools.":
     "Claude Code 또는 Codex MCP 도구를 사용하기 전에 로컬 prompt-coach 서버를 시작하세요.",
   "Run prompt-coach server, then call get_prompt_coach_status from the agent.":
     "prompt-coach server를 실행한 뒤 에이전트에서 get_prompt_coach_status를 호출하세요.",

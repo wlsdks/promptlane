@@ -25,7 +25,7 @@ export function registerServerCommand(program: Command): void {
   program
     .command("server")
     .description(
-      "Run the local prompt-coach HTTP server (web UI, capture, MCP routes).",
+      "Run the local Loopdeck HTTP server (web UI, capture, MCP routes).",
     )
     .option("--data-dir <path>", "Override the prompt-coach data directory.")
     .action(async (options: ServerCommandOptions) => {

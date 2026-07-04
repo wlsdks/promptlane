@@ -3420,3 +3420,8 @@
 - [x] `ui-patrol` 스킬로 cron 기반 디자인 자동 점검 셋업.
 - [x] `workflow_dispatch` run `28717406758`에서 GitHub Actions ui-patrol 성공 및 screenshot artifact 9개 업로드 확인.
 - [ ] 운영 후 첫 scheduled artifact 결과 확인.
+## 2026-07-05 Loopdeck CLI Infrastructure Help Copy
+
+- [x] RED: Add regression coverage for CLI infrastructure help and MCP readiness copy that should use Loopdeck as the product surface while preserving `prompt-coach` command compatibility.
+- [x] GREEN: Update CLI/web help copy for server, MCP, hooks, status line, and service setup without renaming runtime IDs or command namespaces.
+- [ ] VERIFY: Run focused tests, full test/lint/build/pack dry-run gates, push a coherent PR, merge, and prune the branch.

@@ -650,7 +650,7 @@ function buildNextSteps(options: {
     );
     if (options.detectedTools.includes("claude-code")) {
       steps.push(
-        "Then run /prompt-coach:improve-last inside Claude Code to see prompt-coach rewrite that prompt.",
+        "Then run /prompt-coach:improve-last inside Claude Code to see Loopdeck rewrite guidance for that prompt.",
       );
     }
     steps.push(
@@ -677,7 +677,7 @@ function buildNextSteps(options: {
     }
     if (options.statusLineResult) {
       steps.push(
-        "Restart Claude Code if the prompt-coach status line is not visible.",
+        "Restart Claude Code if the Loopdeck status line is not visible.",
       );
     }
   }

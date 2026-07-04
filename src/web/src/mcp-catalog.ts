@@ -205,7 +205,7 @@ export function createMcpReadiness({
     status = "Server unavailable";
     tone = "warning";
     summary =
-      "Start the local prompt-coach server before using Claude Code or Codex MCP tools.";
+      "Start the local Loopdeck server before using Claude Code or Codex MCP tools.";
     nextAction =
       "Run prompt-coach server, then call get_prompt_coach_status from the agent.";
   } else if (redactionMode === "raw") {
