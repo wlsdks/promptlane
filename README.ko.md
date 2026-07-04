@@ -577,14 +577,14 @@ privacy/safety, 보고 규칙을 보는 deterministic local rubric입니다.
 prompt-coach mcp
 ```
 
-MCP server는 열세 개의 tool을 제공합니다.
+MCP server는 스무 개의 tool을 제공합니다.
 
 - `get_prompt_coach_status`: 로컬 archive가 초기화되었는지, prompt가 캡처되었는지, 다음에 어떤 MCP tool을 호출하면 좋은지 확인합니다.
 - `coach_prompt`: Claude Code/Codex 안에서 로컬 readiness, 최신 prompt 점수, 승인형 rewrite, 누적 습관, 프로젝트 규칙, 다음 요청 가이드를 한 번에 받습니다.
 - `score_prompt`: 직접 전달한 prompt text, 저장된 `prompt_id`, 또는 최신 저장 prompt를 점수화합니다.
 - `improve_prompt`: 직접 전달한 prompt text, 저장된 `prompt_id`, 또는 최신 저장 prompt를 승인 가능한 개선 prompt 초안으로 재작성합니다. 결과에는 사용자에게 native ask UI로 물어야 할 `clarifying_questions` 배열(JSON-Schema 형태의 `answer_schema.examples` 포함)이 포함됩니다.
 - `apply_clarifications`: 사용자가 직접 답한 답변(각 항목은 `origin: "user"` 필수)을 받아 최종 승인용 draft를 합성합니다. agent가 자기 ask UI로 답을 모은 뒤 호출합니다.
-- `ask_clarifying_questions`: prompt-coach가 ask-then-apply 흐름 자체를 주도합니다. 클라이언트가 elicitation capability를 광고하면(Claude Code 2.1.76+) MCP `elicitation/create`로 직접 사용자에게 묻고 final draft를 합성하며, 미지원 / 거부 / 타임아웃 시 clarifying_questions metadata로 fallback합니다. rewrite를 자동 제출하지 않습니다. 비대화형 Claude Code print 실행(`claude -p`)에서는 MCP tool routing이 성공해도 사용자가 답하지 않으면 `interaction_status: declined`가 반환될 수 있습니다. 이 경우 실패로 보지 말고 반환된 `clarifying_questions`를 agent의 native ask UI로 다시 물은 뒤, 사용자의 verbatim 답변으로 `apply_clarifications` 또는 `record_clarifications`를 호출합니다.
+- `ask_clarifying_questions`: prompt-coach가 ask-then-apply 흐름 자체를 주도합니다. 클라이언트가 elicitation capability를 광고하면(Claude Code 2.1.76+) MCP `elicitation/create`로 직접 사용자에게 묻고 final draft를 합성하며, 미지원 / 거부 / 타임아웃 시 clarifying_questions metadata로 fallback합니다. rewrite를 자동 제출하지 않습니다. 비대화형 Claude Code print 실행(`claude -p`)에서는 MCP tool routing이 성공해도 사용자가 답하지 않으면 `interaction_status: declined`가 반환될 수 있습니다. 이 경우 실패로 보지 말고 반환된 `clarifying_questions`를 agent의 native ask UI로 다시 물은 뒤, 먼저 `apply_clarifications`로 최종 승인용 draft를 채팅에 보여주고, 사용자가 저장도 원할 때만 `record_clarifications`를 호출합니다.
 - `record_clarifications`: 사용자가 답한 verbatim 답변과 합성된 최종 draft를 prompt id에 묶어 로컬 archive(`prompt_improvement_drafts`)에 영구 저장합니다. 응답에는 metadata(`draft_id`, `answers_count`, `changed_sections` 등)만 들어가고 prompt body나 draft 본문은 echo하지 않습니다.
 - `prepare_agent_rewrite`: 현재 Claude Code/Codex/Gemini CLI 세션이 의미론적으로 더 좋은 prompt를 만들 수 있도록, 하나의 redacted prompt packet, 로컬 점수 metadata, 로컬 baseline draft, rewrite contract를 준비합니다.
 - `record_agent_rewrite`: 사용자가 승인한 agent rewrite를 redacted improvement draft로 저장하고, rewrite 본문은 반환하지 않습니다.

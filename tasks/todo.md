@@ -3296,7 +3296,7 @@
 - [x] 다음 구현 후보: MCP capability metadata가 `tools/list` filtering까지 필요한지 결정하고, 필요할 때 registry/capability catalogue slice로 진행.
 - [ ] 다음 구현 후보: 새 MCP tool/schema 변경이 생길 때 `tools/list`와 `tools/call` dispatch를 같은 registry에서 파생.
 - [x] MCP coach loop stdio audit 실행: `score_prompt` -> `improve_prompt` -> `record_clarifications` 실제 MCP JSON-RPC 흐름 확인.
-- [ ] 다음 구현 후보: MCP instructions/docs에서 `apply_clarifications`를 final draft presentation step으로 명확화.
+- [x] 다음 구현 후보: MCP instructions/docs에서 `apply_clarifications`를 final draft presentation step으로 명확화.
 - [ ] 다음 검증 후보: 실제 Claude Code 또는 Codex interactive session에서 native ask UI handoff 확인.
 
 ### Track E — UI 패트롤 셋업
