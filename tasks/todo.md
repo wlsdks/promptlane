@@ -6,7 +6,7 @@
 - [x] RED: 9.5 plan must include `## Evidence Progress Ledger`, PR #417, PR #419, PR #421, `dogfood:loop-memory-approval`, `docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md`, workflow_dispatch run `28717406758`, no `schedule` event, and Remaining 9.5 blockers, or packaging guard fails.
 - [x] GREEN: 9.5 plan scorecard now reflects latest evidence levels, adds evidence ledger, and keeps scheduled UI patrol/native dialog/user-flow blockers explicit.
 - [x] VERIFY: focused packaging test와 full gate를 통과한다.
-- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+- [x] INTEGRATE: PR #423이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
