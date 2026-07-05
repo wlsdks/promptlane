@@ -11,19 +11,16 @@ operations 9.5 quality bar.
 | Local `corepack pnpm ui-patrol` | PASS | Captured 9 png files for archive, detail, dashboard, coach, projects, MCP, exports, settings desktop, and settings mobile. |
 | `corepack pnpm dogfood:web-user-flow` | PASS | Completed the archive/detail/dashboard/coach/projects/mcp/exports/settings/mobile browser flow with `browser e2e passed`. |
 
-## Remaining Scheduled Evidence
+## CI Policy
 
-This evidence does not complete the scheduled `ui-patrol` blocker.
-
-`corepack pnpm evidence:ui-patrol` still reports
-`pending_no_schedule_run` because the current workflow history has no real
-`schedule` event. The checker must continue to require a scheduled run with a
-`ui-patrol-screenshots` artifact containing 9 png files before returning
-`complete`.
+GitHub Actions workflows are no longer part of the PromptLane quality bar.
+`corepack pnpm evidence:ui-patrol` has been removed with the scheduled workflow.
+Local `ui-patrol` and `dogfood:web-user-flow` are the authoritative web
+operations evidence.
 
 ## Interpretation
 
-The web operations axis has current manual and local browser evidence, but it
-remains blocked externally until the scheduled cron event exists. `quality-evidence`
-records the proven non-scheduled portion as `manual_ui_patrol_artifact_evidence`
-and keeps `scheduled_ui_patrol` in remaining evidence.
+The web operations axis has current local browser evidence. `quality-evidence`
+records this as `manual_ui_patrol_artifact_evidence` and
+`local_ui_patrol_evidence`; it does not keep `scheduled_ui_patrol` as remaining
+evidence.

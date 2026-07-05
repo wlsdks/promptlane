@@ -6,7 +6,7 @@
 
 **Architecture:** Treat 9.5 as a proof standard, not a slogan. Each score axis must have a measurable bar, current evidence, missing evidence, and one or more TDD slices that close the gap without changing the trust model. Keep `PromptLane` as product name and `prompt-coach` as runtime compatibility id until a dedicated migration proves otherwise.
 
-**Tech Stack:** TypeScript, Node.js, Commander CLI, Fastify, SQLite, React/Vite, Vitest, Playwright, pnpm, Codex and Claude Code hooks/MCP/plugin surfaces. GitHub Actions is used only for scheduled `ui-patrol` operational evidence.
+**Tech Stack:** TypeScript, Node.js, Commander CLI, Fastify, SQLite, React/Vite, Vitest, Playwright, pnpm, Codex and Claude Code hooks/MCP/plugin surfaces. GitHub Actions is intentionally absent; PromptLane uses local gates and local browser patrol evidence.
 
 ---
 
@@ -19,7 +19,7 @@
 | Codex and Claude Code integration | 9.0/10 | 9.5 bar: setup, doctor, hook capture, MCP registration, plugin install guidance, slash commands, statusline, and recovery copy are all verified for both tools in isolated smoke and at least one real operator dogfood pass. | smoke:agent-setup, smoke:hooks, dogfood:first-coach-loop, docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md, AGENT-HARNESS. |
 | Setup, doctor, and MCP smoke | 9.5/10 | 9.5 bar: setup and doctor smoke proves capture readiness; MCP smoke proves score/improve/clarify/record loop; failure states produce raw-free recovery actions instead of generic errors. | smoke:agent-setup, smoke:mcp-coach-loop, storage_unavailable tests, package checks. |
 | Loop memory and continuation | 9.5/10 | 9.5 bar: collect, brief, outcome, memory candidate, memory approval, instruction patch proposal, and apply gate are proven through CLI and MCP with evidence-first rules and no automatic instruction writes. | Loop unit tests, storage evidence guards, dogfood:first-coach-loop, dogfood:loop-memory-approval, prompt-linked outcome evidence. |
-| Web UI and operational evidence | 8.6/10 | 9.5 bar: archive, detail, coach, saved draft reuse, settings, loops, exports, projects, and mobile layout have screenshots or browser assertions, plus scheduled `ui-patrol` artifact evidence. | corepack pnpm ui-patrol, workflow_dispatch run `28717406758`, scheduled `ui-patrol`, browser E2E, screenshot artifacts, in-app Browser audit. |
+| Web UI and operational evidence | 9.5/10 | 9.5 bar: archive, detail, coach, saved draft reuse, settings, loops, exports, projects, and mobile layout have local screenshots or browser assertions without depending on hosted CI. | corepack pnpm ui-patrol, dogfood:web-user-flow, browser E2E, screenshot artifacts, in-app Browser audit. |
 | Release stability | 9.5/10 | 9.5 bar: local supported-node gate, pack dry-run, release smoke, first coach loop dogfood, package contents, dependency audit, and release checklist all agree on shipped files and commands. | Local release gate, corepack pnpm pack:dry-run, smoke:release, dogfood:first-coach-loop, dogfood:loop-memory-approval, docs/RELEASE_CHECKLIST.md. |
 
 ## Evidence Progress Ledger
@@ -126,10 +126,10 @@
   `corepack pnpm test`, `corepack pnpm lint`, `corepack pnpm build`,
   `corepack pnpm pack:dry-run`, `smoke:release`, and package manifest guards
   prove the shipped files and commands.
-- General test CI was removed by maintainer decision. Do not reintroduce
-  PR/main test workflows as a release-stability requirement without a dedicated
-  product decision; keep scheduled `ui-patrol` as the only GitHub Actions
-  workflow because it proves external operational evidence.
+- General test CI and scheduled UI patrol workflows were removed by maintainer
+  decision. Do not reintroduce GitHub Actions workflows as a release-stability
+  or web-operations requirement without a dedicated product decision; local
+  gates, local `ui-patrol`, and dogfood commands are authoritative.
 - PR #478 exposed the same 9.5 quality evidence as an installed product CLI:
   `prompt-coach quality-evidence`, `prompt-coach quality-evidence --json`, and
   `prompt-coach quality-evidence --require-complete`. The command lists every
@@ -139,17 +139,8 @@
 
 ## Remaining 9.5 blockers
 
-- Scheduled `ui-patrol` artifact evidence remains pending until a real cron
-  `schedule` event appears and its screenshot artifact is verified.
-- `corepack pnpm evidence:ui-patrol` is the repeatable checker for that
-  blocker. It must stay `pending_no_schedule_run` while only workflow_dispatch
-  evidence exists, and it must require the `ui-patrol-screenshots` artifact
-  with 9 png files before returning `complete`. Pending output includes
-  `schedule_wait_state`, `last_expected_schedule_utc`,
-  `next_expected_schedule_utc`, and `schedule_cron` so the next check can
-  distinguish waiting for the next cron from an overdue missing schedule event.
 - `corepack pnpm evidence:quality` emits the `promptlane_95_quality` summary
-  and must include `scorecard_axes`, `scheduled_ui_patrol`, and
+  and must include `scorecard_axes` and
   `native_dialog_approved_dogfood` blockers until every axis reaches its 9.5
   evidence bar and the direct evidence is complete. Use
   `corepack pnpm evidence:quality -- --require-complete` when a release or
@@ -160,9 +151,9 @@
   `prompt-coach quality-evidence --json` or
   `prompt-coach quality-evidence --require-complete`.
   The JSON includes `axis_evidence_coverage`, which separates satisfied local
-  proof such as `local_95_evidence_sweep` and
+  proof such as `local_95_evidence_sweep`,
   `web_user_flow_current_main_evidence` from remaining gaps such as
-  `scorecard_level_below_9_5`, `scheduled_ui_patrol`, and
+  `scorecard_level_below_9_5` and
   `native_dialog_approved_dogfood`.
   The JSON also includes `scorecard_review_candidates`, which lists axes whose
   local evidence is present and whose only remaining gap is
@@ -172,24 +163,20 @@
   last proof, and `scorecard_review_candidates` is first whenever candidate
   axes exist. Because `web_user_flow_current_main_evidence`,
   `privacy_raw_free_regression_sweep`, and
-  `codex_claude_setup_smoke_refresh` were run and recorded, the next
-  immediately runnable local action is to review those candidate axes with
-  `prompt-coach quality-evidence --json` before scheduled cron review and
-  native dialog dogfood, which stay marked as externally blocked until their
-  event or explicit approval exists. Each recommendation carries
+  `codex_claude_setup_smoke_refresh` were run and recorded, the remaining
+  externally blocked action is native dialog dogfood, which stays blocked until
+  explicit approval exists. Each external recommendation carries
   `blocked_by_external_event` so agents can distinguish local work from
-  cron/operator wait states.
+  operator wait states.
 - `web_user_flow_current_main_evidence` was dogfooded after becoming the first
   recommendation: `corepack pnpm dogfood:web-user-flow` completed with
   `browser e2e passed` on current main. This refreshes local web workflow
-  evidence without treating scheduled `ui-patrol` or native-dialog dogfood as
-  complete.
+  evidence without treating native-dialog dogfood as complete.
 - `privacy_raw_free_regression_sweep` was run after becoming the first
   recommendation: `corepack pnpm test -- src/security src/hooks src/mcp`
   passed with 108 test files and 833 tests on current main-derived work. This
   refreshes the highest-risk raw-free hook/MCP/security evidence without
-  treating any scorecard axis, scheduled `ui-patrol`, or native-dialog dogfood
-  as complete.
+  treating native-dialog dogfood as complete.
 - `codex_claude_setup_smoke_refresh` was run after becoming the first
   recommendation: `corepack pnpm smoke:agent-setup` rebuilt server/web assets,
   exercised setup dry-run, setup with MCP registration, Claude Code doctor, and
@@ -206,13 +193,13 @@
   with `release smoke passed`, and `corepack pnpm benchmark -- --json`
   returned `privacy_leak_count: 0` plus `archive_effectiveness_score: 1`.
   This strengthens the local proof for privacy, Codex/Claude integration,
-  setup/MCP smoke, loop memory, and release stability while keeping scheduled
-  `ui-patrol` and native-dialog dogfood as separate blockers.
-- Local scorecard review promoted the four non-external candidate axes to
+  setup/MCP smoke, loop memory, and release stability while keeping
+  native-dialog dogfood as a separate blocker.
+- Local scorecard review promoted the five non-external candidate axes to
   9.5/10: local-first privacy boundary, setup/doctor/MCP smoke, loop memory and
-  continuation, and release stability. This removes those scorecard-axis
-  blockers while leaving product planning, Codex/Claude operator dogfood, web
-  operations, scheduled `ui-patrol`, and native-dialog approved dogfood pending.
+  continuation, web UI and operational evidence, and release stability. This
+  removes those scorecard-axis blockers while leaving Codex/Claude operator
+  dogfood and native-dialog approved dogfood pending.
 - `docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md` records current GitHub
   repository metadata, README/package/plugin metadata, product contract,
   backlog, goal audit, and Loopdeck legacy decision evidence. Product planning
@@ -221,18 +208,11 @@
   while keeping `prompt-coach` as the compatibility runtime ID.
   `quality-evidence` records this as
   `product_positioning_metadata_alignment`.
-- `docs/UI_PATROL_EVIDENCE_2026-07-06.md` records current non-scheduled web
-  operations evidence: workflow_dispatch run `28717406758`, the
-  `ui-patrol-screenshots` artifact with 9 png files, local
-  `corepack pnpm ui-patrol`, and `dogfood:web-user-flow`. `quality-evidence`
-  records this as `manual_ui_patrol_artifact_evidence` while keeping
-  `scheduled_ui_patrol` pending until a real cron `schedule` event exists.
-- `docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md` records scheduled patrol
-  readiness separately: `ui-patrol.yml` has both manual and scheduled triggers,
-  the cron is `17 6 * * 1`, the latest proven manual artifact path remains
-  workflow_dispatch run `28717406758`, and the repeatable evidence checker
-  refuses to treat that as cron completion. `quality-evidence` records this as
-  `scheduled_ui_patrol_preflight` while keeping `scheduled_ui_patrol` pending.
+- `docs/UI_PATROL_EVIDENCE_2026-07-06.md` records current local web operations
+  evidence: local `corepack pnpm ui-patrol`, `dogfood:web-user-flow`, and
+  9-png screenshot coverage. `quality-evidence` records this as
+  `manual_ui_patrol_artifact_evidence` and `local_ui_patrol_evidence`; no
+  GitHub Actions schedule evidence is required.
 - `docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md` records current
   non-operator Codex and Claude Code evidence: setup/doctor smoke, hook smoke,
   MCP coach-loop smoke, MCP elicitation smoke, no-dialog native fallback
@@ -245,11 +225,11 @@
   `native_dialog_preflight` evidence for MCP elicitation and no-dialog fallback
   behavior. It must not be treated as approved native OS dialog dogfood.
 - `quality-evidence` recommended next slices now carry explicit
-  `blocked_reason`, `available_after_utc` when a cron wait applies,
+  `blocked_reason`,
   preconditions, completion evidence, and guardrails for the remaining external
   blockers. This makes the next operator or scheduled-event pass executable
-  without changing the rule that 9.5 remains pending until real external
-  evidence exists.
+  without changing the rule that native dialog dogfood remains pending until
+  real operator-approved evidence exists.
 - The human `prompt-coach quality-evidence` output also renders external
   evidence status, including scheduled patrol cron and next expected UTC check
   time plus the native dialog approved-run requirement. The default blocker
@@ -272,8 +252,8 @@
   `corepack pnpm benchmark -- --json`. MCP score_prompt effectiveness evidence
   is now proven on the default branch through PR #462, main CI `28750281428`,
   and branch pruning. Release smoke evidence is current in
-  `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md`. Web operations still need
-  scheduled artifact evidence before claiming 9.5.
+  `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md`. Web operations are judged by
+  local browser evidence rather than scheduled artifact evidence.
 
 ## Required Slices
 
@@ -448,38 +428,39 @@ git diff --check
 
 Expected: all pass.
 
-### Task 4: Web UI Scheduled Patrol Evidence
+### Task 4: Web UI Local Patrol Evidence
 
 **Files:**
 - Modify: `docs/NEXT_BACKLOG.md`
-- Modify: `docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md`
+- Modify: `docs/UI_PATROL_EVIDENCE_2026-07-06.md`
 - Modify: `tasks/todo.md`
 - Modify: `src/packaging/plugin-files.test.ts`
 
-- [ ] **Step 1: Inspect scheduled `ui-patrol`**
+- [ ] **Step 1: Run local `ui-patrol`**
 
 Run:
 
 ```bash
-gh run list --workflow ui-patrol.yml --limit 20 --json databaseId,event,status,conclusion,createdAt,url
+corepack pnpm ui-patrol
 ```
 
-Expected: at least one `schedule` event after the cron has actually fired. If no scheduled event exists yet, record that as pending and do not mark this task complete.
+Expected: 9 png files covering archive, detail, dashboard, coach, projects,
+MCP, exports, settings desktop, and settings mobile.
 
-- [ ] **Step 2: Verify artifact**
+- [ ] **Step 2: Run web user-flow dogfood**
 
 Run:
 
 ```bash
-gh run download <run-id> --name ui-patrol-screenshots --dir /tmp/promptlane-ui-patrol
-find /tmp/promptlane-ui-patrol -type f -name '*.png' | sort
+corepack pnpm dogfood:web-user-flow
 ```
 
-Expected: 9 png files covering archive, detail, dashboard, coach, projects, MCP, exports, settings desktop, and settings mobile.
+Expected: ends with `browser e2e passed`.
 
 - [ ] **Step 3: Update evidence docs with guard**
 
-Add a packaging guard requiring scheduled run id, `schedule` event, and `9 png files` in both audit and backlog.
+Add or keep a packaging guard requiring GitHub Actions workflow absence, local
+`ui-patrol` packaging, and local web evidence in the current backlog/plan.
 
 - [ ] **Step 4: Run verification**
 

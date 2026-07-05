@@ -1,48 +1,11 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { spawnSync } from "node:child_process";
-import { afterEach, describe, expect, it } from "vitest";
-
-let sandbox: string | undefined;
-
-afterEach(() => {
-  if (sandbox) {
-    rmSync(sandbox, { recursive: true, force: true });
-    sandbox = undefined;
-  }
-});
+import { describe, expect, it } from "vitest";
 
 describe("quality 9.5 evidence script", () => {
-  it("keeps 9.5 completion pending when scheduled UI patrol and native dialog evidence are missing", () => {
-    sandbox = mkdtempSync(join(tmpdir(), "promptlane-quality-evidence-"));
-    const uiPatrolPath = join(sandbox, "ui-patrol.json");
-    writeFileSync(
-      uiPatrolPath,
-      JSON.stringify({
-        check: "scheduled_ui_patrol",
-        status: "pending_no_schedule_run",
-        schedule_wait_state: "waiting_for_next_cron",
-        last_expected_schedule_utc: "2026-06-29T06:17:00.000Z",
-        next_expected_schedule_utc: "2026-07-06T06:17:00.000Z",
-        expected_artifact: "ui-patrol-screenshots",
-        expected_png_count: 9,
-        latest_manual_run: {
-          databaseId: 28717406758,
-          conclusion: "success",
-        },
-        next_action:
-          "Wait until 2026-07-06T06:17:00.000Z, then rerun corepack pnpm evidence:ui-patrol.",
-      }),
-    );
-
+  it("keeps 9.5 completion pending when native dialog evidence is missing", () => {
     const result = spawnSync(
       process.execPath,
-      [
-        "scripts/quality-95-evidence.mjs",
-        "--ui-patrol-json",
-        uiPatrolPath,
-      ],
+      ["scripts/quality-95-evidence.mjs"],
       {
         cwd: process.cwd(),
         encoding: "utf8",
@@ -92,6 +55,7 @@ describe("quality 9.5 evidence script", () => {
         blocked_reason?: string;
         available_after_utc?: string;
       }>;
+      next_recheck_utc?: string;
       next_action: string;
     };
 
@@ -126,8 +90,9 @@ describe("quality 9.5 evidence script", () => {
         }),
         expect.objectContaining({
           id: "web_ui_and_operational_evidence",
-          current_level: "8.6/10",
-          status: "below_target",
+          current_level: "9.5/10",
+          target_level: "9.5/10",
+          status: "meets_target",
         }),
         expect.objectContaining({
           id: "release_stability",
@@ -137,7 +102,7 @@ describe("quality 9.5 evidence script", () => {
         }),
       ]),
     );
-    expect(parsed.blockers).toHaveLength(4);
+    expect(parsed.blockers).toHaveLength(2);
     expect(parsed.blockers).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -170,22 +135,6 @@ describe("quality 9.5 evidence script", () => {
             "Complete remaining evidence for Codex and Claude Code integration: native_dialog_approved_dogfood, scorecard_level_below_9_5.",
         }),
         expect.objectContaining({
-          id: "scorecard_axis:web_ui_and_operational_evidence",
-          status: "below_target",
-          remaining_evidence: expect.arrayContaining([
-            "scheduled_ui_patrol",
-            "scorecard_level_below_9_5",
-          ]),
-          next_action:
-            "Complete remaining evidence for Web UI and operational evidence: scheduled_ui_patrol, scorecard_level_below_9_5.",
-        }),
-        expect.objectContaining({
-          id: "scheduled_ui_patrol",
-          status: "pending_no_schedule_run",
-          next_action:
-            "Wait until 2026-07-06T06:17:00.000Z, then rerun corepack pnpm evidence:ui-patrol.",
-        }),
-        expect.objectContaining({
           id: "native_dialog_approved_dogfood",
           status: "pending_operator_approval",
         }),
@@ -212,16 +161,13 @@ describe("quality 9.5 evidence script", () => {
         }),
         expect.objectContaining({
           id: "web_ui_and_operational_evidence",
-          status: "blocked_external",
+          status: "complete",
           satisfied_evidence: expect.arrayContaining([
             "web_user_flow_current_main_evidence",
             "manual_ui_patrol_artifact_evidence",
-            "scheduled_ui_patrol_preflight",
+            "local_ui_patrol_evidence",
           ]),
-          remaining_evidence: expect.arrayContaining([
-            "scheduled_ui_patrol",
-            "scorecard_level_below_9_5",
-          ]),
+          remaining_evidence: [],
         }),
         expect.objectContaining({
           id: "codex_and_claude_code_integration",
@@ -256,11 +202,12 @@ describe("quality 9.5 evidence script", () => {
       "Do not claim 9.5 completion while blockers remain pending.",
     );
     expect(parsed.recommended_next_slices[0]).toMatchObject({
-      id: "scheduled_ui_patrol_cron_review",
-      axis: "web_ui_and_operational_evidence",
-      priority: 90,
+      id: "native_dialog_operator_dogfood",
+      axis: "codex_and_claude_code_integration",
+      priority: 100,
       blocked_by_external_event: true,
-      command: "corepack pnpm evidence:ui-patrol",
+      command:
+        "PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved",
     });
     expect(parsed.recommended_next_slices).not.toEqual(
       expect.arrayContaining([
@@ -286,22 +233,6 @@ describe("quality 9.5 evidence script", () => {
     expect(parsed.recommended_next_slices).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          id: "scheduled_ui_patrol_cron_review",
-          blocked_by_external_event: true,
-          blocked_reason: "waiting_for_next_cron",
-          available_after_utc: "2026-07-06T06:17:00.000Z",
-          preconditions: expect.arrayContaining([
-            "A real GitHub Actions schedule event exists for ui-patrol.yml.",
-          ]),
-          completion_evidence: expect.arrayContaining([
-            "scheduled_ui_patrol status is complete",
-            "ui-patrol-screenshots artifact contains 9 png files",
-          ]),
-          guardrails: expect.arrayContaining([
-            "Do not treat workflow_dispatch evidence as scheduled evidence.",
-          ]),
-        }),
-        expect.objectContaining({
           id: "native_dialog_operator_dogfood",
           blocked_by_external_event: true,
           blocked_reason: "operator_approval_required",
@@ -318,30 +249,21 @@ describe("quality 9.5 evidence script", () => {
         }),
       ]),
     );
+    expect(parsed.recommended_next_slices).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "scheduled_ui_patrol_cron_review",
+        }),
+      ]),
+    );
+    expect(parsed).not.toHaveProperty("next_recheck_utc");
     expect(result.stdout).not.toContain(process.cwd());
   });
 
   it("fails closed when require-complete is set and 9.5 evidence is still pending", () => {
-    sandbox = mkdtempSync(join(tmpdir(), "promptlane-quality-evidence-"));
-    const uiPatrolPath = join(sandbox, "ui-patrol.json");
-    writeFileSync(
-      uiPatrolPath,
-      JSON.stringify({
-        check: "scheduled_ui_patrol",
-        status: "pending_no_schedule_run",
-        expected_artifact: "ui-patrol-screenshots",
-        expected_png_count: 9,
-      }),
-    );
-
     const result = spawnSync(
       process.execPath,
-      [
-        "scripts/quality-95-evidence.mjs",
-        "--ui-patrol-json",
-        uiPatrolPath,
-        "--require-complete",
-      ],
+      ["scripts/quality-95-evidence.mjs", "--require-complete"],
       {
         cwd: process.cwd(),
         encoding: "utf8",

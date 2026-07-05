@@ -12,6 +12,7 @@ type QualityEvidenceCliOptions = {
 type QualityEvidenceSummary = {
   check: string;
   status: string;
+  next_recheck_utc?: string;
   scorecard_axes: unknown[];
   axis_evidence_coverage?: Array<{
     id: string;
@@ -43,14 +44,6 @@ type QualityEvidenceSummary = {
     expected_effect: string;
   }>;
   evidence?: {
-    scheduled_ui_patrol?: {
-      status: string;
-      workflow?: string;
-      schedule_cron?: string;
-      schedule_wait_state?: string;
-      last_expected_schedule_utc?: string;
-      next_expected_schedule_utc?: string;
-    };
     native_dialog_approved_dogfood?: {
       status: string;
       approved_run_required?: boolean;
@@ -175,6 +168,9 @@ function formatSummary(summary: QualityEvidenceSummary): string {
   return [
     "PromptLane 9.5 quality evidence",
     `Status: ${summary.status}`,
+    ...(summary.next_recheck_utc
+      ? [`Next recheck UTC: ${summary.next_recheck_utc}`]
+      : []),
     `Scorecard axes: ${summary.scorecard_axes.length}`,
     `Blockers: ${summary.blockers.length}`,
     "",
@@ -201,26 +197,6 @@ function formatSummary(summary: QualityEvidenceSummary): string {
 
 function formatExternalEvidenceRows(summary: QualityEvidenceSummary): string[] {
   const rows: string[] = [];
-  const scheduled = summary.evidence?.scheduled_ui_patrol;
-  if (scheduled) {
-    rows.push(
-      `- scheduled_ui_patrol: ${scheduled.status} workflow=${scheduled.workflow ?? "unknown"} cron=${scheduled.schedule_cron ?? "unknown"}`,
-    );
-    if (scheduled.schedule_wait_state) {
-      rows.push(`  schedule_wait_state=${scheduled.schedule_wait_state}`);
-    }
-    if (scheduled.last_expected_schedule_utc) {
-      rows.push(
-        `  last_expected_schedule_utc=${scheduled.last_expected_schedule_utc}`,
-      );
-    }
-    if (scheduled.next_expected_schedule_utc) {
-      rows.push(
-        `  next_expected_schedule_utc=${scheduled.next_expected_schedule_utc}`,
-      );
-    }
-  }
-
   const nativeDialog = summary.evidence?.native_dialog_approved_dogfood;
   if (nativeDialog) {
     rows.push(
