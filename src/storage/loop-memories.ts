@@ -72,13 +72,20 @@ export function recordLoopMemory(
   if (looksUnsafe(statement)) {
     throw new Error("Loop memory statement must not include raw paths or secrets.");
   }
+  const evidenceRefs = input.evidence_refs.map((ref) => ref.trim()).filter(Boolean);
+  if (evidenceRefs.length === 0) {
+    throw new Error("Loop memory evidence refs must not be empty.");
+  }
+  if (evidenceRefs.some(looksUnsafe)) {
+    throw new Error("Loop memory evidence refs must not include raw paths or secrets.");
+  }
 
   const memory: LoopMemory = {
     id: createLoopMemoryId(),
     snapshot_id: input.snapshot_id,
     title: input.title.trim() || "Loop memory",
     statement,
-    evidence_refs: input.evidence_refs,
+    evidence_refs: evidenceRefs,
     approved_by: input.approved_by.trim() || "user",
     created_at: now.toISOString(),
     privacy: loopMemoryPrivacy(),

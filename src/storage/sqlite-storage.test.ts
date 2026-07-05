@@ -317,6 +317,38 @@ describe("SQLite prompt storage", () => {
     storage.close();
   });
 
+  it("rejects approved loop memories without safe evidence references", () => {
+    const dataDir = createTempDir();
+    initializePromptCoach({ dataDir });
+    const storage = createSqlitePromptStorage({
+      dataDir,
+      hmacSecret: "test-secret",
+      now: () => new Date("2026-07-04T02:00:00.000Z"),
+    });
+
+    expect(() =>
+      storage.recordLoopMemory({
+        snapshot_id: "loop_memory",
+        title: "Missing evidence memory",
+        statement: "Use focused tests before full verification.",
+        evidence_refs: [],
+        approved_by: "user",
+      }),
+    ).toThrow("Loop memory evidence refs must not be empty.");
+    expect(() =>
+      storage.recordLoopMemory({
+        snapshot_id: "loop_memory",
+        title: "Unsafe evidence memory",
+        statement: "Use focused tests before full verification.",
+        evidence_refs: ["/Users/example/private-project/result.log"],
+        approved_by: "user",
+      }),
+    ).toThrow("Loop memory evidence refs must not include raw paths or secrets.");
+    expect(storage.listLoopMemories({ limit: 10 }).items).toHaveLength(0);
+
+    storage.close();
+  });
+
   it("initializes directories, applies migration, stores Markdown, indexes FTS, and deduplicates", async () => {
     const dataDir = createTempDir();
     initializePromptCoach({ dataDir });

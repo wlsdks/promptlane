@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane Loop Memory Evidence Guard
+
+- [x] CHECK: `decideLoopMemoryCandidate`, CLI `loop memory-approve`, MCP `record_loop_memory`는 최신 snapshot 후보 결정을 통해 passed loop와 evidence를 요구하는지 확인했다.
+- [x] RED: storage port가 빈 evidence 또는 unsafe evidence ref로 approved loop memory를 저장하면 `src/storage/sqlite-storage.test.ts`가 실패하도록 고정했다.
+- [x] GREEN: `recordLoopMemory`가 evidence refs를 trim/normalize하고, 빈 evidence refs와 raw path/secret-looking evidence refs를 저장 전에 거부하도록 수정했다.
+- [x] VERIFY: focused storage/CLI/MCP tests와 full gate를 통과한다.
+- [ ] INTEGRATE: PR CI `test (22)`/`test (24)` 통과 후 merge하고 branch prune까지 확인한다.
+
+### 판단 기준
+
+- durable loop memory는 passed loop 후보 생성뿐 아니라 storage write boundary에서도 evidence-first여야 한다.
+- approved memory evidence refs는 최소 하나 이상이어야 하며 raw local path나 secret-looking token을 포함하지 않아야 한다.
+- CLI/MCP는 계속 user approval과 separate instruction patch gate를 요구해야 한다.
+
 ## 2026-07-05 PromptLane MCP Storage Setup Guidance
 
 - [x] CHECK: GitHub repository name/description, local origin, package repository, README heading이 `promptlane`/PromptLane 기준인지 확인했다.
