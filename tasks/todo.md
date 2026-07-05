@@ -5,8 +5,8 @@
 - [x] CHECK: scheduled `ui-patrol` has not fired yet, and `docs/REUSE_LOOP_AUDIT_2026-07-05.md` still described the tested server as a local Loopdeck web server.
 - [x] RED: focused packaging guard must fail unless the reuse audit says `local PromptLane web server` and no longer contains `local Loopdeck`.
 - [x] GREEN: reuse audit path-tested copy now says `local PromptLane web server`.
-- [ ] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI, and branch prune all pass.
-- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+- [x] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI run `28745662071`, and branch prune all pass.
+- [x] INTEGRATE: PR #437이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
