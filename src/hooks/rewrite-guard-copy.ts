@@ -1,6 +1,6 @@
 export const HOOK_COPY = {
   en: {
-    contextHeader: "Loopdeck rewrite guidance",
+    contextHeader: "PromptLane rewrite guidance",
     contextHint:
       "Use this improved request as the working brief when it is clearer than the submitted prompt.",
     scoreLine: (score: number, band: string) =>
@@ -25,7 +25,7 @@ export const HOOK_COPY = {
       "Do not answer the prompt directly without first asking these clarifying questions and waiting for the user's reply.",
   },
   ko: {
-    contextHeader: "Loopdeck 개선안 가이드",
+    contextHeader: "PromptLane 개선안 가이드",
     contextHint:
       "원래 프롬프트보다 명확한 경우 아래 개선안을 작업 brief로 사용해주세요.",
     scoreLine: (score: number, band: string) =>

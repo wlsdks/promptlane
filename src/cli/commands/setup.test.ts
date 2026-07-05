@@ -139,13 +139,13 @@ describe("runSetup", () => {
     );
     expect(result.statusLine.claudeCode?.installed).toBe(true);
     expect(result.nextSteps).toContain(
-      "Then run /prompt-coach:improve-last inside Claude Code to see Loopdeck rewrite guidance for that prompt.",
+      "Then run /prompt-coach:improve-last inside Claude Code to see PromptLane rewrite guidance for that prompt.",
     );
     expect(result.nextSteps).not.toContain(
       "Then run /prompt-coach:improve-last inside Claude Code to see prompt-coach rewrite that prompt.",
     );
     expect(result.nextSteps).toContain(
-      "Restart Claude Code if the Loopdeck status line is not visible.",
+      "Restart Claude Code if the PromptLane status line is not visible.",
     );
     expect(result.nextSteps).not.toContain(
       "Restart Claude Code if the prompt-coach status line is not visible.",

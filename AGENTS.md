@@ -4,17 +4,18 @@
 
 ## 프로젝트 요약
 
-- 제품명은 **Loopdeck**이다.
+- 제품명은 **PromptLane**이다.
 - 현재 npm package, 기본 CLI, hook command, Claude Code slash namespace, canonical MCP server name은 compatibility window 동안 계속 `prompt-coach`다.
-- 포지셔닝은 "local-first agent loop memory and meta-prompting workbench for Codex, Claude Code, and coding-agent workflows"다.
-- 핵심 가치는 프롬프트 단일 점수에서 끝나지 않고, Codex/Claude Code 세션, worktree, branch, loop snapshot, continuation brief, user-approved memory, instruction patch proposal을 로컬에서 안전하게 연결하는 것이다.
+- 포지셔닝은 "local-first prompt improvement workspace for Codex, Claude Code, and long-running coding-agent work"다.
+- 핵심 가치는 Codex/Claude Code 프롬프트를 로컬에서 기록, 점수화, 개선하고, 필요한 경우 worktree, branch, loop snapshot, continuation brief, user-approved memory, instruction patch proposal까지 안전하게 이어 다음 요청을 더 좋게 만드는 것이다.
 - MVP 원칙은 local-first, explicit setup, fail-open hooks, redacted Markdown archive, SQLite index, no hidden provider calls, no automatic prompt resubmission이다.
 - 현재 스택은 TypeScript, Node.js, Commander CLI, Fastify, SQLite, React/Vite, Vitest, Playwright, pnpm이다.
 
 ## 필수 문서 라우팅
 
 - 구조 판단 전: `docs/ARCHITECTURE.md`
-- 제품/Loopdeck 기획 판단 전: `docs/LOOPDECK.md`, `docs/superpowers/specs/2026-07-04-agent-loop-memory-design.md`
+- 제품/PromptLane 기획 판단 전: `docs/PROMPTLANE.md`, `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md`
+- 과거 Loopdeck 결정 확인 전: `docs/LOOPDECK.md`
 - loop snapshot/schema/privacy 판단 전: `docs/LOOP-SNAPSHOT-SCHEMA.md`
 - 현재 우선순위 확인: `docs/NEXT_BACKLOG.md`, `tasks/todo.md`
 - Codex/Claude Code harness 판단 전: `docs/AGENT-HARNESS.md`
@@ -72,10 +73,10 @@ Node 지원 범위는 `package.json#engines.node`가 authoritative하다. depend
 
 ## Codex And Claude Code Integration
 
-- Codex와 Claude Code는 부가 통합이 아니라 Loopdeck의 1급 실행 표면이다.
+- Codex와 Claude Code는 부가 통합이 아니라 PromptLane의 1급 실행 표면이다.
 - Codex integration은 AGENTS.md, hooks, MCP, plugins, skills, worktrees, explicit automations를 기준으로 설계한다.
 - Claude Code integration은 plugin components, skills/commands, hooks, MCP servers, monitors, `CLAUDE.md`를 기준으로 설계한다.
-- 기존 `prompt-coach` runtime IDs는 compatibility contract다. `loopdeck` CLI alias는 존재하지만, package/plugin/slash/MCP server-name migration은 dedicated plan 없이 진행하지 않는다.
+- 기존 `prompt-coach` runtime IDs는 compatibility contract다. `loopdeck` CLI alias는 legacy compatibility alias로 존재하지만, package/plugin/slash/MCP server-name migration은 dedicated plan 없이 진행하지 않는다.
 - Worktree/session 분석은 기존 loop snapshots와 git-safe metadata에서만 파생한다. private app DB나 raw transcript store를 읽는 방향으로 확장하지 않는다.
 
 ## UI And Design

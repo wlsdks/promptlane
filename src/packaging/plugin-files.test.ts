@@ -124,7 +124,7 @@ describe("plugin packaging files", () => {
     }
   });
 
-  it("brands product-facing package and plugin metadata as Loopdeck while preserving prompt-coach command ids", () => {
+  it("brands product-facing package and plugin metadata as PromptLane while preserving runtime ids", () => {
     const packageJson = readJson<{
       name: string;
       description: string;
@@ -146,14 +146,18 @@ describe("plugin packaging files", () => {
       homepage: string;
       repository: string;
       keywords: string[];
-      interface: { displayName: string; shortDescription: string };
+      interface: {
+        displayName: string;
+        shortDescription: string;
+        longDescription: string;
+      };
     }>("plugins/prompt-coach/.codex-plugin/plugin.json");
 
     expect(packageJson.name).toBe("prompt-coach");
     expect(packageJson.bin).toHaveProperty("prompt-coach");
     expect(packageJson.bin.loopdeck).toBe("./dist/cli/index.js");
     expect(packageJson.description).toBe(
-      "Local-first agent loop memory and meta-prompting workbench for Codex, Claude Code, and coding-agent workflows.",
+      "PromptLane local-first prompt improvement workspace for Codex, Claude Code, and long-running coding-agent work.",
     );
     expect(packageJson.repository.url).toBe(
       "https://github.com/wlsdks/loopdeck.git",
@@ -171,15 +175,24 @@ describe("plugin packaging files", () => {
 
     for (const manifest of [claudeManifest, codexManifest]) {
       expect(manifest.name).toBe("prompt-coach");
-      expect(manifest.description).toContain("Loopdeck");
+      expect(manifest.description).toContain("PromptLane");
+      expect(manifest.description).toContain("prompt improvement workspace");
+      expect(manifest.description).not.toContain(
+        "agent loop memory and meta-prompting workbench",
+      );
       expect(manifest.homepage).toBe("https://github.com/wlsdks/loopdeck");
       expect(manifest.repository).toBe("https://github.com/wlsdks/loopdeck");
-      expect(manifest.keywords).toEqual(expect.arrayContaining(["loopdeck"]));
+      expect(manifest.keywords).toEqual(
+        expect.arrayContaining(["promptlane", "prompt-coach"]),
+      );
     }
 
-    expect(codexManifest.interface.displayName).toBe("Loopdeck");
+    expect(codexManifest.interface.displayName).toBe("PromptLane");
     expect(codexManifest.interface.shortDescription).toContain(
-      "agent loop memory",
+      "prompt improvement workspace",
+    );
+    expect(codexManifest.interface.longDescription).toContain(
+      "loop-aware continuation",
     );
   });
 
@@ -335,17 +348,17 @@ describe("plugin packaging files", () => {
     expect(manifest.name).toBe("prompt-coach");
     expect(manifest.hooks).toBeUndefined();
     expect(manifest.skills).toBe("./skills/");
-    expect(manifest.interface.displayName).toBe("Loopdeck");
+    expect(manifest.interface.displayName).toBe("PromptLane");
     expect(manifest.interface.category).toBe("Coding");
     expect(manifest.interface.defaultPrompt).toEqual(
       expect.arrayContaining([
-        "Show my Loopdeck buddy side pane command",
+        "Show my PromptLane buddy side pane command",
         "Use the loopdeck CLI alias for my next manual command",
-        "Show my Loopdeck hook rewrite-guard mode",
-        "Toggle the Loopdeck rewrite guard between off / context / ask / block-and-copy",
+        "Show my PromptLane hook rewrite-guard mode",
+        "Toggle the PromptLane rewrite guard between off / context / ask / block-and-copy",
         "Score my latest captured prompt",
         "Improve my latest captured prompt",
-        "Run my full Loopdeck coach workflow",
+        "Run my full PromptLane coach workflow",
         "Judge my low-scoring prompts with the active agent session",
         "Summarize my prompt habits",
       ]),
@@ -358,7 +371,7 @@ describe("plugin packaging files", () => {
     );
   });
 
-  it("uses Loopdeck-facing Codex plugin copy while preserving prompt-coach ids and setup-driven hook commands", () => {
+  it("uses PromptLane-facing Codex plugin copy while preserving prompt-coach ids and setup-driven hook commands", () => {
     const manifest = readJson<{
       name: string;
       hooks?: string;
@@ -378,14 +391,20 @@ describe("plugin packaging files", () => {
     expect(manifest.name).toBe("prompt-coach");
     expect(manifest.hooks).toBeUndefined();
     expect(manifest.skills).toBe("./skills/");
-    expect(manifest.interface.displayName).toBe("Loopdeck");
-    expect(manifest.interface.shortDescription).toContain("Loopdeck");
-    expect(manifest.interface.longDescription).toContain("Loopdeck");
+    expect(manifest.interface.displayName).toBe("PromptLane");
+    expect(manifest.interface.shortDescription).toContain("PromptLane");
+    expect(manifest.interface.shortDescription).toContain(
+      "prompt improvement workspace",
+    );
+    expect(manifest.interface.longDescription).toContain("PromptLane");
+    expect(manifest.interface.longDescription).toContain(
+      "loop-aware continuation",
+    );
     expect(manifest.interface.defaultPrompt).toEqual(
       expect.arrayContaining([
-        "Set up Loopdeck for this machine",
-        "Check whether Loopdeck is capturing Codex prompts",
-        "Open my local Loopdeck archive",
+        "Set up PromptLane for this machine",
+        "Check whether PromptLane is capturing Codex prompts",
+        "Open my local PromptLane archive",
       ]),
     );
     expect(manifest.interface.defaultPrompt).not.toEqual(
@@ -395,10 +414,10 @@ describe("plugin packaging files", () => {
       ]),
     );
     expect(skill).toContain(
-      "description: Use when the user wants to install, verify, search, or troubleshoot Loopdeck",
+      "description: Use when the user wants to install, verify, search, or troubleshoot PromptLane",
     );
     expect(skill).toContain(
-      "Use this skill when the user wants Codex to work with Loopdeck",
+      "Use this skill when the user wants Codex to work with PromptLane",
     );
     expect(skill).toContain(
       "The compatibility CLI command remains `prompt-coach`",
@@ -424,7 +443,7 @@ describe("plugin packaging files", () => {
     expect(plugins).toContain("`loopdeck` CLI alias");
   });
 
-  it("keeps Loopdeck docs from describing product surfaces as prompt-coach storage or servers", () => {
+  it("keeps PromptLane docs from describing product surfaces as prompt-coach storage or servers", () => {
     const docs = [
       readFileSync(join(process.cwd(), "README.md"), "utf8"),
       readFileSync(join(process.cwd(), "docs/PLUGINS.md"), "utf8"),
@@ -434,9 +453,9 @@ describe("plugin packaging files", () => {
       ),
     ].join("\n");
 
-    expect(docs).toContain("local Loopdeck storage");
-    expect(docs).toContain("Loopdeck MCP server");
-    expect(docs).toContain("local Loopdeck web server");
+    expect(docs).toContain("local PromptLane storage");
+    expect(docs).toContain("PromptLane MCP server");
+    expect(docs).toContain("local PromptLane web server");
     expect(docs).not.toContain("local prompt-coach storage");
     expect(docs).not.toContain("prompt-coach storage only");
     expect(docs).not.toContain("prompt-coach MCP server");
@@ -802,6 +821,38 @@ describe("plugin packaging files", () => {
     expect(spec).not.toContain("/Users/");
   });
 
+  it("ships the PromptLane product contract and marks Loopdeck as legacy", () => {
+    const contractPath = "docs/PROMPTLANE.md";
+    const legacyPath = "docs/LOOPDECK.md";
+    const packageJson = readJson<{ files: string[] }>("package.json");
+    const contract = readFileSync(join(process.cwd(), contractPath), "utf8");
+    const legacy = readFileSync(join(process.cwd(), legacyPath), "utf8");
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+
+    expect(packageJson.files).toContain(contractPath);
+    expect(packageJson.files).toContain(legacyPath);
+    expect(contract).toContain("# PromptLane");
+    expect(contract).toContain("Product name: PromptLane");
+    expect(contract).toContain("prompt improvement workspace");
+    expect(contract).toContain("loop-aware continuation");
+    expect(contract).toContain("Keep `prompt-coach`");
+    expect(contract).toContain("Do not auto-submit");
+    expect(legacy).toContain("# Loopdeck Legacy Decision");
+    expect(legacy).toContain("Loopdeck is not the primary product name");
+    expect(legacy).toContain("PromptLane");
+    expect(readme.startsWith("# PromptLane")).toBe(true);
+    expect(readme).toContain(
+      "Local-first prompt improvement workspace for Claude Code, Codex, and long-running coding-agent work.",
+    );
+    expect(readme).toContain("Loop features are loop-aware continuation");
+    expect(readmeKo.startsWith("# PromptLane")).toBe(true);
+    expect(readmeKo).toContain(
+      "Claude Code, Codex, 장기 coding-agent 작업을 위한 local-first prompt improvement workspace.",
+    );
+    expect(readmeKo).toContain("loop 기능은 loop-aware continuation");
+  });
+
   it("ships a machine-checkable runtime id inventory before rename work", () => {
     const inventoryPath =
       "docs/superpowers/plans/2026-07-04-loopdeck-runtime-id-inventory.json";
@@ -1102,9 +1153,9 @@ describe("plugin packaging files", () => {
       expect(content).toContain("loopdeck");
       expect(content).toContain("prompt-coach");
     }
-    expect(readme).toContain("loopdeck is a CLI alias");
-    expect(readmeKo).toContain("loopdeck는 CLI alias");
-    expect(packageContents).toContain("loopdeck alias");
+    expect(readme).toContain("loopdeck is a legacy CLI alias");
+    expect(readmeKo).toContain("loopdeck는 legacy CLI alias");
+    expect(packageContents).toContain("legacy loopdeck");
   });
 
   it("restores executable mode for the npm CLI bin after server builds", () => {

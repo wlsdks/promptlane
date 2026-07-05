@@ -1,9 +1,9 @@
 {
   "name": "prompt-coach",
-  "description": "Loopdeck is a local-first agent loop memory and meta-prompting workbench for Claude Code and Codex.",
+  "description": "PromptLane is a local-first prompt improvement workspace for Claude Code, Codex, and long-running coding-agent work.",
   "version": "0.1.0-beta.0",
   "author": {
-    "name": "Loopdeck contributors",
+    "name": "PromptLane contributors",
     "url": "https://github.com/wlsdks/loopdeck"
   },
   "commands": [
@@ -22,9 +22,10 @@
   "repository": "https://github.com/wlsdks/loopdeck",
   "license": "MIT",
   "keywords": [
+    "promptlane",
     "loopdeck",
     "prompt-coach",
-    "loop-engineering",
+    "prompt-improvement",
     "meta-prompting",
     "memory",
     "hooks",

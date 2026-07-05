@@ -507,7 +507,7 @@ function createAgentCoachBrief(input: {
 }): CoachPromptToolResult["agent_brief"] {
   if (input.status.status !== "ready") {
     return {
-      headline: "Loopdeck is not ready yet.",
+      headline: "PromptLane is not ready yet.",
       summary:
         "No captured prompt archive is available for coaching in this data directory.",
       next_actions: [

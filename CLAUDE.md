@@ -4,10 +4,10 @@ Claude Code는 먼저 `AGENTS.md`를 읽고 따른다. 이 파일은 Claude Code
 
 ## Claude Code 역할
 
-- Loopdeck의 현재 package, CLI, hook command, slash namespace, MCP server name은 compatibility window 동안 `prompt-coach`다.
+- PromptLane의 현재 package, CLI, hook command, slash namespace, MCP server name은 compatibility window 동안 `prompt-coach`다.
 - Claude Code plugin/slash command 문서에서는 `/prompt-coach:*`를 canonical namespace로 유지한다.
 - `/loopdeck:*`는 future alias-only namespace 계획이며, dedicated plugin rename plan 없이 command file이나 manifest를 추가하지 않는다.
-- `loopdeck` CLI alias는 manual terminal workflow용이다. 기존 setup, hook, plugin command 예시는 `prompt-coach`를 유지한다.
+- `loopdeck` CLI alias는 legacy manual terminal workflow용이다. 기존 setup, hook, plugin command 예시는 `prompt-coach`를 유지한다.
 
 ## Hook And Stdout Safety
 
@@ -43,4 +43,4 @@ corepack pnpm lint
 - AGENTS.md/CLAUDE.md 변경 전 `docs/INSTRUCTION-FILES.md`를 읽는다.
 - Claude-specific 내용만 이 파일에 둔다.
 - 공통 제품/아키텍처/검증 규칙은 `AGENTS.md` 또는 `docs/*`로 보낸다.
-- Loopdeck memory에서 instruction patch를 만들 때도 proposal과 explicit apply gate를 유지한다.
+- PromptLane memory에서 instruction patch를 만들 때도 proposal과 explicit apply gate를 유지한다.

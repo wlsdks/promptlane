@@ -32,7 +32,7 @@
   "codex_plugin": {
     "manifest": "plugins/prompt-coach/.codex-plugin/plugin.json",
     "manifest_name": "prompt-coach",
-    "display_name": "Loopdeck",
+    "display_name": "PromptLane",
     "install_path": "plugins/prompt-coach",
     "hook_install": "prompt-coach setup --profile coach --register-mcp --open-web"
   },

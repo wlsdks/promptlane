@@ -210,7 +210,7 @@ function formatBuddyLine(snapshot: BuddySnapshot): string {
 
 function formatBuddySnapshot(snapshot: BuddySnapshot): string {
   const rows = [
-    "Loopdeck Buddy",
+    "PromptLane Buddy",
     `Status        ${snapshot.status.status} (${snapshot.status.total_prompts} prompts)`,
   ];
 

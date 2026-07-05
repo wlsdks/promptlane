@@ -21,8 +21,8 @@ npm pack --dry-run --json --ignore-scripts
 
 The npm package intentionally includes:
 
-- `dist/cli`: the compiled `prompt-coach` CLI entrypoint, the loopdeck alias
-  that points at the same binary, plus experimental `pc-claude` and
+- `dist/cli`: the compiled `prompt-coach` CLI entrypoint, the legacy loopdeck
+  alias that points at the same binary, plus experimental `pc-claude` and
   `pc-codex` wrapper entrypoints
 - `dist/server`: the compiled local Fastify server and web API
 - `dist/web`: the compiled React web UI assets
@@ -33,9 +33,10 @@ The npm package intentionally includes:
 - public product and release docs under `docs/`
   - includes `docs/LEGAL_USAGE_GUIDE.md` so users can inspect the provider
     documentation boundary for agent-judge mode
-  - includes `docs/LOOPDECK.md` and `docs/LOOP-SNAPSHOT-SCHEMA.md` so
-    installed users can inspect the product contract and loop snapshot privacy
-    schema that back the Loopdeck direction
+  - includes `docs/PROMPTLANE.md`, `docs/LOOPDECK.md`, and
+    `docs/LOOP-SNAPSHOT-SCHEMA.md` so installed users can inspect the active
+    PromptLane product contract, the Loopdeck legacy decision, and the loop
+    snapshot privacy schema
   - includes `docs/AGENT-HARNESS.md` and `docs/INSTRUCTION-FILES.md` so
     installed plugin and CLI users can inspect the Codex/Claude Code harness
     contract and instruction-file layering rules without cloning the repo
@@ -50,7 +51,7 @@ The npm package intentionally includes:
     real Claude Code namespace alias path is proven
   - includes `docs/superpowers/plans/2026-07-04-loopdeck-mcp-server-name-decision.md`
     so the package records why `prompt-coach` remains the canonical MCP server
-    name during the Loopdeck migration
+    name during the PromptLane compatibility window
   - includes `docs/superpowers/plans/2026-07-04-loopdeck-deprecation-readiness.md`
     so future rename work has release-note, support, rollback, and upgrade-smoke
     gates before any old id is deprecated

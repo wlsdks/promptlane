@@ -88,7 +88,7 @@ const CODEX_HOOKS_FEATURE_KEY = "hooks";
 export function registerInstallHookCommands(program: Command): void {
   program
     .command("install-hook")
-    .description("Install the Loopdeck capture hook for Claude Code or Codex.")
+    .description("Install the PromptLane capture hook for Claude Code or Codex.")
     .argument("<tool>", "Tool to install hook for.")
     .option("--data-dir <path>", "Override the prompt-coach data directory.")
     .option("--settings-path <path>", "Override Claude Code settings path.")
@@ -155,7 +155,7 @@ export function registerInstallHookCommands(program: Command): void {
   program
     .command("uninstall-hook")
     .description(
-      "Uninstall the Loopdeck capture hook for Claude Code or Codex.",
+      "Uninstall the PromptLane capture hook for Claude Code or Codex.",
     )
     .argument("<tool>", "Tool to uninstall hook for.")
     .option("--data-dir <path>", "Override the prompt-coach data directory.")

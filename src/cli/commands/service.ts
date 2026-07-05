@@ -46,11 +46,11 @@ const SERVICE_LABEL = "com.prompt-coach.server";
 export function registerServiceCommand(program: Command): void {
   const service = program
     .command("service")
-    .description("Manage the Loopdeck background service.");
+    .description("Manage the PromptLane background service.");
 
   service
     .command("install")
-    .description("Install a login service for the local Loopdeck server.")
+    .description("Install a login service for the local PromptLane server.")
     .option("--data-dir <path>", "Override the prompt-coach data directory.")
     .option("--plist-path <path>", "Override macOS LaunchAgent plist path.")
     .option("--dry-run", "Print intended service change without writing.")
@@ -75,7 +75,7 @@ export function registerServiceCommand(program: Command): void {
 
   service
     .command("start")
-    .description("Start the Loopdeck service on supported platforms.")
+    .description("Start the PromptLane service on supported platforms.")
     .option("--plist-path <path>", "Override macOS LaunchAgent plist path.")
     .option("--json", "Print machine-readable JSON instead of plain text.")
     .action((options: ServiceActionOptions & { json?: boolean }) => {
@@ -92,7 +92,7 @@ export function registerServiceCommand(program: Command): void {
 
   service
     .command("stop")
-    .description("Stop the Loopdeck service on supported platforms.")
+    .description("Stop the PromptLane service on supported platforms.")
     .option("--plist-path <path>", "Override macOS LaunchAgent plist path.")
     .option("--json", "Print machine-readable JSON instead of plain text.")
     .action((options: ServiceActionOptions & { json?: boolean }) => {
@@ -109,7 +109,7 @@ export function registerServiceCommand(program: Command): void {
 
   service
     .command("status")
-    .description("Check the Loopdeck service status.")
+    .description("Check the PromptLane service status.")
     .option("--json", "Print machine-readable JSON instead of plain text.")
     .action((options: ServiceActionOptions & { json?: boolean }) => {
       const result = serviceStatus(options);
