@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-06 Codex Same-File Duplicate Hook Doctor
+
+- [x] CHECK: `doctor codex` detects duplicate PromptLane hooks across user/project sources, but same-file duplicate `UserPromptSubmit` hook groups can still create duplicate hook context output without being diagnosed.
+- [x] RED: focused doctor test must fail when one Codex hooks file contains two PromptLane `UserPromptSubmit` hook groups and `duplicateHooks` remains false.
+- [x] GREEN: doctor detects same-file duplicate PromptLane Codex `UserPromptSubmit` hooks while preserving existing user/project duplicate detection.
+- [ ] VERIFY: focused doctor test, full local gate, PR CI, latest main CI, and branch prune all pass.
+- [ ] INTEGRATE: PR is merged after CI and the temporary branch is pruned locally and remotely.
+
+### 판단 기준
+
+- duplicate hook output should be diagnosable from `prompt-coach doctor codex`.
+- this slice should not mutate user config automatically or remove hooks without explicit user action.
+- no raw prompt, path, token, or transcript content is introduced into doctor output.
+
 ## 2026-07-06 PromptLane Loop Snapshot MCP Branding
 
 - [x] CHECK: `docs/LOOP-SNAPSHOT-SCHEMA.md` is an active loop snapshot/privacy contract, but its MCP section still described the surface as `Loopdeck MCP tools`.

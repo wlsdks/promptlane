@@ -322,6 +322,41 @@ describe("doctorCodex", () => {
     expect(result.settings.ok).toBe(false);
   });
 
+  it("detects duplicate Codex UserPromptSubmit hooks inside one source", async () => {
+    const dir = createTempDir();
+    const dataDir = join(dir, "data");
+    const hooksPath = join(dir, ".codex", "hooks.json");
+    const configPath = join(dir, ".codex", "config.toml");
+    initializePromptCoach({ dataDir });
+    installCodexHook({ dataDir, hooksPath, configPath });
+    const hooks = JSON.parse(readFileSync(hooksPath, "utf8")) as {
+      hooks: {
+        UserPromptSubmit: Array<{
+          hooks: Array<{ command: string; type: "command" }>;
+        }>;
+      };
+    };
+    hooks.hooks.UserPromptSubmit.push({
+      hooks: [{ ...hooks.hooks.UserPromptSubmit[0].hooks[0] }],
+    });
+    writeFileSync(hooksPath, `${JSON.stringify(hooks, null, 2)}\n`);
+
+    const result = await doctorCodex({
+      dataDir,
+      hooksPath,
+      configPath,
+      checkServer: async () => true,
+    });
+
+    expect(result.settings.hookInstalled).toBe(true);
+    expect(result.settings.codexHooksEnabled).toBe(true);
+    expect(result.settings.duplicateHooks).toBe(true);
+    expect(result.settings.ok).toBe(false);
+    expect(formatDoctorResult("codex", result)).toContain(
+      "duplicate hooks found",
+    );
+  });
+
   it("formats Codex doctor output with hook and feature flag status", async () => {
     const dir = createTempDir();
     const dataDir = join(dir, "data");

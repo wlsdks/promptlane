@@ -11,7 +11,7 @@ import {
   type LastHookStatus,
 } from "../../hooks/hook-status.js";
 import {
-  hasPromptCoachCodexHook,
+  countPromptCoachCodexHooks,
   hasPromptCoachHook,
   isCodexHooksFeatureEnabled,
   type ClaudeSettings,
@@ -351,6 +351,7 @@ function inspectCodexSettings(
   }
 
   const hookSources: string[] = [];
+  let promptCoachHookCount = 0;
   let invalid = false;
   let codexHooksEnabled = false;
 
@@ -358,14 +359,16 @@ function inspectCodexSettings(
     try {
       if (
         source.hooksPath &&
-        existsSync(source.hooksPath) &&
-        hasPromptCoachCodexHook(
-          JSON.parse(
-            readFileSync(source.hooksPath, "utf8"),
-          ) as CodexHooksSettings,
-        )
+        existsSync(source.hooksPath)
       ) {
-        hookSources.push(source.name);
+        const settings = JSON.parse(
+          readFileSync(source.hooksPath, "utf8"),
+        ) as CodexHooksSettings;
+        const sourceHookCount = countPromptCoachCodexHooks(settings);
+        promptCoachHookCount += sourceHookCount;
+        if (sourceHookCount > 0) {
+          hookSources.push(source.name);
+        }
       }
     } catch {
       invalid = true;
@@ -385,7 +388,7 @@ function inspectCodexSettings(
   }
 
   const hookInstalled = hookSources.length > 0;
-  const duplicateHooks = hookSources.length > 1;
+  const duplicateHooks = promptCoachHookCount > 1;
 
   return {
     ok: hookInstalled && codexHooksEnabled && !duplicateHooks && !invalid,

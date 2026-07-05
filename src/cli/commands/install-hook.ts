@@ -396,10 +396,20 @@ export function hasPromptCoachSessionStartHook(
 }
 
 export function hasPromptCoachCodexHook(settings: CodexHooksSettings): boolean {
-  return Boolean(
-    settings.hooks?.UserPromptSubmit?.some((group) =>
-      group.hooks?.some((hook) => isCodexPromptCoachHook(hook.command)),
-    ),
+  return countPromptCoachCodexHooks(settings) > 0;
+}
+
+export function countPromptCoachCodexHooks(
+  settings: CodexHooksSettings,
+): number {
+  return (
+    settings.hooks?.UserPromptSubmit?.reduce(
+      (count, group) =>
+        count +
+        (group.hooks?.filter((hook) => isCodexPromptCoachHook(hook.command))
+          .length ?? 0),
+      0,
+    ) ?? 0
   );
 }
 
