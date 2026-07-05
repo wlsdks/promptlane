@@ -236,6 +236,9 @@
   `codex_claude_local_integration_evidence` while keeping
   `native_dialog_approved_dogfood` pending until explicit operator approval
   exists.
+- `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md` is packaged as
+  `native_dialog_preflight` evidence for MCP elicitation and no-dialog fallback
+  behavior. It must not be treated as approved native OS dialog dogfood.
 - PR #478 proved that installed CLI path on the default branch; main CI run
   `28753458359` passed Node 22 and Node 24 after merge, so future agents can use
   the product CLI itself to decide whether 9.5 is still blocked before claiming

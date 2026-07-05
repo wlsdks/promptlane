@@ -99,6 +99,7 @@ describe("quality-evidence CLI command", () => {
           satisfied_evidence: expect.arrayContaining([
             "codex_claude_setup_smoke_refresh",
             "codex_claude_local_integration_evidence",
+            "native_dialog_preflight",
             "local_95_evidence_sweep",
           ]),
           remaining_evidence: expect.arrayContaining([
@@ -176,7 +177,7 @@ describe("quality-evidence CLI command", () => {
       "codex_and_claude_code_integration: blocked_external",
     );
     expect(text).toContain(
-      "satisfied=codex_claude_setup_smoke_refresh,codex_claude_local_integration_evidence,local_95_evidence_sweep",
+      "satisfied=codex_claude_setup_smoke_refresh,codex_claude_local_integration_evidence,native_dialog_preflight,local_95_evidence_sweep",
     );
     expect(text).toContain("remaining=native_dialog_approved_dogfood");
     expect(text).toContain("Scorecard review candidates");

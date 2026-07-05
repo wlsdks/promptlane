@@ -234,6 +234,10 @@ Decision:
   `codex_claude_local_integration_evidence`, while
   `native_dialog_approved_dogfood` remains pending until explicit operator
   approval exists.
+  `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md` is also shipped as
+  `native_dialog_preflight` evidence: it proves MCP elicitation and no-dialog
+  fallback behavior while explicitly refusing to treat that as
+  `native_dialog_approved_dogfood`.
 - PR #478 moved that quality evidence gate onto the installed product CLI. Main
   CI run `28753458359` passed Node 22 and Node 24 after merge, so `prompt-coach
   quality-evidence --require-complete` is now a current default-branch release

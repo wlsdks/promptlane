@@ -200,6 +200,7 @@ describe("quality 9.5 evidence script", () => {
           satisfied_evidence: expect.arrayContaining([
             "codex_claude_setup_smoke_refresh",
             "codex_claude_local_integration_evidence",
+            "native_dialog_preflight",
             "local_95_evidence_sweep",
           ]),
           remaining_evidence: expect.arrayContaining([

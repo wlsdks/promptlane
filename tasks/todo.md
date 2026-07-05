@@ -1,5 +1,29 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Native Dialog Preflight Evidence
+
+- [x] CHECK: Approved native OS dialog dogfood still requires explicit operator
+  approval, so `native_dialog_approved_dogfood` must stay pending.
+- [x] RED: quality evidence CLI/script tests required
+  `codex_and_claude_code_integration` to include `native_dialog_preflight`
+  while still keeping `native_dialog_approved_dogfood` and
+  `scorecard_level_below_9_5` as remaining evidence; packaging tests required
+  the native dialog audit to ship.
+- [x] GREEN: `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md` is now packaged
+  and `quality-evidence` exposes its no-dialog and elicitation proof as
+  `native_dialog_preflight`.
+- [x] EFFECT: agents can see native dialog readiness without confusing it with
+  operator-approved OS dialog dogfood.
+
+### 판단 기준
+
+- Do not run approved native OS dialog dogfood without explicit operator
+  approval.
+- Do not use no-dialog fallback evidence as a substitute for answered OS dialog
+  evidence.
+- Keep preflight evidence visible so future work waits for the right manual
+  approval instead of repeating unrelated smoke checks.
+
 ## 2026-07-06 PromptLane UI Patrol Schedule Readiness Evidence
 
 - [x] CHECK: The GitHub `ui-patrol` workflow has no successful `schedule` event

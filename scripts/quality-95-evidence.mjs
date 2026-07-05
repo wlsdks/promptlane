@@ -174,6 +174,7 @@ function readCompletedEvidence() {
   let uiPatrolEvidence = "";
   let uiPatrolReadiness = "";
   let codexClaudeEvidence = "";
+  let nativeDialogAudit = "";
   try {
     plan = readFileSync(planPath, "utf8");
     localEvidence = readFileSync("docs/LOCAL_95_EVIDENCE_2026-07-06.md", "utf8");
@@ -202,12 +203,14 @@ function readCompletedEvidence() {
       "docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md",
       "utf8",
     );
+    nativeDialogAudit = readFileSync(nativeDialogAuditPath, "utf8");
   } catch {
     return {
       product_positioning_metadata_alignment: false,
       manual_ui_patrol_artifact_evidence: false,
       scheduled_ui_patrol_preflight: false,
       codex_claude_local_integration_evidence: false,
+      native_dialog_preflight: false,
       web_user_flow_current_main_evidence: false,
       privacy_raw_free_regression_sweep: false,
       codex_claude_setup_smoke_refresh: false,
@@ -255,6 +258,13 @@ function readCompletedEvidence() {
       codexClaudeEvidence.includes("corepack pnpm dogfood:loop-memory-approval") &&
       codexClaudeEvidence.includes("native_dialog_approved_dogfood") &&
       codexClaudeEvidence.includes("codex_claude_local_integration_evidence"),
+    native_dialog_preflight:
+      nativeDialogAudit.includes("corepack pnpm smoke:mcp-native-dialog") &&
+      nativeDialogAudit.includes("mcp native dialog preflight passed") &&
+      nativeDialogAudit.includes("pending native_dialog_preflight evidence") &&
+      nativeDialogAudit.includes(
+        "does not complete `native_dialog_approved_dogfood`",
+      ),
     web_user_flow_current_main_evidence:
       plan.includes("web_user_flow_current_main_evidence") &&
       plan.includes("corepack pnpm dogfood:web-user-flow") &&
@@ -336,6 +346,12 @@ function axisEvidenceCoverage({
       completedEvidence.codex_claude_local_integration_evidence
     ) {
       satisfied.push("codex_claude_local_integration_evidence");
+    }
+    if (
+      axis.id === "codex_and_claude_code_integration" &&
+      completedEvidence.native_dialog_preflight
+    ) {
+      satisfied.push("native_dialog_preflight");
     }
     if (
       [

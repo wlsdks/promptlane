@@ -937,6 +937,36 @@ describe("plugin packaging files", () => {
     );
   });
 
+  it("ships native dialog preflight evidence without treating it as approved dogfood", () => {
+    const packageJson = JSON.parse(
+      readFileSync(join(process.cwd(), "package.json"), "utf8"),
+    ) as { files: string[] };
+    const qualityScript = readFileSync(
+      join(process.cwd(), "scripts/quality-95-evidence.mjs"),
+      "utf8",
+    );
+    const audit = readFileSync(
+      join(process.cwd(), "docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md"),
+      "utf8",
+    );
+    const backlog = readFileSync(
+      join(process.cwd(), "docs/NEXT_BACKLOG.md"),
+      "utf8",
+    );
+
+    expect(packageJson.files).toContain(
+      "docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md",
+    );
+    expect(qualityScript).toContain("native_dialog_preflight");
+    expect(audit).toContain("corepack pnpm smoke:mcp-native-dialog");
+    expect(audit).toContain("mcp native dialog preflight passed");
+    expect(audit).toContain("pending native_dialog_preflight evidence");
+    expect(audit).toContain(
+      "does not complete `native_dialog_approved_dogfood`",
+    );
+    expect(backlog).toContain("native_dialog_preflight");
+  });
+
   it("ships a repeatable 9.5 quality evidence summary command", () => {
     const packageJson = readJson<{
       files: string[];

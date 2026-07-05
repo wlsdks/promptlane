@@ -13,6 +13,12 @@ requires operator approval before doing that. The evidence below proves the MCP
 elicitation path and the metadata-only fallback path, and it confirms the
 native dialog fallback remains opt-in.
 
+`quality-evidence` records this audit as pending native_dialog_preflight evidence.
+It does not complete `native_dialog_approved_dogfood`; only an explicitly
+approved local run of
+`PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm
+dogfood:mcp-native-dialog-approved` can do that.
+
 ## Commands Run
 
 ```bash
