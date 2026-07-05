@@ -46,6 +46,17 @@ After the PromptLane product contract and first-screen metadata are aligned, the
 next implementation work should favor reliability and agent-loop continuity
 over more naming work.
 
+Current integration policy:
+
+- General PR/main test CI is removed. Use the local gate as the authoritative
+  release and merge signal: focused tests, `corepack pnpm test`,
+  `corepack pnpm lint`, `corepack pnpm build`, `corepack pnpm pack:dry-run`,
+  and slice-specific smoke/dogfood commands.
+- Keep `.github/workflows/ui-patrol.yml` because scheduled browser screenshot
+  evidence is an external operational blocker, not a general CI gate.
+- Do not re-add generic `test.yml` without a dedicated product decision that
+  explains what local-first risk it closes beyond the local gate.
+
 Current goal audit:
 
 - `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md` maps
@@ -145,6 +156,10 @@ Current goal audit:
 - `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md` records current
   `corepack pnpm smoke:release` and `corepack pnpm pack:dry-run` evidence for
   the local-first release path.
+- General PR/main test CI has been removed by maintainer decision. Release
+  stability is now judged by the local release gate and package evidence; the
+  scheduled `ui-patrol` workflow remains only for external operational
+  evidence.
 
 Decision:
 
@@ -171,7 +186,7 @@ Decision:
 - The 9.5 quality plan now includes an Evidence Progress Ledger with PR #417,
   PR #419, PR #421, PR #425, PR #427, PR #429, PR #433, PR #447, PR #449,
   PR #450, PR #457, PR #458, PR #460, PR #464, workflow_dispatch run
-  `28717406758`, latest main CI run `28750611089`,
+  `28717406758`, local release gate,
   `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md`, the missing `schedule`
   event, and Remaining 9.5 blockers.
 - `corepack pnpm evidence:quality` emits the machine-readable
@@ -244,6 +259,11 @@ Decision:
   dogfood recommendations include preconditions, completion evidence, and
   guardrails so agents can unblock the remaining 9.5 work without confusing
   manual/readiness evidence with real external completion.
+- The human `prompt-coach quality-evidence` summary now renders external
+  evidence status directly: scheduled patrol status, workflow, cron,
+  `next_expected_schedule_utc`, and native dialog approved-run requirement.
+  Agents no longer need to switch to JSON output just to decide when to re-check
+  the remaining external blockers.
 - PR #478 moved that quality evidence gate onto the installed product CLI. Main
   CI run `28753458359` passed Node 22 and Node 24 after merge, so `prompt-coach
   quality-evidence --require-complete` is now a current default-branch release

@@ -219,7 +219,7 @@ TDD execution rule for each slice:
 - RED: add the narrowest failing test or packaging guard first.
 - GREEN: make the smallest product-aligned change.
 - VERIFY: run the focused test, then broaden to the repo gate.
-- INTEGRATE: commit, push, PR, CI `test (22)` and `test (24)`, merge, and prune.
+- INTEGRATE: commit, push, PR, local gate, review, merge, and prune.
 
 ## Autonomy Model
 

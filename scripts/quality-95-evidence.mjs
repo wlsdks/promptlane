@@ -5,6 +5,8 @@ import { readFileSync } from "node:fs";
 const planPath =
   "docs/superpowers/plans/2026-07-05-promptlane-95-quality-plan.md";
 const nativeDialogAuditPath = "docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md";
+const uiPatrolWorkflow = "ui-patrol.yml";
+const uiPatrolScheduleCron = "17 6 * * 1";
 
 const args = parseArgs(process.argv.slice(2));
 const uiPatrol = args.uiPatrolJson
@@ -111,6 +113,8 @@ function runUiPatrolEvidence() {
     return {
       check: "scheduled_ui_patrol",
       status: "unknown_checker_failed",
+      workflow: uiPatrolWorkflow,
+      schedule_cron: uiPatrolScheduleCron,
       next_action: "Run corepack pnpm evidence:ui-patrol and inspect stderr.",
     };
   }
@@ -120,6 +124,8 @@ function runUiPatrolEvidence() {
     return {
       check: "scheduled_ui_patrol",
       status: "unknown_invalid_checker_output",
+      workflow: uiPatrolWorkflow,
+      schedule_cron: uiPatrolScheduleCron,
       next_action: "Fix scripts/ui-patrol-evidence.mjs JSON output.",
     };
   }

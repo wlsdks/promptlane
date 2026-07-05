@@ -1,5 +1,46 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane General CI Removal
+
+- [x] CHECK: PR/main test workflow가 남아 있어 PR #495에서 GitHub Actions
+  환경의 `gh run list` 실패가 제품 변경과 무관한 CI 실패로 드러났다.
+- [x] RED: packaging guard는 `.github/workflows/test.yml`이 없어야 한다고
+  요구하고, PromptLane 실행 계획 문구는 PR CI 대신 local gate를 요구한다.
+- [x] GREEN: 일반 test CI workflow를 삭제하고, release/backlog/quality-plan
+  문서를 local gate 기준으로 갱신했다. 예약된 `ui-patrol.yml`은 외부 운영
+  증거 수집 workflow라 유지한다.
+- [x] EFFECT: 향후 merge/release 판단은 focused tests, `corepack pnpm test`,
+  `corepack pnpm lint`, `corepack pnpm build`, `corepack pnpm pack:dry-run`,
+  필요한 smoke/dogfood 명령으로 판단한다.
+
+### 판단 기준
+
+- Do not re-add generic PR/main `test.yml` without a dedicated product decision.
+- Keep scheduled `ui-patrol.yml` because it proves external browser screenshot
+  evidence, not general CI correctness.
+- Historical CI evidence may remain as history, but active gates must name the
+  local release gate.
+
+## 2026-07-06 PromptLane Quality Evidence External Status Text
+
+- [x] CHECK: `quality-evidence --json` exposed external evidence metadata, but
+  human `quality-evidence` text skipped schedule/native evidence status.
+- [x] RED: CLI test required an `External evidence status` section with
+  scheduled patrol status, workflow, cron, next expected schedule time, and
+  native dialog approved-run requirement; the focused test failed while the
+  section was absent.
+- [x] GREEN: the text formatter now renders external evidence status when the
+  JSON summary includes it.
+- [x] EFFECT: operators and agents can use the default CLI summary to decide
+  when to re-check the remaining external blockers.
+
+### 판단 기준
+
+- Do not remove or downgrade the external blockers through text rendering.
+- Keep text output raw-free and free of local paths.
+- Keep JSON output unchanged except for data already emitted by the evidence
+  script.
+
 ## 2026-07-06 PromptLane UI Patrol Next Schedule Evidence
 
 - [x] CHECK: `ui-patrol.yml` still has no `schedule` event, and

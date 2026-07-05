@@ -35,6 +35,18 @@ type QualityEvidenceSummary = {
     guardrails?: string[];
     expected_effect: string;
   }>;
+  evidence?: {
+    scheduled_ui_patrol?: {
+      status: string;
+      workflow?: string;
+      schedule_cron?: string;
+      next_expected_schedule_utc?: string;
+    };
+    native_dialog_approved_dogfood?: {
+      status: string;
+      approved_run_required?: boolean;
+    };
+  };
   next_action: string;
 };
 
@@ -139,6 +151,7 @@ function formatSummary(summary: QualityEvidenceSummary): string {
             `- ${axis.id}: review=${axis.required_review} satisfied=${axis.satisfied_evidence.join(",") || "none"}`,
         )
       : ["- none"];
+  const externalEvidenceRows = formatExternalEvidenceRows(summary);
 
   return [
     "PromptLane 9.5 quality evidence",
@@ -155,6 +168,9 @@ function formatSummary(summary: QualityEvidenceSummary): string {
     "Scorecard review candidates",
     ...scorecardReviewRows,
     "",
+    "External evidence status",
+    ...externalEvidenceRows,
+    "",
     "Recommended next slices",
     ...recommendedRows,
     "",
@@ -162,4 +178,28 @@ function formatSummary(summary: QualityEvidenceSummary): string {
     "",
     "Privacy: local-only, no external calls, no prompt bodies, no raw paths.",
   ].join("\n");
+}
+
+function formatExternalEvidenceRows(summary: QualityEvidenceSummary): string[] {
+  const rows: string[] = [];
+  const scheduled = summary.evidence?.scheduled_ui_patrol;
+  if (scheduled) {
+    rows.push(
+      `- scheduled_ui_patrol: ${scheduled.status} workflow=${scheduled.workflow ?? "unknown"} cron=${scheduled.schedule_cron ?? "unknown"}`,
+    );
+    if (scheduled.next_expected_schedule_utc) {
+      rows.push(
+        `  next_expected_schedule_utc=${scheduled.next_expected_schedule_utc}`,
+      );
+    }
+  }
+
+  const nativeDialog = summary.evidence?.native_dialog_approved_dogfood;
+  if (nativeDialog) {
+    rows.push(
+      `- native_dialog_approved_dogfood: ${nativeDialog.status} approved_run_required=${nativeDialog.approved_run_required ? "yes" : "no"}`,
+    );
+  }
+
+  return rows.length > 0 ? rows : ["- none"];
 }

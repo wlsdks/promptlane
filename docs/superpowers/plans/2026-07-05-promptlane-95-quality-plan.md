@@ -6,7 +6,7 @@
 
 **Architecture:** Treat 9.5 as a proof standard, not a slogan. Each score axis must have a measurable bar, current evidence, missing evidence, and one or more TDD slices that close the gap without changing the trust model. Keep `PromptLane` as product name and `prompt-coach` as runtime compatibility id until a dedicated migration proves otherwise.
 
-**Tech Stack:** TypeScript, Node.js, Commander CLI, Fastify, SQLite, React/Vite, Vitest, Playwright, pnpm, GitHub Actions, Codex and Claude Code hooks/MCP/plugin surfaces.
+**Tech Stack:** TypeScript, Node.js, Commander CLI, Fastify, SQLite, React/Vite, Vitest, Playwright, pnpm, Codex and Claude Code hooks/MCP/plugin surfaces. GitHub Actions is used only for scheduled `ui-patrol` operational evidence.
 
 ---
 
@@ -20,7 +20,7 @@
 | Setup, doctor, and MCP smoke | 9.5/10 | 9.5 bar: setup and doctor smoke proves capture readiness; MCP smoke proves score/improve/clarify/record loop; failure states produce raw-free recovery actions instead of generic errors. | smoke:agent-setup, smoke:mcp-coach-loop, storage_unavailable tests, package checks. |
 | Loop memory and continuation | 9.5/10 | 9.5 bar: collect, brief, outcome, memory candidate, memory approval, instruction patch proposal, and apply gate are proven through CLI and MCP with evidence-first rules and no automatic instruction writes. | Loop unit tests, storage evidence guards, dogfood:first-coach-loop, dogfood:loop-memory-approval, prompt-linked outcome evidence. |
 | Web UI and operational evidence | 8.6/10 | 9.5 bar: archive, detail, coach, saved draft reuse, settings, loops, exports, projects, and mobile layout have screenshots or browser assertions, plus scheduled `ui-patrol` artifact evidence. | corepack pnpm ui-patrol, workflow_dispatch run `28717406758`, scheduled `ui-patrol`, browser E2E, screenshot artifacts, in-app Browser audit. |
-| Release stability | 9.5/10 | 9.5 bar: Node 22 and 24 CI, pack dry-run, release smoke, first coach loop dogfood, package contents, dependency audit, and release checklist all agree on shipped files and commands. | GitHub Actions, corepack pnpm pack:dry-run, smoke:release, dogfood:first-coach-loop, dogfood:loop-memory-approval, docs/RELEASE_CHECKLIST.md. |
+| Release stability | 9.5/10 | 9.5 bar: local supported-node gate, pack dry-run, release smoke, first coach loop dogfood, package contents, dependency audit, and release checklist all agree on shipped files and commands. | Local release gate, corepack pnpm pack:dry-run, smoke:release, dogfood:first-coach-loop, dogfood:loop-memory-approval, docs/RELEASE_CHECKLIST.md. |
 
 ## Evidence Progress Ledger
 
@@ -121,19 +121,21 @@
 - `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md` records current
   `corepack pnpm smoke:release` and `corepack pnpm pack:dry-run` evidence for
   the local-first release path.
-- PR #464 closed the release-stability evidence log after local release smoke,
-  package dry-run, PR CI, latest main CI run `28750611089`, and branch pruning
-  proved the evidence document on the default branch.
-- latest main CI run `28750611089` after PR #464 passed `test (22)` and
-  `test (24)` with `pnpm test`, `pnpm lint`, `pnpm build`, and
-  `pnpm pack:dry-run`.
+- PR #464 added the release-stability evidence document and package manifest
+  guards. The local release gate now owns release stability evidence: focused tests,
+  `corepack pnpm test`, `corepack pnpm lint`, `corepack pnpm build`,
+  `corepack pnpm pack:dry-run`, `smoke:release`, and package manifest guards
+  prove the shipped files and commands.
+- General test CI was removed by maintainer decision. Do not reintroduce
+  PR/main test workflows as a release-stability requirement without a dedicated
+  product decision; keep scheduled `ui-patrol` as the only GitHub Actions
+  workflow because it proves external operational evidence.
 - PR #478 exposed the same 9.5 quality evidence as an installed product CLI:
   `prompt-coach quality-evidence`, `prompt-coach quality-evidence --json`, and
   `prompt-coach quality-evidence --require-complete`. The command lists every
   current scorecard/direct evidence blocker, keeps output local and raw-free,
-  and exits nonzero while completion evidence remains pending. Main CI run
-  `28753458359` passed Node 22 and Node 24 after merge with `pnpm test`,
-  `pnpm lint`, `pnpm build`, and `pnpm pack:dry-run`.
+  and exits nonzero while completion evidence remains pending. Future changes
+  use the local gate instead of PR/main test CI.
 
 ## Remaining 9.5 blockers
 
@@ -245,10 +247,13 @@
   completion evidence, and guardrails for the remaining external blockers. This
   makes the next operator or scheduled-event pass executable without changing
   the rule that 9.5 remains pending until real external evidence exists.
-- PR #478 proved that installed CLI path on the default branch; main CI run
-  `28753458359` passed Node 22 and Node 24 after merge, so future agents can use
-  the product CLI itself to decide whether 9.5 is still blocked before claiming
-  completion.
+- The human `prompt-coach quality-evidence` output also renders external
+  evidence status, including scheduled patrol cron and next expected UTC check
+  time plus the native dialog approved-run requirement, so normal CLI use can
+  drive the remaining external work without requiring JSON parsing.
+- PR #478 proved that installed CLI path on the default branch, so future
+  agents can use the product CLI itself to decide whether 9.5 is still blocked
+  before claiming completion.
 - Native OS ask UI dogfood remains operator-approved only; do not run
   `dogfood:mcp-native-dialog-approved` without explicit approval because it can
   open a native dialog.
@@ -485,4 +490,4 @@ Expected: pass.
 
 ## Completion Rule
 
-Do not call the long-running goal complete until every scorecard axis has current evidence at the 9.5 bar. Passing unit tests alone is not enough; dogfood evidence, CI evidence, package evidence, and privacy evidence must match the axis being claimed.
+Do not call the long-running goal complete until every scorecard axis has current evidence at the 9.5 bar. Passing unit tests alone is not enough; dogfood evidence, local gate evidence, package evidence, and privacy evidence must match the axis being claimed.

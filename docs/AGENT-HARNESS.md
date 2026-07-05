@@ -169,7 +169,7 @@ Use the narrowest relevant gate first, then broaden before PR.
 | Web user-flow dogfood | `corepack pnpm dogfood:web-user-flow` and `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md` |
 | Plugin/packaging      | `corepack pnpm pack:dry-run`, package contents tests        |
 | Instruction docs      | `git diff --check`, packaging docs tests if shipped         |
-| Dependency update     | CI `test (22)`, CI `test (24)`, engine compatibility review |
+| Dependency update     | local test/lint/build/pack gate, engine compatibility review |
 
 Full gate before merge unless the change is docs-only and the risk is clearly
 bounded:

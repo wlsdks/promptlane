@@ -50,7 +50,7 @@ git diff --check
 corepack pnpm ui-patrol
 ```
 
-Node 지원 범위는 `package.json#engines.node`가 authoritative하다. dependency update가 더 좁은 Node engine을 요구하면 package engine, README, CI 정책을 함께 검토하기 전에는 머지하지 않는다.
+Node 지원 범위는 `package.json#engines.node`가 authoritative하다. dependency update가 더 좁은 Node engine을 요구하면 package engine, README, local gate 정책을 함께 검토하기 전에는 머지하지 않는다.
 
 ## Privacy And Local-First Invariants
 
@@ -92,5 +92,5 @@ Node 지원 범위는 `package.json#engines.node`가 authoritative하다. depend
 - `main`은 보호 브랜치다. 새 브랜치에서 작업하고 PR로 머지한다.
 - 커밋 메시지는 Conventional Commits를 따른다.
 - 커밋 단위는 너무 잘게 쪼개지지 않게 한다. 하나의 PR은 "검증 가능한 행동 변화", "문서/의사결정 단위", "dependency update" 중 하나로 묶는다.
-- solo-maintainer 단계에서는 PR이 CI `test (22)`, `test (24)`를 통과하고 unresolved conversation이 없으면 머지할 수 있다.
+- solo-maintainer 단계에서는 focused tests와 local gate가 통과하고 unresolved conversation이 없으면 머지할 수 있다. 일반 PR/main test CI는 사용하지 않는다.
 - 최종 보고에는 커밋 해시, 푸시 여부, 검증 결과, 남은 리스크를 짧게 포함한다.

@@ -12,14 +12,17 @@ separate blockers.
 | `corepack pnpm smoke:release` | PASS | Built the package, initialized an isolated data directory and HOME, previewed Claude Code and Codex hook installers without touching real user config, started the local server, ingested Claude Code and Codex prompt fixtures, verified CLI list/search/show/rebuild-index, executed transcript import, verified imported-only filtering, previewed and executed anonymized export, then verified SQLite, Markdown, FTS, and delete cleanup. |
 | `corepack pnpm pack:dry-run` | PASS | Built server and web assets, ran the package dry-run wrapper, and produced `prompt-coach-0.1.0-beta.0.tgz` with 344 files including this release evidence document. |
 
-## CI
+## Local Release Gate
 
 - PR #464 added this evidence document, package manifest coverage, and the
   release-stability packaging guard.
-- main CI run `28750611089` passed `test (22)` and `test (24)` after PR #464
-  merged.
-- Both jobs ran `pnpm test`, `pnpm lint`, `pnpm build`, and
-  `pnpm pack:dry-run`.
+- The current local release gate is local-first: focused tests,
+  `corepack pnpm test`, `corepack pnpm lint`, `corepack pnpm build`,
+  `corepack pnpm pack:dry-run`, `corepack pnpm smoke:release`, and package
+  manifest guards.
+- General PR/main test CI is not a release requirement. The scheduled
+  `ui-patrol.yml` workflow remains separate operational evidence for browser
+  screenshots.
 
 ## Privacy Observations
 

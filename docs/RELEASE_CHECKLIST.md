@@ -123,11 +123,11 @@ Confirm `corepack pnpm pack:dry-run` excludes:
 - [ ] Benchmark v1 passes with `privacy_leak_count` equal to 0.
 - [ ] Browser E2E passes on desktop and mobile viewport checks.
 
-## CI
+## Local Release Gate
 
-- [ ] Node 22 CI passes.
-- [ ] Node 24 CI passes.
-- [ ] `better-sqlite3` opens a database and supports WAL/FTS5 in CI.
+- [ ] Node support matches `package.json#engines.node`.
+- [ ] `corepack pnpm test`, `lint`, `build`, and `pack:dry-run` pass locally.
+- [ ] `better-sqlite3` opens a database and supports WAL/FTS5 in local smoke.
 - [ ] Platform support notes are accurate for the release.
 
 ## Manual Smoke

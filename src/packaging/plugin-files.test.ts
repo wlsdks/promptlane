@@ -641,7 +641,7 @@ describe("plugin packaging files", () => {
       "RED: add the narrowest failing test or packaging guard first",
       "GREEN: make the smallest product-aligned change",
       "VERIFY: run the focused test, then broaden to the repo gate",
-      "INTEGRATE: commit, push, PR, CI `test (22)` and `test (24)`, merge, and prune",
+      "INTEGRATE: commit, push, PR, local gate, review, merge, and prune",
     ]) {
       expect(positioning).toContain(requiredText);
     }
@@ -1046,7 +1046,7 @@ describe("plugin packaging files", () => {
         "docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md",
       );
       expect(content).toContain("PR #478");
-      expect(content).toContain("28753458359");
+      expect(content).toContain("local gate");
       expect(content).toContain("corepack pnpm evidence:quality");
       expect(content).toContain("corepack pnpm --silent evidence:quality");
       expect(content).toContain("node scripts/quality-95-evidence.mjs");
@@ -1281,14 +1281,10 @@ describe("plugin packaging files", () => {
     expect(todoSection).toContain("`corepack pnpm ui-patrol`");
   });
 
-  it("keeps CI setup actions on Node 24 compatible versions", () => {
-    const workflow = readFileSync(
-      join(process.cwd(), ".github/workflows/test.yml"),
-      "utf8",
+  it("keeps the general test CI workflow removed", () => {
+    expect(existsSync(join(process.cwd(), ".github/workflows/test.yml"))).toBe(
+      false,
     );
-
-    expect(workflow).toContain("pnpm/action-setup@v6");
-    expect(workflow).not.toContain("pnpm/action-setup@v4");
   });
 
   it("keeps better-sqlite3 on the Node 24 release-stability line", () => {
@@ -1348,7 +1344,7 @@ describe("plugin packaging files", () => {
       "PR #433",
       "PR #434",
       "PR #464",
-      "latest main CI run `28750611089`",
+      "local release gate",
       "docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md",
       "corepack pnpm smoke:release",
     ]) {
@@ -1361,9 +1357,10 @@ describe("plugin packaging files", () => {
       "corepack pnpm smoke:release",
       "corepack pnpm pack:dry-run",
       "PR #464",
-      "main CI run `28750611089`",
-      "test (22)",
-      "test (24)",
+      "local release gate",
+      "corepack pnpm test",
+      "corepack pnpm lint",
+      "corepack pnpm build",
       "Raw prompt bodies, raw local paths, and token-like secrets were not emitted",
     ]) {
       expect(releaseEvidence).toContain(releaseEvidenceText);
@@ -1438,7 +1435,7 @@ describe("plugin packaging files", () => {
       "docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md",
       "workflow_dispatch run `28717406758`",
       "PR #464",
-      "latest main CI run `28750611089`",
+      "local release gate",
       "docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md",
       "corepack pnpm smoke:release",
       "no `schedule` event",
@@ -1456,7 +1453,7 @@ describe("plugin packaging files", () => {
       "`effectiveness` verdict",
       "effectiveness calibration",
       "PR #464",
-      "latest main CI run `28750611089`",
+      "local release gate",
       "docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md",
     ]) {
       expect(backlog).toContain(currentBacklogEvidence);
