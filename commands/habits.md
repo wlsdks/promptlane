@@ -1,9 +1,9 @@
 ---
-description: Summarize recent Loopdeck habits and recurring gaps
+description: Summarize recent PromptLane habits and recurring gaps
 allowed-tools: Bash
 ---
 
-# Loopdeck Habits
+# PromptLane Habits
 
 Prefer the MCP tool when it is available:
 

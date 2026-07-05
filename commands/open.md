@@ -1,9 +1,9 @@
 ---
-description: Open the local Loopdeck archive
+description: Open the local PromptLane archive
 allowed-tools: Bash
 ---
 
-# Open Loopdeck
+# Open PromptLane
 
 Check whether the local server is already configured:
 

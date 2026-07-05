@@ -1,9 +1,9 @@
 ---
-description: Set up Loopdeck capture or the one-command coach profile
+description: Set up PromptLane capture or the one-command coach profile
 allowed-tools: Bash, Read, AskUserQuestion
 ---
 
-# Set Up Loopdeck
+# Set Up PromptLane
 
 First check that the CLI is installed:
 

@@ -1,9 +1,9 @@
 ---
-description: Score Loopdeck habits (latest prompt or accumulated archive)
+description: Score PromptLane habits (latest prompt or accumulated archive)
 allowed-tools: Bash
 ---
 
-# Loopdeck Score
+# PromptLane Score
 
 This command covers both the latest captured prompt and the whole local
 archive. Pick the scope based on the user's request.

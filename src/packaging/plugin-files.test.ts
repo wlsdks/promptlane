@@ -198,7 +198,15 @@ describe("plugin packaging files", () => {
 
   it("ships a Claude Code plugin marketplace and manifest with slash commands", () => {
     const marketplace = readJson<{
-      plugins: Array<{ name: string; source: string; category: string }>;
+      owner: { name: string };
+      metadata: { description: string };
+      plugins: Array<{
+        name: string;
+        source: string;
+        category: string;
+        description: string;
+        tags: string[];
+      }>;
     }>(".claude-plugin/marketplace.json");
     const manifest = readJson<{
       name: string;
@@ -210,8 +218,15 @@ describe("plugin packaging files", () => {
         name: "prompt-coach",
         source: "./",
         category: "memory",
+        description: expect.stringContaining("PromptLane"),
       }),
     );
+    expect(marketplace.owner.name).toBe("PromptLane contributors");
+    expect(marketplace.metadata.description).toContain("PromptLane");
+    expect(marketplace.metadata.description).toContain(
+      "prompt improvement workspace",
+    );
+    expect(marketplace.metadata.description).not.toContain("Loopdeck is");
     expect(manifest.name).toBe("prompt-coach");
     expect(manifest.commands).toEqual([
       "./commands/setup.md",
@@ -282,9 +297,9 @@ describe("plugin packaging files", () => {
       const description = command.match(/^description: (?<text>.+)$/m)?.groups
         ?.text;
       const heading = command.match(/^# (?<text>.+)$/m)?.groups?.text;
-      expect(description).toContain("Loopdeck");
+      expect(description).toContain("PromptLane");
       expect(description).not.toMatch(/\bprompt-coach\b/);
-      expect(heading).toContain("Loopdeck");
+      expect(heading).toContain("PromptLane");
       expect(heading).not.toContain("Prompt Memory");
       expect(heading).not.toContain("Prompt-memory");
     }

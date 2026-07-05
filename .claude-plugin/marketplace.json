@@ -1,18 +1,18 @@
 {
   "name": "prompt-coach",
   "owner": {
-    "name": "Loopdeck contributors",
+    "name": "PromptLane contributors",
     "email": "wlsdks@users.noreply.github.com"
   },
   "metadata": {
-    "description": "Loopdeck is a local-first agent loop memory and meta-prompting workbench for Claude Code and Codex.",
+    "description": "PromptLane is a local-first prompt improvement workspace with loop-aware continuation for Claude Code and Codex.",
     "version": "0.1.0-beta.0"
   },
   "plugins": [
     {
       "name": "prompt-coach",
       "source": "./",
-      "description": "Capture Claude Code and Codex prompts locally, collect loop metadata, redact secrets before storage, and prepare continuation briefs.",
+      "description": "Use PromptLane to capture Claude Code and Codex prompts locally, redact secrets before storage, improve next requests, and prepare loop-aware continuation briefs.",
       "category": "memory",
       "tags": [
         "loopdeck",

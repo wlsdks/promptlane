@@ -1,9 +1,9 @@
 ---
-description: Run the full Loopdeck coach inside Claude Code
+description: Run the full PromptLane coach inside Claude Code
 allowed-tools: Bash
 ---
 
-# Loopdeck Coach
+# PromptLane Coach
 
 Prefer the MCP tool when it is available:
 

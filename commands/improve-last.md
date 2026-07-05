@@ -1,9 +1,9 @@
 ---
-description: Rewrite the latest captured Loopdeck request for approval (deterministic or agent-assisted)
+description: Rewrite the latest captured PromptLane request for approval (deterministic or agent-assisted)
 allowed-tools: Bash, AskUserQuestion
 ---
 
-# Improve Latest Loopdeck Prompt
+# Improve Latest PromptLane Prompt
 
 This command rewrites the most recently captured prompt for the user's approval.
 There are two modes — pick one before running anything.

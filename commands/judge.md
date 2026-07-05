@@ -1,9 +1,9 @@
 ---
-description: Judge low-scoring Loopdeck prompts with the active agent session
+description: Judge low-scoring PromptLane prompts with the active agent session
 allowed-tools: Bash
 ---
 
-# Loopdeck Agent Judge
+# PromptLane Agent Judge
 
 Prefer the MCP tools when they are available:
 

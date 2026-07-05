@@ -1,9 +1,9 @@
 ---
-description: Check Loopdeck capture health
+description: Check PromptLane capture health
 allowed-tools: Bash
 ---
 
-# Loopdeck Status
+# PromptLane Status
 
 First check that the CLI is installed:
 

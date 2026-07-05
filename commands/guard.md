@@ -1,9 +1,9 @@
 ---
-description: Toggle the Loopdeck rewrite guard mode (off / context / ask / block-and-copy)
+description: Toggle the PromptLane rewrite guard mode (off / context / ask / block-and-copy)
 allowed-tools: Bash, AskUserQuestion
 ---
 
-# Loopdeck Rewrite Guard Picker
+# PromptLane Rewrite Guard Picker
 
 This command flips the `UserPromptSubmit` rewrite guard between four modes
 without making the user remember CLI flags. Each mode controls what the hook

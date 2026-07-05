@@ -1,8 +1,8 @@
 ---
-description: Show the Loopdeck side-pane buddy command
+description: Show the PromptLane side-pane buddy command
 ---
 
-# Loopdeck Buddy
+# PromptLane Buddy
 
 Use this when the user wants an always-on prompt score companion while working
 inside Claude Code.
