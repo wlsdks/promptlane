@@ -69,7 +69,8 @@ The npm package intentionally includes:
   `scripts/hook-binary-smoke.mjs`, `scripts/mcp-coach-loop-smoke.mjs`,
   `scripts/mcp-elicitation-smoke.mjs`,
   `scripts/mcp-native-dialog-approved.mjs`,
-  `scripts/mcp-native-dialog-preflight.mjs`, `scripts/pack-dry-run.mjs`,
+  `scripts/mcp-native-dialog-preflight.mjs`,
+  `scripts/quality-95-evidence.mjs`, `scripts/pack-dry-run.mjs`,
   `scripts/quality-gate.mjs`, `scripts/release-smoke.mjs`,
   `scripts/ui-patrol.mjs`, and `scripts/ui-patrol-evidence.mjs`
 

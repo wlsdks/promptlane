@@ -76,6 +76,7 @@ describe("plugin packaging files", () => {
       "scripts/pack-dry-run.mjs",
       "scripts/mcp-native-dialog-approved.mjs",
       "scripts/ui-patrol.mjs",
+      "scripts/quality-95-evidence.mjs",
     ]) {
       expect(packageJson.files).toContain(scriptPath);
       expect(packageContents).toContain(scriptPath);
@@ -901,6 +902,53 @@ describe("plugin packaging files", () => {
     expect(goalAudit).toContain("PR #420");
     expect(backlog).toContain("PR #419");
     expect(backlog).toContain("PR #420");
+  });
+
+  it("ships a repeatable 9.5 quality evidence summary command", () => {
+    const packageJson = readJson<{
+      files: string[];
+      scripts: Record<string, string>;
+    }>("package.json");
+    const packageContents = readFileSync(
+      join(process.cwd(), "docs/PACKAGE_CONTENTS.md"),
+      "utf8",
+    );
+    const releaseChecklist = readFileSync(
+      join(process.cwd(), "docs/RELEASE_CHECKLIST.md"),
+      "utf8",
+    );
+    const backlog = readFileSync(
+      join(process.cwd(), "docs/NEXT_BACKLOG.md"),
+      "utf8",
+    );
+    const plan = readFileSync(
+      join(
+        process.cwd(),
+        "docs/superpowers/plans/2026-07-05-promptlane-95-quality-plan.md",
+      ),
+      "utf8",
+    );
+    const evidenceScript = readFileSync(
+      join(process.cwd(), "scripts/quality-95-evidence.mjs"),
+      "utf8",
+    );
+
+    expect(packageJson.files).toContain("scripts/quality-95-evidence.mjs");
+    expect(packageJson.scripts["evidence:quality"]).toBe(
+      "node scripts/quality-95-evidence.mjs",
+    );
+    for (const content of [packageContents, releaseChecklist]) {
+      expect(content).toContain("scripts/quality-95-evidence.mjs");
+    }
+    for (const content of [backlog, plan]) {
+      expect(content).toContain("corepack pnpm evidence:quality");
+      expect(content).toContain("promptlane_95_quality");
+      expect(content).toContain("native_dialog_approved_dogfood");
+      expect(content).toContain("scheduled_ui_patrol");
+    }
+    expect(evidenceScript).toContain("promptlane_95_quality");
+    expect(evidenceScript).toContain("pending_operator_approval");
+    expect(evidenceScript).toContain("Do not claim 9.5 completion");
   });
 
   it("keeps the active loop snapshot MCP contract branded as PromptLane", () => {

@@ -136,6 +136,10 @@
   blocker. It must stay `pending_no_schedule_run` while only workflow_dispatch
   evidence exists, and it must require the `ui-patrol-screenshots` artifact
   with 9 png files before returning `complete`.
+- `corepack pnpm evidence:quality` emits the `promptlane_95_quality` summary
+  and must include both `scheduled_ui_patrol` and
+  `native_dialog_approved_dogfood` blockers until their direct evidence is
+  complete.
 - Native OS ask UI dogfood remains operator-approved only; do not run
   `dogfood:mcp-native-dialog-approved` without explicit approval because it can
   open a native dialog.

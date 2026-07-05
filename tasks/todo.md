@@ -1,5 +1,27 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane 9.5 Quality Evidence Summary
+
+- [x] CHECK: scheduled UI patrol and native OS dialog evidence are still
+  separate blockers, but the 9.5 completion judgment was spread across plan,
+  backlog, audit, and manual commands.
+- [x] RED: behavior/package guards fail unless `scripts/quality-95-evidence.mjs`,
+  package script `evidence:quality`, docs, and release/package lists expose
+  `corepack pnpm evidence:quality`.
+- [x] GREEN: `evidence:quality` emits `promptlane_95_quality` JSON with
+  `scheduled_ui_patrol` and `native_dialog_approved_dogfood` blockers instead
+  of claiming 9.5 completion.
+- [x] EFFECT: future agents and release checks can see why the long-running
+  goal is still pending without treating passing tests as full product proof.
+
+### 판단 기준
+
+- The command must not open a native OS dialog.
+- The command must not mark native dialog dogfood complete from MCP
+  elicitation-smoke `answered` evidence alone.
+- The command must keep 9.5 status `pending` while either scheduled UI patrol
+  or operator-approved native dialog evidence is missing.
+
 ## 2026-07-06 PromptLane Scheduled UI Patrol Evidence Checker
 
 - [x] CHECK: GitHub `ui-patrol.yml` workflow history still has no `schedule`

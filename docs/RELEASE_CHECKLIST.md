@@ -68,6 +68,7 @@ Confirm `corepack pnpm pack:dry-run` includes:
 - [ ] `scripts/mcp-elicitation-smoke.mjs`
 - [ ] `scripts/mcp-native-dialog-approved.mjs`
 - [ ] `scripts/mcp-native-dialog-preflight.mjs`
+- [ ] `scripts/quality-95-evidence.mjs`
 - [ ] `scripts/pack-dry-run.mjs`
 - [ ] `scripts/quality-gate.mjs`
 - [ ] `scripts/release-smoke.mjs`

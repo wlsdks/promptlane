@@ -173,6 +173,10 @@ Decision:
   `28717406758`, latest main CI run `28750611089`,
   `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md`, the missing `schedule`
   event, and Remaining 9.5 blockers.
+- `corepack pnpm evidence:quality` emits the machine-readable
+  `promptlane_95_quality` summary. It includes `scheduled_ui_patrol` and
+  `native_dialog_approved_dogfood` blockers so agents do not claim 9.5
+  completion while either one is still pending.
 - The earlier GitHub Actions Node 20 runtime annotation and Node 24
   `better-sqlite3` install warning are closed. Keep the release-stability bar
   focused on fresh CI/package warnings that affect local-first install, build,
