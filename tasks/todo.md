@@ -6,8 +6,8 @@
 - [x] RED: focused improve test가 `expected_impact` 부재로 실패하고, CLI human output test가 `Expected impact` 섹션 부재로 실패해야 한다.
 - [x] GREEN: `PromptImprovement`가 로컬 deterministic analyzer 기반 `expected_impact`를 포함하고, CLI human output이 score before/after/delta와 changed axis count를 출력한다.
 - [x] EFFECT: 같은 테스트가 개선안이 원문보다 높은 점수를 갖고 delta가 양수임을 검증하며, MCP 결과는 prompt body, raw path, secret을 노출하지 않는다.
-- [ ] VERIFY: focused tests, full local gate, PR CI, latest main CI, and branch prune all pass.
-- [ ] INTEGRATE: PR이 CI 통과 후 merge되고 branch prune까지 확인된다.
+- [x] VERIFY: focused tests, full local gate, PR CI, latest main CI run `28747232481`, and branch prune all pass.
+- [x] INTEGRATE: PR #447가 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
