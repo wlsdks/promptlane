@@ -6,7 +6,7 @@
 - [x] RED: `dogfood:loop-memory-approval`, `scripts/loop-memory-approval-dogfood.mjs`, AGENT-HARNESS/PACKAGE_CONTENTS/RELEASE_CHECKLIST 연결이 없으면 packaging test가 실패하도록 고정했다.
 - [x] GREEN: 격리 HOME/data-dir/project에서 Codex hook capture, loop snapshot, MCP outcome recording, memory candidate proposal, approved memory write, instruction patch proposal을 실행하는 dogfood script를 추가했다.
 - [x] VERIFY: focused packaging test, `node scripts/loop-memory-approval-dogfood.mjs`, full gate를 통과한다.
-- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+- [x] INTEGRATE: PR #417이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 
