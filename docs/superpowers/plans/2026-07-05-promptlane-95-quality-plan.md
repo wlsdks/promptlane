@@ -88,7 +88,10 @@
   `score_prompt` for stored prompt ids, so Codex and Claude Code can inspect
   prompt impact evidence without opening the web UI or shelling out to
   `prompt-coach show --json`.
-- latest main CI run `28750281428` after PR #462 passed `test (22)` and
+- `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md` records current
+  `corepack pnpm smoke:release` and `corepack pnpm pack:dry-run` evidence for
+  the local-first release path.
+- latest main CI run `28750424030` passed `test (22)` and
   `test (24)` with `pnpm test`, `pnpm lint`, `pnpm build`, and
   `pnpm pack:dry-run`.
 
@@ -105,7 +108,8 @@
   repeatable through `dogfood:web-user-flow`, browser E2E, focused
   CLI/storage/web tests, and `corepack pnpm ui-patrol`. MCP score_prompt
   effectiveness evidence is now proven on the default branch through PR #462,
-  main CI `28750281428`, and branch pruning. Web operations still need
+  main CI `28750281428`, and branch pruning. Release smoke evidence is current
+  in `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md`. Web operations still need
   scheduled artifact evidence before claiming 9.5.
 
 ## Required Slices

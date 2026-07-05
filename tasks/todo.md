@@ -1,5 +1,27 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Release Stability Evidence
+
+- [x] CHECK: GitHub `ui-patrol.yml` still has no `schedule` event, so scheduled
+  artifact evidence cannot be marked complete.
+- [x] RED: packaging guard fails unless
+  `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md` is shipped, linked from the
+  9.5 plan/backlog, and includes current `smoke:release`, `pack:dry-run`, main
+  CI, and privacy evidence.
+- [x] GREEN: release-stability evidence doc, package files, 9.5 quality plan,
+  and backlog now record current local-first release path evidence.
+- [x] EFFECT: release stability is judged from current executable smoke and CI
+  evidence instead of stale ledger text, while scheduled `ui-patrol` and
+  native-dialog blockers remain separate.
+
+### 판단 기준
+
+- Release evidence must remain raw-free and must not claim scheduled
+  `ui-patrol` completion without a real `schedule` event.
+- `smoke:release` must exercise isolated local CLI/server/storage/export/delete
+  behavior, not the user's real PromptLane archive.
+- This slice must not mark the long-running goal complete.
+
 ## 2026-07-06 PromptLane Prompt Effectiveness Verdict
 
 - [x] CHECK: `expected_impact`와 `loop_outcomes`는 각각 보이지만, Codex/Claude Code와 web 사용자가 실제 효과를 매번 수동으로 해석해야 했다.

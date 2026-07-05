@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse as parseYaml } from "yaml";
@@ -1029,6 +1029,10 @@ describe("plugin packaging files", () => {
   });
 
   it("keeps the 9.5 release-stability backlog aligned with merged evidence", () => {
+    const packageJson = readJson<{
+      files: string[];
+    }>("package.json");
+    const releaseEvidencePath = "docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md";
     const backlog = readFileSync(
       join(process.cwd(), "docs/NEXT_BACKLOG.md"),
       "utf8",
@@ -1040,16 +1044,35 @@ describe("plugin packaging files", () => {
       ),
       "utf8",
     );
+    const releaseEvidenceFile = join(process.cwd(), releaseEvidencePath);
+
+    expect(packageJson.files).toContain(releaseEvidencePath);
+    expect(existsSync(releaseEvidenceFile)).toBe(true);
+    const releaseEvidence = readFileSync(releaseEvidenceFile, "utf8");
 
     for (const currentEvidence of [
       "PR #425",
       "PR #427",
       "PR #433",
       "PR #434",
-      "latest main CI run `28750281428`",
+      "latest main CI run `28750424030`",
+      "docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md",
+      "corepack pnpm smoke:release",
     ]) {
       expect(backlog).toContain(currentEvidence);
       expect(plan).toContain(currentEvidence);
+    }
+
+    for (const releaseEvidenceText of [
+      "# PromptLane Release Stability Evidence 2026-07-06",
+      "corepack pnpm smoke:release",
+      "corepack pnpm pack:dry-run",
+      "main CI run `28750424030`",
+      "test (22)",
+      "test (24)",
+      "Raw prompt bodies, raw local paths, and token-like secrets were not emitted",
+    ]) {
+      expect(releaseEvidence).toContain(releaseEvidenceText);
     }
 
     for (const staleFollowUp of [
@@ -1120,7 +1143,9 @@ describe("plugin packaging files", () => {
       "docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md",
       "docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md",
       "workflow_dispatch run `28717406758`",
-      "latest main CI run `28750281428`",
+      "latest main CI run `28750424030`",
+      "docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md",
+      "corepack pnpm smoke:release",
       "no `schedule` event",
       "Remaining 9.5 blockers",
     ]) {
@@ -1135,7 +1160,8 @@ describe("plugin packaging files", () => {
       "`expected_impact` predictions to actual raw-free loop outcomes",
       "`effectiveness` verdict",
       "effectiveness calibration",
-      "latest main CI run `28750281428`",
+      "latest main CI run `28750424030`",
+      "docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md",
     ]) {
       expect(backlog).toContain(currentBacklogEvidence);
     }
