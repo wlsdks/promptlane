@@ -6,8 +6,8 @@
 - [x] RED: packaging guard가 9.5 plan에 PR #447, PR #449, PR #450, `expected_impact`, latest main CI run `28747682131`이 없어서 실패해야 한다.
 - [x] GREEN: 9.5 quality plan과 backlog가 expected-impact CLI/MCP/Web evidence, browser E2E/ui-patrol assertion, latest main CI를 반영한다.
 - [x] EFFECT: 9.5 scorecard가 실제 제품 효과 증거를 따라가며, 다음 작업자가 stale score/evidence로 완료 판단하지 못하게 한다.
-- [ ] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI, and branch prune all pass.
-- [ ] INTEGRATE: PR이 CI 통과 후 merge되고 branch prune까지 확인된다.
+- [x] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI run `28747890493`, and branch prune all pass.
+- [x] INTEGRATE: PR #451이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
