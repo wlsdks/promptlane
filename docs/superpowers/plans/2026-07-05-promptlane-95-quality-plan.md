@@ -158,6 +158,11 @@
   is the first unblocked local evidence action, while scheduled cron review and
   native dialog dogfood stay marked as externally blocked until their event or
   explicit approval exists.
+- `web_user_flow_current_main_evidence` was dogfooded after becoming the first
+  recommendation: `corepack pnpm dogfood:web-user-flow` completed with
+  `browser e2e passed` on current main. This refreshes local web workflow
+  evidence without treating scheduled `ui-patrol` or native-dialog dogfood as
+  complete.
 - PR #478 proved that installed CLI path on the default branch; main CI run
   `28753458359` passed Node 22 and Node 24 after merge, so future agents can use
   the product CLI itself to decide whether 9.5 is still blocked before claiming

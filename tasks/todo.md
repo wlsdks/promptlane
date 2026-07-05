@@ -1,5 +1,27 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Recommended Web User-Flow Evidence
+
+- [x] CHECK: `prompt-coach quality-evidence --json` now recommends
+  `web_user_flow_current_main_evidence` first, but that recommendation needed
+  proof that it actually leads to executable evidence.
+- [x] RUN: `corepack pnpm dogfood:web-user-flow` completed with
+  `browser e2e passed` on current main.
+- [x] RED: packaging guard required plan/backlog to record
+  `corepack pnpm dogfood:web-user-flow` and `browser e2e passed`, and failed
+  before the ledger update.
+- [x] GREEN: 9.5 plan and backlog now record that the first recommended local
+  evidence slice was executed successfully.
+- [x] EFFECT: PromptLane's quality evidence recommendation is no longer only
+  advice; it has been followed once and converted into tracked current evidence
+  without claiming scheduled `ui-patrol` or native-dialog dogfood completion.
+
+### 판단 기준
+
+- This evidence refresh must not mark `promptlane_95_quality` complete.
+- Scheduled `ui-patrol` and native-dialog dogfood must remain separate blockers.
+- The ledger must show the exact command and `browser e2e passed` result.
+
 ## 2026-07-06 PromptLane Quality Evidence Recommended Next Slices
 
 - [x] CHECK: `prompt-coach quality-evidence`는 9.5 blocker를 보여주지만,

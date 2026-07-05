@@ -962,6 +962,8 @@ describe("plugin packaging files", () => {
       expect(content).toContain("prompt-coach quality-evidence --json");
       expect(content).toContain("recommended_next_slices");
       expect(content).toContain("web_user_flow_current_main_evidence");
+      expect(content).toContain("corepack pnpm dogfood:web-user-flow");
+      expect(content).toContain("browser e2e passed");
       expect(content).toContain("promptlane_95_quality");
       expect(content).toContain("scorecard_axes");
       expect(content).toContain("native_dialog_approved_dogfood");

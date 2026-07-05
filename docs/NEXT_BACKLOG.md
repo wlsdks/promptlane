@@ -201,6 +201,11 @@ Decision:
   it runs the same Playwright-backed archive/detail/dashboard/coach/projects/
   mcp/exports/settings/mobile flow documented in
   `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md`.
+- After `web_user_flow_current_main_evidence` became the first
+  `recommended_next_slices` item, `corepack pnpm dogfood:web-user-flow` was run
+  on current main and completed with `browser e2e passed`. This proves the
+  recommended local evidence action is executable, while scheduled `ui-patrol`
+  and native-dialog dogfood remain separate pending blockers.
 - fresh current-main web user-flow evidence is now recorded after PR #465:
   `corepack pnpm dogfood:web-user-flow` passed on main-derived work after main
   CI run `28750766036`, proving the archive/detail/dashboard/coach/projects/
