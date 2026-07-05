@@ -191,6 +191,19 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain("Status: pending");
     expect(text).toContain("Scorecard axes: 7");
     expect(text).toContain("Blockers: 4");
+    expect(text).toContain("Blockers");
+    expect(text).toContain(
+      "- scheduled_ui_patrol: pending_no_schedule_run",
+    );
+    expect(text).toContain(
+      "next_action=Wait until 2026-07-06T06:17:00.000Z, then rerun corepack pnpm evidence:ui-patrol.",
+    );
+    expect(text).toContain(
+      "- native_dialog_approved_dogfood: pending_operator_approval",
+    );
+    expect(text).toContain(
+      "next_action=Get explicit operator approval before running PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved.",
+    );
     expect(text).toContain("Axis evidence coverage");
     expect(text).toContain("product_planning_and_positioning: complete");
     expect(text).toContain("local_first_privacy_boundary: complete");

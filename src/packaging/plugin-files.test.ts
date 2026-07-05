@@ -1080,6 +1080,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("scorecard_axes");
       expect(content).toContain("native_dialog_approved_dogfood");
       expect(content).toContain("scheduled_ui_patrol");
+      expect(content).toContain("blocker `next_action`");
     }
     expect(plan).toContain("| Product planning and positioning | 9.5/10 |");
     expect(plan).toContain("| Local-first privacy boundary | 9.5/10 |");

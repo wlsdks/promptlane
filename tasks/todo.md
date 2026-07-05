@@ -1,5 +1,21 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Quality Blocker Next Actions
+
+- [x] CHECK: `prompt-coach quality-evidence` 기본 텍스트의 Blockers 섹션이
+  blocker id/status만 보여 주고 각 blocker의 `next_action`은 JSON에만 있었다.
+- [x] RED: CLI focused test가 scheduled `ui-patrol`과 native dialog blocker의
+  `next_action=` 줄을 요구했고 기존 formatter에서 실패했다.
+- [x] GREEN: 기본 텍스트 출력의 각 blocker 아래에 `next_action=`을 표시한다.
+- [x] EFFECT: agents and operators can act from the default CLI summary without
+  switching to JSON just to find the next step.
+
+### 판단 기준
+
+- Do not remove or downgrade blockers through text rendering.
+- Keep output raw-free and free of local paths.
+- Keep JSON output unchanged.
+
 ## 2026-07-06 PromptLane UI Patrol Schedule Wait State
 
 - [x] CHECK: `evidence:ui-patrol`이 `pending_no_schedule_run`일 때 다음 cron을

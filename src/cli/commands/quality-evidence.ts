@@ -118,9 +118,10 @@ function qualityEvidenceScriptPath(): string {
 function formatSummary(summary: QualityEvidenceSummary): string {
   const blockerRows =
     summary.blockers.length > 0
-      ? summary.blockers.map(
-          (blocker) => `- ${blocker.id}: ${blocker.status}`,
-        )
+      ? summary.blockers.flatMap((blocker) => [
+          `- ${blocker.id}: ${blocker.status}`,
+          ...(blocker.next_action ? [`  next_action=${blocker.next_action}`] : []),
+        ])
       : ["- none"];
   const recommendedRows =
     summary.recommended_next_slices && summary.recommended_next_slices.length > 0
