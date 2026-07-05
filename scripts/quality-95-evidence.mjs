@@ -38,6 +38,7 @@ if (uiPatrol.status !== "complete") {
     id: "scheduled_ui_patrol",
     status: uiPatrol.status,
     next_action:
+      uiPatrol.next_action ||
       "Wait for a real schedule event, then rerun corepack pnpm evidence:ui-patrol.",
   });
 }

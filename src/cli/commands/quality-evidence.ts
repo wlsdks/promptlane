@@ -40,6 +40,8 @@ type QualityEvidenceSummary = {
       status: string;
       workflow?: string;
       schedule_cron?: string;
+      schedule_wait_state?: string;
+      last_expected_schedule_utc?: string;
       next_expected_schedule_utc?: string;
     };
     native_dialog_approved_dogfood?: {
@@ -187,6 +189,14 @@ function formatExternalEvidenceRows(summary: QualityEvidenceSummary): string[] {
     rows.push(
       `- scheduled_ui_patrol: ${scheduled.status} workflow=${scheduled.workflow ?? "unknown"} cron=${scheduled.schedule_cron ?? "unknown"}`,
     );
+    if (scheduled.schedule_wait_state) {
+      rows.push(`  schedule_wait_state=${scheduled.schedule_wait_state}`);
+    }
+    if (scheduled.last_expected_schedule_utc) {
+      rows.push(
+        `  last_expected_schedule_utc=${scheduled.last_expected_schedule_utc}`,
+      );
+    }
     if (scheduled.next_expected_schedule_utc) {
       rows.push(
         `  next_expected_schedule_utc=${scheduled.next_expected_schedule_utc}`,

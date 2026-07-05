@@ -8,6 +8,7 @@ const workflow = "ui-patrol.yml";
 const artifactName = "ui-patrol-screenshots";
 const expectedPngCount = 9;
 const scheduleCron = "17 6 * * 1";
+const now = currentTime();
 
 const runs = ghJson([
   "run",
@@ -24,17 +25,24 @@ const scheduledRuns = runs.filter((run) => run.event === "schedule");
 const latestScheduled = scheduledRuns[0];
 
 if (!latestScheduled) {
+  const lastExpectedScheduleUtc = lastWeeklyScheduleUtc(now);
+  const nextExpectedScheduleUtc = nextWeeklyScheduleUtc(now);
+  const waitState = scheduleWaitState({
+    lastExpectedScheduleUtc,
+    latestManualRun: latestManualRun(runs),
+  });
   print({
     check: "scheduled_ui_patrol",
     status: "pending_no_schedule_run",
     workflow,
     schedule_cron: scheduleCron,
-    next_expected_schedule_utc: nextWeeklyScheduleUtc(new Date()),
+    schedule_wait_state: waitState,
+    last_expected_schedule_utc: lastExpectedScheduleUtc,
+    next_expected_schedule_utc: nextExpectedScheduleUtc,
     expected_artifact: artifactName,
     expected_png_count: expectedPngCount,
     latest_manual_run: latestManualRun(runs),
-    next_action:
-      "Wait for the weekly cron schedule event, then rerun corepack pnpm evidence:ui-patrol.",
+    next_action: nextActionForMissingSchedule(waitState, nextExpectedScheduleUtc),
   });
   process.exit(0);
 }
@@ -100,6 +108,23 @@ function latestManualRun(runs) {
   };
 }
 
+function scheduleWaitState({ lastExpectedScheduleUtc, latestManualRun }) {
+  if (
+    latestManualRun?.createdAt &&
+    Date.parse(latestManualRun.createdAt) > Date.parse(lastExpectedScheduleUtc)
+  ) {
+    return "waiting_for_next_cron";
+  }
+  return "overdue_no_schedule_run";
+}
+
+function nextActionForMissingSchedule(waitState, nextExpectedScheduleUtc) {
+  if (waitState === "waiting_for_next_cron") {
+    return `Wait until ${nextExpectedScheduleUtc}, then rerun corepack pnpm evidence:ui-patrol.`;
+  }
+  return "Inspect the ui-patrol workflow schedule delivery, then rerun corepack pnpm evidence:ui-patrol after a real schedule event exists.";
+}
+
 function ghJson(args) {
   const result = gh(args);
   return JSON.parse(result.stdout);
@@ -144,6 +169,29 @@ function nextWeeklyScheduleUtc(now) {
   }
 
   return next.toISOString();
+}
+
+function lastWeeklyScheduleUtc(now) {
+  const last = new Date(now);
+  const daysSinceMonday = (last.getUTCDay() - 1 + 7) % 7;
+  last.setUTCDate(last.getUTCDate() - daysSinceMonday);
+  last.setUTCHours(6, 17, 0, 0);
+
+  if (last > now) {
+    last.setUTCDate(last.getUTCDate() - 7);
+  }
+
+  return last.toISOString();
+}
+
+function currentTime() {
+  const override = process.env.PROMPT_COACH_UI_PATROL_NOW_UTC;
+  if (!override) return new Date();
+  const parsed = new Date(override);
+  if (Number.isNaN(parsed.getTime())) {
+    throw new Error("PROMPT_COACH_UI_PATROL_NOW_UTC must be an ISO timestamp.");
+  }
+  return parsed;
 }
 
 function print(value) {

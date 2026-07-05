@@ -131,8 +131,10 @@ Verified CI and operational evidence:
 - `corepack pnpm evidence:ui-patrol` now repeats that check and reports
   `pending_no_schedule_run` until a real `schedule` run with the
   `ui-patrol-screenshots` artifact and 9 png files exists. Pending output
-  includes `next_expected_schedule_utc` and `schedule_cron` so the next review
-  can wait for the real weekly cron window.
+  includes `schedule_wait_state`, `last_expected_schedule_utc`,
+  `next_expected_schedule_utc`, and `schedule_cron` so the next review can
+  distinguish waiting for the real weekly cron window from an overdue missing
+  schedule event.
 - `corepack pnpm e2e:browser` on `codex/reuse-copy-fallback-audit-refresh`
   forced clipboard writes to fail and verified the prompt detail manual-copy
   fallback for saved improvement drafts.

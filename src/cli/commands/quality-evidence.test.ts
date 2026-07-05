@@ -218,6 +218,8 @@ describe("quality-evidence CLI command", () => {
       "workflow=ui-patrol.yml cron=17 6 * * 1",
     );
     if (text.includes("pending_no_schedule_run")) {
+      expect(text).toContain("schedule_wait_state=");
+      expect(text).toContain("last_expected_schedule_utc=");
       expect(text).toContain("next_expected_schedule_utc=");
     }
     expect(text).toContain(

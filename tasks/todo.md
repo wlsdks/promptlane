@@ -1,5 +1,26 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane UI Patrol Schedule Wait State
+
+- [x] CHECK: `evidence:ui-patrol`이 `pending_no_schedule_run`일 때 다음 cron을
+  기다리면 되는지, 이미 예상 cron이 지났는데 schedule run이 없는지 구분하지
+  못했다.
+- [x] RED: fake `gh`와 deterministic `PROMPT_COACH_UI_PATROL_NOW_UTC`를 쓰는
+  focused test가 `schedule_wait_state`, `last_expected_schedule_utc`,
+  `next_expected_schedule_utc`를 요구했고 기존 스크립트에서 실패했다.
+- [x] GREEN: `scripts/ui-patrol-evidence.mjs`가
+  `waiting_for_next_cron`/`overdue_no_schedule_run`을 구분하고 CLI text도 해당
+  상태를 표시한다.
+- [x] EFFECT: scheduled `ui-patrol` evidence remains pending, but operators and
+  agents can tell whether to wait for cron or inspect missing schedule delivery.
+
+### 판단 기준
+
+- Do not mark `scheduled_ui_patrol` complete without a real `schedule` run and
+  9 png artifact.
+- Do not treat workflow_dispatch evidence as scheduled evidence.
+- Keep pending output raw-free and free of local paths.
+
 ## 2026-07-06 PromptLane General CI Removal
 
 - [x] CHECK: PR/main test workflow가 남아 있어 PR #495에서 GitHub Actions

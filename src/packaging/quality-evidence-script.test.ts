@@ -22,12 +22,17 @@ describe("quality 9.5 evidence script", () => {
       JSON.stringify({
         check: "scheduled_ui_patrol",
         status: "pending_no_schedule_run",
+        schedule_wait_state: "waiting_for_next_cron",
+        last_expected_schedule_utc: "2026-06-29T06:17:00.000Z",
+        next_expected_schedule_utc: "2026-07-06T06:17:00.000Z",
         expected_artifact: "ui-patrol-screenshots",
         expected_png_count: 9,
         latest_manual_run: {
           databaseId: 28717406758,
           conclusion: "success",
         },
+        next_action:
+          "Wait until 2026-07-06T06:17:00.000Z, then rerun corepack pnpm evidence:ui-patrol.",
       }),
     );
 
@@ -158,6 +163,8 @@ describe("quality 9.5 evidence script", () => {
         expect.objectContaining({
           id: "scheduled_ui_patrol",
           status: "pending_no_schedule_run",
+          next_action:
+            "Wait until 2026-07-06T06:17:00.000Z, then rerun corepack pnpm evidence:ui-patrol.",
         }),
         expect.objectContaining({
           id: "native_dialog_approved_dogfood",

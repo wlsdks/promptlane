@@ -885,12 +885,16 @@ describe("plugin packaging files", () => {
     expect(evidenceScript).toContain("ui-patrol-screenshots");
     expect(evidenceScript).toContain("scheduled_ui_patrol");
     expect(evidenceScript).toContain("pending_no_schedule_run");
+    expect(evidenceScript).toContain("schedule_wait_state");
+    expect(evidenceScript).toContain("last_expected_schedule_utc");
     expect(evidenceScript).toContain("next_expected_schedule_utc");
     expect(evidenceScript).toContain("schedule_cron");
     expect(workflow).toContain("schedule:");
     expect(workflow).toContain('cron: "17 6 * * 1"');
     for (const content of [goalAudit, backlog, todo]) {
       expect(content).toContain("corepack pnpm evidence:ui-patrol");
+      expect(content).toContain("schedule_wait_state");
+      expect(content).toContain("last_expected_schedule_utc");
       expect(content).toContain("next_expected_schedule_utc");
       expect(content).toContain("workflow_dispatch run `28717406758`");
       expect(content).toContain("9 png files");
