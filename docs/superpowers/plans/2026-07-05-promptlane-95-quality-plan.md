@@ -137,9 +137,9 @@
   evidence exists, and it must require the `ui-patrol-screenshots` artifact
   with 9 png files before returning `complete`.
 - `corepack pnpm evidence:quality` emits the `promptlane_95_quality` summary
-  and must include both `scheduled_ui_patrol` and
-  `native_dialog_approved_dogfood` blockers until their direct evidence is
-  complete.
+  and must include `scorecard_axes`, `scheduled_ui_patrol`, and
+  `native_dialog_approved_dogfood` blockers until every axis reaches its 9.5
+  evidence bar and the direct evidence is complete.
 - Native OS ask UI dogfood remains operator-approved only; do not run
   `dogfood:mcp-native-dialog-approved` without explicit approval because it can
   open a native dialog.

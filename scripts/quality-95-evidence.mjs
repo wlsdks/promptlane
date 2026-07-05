@@ -11,8 +11,19 @@ const uiPatrol = args.uiPatrolJson
   ? readJsonFile(args.uiPatrolJson)
   : runUiPatrolEvidence();
 const nativeDialog = readNativeDialogEvidence();
+const scorecardAxes = readScorecardAxes();
+const underTargetAxes = scorecardAxes.filter(
+  (axis) => axis.status !== "meets_target",
+);
 
 const blockers = [];
+for (const axis of underTargetAxes) {
+  blockers.push({
+    id: `scorecard_axis:${axis.id}`,
+    status: axis.status,
+    next_action: `Raise ${axis.axis} from ${axis.current_level} to ${axis.target_level} with direct evidence.`,
+  });
+}
 if (uiPatrol.status !== "complete") {
   blockers.push({
     id: "scheduled_ui_patrol",
@@ -36,6 +47,7 @@ print({
   proof_standard:
     "9.5 requires current evidence for every scorecard axis, not only passing tests.",
   plan: planPath,
+  scorecard_axes: scorecardAxes,
   evidence: {
     scheduled_ui_patrol: uiPatrol,
     native_dialog_approved_dogfood: nativeDialog,
@@ -108,6 +120,42 @@ function readNativeDialogEvidence() {
     status: approvedAnswered ? "complete" : "pending_operator_approval",
     audit: nativeDialogAuditPath,
     approved_run_required: true,
+  };
+}
+
+function readScorecardAxes() {
+  const plan = readFileSync(planPath, "utf8");
+  return plan
+    .split("\n")
+    .filter((line) => line.startsWith("| ") && line.includes(" | "))
+    .filter((line) => !line.includes("Axis | Current level"))
+    .filter((line) => !line.includes("---"))
+    .map(parseScorecardRow)
+    .filter(Boolean);
+}
+
+function parseScorecardRow(line) {
+  const cells = line
+    .slice(1, -1)
+    .split("|")
+    .map((cell) => cell.trim());
+  if (cells.length < 4) return undefined;
+  const [axis, currentLevel, bar, evidence] = cells;
+  const currentScore = Number(currentLevel.match(/(?<score>\d+(?:\.\d+)?)\/10/)?.groups?.score);
+  const targetLevel = bar.includes("9.5 bar") ? "9.5/10" : "unknown";
+  return {
+    id: axis
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, ""),
+    axis,
+    current_level: currentLevel,
+    target_level: targetLevel,
+    status:
+      Number.isFinite(currentScore) && currentScore >= 9.5
+        ? "meets_target"
+        : "below_target",
+    evidence_required: evidence,
   };
 }
 
