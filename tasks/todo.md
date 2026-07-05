@@ -1,5 +1,24 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane UI Patrol Next Schedule Evidence
+
+- [x] CHECK: `ui-patrol.yml` still has no `schedule` event, and
+  `evidence:ui-patrol` only said to wait for the weekly cron.
+- [x] RED: packaging guard required `scripts/ui-patrol-evidence.mjs` and the
+  scheduled-evidence docs to mention `next_expected_schedule_utc` and
+  `schedule_cron`; the focused test failed while those fields were absent.
+- [x] GREEN: pending `evidence:ui-patrol` output now includes the weekly cron
+  expression and the next expected UTC schedule time.
+- [x] EFFECT: future agents know when to re-check the external schedule event
+  instead of rerunning unrelated local UI checks.
+
+### 판단 기준
+
+- Do not treat `next_expected_schedule_utc` as completion evidence.
+- Do not mark scheduled `ui-patrol` complete without a real `schedule` event
+  and 9-png artifact.
+- Keep pending output raw-free and free of local paths.
+
 ## 2026-07-06 PromptLane External Evidence Action Criteria
 
 - [x] CHECK: The remaining 9.5 blockers are external, but the recommended next

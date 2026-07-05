@@ -7,6 +7,7 @@ import { join } from "node:path";
 const workflow = "ui-patrol.yml";
 const artifactName = "ui-patrol-screenshots";
 const expectedPngCount = 9;
+const scheduleCron = "17 6 * * 1";
 
 const runs = ghJson([
   "run",
@@ -27,6 +28,8 @@ if (!latestScheduled) {
     check: "scheduled_ui_patrol",
     status: "pending_no_schedule_run",
     workflow,
+    schedule_cron: scheduleCron,
+    next_expected_schedule_utc: nextWeeklyScheduleUtc(new Date()),
     expected_artifact: artifactName,
     expected_png_count: expectedPngCount,
     latest_manual_run: latestManualRun(runs),
@@ -44,6 +47,7 @@ if (
     check: "scheduled_ui_patrol",
     status: "pending_schedule_not_successful",
     workflow,
+    schedule_cron: scheduleCron,
     scheduled_run: latestScheduled,
     next_action:
       "Inspect the scheduled ui-patrol workflow run and fix failures before claiming scheduled evidence.",
@@ -70,6 +74,7 @@ try {
         ? "complete"
         : "pending_artifact_incomplete",
     workflow,
+    schedule_cron: scheduleCron,
     scheduled_run: latestScheduled,
     artifact: artifactName,
     png_count: pngs.length,
@@ -126,6 +131,19 @@ function findPngs(dir) {
     .map((line) => line.trim())
     .filter(Boolean)
     .sort();
+}
+
+function nextWeeklyScheduleUtc(now) {
+  const next = new Date(now);
+  const daysUntilMonday = (1 - next.getUTCDay() + 7) % 7;
+  next.setUTCDate(next.getUTCDate() + daysUntilMonday);
+  next.setUTCHours(6, 17, 0, 0);
+
+  if (next <= now) {
+    next.setUTCDate(next.getUTCDate() + 7);
+  }
+
+  return next.toISOString();
 }
 
 function print(value) {
