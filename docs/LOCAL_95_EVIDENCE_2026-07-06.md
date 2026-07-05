@@ -7,8 +7,6 @@ state.
 
 It does not complete the remaining externally gated evidence:
 
-- scheduled `ui-patrol` still requires a real GitHub `schedule` event and a
-  `ui-patrol-screenshots` artifact with 9 png files.
 - native dialog approved dogfood still requires explicit operator approval
   before running `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm
   dogfood:mcp-native-dialog-approved`.

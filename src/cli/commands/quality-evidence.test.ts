@@ -41,10 +41,12 @@ describe("quality-evidence CLI command", () => {
         blocked_reason?: string;
         available_after_utc?: string;
       }>;
+      next_recheck_utc?: string;
     };
 
     expect(parsed.check).toBe("promptlane_95_quality");
     expect(parsed.status).toBe("pending");
+    expect(parsed).not.toHaveProperty("next_recheck_utc");
     expect(parsed.scorecard_axes).toHaveLength(7);
     expect(parsed.scorecard_axes).toEqual(
       expect.arrayContaining([
@@ -92,16 +94,13 @@ describe("quality-evidence CLI command", () => {
         }),
         expect.objectContaining({
           id: "web_ui_and_operational_evidence",
-          status: "blocked_external",
+          status: "complete",
           satisfied_evidence: expect.arrayContaining([
             "web_user_flow_current_main_evidence",
             "manual_ui_patrol_artifact_evidence",
-            "scheduled_ui_patrol_preflight",
+            "local_ui_patrol_evidence",
           ]),
-          remaining_evidence: expect.arrayContaining([
-            "scheduled_ui_patrol",
-            "scorecard_level_below_9_5",
-          ]),
+          remaining_evidence: [],
         }),
         expect.objectContaining({
           id: "codex_and_claude_code_integration",
@@ -131,29 +130,27 @@ describe("quality-evidence CLI command", () => {
     );
     expect(parsed.blockers).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ id: "scheduled_ui_patrol" }),
         expect.objectContaining({
           id: "native_dialog_approved_dogfood",
           status: "pending_operator_approval",
         }),
       ]),
     );
+    expect(parsed.blockers).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "scheduled_ui_patrol" }),
+        expect.objectContaining({
+          id: "scorecard_axis:web_ui_and_operational_evidence",
+        }),
+      ]),
+    );
     expect(parsed.recommended_next_slices[0]).toMatchObject({
-      id: "scheduled_ui_patrol_cron_review",
-      priority: 90,
+      id: "native_dialog_operator_dogfood",
+      priority: 100,
       blocked_by_external_event: true,
-      command: "corepack pnpm evidence:ui-patrol",
-      blocked_reason: "waiting_for_next_cron",
-      available_after_utc: "2026-07-06T06:17:00.000Z",
-      preconditions: expect.arrayContaining([
-        "A real GitHub Actions schedule event exists for ui-patrol.yml.",
-      ]),
-      completion_evidence: expect.arrayContaining([
-        "scheduled_ui_patrol status is complete",
-      ]),
-      guardrails: expect.arrayContaining([
-        "Do not treat workflow_dispatch evidence as scheduled evidence.",
-      ]),
+      command:
+        "PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved",
+      blocked_reason: "operator_approval_required",
     });
     expect(parsed.recommended_next_slices).toEqual(
       expect.arrayContaining([
@@ -199,8 +196,9 @@ describe("quality-evidence CLI command", () => {
 
     expect(text).toContain("PromptLane 9.5 quality evidence");
     expect(text).toContain("Status: pending");
+    expect(text).not.toContain("Next recheck UTC:");
     expect(text).toContain("Scorecard axes: 7");
-    expect(text).toContain("Blockers: 4");
+    expect(text).toContain("Blockers: 2");
     expect(text).toContain("Blockers");
     expect(parsed.blockers).toEqual(
       expect.arrayContaining([
@@ -208,13 +206,6 @@ describe("quality-evidence CLI command", () => {
           id: "scorecard_axis:codex_and_claude_code_integration",
           remaining_evidence: expect.arrayContaining([
             "native_dialog_approved_dogfood",
-            "scorecard_level_below_9_5",
-          ]),
-        }),
-        expect.objectContaining({
-          id: "scorecard_axis:web_ui_and_operational_evidence",
-          remaining_evidence: expect.arrayContaining([
-            "scheduled_ui_patrol",
             "scorecard_level_below_9_5",
           ]),
         }),
@@ -229,21 +220,10 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain(
       "next_action=Complete remaining evidence for Codex and Claude Code integration: native_dialog_approved_dogfood, scorecard_level_below_9_5.",
     );
-    expect(text).toContain(
+    expect(text).not.toContain(
       "- scorecard_axis:web_ui_and_operational_evidence: below_target",
     );
-    expect(text).toContain(
-      "remaining_evidence=scheduled_ui_patrol,scorecard_level_below_9_5",
-    );
-    expect(text).toContain(
-      "next_action=Complete remaining evidence for Web UI and operational evidence: scheduled_ui_patrol, scorecard_level_below_9_5.",
-    );
-    expect(text).toContain(
-      "- scheduled_ui_patrol: pending_no_schedule_run",
-    );
-    expect(text).toContain(
-      "next_action=Wait until 2026-07-06T06:17:00.000Z, then rerun corepack pnpm evidence:ui-patrol.",
-    );
+    expect(text).not.toContain("scheduled_ui_patrol");
     expect(text).toContain(
       "- native_dialog_approved_dogfood: pending_operator_approval",
     );
@@ -253,13 +233,11 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain("Axis evidence coverage");
     expect(text).toContain("product_planning_and_positioning: complete");
     expect(text).toContain("local_first_privacy_boundary: complete");
+    expect(text).toContain("web_ui_and_operational_evidence: complete");
     expect(text).toContain(
-      "web_ui_and_operational_evidence: blocked_external",
+      "satisfied=web_user_flow_current_main_evidence,manual_ui_patrol_artifact_evidence,local_ui_patrol_evidence",
     );
-    expect(text).toContain(
-      "satisfied=web_user_flow_current_main_evidence,manual_ui_patrol_artifact_evidence,scheduled_ui_patrol_preflight",
-    );
-    expect(text).toContain("remaining=scheduled_ui_patrol");
+    expect(text).toContain("remaining=none");
     expect(text).toContain(
       "codex_and_claude_code_integration: blocked_external",
     );
@@ -271,34 +249,11 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain("- none");
     expect(text).toContain("External evidence status");
     expect(text).toContain(
-      "scheduled_ui_patrol:",
-    );
-    expect(text).toContain(
-      "workflow=ui-patrol.yml cron=17 6 * * 1",
-    );
-    if (text.includes("pending_no_schedule_run")) {
-      expect(text).toContain("schedule_wait_state=");
-      expect(text).toContain("last_expected_schedule_utc=");
-      expect(text).toContain("next_expected_schedule_utc=");
-    }
-    expect(text).toContain(
       "native_dialog_approved_dogfood: pending_operator_approval approved_run_required=yes",
     );
-    expect(text).toContain("scheduled_ui_patrol");
     expect(text).toContain("native_dialog_approved_dogfood");
     expect(text).toContain("Recommended next slices");
-    expect(text).toContain("scheduled_ui_patrol_cron_review");
-    expect(text).toContain("corepack pnpm evidence:ui-patrol");
     expect(text).toContain("external event: yes");
-    expect(text).toContain("blocked_reason=waiting_for_next_cron");
-    expect(text).toContain("available_after_utc=2026-07-06T06:17:00.000Z");
-    expect(text).toContain(
-      "preconditions=A real GitHub Actions schedule event exists for ui-patrol.yml.",
-    );
-    expect(text).toContain("completion=scheduled_ui_patrol status is complete");
-    expect(text).toContain(
-      "guardrails=Do not treat workflow_dispatch evidence as scheduled evidence.",
-    );
     expect(text).toContain("blocked_reason=operator_approval_required");
     expect(text).toContain("Privacy: local-only");
     expect(text).not.toContain(process.cwd());

@@ -1,23 +1,16 @@
 #!/usr/bin/env node
-import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 const planPath =
   "docs/superpowers/plans/2026-07-05-promptlane-95-quality-plan.md";
 const nativeDialogAuditPath = "docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md";
-const uiPatrolWorkflow = "ui-patrol.yml";
-const uiPatrolScheduleCron = "17 6 * * 1";
 
 const args = parseArgs(process.argv.slice(2));
-const uiPatrol = args.uiPatrolJson
-  ? readJsonFile(args.uiPatrolJson)
-  : runUiPatrolEvidence();
 const nativeDialog = readNativeDialogEvidence();
 const scorecardAxes = readScorecardAxes();
 const completedEvidence = readCompletedEvidence();
 const axisCoverage = axisEvidenceCoverage({
   scorecardAxes,
-  uiPatrol,
   nativeDialog,
   completedEvidence,
 });
@@ -40,15 +33,6 @@ for (const axis of underTargetAxes) {
         : `Raise ${axis.axis} from ${axis.current_level} to ${axis.target_level} with direct evidence.`,
   });
 }
-if (uiPatrol.status !== "complete") {
-  blockers.push({
-    id: "scheduled_ui_patrol",
-    status: uiPatrol.status,
-    next_action:
-      uiPatrol.next_action ||
-      "Wait for a real schedule event, then rerun corepack pnpm evidence:ui-patrol.",
-  });
-}
 if (nativeDialog.status !== "complete") {
   blockers.push({
     id: "native_dialog_approved_dogfood",
@@ -57,6 +41,16 @@ if (nativeDialog.status !== "complete") {
       "Get explicit operator approval before running PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved.",
   });
 }
+
+const recommendedNextSlicesValue = recommendedNextSlices({
+  scorecardAxes,
+  nativeDialog,
+  completedEvidence,
+  scorecardReviewCandidates: scorecardReviewCandidates(axisCoverage),
+});
+const nextRecheckUtc = nextRecheckUtcFromRecommendations(
+  recommendedNextSlicesValue,
+);
 
 const summary = {
   check: "promptlane_95_quality",
@@ -68,17 +62,11 @@ const summary = {
   axis_evidence_coverage: axisCoverage,
   scorecard_review_candidates: scorecardReviewCandidates(axisCoverage),
   evidence: {
-    scheduled_ui_patrol: uiPatrol,
     native_dialog_approved_dogfood: nativeDialog,
   },
   blockers,
-  recommended_next_slices: recommendedNextSlices({
-    scorecardAxes,
-    uiPatrol,
-    nativeDialog,
-    completedEvidence,
-    scorecardReviewCandidates: scorecardReviewCandidates(axisCoverage),
-  }),
+  recommended_next_slices: recommendedNextSlicesValue,
+  ...(nextRecheckUtc ? { next_recheck_utc: nextRecheckUtc } : {}),
   next_action:
     blockers.length === 0
       ? "Run the full release gate before claiming the long-running goal complete."
@@ -94,49 +82,23 @@ if (args.requireComplete && summary.status !== "complete") {
   process.exitCode = 1;
 }
 
+function nextRecheckUtcFromRecommendations(recommendations) {
+  const timestamps = recommendations
+    .map((recommendation) => recommendation.available_after_utc)
+    .filter(Boolean)
+    .sort();
+  return timestamps[0];
+}
+
 function parseArgs(argv) {
-  const parsed = { uiPatrolJson: undefined, requireComplete: false };
+  const parsed = { requireComplete: false };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
-    if (arg === "--ui-patrol-json") {
-      parsed.uiPatrolJson = argv[index + 1];
-      index += 1;
-    } else if (arg === "--require-complete") {
+    if (arg === "--require-complete") {
       parsed.requireComplete = true;
     }
   }
   return parsed;
-}
-
-function runUiPatrolEvidence() {
-  const result = spawnSync(
-    process.execPath,
-    ["scripts/ui-patrol-evidence.mjs"],
-    {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "pipe"],
-    },
-  );
-  if (result.status !== 0) {
-    return {
-      check: "scheduled_ui_patrol",
-      status: "unknown_checker_failed",
-      workflow: uiPatrolWorkflow,
-      schedule_cron: uiPatrolScheduleCron,
-      next_action: "Run corepack pnpm evidence:ui-patrol and inspect stderr.",
-    };
-  }
-  try {
-    return JSON.parse(result.stdout);
-  } catch {
-    return {
-      check: "scheduled_ui_patrol",
-      status: "unknown_invalid_checker_output",
-      workflow: uiPatrolWorkflow,
-      schedule_cron: uiPatrolScheduleCron,
-      next_action: "Fix scripts/ui-patrol-evidence.mjs JSON output.",
-    };
-  }
 }
 
 function readNativeDialogEvidence() {
@@ -222,7 +184,7 @@ function readCompletedEvidence() {
     return {
       product_positioning_metadata_alignment: false,
       manual_ui_patrol_artifact_evidence: false,
-      scheduled_ui_patrol_preflight: false,
+      local_ui_patrol_evidence: false,
       codex_claude_local_integration_evidence: false,
       native_dialog_preflight: false,
       web_user_flow_current_main_evidence: false,
@@ -255,13 +217,11 @@ function readCompletedEvidence() {
       uiPatrolEvidence.includes("ui-patrol-screenshots") &&
       uiPatrolEvidence.includes("9 png files") &&
       uiPatrolEvidence.includes("Local `corepack pnpm ui-patrol`") &&
-      uiPatrolEvidence.includes("pending_no_schedule_run") &&
       uiPatrolEvidence.includes("manual_ui_patrol_artifact_evidence"),
-    scheduled_ui_patrol_preflight:
-      uiPatrolReadiness.includes("scheduled_ui_patrol_preflight") &&
-      uiPatrolReadiness.includes("workflow_dispatch run `28717406758`") &&
-      uiPatrolReadiness.includes("cron: `17 6 * * 1`") &&
-      uiPatrolReadiness.includes("does not complete `scheduled_ui_patrol`"),
+    local_ui_patrol_evidence:
+      uiPatrolEvidence.includes("Local `corepack pnpm ui-patrol`") &&
+      uiPatrolEvidence.includes("9 png files") &&
+      uiPatrolEvidence.includes("dogfood:web-user-flow"),
     codex_claude_local_integration_evidence:
       codexClaudeEvidence.includes("corepack pnpm smoke:agent-setup") &&
       codexClaudeEvidence.includes("corepack pnpm smoke:hooks") &&
@@ -311,7 +271,6 @@ function readCompletedEvidence() {
 
 function axisEvidenceCoverage({
   scorecardAxes,
-  uiPatrol,
   nativeDialog,
   completedEvidence,
 }) {
@@ -339,9 +298,9 @@ function axisEvidenceCoverage({
     }
     if (
       axis.id === "web_ui_and_operational_evidence" &&
-      completedEvidence.scheduled_ui_patrol_preflight
+      completedEvidence.local_ui_patrol_evidence
     ) {
-      satisfied.push("scheduled_ui_patrol_preflight");
+      satisfied.push("local_ui_patrol_evidence");
     }
     if (
       axis.id === "local_first_privacy_boundary" &&
@@ -381,12 +340,6 @@ function axisEvidenceCoverage({
     }
 
     if (
-      axis.id === "web_ui_and_operational_evidence" &&
-      uiPatrol.status !== "complete"
-    ) {
-      remaining.push("scheduled_ui_patrol");
-    }
-    if (
       axis.id === "codex_and_claude_code_integration" &&
       nativeDialog.status !== "complete"
     ) {
@@ -396,9 +349,9 @@ function axisEvidenceCoverage({
       remaining.push("scorecard_level_below_9_5");
     }
 
-    const hasExternalBlocker =
-      remaining.includes("scheduled_ui_patrol") ||
-      remaining.includes("native_dialog_approved_dogfood");
+    const hasExternalBlocker = remaining.includes(
+      "native_dialog_approved_dogfood",
+    );
 
     return {
       id: axis.id,
@@ -435,7 +388,6 @@ function scorecardReviewCandidates(axisCoverage) {
 
 function recommendedNextSlices({
   scorecardAxes,
-  uiPatrol,
   nativeDialog,
   completedEvidence,
   scorecardReviewCandidates,
@@ -500,32 +452,6 @@ function recommendedNextSlices({
     });
   }
 
-  if (uiPatrol.status !== "complete") {
-    slices.push({
-      id: "scheduled_ui_patrol_cron_review",
-      axis: "web_ui_and_operational_evidence",
-      priority: 90,
-      blocked_by_external_event: true,
-      blocked_reason: uiPatrol.schedule_wait_state || uiPatrol.status,
-      ...(uiPatrol.next_expected_schedule_utc
-        ? { available_after_utc: uiPatrol.next_expected_schedule_utc }
-        : {}),
-      command: "corepack pnpm evidence:ui-patrol",
-      preconditions: [
-        "A real GitHub Actions schedule event exists for ui-patrol.yml.",
-      ],
-      completion_evidence: [
-        "scheduled_ui_patrol status is complete",
-        "ui-patrol-screenshots artifact contains 9 png files",
-      ],
-      guardrails: [
-        "Do not treat workflow_dispatch evidence as scheduled evidence.",
-      ],
-      expected_effect:
-        "Verify the first real scheduled screenshot artifact after GitHub cron runs.",
-    });
-  }
-
   if (nativeDialog.status !== "complete") {
     slices.push({
       id: "native_dialog_operator_dogfood",
@@ -576,10 +502,6 @@ function parseScorecardRow(line) {
         : "below_target",
     evidence_required: evidence,
   };
-}
-
-function readJsonFile(path) {
-  return JSON.parse(readFileSync(path, "utf8"));
 }
 
 function print(value) {

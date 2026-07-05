@@ -2,8 +2,8 @@
 
 This document records current release-stability evidence for the PromptLane
 9.5 quality bar. It is evidence only for the local-first release smoke and
-package lifecycle paths; scheduled `ui-patrol` and native dialog dogfood remain
-separate blockers.
+package lifecycle paths; native dialog dogfood remains a separate
+operator-approved blocker.
 
 ## Commands
 

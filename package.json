@@ -87,16 +87,15 @@
     "scripts/pack-dry-run.mjs",
     "scripts/quality-gate.mjs",
     "scripts/release-smoke.mjs",
-    "scripts/ui-patrol.mjs",
-    "scripts/ui-patrol-evidence.mjs"
+    "scripts/ui-patrol.mjs"
   ],
   "scripts": {
     "build": "pnpm build:server && pnpm build:web",
     "build:server": "tsc -p tsconfig.json && node scripts/fix-bin-mode.mjs",
     "build:web": "vite build --config vite.web.config.ts",
     "clean": "rm -rf dist coverage",
-    "format": "prettier --check package.json tsconfig.json tsconfig.web.json vite.web.config.ts vitest.config.ts \"scripts/**/*.mjs\" \"src/**/*.{ts,tsx,css}\" \".github/**/*.yml\"",
-    "format:write": "prettier --write package.json tsconfig.json tsconfig.web.json vite.web.config.ts vitest.config.ts \"scripts/**/*.mjs\" \"src/**/*.{ts,tsx,css}\" \".github/**/*.yml\"",
+    "format": "prettier --check package.json tsconfig.json tsconfig.web.json vite.web.config.ts vitest.config.ts \"scripts/**/*.mjs\" \"src/**/*.{ts,tsx,css}\"",
+    "format:write": "prettier --write package.json tsconfig.json tsconfig.web.json vite.web.config.ts vitest.config.ts \"scripts/**/*.mjs\" \"src/**/*.{ts,tsx,css}\"",
     "benchmark": "pnpm build && node scripts/benchmark.mjs",
     "dev:web": "vite --config vite.web.config.ts",
     "e2e:browser": "pnpm build && node scripts/browser-e2e.mjs",
@@ -118,7 +117,6 @@
     "dogfood:loop-memory-approval": "pnpm build && node scripts/loop-memory-approval-dogfood.mjs",
     "dogfood:web-user-flow": "pnpm e2e:browser",
     "evidence:quality": "node scripts/quality-95-evidence.mjs",
-    "evidence:ui-patrol": "node scripts/ui-patrol-evidence.mjs",
     "smoke:release": "pnpm build && node scripts/release-smoke.mjs",
     "test": "vitest run",
     "ui-patrol": "node scripts/ui-patrol.mjs"

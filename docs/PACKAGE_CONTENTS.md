@@ -72,7 +72,7 @@ The npm package intentionally includes:
   `scripts/mcp-native-dialog-preflight.mjs`,
   `scripts/quality-95-evidence.mjs`, `scripts/pack-dry-run.mjs`,
   `scripts/quality-gate.mjs`, `scripts/release-smoke.mjs`,
-  `scripts/ui-patrol.mjs`, and `scripts/ui-patrol-evidence.mjs`
+  and `scripts/ui-patrol.mjs`
 
 ## Excluded
 

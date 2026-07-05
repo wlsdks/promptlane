@@ -1,5 +1,24 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane CI Workflow Removal
+
+- [x] CHECK: 사용자가 CI는 없어도 된다고 명시했고, 남은 GitHub Actions 파일은
+  scheduled `ui-patrol.yml` 하나였다.
+- [x] RED: 기존 quality-evidence 테스트는 `scheduled_ui_patrol` blocker와
+  `next_recheck_utc`를 기대해 실패했다.
+- [x] GREEN: `.github/workflows/ui-patrol.yml`과
+  `scripts/ui-patrol-evidence.mjs`를 제거하고, web operations 품질 기준을
+  local `corepack pnpm ui-patrol` plus `dogfood:web-user-flow` 증거로 전환했다.
+- [x] EFFECT: PromptLane의 active gate는 local gate와 approval-gated native
+  dialog dogfood만 남는다. GitHub Actions schedule 대기는 더 이상 9.5 품질
+  blocker가 아니다.
+
+### 판단 기준
+
+- Do not re-add `.github/workflows/*.yml` without a dedicated product decision.
+- Do not treat removed scheduled evidence as a remaining quality blocker.
+- Keep `ui-patrol` as a local browser verification command.
+
 ## 2026-07-06 PromptLane Recommendation Blocked Reasons
 
 - [x] CHECK: `recommended_next_slices` marked external blockers but did not

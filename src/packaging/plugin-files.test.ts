@@ -855,7 +855,7 @@ describe("plugin packaging files", () => {
     );
   });
 
-  it("keeps scheduled ui-patrol evidence pending until a schedule run exists", () => {
+  it("keeps GitHub Actions removed while preserving local ui-patrol evidence", () => {
     const packageJson = readJson<{
       files: string[];
       scripts: Record<string, string>;
@@ -869,48 +869,34 @@ describe("plugin packaging files", () => {
       "utf8",
     );
     const todo = readFileSync(join(process.cwd(), "tasks/todo.md"), "utf8");
-    const workflow = readFileSync(
-      join(process.cwd(), ".github/workflows/ui-patrol.yml"),
-      "utf8",
-    );
-    const evidenceScript = readFileSync(
-      join(process.cwd(), "scripts/ui-patrol-evidence.mjs"),
-      "utf8",
-    );
+    const workflowPath = join(process.cwd(), ".github/workflows/ui-patrol.yml");
+    const evidenceScriptPath = join(process.cwd(), "scripts/ui-patrol-evidence.mjs");
 
-    expect(packageJson.files).toContain("scripts/ui-patrol-evidence.mjs");
-    expect(packageJson.scripts["evidence:ui-patrol"]).toBe(
-      "node scripts/ui-patrol-evidence.mjs",
+    expect(existsSync(workflowPath)).toBe(false);
+    expect(existsSync(evidenceScriptPath)).toBe(false);
+    expect(packageJson.files).toContain("scripts/ui-patrol.mjs");
+    expect(packageJson.files).not.toContain("scripts/ui-patrol-evidence.mjs");
+    expect(packageJson.scripts["ui-patrol"]).toBe("node scripts/ui-patrol.mjs");
+    expect(packageJson.scripts).not.toHaveProperty("evidence:ui-patrol");
+    const latestTodo = sectionBetween(
+      todo,
+      "## 2026-07-06 PromptLane CI Workflow Removal",
     );
-    expect(evidenceScript).toContain("ui-patrol-screenshots");
-    expect(evidenceScript).toContain("scheduled_ui_patrol");
-    expect(evidenceScript).toContain("pending_no_schedule_run");
-    expect(evidenceScript).toContain("schedule_wait_state");
-    expect(evidenceScript).toContain("last_expected_schedule_utc");
-    expect(evidenceScript).toContain("next_expected_schedule_utc");
-    expect(evidenceScript).toContain("schedule_cron");
-    expect(workflow).toContain("schedule:");
-    expect(workflow).toContain('cron: "17 6 * * 1"');
-    for (const content of [goalAudit, backlog, todo]) {
-      expect(content).toContain("corepack pnpm evidence:ui-patrol");
-      expect(content).toContain("schedule_wait_state");
-      expect(content).toContain("last_expected_schedule_utc");
-      expect(content).toContain("next_expected_schedule_utc");
-      expect(content).toContain("workflow_dispatch run `28717406758`");
-      expect(content).toContain("9 png files");
-      expect(content).toContain("no `schedule` event");
-      expect(content).toContain("scheduled `ui-patrol` evidence remains pending");
-      expect(content).not.toContain(
-        "scheduled `ui-patrol` evidence is complete",
-      );
-    }
+    expect(backlog).toContain("GitHub Actions workflows are removed");
+    expect(backlog).toContain("corepack pnpm ui-patrol");
+    expect(backlog).toContain("dogfood:web-user-flow");
+    expect(latestTodo).toContain("GitHub Actions");
+    expect(latestTodo).toContain("corepack pnpm ui-patrol");
+    expect(latestTodo).toContain("dogfood:web-user-flow");
+    expect(latestTodo).not.toContain("scheduled `ui-patrol` evidence remains pending");
+    expect(latestTodo).not.toContain("corepack pnpm evidence:ui-patrol");
     expect(goalAudit).toContain("PR #419");
     expect(goalAudit).toContain("PR #420");
     expect(backlog).toContain("PR #419");
     expect(backlog).toContain("PR #420");
   });
 
-  it("ships scheduled ui-patrol preflight evidence without treating it as cron completion", () => {
+  it("ships local ui-patrol evidence without treating GitHub Actions as required", () => {
     const packageJson = JSON.parse(
       readFileSync(join(process.cwd(), "package.json"), "utf8"),
     ) as { files: string[] };
@@ -930,18 +916,16 @@ describe("plugin packaging files", () => {
     expect(packageJson.files).toContain(
       "docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md",
     );
-    expect(qualityScript).toContain("scheduled_ui_patrol_preflight");
+    expect(qualityScript).toContain("local_ui_patrol_evidence");
     expect(qualityScript).toContain(
       "UI_PATROL_SCHEDULE_READINESS_2026-07-06",
     );
-    expect(readiness).toContain("scheduled_ui_patrol_preflight");
-    expect(readiness).toContain("workflow_dispatch run `28717406758`");
-    expect(readiness).toContain("cron: `17 6 * * 1`");
-    expect(readiness).toContain("does not complete `scheduled_ui_patrol`");
-    expect(backlog).toContain("scheduled_ui_patrol_preflight");
-    expect(backlog).toContain(
-      "docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md",
-    );
+    expect(readiness).toContain("GitHub Actions workflows");
+    expect(readiness).toContain("Local `ui-patrol` evidence");
+    expect(readiness).not.toContain("scheduled_ui_patrol_preflight");
+    expect(readiness).not.toContain("does not complete `scheduled_ui_patrol`");
+    expect(backlog).toContain("local_ui_patrol_evidence");
+    expect(backlog).not.toContain("scheduled_ui_patrol_preflight");
   });
 
   it("ships native dialog preflight evidence without treating it as approved dogfood", () => {
@@ -1061,9 +1045,9 @@ describe("plugin packaging files", () => {
       expect(content).toContain("recommended_next_slices");
       expect(content).toContain("blocked_by_external_event");
       expect(content).toContain("blocked_reason");
-      expect(content).toContain("available_after_utc");
       expect(content).toContain("product_positioning_metadata_alignment");
       expect(content).toContain("manual_ui_patrol_artifact_evidence");
+      expect(content).toContain("local_ui_patrol_evidence");
       expect(content).toContain("codex_claude_local_integration_evidence");
       expect(content).toContain("local-first privacy boundary");
       expect(content).toContain("setup/doctor/MCP smoke");
@@ -1081,7 +1065,6 @@ describe("plugin packaging files", () => {
       expect(content).toContain("promptlane_95_quality");
       expect(content).toContain("scorecard_axes");
       expect(content).toContain("native_dialog_approved_dogfood");
-      expect(content).toContain("scheduled_ui_patrol");
       expect(content).toContain("blocker `remaining_evidence`");
       expect(content).toContain("blocker `next_action`");
     }
@@ -1091,7 +1074,7 @@ describe("plugin packaging files", () => {
     expect(plan).toContain("| Loop memory and continuation | 9.5/10 |");
     expect(plan).toContain("| Release stability | 9.5/10 |");
     expect(plan).toContain("| Codex and Claude Code integration | 9.0/10 |");
-    expect(plan).toContain("| Web UI and operational evidence | 8.6/10 |");
+    expect(plan).toContain("| Web UI and operational evidence | 9.5/10 |");
     for (const content of [localEvidence, backlog, plan]) {
       expect(content).toContain("corepack pnpm smoke:hooks");
       expect(content).toContain("hook binary smoke passed");
@@ -1412,7 +1395,8 @@ describe("plugin packaging files", () => {
     }
     expect(plan).toContain("dogfood:first-coach-loop");
     expect(plan).toContain("dogfood:mcp-native-dialog-approved");
-    expect(plan).toContain("scheduled `ui-patrol`");
+    expect(plan).toContain("local `ui-patrol`");
+    expect(plan).toContain("GitHub Actions is intentionally absent");
     for (const currentEvidence of [
       "## Evidence Progress Ledger",
       "PR #417",
@@ -2249,19 +2233,19 @@ describe("plugin packaging files", () => {
     );
   });
 
-  it("installs Playwright Chromium before the scheduled UI patrol", () => {
-    const workflow = readFileSync(
-      join(process.cwd(), ".github/workflows/ui-patrol.yml"),
-      "utf8",
-    );
+  it("does not ship a scheduled UI patrol workflow", () => {
+    const packageJson = readJson<{
+      files: string[];
+      scripts: Record<string, string>;
+    }>("package.json");
 
-    expect(workflow).toContain("pnpm/action-setup@v6");
-    expect(workflow).not.toContain("pnpm/action-setup@v4");
-    expect(workflow).toContain("pnpm exec playwright install chromium");
-    expect(workflow.indexOf("pnpm exec playwright install chromium")).toBeLessThan(
-      workflow.indexOf("pnpm ui-patrol"),
+    expect(existsSync(join(process.cwd(), ".github/workflows/ui-patrol.yml"))).toBe(
+      false,
     );
-    expect(workflow).toContain("Upload UI patrol screenshots");
+    expect(packageJson.files).toContain("scripts/ui-patrol.mjs");
+    expect(packageJson.files).not.toContain("scripts/ui-patrol-evidence.mjs");
+    expect(packageJson.scripts["ui-patrol"]).toBe("node scripts/ui-patrol.mjs");
+    expect(packageJson.scripts).not.toHaveProperty("evidence:ui-patrol");
   });
 
   it("documents Claude Code as a hook integration without embedding secrets", () => {
