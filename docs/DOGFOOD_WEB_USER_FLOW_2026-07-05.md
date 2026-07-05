@@ -12,6 +12,17 @@ provider calls.
 | --- | --- | --- |
 | `corepack pnpm dogfood:web-user-flow` | PASS | Runs the built local server through `scripts/browser-e2e.mjs`, captures isolated Codex and Claude Code prompt fixtures, and verifies archive, detail, dashboard, coach, projects, mcp, exports, settings, and mobile rendering flows. |
 
+## Current-Main Evidence
+
+- fresh current-main pass after PR #465:
+  `corepack pnpm dogfood:web-user-flow` passed on main-derived work after main
+  CI run `28750766036`.
+- The run built the package, initialized an isolated data directory, started a
+  local server, captured prompt fixtures, seeded judge score and loop outcome
+  evidence, then completed the Playwright browser flow.
+- main CI run `28750766036` passed `test (22)` and `test (24)` with
+  `pnpm test`, `pnpm lint`, `pnpm build`, and `pnpm pack:dry-run`.
+
 ## Flow Coverage
 
 - `archive`: validates the Prompt archive first screen, language toggle, safe

@@ -46,6 +46,11 @@
   user-flow evidence for archive, detail, dashboard, coach, projects, mcp,
   exports, settings, and mobile flows through
   `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md`.
+- fresh current-main web user-flow evidence after PR #465 is recorded in
+  `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md`: `corepack pnpm
+  dogfood:web-user-flow` passed after main CI run `28750766036`, proving the
+  archive/detail/dashboard/coach/projects/mcp/exports/settings/mobile flow
+  remains healthy on the current evidence-ledger baseline.
 - PR #430 closed the web user-flow dogfood evidence log after PR #429 passed
   local focused packaging guard, `corepack pnpm dogfood:web-user-flow`, full
   local gate, PR CI, latest main CI run `28744584511`, and branch prune.

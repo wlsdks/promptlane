@@ -177,6 +177,11 @@ Decision:
   it runs the same Playwright-backed archive/detail/dashboard/coach/projects/
   mcp/exports/settings/mobile flow documented in
   `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md`.
+- fresh current-main web user-flow evidence is now recorded after PR #465:
+  `corepack pnpm dogfood:web-user-flow` passed on main-derived work after main
+  CI run `28750766036`, proving the archive/detail/dashboard/coach/projects/
+  mcp/exports/settings/mobile flow still works after the latest evidence-ledger
+  changes.
 - Expected-impact evidence is now visible in CLI/MCP/Web surfaces and guarded by
   focused tests plus browser E2E, so future prompt-improvement work should
   preserve a measurable before/after signal instead of only returning a rewrite.

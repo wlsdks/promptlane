@@ -1244,6 +1244,8 @@ describe("plugin packaging files", () => {
     expect(qualityPlan).toContain("dogfood:web-user-flow");
     for (const required of [
       "corepack pnpm dogfood:web-user-flow",
+      "fresh current-main pass after PR #465",
+      "main CI run `28750766036`",
       "archive",
       "detail",
       "dashboard",
@@ -1258,6 +1260,8 @@ describe("plugin packaging files", () => {
     ]) {
       expect(evidence).toContain(required);
     }
+    expect(backlog).toContain("fresh current-main web user-flow evidence");
+    expect(qualityPlan).toContain("fresh current-main web user-flow evidence");
     expect(evidence).not.toContain("/Users/");
     expect(evidence).not.toMatch(/sk-[a-z0-9_-]{6,}/i);
     expect(evidence).not.toMatch(/gh[pousr]_[a-z0-9_]{12,}/i);

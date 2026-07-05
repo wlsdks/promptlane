@@ -1,5 +1,23 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Fresh Web User-Flow Evidence
+
+- [x] CHECK: scheduled `ui-patrol` still has no `schedule` event, so web
+  operations cannot be promoted on scheduled artifact evidence.
+- [x] RED: packaging guard fails unless the web dogfood evidence doc, backlog,
+  and 9.5 plan include fresh current-main web user-flow evidence after PR #465.
+- [x] GREEN: `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md`, backlog, and 9.5 plan
+  now record the current-main `dogfood:web-user-flow` pass.
+- [x] EFFECT: web operations evidence is refreshed from an executable browser
+  user-flow instead of relying only on the earlier PR #429/#430 evidence.
+
+### 판단 기준
+
+- The dogfood must use isolated local data and must not touch the user's real
+  archive.
+- Browser-visible output must remain raw-free.
+- Scheduled `ui-patrol` remains pending until a real `schedule` event exists.
+
 ## 2026-07-06 PromptLane Release Stability Evidence
 
 - [x] CHECK: GitHub `ui-patrol.yml` still has no `schedule` event, so scheduled
