@@ -6,7 +6,7 @@
 - [x] RED: `docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md`, package inclusion, AGENT-HARNESS 링크가 없으면 packaging test가 실패하도록 고정했다.
 - [x] GREEN: 격리 smoke/dogfood 명령 결과를 기반으로 Codex/Claude Code dogfood evidence 문서를 추가하고 package/harness에 연결했다.
 - [x] VERIFY: focused packaging test와 full gate를 통과한다.
-- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+- [x] INTEGRATE: PR #419가 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 
