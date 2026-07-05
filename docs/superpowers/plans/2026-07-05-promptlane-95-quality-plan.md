@@ -142,7 +142,9 @@
 - `corepack pnpm evidence:ui-patrol` is the repeatable checker for that
   blocker. It must stay `pending_no_schedule_run` while only workflow_dispatch
   evidence exists, and it must require the `ui-patrol-screenshots` artifact
-  with 9 png files before returning `complete`.
+  with 9 png files before returning `complete`. Pending output includes
+  `next_expected_schedule_utc` and `schedule_cron` so the next check can wait
+  for the real weekly cron window.
 - `corepack pnpm evidence:quality` emits the `promptlane_95_quality` summary
   and must include `scorecard_axes`, `scheduled_ui_patrol`, and
   `native_dialog_approved_dogfood` blockers until every axis reaches its 9.5

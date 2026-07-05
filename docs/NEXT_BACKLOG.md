@@ -123,7 +123,8 @@ Current goal audit:
 - `corepack pnpm evidence:ui-patrol` is the repeatable scheduled evidence
   checker. It reports `pending_no_schedule_run` until a real `schedule` event
   exists and only reports `complete` after downloading `ui-patrol-screenshots`
-  and finding 9 png files.
+  and finding 9 png files. Pending output includes `next_expected_schedule_utc`
+  and `schedule_cron` so agents know when to re-check the external event.
 - Local `corepack pnpm ui-patrol` on current main after PR #410 passed and
   captured 9 png files.
 - PR #447 added local `expected_impact` evidence to prompt improvements so
