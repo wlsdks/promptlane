@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane Agent Setup Smoke
+
+- [x] CHECK: 기존 release/hook/MCP smoke는 있지만, Codex와 Claude Code의 `setup --profile coach --register-mcp` 및 `doctor` happy path를 독립적으로 검증하는 focused smoke가 없는지 확인했다.
+- [x] RED: `smoke:agent-setup`, `scripts/agent-setup-smoke.mjs`, AGENT-HARNESS/PACKAGE_CONTENTS 연결이 없으면 packaging test가 실패하도록 고정했다.
+- [x] GREEN: 격리 HOME/PATH/data-dir에서 fake `claude`/`codex`를 감지시키고 setup dry-run, real setup, `doctor claude-code`, `doctor codex`를 실행하는 local-only smoke를 추가했다.
+- [x] VERIFY: focused packaging test, `node scripts/agent-setup-smoke.mjs`, full gate를 통과한다.
+- [ ] INTEGRATE: PR CI `test (22)`/`test (24)` 통과 후 merge하고 branch prune까지 확인한다.
+
+### 판단 기준
+
+- Codex와 Claude Code는 PromptLane의 1급 실행 표면이므로 setup/doctor happy path가 별도 smoke로 반복 가능해야 한다.
+- smoke는 실제 provider CLI를 실행하지 않고 격리된 fake binary와 temp HOME/data-dir만 사용한다.
+- smoke는 real user config, real prompt archive, provider credentials, external calls를 건드리지 않는다.
+
 ## 2026-07-05 PromptLane Loop Memory Evidence Guard
 
 - [x] CHECK: `decideLoopMemoryCandidate`, CLI `loop memory-approve`, MCP `record_loop_memory`는 최신 snapshot 후보 결정을 통해 passed loop와 evidence를 요구하는지 확인했다.

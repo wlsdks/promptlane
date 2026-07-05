@@ -59,6 +59,7 @@ Confirm `corepack pnpm pack:dry-run` includes:
 - [ ] `.claude-plugin/` and `commands/` directories
 - [ ] `plugins/` and `integrations/` directories
 - [ ] `scripts/benchmark.mjs`
+- [ ] `scripts/agent-setup-smoke.mjs`
 - [ ] `scripts/browser-e2e.mjs`
 - [ ] `scripts/hook-binary-smoke.mjs`
 - [ ] `scripts/mcp-coach-loop-smoke.mjs`

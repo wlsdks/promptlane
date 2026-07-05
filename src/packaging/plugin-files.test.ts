@@ -1290,6 +1290,37 @@ describe("plugin packaging files", () => {
     expect(smoke).not.toContain("/Users/");
   });
 
+  it("ships a focused Codex and Claude Code setup doctor smoke", () => {
+    const packageJson = readJson<{
+      files: string[];
+      scripts: Record<string, string>;
+    }>("package.json");
+    const smoke = readFileSync(
+      join(process.cwd(), "scripts/agent-setup-smoke.mjs"),
+      "utf8",
+    );
+    const harness = readFileSync(
+      join(process.cwd(), "docs/AGENT-HARNESS.md"),
+      "utf8",
+    );
+    const packageContents = readFileSync(
+      join(process.cwd(), "docs/PACKAGE_CONTENTS.md"),
+      "utf8",
+    );
+
+    expect(packageJson.files).toContain("scripts/agent-setup-smoke.mjs");
+    expect(packageJson.scripts["smoke:agent-setup"]).toBe(
+      "pnpm build && node scripts/agent-setup-smoke.mjs",
+    );
+    expect(smoke).toContain("setup --profile coach --register-mcp");
+    expect(smoke).toContain("doctor claude-code");
+    expect(smoke).toContain("doctor codex");
+    expect(smoke).toContain("prompt-coach agent setup smoke passed");
+    expect(smoke).not.toContain("/Users/");
+    expect(harness).toContain("corepack pnpm smoke:agent-setup");
+    expect(packageContents).toContain("scripts/agent-setup-smoke.mjs");
+  });
+
   it("ships a no-dialog MCP native fallback preflight smoke", () => {
     const packageJson = readJson<{
       files: string[];
