@@ -3606,4 +3606,4 @@
 - [x] RED: Add focused packaging/docs and MCP drift guards requiring active product docs and agent-facing tool descriptions to avoid presenting `Prompt Coach` as a service name.
 - [x] GREEN: Replace active README, release checklist, tech spec, implementation-plan, and MCP `improve_prompt` `Prompt Coach` labels with PromptLane improvement-draft wording while preserving `prompt-coach` runtime IDs.
 - [x] VERIFY: Focused packaging and MCP tests, full test/lint/build, pack dry-run, and diff check passed.
-- [ ] INTEGRATE: Push one coherent PR, merge it after CI, and prune the branch.
+- [x] INTEGRATE: PR #377 was merged to `main`; branch was pruned.
