@@ -33,7 +33,9 @@ export function createProgram(): Command {
 
   program
     .name("prompt-coach")
-    .description("Local-first prompt archive for AI coding tools.")
+    .description(
+      "Local-first agent loop memory and meta-prompting workbench for Codex and Claude Code.",
+    )
     .version(VERSION);
 
   registerBuddyCommand(program);

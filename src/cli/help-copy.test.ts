@@ -28,6 +28,18 @@ function nestedHelpFor(commandPath: string, subcommandPath: string): string {
 }
 
 describe("CLI help copy", () => {
+  it("presents the root command as the Loopdeck workbench while preserving the prompt-coach command id", () => {
+    const help = createProgram().helpInformation();
+
+    expect(help).toContain("Usage: prompt-coach");
+    expect(help).toContain(
+      "Local-first agent loop memory and meta-prompting workbench",
+    );
+    expect(help).toContain("Codex");
+    expect(help).toContain("Claude Code");
+    expect(help).not.toContain("Local-first prompt archive for AI coding tools.");
+  });
+
   it("presents local infrastructure commands as Loopdeck surfaces", () => {
     const help = [
       helpFor("server"),
