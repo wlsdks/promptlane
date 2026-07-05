@@ -86,6 +86,7 @@ describe("quality-evidence CLI command", () => {
           satisfied_evidence: expect.arrayContaining([
             "web_user_flow_current_main_evidence",
             "manual_ui_patrol_artifact_evidence",
+            "scheduled_ui_patrol_preflight",
           ]),
           remaining_evidence: expect.arrayContaining([
             "scheduled_ui_patrol",
@@ -168,7 +169,7 @@ describe("quality-evidence CLI command", () => {
       "web_ui_and_operational_evidence: blocked_external",
     );
     expect(text).toContain(
-      "satisfied=web_user_flow_current_main_evidence,manual_ui_patrol_artifact_evidence",
+      "satisfied=web_user_flow_current_main_evidence,manual_ui_patrol_artifact_evidence,scheduled_ui_patrol_preflight",
     );
     expect(text).toContain("remaining=scheduled_ui_patrol");
     expect(text).toContain(

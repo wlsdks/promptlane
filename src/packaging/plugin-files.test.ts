@@ -903,6 +903,40 @@ describe("plugin packaging files", () => {
     expect(backlog).toContain("PR #420");
   });
 
+  it("ships scheduled ui-patrol preflight evidence without treating it as cron completion", () => {
+    const packageJson = JSON.parse(
+      readFileSync(join(process.cwd(), "package.json"), "utf8"),
+    ) as { files: string[] };
+    const qualityScript = readFileSync(
+      join(process.cwd(), "scripts/quality-95-evidence.mjs"),
+      "utf8",
+    );
+    const readiness = readFileSync(
+      join(process.cwd(), "docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md"),
+      "utf8",
+    );
+    const backlog = readFileSync(
+      join(process.cwd(), "docs/NEXT_BACKLOG.md"),
+      "utf8",
+    );
+
+    expect(packageJson.files).toContain(
+      "docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md",
+    );
+    expect(qualityScript).toContain("scheduled_ui_patrol_preflight");
+    expect(qualityScript).toContain(
+      "UI_PATROL_SCHEDULE_READINESS_2026-07-06",
+    );
+    expect(readiness).toContain("scheduled_ui_patrol_preflight");
+    expect(readiness).toContain("workflow_dispatch run `28717406758`");
+    expect(readiness).toContain("cron: `17 6 * * 1`");
+    expect(readiness).toContain("does not complete `scheduled_ui_patrol`");
+    expect(backlog).toContain("scheduled_ui_patrol_preflight");
+    expect(backlog).toContain(
+      "docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md",
+    );
+  });
+
   it("ships a repeatable 9.5 quality evidence summary command", () => {
     const packageJson = readJson<{
       files: string[];

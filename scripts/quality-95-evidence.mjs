@@ -172,6 +172,7 @@ function readCompletedEvidence() {
   let claudePlugin = "";
   let claudeMarketplace = "";
   let uiPatrolEvidence = "";
+  let uiPatrolReadiness = "";
   let codexClaudeEvidence = "";
   try {
     plan = readFileSync(planPath, "utf8");
@@ -193,6 +194,10 @@ function readCompletedEvidence() {
       "docs/UI_PATROL_EVIDENCE_2026-07-06.md",
       "utf8",
     );
+    uiPatrolReadiness = readFileSync(
+      "docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md",
+      "utf8",
+    );
     codexClaudeEvidence = readFileSync(
       "docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md",
       "utf8",
@@ -201,6 +206,7 @@ function readCompletedEvidence() {
     return {
       product_positioning_metadata_alignment: false,
       manual_ui_patrol_artifact_evidence: false,
+      scheduled_ui_patrol_preflight: false,
       codex_claude_local_integration_evidence: false,
       web_user_flow_current_main_evidence: false,
       privacy_raw_free_regression_sweep: false,
@@ -234,6 +240,11 @@ function readCompletedEvidence() {
       uiPatrolEvidence.includes("Local `corepack pnpm ui-patrol`") &&
       uiPatrolEvidence.includes("pending_no_schedule_run") &&
       uiPatrolEvidence.includes("manual_ui_patrol_artifact_evidence"),
+    scheduled_ui_patrol_preflight:
+      uiPatrolReadiness.includes("scheduled_ui_patrol_preflight") &&
+      uiPatrolReadiness.includes("workflow_dispatch run `28717406758`") &&
+      uiPatrolReadiness.includes("cron: `17 6 * * 1`") &&
+      uiPatrolReadiness.includes("does not complete `scheduled_ui_patrol`"),
     codex_claude_local_integration_evidence:
       codexClaudeEvidence.includes("corepack pnpm smoke:agent-setup") &&
       codexClaudeEvidence.includes("corepack pnpm smoke:hooks") &&
@@ -301,6 +312,12 @@ function axisEvidenceCoverage({
       completedEvidence.manual_ui_patrol_artifact_evidence
     ) {
       satisfied.push("manual_ui_patrol_artifact_evidence");
+    }
+    if (
+      axis.id === "web_ui_and_operational_evidence" &&
+      completedEvidence.scheduled_ui_patrol_preflight
+    ) {
+      satisfied.push("scheduled_ui_patrol_preflight");
     }
     if (
       axis.id === "local_first_privacy_boundary" &&

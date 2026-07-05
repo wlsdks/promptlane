@@ -221,6 +221,13 @@ Decision:
   `dogfood:web-user-flow` browser evidence. `quality-evidence` records this as
   `manual_ui_patrol_artifact_evidence`, but `scheduled_ui_patrol` remains
   pending until a real cron `schedule` event exists.
+  `docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md` records the current
+  scheduled patrol readiness: `ui-patrol.yml` has both manual and scheduled
+  triggers, the cron is `17 6 * * 1`, workflow_dispatch run `28717406758`
+  proves the 9-png artifact path, and `corepack pnpm evidence:ui-patrol`
+  refuses to treat manual evidence as cron completion. `quality-evidence`
+  records this as `scheduled_ui_patrol_preflight`, but it does not complete
+  `scheduled_ui_patrol`.
   `docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md` records current
   non-operator setup, hook, MCP, elicitation, no-dialog fallback, first-loop,
   and loop-memory evidence. `quality-evidence` records this as

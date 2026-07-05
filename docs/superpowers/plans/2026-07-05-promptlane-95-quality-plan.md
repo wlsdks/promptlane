@@ -222,6 +222,12 @@
   `corepack pnpm ui-patrol`, and `dogfood:web-user-flow`. `quality-evidence`
   records this as `manual_ui_patrol_artifact_evidence` while keeping
   `scheduled_ui_patrol` pending until a real cron `schedule` event exists.
+- `docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md` records scheduled patrol
+  readiness separately: `ui-patrol.yml` has both manual and scheduled triggers,
+  the cron is `17 6 * * 1`, the latest proven manual artifact path remains
+  workflow_dispatch run `28717406758`, and the repeatable evidence checker
+  refuses to treat that as cron completion. `quality-evidence` records this as
+  `scheduled_ui_patrol_preflight` while keeping `scheduled_ui_patrol` pending.
 - `docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md` records current
   non-operator Codex and Claude Code evidence: setup/doctor smoke, hook smoke,
   MCP coach-loop smoke, MCP elicitation smoke, no-dialog native fallback

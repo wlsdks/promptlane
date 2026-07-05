@@ -1,5 +1,27 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane UI Patrol Schedule Readiness Evidence
+
+- [x] CHECK: The GitHub `ui-patrol` workflow has no successful `schedule` event
+  yet, so `scheduled_ui_patrol` must stay pending.
+- [x] RED: quality evidence CLI/script tests required
+  `web_ui_and_operational_evidence` to include
+  `scheduled_ui_patrol_preflight` while still keeping `scheduled_ui_patrol` and
+  `scorecard_level_below_9_5` as remaining evidence; packaging tests required
+  the readiness ledger to ship.
+- [x] GREEN: `docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md` records the
+  configured cron, latest manual artifact path, and checker boundary, and
+  `quality-evidence` exposes it as `scheduled_ui_patrol_preflight`.
+- [x] EFFECT: agents can see schedule readiness without confusing it with
+  actual cron completion.
+
+### 판단 기준
+
+- Do not mark scheduled `ui-patrol` complete without a real `schedule` event.
+- Do not use workflow_dispatch evidence as a substitute for cron evidence.
+- Keep readiness evidence visible so future work waits for the right external
+  event instead of rerunning unrelated local checks.
+
 ## 2026-07-06 PromptLane Codex Claude Evidence Split
 
 - [x] CHECK: Codex/Claude integration still has an external native-dialog
