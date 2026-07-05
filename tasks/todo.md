@@ -3571,4 +3571,11 @@
 - [x] RED: Add a focused packaging/docs drift test requiring the Loopdeck goal audit and next backlog to cite latest merged evidence through PR #371 and stop carrying completed MCP/reuse follow-up text.
 - [x] GREEN: Refresh `docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md` and `docs/NEXT_BACKLOG.md` so completed audit follow-ups are closed and only scheduled UI patrol plus approval-gated native ask dogfood remain.
 - [x] VERIFY: Focused test, full test/lint/build, pack dry-run, and diff check passed.
+- [x] INTEGRATE: PR #372 was merged to `main`; branch was pruned.
+
+## 2026-07-05 CLI Root Loopdeck Help Copy
+
+- [x] RED: Add a focused CLI help-copy test requiring root `prompt-coach --help` to present Loopdeck as an agent loop memory and meta-prompting workbench while preserving the `prompt-coach` command id.
+- [x] GREEN: Update the root CLI description to the Loopdeck workbench positioning for Codex and Claude Code.
+- [x] VERIFY: Focused test, full test/lint/build, pack dry-run, and diff check passed.
 - [ ] INTEGRATE: Push one coherent PR, merge it after CI, and prune the branch.
