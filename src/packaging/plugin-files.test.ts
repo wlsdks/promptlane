@@ -970,7 +970,9 @@ describe("plugin packaging files", () => {
       expect(content).toContain("prompt-coach quality-evidence --json");
       expect(content).toContain("axis_evidence_coverage");
       expect(content).toContain("scorecard_review_candidates");
+      expect(content).toContain("scorecard_level_below_9_5");
       expect(content).toContain("recommended_next_slices");
+      expect(content).toContain("blocked_by_external_event");
       expect(content).toContain("web_user_flow_current_main_evidence");
       expect(content).toContain("corepack pnpm dogfood:web-user-flow");
       expect(content).toContain("browser e2e passed");
@@ -1012,6 +1014,8 @@ describe("plugin packaging files", () => {
     expect(evidenceScript).toContain("axis_evidence_coverage");
     expect(evidenceScript).toContain("scorecardReviewCandidates");
     expect(evidenceScript).toContain("scorecard_review_candidates");
+    expect(evidenceScript).toContain("scorecard_review");
+    expect(evidenceScript).toContain("Review axes whose local evidence is present");
     expect(evidenceScript).toContain("scorecard_level_below_9_5");
     expect(evidenceScript).toContain("blocked_external");
     expect(evidenceScript).toContain("recommendedNextSlices");

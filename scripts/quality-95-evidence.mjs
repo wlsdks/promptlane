@@ -67,6 +67,7 @@ const summary = {
     uiPatrol,
     nativeDialog,
     completedEvidence,
+    scorecardReviewCandidates: scorecardReviewCandidates(axisCoverage),
   }),
   next_action:
     blockers.length === 0
@@ -305,9 +306,22 @@ function recommendedNextSlices({
   uiPatrol,
   nativeDialog,
   completedEvidence,
+  scorecardReviewCandidates,
 }) {
   const axesById = new Map(scorecardAxes.map((axis) => [axis.id, axis]));
   const slices = [];
+
+  if (scorecardReviewCandidates.length > 0) {
+    slices.push({
+      id: "scorecard_review_candidates",
+      axis: "scorecard_review",
+      priority: 10,
+      blocked_by_external_event: false,
+      command: "prompt-coach quality-evidence --json",
+      expected_effect:
+        "Review axes whose local evidence is present and whose only remaining gap is scorecard_level_below_9_5.",
+    });
+  }
 
   if (
     axesById.get("web_ui_and_operational_evidence")?.status !== "meets_target" &&

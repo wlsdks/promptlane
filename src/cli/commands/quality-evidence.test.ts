@@ -25,6 +25,7 @@ describe("quality-evidence CLI command", () => {
         id: string;
         priority: number;
         blocked_by_external_event: boolean;
+        command: string;
       }>;
     };
 
@@ -85,9 +86,10 @@ describe("quality-evidence CLI command", () => {
       ]),
     );
     expect(parsed.recommended_next_slices[0]).toMatchObject({
-      id: "scheduled_ui_patrol_cron_review",
-      priority: 90,
-      blocked_by_external_event: true,
+      id: "scorecard_review_candidates",
+      priority: 10,
+      blocked_by_external_event: false,
+      command: "prompt-coach quality-evidence --json",
     });
     expect(parsed.recommended_next_slices).not.toEqual(
       expect.arrayContaining([
@@ -138,6 +140,9 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain("scheduled_ui_patrol");
     expect(text).toContain("native_dialog_approved_dogfood");
     expect(text).toContain("Recommended next slices");
+    expect(text).toContain("scorecard_review_candidates");
+    expect(text).toContain("prompt-coach quality-evidence --json");
+    expect(text).toContain("external event: no");
     expect(text).toContain("scheduled_ui_patrol_cron_review");
     expect(text).toContain("corepack pnpm evidence:ui-patrol");
     expect(text).toContain("external event: yes");

@@ -194,11 +194,15 @@ Decision:
   local evidence is present and whose only remaining gap is
   `scorecard_level_below_9_5`, without treating those axes as complete.
   The same JSON includes `recommended_next_slices`, which now skips already
-  recorded local evidence actions. After `web_user_flow_current_main_evidence`,
+  recorded local evidence actions and puts `scorecard_review_candidates` first
+  when review candidates exist. After `web_user_flow_current_main_evidence`,
   `privacy_raw_free_regression_sweep`, and
-  `codex_claude_setup_smoke_refresh` were run and recorded, no immediately
-  runnable local recommendation remains ahead of externally blocked cron and
-  operator-approved dogfood items.
+  `codex_claude_setup_smoke_refresh` were run and recorded, the next
+  immediately runnable local action is to review those candidate axes with
+  `prompt-coach quality-evidence --json` before waiting on externally blocked
+  cron and operator-approved dogfood items. Each recommendation carries
+  `blocked_by_external_event` so agents can distinguish local work from
+  cron/operator wait states.
 - PR #478 moved that quality evidence gate onto the installed product CLI. Main
   CI run `28753458359` passed Node 22 and Node 24 after merge, so `prompt-coach
   quality-evidence --require-complete` is now a current default-branch release

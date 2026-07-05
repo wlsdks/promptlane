@@ -164,12 +164,16 @@
   `scorecard_level_below_9_5`, without treating those axes as complete.
   The JSON includes `recommended_next_slices`; completed local evidence actions
   are skipped so the recommendation loop moves forward instead of repeating the
-  last proof. Because `web_user_flow_current_main_evidence`,
+  last proof, and `scorecard_review_candidates` is first whenever candidate
+  axes exist. Because `web_user_flow_current_main_evidence`,
   `privacy_raw_free_regression_sweep`, and
-  `codex_claude_setup_smoke_refresh` were run and recorded, no immediately
-  runnable local evidence recommendation remains ahead of scheduled cron review
-  and native dialog dogfood, which stay marked as externally blocked until
-  their event or explicit approval exists.
+  `codex_claude_setup_smoke_refresh` were run and recorded, the next
+  immediately runnable local action is to review those candidate axes with
+  `prompt-coach quality-evidence --json` before scheduled cron review and
+  native dialog dogfood, which stay marked as externally blocked until their
+  event or explicit approval exists. Each recommendation carries
+  `blocked_by_external_event` so agents can distinguish local work from
+  cron/operator wait states.
 - `web_user_flow_current_main_evidence` was dogfooded after becoming the first
   recommendation: `corepack pnpm dogfood:web-user-flow` completed with
   `browser e2e passed` on current main. This refreshes local web workflow

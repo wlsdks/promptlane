@@ -1,5 +1,26 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Scorecard Review Recommendation
+
+- [x] CHECK: `scorecard_review_candidates` existed, but
+  `recommended_next_slices` pointed first at externally blocked scheduled
+  `ui-patrol` evidence.
+- [x] RED: quality evidence script and CLI tests required the first
+  recommendation to be `scorecard_review_candidates` with
+  `blocked_by_external_event: false` and
+  `prompt-coach quality-evidence --json`; tests failed while
+  `scheduled_ui_patrol_cron_review` was first.
+- [x] GREEN: `recommendedNextSlices` now prepends
+  `scorecard_review_candidates` when review candidates exist.
+- [x] EFFECT: agents can handle local scorecard review before waiting on cron
+  or operator-approved native-dialog blockers.
+
+### 판단 기준
+
+- Must not mark quality complete or remove blockers.
+- External blockers remain in recommendations after the local review action.
+- Output remains local-only and raw-free.
+
 ## 2026-07-06 PromptLane Scorecard Review Candidates
 
 - [x] CHECK: `axis_evidence_coverage` separated satisfied evidence from

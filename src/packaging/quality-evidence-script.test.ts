@@ -195,11 +195,11 @@ describe("quality 9.5 evidence script", () => {
       "Do not claim 9.5 completion while blockers remain pending.",
     );
     expect(parsed.recommended_next_slices[0]).toMatchObject({
-      id: "scheduled_ui_patrol_cron_review",
-      axis: "web_ui_and_operational_evidence",
-      priority: 90,
-      blocked_by_external_event: true,
-      command: "corepack pnpm evidence:ui-patrol",
+      id: "scorecard_review_candidates",
+      axis: "scorecard_review",
+      priority: 10,
+      blocked_by_external_event: false,
+      command: "prompt-coach quality-evidence --json",
     });
     expect(parsed.recommended_next_slices).not.toEqual(
       expect.arrayContaining([
@@ -224,6 +224,10 @@ describe("quality 9.5 evidence script", () => {
     );
     expect(parsed.recommended_next_slices).toEqual(
       expect.arrayContaining([
+        expect.objectContaining({
+          id: "scorecard_review_candidates",
+          blocked_by_external_event: false,
+        }),
         expect.objectContaining({
           id: "scheduled_ui_patrol_cron_review",
           blocked_by_external_event: true,
