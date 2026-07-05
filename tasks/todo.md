@@ -8,7 +8,7 @@
 - [x] RED: active product surfaces가 `Prompt Coach` 또는 product-facing `Loopdeck` wording을 다시 노출하면 packaging test가 실패하도록 고정한다.
 - [x] GREEN: README, plugin metadata, package metadata, install docs, product docs가 `PromptLane`과 `wlsdks/promptlane` 기준으로 맞춰진다.
 - [x] VERIFY: focused packaging guard, full test/lint/build, pack dry-run, diff check를 통과한다.
-- [ ] INTEGRATE: 변경을 커밋, 푸시, PR, CI 확인 후 merge하고 branch를 정리한다.
+- [x] INTEGRATE: PR #385가 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 
