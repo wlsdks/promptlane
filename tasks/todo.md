@@ -3613,4 +3613,4 @@
 - [x] RED: Update packaging tests to require Claude Code marketplace metadata and slash command docs to present PromptLane, while preserving `prompt-coach` command IDs and `loopdeck` compatibility alias where explicitly documented.
 - [x] GREEN: Replace Loopdeck-facing marketplace and slash command titles/descriptions with PromptLane wording without changing command filenames or runtime IDs.
 - [x] VERIFY: Focused packaging test, full test/lint/build, pack dry-run, and diff check passed.
-- [ ] INTEGRATE: Push one coherent PR, merge it after CI, and prune the branch.
+- [x] INTEGRATE: PR #379 was merged to `main`; branch was pruned.
