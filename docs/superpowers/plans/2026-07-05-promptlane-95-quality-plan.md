@@ -37,11 +37,16 @@
   workflow_dispatch run `28717406758` still has a non-expired
   `ui-patrol-screenshots` artifact with 9 png files, but the latest workflow
   history has no `schedule` event.
-- `dogfood:web-user-flow` now provides repeatable fresh web user-flow evidence
-  for archive, detail, dashboard, coach, projects, mcp, exports, settings, and
-  mobile flows through `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md`.
-- Latest main CI after PR #422 passed `test (22)` and `test (24)` with
-  `pnpm test`, `pnpm lint`, `pnpm build`, and `pnpm pack:dry-run`.
+- PR #429 added `dogfood:web-user-flow`, providing repeatable fresh web
+  user-flow evidence for archive, detail, dashboard, coach, projects, mcp,
+  exports, settings, and mobile flows through
+  `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md`.
+- PR #430 closed the web user-flow dogfood evidence log after PR #429 passed
+  local focused packaging guard, `corepack pnpm dogfood:web-user-flow`, full
+  local gate, PR CI, latest main CI run `28744584511`, and branch prune.
+- latest main CI run `28744698708` after PR #430 passed `test (22)` and
+  `test (24)` with `pnpm test`, `pnpm lint`, `pnpm build`, and
+  `pnpm pack:dry-run`.
 
 ## Remaining 9.5 blockers
 
