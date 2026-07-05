@@ -3550,4 +3550,11 @@
 - [x] RED: Add a focused packaging/docs drift test requiring the Loopdeck goal audit and next backlog to cite PR #366, PR #367, and PR #368 saved-draft reuse work.
 - [x] GREEN: Refresh the Loopdeck goal audit and next backlog so saved-draft reuse is documented as the current completed flow instead of a stale active slice.
 - [x] VERIFY: Focused test, full test/lint/build, pack dry-run, and diff check passed.
+- [x] INTEGRATE: PR #369 was merged to `main`; branch was pruned.
+
+## 2026-07-05 Reuse Audit Next Slice Closure
+
+- [x] RED: Add a focused packaging/docs drift test requiring the reuse audit to stop carrying the stale real-browser rerun recommendation after PR #366-#368 landed.
+- [x] GREEN: Refresh `docs/REUSE_LOOP_AUDIT_2026-07-05.md` so no immediate reuse-flow slice remains until fresh user-flow evidence appears.
+- [x] VERIFY: Focused test, full test/lint/build, pack dry-run, and diff check passed.
 - [ ] INTEGRATE: Push one coherent PR, merge it after CI, and prune the branch.

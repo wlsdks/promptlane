@@ -130,14 +130,14 @@ Follow-up manual pass:
 What worked: search found the reusable prompt, detail showed the improved
 draft, and `Save draft` persisted it locally.
 
-Follow-up implementation: saved draft rows now expose `Use as current draft`.
-This reopens the saved redacted draft text in the current coach draft panel,
-so the operator can reuse the existing copy, save, feedback, and manual-copy
+Follow-up implementation: PR #366 added `Use as current draft` to saved draft
+rows. This reopens the saved redacted draft text in the current coach draft
+panel, so the operator can reuse the existing copy, feedback, and manual-copy
 fallback controls without auto-submitting the prompt or adding a new storage
-write path. Reopened drafts use the user-facing `Saved draft` badge rather
-than leaking the internal `saved-draft` mode enum into the UI, and the save
-action changes to disabled `Already saved` copy so reopening a draft does not
-create a duplicate saved draft row.
+write path. PR #367 made reopened drafts use the user-facing `Saved draft`
+badge rather than leaking the internal `saved-draft` mode enum into the UI.
+PR #368 changed the save action to disabled `Already saved` copy so reopening a
+draft does not create a duplicate saved draft row.
 
 ## Decisions
 
@@ -149,5 +149,6 @@ create a duplicate saved draft row.
 
 ## Recommended Next Slices
 
-1. Re-run the reuse flow in a real browser after this slice is merged to
-   confirm the reopened current draft behaves correctly with clipboard fallback.
+No immediate reuse-flow slice remains. Future reuse work should be triggered by
+fresh user-flow evidence, not by the completed clipboard/manual-copy and
+saved-draft reopen path.

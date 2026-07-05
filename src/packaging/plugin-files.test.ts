@@ -464,6 +464,19 @@ describe("plugin packaging files", () => {
     expect(backlog).not.toContain("current reuse slice adds");
   });
 
+  it("keeps the reuse audit from carrying stale rerun-only next slices", () => {
+    const reuseAudit = readFileSync(
+      join(process.cwd(), "docs/REUSE_LOOP_AUDIT_2026-07-05.md"),
+      "utf8",
+    );
+
+    expect(reuseAudit).toContain("No immediate reuse-flow slice remains");
+    expect(reuseAudit).toContain("PR #366");
+    expect(reuseAudit).toContain("PR #367");
+    expect(reuseAudit).toContain("PR #368");
+    expect(reuseAudit).not.toContain("Re-run the reuse flow");
+  });
+
   it("documents /loopdeck:* as a future alias-only slash namespace without shipping command files yet", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
