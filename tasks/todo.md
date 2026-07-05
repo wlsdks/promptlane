@@ -5,8 +5,8 @@
 - [x] CHECK: 9.5 quality plan Evidence Ledger still referenced the stale "after PR #422" main CI line and did not pin PR #429/#430 or latest main CI run `28744698708`.
 - [x] RED: packaging guard must fail unless the 9.5 quality plan includes PR #429, PR #430, `dogfood:web-user-flow`, `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md`, and latest main CI run `28744698708`.
 - [x] GREEN: the 9.5 quality plan now records PR #429 web user-flow evidence, PR #430 close-log integration, and latest main CI run `28744698708`.
-- [ ] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI, and branch prune all pass.
-- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+- [x] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI run `28744839139`, and branch prune all pass.
+- [x] INTEGRATE: PR #431이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
