@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane Data Privacy Contract
+
+- [x] RED: `docs/PROMPTLANE.md`가 데이터 모델과 privacy/local-first 경계를 명시하지 않으면 packaging test가 실패하도록 고정했다.
+- [x] GREEN: PromptLane product contract에 redacted Markdown archive, SQLite/FTS, loop snapshots, approved memories, instruction patch proposals, storage capability registry의 역할과 boundary를 추가했다.
+- [x] VERIFY: focused packaging test와 full gate를 통과한다.
+- [ ] INTEGRATE: 변경을 커밋, 푸시, PR, CI 확인 후 merge하고 branch를 정리한다.
+
+### 판단 기준
+
+- prompt bodies는 redacted Markdown archive에만 남고 status/setup/MCP summary로 복사되지 않는다.
+- loop snapshots는 safe labels, prompt ids, aggregate counts, outcome state, evidence refs, continuation readiness만 저장한다.
+- raw local paths는 safe label/hash로 대체하고 transcripts/compact summaries는 loop memory로 저장하지 않는다.
+- provider credentials는 추출, 저장, proxy, replay하지 않는다.
+- loop state의 Markdown export는 opt-in이며 기본 기능으로 확장하지 않는다.
+
 ## 2026-07-05 PromptLane Feature Portfolio Contract
 
 - [x] RED: `docs/PROMPTLANE.md`가 Keep/Improve/Build Next/Defer/Reject 기능 결정을 명시하지 않으면 packaging test가 실패하도록 고정했다.

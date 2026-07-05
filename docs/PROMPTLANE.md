@@ -116,6 +116,25 @@ MCP agent rewrite and judge tools may return bounded redacted packets only when
 the user explicitly asks the active agent session to evaluate or rewrite them.
 PromptLane does not call the provider on the user's behalf.
 
+## Data And Privacy Model
+
+PromptLane stores local data in separate layers so each surface can expose only
+the minimum safe shape it needs:
+
+| Layer | Role | Boundary |
+| --- | --- | --- |
+| redacted Markdown prompt archive | Human-readable source of truth for captured prompts | prompt bodies remain in the redacted archive |
+| SQLite/FTS index | Local query, search, scoring, tags, projects, jobs, drafts, and loop metadata | Index rows must not become a raw transcript store |
+| loop snapshots | Safe labels, prompt ids, aggregate counts, outcome state, evidence refs, and continuation readiness | raw local paths are replaced with safe labels or hashes |
+| approved loop memories | User-approved lessons derived from passed loops with evidence | transcripts and compact summaries are not stored as loop memory |
+| instruction patch proposals | Reviewable AGENTS.md/CLAUDE.md/project-doc patches | proposal first; explicit apply gate before writes |
+| storage capability registry | Shared setup/unavailable contract for storage-backed routes and MCP tools | capability errors stay raw-free and local-only |
+
+Provider credentials are never extracted, stored, proxied, or replayed.
+Markdown export of loop state is opt-in and deferred. See
+`docs/LOOP-SNAPSHOT-SCHEMA.md` for the runtime loop snapshot schema and
+`docs/ARCHITECTURE.md` for storage/module boundaries.
+
 ## Feature Portfolio
 
 ### Keep

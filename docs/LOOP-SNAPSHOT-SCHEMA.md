@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-05
 
-This document defines the privacy-safe loop snapshot contract used by Loopdeck.
+This document defines the privacy-safe loop snapshot contract used by PromptLane.
 It reflects the current `src/loop/types.ts` domain model and the SQLite
 `loop_snapshots` storage shape.
 

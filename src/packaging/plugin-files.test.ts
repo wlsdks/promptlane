@@ -541,6 +541,30 @@ describe("plugin packaging files", () => {
     }
   });
 
+  it("keeps the PromptLane data and privacy model explicit", () => {
+    const positioning = readFileSync(
+      join(process.cwd(), "docs/PROMPTLANE.md"),
+      "utf8",
+    );
+
+    for (const requiredText of [
+      "## Data And Privacy Model",
+      "redacted Markdown prompt archive",
+      "SQLite/FTS index",
+      "loop snapshots",
+      "approved loop memories",
+      "instruction patch proposals",
+      "storage capability registry",
+      "prompt bodies remain in the redacted archive",
+      "raw local paths are replaced with safe labels or hashes",
+      "Provider credentials are never extracted, stored, proxied, or replayed",
+      "transcripts and compact summaries are not stored as loop memory",
+      "Markdown export of loop state is opt-in and deferred",
+    ]) {
+      expect(positioning).toContain(requiredText);
+    }
+  });
+
   it("keeps agent instruction docs routed through the PromptLane product contract", () => {
     const agents = readFileSync(join(process.cwd(), "AGENTS.md"), "utf8");
     const claude = readFileSync(join(process.cwd(), "CLAUDE.md"), "utf8");
