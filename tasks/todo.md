@@ -6,7 +6,7 @@
 - [x] RED: MCP storage unavailable 메시지가 Codex/Claude Code setup/register/doctor 흐름을 안내하지 않으면 `src/mcp/storage-unavailable.test.ts`가 실패하도록 고정했다.
 - [x] GREEN: 공통 MCP storage error helper가 PromptLane setup, MCP registration, doctor, custom `--data-dir` 경로를 raw-free 문장으로 안내하도록 수정했다.
 - [x] VERIFY: focused MCP tests와 full gate를 통과한다.
-- [ ] INTEGRATE: PR CI `test (22)`/`test (24)` 통과 후 merge하고 branch prune까지 확인한다.
+- [x] INTEGRATE: PR #403이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 
