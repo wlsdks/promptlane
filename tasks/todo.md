@@ -8,8 +8,8 @@
 - [x] RED: web prompt detail이 `Effectiveness: proven`과 raw-free verdict summary를 렌더링하지 않아 실패해야 한다.
 - [x] GREEN: storage detail, CLI JSON, web detail이 같은 raw-free effectiveness verdict를 공유한다.
 - [x] EFFECT: 예상 개선량과 실제 loop outcome 사이를 사용자가 직접 추론하지 않아도, passed outcome/test/ref 기반으로 prompt 효과를 빠르게 판단할 수 있다.
-- [ ] VERIFY: focused tests, `corepack pnpm e2e:browser`, full local gate, PR CI, latest main CI, and branch prune all pass.
-- [ ] INTEGRATE: PR이 CI 통과 후 merge되고 branch prune까지 확인된다.
+- [x] VERIFY: focused tests, `corepack pnpm e2e:browser`, `corepack pnpm ui-patrol`, full local gate, PR CI, latest main CI run `28749214218`, and branch prune all pass.
+- [x] INTEGRATE: PR #457이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
