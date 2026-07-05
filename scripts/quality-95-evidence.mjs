@@ -164,11 +164,32 @@ function readScorecardAxes() {
 function readCompletedEvidence() {
   let plan = "";
   let localEvidence = "";
+  let productEvidence = "";
+  let promptlane = "";
+  let readme = "";
+  let packageJson = "";
+  let codexPlugin = "";
+  let claudePlugin = "";
+  let claudeMarketplace = "";
   try {
     plan = readFileSync(planPath, "utf8");
     localEvidence = readFileSync("docs/LOCAL_95_EVIDENCE_2026-07-06.md", "utf8");
+    productEvidence = readFileSync(
+      "docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md",
+      "utf8",
+    );
+    promptlane = readFileSync("docs/PROMPTLANE.md", "utf8");
+    readme = readFileSync("README.md", "utf8");
+    packageJson = readFileSync("package.json", "utf8");
+    codexPlugin = readFileSync(
+      "plugins/prompt-coach/.codex-plugin/plugin.json",
+      "utf8",
+    );
+    claudePlugin = readFileSync(".claude-plugin/plugin.json", "utf8");
+    claudeMarketplace = readFileSync(".claude-plugin/marketplace.json", "utf8");
   } catch {
     return {
+      product_positioning_metadata_alignment: false,
       web_user_flow_current_main_evidence: false,
       privacy_raw_free_regression_sweep: false,
       codex_claude_setup_smoke_refresh: false,
@@ -177,6 +198,23 @@ function readCompletedEvidence() {
   }
 
   return {
+    product_positioning_metadata_alignment:
+      productEvidence.includes("wlsdks/promptlane") &&
+      productEvidence.includes("Prompt improvement is the first value") &&
+      productEvidence.includes("Loopdeck is historical or compatibility-only") &&
+      productEvidence.includes("GitHub repository metadata") &&
+      promptlane.includes("Product name: PromptLane.") &&
+      promptlane.includes("PromptLane starts with prompt improvement") &&
+      promptlane.includes("Loop features are loop-aware continuation") &&
+      readme.includes("Local-first prompt improvement workspace") &&
+      readme.includes("loop-aware continuation") &&
+      packageJson.includes(
+        "PromptLane local-first prompt improvement workspace for Codex, Claude Code, and long-running coding-agent work.",
+      ) &&
+      codexPlugin.includes('"displayName": "PromptLane"') &&
+      codexPlugin.includes("loop-aware continuation") &&
+      claudePlugin.includes("PromptLane is a local-first prompt improvement workspace") &&
+      claudeMarketplace.includes("PromptLane is a local-first prompt improvement workspace"),
     web_user_flow_current_main_evidence:
       plan.includes("web_user_flow_current_main_evidence") &&
       plan.includes("corepack pnpm dogfood:web-user-flow") &&
@@ -217,6 +255,12 @@ function axisEvidenceCoverage({
     const satisfied = [];
     const remaining = [];
 
+    if (
+      axis.id === "product_planning_and_positioning" &&
+      completedEvidence.product_positioning_metadata_alignment
+    ) {
+      satisfied.push("product_positioning_metadata_alignment");
+    }
     if (
       axis.id === "web_ui_and_operational_evidence" &&
       completedEvidence.web_user_flow_current_main_evidence

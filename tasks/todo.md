@@ -1,5 +1,29 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Product Positioning Evidence
+
+- [x] CHECK: GitHub repository metadata, README copy, package metadata, Codex
+  plugin metadata, Claude plugin metadata, product contract, backlog, and goal
+  audit all point to PromptLane as prompt improvement first and loop-aware
+  continuation second.
+- [x] RED: quality evidence CLI/script tests required
+  `product_planning_and_positioning` to report `9.5/10`, `meets_target`, and
+  `product_positioning_metadata_alignment`; tests failed while the axis still
+  reported `9.2/10`.
+- [x] GREEN: `docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md` records the
+  product-positioning evidence and `quality-evidence` now treats the axis as
+  complete when that ledger and metadata stay aligned.
+- [x] EFFECT: `quality-evidence` removes the product-planning blocker while
+  keeping Codex/Claude operator dogfood, web operations, scheduled `ui-patrol`,
+  and native-dialog approved dogfood pending.
+
+### 판단 기준
+
+- Do not rename `prompt-coach` runtime IDs during the compatibility window.
+- Do not re-promote Loopdeck as product-facing identity.
+- Do not claim full 9.5 completion while external integration and operational
+  blockers remain pending.
+
 ## 2026-07-06 PromptLane Local Scorecard Axis Promotion
 
 - [x] CHECK: `scorecard_review_candidates` identified four axes whose local

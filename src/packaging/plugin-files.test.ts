@@ -942,6 +942,9 @@ describe("plugin packaging files", () => {
     expect(packageJson.files).toContain(
       "docs/LOCAL_95_EVIDENCE_2026-07-06.md",
     );
+    expect(packageJson.files).toContain(
+      "docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md",
+    );
     expect(packageJson.scripts["evidence:quality"]).toBe(
       "node scripts/quality-95-evidence.mjs",
     );
@@ -962,6 +965,9 @@ describe("plugin packaging files", () => {
     }
     for (const content of [backlog, plan]) {
       expect(content).toContain("docs/LOCAL_95_EVIDENCE_2026-07-06.md");
+      expect(content).toContain(
+        "docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md",
+      );
       expect(content).toContain("PR #478");
       expect(content).toContain("28753458359");
       expect(content).toContain("corepack pnpm evidence:quality");
@@ -973,6 +979,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("scorecard_level_below_9_5");
       expect(content).toContain("recommended_next_slices");
       expect(content).toContain("blocked_by_external_event");
+      expect(content).toContain("product_positioning_metadata_alignment");
       expect(content).toContain("local-first privacy boundary");
       expect(content).toContain("setup/doctor/MCP smoke");
       expect(content).toContain("loop memory");
@@ -991,6 +998,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("native_dialog_approved_dogfood");
       expect(content).toContain("scheduled_ui_patrol");
     }
+    expect(plan).toContain("| Product planning and positioning | 9.5/10 |");
     expect(plan).toContain("| Local-first privacy boundary | 9.5/10 |");
     expect(plan).toContain("| Setup, doctor, and MCP smoke | 9.5/10 |");
     expect(plan).toContain("| Loop memory and continuation | 9.5/10 |");
@@ -1030,6 +1038,8 @@ describe("plugin packaging files", () => {
     expect(evidenceScript).toContain("blocked_external");
     expect(evidenceScript).toContain("recommendedNextSlices");
     expect(evidenceScript).toContain("readCompletedEvidence");
+    expect(evidenceScript).toContain("product_positioning_metadata_alignment");
+    expect(evidenceScript).toContain("PRODUCT_POSITIONING_EVIDENCE_2026-07-06");
     expect(evidenceScript).toContain("web_user_flow_current_main_evidence");
     expect(evidenceScript).toContain("browser e2e passed");
     expect(evidenceScript).toContain("privacy_raw_free_regression_sweep");

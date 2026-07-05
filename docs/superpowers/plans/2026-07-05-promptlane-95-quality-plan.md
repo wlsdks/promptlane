@@ -14,7 +14,7 @@
 
 | Axis | Current level after latest evidence | 9.5 bar | Evidence that must exist |
 | --- | --- | --- | --- |
-| Product planning and positioning | 9.2/10 | 9.5 bar: every active first-screen surface, plugin surface, README path, and backlog slice says PromptLane is prompt improvement first, loop-aware continuation second, with no product-facing Loopdeck drift. | Packaging guard, README/plugin metadata, repo metadata, docs/PROMPTLANE.md, docs/NEXT_BACKLOG.md, goal audit, expected-impact evidence. |
+| Product planning and positioning | 9.5/10 | 9.5 bar: every active first-screen surface, plugin surface, README path, and backlog slice says PromptLane is prompt improvement first, loop-aware continuation second, with no product-facing Loopdeck drift. | Packaging guard, README/plugin metadata, repo metadata, docs/PROMPTLANE.md, docs/NEXT_BACKLOG.md, goal audit, expected-impact evidence. |
 | Local-first privacy boundary | 9.5/10 | 9.5 bar: every hook, MCP, CLI, server, web, export, loop, and dogfood path proves no prompt body, raw path, provider credential, transcript body, compact summary, or external provider call leaks outside the allowed storage layer. | Focused privacy tests, raw-free fixtures, dogfood:first-coach-loop, dogfood:loop-memory-approval, smoke:mcp-coach-loop, browser E2E, release smoke. |
 | Codex and Claude Code integration | 9.0/10 | 9.5 bar: setup, doctor, hook capture, MCP registration, plugin install guidance, slash commands, statusline, and recovery copy are all verified for both tools in isolated smoke and at least one real operator dogfood pass. | smoke:agent-setup, smoke:hooks, dogfood:first-coach-loop, docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md, AGENT-HARNESS. |
 | Setup, doctor, and MCP smoke | 9.5/10 | 9.5 bar: setup and doctor smoke proves capture readiness; MCP smoke proves score/improve/clarify/record loop; failure states produce raw-free recovery actions instead of generic errors. | smoke:agent-setup, smoke:mcp-coach-loop, storage_unavailable tests, package checks. |
@@ -208,6 +208,14 @@
   continuation, and release stability. This removes those scorecard-axis
   blockers while leaving product planning, Codex/Claude operator dogfood, web
   operations, scheduled `ui-patrol`, and native-dialog approved dogfood pending.
+- `docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md` records current GitHub
+  repository metadata, README/package/plugin metadata, product contract,
+  backlog, goal audit, and Loopdeck legacy decision evidence. Product planning
+  and positioning is now 9.5/10 because those surfaces consistently present
+  PromptLane as prompt improvement first and loop-aware continuation second
+  while keeping `prompt-coach` as the compatibility runtime ID.
+  `quality-evidence` records this as
+  `product_positioning_metadata_alignment`.
 - PR #478 proved that installed CLI path on the default branch; main CI run
   `28753458359` passed Node 22 and Node 24 after merge, so future agents can use
   the product CLI itself to decide whether 9.5 is still blocked before claiming

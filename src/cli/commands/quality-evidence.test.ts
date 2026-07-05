@@ -39,6 +39,11 @@ describe("quality-evidence CLI command", () => {
     expect(parsed.scorecard_axes).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
+          id: "product_planning_and_positioning",
+          current_level: "9.5/10",
+          status: "meets_target",
+        }),
+        expect.objectContaining({
           id: "local_first_privacy_boundary",
           current_level: "9.5/10",
           status: "meets_target",
@@ -62,6 +67,14 @@ describe("quality-evidence CLI command", () => {
     );
     expect(parsed.axis_evidence_coverage).toEqual(
       expect.arrayContaining([
+        expect.objectContaining({
+          id: "product_planning_and_positioning",
+          status: "complete",
+          satisfied_evidence: expect.arrayContaining([
+            "product_positioning_metadata_alignment",
+          ]),
+          remaining_evidence: [],
+        }),
         expect.objectContaining({
           id: "local_first_privacy_boundary",
           status: "complete",
@@ -141,8 +154,9 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain("PromptLane 9.5 quality evidence");
     expect(text).toContain("Status: pending");
     expect(text).toContain("Scorecard axes: 7");
-    expect(text).toContain("Blockers: 5");
+    expect(text).toContain("Blockers: 4");
     expect(text).toContain("Axis evidence coverage");
+    expect(text).toContain("product_planning_and_positioning: complete");
     expect(text).toContain("local_first_privacy_boundary: complete");
     expect(text).toContain(
       "web_ui_and_operational_evidence: blocked_external",

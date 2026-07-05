@@ -208,6 +208,14 @@ Decision:
   and continuation, and release stability are 9.5/10 in the scorecard. Product
   planning, Codex/Claude operator dogfood, web operations, scheduled
   `ui-patrol`, and native-dialog approved dogfood remain pending.
+  Product planning is now also 9.5/10 after
+  `docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md` recorded current GitHub
+  repository metadata, README/package/plugin metadata, the PromptLane product
+  contract, Loopdeck legacy decision, backlog, and goal-audit alignment.
+  `quality-evidence` records this as
+  `product_positioning_metadata_alignment`.
+  Codex/Claude operator dogfood, web operations, scheduled `ui-patrol`, and
+  native-dialog approved dogfood remain pending.
 - PR #478 moved that quality evidence gate onto the installed product CLI. Main
   CI run `28753458359` passed Node 22 and Node 24 after merge, so `prompt-coach
   quality-evidence --require-complete` is now a current default-branch release

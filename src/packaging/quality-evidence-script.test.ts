@@ -87,9 +87,9 @@ describe("quality 9.5 evidence script", () => {
       expect.arrayContaining([
         expect.objectContaining({
           id: "product_planning_and_positioning",
-          current_level: "9.2/10",
+          current_level: "9.5/10",
           target_level: "9.5/10",
-          status: "below_target",
+          status: "meets_target",
         }),
         expect.objectContaining({
           id: "local_first_privacy_boundary",
@@ -122,9 +122,12 @@ describe("quality 9.5 evidence script", () => {
         }),
       ]),
     );
-    expect(parsed.blockers).toHaveLength(5);
+    expect(parsed.blockers).toHaveLength(4);
     expect(parsed.blockers).not.toEqual(
       expect.arrayContaining([
+        expect.objectContaining({
+          id: "scorecard_axis:product_planning_and_positioning",
+        }),
         expect.objectContaining({
           id: "scorecard_axis:local_first_privacy_boundary",
         }),
@@ -141,10 +144,6 @@ describe("quality 9.5 evidence script", () => {
     );
     expect(parsed.blockers).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          id: "scorecard_axis:product_planning_and_positioning",
-          status: "below_target",
-        }),
         expect.objectContaining({
           id: "scorecard_axis:codex_and_claude_code_integration",
           status: "below_target",
@@ -165,6 +164,14 @@ describe("quality 9.5 evidence script", () => {
     );
     expect(parsed.axis_evidence_coverage).toEqual(
       expect.arrayContaining([
+        expect.objectContaining({
+          id: "product_planning_and_positioning",
+          status: "complete",
+          satisfied_evidence: expect.arrayContaining([
+            "product_positioning_metadata_alignment",
+          ]),
+          remaining_evidence: [],
+        }),
         expect.objectContaining({
           id: "local_first_privacy_boundary",
           status: "complete",
