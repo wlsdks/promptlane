@@ -1,5 +1,28 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Web Operations Evidence Split
+
+- [x] CHECK: GitHub `ui-patrol.yml` still has only workflow_dispatch runs and
+  no real `schedule` event, so scheduled `ui-patrol` cannot be completed.
+- [x] RED: quality evidence CLI/script tests required
+  `web_ui_and_operational_evidence` to include
+  `manual_ui_patrol_artifact_evidence` while still keeping
+  `scheduled_ui_patrol` and `scorecard_level_below_9_5` as remaining evidence;
+  tests failed while only `web_user_flow_current_main_evidence` was satisfied.
+- [x] GREEN: `docs/UI_PATROL_EVIDENCE_2026-07-06.md` records manual
+  workflow_dispatch artifact, local UI patrol, and web-user-flow evidence, and
+  `quality-evidence` now exposes that non-scheduled web proof separately.
+- [x] EFFECT: web operations evidence is more accurate without claiming the
+  scheduled cron blocker is complete.
+
+### 판단 기준
+
+- Do not mark scheduled `ui-patrol` complete without a real `schedule` event.
+- Do not promote web operations to 9.5 while scheduled evidence remains
+  pending.
+- Keep manual/local browser evidence visible so agents do not rerun stale local
+  work unnecessarily.
+
 ## 2026-07-06 PromptLane Product Positioning Evidence
 
 - [x] CHECK: GitHub repository metadata, README copy, package metadata, Codex

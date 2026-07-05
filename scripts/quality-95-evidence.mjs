@@ -171,6 +171,7 @@ function readCompletedEvidence() {
   let codexPlugin = "";
   let claudePlugin = "";
   let claudeMarketplace = "";
+  let uiPatrolEvidence = "";
   try {
     plan = readFileSync(planPath, "utf8");
     localEvidence = readFileSync("docs/LOCAL_95_EVIDENCE_2026-07-06.md", "utf8");
@@ -187,9 +188,14 @@ function readCompletedEvidence() {
     );
     claudePlugin = readFileSync(".claude-plugin/plugin.json", "utf8");
     claudeMarketplace = readFileSync(".claude-plugin/marketplace.json", "utf8");
+    uiPatrolEvidence = readFileSync(
+      "docs/UI_PATROL_EVIDENCE_2026-07-06.md",
+      "utf8",
+    );
   } catch {
     return {
       product_positioning_metadata_alignment: false,
+      manual_ui_patrol_artifact_evidence: false,
       web_user_flow_current_main_evidence: false,
       privacy_raw_free_regression_sweep: false,
       codex_claude_setup_smoke_refresh: false,
@@ -215,6 +221,13 @@ function readCompletedEvidence() {
       codexPlugin.includes("loop-aware continuation") &&
       claudePlugin.includes("PromptLane is a local-first prompt improvement workspace") &&
       claudeMarketplace.includes("PromptLane is a local-first prompt improvement workspace"),
+    manual_ui_patrol_artifact_evidence:
+      uiPatrolEvidence.includes("workflow_dispatch run `28717406758`") &&
+      uiPatrolEvidence.includes("ui-patrol-screenshots") &&
+      uiPatrolEvidence.includes("9 png files") &&
+      uiPatrolEvidence.includes("Local `corepack pnpm ui-patrol`") &&
+      uiPatrolEvidence.includes("pending_no_schedule_run") &&
+      uiPatrolEvidence.includes("manual_ui_patrol_artifact_evidence"),
     web_user_flow_current_main_evidence:
       plan.includes("web_user_flow_current_main_evidence") &&
       plan.includes("corepack pnpm dogfood:web-user-flow") &&
@@ -266,6 +279,12 @@ function axisEvidenceCoverage({
       completedEvidence.web_user_flow_current_main_evidence
     ) {
       satisfied.push("web_user_flow_current_main_evidence");
+    }
+    if (
+      axis.id === "web_ui_and_operational_evidence" &&
+      completedEvidence.manual_ui_patrol_artifact_evidence
+    ) {
+      satisfied.push("manual_ui_patrol_artifact_evidence");
     }
     if (
       axis.id === "local_first_privacy_boundary" &&

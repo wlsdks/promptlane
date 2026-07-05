@@ -216,6 +216,11 @@ Decision:
   `product_positioning_metadata_alignment`.
   Codex/Claude operator dogfood, web operations, scheduled `ui-patrol`, and
   native-dialog approved dogfood remain pending.
+  `docs/UI_PATROL_EVIDENCE_2026-07-06.md` records the current manual
+  workflow_dispatch artifact, local `corepack pnpm ui-patrol`, and
+  `dogfood:web-user-flow` browser evidence. `quality-evidence` records this as
+  `manual_ui_patrol_artifact_evidence`, but `scheduled_ui_patrol` remains
+  pending until a real cron `schedule` event exists.
 - PR #478 moved that quality evidence gate onto the installed product CLI. Main
   CI run `28753458359` passed Node 22 and Node 24 after merge, so `prompt-coach
   quality-evidence --require-complete` is now a current default-branch release

@@ -186,6 +186,7 @@ describe("quality 9.5 evidence script", () => {
           status: "blocked_external",
           satisfied_evidence: expect.arrayContaining([
             "web_user_flow_current_main_evidence",
+            "manual_ui_patrol_artifact_evidence",
           ]),
           remaining_evidence: expect.arrayContaining([
             "scheduled_ui_patrol",
