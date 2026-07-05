@@ -123,6 +123,12 @@ function readNativeDialogEvidence() {
     status: approvedAnswered ? "complete" : "pending_operator_approval",
     audit: nativeDialogAuditPath,
     approved_run_required: true,
+    approval_status: approvedAnswered
+      ? "operator_approved_answer_recorded"
+      : "operator_approval_required",
+    preconditions: approvedAnswered
+      ? []
+      : ["The operator explicitly approves opening a native OS dialog."],
   };
 }
 

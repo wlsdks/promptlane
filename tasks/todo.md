@@ -1,5 +1,28 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Native Dialog Approval Evidence Clarity
+
+- [x] CHECK: `quality-evidence` JSON의 recommended next slice는 native dialog
+  실행 전 operator approval이 필요하다고 말하지만, direct evidence row는
+  상태와 `approved_run_required`만 보여 기본 출력에서 승인 전제 조건이 약했다.
+- [x] RED: `src/cli/commands/quality-evidence.test.ts`가
+  `evidence.native_dialog_approved_dogfood.approval_status`와
+  `preconditions`를 JSON에 요구하고, 텍스트 `External evidence status`에도
+  같은 승인 상태/전제 조건이 렌더링되도록 실패했다.
+- [x] GREEN: `scripts/quality-95-evidence.mjs`가 direct native-dialog evidence에
+  `approval_status=operator_approval_required`와 explicit operator approval
+  precondition을 추가하고, CLI formatter가 해당 값을 출력한다.
+- [x] EFFECT: 승인 없는 자동 실행은 계속 금지하면서도 남은 9.5 blocker를
+  사람이 읽는 기본 evidence 출력과 JSON 파서 양쪽에서 더 명확히 추적한다.
+
+### 판단 기준
+
+- Do not run approved native OS dialog dogfood without explicit operator
+  approval.
+- Do not mark `native_dialog_approved_dogfood` complete through metadata-only
+  clarity improvements.
+- Keep external evidence output raw-free and free of local paths.
+
 ## 2026-07-06 PromptLane Stale Scheduled UI Patrol Docs Cleanup
 
 - [x] CHECK: CI workflow removal 이후에도 9.5 plan의 현재 blocker 문단이

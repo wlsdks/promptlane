@@ -41,6 +41,14 @@ describe("quality-evidence CLI command", () => {
         blocked_reason?: string;
         available_after_utc?: string;
       }>;
+      evidence: {
+        native_dialog_approved_dogfood: {
+          status: string;
+          approval_status: string;
+          approved_run_required: boolean;
+          preconditions: string[];
+        };
+      };
       next_recheck_utc?: string;
     };
 
@@ -144,6 +152,14 @@ describe("quality-evidence CLI command", () => {
         }),
       ]),
     );
+    expect(parsed.evidence.native_dialog_approved_dogfood).toMatchObject({
+      status: "pending_operator_approval",
+      approval_status: "operator_approval_required",
+      approved_run_required: true,
+      preconditions: expect.arrayContaining([
+        "The operator explicitly approves opening a native OS dialog.",
+      ]),
+    });
     expect(parsed.recommended_next_slices[0]).toMatchObject({
       id: "native_dialog_operator_dogfood",
       priority: 100,
@@ -250,6 +266,10 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain("External evidence status");
     expect(text).toContain(
       "native_dialog_approved_dogfood: pending_operator_approval approved_run_required=yes",
+    );
+    expect(text).toContain("approval_status=operator_approval_required");
+    expect(text).toContain(
+      "preconditions=The operator explicitly approves opening a native OS dialog.",
     );
     expect(text).toContain("native_dialog_approved_dogfood");
     expect(text).toContain("Recommended next slices");

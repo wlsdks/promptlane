@@ -47,6 +47,8 @@ type QualityEvidenceSummary = {
     native_dialog_approved_dogfood?: {
       status: string;
       approved_run_required?: boolean;
+      approval_status?: string;
+      preconditions?: string[];
     };
   };
   next_action: string;
@@ -201,6 +203,12 @@ function formatExternalEvidenceRows(summary: QualityEvidenceSummary): string[] {
   if (nativeDialog) {
     rows.push(
       `- native_dialog_approved_dogfood: ${nativeDialog.status} approved_run_required=${nativeDialog.approved_run_required ? "yes" : "no"}`,
+      ...(nativeDialog.approval_status
+        ? [`  approval_status=${nativeDialog.approval_status}`]
+        : []),
+      ...(nativeDialog.preconditions && nativeDialog.preconditions.length > 0
+        ? [`  preconditions=${nativeDialog.preconditions.join("; ")}`]
+        : []),
     );
   }
 
