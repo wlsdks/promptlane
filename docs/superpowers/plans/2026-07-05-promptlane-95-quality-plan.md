@@ -127,6 +127,13 @@
 - latest main CI run `28750611089` after PR #464 passed `test (22)` and
   `test (24)` with `pnpm test`, `pnpm lint`, `pnpm build`, and
   `pnpm pack:dry-run`.
+- PR #478 exposed the same 9.5 quality evidence as an installed product CLI:
+  `prompt-coach quality-evidence`, `prompt-coach quality-evidence --json`, and
+  `prompt-coach quality-evidence --require-complete`. The command lists every
+  current scorecard/direct evidence blocker, keeps output local and raw-free,
+  and exits nonzero while completion evidence remains pending. Main CI run
+  `28753458359` passed Node 22 and Node 24 after merge with `pnpm test`,
+  `pnpm lint`, `pnpm build`, and `pnpm pack:dry-run`.
 
 ## Remaining 9.5 blockers
 
@@ -147,6 +154,10 @@
   JSON directly. Installed CLI users can run
   `prompt-coach quality-evidence --json` or
   `prompt-coach quality-evidence --require-complete`.
+- PR #478 proved that installed CLI path on the default branch; main CI run
+  `28753458359` passed Node 22 and Node 24 after merge, so future agents can use
+  the product CLI itself to decide whether 9.5 is still blocked before claiming
+  completion.
 - Native OS ask UI dogfood remains operator-approved only; do not run
   `dogfood:mcp-native-dialog-approved` without explicit approval because it can
   open a native dialog.

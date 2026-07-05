@@ -954,6 +954,8 @@ describe("plugin packaging files", () => {
       expect(content).toContain("scripts/quality-95-evidence.mjs");
     }
     for (const content of [backlog, plan]) {
+      expect(content).toContain("PR #478");
+      expect(content).toContain("28753458359");
       expect(content).toContain("corepack pnpm evidence:quality");
       expect(content).toContain("corepack pnpm --silent evidence:quality");
       expect(content).toContain("node scripts/quality-95-evidence.mjs");

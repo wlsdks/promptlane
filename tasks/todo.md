@@ -1,5 +1,29 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Quality Evidence CLI Ledger Refresh
+
+- [x] CHECK: PR #478로 installed CLI `prompt-coach quality-evidence`가
+  landing됐지만 9.5 quality plan/backlog ledger는 아직 PR #478과 latest
+  main CI run `28753458359`를 추적하지 않았다.
+- [x] RED: packaging guard가 9.5 plan과 backlog에서 PR #478,
+  `28753458359`, `prompt-coach quality-evidence --json`, and
+  `prompt-coach quality-evidence --require-complete`를 찾지 못해 실패해야
+  한다.
+- [x] GREEN: 9.5 plan과 backlog가 installed CLI quality gate evidence와
+  latest main CI run `28753458359`를 반영한다.
+- [x] EFFECT: future agents can judge 9.5 completion from the product CLI and
+  current default-branch evidence instead of relying on stale ledger text or a
+  repo-only npm script.
+
+### 판단 기준
+
+- This slice must not mark scheduled `ui-patrol` or native-dialog dogfood
+  complete.
+- The ledger must keep `--require-complete` as a fail-closed gate while direct
+  blockers or scorecard axes remain pending.
+- The guard must fail if future docs drop PR #478 or the current main CI
+  evidence from the 9.5 quality ledger.
+
 ## 2026-07-06 PromptLane 9.5 Quality Evidence Summary
 
 - [x] CHECK: scheduled UI patrol and native OS dialog evidence are still

@@ -185,6 +185,10 @@ Decision:
   Installed CLI users can inspect the same summary with
   `prompt-coach quality-evidence --json` and fail closed with
   `prompt-coach quality-evidence --require-complete`.
+- PR #478 moved that quality evidence gate onto the installed product CLI. Main
+  CI run `28753458359` passed Node 22 and Node 24 after merge, so `prompt-coach
+  quality-evidence --require-complete` is now a current default-branch release
+  and goal-completion guard rather than only a repo-local npm script.
 - The earlier GitHub Actions Node 20 runtime annotation and Node 24
   `better-sqlite3` install warning are closed. Keep the release-stability bar
   focused on fresh CI/package warnings that affect local-first install, build,
