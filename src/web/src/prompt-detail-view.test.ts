@@ -62,6 +62,48 @@ describe("PromptDetailView", () => {
     expect(html).toMatch(/\+\d+ point/);
   });
 
+  it("renders loop outcome evidence for the prompt", () => {
+    const html = renderToStaticMarkup(
+      createElement(PromptDetailView, {
+        copied: false,
+        copiedImprovement: false,
+        language: "en",
+        savedImprovement: false,
+        onBack: vi.fn(),
+        onBookmark: vi.fn(),
+        onCloseManualCopyFallback: vi.fn(),
+        onCopy: vi.fn(),
+        onCopyImprovement: vi.fn(),
+        onCopySavedDraft: vi.fn(),
+        onDelete: vi.fn(),
+        onNavigate: vi.fn(),
+        onOpenQualityGap: vi.fn(),
+        onSaveImprovement: vi.fn(),
+        prompt: {
+          ...buildPromptDetail(),
+          loop_outcomes: [
+            {
+              snapshot_id: "loop_effectiveness",
+              status: "passed",
+              summary:
+                "Expected impact matched the finished implementation and tests.",
+              evidence_refs: ["PR #451", "main CI 28748001738"],
+              tests_run: 3,
+            },
+          ],
+        },
+        queueNavigation: {},
+      }),
+    );
+
+    expect(html).toContain("Outcome evidence");
+    expect(html).toContain("Expected impact matched");
+    expect(html).toContain("passed");
+    expect(html).toContain("3 tests");
+    expect(html).toContain("PR #451");
+    expect(html).toContain("main CI 28748001738");
+  });
+
   it("renders a manual-copy fallback when draft clipboard copy fails", () => {
     const html = renderToStaticMarkup(
       createElement(PromptDetailView, {

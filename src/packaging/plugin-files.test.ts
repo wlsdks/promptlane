@@ -1064,6 +1064,9 @@ describe("plugin packaging files", () => {
       "dogfood:loop-memory-approval",
       "dogfood:web-user-flow",
       "expected_impact",
+      "prompt-linked outcome evidence",
+      "`loop_outcomes`",
+      "`Outcome evidence`",
       "docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md",
       "docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md",
       "workflow_dispatch run `28717406758`",
@@ -1072,6 +1075,12 @@ describe("plugin packaging files", () => {
       "Remaining 9.5 blockers",
     ]) {
       expect(plan).toContain(currentEvidence);
+    }
+    for (const currentBacklogEvidence of [
+      "prompt-linked outcome evidence",
+      "`expected_impact` predictions to actual raw-free loop outcomes",
+    ]) {
+      expect(backlog).toContain(currentBacklogEvidence);
     }
     expect(plan).not.toMatch(/\bTBD\b|TODO:|implement later|fill in details/i);
   });

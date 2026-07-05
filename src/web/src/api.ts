@@ -39,6 +39,15 @@ export type PromptDetail = PromptSummary & {
   };
   improvement_drafts: PromptImprovementDraft[];
   judge_score?: PromptJudgeScore;
+  loop_outcomes?: PromptLoopOutcomeEvidence[];
+};
+
+export type PromptLoopOutcomeEvidence = {
+  snapshot_id: string;
+  status: LoopSummary["outcome_status"];
+  summary: string;
+  evidence_refs: string[];
+  tests_run?: number;
 };
 
 export type PromptJudgeScore = {

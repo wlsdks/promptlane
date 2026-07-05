@@ -85,6 +85,8 @@ try {
     score: 88,
     reason: "Goal explicit, verification implied via pnpm test.",
   });
+  step("Seed loop outcome evidence for the selected prompt");
+  insertLoopOutcomeForClaudePrompt();
 
   step("Run browser flow");
   browser = await launchBrowser();
@@ -196,6 +198,27 @@ try {
     page,
     "88",
     "Detail should show the seeded LLM judge score value.",
+  );
+  await page.locator(".loop-outcome-panel").first().waitFor();
+  await assertTextAny(
+    page,
+    ["Outcome evidence"],
+    "Detail should show linked loop outcome evidence for the selected prompt.",
+  );
+  await assertText(
+    page,
+    "browser e2e outcome passed",
+    "Detail should show the safe loop outcome summary.",
+  );
+  await assertText(
+    page,
+    "4 tests",
+    "Detail should show loop outcome test-count evidence.",
+  );
+  await assertText(
+    page,
+    "main CI 28748001738",
+    "Detail should show safe loop outcome evidence refs.",
   );
   await assertBrowserSafe(page, "detail");
   await forceClipboardFailure(page);
@@ -512,6 +535,86 @@ function insertJudgeScoreForClaudePrompt({ score, reason }) {
       score,
       reason,
       new Date().toISOString(),
+    );
+  } finally {
+    db.close();
+  }
+}
+
+function insertLoopOutcomeForClaudePrompt() {
+  const dbPath = join(dataDir, "prompt-coach.sqlite");
+  const db = new Database(dbPath);
+  try {
+    const row = db
+      .prepare(
+        "SELECT id FROM prompts WHERE tool = 'claude-code' AND deleted_at IS NULL ORDER BY received_at DESC LIMIT 1",
+      )
+      .get();
+    if (!row) {
+      throw new Error("No claude-code prompt found to seed loop outcome.");
+    }
+
+    db.prepare(
+      `
+      INSERT INTO loop_snapshots (
+        id,
+        created_at,
+        tool,
+        source,
+        session_id,
+        thread_id,
+        cwd_label,
+        project_id,
+        git_root_hash,
+        branch,
+        worktree_label,
+        prompt_ids_json,
+        event_counts_json,
+        quality_json,
+        outcome_json,
+        next_brief_json,
+        privacy_json
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+    ).run(
+      "loop_browser_effectiveness",
+      new Date().toISOString(),
+      "codex",
+      "mcp",
+      "browser-e2e-loop",
+      null,
+      "private-project",
+      "proj_browser",
+      null,
+      "codex/browser-effectiveness",
+      "browser-effectiveness",
+      JSON.stringify([row.id]),
+      JSON.stringify({ prompts: 1, tests_run: 4 }),
+      JSON.stringify({
+        average_prompt_score: 88,
+        top_gaps: ["verification_criteria"],
+        unresolved_questions: [],
+      }),
+      JSON.stringify({
+        status: "passed",
+        summary: "browser e2e outcome passed",
+        evidence_refs: [
+          "PR #451",
+          "main CI 28748001738",
+          join(rawPathPrefix, "private-project", "secret.txt"),
+          rawSecret,
+        ],
+      }),
+      JSON.stringify({
+        generated: true,
+        prompt_id: row.id,
+        summary: "Continue from browser e2e outcome evidence.",
+      }),
+      JSON.stringify({
+        stores_prompt_bodies: false,
+        stores_raw_paths: false,
+        local_only: true,
+      }),
     );
   } finally {
     db.close();

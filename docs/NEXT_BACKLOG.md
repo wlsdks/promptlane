@@ -171,6 +171,7 @@ Decision:
 - Expected-impact evidence is now visible in CLI/MCP/Web surfaces and guarded by
   focused tests plus browser E2E, so future prompt-improvement work should
   preserve a measurable before/after signal instead of only returning a rewrite.
+- Prompt-linked outcome evidence is the next active effectiveness slice: prompt detail should connect `expected_impact` predictions to actual raw-free loop outcomes and browser assertions, without treating this as scheduled `ui-patrol` or native-dialog completion evidence.
 
 Rationale:
 
@@ -241,7 +242,8 @@ Next capability PR:
 ### 2. PromptLane MVP Reliability Slice Status
 
 No immediate MVP reliability slice remains from the current PromptLane product
-contract.
+contract, but effectiveness work should continue to connect prompt improvement
+predictions to actual loop outcomes instead of adding prediction-only surfaces.
 
 Completed:
 
@@ -253,6 +255,9 @@ Completed:
   with evidence and storage writes reject missing or unsafe evidence refs
 - focused Codex and Claude Code smoke coverage: `smoke:agent-setup` verifies
   setup/doctor happy paths without running real provider CLIs
+- prompt-linked outcome evidence: prompt detail API and web detail can show
+  raw-free loop outcome status, summary, evidence refs, and test-count metadata
+  for prompts included in explicit loop snapshots
 
 Next work should come from fresh user-flow evidence, a real MCP tool/schema
 change, scheduled UI patrol evidence, or explicit operator-approved dogfood.

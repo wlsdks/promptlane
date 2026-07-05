@@ -18,8 +18,8 @@
 | Local-first privacy boundary | 9.1/10 | 9.5 bar: every hook, MCP, CLI, server, web, export, loop, and dogfood path proves no prompt body, raw path, provider credential, transcript body, compact summary, or external provider call leaks outside the allowed storage layer. | Focused privacy tests, raw-free fixtures, dogfood:first-coach-loop, dogfood:loop-memory-approval, smoke:mcp-coach-loop, browser E2E, release smoke. |
 | Codex and Claude Code integration | 9.0/10 | 9.5 bar: setup, doctor, hook capture, MCP registration, plugin install guidance, slash commands, statusline, and recovery copy are all verified for both tools in isolated smoke and at least one real operator dogfood pass. | smoke:agent-setup, smoke:hooks, dogfood:first-coach-loop, docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md, AGENT-HARNESS. |
 | Setup, doctor, and MCP smoke | 9.0/10 | 9.5 bar: setup and doctor smoke proves capture readiness; MCP smoke proves score/improve/clarify/record loop; failure states produce raw-free recovery actions instead of generic errors. | smoke:agent-setup, smoke:mcp-coach-loop, storage_unavailable tests, package checks. |
-| Loop memory and continuation | 9.0/10 | 9.5 bar: collect, brief, outcome, memory candidate, memory approval, instruction patch proposal, and apply gate are proven through CLI and MCP with evidence-first rules and no automatic instruction writes. | Loop unit tests, storage evidence guards, dogfood:first-coach-loop, dogfood:loop-memory-approval. |
-| Web UI and operational evidence | 8.4/10 | 9.5 bar: archive, detail, coach, saved draft reuse, settings, loops, exports, projects, and mobile layout have screenshots or browser assertions, plus scheduled `ui-patrol` artifact evidence. | corepack pnpm ui-patrol, workflow_dispatch run `28717406758`, scheduled `ui-patrol`, browser E2E, screenshot artifacts, in-app Browser audit. |
+| Loop memory and continuation | 9.1/10 | 9.5 bar: collect, brief, outcome, memory candidate, memory approval, instruction patch proposal, and apply gate are proven through CLI and MCP with evidence-first rules and no automatic instruction writes. | Loop unit tests, storage evidence guards, dogfood:first-coach-loop, dogfood:loop-memory-approval, prompt-linked outcome evidence. |
+| Web UI and operational evidence | 8.6/10 | 9.5 bar: archive, detail, coach, saved draft reuse, settings, loops, exports, projects, and mobile layout have screenshots or browser assertions, plus scheduled `ui-patrol` artifact evidence. | corepack pnpm ui-patrol, workflow_dispatch run `28717406758`, scheduled `ui-patrol`, browser E2E, screenshot artifacts, in-app Browser audit. |
 | Release stability | 9.0/10 | 9.5 bar: Node 22 and 24 CI, pack dry-run, release smoke, first coach loop dogfood, package contents, dependency audit, and release checklist all agree on shipped files and commands. | GitHub Actions, corepack pnpm pack:dry-run, smoke:release, dogfood:first-coach-loop, dogfood:loop-memory-approval, docs/RELEASE_CHECKLIST.md. |
 
 ## Evidence Progress Ledger
@@ -66,6 +66,10 @@
 - latest main CI run `28747682131` after PR #450 passed `test (22)` and
   `test (24)` with `pnpm test`, `pnpm lint`, `pnpm build`, and
   `pnpm pack:dry-run`.
+- Current prompt outcome evidence slice links prompt detail back to actual loop
+  outcomes, returning raw-free `loop_outcomes` through the prompt API and
+  rendering `Outcome evidence` in the web detail flow so expected-impact
+  predictions can be checked against finished loop evidence.
 
 ## Remaining 9.5 blockers
 
@@ -74,9 +78,10 @@
 - Native OS ask UI dogfood remains operator-approved only; do not run
   `dogfood:mcp-native-dialog-approved` without explicit approval because it can
   open a native dialog.
-- Fresh user-flow and expected-impact evidence are now repeatable through
-  `dogfood:web-user-flow`, browser E2E, and `corepack pnpm ui-patrol`, but web
-  operations still need scheduled artifact evidence before claiming 9.5.
+- Fresh user-flow, expected-impact, and prompt-linked outcome evidence are now
+  repeatable through `dogfood:web-user-flow`, browser E2E, and `corepack pnpm
+  ui-patrol`, but web operations still need scheduled artifact evidence before
+  claiming 9.5.
 
 ## Required Slices
 

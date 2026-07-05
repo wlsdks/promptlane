@@ -168,6 +168,7 @@ export function PromptDetailView({
           />
         )}
         <JudgeScorePanel prompt={prompt} />
+        <LoopOutcomeEvidencePanel prompt={prompt} />
         <PromptCoachPanel
           answersByAxis={answersByAxis}
           copied={copiedImprovement}
@@ -245,6 +246,41 @@ export type ManualCopyFallback = {
   title: string;
   text: string;
 };
+
+function LoopOutcomeEvidencePanel({ prompt }: { prompt: PromptDetail }) {
+  const outcomes = prompt.loop_outcomes ?? [];
+  if (outcomes.length === 0) return null;
+
+  return (
+    <section className="loop-outcome-panel" aria-label="Outcome evidence">
+      <header>
+        <div>
+          <p className="eyebrow">Outcome evidence</p>
+          <h3>Actual loop results</h3>
+        </div>
+        <span>{outcomes.length} linked</span>
+      </header>
+      <ul>
+        {outcomes.map((outcome) => (
+          <li key={outcome.snapshot_id}>
+            <div className="loop-outcome-row">
+              <strong>{outcome.status}</strong>
+              <span>{outcome.tests_run ?? 0} tests</span>
+            </div>
+            <p>{outcome.summary}</p>
+            {outcome.evidence_refs.length > 0 && (
+              <div className="loop-outcome-refs" aria-label="Evidence refs">
+                {outcome.evidence_refs.map((ref) => (
+                  <code key={ref}>{ref}</code>
+                ))}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
 
 function PromptCoachPanel({
   answersByAxis,

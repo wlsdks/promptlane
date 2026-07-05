@@ -1,5 +1,21 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Prompt Outcome Effectiveness Evidence
+
+- [x] CHECK: `expected_impact`는 CLI/MCP/Web에 보이지만, prompt detail에서 해당 prompt가 실제 loop outcome으로 이어졌는지 확인하는 사후 evidence가 없었다.
+- [x] RED: prompt detail API test가 linked loop snapshot outcome을 `loop_outcomes`로 반환하지 않아 실패해야 한다.
+- [x] RED: PromptDetailView SSR test가 `Outcome evidence`, outcome summary, status, tests count, PR/CI refs 부재로 실패해야 한다.
+- [x] GREEN: prompt detail API가 해당 prompt id를 포함한 loop snapshot outcome을 raw-free `loop_outcomes`로 반환하고, web detail이 outcome evidence panel을 렌더링한다.
+- [x] EFFECT: PromptLane이 개선안의 예상 효과만 보여주는 상태에서 벗어나, 같은 prompt가 실제 loop 결과와 어떤 evidence로 연결됐는지 확인할 수 있게 한다.
+- [ ] VERIFY: focused tests, `corepack pnpm e2e:browser`, full local gate, PR CI, latest main CI, and branch prune all pass.
+- [ ] INTEGRATE: PR이 CI 통과 후 merge되고 branch prune까지 확인된다.
+
+### 판단 기준
+
+- outcome evidence는 prompt body, raw local path, token-like secret을 노출하지 않는다.
+- 효과 판단은 expected-impact prediction과 actual loop outcome evidence를 함께 보게 해야 한다.
+- scheduled `ui-patrol`과 approval-gated native dialog dogfood는 별도 blocker로 유지한다.
+
 ## 2026-07-06 PromptLane Expected Impact 9.5 Ledger Refresh
 
 - [x] CHECK: PR #447-#450으로 expected-impact 기능과 web 증거가 landing 되었지만 9.5 quality plan과 backlog Evidence Ledger가 PR #434/latest main CI `28745224451` 상태에 머물렀다.

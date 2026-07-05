@@ -72,6 +72,15 @@ export type PromptDetail = PromptSummary & {
   markdown: string;
   analysis?: PromptAnalysisPreview;
   improvement_drafts: PromptImprovementDraft[];
+  loop_outcomes?: PromptLoopOutcomeEvidence[];
+};
+
+export type PromptLoopOutcomeEvidence = {
+  snapshot_id: string;
+  status: LoopSnapshot["outcome"]["status"];
+  summary: string;
+  evidence_refs: string[];
+  tests_run?: number;
 };
 
 export type PromptUsefulness = {

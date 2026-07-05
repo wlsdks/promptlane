@@ -190,6 +190,86 @@ describe("prompt read/delete API", () => {
     });
   });
 
+  it("includes raw-free loop outcome evidence on prompt detail", async () => {
+    const { server, storage, ids } = await createPromptApiFixture();
+    storage.createLoopSnapshot({
+      id: "loop_effectiveness",
+      created_at: "2026-05-01T10:05:00.000Z",
+      tool: "codex",
+      source: "mcp",
+      session_id: "session-loop",
+      cwd_label: "project",
+      project_id: "proj_test",
+      branch: "codex/effectiveness",
+      worktree_label: "effectiveness",
+      prompt_ids: [ids.beta],
+      event_counts: {
+        prompts: 1,
+        tests_run: 3,
+      },
+      quality: {
+        average_prompt_score: 74,
+        top_gaps: ["verification_criteria"],
+        unresolved_questions: [],
+      },
+      outcome: {
+        status: "passed",
+        summary:
+          "Expected impact matched /Users/example/project/secret.txt with sk-proj-1234567890abcdef.",
+        evidence_refs: [
+          "PR #451",
+          "main CI 28748001738",
+          "/Users/example/project/secret.txt",
+          "sk-proj-1234567890abcdef",
+        ],
+      },
+      next_brief: {
+        generated: true,
+        prompt_id: ids.beta,
+        summary: "Continue from the verified evidence.",
+      },
+      privacy: {
+        stores_prompt_bodies: false,
+        stores_raw_paths: false,
+        local_only: true,
+      },
+    });
+
+    const detail = await server.inject({
+      method: "GET",
+      url: `/api/v1/prompts/${ids.beta}`,
+      headers: {
+        host: "127.0.0.1:17373",
+        authorization: "Bearer app-token",
+      },
+    });
+
+    expect(detail.statusCode).toBe(200);
+    const body = detail.json<{
+      data: {
+        loop_outcomes?: Array<{
+          snapshot_id: string;
+          status: string;
+          summary: string;
+          evidence_refs: string[];
+          tests_run?: number;
+        }>;
+      };
+    }>().data;
+    expect(body.loop_outcomes).toEqual([
+      {
+        snapshot_id: "loop_effectiveness",
+        status: "passed",
+        summary:
+          "Expected impact matched [REDACTED:path] with [REDACTED:api_key].",
+        evidence_refs: ["PR #451", "main CI 28748001738"],
+        tests_run: 3,
+      },
+    ]);
+    expect(detail.body).not.toContain("/Users/example/project");
+    expect(detail.body).not.toContain("sk-proj-1234567890abcdef");
+  });
+
   it("omits judge_score when no judgment has been recorded", async () => {
     const { server, ids } = await createPromptApiFixture();
 
