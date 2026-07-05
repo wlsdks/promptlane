@@ -5,7 +5,7 @@
 - [x] RED: Codex default prompts, README, PLUGINS가 `loopdeck` alias를 추천하거나 preferred/manual command로 홍보하면 packaging test가 실패하도록 고정했다.
 - [x] GREEN: Codex plugin default prompts에서 `loopdeck` 제안을 제거하고 README/PLUGINS는 legacy compatibility 설명만 남겼다.
 - [x] VERIFY: focused packaging guard, full test/lint/build, pack dry-run, diff check를 통과한다.
-- [ ] INTEGRATE: 변경을 커밋, 푸시, PR, CI 확인 후 merge하고 branch를 정리한다.
+- [x] INTEGRATE: PR #387이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 
