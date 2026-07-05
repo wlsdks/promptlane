@@ -6,7 +6,7 @@
 - [x] GREEN: `loop schedule` help description을 PromptLane 중심으로 정리했다.
 - [x] GREEN: active backlog/audit 문서의 stale `Loopdeck status` copy를 PromptLane status로 정리하고 active product surface guard 범위에 포함했다.
 - [x] VERIFY: focused CLI/packaging tests, full test/lint/build, pack dry-run, diff check를 통과한다.
-- [ ] INTEGRATE: 변경을 커밋, 푸시, PR, CI 확인 후 merge하고 branch를 정리한다.
+- [x] INTEGRATE: PR #391이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 
