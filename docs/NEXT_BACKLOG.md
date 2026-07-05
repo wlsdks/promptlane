@@ -135,6 +135,9 @@ Decision:
 - The next executable quality slices are scheduled `ui-patrol` artifact evidence
   after a real cron run exists, explicit operator-approved native ask UI
   dogfood, and fresh user-flow evidence from real PromptLane work.
+- The 9.5 quality plan now includes an Evidence Progress Ledger with PR #417,
+  PR #419, PR #421, workflow_dispatch run `28717406758`, the missing
+  `schedule` event, and Remaining 9.5 blockers.
 
 Rationale:
 

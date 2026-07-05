@@ -858,6 +858,19 @@ describe("plugin packaging files", () => {
     expect(plan).toContain("dogfood:first-coach-loop");
     expect(plan).toContain("dogfood:mcp-native-dialog-approved");
     expect(plan).toContain("scheduled `ui-patrol`");
+    for (const currentEvidence of [
+      "## Evidence Progress Ledger",
+      "PR #417",
+      "PR #419",
+      "PR #421",
+      "dogfood:loop-memory-approval",
+      "docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md",
+      "workflow_dispatch run `28717406758`",
+      "no `schedule` event",
+      "Remaining 9.5 blockers",
+    ]) {
+      expect(plan).toContain(currentEvidence);
+    }
     expect(plan).not.toMatch(/\bTBD\b|TODO:|implement later|fill in details/i);
   });
 

@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane 9.5 Scorecard Refresh
+
+- [x] CHECK: 9.5 plan still carried initial current-level scores and `future loop memory approval dogfood` wording even after PR #417, PR #419, and PR #421 landed.
+- [x] RED: 9.5 plan must include `## Evidence Progress Ledger`, PR #417, PR #419, PR #421, `dogfood:loop-memory-approval`, `docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md`, workflow_dispatch run `28717406758`, no `schedule` event, and Remaining 9.5 blockers, or packaging guard fails.
+- [x] GREEN: 9.5 plan scorecard now reflects latest evidence levels, adds evidence ledger, and keeps scheduled UI patrol/native dialog/user-flow blockers explicit.
+- [x] VERIFY: focused packaging test와 full gate를 통과한다.
+- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+
+### 판단 기준
+
+- 9.5 plan은 낙관적 완료 선언이 아니라 현재 증거와 남은 blocker를 함께 보여야 한다.
+- scheduled `ui-patrol`과 native OS ask UI는 실제 evidence 없이 완료로 올리지 않는다.
+- scorecard는 최신 dogfood/CI/package evidence가 들어오면 stale 상태로 방치하지 않는다.
+
 ## 2026-07-05 PromptLane Scheduled UI Patrol Evidence Audit
 
 - [x] CHECK: GitHub `ui-patrol.yml` workflow history has workflow_dispatch run `28717406758`, but no `schedule` event; artifact API confirms workflow_dispatch run `28717406758` still has non-expired screenshot artifact `8084817676` with 9 png files.
