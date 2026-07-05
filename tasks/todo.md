@@ -6,7 +6,7 @@
 - [x] RED: goal audit, backlog, and todo must say there is no `schedule` event and scheduled `ui-patrol` evidence remains pending, or packaging drift guard fails.
 - [x] GREEN: goal audit/backlog/todo record the current manual artifact evidence while preserving scheduled `ui-patrol` evidence remains pending.
 - [x] VERIFY: focused packaging test와 full gate를 통과한다.
-- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+- [x] INTEGRATE: PR #421이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 
