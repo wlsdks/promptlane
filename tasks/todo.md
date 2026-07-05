@@ -6,7 +6,7 @@
 - [x] RED: storage port가 빈 evidence 또는 unsafe evidence ref로 approved loop memory를 저장하면 `src/storage/sqlite-storage.test.ts`가 실패하도록 고정했다.
 - [x] GREEN: `recordLoopMemory`가 evidence refs를 trim/normalize하고, 빈 evidence refs와 raw path/secret-looking evidence refs를 저장 전에 거부하도록 수정했다.
 - [x] VERIFY: focused storage/CLI/MCP tests와 full gate를 통과한다.
-- [ ] INTEGRATE: PR CI `test (22)`/`test (24)` 통과 후 merge하고 branch prune까지 확인한다.
+- [x] INTEGRATE: PR #405가 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 
