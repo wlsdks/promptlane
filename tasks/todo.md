@@ -5,8 +5,8 @@
 - [x] CHECK: scheduled `ui-patrol` has not fired yet because the 2026-07-06 15:17 KST cron time has not arrived, while `docs/NEXT_BACKLOG.md` and the 9.5 quality plan still carried stale release-stability follow-up wording.
 - [x] RED: packaging guard must fail unless backlog and 9.5 plan include PR #425, PR #427, PR #433, PR #434, latest main CI run `28745224451`, and no stale action-runtime or better-sqlite3 warning follow-up text.
 - [x] GREEN: backlog and 9.5 quality plan now record the closed release-stability evidence while keeping scheduled `ui-patrol` artifact evidence pending.
-- [ ] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI, and branch prune all pass.
-- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+- [x] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI run `28745397311`, and branch prune all pass.
+- [x] INTEGRATE: PR #435가 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
