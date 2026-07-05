@@ -6,8 +6,8 @@
 - [x] RED: focused doctor test must fail until duplicate Codex hook next steps tell the user to rerun `prompt-coach install-hook codex` for same-file normalization.
 - [x] GREEN: doctor duplicate hook recovery copy points to the idempotent install-hook cleanup path while preserving manual user/project duplicate guidance.
 - [x] EFFECT: the focused doctor test proves rerunning `install-hook codex` removes same-file duplicate `UserPromptSubmit` handlers and returns `doctor codex` to ready state.
-- [ ] VERIFY: focused doctor test, full local gate, PR CI, latest main CI, and branch prune all pass.
-- [ ] INTEGRATE: PR is merged after CI and the temporary branch is pruned locally and remotely.
+- [x] VERIFY: focused doctor test, full local gate, PR CI, latest main CI run `28746602316`, and branch prune all pass.
+- [x] INTEGRATE: PR #443가 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
