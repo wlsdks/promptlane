@@ -91,7 +91,10 @@
 - `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md` records current
   `corepack pnpm smoke:release` and `corepack pnpm pack:dry-run` evidence for
   the local-first release path.
-- latest main CI run `28750424030` passed `test (22)` and
+- PR #464 closed the release-stability evidence log after local release smoke,
+  package dry-run, PR CI, latest main CI run `28750611089`, and branch pruning
+  proved the evidence document on the default branch.
+- latest main CI run `28750611089` after PR #464 passed `test (22)` and
   `test (24)` with `pnpm test`, `pnpm lint`, `pnpm build`, and
   `pnpm pack:dry-run`.
 

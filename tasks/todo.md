@@ -13,6 +13,10 @@
 - [x] EFFECT: release stability is judged from current executable smoke and CI
   evidence instead of stale ledger text, while scheduled `ui-patrol` and
   native-dialog blockers remain separate.
+- [x] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI
+  run `28750611089`, and branch prune all pass.
+- [x] INTEGRATE: PR #464 merged the release stability evidence doc and package
+  manifest coverage into main.
 
 ### 판단 기준
 
