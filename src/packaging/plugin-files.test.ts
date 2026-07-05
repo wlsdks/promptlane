@@ -943,10 +943,13 @@ describe("plugin packaging files", () => {
     for (const content of [backlog, plan]) {
       expect(content).toContain("corepack pnpm evidence:quality");
       expect(content).toContain("promptlane_95_quality");
+      expect(content).toContain("scorecard_axes");
       expect(content).toContain("native_dialog_approved_dogfood");
       expect(content).toContain("scheduled_ui_patrol");
     }
     expect(evidenceScript).toContain("promptlane_95_quality");
+    expect(evidenceScript).toContain("scorecard_axes");
+    expect(evidenceScript).toContain("below_target");
     expect(evidenceScript).toContain("pending_operator_approval");
     expect(evidenceScript).toContain("Do not claim 9.5 completion");
   });

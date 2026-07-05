@@ -13,6 +13,8 @@
   of claiming 9.5 completion.
 - [x] EFFECT: future agents and release checks can see why the long-running
   goal is still pending without treating passing tests as full product proof.
+- [x] GREEN: `scorecard_axes` now lists all seven 9.5 scorecard axes from the
+  plan and marks axes below 9.5 as `below_target`.
 
 ### 판단 기준
 
@@ -21,6 +23,8 @@
   elicitation-smoke `answered` evidence alone.
 - The command must keep 9.5 status `pending` while either scheduled UI patrol
   or operator-approved native dialog evidence is missing.
+- The command must keep 9.5 status `pending` while any scorecard axis is below
+  its 9.5 target.
 
 ## 2026-07-06 PromptLane Scheduled UI Patrol Evidence Checker
 

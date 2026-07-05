@@ -50,12 +50,35 @@ describe("quality 9.5 evidence script", () => {
     const parsed = JSON.parse(result.stdout) as {
       check: string;
       status: string;
+      scorecard_axes: Array<{
+        id: string;
+        axis: string;
+        current_level: string;
+        target_level: string;
+        status: string;
+      }>;
       blockers: Array<{ id: string; status: string }>;
       next_action: string;
     };
 
     expect(parsed.check).toBe("promptlane_95_quality");
     expect(parsed.status).toBe("pending");
+    expect(parsed.scorecard_axes).toHaveLength(7);
+    expect(parsed.scorecard_axes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "product_planning_and_positioning",
+          current_level: "9.2/10",
+          target_level: "9.5/10",
+          status: "below_target",
+        }),
+        expect.objectContaining({
+          id: "web_ui_and_operational_evidence",
+          current_level: "8.6/10",
+          status: "below_target",
+        }),
+      ]),
+    );
     expect(parsed.blockers).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
