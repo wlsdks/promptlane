@@ -131,7 +131,7 @@ Current goal audit:
 - PR #450 closed the web expected-impact evidence log after PR #449 passed PR
   CI, local `corepack pnpm ui-patrol`, latest main CI run `28747568864`, and
   branch pruning.
-- latest main CI run `28747682131` passed `test (22)` and `test (24)` with
+- latest main CI run `28749352031` passed `test (22)` and `test (24)` with
   `pnpm test`, `pnpm lint`, `pnpm build`, and `pnpm pack:dry-run`.
 
 Decision:
@@ -158,8 +158,9 @@ Decision:
   dogfood, and fresh user-flow evidence from real PromptLane work.
 - The 9.5 quality plan now includes an Evidence Progress Ledger with PR #417,
   PR #419, PR #421, PR #425, PR #427, PR #429, PR #433, PR #447, PR #449,
-  PR #450, workflow_dispatch run `28717406758`, latest main CI run
-  `28747682131`, the missing `schedule` event, and Remaining 9.5 blockers.
+  PR #450, PR #457, PR #458, workflow_dispatch run `28717406758`,
+  latest main CI run `28749352031`, the missing `schedule` event, and
+  Remaining 9.5 blockers.
 - The earlier GitHub Actions Node 20 runtime annotation and Node 24
   `better-sqlite3` install warning are closed. Keep the release-stability bar
   focused on fresh CI/package warnings that affect local-first install, build,
@@ -171,13 +172,12 @@ Decision:
 - Expected-impact evidence is now visible in CLI/MCP/Web surfaces and guarded by
   focused tests plus browser E2E, so future prompt-improvement work should
   preserve a measurable before/after signal instead of only returning a rewrite.
-- Prompt-linked outcome evidence is the next active effectiveness slice: prompt detail should connect `expected_impact` predictions to actual raw-free loop outcomes and browser assertions, without treating this as scheduled `ui-patrol` or native-dialog completion evidence.
-- CLI prompt outcome evidence is the active agent-native follow-up: `prompt-coach show --json` should expose the same raw-free `loop_outcomes` contract from storage `getPrompt()` so Codex and Claude Code sessions can evaluate real outcome evidence without opening the web UI.
-- Prompt effectiveness verdict is the active evidence-quality follow-up:
+- Prompt-linked outcome evidence, CLI prompt outcome evidence, and Prompt effectiveness verdict
+  are landed evidence-quality slices: prompt detail,
   storage `getPrompt()`, `prompt-coach show --json`, and the web prompt detail
-  should summarize raw-free linked loop outcomes as an `effectiveness` verdict
-  so agents and users can judge actual prompt impact without manually
-  reconciling every outcome row.
+  now connect `expected_impact` predictions to actual raw-free loop outcomes
+  and an `effectiveness` verdict without treating that as scheduled
+  `ui-patrol` or native-dialog completion evidence.
 
 Rationale:
 

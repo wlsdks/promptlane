@@ -1046,7 +1046,7 @@ describe("plugin packaging files", () => {
       "PR #427",
       "PR #433",
       "PR #434",
-      "latest main CI run `28747682131`",
+      "latest main CI run `28749352031`",
     ]) {
       expect(backlog).toContain(currentEvidence);
       expect(plan).toContain(currentEvidence);
@@ -1103,6 +1103,8 @@ describe("plugin packaging files", () => {
       "PR #447",
       "PR #449",
       "PR #450",
+      "PR #457",
+      "PR #458",
       "dogfood:loop-memory-approval",
       "dogfood:web-user-flow",
       "expected_impact",
@@ -1116,7 +1118,7 @@ describe("plugin packaging files", () => {
       "docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md",
       "docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md",
       "workflow_dispatch run `28717406758`",
-      "latest main CI run `28747682131`",
+      "latest main CI run `28749352031`",
       "no `schedule` event",
       "Remaining 9.5 blockers",
     ]) {
@@ -1129,6 +1131,7 @@ describe("plugin packaging files", () => {
       "`prompt-coach show --json`",
       "`expected_impact` predictions to actual raw-free loop outcomes",
       "`effectiveness` verdict",
+      "latest main CI run `28749352031`",
     ]) {
       expect(backlog).toContain(currentBacklogEvidence);
     }

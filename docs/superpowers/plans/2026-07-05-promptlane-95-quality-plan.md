@@ -63,22 +63,25 @@
 - PR #450 closed the web expected-impact evidence log after PR #449 passed PR
   CI, local `corepack pnpm ui-patrol`, latest main CI run `28747568864`, and
   branch pruning.
-- latest main CI run `28747682131` after PR #450 passed `test (22)` and
-  `test (24)` with `pnpm test`, `pnpm lint`, `pnpm build`, and
-  `pnpm pack:dry-run`.
-- Current prompt outcome evidence slice links prompt detail back to actual loop
+- PR #453 linked prompt detail back to actual loop
   outcomes, returning raw-free `loop_outcomes` through the prompt API and
   rendering `Outcome evidence` in the web detail flow so expected-impact
   predictions can be checked against finished loop evidence.
-- Current CLI prompt outcome evidence slice moves the same raw-free
+- PR #455 added CLI prompt outcome evidence by moving the same raw-free
   `loop_outcomes` contract into storage `getPrompt()` so `prompt-coach show
   --json`, web detail, and future agent-native consumers share one effectiveness
   evidence source instead of web-only derivation.
-- Current prompt effectiveness verdict slice summarizes those raw-free linked
+- PR #457 summarized those raw-free linked
   loop outcomes into an `effectiveness` verdict shared by storage
   `getPrompt()`, `prompt-coach show --json`, and the web prompt detail, so
   users and agents can judge actual prompt impact without manually reconciling
   every outcome row.
+- PR #458 closed the prompt effectiveness verdict log after PR #457 passed PR
+  CI, local `corepack pnpm ui-patrol`, latest main CI run `28749214218`, and
+  branch pruning.
+- latest main CI run `28749352031` after PR #458 passed `test (22)` and
+  `test (24)` with `pnpm test`, `pnpm lint`, `pnpm build`, and
+  `pnpm pack:dry-run`.
 
 ## Remaining 9.5 blockers
 
@@ -87,12 +90,11 @@
 - Native OS ask UI dogfood remains operator-approved only; do not run
   `dogfood:mcp-native-dialog-approved` without explicit approval because it can
   open a native dialog.
-- Fresh user-flow, expected-impact, prompt-linked outcome evidence, and CLI
-  prompt outcome evidence are now repeatable through `dogfood:web-user-flow`,
-  browser E2E, focused CLI/storage tests, and `corepack pnpm ui-patrol`. The
-  prompt effectiveness verdict remains the active evidence-quality slice until
-  PR CI, main CI, and branch pruning prove it on the default branch. Web
-  operations still need scheduled artifact evidence before claiming 9.5.
+- Fresh user-flow, expected-impact, prompt-linked outcome evidence, CLI prompt
+  outcome evidence, and prompt effectiveness verdict evidence are now
+  repeatable through `dogfood:web-user-flow`, browser E2E, focused
+  CLI/storage/web tests, and `corepack pnpm ui-patrol`. Web operations still
+  need scheduled artifact evidence before claiming 9.5.
 
 ## Required Slices
 
