@@ -34,6 +34,7 @@ launch.
    - `tools/list`
    - `tools/call` -> `score_prompt`
    - `tools/call` -> `improve_prompt`
+   - `tools/call` -> `apply_clarifications`
    - `tools/call` -> `record_clarifications`
 
 ## Evidence
@@ -50,7 +51,8 @@ Observed MCP server identity:
 Observed tool catalogue:
 
 - 20 tools returned from `tools/list`.
-- `score_prompt`, `improve_prompt`, and `record_clarifications` were present.
+- `score_prompt`, `improve_prompt`, `apply_clarifications`, and
+  `record_clarifications` were present.
 
 Observed `score_prompt` result:
 
@@ -118,17 +120,25 @@ Observed `record_clarifications` result:
 
 ## Friction Found
 
-1. **The documented audit path is missing `apply_clarifications`.**
+1. **The original documented audit path missed `apply_clarifications`.**
    `record_clarifications` is a storage tool; it intentionally returns
    metadata only. For an agent to show the final answer-refined draft to the
    user inside Claude Code or Codex, the natural path is:
    `score_prompt` -> `improve_prompt` -> ask user -> `apply_clarifications` ->
    `record_clarifications`.
 
-2. **There is no reusable MCP coach-loop smoke command.**
-   This audit used a one-off Node script to seed a local archive and exercise
-   JSON-RPC over stdio. That is good enough as evidence, but not repeatable
-   enough for future regression checks.
+   Resolution: docs and the repeatable `smoke:mcp-coach-loop` harness now
+   treat `apply_clarifications` as the in-agent draft presentation step before
+   optional `record_clarifications`.
+
+2. **The first audit needed a reusable MCP coach-loop smoke command.**
+   The initial audit used a one-off Node script to seed a local archive and
+   exercise JSON-RPC over stdio.
+
+   Resolution: `smoke:mcp-coach-loop` now builds the package, starts the real
+   stdio MCP server against a temporary archive, and verifies `score_prompt` ->
+   `improve_prompt` -> `apply_clarifications` -> optional
+   `record_clarifications` without returning stored prompt bodies.
 
 3. **The post-record next action forces a context switch for review.**
    `record_clarifications` says to open the draft in the local archive or use
@@ -148,16 +158,12 @@ Observed `record_clarifications` result:
   `record_clarifications` return stored prompt or draft bodies just to reduce
   friction.
 - Treat `apply_clarifications` as the in-agent draft presentation step.
-- Add a future small smoke harness only if we need this flow as a repeatable
-  regression gate; avoid broad MCP registry work for this audit alone.
+- Keep the repeatable smoke harness small and stdio-only; avoid broad MCP
+  registry work for this audit alone.
 
 ## Recommended Next Slices
 
-1. Update MCP/server instructions and docs so the canonical clarification flow
-   is:
-   `improve_prompt` -> ask user -> `apply_clarifications` -> optionally
-   `record_clarifications`.
-2. Done: `scripts/mcp-coach-loop-smoke.mjs` seeds a temporary archive and
-   checks the JSON-RPC stdio path without returning stored prompt bodies.
-3. Run the same flow inside one real Claude Code or Codex session to validate
-   the native ask UI handoff.
+No immediate MCP coach-loop slice remains. The remaining validation is the
+approval-gated native ask UI dogfood tracked in
+`docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md`; do not open that OS/native
+dialog path without explicit operator approval.

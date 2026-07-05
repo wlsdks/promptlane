@@ -3557,4 +3557,11 @@
 - [x] RED: Add a focused packaging/docs drift test requiring the reuse audit to stop carrying the stale real-browser rerun recommendation after PR #366-#368 landed.
 - [x] GREEN: Refresh `docs/REUSE_LOOP_AUDIT_2026-07-05.md` so no immediate reuse-flow slice remains until fresh user-flow evidence appears.
 - [x] VERIFY: Focused test, full test/lint/build, pack dry-run, and diff check passed.
+- [x] INTEGRATE: PR #370 was merged to `main`; branch was pruned.
+
+## 2026-07-05 MCP Coach Loop Audit Next Slice Closure
+
+- [x] RED: Add a focused packaging/docs drift test requiring the MCP coach loop audit to stop carrying completed docs and smoke-harness follow-ups.
+- [x] GREEN: Refresh `docs/MCP_COACH_LOOP_AUDIT_2026-07-05.md` so only the approval-gated native ask UI dogfood remains.
+- [x] VERIFY: Focused test, full test/lint/build, pack dry-run, and diff check passed.
 - [ ] INTEGRATE: Push one coherent PR, merge it after CI, and prune the branch.
