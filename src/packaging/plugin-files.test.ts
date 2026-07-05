@@ -1079,6 +1079,8 @@ describe("plugin packaging files", () => {
       "dogfood:web-user-flow",
       "expected_impact",
       "prompt-linked outcome evidence",
+      "CLI prompt outcome evidence",
+      "prompt-coach show\n  --json",
       "`loop_outcomes`",
       "`Outcome evidence`",
       "docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md",
@@ -1092,6 +1094,8 @@ describe("plugin packaging files", () => {
     }
     for (const currentBacklogEvidence of [
       "prompt-linked outcome evidence",
+      "CLI prompt outcome evidence",
+      "`prompt-coach show --json`",
       "`expected_impact` predictions to actual raw-free loop outcomes",
     ]) {
       expect(backlog).toContain(currentBacklogEvidence);

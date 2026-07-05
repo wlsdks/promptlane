@@ -127,6 +127,7 @@ import {
 import { applyMigrations } from "./sqlite-migrations.js";
 import { createProjectKey } from "./project-id.js";
 import { projectLabel } from "./project-label.js";
+import { promptLoopOutcomesForPrompt } from "./prompt-loop-outcomes.js";
 import * as loopSnapshots from "./loop-snapshots.js";
 import * as compactBoundaries from "./compact-boundaries.js";
 import * as loopMemories from "./loop-memories.js";
@@ -943,7 +944,20 @@ function getPrompt(
     ).stored_text,
     analysis: readPromptAnalysis(db, id),
     improvement_drafts: readPromptImprovementDrafts(db, id),
+    ...promptLoopOutcomeDetail(db, id),
   };
+}
+
+function promptLoopOutcomeDetail(
+  db: Database.Database,
+  promptId: string,
+): Pick<PromptDetail, "loop_outcomes"> {
+  const loopOutcomes = promptLoopOutcomesForPrompt(
+    loopSnapshots.listLoopSnapshots(db, { limit: 100 }).items,
+    promptId,
+  );
+
+  return loopOutcomes.length > 0 ? { loop_outcomes: loopOutcomes } : {};
 }
 
 function deletePrompt(db: Database.Database, id: string): DeletePromptResult {

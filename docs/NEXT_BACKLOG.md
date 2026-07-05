@@ -172,6 +172,7 @@ Decision:
   focused tests plus browser E2E, so future prompt-improvement work should
   preserve a measurable before/after signal instead of only returning a rewrite.
 - Prompt-linked outcome evidence is the next active effectiveness slice: prompt detail should connect `expected_impact` predictions to actual raw-free loop outcomes and browser assertions, without treating this as scheduled `ui-patrol` or native-dialog completion evidence.
+- CLI prompt outcome evidence is the active agent-native follow-up: `prompt-coach show --json` should expose the same raw-free `loop_outcomes` contract from storage `getPrompt()` so Codex and Claude Code sessions can evaluate real outcome evidence without opening the web UI.
 
 Rationale:
 
@@ -258,6 +259,9 @@ Completed:
 - prompt-linked outcome evidence: prompt detail API and web detail can show
   raw-free loop outcome status, summary, evidence refs, and test-count metadata
   for prompts included in explicit loop snapshots
+- CLI prompt outcome evidence: `prompt-coach show --json` reads the same
+  storage-level `loop_outcomes` contract so agent-native workflows can inspect
+  actual outcome evidence alongside the stored prompt metadata
 
 Next work should come from fresh user-flow evidence, a real MCP tool/schema
 change, scheduled UI patrol evidence, or explicit operator-approved dogfood.

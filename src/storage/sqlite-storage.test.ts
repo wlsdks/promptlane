@@ -195,6 +195,78 @@ describe("SQLite prompt storage", () => {
     storage.close();
   });
 
+  it("includes raw-free loop outcome evidence on prompt details", async () => {
+    const dataDir = createTempDir();
+    initializePromptCoach({ dataDir });
+    const storage = createSqlitePromptStorage({
+      dataDir,
+      hmacSecret: "test-secret",
+      now: () => new Date("2026-07-04T01:00:00.000Z"),
+    });
+
+    const stored = await storeClaudePrompt(storage, {
+      prompt: "Use PromptLane to tighten the request and run pnpm test.",
+      receivedAt: "2026-07-04T01:00:00.000Z",
+    });
+    storage.createLoopSnapshot({
+      id: "loop_prompt_detail_effectiveness",
+      created_at: "2026-07-04T01:05:00.000Z",
+      tool: "codex",
+      source: "mcp",
+      cwd_label: "private-project",
+      project_id: "proj_prompt_detail",
+      prompt_ids: [stored.id],
+      event_counts: {
+        prompts: 1,
+        tests_run: 5,
+      },
+      quality: {
+        average_prompt_score: 82,
+        top_gaps: [],
+        unresolved_questions: [],
+      },
+      outcome: {
+        status: "passed",
+        summary:
+          "Finished /Users/example/project/secret.txt with sk-proj-1234567890abcdef.",
+        evidence_refs: [
+          "PR #453",
+          "main CI 28748310489",
+          "/Users/example/project/secret.txt",
+          "sk-proj-1234567890abcdef",
+        ],
+      },
+      next_brief: {
+        generated: true,
+        prompt_id: stored.id,
+        summary: "Continue from the verified loop outcome.",
+      },
+      privacy: {
+        stores_prompt_bodies: false,
+        stores_raw_paths: false,
+        local_only: true,
+      },
+    });
+
+    expect(storage.getPrompt(stored.id)?.loop_outcomes).toEqual([
+      {
+        snapshot_id: "loop_prompt_detail_effectiveness",
+        status: "passed",
+        summary:
+          "Finished [REDACTED:path] with [REDACTED:api_key].",
+        evidence_refs: ["PR #453", "main CI 28748310489"],
+        tests_run: 5,
+      },
+    ]);
+    const loopOutcomesJson = JSON.stringify(
+      storage.getPrompt(stored.id)?.loop_outcomes,
+    );
+    expect(loopOutcomesJson).not.toContain("/Users/example/project");
+    expect(loopOutcomesJson).not.toContain("sk-proj-1234567890abcdef");
+
+    storage.close();
+  });
+
   it("records approved loop memories without prompt bodies or raw paths", () => {
     const dataDir = createTempDir();
     initializePromptCoach({ dataDir });

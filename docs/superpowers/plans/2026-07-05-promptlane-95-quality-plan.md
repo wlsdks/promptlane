@@ -70,6 +70,10 @@
   outcomes, returning raw-free `loop_outcomes` through the prompt API and
   rendering `Outcome evidence` in the web detail flow so expected-impact
   predictions can be checked against finished loop evidence.
+- Current CLI prompt outcome evidence slice moves the same raw-free
+  `loop_outcomes` contract into storage `getPrompt()` so `prompt-coach show
+  --json`, web detail, and future agent-native consumers share one effectiveness
+  evidence source instead of web-only derivation.
 
 ## Remaining 9.5 blockers
 
@@ -78,10 +82,10 @@
 - Native OS ask UI dogfood remains operator-approved only; do not run
   `dogfood:mcp-native-dialog-approved` without explicit approval because it can
   open a native dialog.
-- Fresh user-flow, expected-impact, and prompt-linked outcome evidence are now
-  repeatable through `dogfood:web-user-flow`, browser E2E, and `corepack pnpm
-  ui-patrol`, but web operations still need scheduled artifact evidence before
-  claiming 9.5.
+- Fresh user-flow, expected-impact, prompt-linked outcome evidence, and CLI
+  prompt outcome evidence are now repeatable through `dogfood:web-user-flow`,
+  browser E2E, focused CLI/storage tests, and `corepack pnpm ui-patrol`, but web
+  operations still need scheduled artifact evidence before claiming 9.5.
 
 ## Required Slices
 

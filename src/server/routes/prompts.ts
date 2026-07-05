@@ -9,15 +9,12 @@ import type {
   AskEventStoragePort,
   JudgeScoreEntry,
   JudgeScoreStoragePort,
-  LoopSnapshotStoragePort,
   PromptDetail,
-  PromptLoopOutcomeEvidence,
   PromptQualityDashboard,
   PromptReadStoragePort,
   PromptSummary,
   PromptStoragePort,
 } from "../../storage/ports.js";
-import { detectSensitiveValues } from "../../redaction/detectors.js";
 import { requireAppAccess, type ServerAuthConfig } from "../auth.js";
 import { problem } from "../errors.js";
 import { requireStorageCapabilities } from "../storage-capabilities.js";
@@ -27,8 +24,7 @@ export type PromptRouteOptions = {
   storage: PromptStoragePort &
     Partial<PromptReadStoragePort> &
     Partial<JudgeScoreStoragePort> &
-    Partial<AskEventStoragePort> &
-    Partial<LoopSnapshotStoragePort>;
+    Partial<AskEventStoragePort>;
 };
 
 type PromptReadRouteStorage = Pick<
@@ -201,11 +197,7 @@ export function registerPromptRoutes(
 
     const judgeScore = options.storage.getLatestJudgeScore?.(params.id);
     return {
-      data: toBrowserPromptDetail(
-        prompt,
-        judgeScore,
-        findPromptLoopOutcomes(options.storage, params.id),
-      ),
+      data: toBrowserPromptDetail(prompt, judgeScore),
     };
   });
 
@@ -354,7 +346,6 @@ function toBrowserPromptSummary(prompt: PromptSummary): PromptSummary {
 function toBrowserPromptDetail(
   prompt: PromptDetail,
   judgeScore: JudgeScoreEntry | undefined,
-  loopOutcomes: PromptLoopOutcomeEvidence[] | undefined,
 ): PromptDetail & { judge_score?: JudgeScoreEntry } {
   return {
     ...prompt,
@@ -362,58 +353,7 @@ function toBrowserPromptDetail(
     snippet: maskBrowserPathText(prompt.snippet),
     markdown: maskBrowserPathText(prompt.markdown),
     ...(judgeScore ? { judge_score: judgeScore } : {}),
-    ...(loopOutcomes && loopOutcomes.length > 0
-      ? { loop_outcomes: loopOutcomes }
-      : {}),
   };
-}
-
-function findPromptLoopOutcomes(
-  storage: PromptRouteOptions["storage"],
-  promptId: string,
-): PromptLoopOutcomeEvidence[] | undefined {
-  if (!storage.listLoopSnapshots) {
-    return undefined;
-  }
-
-  const outcomes = storage
-    .listLoopSnapshots({ limit: 100 })
-    .items.filter((snapshot) => snapshot.prompt_ids.includes(promptId))
-    .filter((snapshot) => snapshot.outcome.status !== "unknown")
-    .map((snapshot) => ({
-      snapshot_id: snapshot.id,
-      status: snapshot.outcome.status,
-      summary: redactBrowserEvidenceText(snapshot.outcome.summary),
-      evidence_refs: snapshot.outcome.evidence_refs.filter(isSafeEvidenceRef),
-      ...(snapshot.event_counts.tests_run !== undefined
-        ? { tests_run: snapshot.event_counts.tests_run }
-        : {}),
-    }))
-    .filter(
-      (outcome) =>
-        outcome.summary.length > 0 || outcome.evidence_refs.length > 0,
-    )
-    .slice(0, 5);
-
-  return outcomes.length > 0 ? outcomes : undefined;
-}
-
-function isSafeEvidenceRef(ref: string): boolean {
-  const trimmed = ref.trim();
-  return trimmed.length > 0 && detectSensitiveValues(trimmed).length === 0;
-}
-
-function redactBrowserEvidenceText(value: string): string {
-  const findings = detectSensitiveValues(value);
-  if (findings.length === 0) {
-    return maskBrowserPathText(value);
-  }
-
-  let redacted = value;
-  for (const finding of [...findings].reverse()) {
-    redacted = `${redacted.slice(0, finding.range_start)}${finding.replacement}${redacted.slice(finding.range_end)}`;
-  }
-  return maskBrowserPathText(redacted);
 }
 
 function toBrowserQualityDashboard(

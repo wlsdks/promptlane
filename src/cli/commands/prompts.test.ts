@@ -107,6 +107,72 @@ describe("prompt CLI commands", () => {
     expect(explanation).toContain("Verification criteria");
   });
 
+  it("includes prompt-linked loop outcome evidence in show --json", async () => {
+    const dataDir = createTempDir();
+    const ids = await createCliFixture(dataDir);
+    const init = initializePromptCoach({ dataDir });
+    const storage = createSqlitePromptStorage({
+      dataDir,
+      hmacSecret: init.hookAuth.web_session_secret,
+    });
+    try {
+      storage.createLoopSnapshot({
+        id: "loop_cli_effectiveness",
+        created_at: "2026-07-04T01:05:00.000Z",
+        tool: "codex",
+        source: "mcp",
+        cwd_label: "project",
+        project_id: "proj_cli",
+        prompt_ids: [ids.beta],
+        event_counts: {
+          prompts: 1,
+          tests_run: 2,
+        },
+        quality: {
+          average_prompt_score: 70,
+          top_gaps: [],
+          unresolved_questions: [],
+        },
+        outcome: {
+          status: "passed",
+          summary: "Validated /Users/example/project/secret.txt.",
+          evidence_refs: [
+            "PR #453",
+            "main CI 28748310489",
+            "/Users/example/project/secret.txt",
+          ],
+        },
+        next_brief: {
+          generated: true,
+          prompt_id: ids.beta,
+          summary: "Continue from CLI outcome evidence.",
+        },
+        privacy: {
+          stores_prompt_bodies: false,
+          stores_raw_paths: false,
+          local_only: true,
+        },
+      });
+    } finally {
+      storage.close();
+    }
+
+    const shown = JSON.parse(
+      showPromptForCli(ids.beta, { dataDir, json: true }),
+    );
+
+    expect(shown.loop_outcomes).toEqual([
+      {
+        snapshot_id: "loop_cli_effectiveness",
+        status: "passed",
+        summary: "Validated [REDACTED:path]",
+        evidence_refs: ["PR #453", "main CI 28748310489"],
+        tests_run: 2,
+      },
+    ]);
+    expect(JSON.stringify(shown.loop_outcomes)).not.toContain("/Users/example");
+  });
+
   it("shows drafts:N suffix on list rows that have saved improvement drafts", async () => {
     const dataDir = createTempDir();
     const ids = await createCliFixture(dataDir);
