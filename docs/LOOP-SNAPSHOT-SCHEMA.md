@@ -172,7 +172,7 @@ CLI output must:
 
 ### MCP
 
-Loopdeck MCP tools may expose snapshot-derived status and briefs.
+PromptLane MCP loop tools may expose snapshot-derived status and briefs.
 
 MCP output must:
 

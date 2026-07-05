@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Loop Snapshot MCP Branding
+
+- [x] CHECK: `docs/LOOP-SNAPSHOT-SCHEMA.md` is an active loop snapshot/privacy contract, but its MCP section still described the surface as `Loopdeck MCP tools`.
+- [x] RED: packaging guard must fail unless the active schema says `PromptLane MCP loop tools may expose snapshot-derived status and briefs` and no longer says `Loopdeck MCP tools may expose`.
+- [x] GREEN: active loop snapshot MCP surface wording now uses PromptLane while preserving `prompt-coach` runtime IDs and legacy `loopdeck` compatibility boundaries.
+- [ ] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI, and branch prune all pass.
+- [ ] INTEGRATE: PR is merged after CI and the temporary branch is pruned locally and remotely.
+
+### 판단 기준
+
+- active product/runtime contract docs use PromptLane for product-facing surfaces.
+- `Loopdeck` remains allowed in rejected-name history, legacy compatibility docs, and compatibility alias surfaces only.
+- this slice does not rename package, CLI, slash namespace, MCP server name, or existing compatibility ids.
+
 ## 2026-07-06 PromptLane Reuse Audit Branding Drift
 
 - [x] CHECK: scheduled `ui-patrol` has not fired yet, and `docs/REUSE_LOOP_AUDIT_2026-07-05.md` still described the tested server as a local Loopdeck web server.

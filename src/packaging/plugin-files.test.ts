@@ -838,6 +838,18 @@ describe("plugin packaging files", () => {
     expect(backlog).toContain("PR #420");
   });
 
+  it("keeps the active loop snapshot MCP contract branded as PromptLane", () => {
+    const loopSnapshotSchema = readFileSync(
+      join(process.cwd(), "docs/LOOP-SNAPSHOT-SCHEMA.md"),
+      "utf8",
+    );
+
+    expect(loopSnapshotSchema).toContain(
+      "PromptLane MCP loop tools may expose snapshot-derived status and briefs.",
+    );
+    expect(loopSnapshotSchema).not.toContain("Loopdeck MCP tools may expose");
+  });
+
   it("keeps CI setup actions on Node 24 compatible versions", () => {
     const workflow = readFileSync(
       join(process.cwd(), ".github/workflows/test.yml"),
