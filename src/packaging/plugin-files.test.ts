@@ -1900,6 +1900,10 @@ describe("plugin packaging files", () => {
       "pnpm build && node scripts/mcp-coach-loop-smoke.mjs",
     );
     expect(smoke).toContain("score_prompt");
+    expect(smoke).toContain("coach_prompt");
+    expect(smoke).toContain("Effectiveness evidence");
+    expect(smoke).toContain("unmeasured prompt");
+    expect(smoke).toContain("smoke:mcp-coach-loop");
     expect(smoke).toContain("improve_prompt");
     expect(smoke).toContain("apply_clarifications");
     expect(smoke).toContain("record_clarifications");

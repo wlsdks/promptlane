@@ -59,6 +59,19 @@ try {
       },
     }),
   );
+  const coach = structured(
+    await request("tools/call", {
+      name: "coach_prompt",
+      arguments: {
+        include_latest_score: true,
+        include_archive: true,
+        include_improvement: true,
+        include_project_rules: false,
+        max_prompts: 10,
+        low_score_limit: 3,
+      },
+    }),
+  );
   const improve = structured(
     await request("tools/call", {
       name: "improve_prompt",
@@ -90,7 +103,7 @@ try {
     }),
   );
 
-  assertSmokeResult({ initialize, score, improve, applied, recorded });
+  assertSmokeResult({ initialize, score, coach, improve, applied, recorded });
   console.log("mcp coach loop smoke passed");
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
@@ -140,6 +153,22 @@ function seedStoredPrompt(dataDir) {
     if (!promptId) {
       throw new Error("Smoke failed to seed a stored prompt.");
     }
+    const unmeasuredEvent = normalizeClaudeCodePayload(
+      {
+        session_id: "mcp-coach-loop-smoke-unmeasured-session",
+        transcript_path: join(dataDir, "prompt-coach-smoke-transcript-2.jsonl"),
+        cwd: join(dataDir, "prompt-coach-smoke-project"),
+        permission_mode: "default",
+        hook_event_name: "UserPromptSubmit",
+        prompt:
+          "Review the generated HTML in a browser, keep scope to render verification, run the narrow browser smoke, and report visible issues.",
+      },
+      new Date("2026-07-05T00:01:00.000Z"),
+    );
+    storage.storePrompt({
+      event: unmeasuredEvent,
+      redaction: redactPrompt(unmeasuredEvent.prompt, "mask"),
+    });
     storage.createLoopSnapshot({
       id: "loop_mcp_coach_score_effectiveness",
       created_at: "2026-07-05T00:05:00.000Z",
@@ -243,7 +272,7 @@ function buildAnswers(questions) {
   }));
 }
 
-function assertSmokeResult({ initialize, score, improve, applied, recorded }) {
+function assertSmokeResult({ initialize, score, improve, applied, recorded, coach }) {
   assertEqual(
     initialize?.result?.serverInfo?.name,
     "prompt-coach",
@@ -270,6 +299,24 @@ function assertSmokeResult({ initialize, score, improve, applied, recorded }) {
     3,
     "score_prompt should return effectiveness calibration counts.",
   );
+  assertEqual(coach?.is_error === true, false, "coach_prompt should pass.");
+  assertTruthy(
+    coach?.agent_brief?.summary?.includes("Effectiveness evidence"),
+    "coach_prompt agent brief should summarize effectiveness evidence.",
+  );
+  assertTruthy(
+    coach?.agent_brief?.next_actions?.some((action) =>
+      action.includes("unmeasured prompt"),
+    ),
+    "coach_prompt agent brief should ask the agent to review unmeasured prompts.",
+  );
+  assertTruthy(
+    coach?.agent_brief?.next_actions?.some((action) =>
+      action.includes("smoke:mcp-coach-loop"),
+    ),
+    "coach_prompt agent brief should include safe effectiveness evidence refs.",
+  );
+  assertNoUnsafeCoachBrief(coach);
   assertEqual(improve?.is_error === true, false, "improve_prompt should pass.");
   assertTruthy(
     improve?.clarifying_questions?.length > 0,
@@ -316,6 +363,20 @@ function assertSmokeResult({ initialize, score, improve, applied, recorded }) {
     "record_clarifications should not return stored prompt bodies.",
   );
   assertEqual(stderr.trim(), "", "MCP coach loop smoke should not print stderr.");
+}
+
+function assertNoUnsafeCoachBrief(coach) {
+  const serialized = JSON.stringify(coach?.agent_brief ?? {});
+  assertEqual(
+    serialized.includes(dataDir),
+    false,
+    "coach_prompt agent brief should not return raw data-dir paths.",
+  );
+  assertEqual(
+    serialized.includes("prompt-coach-smoke-transcript"),
+    false,
+    "coach_prompt agent brief should not return transcript paths.",
+  );
 }
 
 function assertFileExists(path, message) {

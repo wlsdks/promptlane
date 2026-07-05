@@ -224,6 +224,10 @@ Decision:
   effectiveness coverage, linked outcomes, tests run, and safe evidence refs,
   and `coach_prompt_actionability` requires that signal before the benchmark
   can pass.
+- MCP coach-loop smoke now repeats that one-call path over the real stdio MCP
+  server: `smoke:mcp-coach-loop` calls `coach_prompt`, verifies the
+  `Effectiveness evidence` summary, checks the review-first unmeasured prompt
+  action, and confirms safe evidence refs remain raw-free.
 
 Rationale:
 

@@ -1,5 +1,26 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane MCP Coach Effectiveness Smoke
+
+- [x] CHECK: `coach_prompt` agent brief는 effectiveness evidence를 포함하지만
+  반복 가능한 `smoke:mcp-coach-loop`는 아직 실제 MCP stdio 서버에서 그
+  one-call path를 검증하지 않았다.
+- [x] RED: smoke assertion이 `coach_prompt` agent brief의
+  `Effectiveness evidence`, unmeasured prompt review action, safe evidence
+  refs를 요구하지만 `coach_prompt`를 호출하지 않아 실패해야 한다.
+- [x] GREEN: smoke가 measured prompt와 unmeasured prompt를 모두 seed하고,
+  MCP `coach_prompt`를 호출해 raw-free effectiveness guidance를 검증한다.
+- [x] EFFECT: Codex/Claude Code 통합 evidence가 `score_prompt` 개별 prompt
+  효과에서 멈추지 않고 기본 one-call coach workflow까지 포함한다.
+
+### 판단 기준
+
+- Smoke must run through the real MCP stdio server, not a direct function call.
+- The seeded archive must include at least one linked passed outcome and one
+  unmeasured prompt.
+- The agent brief must not expose prompt bodies, raw data-dir paths, transcript
+  paths, or token-like secrets.
+
 ## 2026-07-06 PromptLane Coach Prompt Effectiveness Brief
 
 - [x] CHECK: `score_prompt`, archive score, web, benchmark에는 효과 evidence가

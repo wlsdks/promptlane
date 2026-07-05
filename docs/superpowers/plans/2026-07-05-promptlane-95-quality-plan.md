@@ -114,6 +114,10 @@
   measured vs unmeasured prompts, linked outcomes, tests run, safe evidence
   refs, and a review-first action before claiming archive-wide improvement.
   `coach_prompt_actionability` now requires this signal in the benchmark.
+- The MCP coach-loop smoke now exercises that one-call path over the real stdio
+  MCP server: `smoke:mcp-coach-loop` calls `coach_prompt`, verifies the
+  `Effectiveness evidence` summary, checks the unmeasured-prompt review action,
+  and keeps prompt bodies, raw paths, and transcript paths out of the brief.
 - `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md` records current
   `corepack pnpm smoke:release` and `corepack pnpm pack:dry-run` evidence for
   the local-first release path.

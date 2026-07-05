@@ -13,7 +13,7 @@ calls were required.
 | `corepack pnpm smoke:agent-setup` | PASS | Ran `prompt-coach setup --profile coach --register-mcp` in dry-run and real isolated setup modes, initialized storage for doctor checks, then ran `prompt-coach doctor claude-code` and `prompt-coach doctor codex` against fake provider binaries. |
 | `corepack pnpm dogfood:first-coach-loop` | PASS | Built the package, initialized an isolated PromptLane archive, started a local server, captured a Codex prompt through the hook, then ran `coach --json`, `loop collect --json`, and `loop brief --json`. |
 | `corepack pnpm smoke:hooks` | PASS | Verified `prompt-coach` and `loopdeck` compatibility hook status plus Claude Code and Codex fail-open hook behavior. |
-| `corepack pnpm smoke:mcp-coach-loop` | PASS | Started the MCP server against an isolated archive and exercised score, improve, clarification apply, and clarification record flows through structured MCP responses. The score path now seeds linked loop outcome metadata and verifies `score_prompt effectiveness evidence` with verdict and calibration counts. |
+| `corepack pnpm smoke:mcp-coach-loop` | PASS | Started the MCP server against an isolated archive and exercised score, one-call coach, improve, clarification apply, and clarification record flows through structured MCP responses. The smoke seeds linked loop outcome metadata, verifies `score_prompt effectiveness evidence`, and verifies `coach_prompt` agent brief effectiveness coverage with a review-first unmeasured prompt action. |
 | `corepack pnpm dogfood:loop-memory-approval` | PASS | Captured a Codex prompt, collected a loop snapshot, called MCP `record_loop_outcome`, `propose_loop_memory_candidate`, `record_loop_memory`, and `propose_instruction_patch`, then verified the instruction file was not written. |
 
 ## Integration Coverage
@@ -30,6 +30,10 @@ calls were required.
   `smoke:mcp-coach-loop`, proving Codex and Claude Code can inspect stored
   prompt impact evidence through MCP structured content without opening the web
   UI or shelling out to `prompt-coach show --json`.
+- Agent-readable `coach_prompt` effectiveness guidance is covered by
+  `smoke:mcp-coach-loop`, proving the default one-call coach path tells Codex
+  and Claude Code to review unmeasured prompts before claiming archive-wide
+  improvement.
 - First-loop prompt capture, coaching, loop snapshot, and continuation brief are
   covered by `dogfood:first-coach-loop`.
 - Evidence-backed loop memory approval and instruction patch proposal are
