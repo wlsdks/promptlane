@@ -222,6 +222,14 @@
   `corepack pnpm ui-patrol`, and `dogfood:web-user-flow`. `quality-evidence`
   records this as `manual_ui_patrol_artifact_evidence` while keeping
   `scheduled_ui_patrol` pending until a real cron `schedule` event exists.
+- `docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md` records current
+  non-operator Codex and Claude Code evidence: setup/doctor smoke, hook smoke,
+  MCP coach-loop smoke, MCP elicitation smoke, no-dialog native fallback
+  preflight, first-loop dogfood, and loop-memory approval dogfood.
+  `quality-evidence` records this as
+  `codex_claude_local_integration_evidence` while keeping
+  `native_dialog_approved_dogfood` pending until explicit operator approval
+  exists.
 - PR #478 proved that installed CLI path on the default branch; main CI run
   `28753458359` passed Node 22 and Node 24 after merge, so future agents can use
   the product CLI itself to decide whether 9.5 is still blocked before claiming

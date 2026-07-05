@@ -948,6 +948,9 @@ describe("plugin packaging files", () => {
     expect(packageJson.files).toContain(
       "docs/UI_PATROL_EVIDENCE_2026-07-06.md",
     );
+    expect(packageJson.files).toContain(
+      "docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md",
+    );
     expect(packageJson.scripts["evidence:quality"]).toBe(
       "node scripts/quality-95-evidence.mjs",
     );
@@ -972,6 +975,9 @@ describe("plugin packaging files", () => {
         "docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md",
       );
       expect(content).toContain("docs/UI_PATROL_EVIDENCE_2026-07-06.md");
+      expect(content).toContain(
+        "docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md",
+      );
       expect(content).toContain("PR #478");
       expect(content).toContain("28753458359");
       expect(content).toContain("corepack pnpm evidence:quality");
@@ -985,6 +991,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("blocked_by_external_event");
       expect(content).toContain("product_positioning_metadata_alignment");
       expect(content).toContain("manual_ui_patrol_artifact_evidence");
+      expect(content).toContain("codex_claude_local_integration_evidence");
       expect(content).toContain("local-first privacy boundary");
       expect(content).toContain("setup/doctor/MCP smoke");
       expect(content).toContain("loop memory");
@@ -1047,6 +1054,10 @@ describe("plugin packaging files", () => {
     expect(evidenceScript).toContain("PRODUCT_POSITIONING_EVIDENCE_2026-07-06");
     expect(evidenceScript).toContain("manual_ui_patrol_artifact_evidence");
     expect(evidenceScript).toContain("UI_PATROL_EVIDENCE_2026-07-06");
+    expect(evidenceScript).toContain("codex_claude_local_integration_evidence");
+    expect(evidenceScript).toContain(
+      "CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06",
+    );
     expect(evidenceScript).toContain("web_user_flow_current_main_evidence");
     expect(evidenceScript).toContain("browser e2e passed");
     expect(evidenceScript).toContain("privacy_raw_free_regression_sweep");

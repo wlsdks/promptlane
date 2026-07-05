@@ -198,6 +198,7 @@ describe("quality 9.5 evidence script", () => {
           status: "blocked_external",
           satisfied_evidence: expect.arrayContaining([
             "codex_claude_setup_smoke_refresh",
+            "codex_claude_local_integration_evidence",
             "local_95_evidence_sweep",
           ]),
           remaining_evidence: expect.arrayContaining([

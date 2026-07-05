@@ -221,6 +221,12 @@ Decision:
   `dogfood:web-user-flow` browser evidence. `quality-evidence` records this as
   `manual_ui_patrol_artifact_evidence`, but `scheduled_ui_patrol` remains
   pending until a real cron `schedule` event exists.
+  `docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md` records current
+  non-operator setup, hook, MCP, elicitation, no-dialog fallback, first-loop,
+  and loop-memory evidence. `quality-evidence` records this as
+  `codex_claude_local_integration_evidence`, while
+  `native_dialog_approved_dogfood` remains pending until explicit operator
+  approval exists.
 - PR #478 moved that quality evidence gate onto the installed product CLI. Main
   CI run `28753458359` passed Node 22 and Node 24 after merge, so `prompt-coach
   quality-evidence --require-complete` is now a current default-branch release

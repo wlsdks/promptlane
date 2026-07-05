@@ -172,6 +172,7 @@ function readCompletedEvidence() {
   let claudePlugin = "";
   let claudeMarketplace = "";
   let uiPatrolEvidence = "";
+  let codexClaudeEvidence = "";
   try {
     plan = readFileSync(planPath, "utf8");
     localEvidence = readFileSync("docs/LOCAL_95_EVIDENCE_2026-07-06.md", "utf8");
@@ -192,10 +193,15 @@ function readCompletedEvidence() {
       "docs/UI_PATROL_EVIDENCE_2026-07-06.md",
       "utf8",
     );
+    codexClaudeEvidence = readFileSync(
+      "docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md",
+      "utf8",
+    );
   } catch {
     return {
       product_positioning_metadata_alignment: false,
       manual_ui_patrol_artifact_evidence: false,
+      codex_claude_local_integration_evidence: false,
       web_user_flow_current_main_evidence: false,
       privacy_raw_free_regression_sweep: false,
       codex_claude_setup_smoke_refresh: false,
@@ -228,6 +234,16 @@ function readCompletedEvidence() {
       uiPatrolEvidence.includes("Local `corepack pnpm ui-patrol`") &&
       uiPatrolEvidence.includes("pending_no_schedule_run") &&
       uiPatrolEvidence.includes("manual_ui_patrol_artifact_evidence"),
+    codex_claude_local_integration_evidence:
+      codexClaudeEvidence.includes("corepack pnpm smoke:agent-setup") &&
+      codexClaudeEvidence.includes("corepack pnpm smoke:hooks") &&
+      codexClaudeEvidence.includes("corepack pnpm smoke:mcp-coach-loop") &&
+      codexClaudeEvidence.includes("corepack pnpm smoke:mcp-elicitation") &&
+      codexClaudeEvidence.includes("corepack pnpm smoke:mcp-native-dialog") &&
+      codexClaudeEvidence.includes("corepack pnpm dogfood:first-coach-loop") &&
+      codexClaudeEvidence.includes("corepack pnpm dogfood:loop-memory-approval") &&
+      codexClaudeEvidence.includes("native_dialog_approved_dogfood") &&
+      codexClaudeEvidence.includes("codex_claude_local_integration_evidence"),
     web_user_flow_current_main_evidence:
       plan.includes("web_user_flow_current_main_evidence") &&
       plan.includes("corepack pnpm dogfood:web-user-flow") &&
@@ -297,6 +313,12 @@ function axisEvidenceCoverage({
       completedEvidence.codex_claude_setup_smoke_refresh
     ) {
       satisfied.push("codex_claude_setup_smoke_refresh");
+    }
+    if (
+      axis.id === "codex_and_claude_code_integration" &&
+      completedEvidence.codex_claude_local_integration_evidence
+    ) {
+      satisfied.push("codex_claude_local_integration_evidence");
     }
     if (
       [

@@ -1,5 +1,31 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Codex Claude Evidence Split
+
+- [x] CHECK: Codex/Claude integration still has an external native-dialog
+  approved dogfood blocker, but local setup, hooks, MCP, elicitation, first
+  loop, and loop-memory dogfood evidence are already repeatable.
+- [x] RED: quality evidence CLI/script tests required
+  `codex_and_claude_code_integration` to include
+  `codex_claude_local_integration_evidence` while still keeping
+  `native_dialog_approved_dogfood` and `scorecard_level_below_9_5` as remaining
+  evidence; tests failed while only setup smoke and local sweep evidence were
+  satisfied.
+- [x] GREEN:
+  `docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md` records the
+  non-operator integration evidence and `quality-evidence` now exposes it as a
+  separate satisfied evidence ref.
+- [x] EFFECT: Codex/Claude evidence is more accurate without claiming the
+  operator-approved native dialog blocker is complete.
+
+### 판단 기준
+
+- Do not run native OS dialog dogfood without explicit operator approval.
+- Do not promote Codex/Claude integration to 9.5 while native approved dogfood
+  remains pending.
+- Keep local setup/hook/MCP/elicitation evidence visible so agents do not rerun
+  stale local work unnecessarily.
+
 ## 2026-07-06 PromptLane Web Operations Evidence Split
 
 - [x] CHECK: GitHub `ui-patrol.yml` still has only workflow_dispatch runs and
