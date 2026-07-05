@@ -7,8 +7,8 @@
 - [x] RED: `prompt-coach show --json`이 `loop_outcomes`를 포함하지 않아 실패해야 한다.
 - [x] GREEN: storage prompt detail이 raw-free `loop_outcomes`를 포함하고, CLI `show --json`도 같은 필드를 반환한다.
 - [x] EFFECT: agent-native CLI 흐름에서도 expected-impact prediction과 actual loop outcome evidence를 함께 평가할 수 있다.
-- [ ] VERIFY: focused tests, `corepack pnpm e2e:browser`, full local gate, PR CI, latest main CI, and branch prune all pass.
-- [ ] INTEGRATE: PR이 CI 통과 후 merge되고 branch prune까지 확인된다.
+- [x] VERIFY: focused tests, `corepack pnpm e2e:browser`, full local gate, PR CI, latest main CI run `28748664657`, and branch prune all pass.
+- [x] INTEGRATE: PR #455가 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
