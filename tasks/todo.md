@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane 9.5 Web Evidence Ledger Refresh
+
+- [x] CHECK: 9.5 quality plan Evidence Ledger still referenced the stale "after PR #422" main CI line and did not pin PR #429/#430 or latest main CI run `28744698708`.
+- [x] RED: packaging guard must fail unless the 9.5 quality plan includes PR #429, PR #430, `dogfood:web-user-flow`, `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md`, and latest main CI run `28744698708`.
+- [x] GREEN: the 9.5 quality plan now records PR #429 web user-flow evidence, PR #430 close-log integration, and latest main CI run `28744698708`.
+- [ ] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI, and branch prune all pass.
+- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+
+### 판단 기준
+
+- 9.5 Evidence Ledger는 stale PR/CI 문구를 방치하지 않는다.
+- web dogfood evidence는 PR 번호, command evidence, CI evidence가 함께 추적되어야 한다.
+- scheduled `ui-patrol`과 native OS ask UI dogfood는 별도 blocker로 유지한다.
+
 ## 2026-07-05 PromptLane Web User-Flow Dogfood Evidence
 
 - [x] CHECK: 9.5 web operations blocker still needed repeatable fresh user-flow evidence beyond scheduled `ui-patrol`, while `scripts/browser-e2e.mjs` already exercises the real archive/detail/dashboard/coach/projects/mcp/exports/settings/mobile flow.
