@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Web Expected Impact Evidence
+
+- [x] CHECK: `improve` expected impact는 CLI/MCP에 노출되지만 web prompt detail의 current improvement draft에는 원문 점수, 개선안 점수, delta가 보이지 않았다.
+- [x] RED: `PromptDetailView` SSR test가 `Expected impact`, `Original score`, `Improved score`, positive point delta 부재로 실패해야 한다.
+- [x] GREEN: web prompt detail coach panel이 expected impact metric row를 렌더링한다.
+- [x] EFFECT: 웹 사용자가 개선안을 복사/저장하기 전에 로컬 analyzer 기준 원문 대비 예상 개선량을 직접 판단할 수 있다.
+- [ ] VERIFY: focused web tests, `corepack pnpm ui-patrol`, full local gate, PR CI, latest main CI, and branch prune all pass.
+- [ ] INTEGRATE: PR이 CI 통과 후 merge되고 branch prune까지 확인된다.
+
+### 판단 기준
+
+- expected impact is advisory local-rules evidence, not external LLM judgment or automatic approval.
+- web UI must expose numeric improvement evidence without exposing prompt bodies outside the existing comparison panel.
+- layout must remain stable on desktop and mobile patrol viewports.
+
 ## 2026-07-06 PromptLane Improve Expected Impact Evidence
 
 - [x] CHECK: `improve`가 approval-ready draft를 만들지만 사용자가 “정말 나아졌는지” 판단할 수 있는 원문 점수, 개선안 예상 점수, delta를 직접 보여주지 않았다.

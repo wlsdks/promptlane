@@ -161,6 +161,17 @@ try {
   );
   await captureScreenshot(page, "detail-desktop");
   await page.locator(".prompt-comparison").first().waitFor();
+  await page.locator(".expected-impact").first().waitFor();
+  await assertTextAny(
+    page,
+    ["Expected impact"],
+    "Detail should show local expected-impact evidence before copy/save actions.",
+  );
+  await assertTextAny(
+    page,
+    ["Improved score"],
+    "Detail should show the improved draft score in the expected-impact row.",
+  );
   await page
     .locator('.prompt-comparison-heading:has-text("Original")')
     .first()

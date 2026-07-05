@@ -34,6 +34,34 @@ describe("PromptDetailView", () => {
     expect(html).toContain("Copy saved draft");
   });
 
+  it("renders local expected impact for the current improvement draft", () => {
+    const html = renderToStaticMarkup(
+      createElement(PromptDetailView, {
+        copied: false,
+        copiedImprovement: false,
+        language: "en",
+        savedImprovement: false,
+        onBack: vi.fn(),
+        onBookmark: vi.fn(),
+        onCloseManualCopyFallback: vi.fn(),
+        onCopy: vi.fn(),
+        onCopyImprovement: vi.fn(),
+        onCopySavedDraft: vi.fn(),
+        onDelete: vi.fn(),
+        onNavigate: vi.fn(),
+        onOpenQualityGap: vi.fn(),
+        onSaveImprovement: vi.fn(),
+        prompt: buildPromptDetail(),
+        queueNavigation: {},
+      }),
+    );
+
+    expect(html).toContain("Expected impact");
+    expect(html).toContain("Original score");
+    expect(html).toContain("Improved score");
+    expect(html).toMatch(/\+\d+ point/);
+  });
+
   it("renders a manual-copy fallback when draft clipboard copy fails", () => {
     const html = renderToStaticMarkup(
       createElement(PromptDetailView, {

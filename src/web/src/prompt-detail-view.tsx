@@ -297,6 +297,7 @@ function PromptCoachPanel({
         <span className="badge">{improvementModeLabel(improvement.mode)}</span>
       </div>
       <p className="analysis-summary">{improvement.summary}</p>
+      <ExpectedImpactSummary improvement={improvement} />
       <div
         className="prompt-comparison"
         aria-label="Original prompt next to improved draft"
@@ -461,6 +462,33 @@ function PromptCoachPanel({
         </div>
       )}
     </section>
+  );
+}
+
+function ExpectedImpactSummary({
+  improvement,
+}: {
+  improvement: PromptImprovement;
+}) {
+  const impact = improvement.expected_impact;
+  const deltaLabel =
+    impact.delta >= 0 ? `+${impact.delta} points` : `${impact.delta} points`;
+
+  return (
+    <dl className="expected-impact" aria-label="Expected impact">
+      <div>
+        <dt>Original score</dt>
+        <dd>{impact.original_score}/100</dd>
+      </div>
+      <div>
+        <dt>Improved score</dt>
+        <dd>{impact.improved_score}/100</dd>
+      </div>
+      <div>
+        <dt>Expected impact</dt>
+        <dd>{deltaLabel}</dd>
+      </div>
+    </dl>
   );
 }
 
