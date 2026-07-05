@@ -2,12 +2,14 @@
 
 Last updated: 2026-07-05
 
-This is the prioritized "what to pick up next" list after the Loopdeck planning
-and architecture decision pass. It is intentionally short. The PRD itself
+This is the prioritized "what to pick up next" list after the PromptLane
+repositioning and architecture decision pass. It is intentionally short. The PRD itself
 (`docs/PRD.md`, `docs/PRD_PHASE2.md`), the completion audit
-(`docs/PRD2_COMPLETION_AUDIT.md`), and the Loopdeck design spec
-(`docs/superpowers/specs/2026-07-04-agent-loop-memory-design.md`) remain the
-source of truth for product scope; this file is the operational queue.
+(`docs/PRD2_COMPLETION_AUDIT.md`), the PromptLane product contract
+(`docs/PROMPTLANE.md`), and the PromptLane repositioning spec
+(`docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md`)
+remain the source of truth for product scope; this file is the operational
+queue.
 
 ## What We Know Is Done
 
@@ -18,10 +20,10 @@ source of truth for product scope; this file is the operational queue.
   pipeline extracted with importer redaction-reject fix (PR #239), shared
   coaching threshold module (PR #240), ADRs 0001 and 0002 proposed in PR #241
   and accepted in PR #318.
-- Loopdeck direction is active while the public npm package, CLI command,
+- PromptLane direction is active while the public npm package, CLI command,
   Claude Code slash commands, Codex plugin id, hook command, and canonical MCP
   server name remain `prompt-coach` during the compatibility window.
-- The first Loopdeck runtime slices have landed: loop snapshots, continuation
+- The first loop-aware continuation runtime slices have landed: loop snapshots, continuation
   briefs, compact boundary awareness, worktree/session/branch selected
   continuation, command-center summaries, local merge decision metadata,
   instruction patch proposals, and explicit AGENTS.md/CLAUDE.md apply gates.
@@ -37,13 +39,15 @@ source of truth for product scope; this file is the operational queue.
 
 ## Current Priority Decision
 
-The next implementation work should favor reliability and agent-loop
-continuity over more product naming work.
+After the PromptLane product contract and first-screen metadata are aligned, the
+next implementation work should favor reliability and agent-loop continuity
+over more naming work.
 
 Current goal audit:
 
-- `docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md` maps the long-running Loopdeck goal
-  to current evidence and explicitly keeps the goal open.
+- `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md` maps
+  why Loopdeck and Prompt Coach were rejected as primary product names and keeps
+  `prompt-coach` as the runtime compatibility id.
 - PR #343 added an approval-gated native-dialog dogfood command. It proves the
   command refuses to open a native OS dialog without
   `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1`, but it does not replace the
@@ -96,7 +100,7 @@ Decision:
 
 Rationale:
 
-- Loopdeck now has enough agent-loop runtime surface that storage-backed
+- PromptLane now has enough agent-loop runtime surface that storage-backed
   features should fail clearly at registration instead of varying by route or
   MCP handler.
 - Capability negotiation directly protects local-first reliability for Codex
@@ -104,7 +108,8 @@ Rationale:
 - MCP registry cleanup is valuable, but ADR 0001 deliberately avoids a broad
   rewrite until a tool-list change creates real pressure.
 - More rename or plugin alias work has lower product value than making the
-  current `prompt-coach` compatibility runtime safer and easier to extend.
+  current `prompt-coach` compatibility runtime safer and easier to extend after
+  the PromptLane product-facing contract lands.
 - Security and package-manager hygiene should remain tightly scoped: update the
   smallest dependency/config surface that removes the alert or warning, then
   prove it with audit, install/build/pack, and CI.

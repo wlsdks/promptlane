@@ -28,19 +28,19 @@ function nestedHelpFor(commandPath: string, subcommandPath: string): string {
 }
 
 describe("CLI help copy", () => {
-  it("presents the root command as the Loopdeck workbench while preserving the prompt-coach command id", () => {
+  it("presents the root command as the PromptLane workbench while preserving the prompt-coach command id", () => {
     const help = createProgram().helpInformation();
 
     expect(help).toContain("Usage: prompt-coach");
     expect(help).toContain(
-      "Local-first agent loop memory and meta-prompting workbench",
+      "Local-first prompt improvement workspace",
     );
     expect(help).toContain("Codex");
     expect(help).toContain("Claude Code");
     expect(help).not.toContain("Local-first prompt archive for AI coding tools.");
   });
 
-  it("presents local infrastructure commands as Loopdeck surfaces", () => {
+  it("presents local infrastructure commands as PromptLane surfaces", () => {
     const help = [
       helpFor("server"),
       helpFor("mcp"),
@@ -53,15 +53,15 @@ describe("CLI help copy", () => {
       nestedHelpFor("service", "install"),
     ].join("\n");
 
-    expect(help).toContain("Run the local Loopdeck HTTP server");
-    expect(help).toContain("Run the local Loopdeck MCP server over stdio.");
-    expect(help).toContain("Install the Loopdeck capture hook");
-    expect(help).toContain("Uninstall the Loopdeck capture hook");
-    expect(help).toContain("Render the Loopdeck status line");
-    expect(help).toContain("combines Loopdeck with another tool");
-    expect(help).toContain("Install the Loopdeck status line");
-    expect(help).toContain("Uninstall the Loopdeck status line");
-    expect(help).toContain("Install a login service for the local Loopdeck server.");
+    expect(help).toContain("Run the local PromptLane HTTP server");
+    expect(help).toContain("Run the local PromptLane MCP server over stdio.");
+    expect(help).toContain("Install the PromptLane capture hook");
+    expect(help).toContain("Uninstall the PromptLane capture hook");
+    expect(help).toContain("Render the PromptLane status line");
+    expect(help).toContain("combines PromptLane with another tool");
+    expect(help).toContain("Install the PromptLane status line");
+    expect(help).toContain("Uninstall the PromptLane status line");
+    expect(help).toContain("Install a login service for the local PromptLane server.");
     expect(help).not.toContain("local prompt-coach HTTP server");
     expect(help).not.toContain("local prompt-coach MCP server");
     expect(help).not.toContain("prompt-coach capture hook");

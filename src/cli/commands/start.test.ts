@@ -30,7 +30,7 @@ describe("start guide", () => {
       (step) => step.title === "Send one real coding prompt",
     );
     expect(sendStep?.detail).toContain("/prompt-coach:improve-last");
-    expect(sendStep?.detail).toContain("Loopdeck rewrite guidance");
+    expect(sendStep?.detail).toContain("PromptLane rewrite guidance");
     expect(sendStep?.detail).not.toContain("prompt-coach rewrite");
     expect(output).toContain("/prompt-coach:improve-last");
   });

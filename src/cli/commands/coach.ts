@@ -65,7 +65,7 @@ function parseLanguage(value: string | undefined): "en" | "ko" | undefined {
 
 function formatCoach(result: CoachPromptToolResult): string {
   const rows = [
-    "Loopdeck Coach",
+    "PromptLane Coach",
     result.agent_brief.headline,
     result.agent_brief.summary,
     "",

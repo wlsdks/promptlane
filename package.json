@@ -1,7 +1,7 @@
 {
   "name": "prompt-coach",
   "version": "0.1.0-beta.0",
-  "description": "Local-first agent loop memory and meta-prompting workbench for Codex, Claude Code, and coding-agent workflows.",
+  "description": "PromptLane local-first prompt improvement workspace for Codex, Claude Code, and long-running coding-agent work.",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -39,6 +39,7 @@
     "docs/TECH_SPEC.md",
     "docs/IMPLEMENTATION_PLAN.md",
     "docs/ADAPTERS.md",
+    "docs/PROMPTLANE.md",
     "docs/LOOPDECK.md",
     "docs/LOOP-SNAPSHOT-SCHEMA.md",
     "docs/AGENT-HARNESS.md",

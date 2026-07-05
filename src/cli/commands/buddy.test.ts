@@ -58,7 +58,7 @@ describe("buddy CLI", () => {
 
     const output = renderBuddyForCli({ dataDir });
 
-    expect(output).toContain("Loopdeck Buddy");
+    expect(output).toContain("PromptLane Buddy");
     expect(output).not.toContain("Prompt Memory Buddy");
     expect(output).toContain("Latest prompt");
     expect(output).toContain("Habit");
@@ -123,9 +123,9 @@ describe("buddy CLI", () => {
     const def = renderBuddyForCli({ dataDir });
     const block = renderBuddyForCli({ dataDir, style: "block" });
 
-    expect(block).toContain("Loopdeck Buddy");
+    expect(block).toContain("PromptLane Buddy");
     expect(block).not.toContain("Prompt Memory Buddy");
-    expect(def.startsWith("Loopdeck Buddy")).toBe(true);
+    expect(def.startsWith("PromptLane Buddy")).toBe(true);
     expect(def.split("\n").length).toBe(block.split("\n").length);
   });
 

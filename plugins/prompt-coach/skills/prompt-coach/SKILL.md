@@ -1,22 +1,22 @@
 ---
 name: prompt-coach
-description: Use when the user wants to install, verify, search, or troubleshoot Loopdeck, the local loop memory workspace for Codex or Claude Code.
+description: Use when the user wants to install, verify, search, or troubleshoot PromptLane, the local prompt improvement workspace for Codex or Claude Code.
 ---
 
-# Loopdeck
+# PromptLane
 
-Use this skill when the user wants Codex to work with Loopdeck through the local
+Use this skill when the user wants Codex to work with PromptLane through the local
 CLI/archive. The compatibility CLI command remains `prompt-coach` during the
-Loopdeck migration.
+PromptLane compatibility window.
 
 ## What This Plugin Does
 
-Loopdeck stores coding-agent prompts and loop metadata locally. It redacts
+PromptLane stores coding-agent prompts and loop metadata locally. It redacts
 sensitive values before writing Markdown files, indexes the archive in SQLite,
 and exposes a local web UI at `http://127.0.0.1:17373`.
 
 The plugin does not install active hooks by itself. Run the coach profile from
-the installed package so Loopdeck writes one explicit user-level hook
+the installed package so PromptLane writes one explicit user-level hook
 configuration:
 
 ```sh
@@ -32,7 +32,7 @@ plain `prompt-coach setup` only when the user wants passive capture without
 coaching.
 
 Setup-installed hooks use `UserPromptSubmit` for prompt capture/rewrite guidance,
-`Stop` for local Loopdeck snapshot collection, and `PreCompact`/`PostCompact`
+`Stop` for local PromptLane snapshot collection, and `PreCompact`/`PostCompact`
 for compact boundary metadata. Stop snapshots and compact boundaries are
 metadata-only: prompt ids, safe project labels, quality gaps, trigger values,
 and optional HMAC content hashes, not prompt bodies, raw paths, custom compact

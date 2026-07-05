@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-05
 
-This document defines how Loopdeck uses project instruction files for Codex,
+This document defines how PromptLane uses project instruction files for Codex,
 Claude Code, and other coding agents.
 
 ## Source Of Truth
@@ -42,7 +42,7 @@ drift and wastes agent context.
 
 Keep repo-level instruction files short and route deeper work to docs:
 
-- Product planning: `docs/superpowers/specs/2026-07-04-agent-loop-memory-design.md`
+- Product planning: `docs/PROMPTLANE.md`, `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md`
 - Current operational queue: `docs/NEXT_BACKLOG.md`
 - Harness details: `docs/AGENT-HARNESS.md`
 - Architecture: `docs/ARCHITECTURE.md`
@@ -67,9 +67,9 @@ Update `AGENTS.md` when one of these is true:
 Do not update `AGENTS.md` for temporary task state. Use `tasks/todo.md` or a
 design/plan doc instead.
 
-## Loopdeck Memory And Patch Proposals
+## PromptLane Memory And Patch Proposals
 
-Loopdeck may propose instruction changes from approved loop memories, but the
+PromptLane may propose instruction changes from approved loop memories, but the
 proposal path must stay review-first.
 
 Allowed:
@@ -101,16 +101,16 @@ Practical rule:
 
 ## Compatibility Language
 
-During the Loopdeck migration, use this wording consistently:
+During the PromptLane compatibility window, use this wording consistently:
 
-- Product name: Loopdeck
+- Product name: PromptLane
 - npm package: `prompt-coach`
 - primary compatibility CLI: `prompt-coach`
-- product-name CLI alias: `loopdeck`
+- legacy CLI alias: `loopdeck`
 - canonical MCP server name: `prompt-coach`
 - Claude Code slash namespace: `/prompt-coach:*`
-- future slash namespace: `/loopdeck:*` as alias-only, gated by the dedicated
-  plugin rename plan
+- `/loopdeck:*` remains unshipped legacy alias planning unless a later migration
+  proves it is still needed
 
 Do not introduce deprecation language for `prompt-coach` runtime identifiers
 until the deprecation readiness plan says the evidence gates are satisfied.

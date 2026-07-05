@@ -86,7 +86,7 @@ export function registerStatusLineCommand(program: Command): void {
 function registerRenderStatusLineCommand(program: Command): void {
   program
     .command("statusline")
-    .description("Render the Loopdeck status line for Claude Code.")
+    .description("Render the PromptLane status line for Claude Code.")
     .argument("<tool>", "Tool to render a status line for.")
     .option("--data-dir <path>", "Override the prompt-coach data directory.")
     .option("--settings-path <path>", "Override Claude Code settings path.")
@@ -105,11 +105,11 @@ function registerChainedStatusLineCommand(program: Command): void {
   program
     .command("statusline-chain")
     .description(
-      "Render a chained status line that combines Loopdeck with another tool's existing status line.",
+      "Render a chained status line that combines PromptLane with another tool's existing status line.",
     )
     .argument("<tool>", "Tool to render a chained status line for.")
     .requiredOption("--previous <base64url>", "Previous status line command.")
-    .requiredOption("--prompt-coach <base64url>", "Loopdeck status line command.")
+    .requiredOption("--prompt-coach <base64url>", "PromptLane status line command.")
     .action((tool: string, options: ChainedStatusLineOptions) => {
       if (tool !== "claude-code") {
         throw new UserError(
@@ -130,7 +130,7 @@ function registerChainedStatusLineCommand(program: Command): void {
 function registerInstallStatusLineCommand(program: Command): void {
   program
     .command("install-statusline")
-    .description("Install the Loopdeck status line for Claude Code.")
+    .description("Install the PromptLane status line for Claude Code.")
     .argument("<tool>", "Tool to install status line for.")
     .option("--settings-path <path>", "Override Claude Code settings path.")
     .option("--data-dir <path>", "Override the prompt-coach data directory.")
@@ -161,7 +161,7 @@ function registerInstallStatusLineCommand(program: Command): void {
 function registerUninstallStatusLineCommand(program: Command): void {
   program
     .command("uninstall-statusline")
-    .description("Uninstall the Loopdeck status line for Claude Code.")
+    .description("Uninstall the PromptLane status line for Claude Code.")
     .argument("<tool>", "Tool to uninstall status line for.")
     .option("--settings-path <path>", "Override Claude Code settings path.")
     .action((tool: string, options: StatusLineInstallOptions) => {

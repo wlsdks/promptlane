@@ -34,7 +34,7 @@ export function createProgram(): Command {
   program
     .name("prompt-coach")
     .description(
-      "Local-first agent loop memory and meta-prompting workbench for Codex and Claude Code.",
+      "Local-first prompt improvement workspace for Codex and Claude Code.",
     )
     .version(VERSION);
 

@@ -1,8 +1,8 @@
-# Loopdeck
+# PromptLane
 
 [English](README.md) | [한국어](README.ko.md)
 
-**Claude Code · Codex용 local-first agent loop memory 및 meta-prompting workbench.**
+**Claude Code, Codex, 장기 coding-agent 작업을 위한 local-first prompt improvement workspace.**
 
 - 🗂️ Claude Code / Codex에 보낸 모든 prompt를 로컬 Markdown + SQLite에
   보관합니다 — 외부로 나가지 않습니다.
@@ -10,6 +10,8 @@
   깎였는지 알려줍니다. 추측 대신 학습합니다.
 - ✍️ 자동 재제출 없이 복사해서 바로 쓸 수 있는 개선안 초안을 만들어
   줍니다 (영어/한국어 자동 감지).
+- 🔁 장기 agent 작업에서는 승인된 lesson과 loop snapshot을 다음 요청
+  작성에 재사용합니다.
 
 ```sh
 npm install -g prompt-coach
@@ -18,13 +20,18 @@ prompt-coach setup --profile coach --register-mcp --open-web
 prompt-coach coach
 ```
 
-Loopdeck은 Claude Code, Codex 같은 AI 코딩 도구에 입력한 프롬프트와 loop metadata를 안전하게 로컬에 기록하고, 나중에 다시 찾고, 반복되는 약한 프롬프트 패턴을 분석하고, 다음 요청을 더 잘 쓰도록 돕는 developer tool입니다. 현재 npm package와 CLI 명령은 호환성 기간 동안 계속 `prompt-coach` 이름을 사용합니다.
+PromptLane은 Claude Code, Codex 같은 AI 코딩 도구에 입력한 프롬프트와 loop metadata를 안전하게 로컬에 기록하고, 나중에 다시 찾고, 반복되는 약한 프롬프트 패턴을 분석하고, 다음 요청을 더 잘 쓰도록 돕는 developer tool입니다. 현재 npm package와 CLI 명령은 호환성 기간 동안 계속 `prompt-coach` 이름을 사용합니다.
 
-npm package는 같은 binary를 가리키는 `loopdeck`도 함께 설치합니다. loopdeck는 CLI alias입니다.
-기존 script와 plugin command에는 `prompt-coach`를 계속 쓰고, 새 terminal
-workflow에서는 제품명 command가 필요할 때 `loopdeck`를 사용할 수 있습니다.
+npm package는 같은 binary를 가리키는 `loopdeck`도 함께 설치합니다. loopdeck는 legacy CLI alias입니다.
+기존 script와 plugin command에는 `prompt-coach`를 계속 쓰고, 이전 manual
+terminal workflow 호환이 필요할 때만 `loopdeck`를 유지합니다.
 
 지원되는 도구의 프롬프트를 로컬에서 수집하고, 민감값을 저장 전에 마스킹하고, 사람이 읽을 수 있는 Markdown을 원본으로 남기며, SQLite/FTS 인덱스와 로컬 웹 UI를 통해 검색, 상세 보기, 누적 점수 측정, 프롬프트 연습, 분석, 삭제, 승인형 Prompt Coach 개선안을 제공합니다.
+
+loop 기능은 loop-aware continuation입니다. worktree, session, branch,
+snapshot context를 안전하게 골라 다음 prompt를 더 잘 쓰게 돕지만,
+PromptLane을 자동 agent runtime, transcript scraper, merge bot으로 만들지
+않습니다.
 
 이 프로젝트는 Anthropic, OpenAI 또는 다른 AI 도구 제공사와 제휴, 보증, 후원 관계가 없습니다. Claude Code, Codex 같은 제품명은 호환성을 설명하기 위해서만 사용합니다.
 
@@ -451,7 +458,7 @@ Claude Code plugin slash commands:
 /prompt-coach:open
 ```
 
-Loopdeck migration 중 Claude Code slash command는 `/prompt-coach:*`에
+PromptLane compatibility window 중 Claude Code slash command는 `/prompt-coach:*`에
 남아 있습니다. `/loopdeck:*`는 다음 compatibility slice에서 검토할
 planned alias-only namespace이며, 현재 package는 `/loopdeck:*` command
 file을 ship하지 않습니다. 기존 `/prompt-coach:*` command는 계속 유지해야

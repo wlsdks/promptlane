@@ -1,8 +1,8 @@
-# Loopdeck
+# PromptLane
 
 [English](README.md) | [한국어](README.ko.md)
 
-**Local-first agent loop memory and meta-prompting workbench for Claude Code and Codex.**
+**Local-first prompt improvement workspace for Claude Code, Codex, and long-running coding-agent work.**
 
 - 🗂️ Captures every prompt you send to Claude Code / Codex into a local
   Markdown + SQLite archive — nothing leaves your machine.
@@ -10,6 +10,8 @@
   axis cost points, so you learn instead of guessing.
 - ✍️ Generates a copy-ready improved draft on demand (English or Korean,
   auto-detected) without auto-resubmitting anything.
+- 🔁 Reuses approved lessons and loop snapshots when long-running agent work
+  needs a better next request.
 
 ```sh
 npm install -g prompt-coach
@@ -18,18 +20,22 @@ prompt-coach setup --profile coach --register-mcp --open-web
 prompt-coach coach
 ```
 
-Loopdeck is a developer tool that safely records prompts and loop metadata from AI coding tools such as Claude Code and Codex, helps you find them again, analyzes weak prompting patterns, and helps you write better follow-up requests. The current npm package and CLI command are still named `prompt-coach` during the compatibility window.
+PromptLane is a developer tool that safely records prompts and loop metadata from AI coding tools such as Claude Code and Codex, helps you find them again, analyzes weak prompting patterns, and helps you write better follow-up requests. The current npm package and CLI command are still named `prompt-coach` during the compatibility window.
 
-The npm package now also installs `loopdeck`; loopdeck is a CLI alias for the same binary.
-Use `prompt-coach` in existing scripts and plugin commands; use `loopdeck` for
-new manual terminal workflows when you want the product-name command.
+The npm package also installs `loopdeck`; loopdeck is a legacy CLI alias for the same binary.
+Use `prompt-coach` in existing scripts and plugin commands. Keep `loopdeck`
+only for compatibility with earlier manual terminal workflows.
 Slash command and plugin id migration is gated by
 `docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md`; Claude Code
 slash commands remain under `/prompt-coach:*` until that compatibility plan is
 implemented. `/loopdeck:*` is a planned alias-only slash namespace, not the
 only namespace and not shipped as command files yet.
 
-It collects supported tool prompts locally, redacts sensitive values before storage, writes Markdown files, indexes them in SQLite, and serves a local web UI for search, review, archive scoring, prompt practice, analysis, deletion, and copy-based prompt improvement.
+It collects supported tool prompts locally, redacts sensitive values before storage, writes Markdown files, indexes them in SQLite, and serves a local PromptLane web server for search, review, archive scoring, prompt practice, analysis, deletion, and copy-based prompt improvement. The same local PromptLane MCP server exposes scoring, rewrite, clarification, loop-aware continuation, and review tools to connected agents.
+
+Loop features are loop-aware continuation. They help select safe worktree,
+session, branch, and snapshot context for the next prompt; they do not turn
+PromptLane into an automatic agent runtime, transcript scraper, or merge bot.
 
 This project is not affiliated with, endorsed by, or sponsored by Anthropic, OpenAI, or any other AI tool provider. Product names such as Claude Code and Codex are used only to describe compatibility.
 
@@ -341,7 +347,7 @@ auto-submit anything. If the local ingest server is unavailable or ingest fails,
 the hook fails open and does not block the prompt.
 
 The same installation also registers fail-open `Stop`, `PreCompact`, and
-`PostCompact` hooks. On stop events, prompt-coach collects a local Loopdeck
+`PostCompact` hooks. On stop events, prompt-coach collects a local PromptLane
 snapshot from recent prompt metadata for the current project. On compact events,
 it records only compaction boundary metadata and an optional HMAC content hash;
 it does not store prompt bodies, raw paths, transcript contents, custom compact
@@ -532,8 +538,8 @@ The Claude Code plugin provides slash commands:
 /prompt-coach:open
 ```
 
-Claude Code slash commands remain under `/prompt-coach:*` during the Loopdeck
-migration. Existing plugin users can keep those commands, while manual terminal
+Claude Code slash commands remain under `/prompt-coach:*` during the PromptLane
+compatibility window. Existing plugin users can keep those commands, while manual terminal
 fallbacks can use the loopdeck CLI alias when preferred. `/loopdeck:*` is a
 planned alias-only slash namespace for a later compatibility slice; this package
 does not ship `/loopdeck:*` command files yet, and `/prompt-coach:*` must remain
@@ -747,33 +753,33 @@ The MCP server exposes twenty tools:
   (`prompt_improvement_drafts`). Returns metadata only (`draft_id`,
   `answers_count`, `changed_sections`, …) — the prompt body and the draft
   text are never echoed in the response. Local-only write tool.
-- `get_loopdeck_status`: check whether local Loopdeck loop snapshots exist and
+- `get_loopdeck_status`: check whether local PromptLane loop snapshots exist and
   return safe latest-loop metadata plus compact-boundary awareness when a
   compact happened after the latest snapshot.
 - `prepare_loop_brief`: prepare a copy-ready continuation prompt from the
-  latest local Loopdeck snapshot, or from the newest snapshot matching optional
+  latest local PromptLane snapshot, or from the newest snapshot matching optional
   `worktree`, `session_id`, and `branch` filters, without returning prompt
   bodies or raw paths. If the selected snapshot is older than a compact
   boundary, the brief says to refresh the loop snapshot but does not include
   compact summaries or custom compact instructions.
 - `record_loop_outcome`: store user-approved loop outcome metadata for a
-  Loopdeck snapshot without storing prompt bodies or raw paths.
+  PromptLane snapshot without storing prompt bodies or raw paths.
 - `propose_loop_memory_candidate`: decide whether the latest verified loop
   outcome is safe and evidence-backed enough to become a user-approved memory
   candidate. It is read-only and never writes AGENTS.md, CLAUDE.md, memory
   files, prompt bodies, raw paths, transcripts, compact summaries, or external
   LLM results.
-- `record_loop_memory`: record a user-approved Loopdeck memory from the latest
-  eligible candidate into local Loopdeck storage. It does not write
+- `record_loop_memory`: record a user-approved PromptLane memory from the latest
+  eligible candidate into local PromptLane storage. It does not write
   AGENTS.md, CLAUDE.md, project docs, prompt bodies, raw paths, transcripts,
   compact summaries, or external LLM results. Its structured `next_actions`
   point agents to `prepare_loop_brief` and
   `propose_instruction_patch target_file=AGENTS.md`.
 - `propose_instruction_patch`: propose a reviewable unified diff for adding the
-  latest approved Loopdeck memory to `AGENTS.md` or `CLAUDE.md`. It returns the
+  latest approved PromptLane memory to `AGENTS.md` or `CLAUDE.md`. It returns the
   patch text and an explicit apply gate only; web review does not write files,
   and application must go through CLI or MCP with explicit confirmation.
-- `apply_instruction_patch`: apply the latest approved Loopdeck memory to
+- `apply_instruction_patch`: apply the latest approved PromptLane memory to
   `AGENTS.md` or `CLAUDE.md` only when the caller explicitly confirms the file
   write. It is idempotent by source memory id and does not return raw paths.
 
@@ -813,7 +819,7 @@ The web UI also includes a Loops view for local snapshot readiness, recent loop
 metadata, compact refresh markers, and a copy action for the next loop brief.
 When the latest loop has an eligible memory candidate, the Loops summary can
 record that approved memory through the local web session; this only writes the
-local Loopdeck memory record and still leaves AGENTS.md/CLAUDE.md changes to
+local PromptLane memory record and still leaves AGENTS.md/CLAUDE.md changes to
 the explicit instruction patch workflow. After a memory is approved, the Loops
 summary can fetch a review-only AGENTS.md patch preview without writing files.
 It does not render prompt bodies, compact summaries, custom compact
