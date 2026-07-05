@@ -940,11 +940,16 @@ describe("plugin packaging files", () => {
     expect(releaseChecklist).toContain(
       "corepack pnpm evidence:quality -- --require-complete",
     );
+    expect(releaseChecklist).toContain(
+      "corepack pnpm --silent evidence:quality",
+    );
     for (const content of [packageContents, releaseChecklist]) {
       expect(content).toContain("scripts/quality-95-evidence.mjs");
     }
     for (const content of [backlog, plan]) {
       expect(content).toContain("corepack pnpm evidence:quality");
+      expect(content).toContain("corepack pnpm --silent evidence:quality");
+      expect(content).toContain("node scripts/quality-95-evidence.mjs");
       expect(content).toContain("promptlane_95_quality");
       expect(content).toContain("scorecard_axes");
       expect(content).toContain("native_dialog_approved_dogfood");

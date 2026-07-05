@@ -141,7 +141,10 @@
   `native_dialog_approved_dogfood` blockers until every axis reaches its 9.5
   evidence bar and the direct evidence is complete. Use
   `corepack pnpm evidence:quality -- --require-complete` when a release or
-  goal-completion gate must fail closed while that summary is pending.
+  goal-completion gate must fail closed while that summary is pending. Use
+  `corepack pnpm --silent evidence:quality` or
+  `node scripts/quality-95-evidence.mjs` when another tool needs to parse the
+  JSON directly.
 - Native OS ask UI dogfood remains operator-approved only; do not run
   `dogfood:mcp-native-dialog-approved` without explicit approval because it can
   open a native dialog.

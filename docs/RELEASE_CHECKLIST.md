@@ -32,6 +32,11 @@ Use this checklist before publishing a public beta or npm package.
 - [ ] `corepack pnpm evidence:quality -- --require-complete`
 - [ ] `git diff --check`
 
+For machine-readable inspection of the 9.5 quality summary, use
+`corepack pnpm --silent evidence:quality` or
+`node scripts/quality-95-evidence.mjs`; plain `corepack pnpm evidence:quality`
+may include package-manager execution banners around stdout.
+
 ## Package Contents
 
 Confirm `corepack pnpm pack:dry-run` includes:

@@ -135,4 +135,25 @@ describe("quality 9.5 evidence script", () => {
     expect(result.stderr).toContain("promptlane_95_quality pending");
     expect(result.stderr).toContain("--require-complete");
   });
+
+  it("stays machine-parseable through the silent pnpm script invocation", () => {
+    const result = spawnSync(
+      "corepack",
+      ["pnpm", "--silent", "evidence:quality"],
+      {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+
+    expect(result.status).toBe(0);
+    expect(result.stderr).toBe("");
+    const parsed = JSON.parse(result.stdout) as {
+      check: string;
+      scorecard_axes: unknown[];
+    };
+    expect(parsed.check).toBe("promptlane_95_quality");
+    expect(parsed.scorecard_axes).toHaveLength(7);
+  });
 });

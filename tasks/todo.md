@@ -17,6 +17,9 @@
   plan and marks axes below 9.5 as `below_target`.
 - [x] GREEN: `--require-complete` keeps JSON output available but exits nonzero
   while `promptlane_95_quality.status` is not `complete`.
+- [x] GREEN: machine parsers can use
+  `corepack pnpm --silent evidence:quality` or
+  `node scripts/quality-95-evidence.mjs` for clean JSON without pnpm banners.
 
 ### 판단 기준
 
@@ -29,6 +32,8 @@
   its 9.5 target.
 - Release/goal-completion automation can use
   `corepack pnpm evidence:quality -- --require-complete` as a fail-closed gate.
+- JSON-consuming automation should use the silent pnpm invocation or direct node
+  script, not the noisy package-manager wrapper output.
 
 ## 2026-07-06 PromptLane Scheduled UI Patrol Evidence Checker
 
