@@ -19,6 +19,8 @@ describe("createLoopBrief", () => {
     expect(brief.title).toBe("Continue agent loop loop_123");
     expect(brief.prompt).toContain("## Goal");
     expect(brief.prompt).toContain("Continue the current coding-agent loop");
+    expect(brief.prompt).toContain("local PromptLane snapshot");
+    expect(brief.prompt).not.toContain("Loopdeck");
     expect(brief.prompt).toContain("## Context");
     expect(brief.prompt).toContain("project: private-project");
     expect(brief.prompt).toContain("branch: codex/agent-loop-memory-design");

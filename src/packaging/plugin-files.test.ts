@@ -532,6 +532,7 @@ describe("plugin packaging files", () => {
       "docs/TECH_SPEC.md",
       "docs/IMPLEMENTATION_PLAN.md",
       "docs/RELEASE_CHECKLIST.md",
+      "src/loop/brief.ts",
     ];
     const forbiddenProductNamePatterns = [
       /\bPrompt Coach\b/,

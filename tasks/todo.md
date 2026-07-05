@@ -1,11 +1,27 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane Repository Surface Audit
+
+- [x] CHECK: GitHub canonical repository, local origin, README, package metadata, Claude/Codex plugin metadata가 `wlsdks/promptlane`과 `PromptLane`을 쓰는지 확인했다.
+- [x] RED: loop continuation brief가 product-facing `Loopdeck` wording을 노출하면 focused test와 packaging guard가 실패하도록 고정했다.
+- [x] GREEN: continuation brief의 user-facing snapshot copy를 `PromptLane` 기준으로 수정한다.
+- [x] VERIFY: focused tests, full test/lint/build, pack dry-run, diff check를 통과한다.
+- [ ] INTEGRATE: 변경을 커밋, 푸시, PR, CI 확인 후 merge하고 branch를 정리한다.
+
+### 판단 기준
+
+- GitHub repository canonical name은 `wlsdks/promptlane`이다.
+- 로컬 checkout 폴더명 `prompt-memory`는 GitHub repository name이 아니다.
+- `prompt-coach`는 package/CLI/MCP/slash/runtime compatibility id로 유지한다.
+- `Prompt Coach`는 제품명으로 쓰지 않고 workflow phrase로만 허용한다.
+- product-facing `Loopdeck` copy는 legacy/historical/compatibility allowlist 밖에서 추가하지 않는다.
+
 ## 2026-07-05 PromptLane Historical Plan Contract
 
 - [x] RED: shipped `docs/superpowers/plans/2026-07-04-loopdeck-*.md` 문서가 현재 PromptLane 계약 안내 없이 package에 실리면 packaging test가 실패하도록 고정했다.
 - [x] GREEN: 모든 shipped historical Loopdeck markdown plan 상단에 historical naming note, 현재 제품명 `PromptLane`, 현재 runtime id `prompt-coach`, current contract 문서 링크를 추가했다.
 - [x] VERIFY: focused packaging guard, full test/lint/build, pack dry-run, diff check를 통과한다.
-- [ ] INTEGRATE: 변경을 커밋, 푸시, PR, CI 확인 후 merge하고 branch를 정리한다.
+- [x] INTEGRATE: PR #393이 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인했다.
 
 ### 판단 기준
 

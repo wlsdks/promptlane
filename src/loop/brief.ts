@@ -52,7 +52,7 @@ export function createLoopBrief(input: {
     source_snapshot_id: snapshot.id,
     prompt: [
       "## Goal",
-      "Continue the current coding-agent loop using the local Loopdeck snapshot.",
+      "Continue the current coding-agent loop using the local PromptLane snapshot.",
       "",
       "## Context",
       `project: ${snapshot.cwd_label}`,
