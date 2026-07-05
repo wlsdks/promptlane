@@ -1,5 +1,27 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Scheduled UI Patrol Evidence Checker
+
+- [x] CHECK: GitHub `ui-patrol.yml` workflow history still has no `schedule`
+  event, so scheduled evidence must remain pending even though manual
+  workflow_dispatch artifact evidence exists.
+- [x] RED: packaging guard fails unless `scripts/ui-patrol-evidence.mjs`,
+  package script `evidence:ui-patrol`, and docs mention
+  `corepack pnpm evidence:ui-patrol`.
+- [x] GREEN: evidence checker reports `pending_no_schedule_run` when no
+  scheduled run exists, and verifies `ui-patrol-screenshots` plus 9 png
+  artifacts before returning `complete`.
+- [x] EFFECT: scheduled UI patrol blocker is repeatable and machine-readable
+  without pretending the manual workflow_dispatch artifact is scheduled
+  evidence.
+
+### 판단 기준
+
+- Checker must not mark completion unless a real `schedule` event exists.
+- Checker must require `ui-patrol-screenshots` and 9 png files for completion.
+- Docs must keep scheduled `ui-patrol` evidence pending until
+  `corepack pnpm evidence:ui-patrol` reports `complete`.
+
 ## 2026-07-06 PromptLane MCP Coach Effectiveness Smoke
 
 - [x] CHECK: `coach_prompt` agent brief는 effectiveness evidence를 포함하지만

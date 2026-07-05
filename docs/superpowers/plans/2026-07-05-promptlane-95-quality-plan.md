@@ -132,6 +132,10 @@
 
 - Scheduled `ui-patrol` artifact evidence remains pending until a real cron
   `schedule` event appears and its screenshot artifact is verified.
+- `corepack pnpm evidence:ui-patrol` is the repeatable checker for that
+  blocker. It must stay `pending_no_schedule_run` while only workflow_dispatch
+  evidence exists, and it must require the `ui-patrol-screenshots` artifact
+  with 9 png files before returning `complete`.
 - Native OS ask UI dogfood remains operator-approved only; do not run
   `dogfood:mcp-native-dialog-approved` without explicit approval because it can
   open a native dialog.

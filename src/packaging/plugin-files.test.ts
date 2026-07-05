@@ -856,6 +856,10 @@ describe("plugin packaging files", () => {
   });
 
   it("keeps scheduled ui-patrol evidence pending until a schedule run exists", () => {
+    const packageJson = readJson<{
+      files: string[];
+      scripts: Record<string, string>;
+    }>("package.json");
     const goalAudit = readFileSync(
       join(process.cwd(), "docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md"),
       "utf8",
@@ -869,10 +873,22 @@ describe("plugin packaging files", () => {
       join(process.cwd(), ".github/workflows/ui-patrol.yml"),
       "utf8",
     );
+    const evidenceScript = readFileSync(
+      join(process.cwd(), "scripts/ui-patrol-evidence.mjs"),
+      "utf8",
+    );
 
+    expect(packageJson.files).toContain("scripts/ui-patrol-evidence.mjs");
+    expect(packageJson.scripts["evidence:ui-patrol"]).toBe(
+      "node scripts/ui-patrol-evidence.mjs",
+    );
+    expect(evidenceScript).toContain("ui-patrol-screenshots");
+    expect(evidenceScript).toContain("scheduled_ui_patrol");
+    expect(evidenceScript).toContain("pending_no_schedule_run");
     expect(workflow).toContain("schedule:");
     expect(workflow).toContain('cron: "17 6 * * 1"');
     for (const content of [goalAudit, backlog, todo]) {
+      expect(content).toContain("corepack pnpm evidence:ui-patrol");
       expect(content).toContain("workflow_dispatch run `28717406758`");
       expect(content).toContain("9 png files");
       expect(content).toContain("no `schedule` event");

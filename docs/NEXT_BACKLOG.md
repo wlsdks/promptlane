@@ -120,6 +120,10 @@ Current goal audit:
   workflow_dispatch run `28717406758` and no `schedule` event; workflow_dispatch run
   `28717406758` still has a non-expired `ui-patrol-screenshots` artifact with
   9 png files, but scheduled `ui-patrol` evidence remains pending.
+- `corepack pnpm evidence:ui-patrol` is the repeatable scheduled evidence
+  checker. It reports `pending_no_schedule_run` until a real `schedule` event
+  exists and only reports `complete` after downloading `ui-patrol-screenshots`
+  and finding 9 png files.
 - Local `corepack pnpm ui-patrol` on current main after PR #410 passed and
   captured 9 png files.
 - PR #447 added local `expected_impact` evidence to prompt improvements so

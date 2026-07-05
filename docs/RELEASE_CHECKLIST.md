@@ -72,6 +72,7 @@ Confirm `corepack pnpm pack:dry-run` includes:
 - [ ] `scripts/quality-gate.mjs`
 - [ ] `scripts/release-smoke.mjs`
 - [ ] `scripts/ui-patrol.mjs`
+- [ ] `scripts/ui-patrol-evidence.mjs`
 
 Confirm `corepack pnpm pack:dry-run` uses the local wrapper:
 

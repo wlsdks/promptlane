@@ -128,6 +128,9 @@ Verified CI and operational evidence:
 - The latest `ui-patrol.yml` workflow history inspected on 2026-07-05 contains
   workflow_dispatch runs only and no `schedule` event, so scheduled
   `ui-patrol` evidence remains pending.
+- `corepack pnpm evidence:ui-patrol` now repeats that check and reports
+  `pending_no_schedule_run` until a real `schedule` run with the
+  `ui-patrol-screenshots` artifact and 9 png files exists.
 - `corepack pnpm e2e:browser` on `codex/reuse-copy-fallback-audit-refresh`
   forced clipboard writes to fail and verified the prompt detail manual-copy
   fallback for saved improvement drafts.
@@ -154,7 +157,7 @@ Verified CI and operational evidence:
 | PromptLane MVP reliability slices | The current product-contract reliability slices for storage capability, MCP setup guidance, evidence-first memory, and focused Codex/Claude setup smoke have landed. | PR #403, PR #405, PR #407, PR #408, `docs/NEXT_BACKLOG.md`, `tasks/todo.md` | Satisfied for current MVP reliability scope |
 | Reuse copy fallback | Clipboard-write failure now opens a local manual-copy fallback instead of leaving the user at a dead end, including the real Codex in-app Browser clipboard failure mode. | `src/web/src/App.tsx`, `src/web/src/prompt-detail-view.test.ts`, `scripts/browser-e2e.mjs`, `corepack pnpm e2e:browser`, fresh Codex in-app Browser pass | Satisfied for automated and manual in-app Browser coverage |
 | Reuse saved draft workflow | Saved drafts can be reopened as the current coach draft so the operator can reuse the same copy/manual-fallback controls without auto-submitting to an agent; reopened rows show `Saved draft` and disable duplicate saves with `Already saved`. | `src/web/src/saved-draft-improvement.ts`, `src/web/src/improvement-mode-label.ts`, `src/web/src/improvement-save-state.ts`, `src/web/src/prompt-detail-view.tsx`, `scripts/browser-e2e.mjs` | Satisfied for current reuse flow |
-| UI patrol scheduled artifact | Manual workflow dispatch and local `corepack pnpm ui-patrol` are verified; latest workflow history has no `schedule` event, so scheduled `ui-patrol` evidence remains pending. | workflow_dispatch run `28717406758`; artifact `8084817676`; local `corepack pnpm ui-patrol` with 9 png files; `.github/workflows/ui-patrol.yml` cron | Not yet complete as a scheduled-run requirement |
+| UI patrol scheduled artifact | Manual workflow dispatch and local `corepack pnpm ui-patrol` are verified; latest workflow history has no `schedule` event, so scheduled `ui-patrol` evidence remains pending. `corepack pnpm evidence:ui-patrol` is the repeatable checker and must report `complete` before this row can be promoted. | workflow_dispatch run `28717406758`; artifact `8084817676`; local `corepack pnpm ui-patrol` with 9 png files; `.github/workflows/ui-patrol.yml` cron; `corepack pnpm evidence:ui-patrol` | Not yet complete as a scheduled-run requirement |
 | Codex native dialog fallback | Safe no-dialog preflight, MCP elicitation smoke, and approval-gated harness refusal are verified; real OS/native ask UI dogfood is not run. | `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md`, `scripts/mcp-native-dialog-approved.mjs`, `package.json` | Pending explicit operator approval for the answered dialog run |
 | MCP registry follow-up | Decision is documented to wait until a new MCP tool/schema change touches registration. | ADR 0001, `docs/NEXT_BACKLOG.md` | Deferred by design |
 
@@ -179,8 +182,9 @@ evidence for the pending integration and operational items:
 ## Next Best Actions
 
 1. Keep `main` clean and continue shipping small, evidence-backed slices.
-2. After the next Monday cron, inspect the scheduled `ui-patrol` artifact and
-   update `tasks/todo.md`.
+2. After the next Monday cron, run `corepack pnpm evidence:ui-patrol`; only
+   update this item as complete if it finds a real `schedule` event and 9 png
+   screenshots.
 3. Ask for explicit operator approval before opening a native OS dialog.
 4. When approval is granted, run
    `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved`
