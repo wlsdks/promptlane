@@ -6,8 +6,8 @@
 - [x] RED: `PromptDetailView` SSR test가 `Expected impact`, `Original score`, `Improved score`, positive point delta 부재로 실패해야 한다.
 - [x] GREEN: web prompt detail coach panel이 expected impact metric row를 렌더링한다.
 - [x] EFFECT: 웹 사용자가 개선안을 복사/저장하기 전에 로컬 analyzer 기준 원문 대비 예상 개선량을 직접 판단할 수 있다.
-- [ ] VERIFY: focused web tests, `corepack pnpm ui-patrol`, full local gate, PR CI, latest main CI, and branch prune all pass.
-- [ ] INTEGRATE: PR이 CI 통과 후 merge되고 branch prune까지 확인된다.
+- [x] VERIFY: focused web tests, `corepack pnpm ui-patrol`, full local gate, PR CI, latest main CI run `28747568864`, and branch prune all pass.
+- [x] INTEGRATE: PR #449가 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.
 
 ### 판단 기준
 
