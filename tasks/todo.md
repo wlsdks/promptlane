@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane UI Patrol Action Runtime Cleanup
+
+- [x] CHECK: `ui-patrol.yml` has a real Monday cron (`17 6 * * 1`), but as of 2026-07-06 00:04 KST the scheduled run has not fired yet; the workflow still used `pnpm/action-setup@v4`.
+- [x] RED: packaging guard must fail while the scheduled UI patrol workflow uses `pnpm/action-setup@v4` instead of Node 24 compatible `pnpm/action-setup@v6`.
+- [x] GREEN: `.github/workflows/ui-patrol.yml` now uses `pnpm/action-setup@v6`, matching the latest verified action major whose metadata uses `runs.using: node24`.
+- [ ] VERIFY: focused packaging guard, full local gate, PR CI, latest main CI, and branch prune all pass.
+- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+
+### 판단 기준
+
+- scheduled `ui-patrol` evidence remains pending until a real `schedule` event and artifact exist.
+- action runtime cleanup is release/web reliability work because scheduled evidence should not reintroduce Node 20 action annotations.
+- workflow action major updates must be guarded so `ui-patrol.yml` does not drift behind the main test workflow.
+
 ## 2026-07-05 PromptLane 9.5 Web Evidence Ledger Refresh
 
 - [x] CHECK: 9.5 quality plan Evidence Ledger still referenced the stale "after PR #422" main CI line and did not pin PR #429/#430 or latest main CI run `28744698708`.

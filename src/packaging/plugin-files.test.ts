@@ -1701,6 +1701,8 @@ describe("plugin packaging files", () => {
       "utf8",
     );
 
+    expect(workflow).toContain("pnpm/action-setup@v6");
+    expect(workflow).not.toContain("pnpm/action-setup@v4");
     expect(workflow).toContain("pnpm exec playwright install chromium");
     expect(workflow.indexOf("pnpm exec playwright install chromium")).toBeLessThan(
       workflow.indexOf("pnpm ui-patrol"),
