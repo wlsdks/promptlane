@@ -1,5 +1,12 @@
 # Loopdeck Deprecation Readiness
 
+Historical naming note:
+
+- Current product name: PromptLane.
+- Current runtime id: `prompt-coach`.
+- This document preserves an older Loopdeck compatibility decision. See `docs/PROMPTLANE.md` for the active product contract.
+- See `docs/LOOPDECK-LEGACY-SURFACES.md` before adding or changing any Loopdeck/`loopdeck` surface.
+
 **Date:** 2026-07-04
 **Slice:** R7 Deprecation Window Readiness
 **Decision: not deprecated**

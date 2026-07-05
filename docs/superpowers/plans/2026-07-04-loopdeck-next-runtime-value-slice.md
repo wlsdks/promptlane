@@ -1,5 +1,12 @@
 # Loopdeck Next Runtime Value Slice
 
+Historical naming note:
+
+- Current product name: PromptLane.
+- Current runtime id: `prompt-coach`.
+- This document preserves an older Loopdeck compatibility decision. See `docs/PROMPTLANE.md` for the active product contract.
+- See `docs/LOOPDECK-LEGACY-SURFACES.md` before adding or changing any Loopdeck/`loopdeck` surface.
+
 Decision: Selected Worktree Continuation Brief Parity
 
 This is not a rename slice. The runtime id compatibility line is now blocked on

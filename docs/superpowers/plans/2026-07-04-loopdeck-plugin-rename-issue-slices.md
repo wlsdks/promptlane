@@ -1,5 +1,12 @@
 # Loopdeck Plugin Rename Issue Slices
 
+Historical naming note:
+
+- Current product name: PromptLane.
+- Current runtime id: `prompt-coach`.
+- This document preserves an older Loopdeck compatibility decision. See `docs/PROMPTLANE.md` for the active product contract.
+- See `docs/LOOPDECK-LEGACY-SURFACES.md` before adding or changing any Loopdeck/`loopdeck` surface.
+
 **Date:** 2026-07-04
 **Parent plan:** `docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md`
 **Status:** Implementation slicing plan, not approval to rename runtime ids

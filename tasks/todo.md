@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane Historical Plan Contract
+
+- [x] RED: shipped `docs/superpowers/plans/2026-07-04-loopdeck-*.md` 문서가 현재 PromptLane 계약 안내 없이 package에 실리면 packaging test가 실패하도록 고정했다.
+- [x] GREEN: 모든 shipped historical Loopdeck markdown plan 상단에 historical naming note, 현재 제품명 `PromptLane`, 현재 runtime id `prompt-coach`, current contract 문서 링크를 추가했다.
+- [x] VERIFY: focused packaging guard, full test/lint/build, pack dry-run, diff check를 통과한다.
+- [ ] INTEGRATE: 변경을 커밋, 푸시, PR, CI 확인 후 merge하고 branch를 정리한다.
+
+### 판단 기준
+
+- historical docs는 삭제하지 않고 과거 결정 기록으로 유지한다.
+- 설치 사용자가 historical docs를 열어도 현재 제품명은 PromptLane이고 runtime id는 `prompt-coach`임을 먼저 보게 한다.
+- 새 Loopdeck/`loopdeck` surface는 `docs/LOOPDECK-LEGACY-SURFACES.md` 기준으로 분류한다.
+
 ## 2026-07-05 PromptLane Runtime Copy Boundary
 
 - [x] RED: CLI loop schedule help가 `Loopdeck` 제품명을 노출하면 `src/cli/index.test.ts`가 실패하도록 고정했다.

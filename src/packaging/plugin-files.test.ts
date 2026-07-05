@@ -1335,6 +1335,29 @@ describe("plugin packaging files", () => {
     expect(allowlist).not.toContain("/Users/");
   });
 
+  it("marks shipped Loopdeck historical plans as superseded by PromptLane", () => {
+    const packageJson = readJson<{ files: string[] }>("package.json");
+    const historicalPlanPaths = packageJson.files.filter(
+      (filePath) =>
+        filePath.startsWith("docs/superpowers/plans/2026-07-04-loopdeck-") &&
+        filePath.endsWith(".md"),
+    );
+
+    expect(historicalPlanPaths.length).toBeGreaterThan(0);
+    for (const planPath of historicalPlanPaths) {
+      const plan = readFileSync(join(process.cwd(), planPath), "utf8");
+      expect(plan, planPath).toContain("Historical naming note");
+      expect(plan, planPath).toContain("Current product name: PromptLane");
+      expect(plan, planPath).toContain("Current runtime id: `prompt-coach`");
+      expect(plan, planPath).toContain("See `docs/PROMPTLANE.md`");
+      expect(plan, planPath).toContain("See `docs/LOOPDECK-LEGACY-SURFACES.md`");
+      expect(plan, planPath).not.toContain("TODO");
+      expect(plan, planPath).not.toContain("TBD");
+      expect(plan, planPath).not.toContain("sk-proj");
+      expect(plan, planPath).not.toContain("/Users/");
+    }
+  });
+
   it("restores executable mode for the npm CLI bin after server builds", () => {
     const packageJson = readJson<{ scripts: Record<string, string> }>(
       "package.json",
