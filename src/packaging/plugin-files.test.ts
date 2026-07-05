@@ -368,7 +368,6 @@ describe("plugin packaging files", () => {
     expect(manifest.interface.defaultPrompt).toEqual(
       expect.arrayContaining([
         "Show my PromptLane buddy side pane command",
-        "Use the loopdeck CLI alias for my next manual command",
         "Show my PromptLane hook rewrite-guard mode",
         "Toggle the PromptLane rewrite guard between off / context / ask / block-and-copy",
         "Score my latest captured prompt",
@@ -383,6 +382,9 @@ describe("plugin packaging files", () => {
     );
     expect(manifest.interface.defaultPrompt).not.toContain(
       "Review my current project AGENTS.md or CLAUDE.md rules",
+    );
+    expect(manifest.interface.defaultPrompt).not.toEqual(
+      expect.arrayContaining([expect.stringMatching(/\bloopdeck\b/i)]),
     );
   });
 
@@ -441,7 +443,7 @@ describe("plugin packaging files", () => {
     expect(skill).toContain("prompt-coach install-hook codex");
   });
 
-  it("documents plugin command namespace compatibility during the Loopdeck migration", () => {
+  it("documents plugin command namespace compatibility without promoting loopdeck aliases", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const plugins = readFileSync(
       join(process.cwd(), "docs/PLUGINS.md"),
@@ -451,11 +453,15 @@ describe("plugin packaging files", () => {
     expect(readme).toContain(
       "Claude Code slash commands remain under `/prompt-coach:*`",
     );
-    expect(readme).toContain("use the loopdeck CLI alias");
+    expect(readme).not.toContain("use the loopdeck CLI alias");
+    expect(readme).not.toContain("Use the loopdeck CLI alias");
+    expect(readme).not.toContain("when preferred");
     expect(plugins).toContain(
       "Claude Code slash commands remain under `/prompt-coach:*`",
     );
-    expect(plugins).toContain("`loopdeck` CLI alias");
+    expect(plugins).toContain("legacy `loopdeck` CLI alias");
+    expect(plugins).not.toContain("use the loopdeck CLI alias");
+    expect(plugins).not.toContain("when preferred");
   });
 
   it("keeps PromptLane docs from describing product surfaces as prompt-coach storage or servers", () => {
@@ -1288,8 +1294,8 @@ describe("plugin packaging files", () => {
       expect(content).toContain("loopdeck");
       expect(content).toContain("prompt-coach");
     }
-    expect(readme).toContain("loopdeck is a legacy CLI alias");
-    expect(readmeKo).toContain("loopdeck는 legacy CLI alias");
+    expect(readme).toContain("it is a legacy CLI alias");
+    expect(readmeKo).toContain("`loopdeck`는 legacy CLI alias");
     expect(packageContents).toContain("legacy loopdeck");
   });
 

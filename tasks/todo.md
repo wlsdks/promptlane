@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane Loopdeck Alias Boundary
+
+- [x] RED: Codex default prompts, README, PLUGINS가 `loopdeck` alias를 추천하거나 preferred/manual command로 홍보하면 packaging test가 실패하도록 고정했다.
+- [x] GREEN: Codex plugin default prompts에서 `loopdeck` 제안을 제거하고 README/PLUGINS는 legacy compatibility 설명만 남겼다.
+- [x] VERIFY: focused packaging guard, full test/lint/build, pack dry-run, diff check를 통과한다.
+- [ ] INTEGRATE: 변경을 커밋, 푸시, PR, CI 확인 후 merge하고 branch를 정리한다.
+
+### 판단 기준
+
+- `PromptLane`은 제품명이고 `prompt-coach`는 기본 runtime command다.
+- `loopdeck`는 legacy CLI alias로만 설명하고 새 사용자 prompt/default action으로 제안하지 않는다.
+- `/loopdeck:*`는 shipped slash namespace가 아니며 `/prompt-coach:*`가 계속 required namespace다.
+
 ## 2026-07-05 PromptLane Name And Repository Surface
 
 - [x] DECISION: `Prompt Coach`는 서비스명으로 쓰지 않고 `PromptLane`을 제품명으로 사용한다.

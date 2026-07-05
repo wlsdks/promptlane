@@ -22,7 +22,7 @@ prompt-coach coach
 
 PromptLane is a developer tool that safely records prompts and loop metadata from AI coding tools such as Claude Code and Codex, helps you find them again, analyzes weak prompting patterns, and helps you write better follow-up requests. The current npm package and CLI command are still named `prompt-coach` during the compatibility window.
 
-The npm package also installs `loopdeck`; loopdeck is a legacy CLI alias for the same binary.
+The npm package also installs `loopdeck`; it is a legacy CLI alias for the same binary.
 Use `prompt-coach` in existing scripts and plugin commands. Keep `loopdeck`
 only for compatibility with earlier manual terminal workflows.
 Slash command and plugin id migration is gated by
@@ -539,11 +539,11 @@ The Claude Code plugin provides slash commands:
 ```
 
 Claude Code slash commands remain under `/prompt-coach:*` during the PromptLane
-compatibility window. Existing plugin users can keep those commands, while manual terminal
-fallbacks can use the loopdeck CLI alias when preferred. `/loopdeck:*` is a
-planned alias-only slash namespace for a later compatibility slice; this package
-does not ship `/loopdeck:*` command files yet, and `/prompt-coach:*` must remain
-available.
+compatibility window. Existing plugin users should keep those commands. The
+`loopdeck` CLI alias remains only for earlier manual terminal fallbacks.
+`/loopdeck:*` is a planned alias-only slash namespace for a later compatibility
+slice; this package does not ship `/loopdeck:*` command files yet, and
+`/prompt-coach:*` must remain available.
 
 `/prompt-coach:guard` opens an interactive picker (off / context / ask /
 block-and-copy) that flips the `UserPromptSubmit` rewrite-guard mode without

@@ -22,7 +22,7 @@ prompt-coach coach
 
 PromptLane은 Claude Code, Codex 같은 AI 코딩 도구에 입력한 프롬프트와 loop metadata를 안전하게 로컬에 기록하고, 나중에 다시 찾고, 반복되는 약한 프롬프트 패턴을 분석하고, 다음 요청을 더 잘 쓰도록 돕는 developer tool입니다. 현재 npm package와 CLI 명령은 호환성 기간 동안 계속 `prompt-coach` 이름을 사용합니다.
 
-npm package는 같은 binary를 가리키는 `loopdeck`도 함께 설치합니다. loopdeck는 legacy CLI alias입니다.
+npm package는 같은 binary를 가리키는 `loopdeck`도 함께 설치합니다. `loopdeck`는 legacy CLI alias입니다.
 기존 script와 plugin command에는 `prompt-coach`를 계속 쓰고, 이전 manual
 terminal workflow 호환이 필요할 때만 `loopdeck`를 유지합니다.
 

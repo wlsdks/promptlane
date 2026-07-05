@@ -34,7 +34,6 @@
     "defaultPrompt": [
       "Set up PromptLane for this machine",
       "Check whether PromptLane is capturing Codex prompts",
-      "Use the loopdeck CLI alias for my next manual command",
       "Show my PromptLane hook rewrite-guard mode",
       "Toggle the PromptLane rewrite guard between off / context / ask / block-and-copy",
       "Show my PromptLane buddy side pane command",
