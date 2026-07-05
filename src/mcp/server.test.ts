@@ -57,6 +57,7 @@ describe("MCP stdio server", () => {
     expect(joinedDescriptions).not.toContain("local prompt-coach archive");
     expect(joinedDescriptions).not.toContain("prompt-coach archive");
     expect(joinedDescriptions).not.toContain("prompt-coach storage");
+    expect(joinedDescriptions).not.toContain("Prompt Coach");
     expect(joinedDescriptions).toContain("prompt-coach MCP tool");
     expect(JSON.stringify(tools)).toContain("Loopdeck status preflight");
     expect(JSON.stringify(tools)).not.toContain("Prompt-memory status preflight");

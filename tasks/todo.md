@@ -3599,4 +3599,11 @@
 - [x] RED: Add packaging/docs drift guard requiring shipped core docs (`ARCHITECTURE`, `AGENT-HARNESS`, `PLUGINS`, `TECH_SPEC`) to name PromptLane as the prompt improvement workspace with loop-aware continuation while preserving `prompt-coach` runtime ids.
 - [x] GREEN: Align core doc product boundaries, harness wording, plugin MCP wording, and tech spec purpose to PromptLane-first positioning.
 - [x] VERIFY: Focused packaging test, full test/lint/build, pack dry-run, and diff check passed.
+- [x] INTEGRATE: PR #376 was merged to `main`; branch was pruned.
+
+## 2026-07-05 PromptLane Prompt Coach Boundary
+
+- [x] RED: Add focused packaging/docs and MCP drift guards requiring active product docs and agent-facing tool descriptions to avoid presenting `Prompt Coach` as a service name.
+- [x] GREEN: Replace active README, release checklist, tech spec, implementation-plan, and MCP `improve_prompt` `Prompt Coach` labels with PromptLane improvement-draft wording while preserving `prompt-coach` runtime IDs.
+- [x] VERIFY: Focused packaging and MCP tests, full test/lint/build, pack dry-run, and diff check passed.
 - [ ] INTEGRATE: Push one coherent PR, merge it after CI, and prune the branch.

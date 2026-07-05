@@ -462,6 +462,29 @@ describe("plugin packaging files", () => {
     expect(docs).not.toContain("local prompt-coach web server");
   });
 
+  it("keeps active product docs from presenting Prompt Coach as a service name", () => {
+    const activeProductDocs = [
+      "README.md",
+      "README.ko.md",
+      "docs/IMPLEMENTATION_PLAN.md",
+      "docs/RELEASE_CHECKLIST.md",
+      "docs/TECH_SPEC.md",
+    ];
+
+    for (const docPath of activeProductDocs) {
+      const doc = readFileSync(join(process.cwd(), docPath), "utf8");
+      expect(doc).toContain("PromptLane");
+      expect(doc).not.toContain("Prompt Coach");
+    }
+
+    const positioning = readFileSync(
+      join(process.cwd(), "docs/PROMPTLANE.md"),
+      "utf8",
+    );
+    expect(positioning).toContain("Product name: PromptLane.");
+    expect(positioning).toContain("`prompt-coach`");
+  });
+
   it("keeps the Loopdeck goal audit aligned with merged saved-draft reuse slices", () => {
     const audit = readFileSync(
       join(process.cwd(), "docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md"),

@@ -19,7 +19,7 @@ The product identity is:
 
 > AI coding prompt memory and improvement workspace, local-first.
 
-The implementation goal is to help Claude Code and Codex users safely record prompts locally, find them again, understand weak prompting habits, and write better next requests through a copy-based Prompt Coach workflow.
+The implementation goal is to help Claude Code and Codex users safely record prompts locally, find them again, understand weak prompting habits, and write better next requests through a copy-based PromptLane improvement workflow.
 
 ## 2. Engineering Principles
 
@@ -65,7 +65,7 @@ The beta is implementation-complete when:
 - Markdown and SQLite/FTS rows are created
 - CLI can list/search/show/delete/open prompts
 - web UI can list/search/detail/delete prompts
-- Prompt Coach can create, copy, and save improvement drafts
+- PromptLane can create, copy, and save improvement drafts
 - Prompt Rewrite Guard can optionally block low-score prompts and copy a local
   rewrite for manual resubmission
 - project capture/export policies are enforced
@@ -144,7 +144,7 @@ Web screens:
 
 - archive
 - prompt detail
-- Prompt Coach
+- improvement drafts
 - dashboard/quality
 - projects
 - export
@@ -180,7 +180,7 @@ Deferred from public beta:
 
 1. Add CI release gates for Node 22 and Node 24.
 2. Expand smoke coverage across macOS, Linux, and Windows.
-3. Collect beta feedback on Prompt Coach usefulness.
+3. Collect beta feedback on PromptLane improvement usefulness.
 4. Decide whether to add web import upload.
 5. Decide whether semantic search can remain local-first.
 6. Revisit external/tool-assisted analysis only with explicit opt-in, preview,

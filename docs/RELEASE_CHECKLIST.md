@@ -7,7 +7,7 @@ Use this checklist before publishing a public beta or npm package.
 - [ ] README describes install, init, server, hook install, doctor, uninstall, and delete flows.
 - [ ] README states the default storage path.
 - [ ] README states that local rule-based analysis preview is implemented.
-- [ ] README states that Prompt Coach is copy-based and does not auto-type, replace, or resubmit prompts into Claude Code or Codex.
+- [ ] README states that PromptLane improvement drafts are copy-based and do not auto-type, replace, or resubmit prompts into Claude Code or Codex.
 - [ ] Prompt Rewrite Guard docs state that `block-and-copy` is opt-in and requires manual paste/enter.
 - [ ] README states that transcript import is CLI-centered and has no web upload UI.
 - [ ] README states that browser export is anonymized-only and raw export is not implemented.
@@ -105,8 +105,8 @@ Confirm `corepack pnpm pack:dry-run` excludes:
 - [ ] `prompt-coach import --dry-run --save-job` stores a raw-free job summary.
 - [ ] `prompt-coach import --execute` imports prompt candidates and supports resume/idempotency.
 - [ ] Imported-only filter works in CLI/API list flows.
-- [ ] Prompt detail shows local analysis and Prompt Coach draft.
-- [ ] Prompt Coach draft can be copied and saved without overwriting the original prompt.
+- [ ] Prompt detail shows local analysis and a PromptLane improvement draft.
+- [ ] PromptLane improvement drafts can be copied and saved without overwriting the original prompt.
 - [ ] Export preview and execute work from both CLI and web UI.
 - [ ] Benchmark v1 passes with `privacy_leak_count` equal to 0.
 - [ ] Browser E2E passes on desktop and mobile viewport checks.
@@ -130,7 +130,7 @@ Confirm `corepack pnpm pack:dry-run` excludes:
 - [ ] Capture one fixture-like Codex prompt.
 - [ ] Confirm both prompts appear in CLI.
 - [ ] Confirm both prompts appear in the web UI.
-- [ ] Confirm Prompt Coach copy/save works in the web UI.
+- [ ] Confirm PromptLane improvement draft copy/save works in the web UI.
 - [ ] Confirm anonymized export preview and execution work.
 - [ ] Confirm Benchmark v1 passes.
 - [ ] Delete a prompt and confirm it disappears from CLI and web UI.

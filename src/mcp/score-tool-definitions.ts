@@ -250,7 +250,7 @@ export const SCORE_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
 export const IMPROVE_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
   name: "improve_prompt",
   description:
-    "Generate an approval-ready improved coding prompt draft with prompt-coach's local deterministic Prompt Coach. Use this when the user asks Claude Code or Codex to rewrite, clarify, or upgrade the current request, a pasted prompt, a stored prompt id, or the latest captured prompt before resubmitting it. The tool is copy-based: it never auto-submits the draft, never calls external LLMs, does not store direct prompt input, and does not return the original stored prompt body.",
+    "Generate an approval-ready improved coding prompt draft with PromptLane's local deterministic improver. Use this when the user asks Claude Code or Codex to rewrite, clarify, or upgrade the current request, a pasted prompt, a stored prompt id, or the latest captured prompt before resubmitting it. The tool is copy-based: it never auto-submits the draft, never calls external LLMs, does not store direct prompt input, and does not return the original stored prompt body.",
   annotations: {
     ...LOCAL_READ_ONLY_TOOL_ANNOTATIONS,
     title: "Approval-ready prompt rewrite",

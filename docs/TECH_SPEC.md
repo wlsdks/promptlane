@@ -314,7 +314,7 @@ Public beta claim:
 - redaction is best effort
 - users should not rely on it as a complete DLP system
 
-## 10. Analysis And Prompt Coach
+## 10. Analysis And Improvement Drafts
 
 Local analysis is deterministic and rule-based.
 
@@ -333,7 +333,7 @@ It also derives a local Prompt Quality Score:
 - status scoring: `good` earns full weight, `weak` earns half weight, `missing` earns zero
 - bands: `excellent >= 85`, `good >= 60`, `needs_work >= 40`, `weak < 40`
 
-Prompt Coach creates a copy-based improvement draft. Drafts:
+PromptLane creates copy-based improvement drafts. Drafts:
 
 - do not overwrite source prompts
 - can be copied
@@ -402,7 +402,7 @@ Core screens:
 
 - archive list
 - prompt detail
-- Prompt Coach panel
+- improvement draft panel
 - dashboard
 - projects
 - export
@@ -452,7 +452,7 @@ The public beta can claim:
 - Markdown source of truth
 - SQLite/FTS index
 - CLI and web UI
-- Prompt Coach copy/save workflow
+- improvement draft copy/save workflow
 - project capture/export policy
 - CLI import
 - anonymized export

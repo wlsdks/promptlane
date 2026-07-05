@@ -86,7 +86,7 @@ This repository is pre-release software.
 - Local rule-based analysis preview: implemented
 - Prompt Quality Score: implemented as a local deterministic `0-100` rubric
 - MCP prompt scoring tools: implemented as a local stdio server
-- Copy-based Prompt Coach: implemented, including raw-free next request briefs
+- Copy-based PromptLane improvement drafts: implemented, including raw-free next request briefs
 - Prompt Practice workspace: implemented as a local draft-and-score UI with
   score history and outcome feedback that do not store draft text
 - Transcript import: CLI only
@@ -670,7 +670,7 @@ The web UI exposes only anonymized export. Raw export is not implemented.
 Previewed export jobs expire and are invalidated when the selected prompt set,
 project policy versions, redaction version, or preview counts change.
 
-Generate a copy-based Prompt Coach draft:
+Generate a copy-based PromptLane improvement draft:
 
 ```sh
 pnpm prompt-coach coach
@@ -964,7 +964,7 @@ Browser regression smoke is also available:
 pnpm e2e:browser
 ```
 
-It checks the archive, prompt detail, Prompt Coach copy/save flow, projects,
+It checks the archive, prompt detail, improvement draft copy/save flow, projects,
 anonymized export, and mobile overflow against a real local server.
 
 ## Storage
@@ -998,7 +998,7 @@ Default behavior:
   redacted prompt packets to the active user-controlled Claude Code, Codex, or
   Gemini CLI session when requested, and that agent may send the packet through
   its provider session according to the user's tool setup.
-- Prompt Coach is copy-based. It does not automatically type into, replace, or resubmit prompts into Claude Code or Codex.
+- PromptLane improvement drafts are copy-based. They do not automatically type into, replace, or resubmit prompts into Claude Code or Codex.
 - Prompt Rewrite Guard is opt-in. In `block-and-copy` mode it blocks weak prompts and offers a copied local rewrite for manual paste/enter. In `context` mode it adds model-visible rewrite guidance but does not replace the original prompt.
 - Settings and local diagnostics may show local filesystem paths to the local user. Browser prompt/archive/export surfaces mask prompt-body paths and avoid raw prompt identifiers.
 
