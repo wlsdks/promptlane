@@ -477,6 +477,27 @@ describe("plugin packaging files", () => {
     expect(reuseAudit).not.toContain("Re-run the reuse flow");
   });
 
+  it("keeps the MCP coach loop audit from carrying completed docs and smoke follow-ups", () => {
+    const mcpAudit = readFileSync(
+      join(process.cwd(), "docs/MCP_COACH_LOOP_AUDIT_2026-07-05.md"),
+      "utf8",
+    );
+    const packageJson = readJson<{ scripts: Record<string, string> }>(
+      "package.json",
+    );
+
+    expect(packageJson.scripts["smoke:mcp-coach-loop"]).toBe(
+      "pnpm build && node scripts/mcp-coach-loop-smoke.mjs",
+    );
+    expect(mcpAudit).toContain("No immediate MCP coach-loop slice remains");
+    expect(mcpAudit).toContain("apply_clarifications");
+    expect(mcpAudit).toContain("smoke:mcp-coach-loop");
+    expect(mcpAudit).not.toContain(
+      "Update MCP/server instructions and docs so the canonical clarification flow",
+    );
+    expect(mcpAudit).not.toContain("Add a future small smoke harness");
+  });
+
   it("documents /loopdeck:* as a future alias-only slash namespace without shipping command files yet", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
