@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane Scheduled UI Patrol Evidence Audit
+
+- [x] CHECK: GitHub `ui-patrol.yml` workflow history has workflow_dispatch run `28717406758`, but no `schedule` event; artifact API confirms workflow_dispatch run `28717406758` still has non-expired screenshot artifact `8084817676` with 9 png files.
+- [x] RED: goal audit, backlog, and todo must say there is no `schedule` event and scheduled `ui-patrol` evidence remains pending, or packaging drift guard fails.
+- [x] GREEN: goal audit/backlog/todo record the current manual artifact evidence while preserving scheduled `ui-patrol` evidence remains pending.
+- [x] VERIFY: focused packaging test와 full gate를 통과한다.
+- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+
+### 판단 기준
+
+- workflow_dispatch artifact는 operational evidence로 인정하지만 scheduled evidence completion으로 쓰지 않는다.
+- scheduled evidence가 완료됐다는 문구를 추가하지 않는다.
+- 다음 월요일 cron 이후 실제 `schedule` event와 artifact가 생기면 별도 slice에서 완료 처리한다.
+
 ## 2026-07-05 PromptLane Codex And Claude Code Dogfood Evidence
 
 - [x] CHECK: 9.5 plan의 Task 2가 실제 Codex/Claude Code setup, doctor, hook, MCP, loop dogfood evidence 문서를 요구하는지 확인했다.

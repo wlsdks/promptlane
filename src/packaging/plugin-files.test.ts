@@ -775,9 +775,9 @@ describe("plugin packaging files", () => {
     );
 
     expect(goalAudit).toContain(
-      "`b87ad08 docs: close agent setup smoke log (#408)`",
+      "`2f99c10 docs: close codex claude dogfood log`",
     );
-    for (const prNumber of ["#403", "#405", "#407", "#408"]) {
+    for (const prNumber of ["#403", "#405", "#407", "#408", "#417", "#419", "#420"]) {
       expect(goalAudit).toContain(`PR ${prNumber}`);
       expect(backlog).toContain(`PR ${prNumber}`);
     }
@@ -795,6 +795,38 @@ describe("plugin packaging files", () => {
     expect(backlog).not.toContain(
       "Immediate follow-up from the stdio audit",
     );
+  });
+
+  it("keeps scheduled ui-patrol evidence pending until a schedule run exists", () => {
+    const goalAudit = readFileSync(
+      join(process.cwd(), "docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md"),
+      "utf8",
+    );
+    const backlog = readFileSync(
+      join(process.cwd(), "docs/NEXT_BACKLOG.md"),
+      "utf8",
+    );
+    const todo = readFileSync(join(process.cwd(), "tasks/todo.md"), "utf8");
+    const workflow = readFileSync(
+      join(process.cwd(), ".github/workflows/ui-patrol.yml"),
+      "utf8",
+    );
+
+    expect(workflow).toContain("schedule:");
+    expect(workflow).toContain('cron: "17 6 * * 1"');
+    for (const content of [goalAudit, backlog, todo]) {
+      expect(content).toContain("workflow_dispatch run `28717406758`");
+      expect(content).toContain("9 png files");
+      expect(content).toContain("no `schedule` event");
+      expect(content).toContain("scheduled `ui-patrol` evidence remains pending");
+      expect(content).not.toContain(
+        "scheduled `ui-patrol` evidence is complete",
+      );
+    }
+    expect(goalAudit).toContain("PR #419");
+    expect(goalAudit).toContain("PR #420");
+    expect(backlog).toContain("PR #419");
+    expect(backlog).toContain("PR #420");
   });
 
   it("ships the PromptLane 9.5 quality plan and links it from the operational backlog", () => {

@@ -98,6 +98,18 @@ Current goal audit:
   binaries.
 - PR #408 closed the agent setup smoke log after CI passed and branch pruning
   was confirmed.
+- PR #417 added `dogfood:loop-memory-approval`, proving the evidence-backed
+  loop memory approval and instruction patch proposal flow through the real
+  local CLI/MCP surfaces.
+- PR #419 added `docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md`, recording repeatable
+  Codex and Claude Code dogfood evidence for setup/doctor, hooks, MCP
+  coach-loop, first-loop, and loop-memory approval.
+- PR #420 closed the Codex and Claude Code dogfood evidence log after CI passed
+  and branch pruning was confirmed.
+- GitHub `ui-patrol` workflow history inspected on 2026-07-05 still shows
+  workflow_dispatch run `28717406758` and no `schedule` event; workflow_dispatch run
+  `28717406758` still has a non-expired `ui-patrol-screenshots` artifact with
+  9 png files, but scheduled `ui-patrol` evidence remains pending.
 - Local `corepack pnpm ui-patrol` on current main after PR #410 passed and
   captured 9 png files.
 
@@ -120,9 +132,9 @@ Decision:
   the evidence bars needed to move product planning, privacy, Codex/Claude
   integration, setup/MCP smoke, loop memory, web operations, and release
   stability from beta-grade to 9.5/10.
-- The next executable quality slices are real operator dogfood for Codex and
-  Claude Code, loop memory approval dogfood, and scheduled `ui-patrol` artifact
-  evidence.
+- The next executable quality slices are scheduled `ui-patrol` artifact evidence
+  after a real cron run exists, explicit operator-approved native ask UI
+  dogfood, and fresh user-flow evidence from real PromptLane work.
 
 Rationale:
 

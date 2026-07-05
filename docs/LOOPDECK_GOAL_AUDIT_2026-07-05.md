@@ -24,7 +24,7 @@ Verified repository state:
 - Runtime compatibility IDs: package, CLI, hook command, Claude Code slash
   namespace, and canonical MCP server remain `prompt-coach`
 - Latest merged main commit at audit time:
-  `b87ad08 docs: close agent setup smoke log (#408)`
+  `2f99c10 docs: close codex claude dogfood log`
 - Open PRs at audit time: none
 - Local and remote `main` matched at audit time
 
@@ -105,17 +105,29 @@ Verified CI and operational evidence:
   binaries.
 - PR #408 closed the agent setup smoke log after CI `test (22)` and `test (24)`
   passed and branch pruning was confirmed.
+- PR #417 added `dogfood:loop-memory-approval`, proving Codex hook capture,
+  loop snapshot collection, MCP outcome recording, memory candidate proposal,
+  approved memory write, and instruction patch proposal in an isolated local
+  dogfood.
+- PR #419 added repeatable Codex and Claude Code dogfood evidence in
+  `docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md`, covering setup/doctor, hook,
+  MCP coach-loop, first-loop, and loop-memory approval commands.
+- PR #420 closed the Codex and Claude Code dogfood evidence log after CI
+  `test (22)` and `test (24)` passed and branch pruning was confirmed.
 - `ui-patrol` workflow_dispatch run `28717201110` failed before #341 because
   the GitHub runner did not have Chromium installed.
 - `ui-patrol` workflow_dispatch run `28717406758` succeeded after #341.
 - Run `28717406758` uploaded `ui-patrol-screenshots` with 9 png files:
   archive, detail, dashboard, coach, projects, MCP, exports, settings desktop,
   and settings mobile.
+- GitHub artifact API confirms run `28717406758` still has non-expired
+  `ui-patrol-screenshots` artifact `8084817676`.
 - Local `corepack pnpm ui-patrol` on current main after PR #410 passed and
   captured 9 png files: archive, detail, dashboard, coach, projects, MCP,
   exports, settings desktop, and settings mobile.
-- The first scheduled `ui-patrol` run has not appeared yet in the latest
-  workflow history inspected after #359.
+- The latest `ui-patrol.yml` workflow history inspected on 2026-07-05 contains
+  workflow_dispatch runs only and no `schedule` event, so scheduled
+  `ui-patrol` evidence remains pending.
 - `corepack pnpm e2e:browser` on `codex/reuse-copy-fallback-audit-refresh`
   forced clipboard writes to fail and verified the prompt detail manual-copy
   fallback for saved improvement drafts.
@@ -133,7 +145,7 @@ Verified CI and operational evidence:
 | --- | --- | --- | --- |
 | Product name and positioning | PromptLane is the product direction while `prompt-coach` remains the compatibility runtime ID. Loopdeck is legacy terminology and a compatibility CLI alias. | `docs/PROMPTLANE.md`, `docs/LOOPDECK.md`, `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md`, repo `wlsdks/promptlane` | Satisfied for current compatibility window |
 | Existing feature portfolio decision | Keep/improve/defer/reject decisions are documented. | Feature portfolio matrix in `docs/PROMPTLANE.md` and the PromptLane repositioning spec | Satisfied for current slices |
-| Codex and Claude Code first-class integration | Hook, MCP, instruction, plugin, smoke, and dogfood paths are documented and partially verified. `smoke:agent-setup` now verifies setup/doctor happy paths with isolated fake provider binaries. The native-dialog dogfood command still refuses to open OS dialogs unless the operator approval env is set. | `docs/AGENT-HARNESS.md`, `AGENTS.md`, `CLAUDE.md`, MCP smoke scripts, `scripts/agent-setup-smoke.mjs`, native dogfood audits, `scripts/mcp-native-dialog-approved.mjs` | Mostly satisfied; real answered OS-dialog run still needs operator approval |
+| Codex and Claude Code first-class integration | Hook, MCP, instruction, plugin, smoke, and dogfood paths are documented and verified through repeatable local-only evidence. `smoke:agent-setup` verifies setup/doctor happy paths with isolated fake provider binaries. The native-dialog dogfood command still refuses to open OS dialogs unless the operator approval env is set. | `docs/AGENT-HARNESS.md`, `docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md`, `AGENTS.md`, `CLAUDE.md`, MCP smoke scripts, `scripts/agent-setup-smoke.mjs`, native dogfood audits, `scripts/mcp-native-dialog-approved.mjs` | Satisfied for automated local dogfood; real answered OS-dialog run still needs operator approval |
 | Loop data model | Loop snapshot and memory schema contracts exist and runtime slices have landed. | `docs/LOOP-SNAPSHOT-SCHEMA.md`, loop CLI/MCP/web implementation, status and selected worktree slices | Satisfied for MVP loop metadata model |
 | Privacy/local-first boundary | Prompt bodies stay in redacted archive; loop surfaces are raw-free; write paths are explicit. Approved loop memories now require safe evidence refs at the storage boundary. | `docs/PROMPTLANE.md`, storage/server/MCP tests, route capability guard cleanup, MCP smoke audits, PR #405 | Satisfied for implemented paths |
 | AGENTS.md/CLAUDE.md/harness docs | Cross-agent and Claude-specific instruction boundaries are separated. | `AGENTS.md`, `CLAUDE.md`, `docs/INSTRUCTION-FILES.md`, `docs/AGENT-HARNESS.md` | Satisfied for current compatibility window |
@@ -142,7 +154,7 @@ Verified CI and operational evidence:
 | PromptLane MVP reliability slices | The current product-contract reliability slices for storage capability, MCP setup guidance, evidence-first memory, and focused Codex/Claude setup smoke have landed. | PR #403, PR #405, PR #407, PR #408, `docs/NEXT_BACKLOG.md`, `tasks/todo.md` | Satisfied for current MVP reliability scope |
 | Reuse copy fallback | Clipboard-write failure now opens a local manual-copy fallback instead of leaving the user at a dead end, including the real Codex in-app Browser clipboard failure mode. | `src/web/src/App.tsx`, `src/web/src/prompt-detail-view.test.ts`, `scripts/browser-e2e.mjs`, `corepack pnpm e2e:browser`, fresh Codex in-app Browser pass | Satisfied for automated and manual in-app Browser coverage |
 | Reuse saved draft workflow | Saved drafts can be reopened as the current coach draft so the operator can reuse the same copy/manual-fallback controls without auto-submitting to an agent; reopened rows show `Saved draft` and disable duplicate saves with `Already saved`. | `src/web/src/saved-draft-improvement.ts`, `src/web/src/improvement-mode-label.ts`, `src/web/src/improvement-save-state.ts`, `src/web/src/prompt-detail-view.tsx`, `scripts/browser-e2e.mjs` | Satisfied for current reuse flow |
-| UI patrol scheduled artifact | Manual workflow dispatch and local `corepack pnpm ui-patrol` are verified; first scheduled cron artifact has not occurred yet. | Run `28717406758`; local `corepack pnpm ui-patrol` with 9 png files; `.github/workflows/ui-patrol.yml` cron | Not yet complete as a scheduled-run requirement |
+| UI patrol scheduled artifact | Manual workflow dispatch and local `corepack pnpm ui-patrol` are verified; latest workflow history has no `schedule` event, so scheduled `ui-patrol` evidence remains pending. | workflow_dispatch run `28717406758`; artifact `8084817676`; local `corepack pnpm ui-patrol` with 9 png files; `.github/workflows/ui-patrol.yml` cron | Not yet complete as a scheduled-run requirement |
 | Codex native dialog fallback | Safe no-dialog preflight, MCP elicitation smoke, and approval-gated harness refusal are verified; real OS/native ask UI dogfood is not run. | `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md`, `scripts/mcp-native-dialog-approved.mjs`, `package.json` | Pending explicit operator approval for the answered dialog run |
 | MCP registry follow-up | Decision is documented to wait until a new MCP tool/schema change touches registration. | ADR 0001, `docs/NEXT_BACKLOG.md` | Deferred by design |
 
