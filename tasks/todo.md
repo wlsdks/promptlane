@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-05 PromptLane Codex And Claude Code Dogfood Evidence
+
+- [x] CHECK: 9.5 plan의 Task 2가 실제 Codex/Claude Code setup, doctor, hook, MCP, loop dogfood evidence 문서를 요구하는지 확인했다.
+- [x] RED: `docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md`, package inclusion, AGENT-HARNESS 링크가 없으면 packaging test가 실패하도록 고정했다.
+- [x] GREEN: 격리 smoke/dogfood 명령 결과를 기반으로 Codex/Claude Code dogfood evidence 문서를 추가하고 package/harness에 연결했다.
+- [x] VERIFY: focused packaging test와 full gate를 통과한다.
+- [ ] INTEGRATE: PR이 CI `test (22)`/`test (24)` 통과 후 merge되고 branch prune까지 확인된다.
+
+### 판단 기준
+
+- dogfood evidence는 실제 명령 실행 결과를 요약해야 하며 상상한 통합 상태를 증거로 쓰지 않는다.
+- 자동 smoke는 real user config, provider credential, raw prompt archive를 건드리지 않아야 한다.
+- native OS dialog dogfood는 명시적 operator approval 없이는 실행하지 않고 human-only remaining step으로 남긴다.
+
 ## 2026-07-05 PromptLane Loop Memory Approval Dogfood
 
 - [x] CHECK: `record_loop_outcome`, `propose_loop_memory_candidate`, `record_loop_memory`, `propose_instruction_patch`가 MCP surface로 존재하며 approved memory와 instruction patch proposal을 분리하는지 확인했다.

@@ -3,6 +3,8 @@
 Last updated: 2026-07-05
 
 This document defines PromptLane's Codex and Claude Code integration contract.
+Current repeatable dogfood evidence is recorded in
+`docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md`.
 It complements `AGENTS.md`, `CLAUDE.md`, and the PromptLane product contract.
 
 ## Product Boundary

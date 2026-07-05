@@ -829,6 +829,39 @@ describe("plugin packaging files", () => {
     expect(plan).not.toMatch(/\bTBD\b|TODO:|implement later|fill in details/i);
   });
 
+  it("ships Codex and Claude Code dogfood evidence for the 9.5 integration bar", () => {
+    const packageJson = readJson<{
+      files: string[];
+    }>("package.json");
+    const evidencePath = "docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md";
+    const evidence = readFileSync(join(process.cwd(), evidencePath), "utf8");
+    const harness = readFileSync(
+      join(process.cwd(), "docs/AGENT-HARNESS.md"),
+      "utf8",
+    );
+
+    expect(packageJson.files).toContain(evidencePath);
+    expect(harness).toContain(evidencePath);
+    for (const required of [
+      "prompt-coach setup --profile coach --register-mcp",
+      "prompt-coach doctor codex",
+      "prompt-coach doctor claude-code",
+      "dogfood:first-coach-loop",
+      "dogfood:loop-memory-approval",
+      "smoke:agent-setup",
+      "smoke:hooks",
+      "smoke:mcp-coach-loop",
+      "PASS",
+      "Privacy Observations",
+      "Human-only Remaining Steps",
+    ]) {
+      expect(evidence).toContain(required);
+    }
+    expect(evidence).not.toContain("/Users/");
+    expect(evidence).not.toMatch(/sk-[a-z0-9_-]{6,}/i);
+    expect(evidence).not.toMatch(/gh[pousr]_[a-z0-9_]{12,}/i);
+  });
+
   it("documents /loopdeck:* as a future alias-only slash namespace without shipping command files yet", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
