@@ -8,22 +8,23 @@ fallback item in `docs/NEXT_BACKLOG.md`.
 
 ## Boundary
 
-This pass did not open a real macOS `osascript` dialog. The backlog explicitly
-requires operator approval before doing that. The evidence below proves the MCP
-elicitation path and the metadata-only fallback path, and it confirms the
-native dialog fallback remains opt-in.
+The original safe pass did not open a real macOS `osascript` dialog. The
+follow-up approved pass was run only after explicit operator approval. The
+evidence below proves the MCP elicitation path, the metadata-only fallback path,
+and the operator-approved native dialog path while keeping native dialog use
+opt-in.
 
-`quality-evidence` records this audit as pending native_dialog_preflight evidence.
-It does not complete `native_dialog_approved_dogfood`; only an explicitly
-approved local run of
-`PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm
-dogfood:mcp-native-dialog-approved` can do that.
+`quality-evidence` records this audit as both `native_dialog_preflight` evidence
+and completed `native_dialog_approved_dogfood` evidence because the explicitly
+approved local run of `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm
+dogfood:mcp-native-dialog-approved` completed with an answered interaction.
 
 ## Commands Run
 
 ```bash
 corepack pnpm smoke:mcp-native-dialog
 corepack pnpm smoke:mcp-elicitation
+PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved
 ```
 
 Both commands rebuild the package before running the smoke harness.
@@ -56,6 +57,20 @@ Both commands rebuild the package before running the smoke harness.
   input, performs no external calls, and does not return stored prompt bodies.
 - Completed with `mcp elicitation smoke passed`.
 
+`dogfood:mcp-native-dialog-approved`:
+
+- Was run only after the operator explicitly approved opening a native macOS
+  dialog.
+- Command:
+  `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved`.
+- Opened the native dialog fallback through the real MCP server path.
+- The operator answered the dialog instead of relying on fabricated input.
+- Confirms the final response reports `interaction_status: "answered"`.
+- Confirms the local-only privacy contract remains intact with no external
+  provider call, no automatic prompt resubmission, and no instruction-file
+  write.
+- Completed with `approved native dialog dogfood passed`.
+
 ## Findings
 
 ### P1 - Safe agent-native elicitation path is verified
@@ -71,12 +86,12 @@ tool returns metadata with clarifying questions instead of opening an OS dialog
 or fabricating answers. This keeps Codex/Claude agents on the manual
 `ask user -> apply_clarifications` path.
 
-### P3 - Real OS dialog dogfood still needs explicit operator approval
+### P3 - Real OS dialog dogfood is verified only under explicit approval
 
-The macOS `osascript` fallback code path exists, but this audit intentionally
-did not execute it. The remaining dogfood item is a manually approved run in a
-real Codex or Claude Code session where the operator expects a dialog and can
-answer or cancel it.
+The macOS `osascript` fallback code path now has an answered approved dogfood
+run. This does not make native dialogs a default behavior; it only proves the
+approval-gated fallback works when the operator expects the dialog and answers
+it.
 
 ## Decision
 
@@ -89,9 +104,9 @@ path. The canonical path remains:
 3. Use `allow_native_dialog: true` or `PROMPT_COACH_NATIVE_DIALOG=1` only for an
    explicitly approved local dogfood run.
 
-## Remaining Manual Dogfood
+## Manual Dogfood Contract
 
-Run a real interactive session only after operator approval:
+Run a real interactive session again only after operator approval:
 
 1. Confirm the operator is present and expects a native OS dialog.
 2. Run:

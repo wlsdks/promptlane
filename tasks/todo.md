@@ -1,5 +1,29 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Approved Native Dialog Evidence
+
+- [x] CHECK: PR #507 이후
+  `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved`
+  를 explicit operator approval 상태에서 다시 실행했고 `approved native dialog
+  dogfood passed`로 완료됐다.
+- [x] RED: 기존 quality evidence tests/docs는
+  `native_dialog_approved_dogfood`를 pending blocker로 유지하도록 고정돼 있어
+  실제 승인 실행 완료 상태를 반영할 수 없었다.
+- [x] GREEN: native dialog audit, Codex/Claude local integration evidence,
+  9.5 quality plan, NEXT_BACKLOG, quality evidence tests를 approved answered
+  evidence 기준으로 갱신한다.
+- [x] EFFECT: `native_dialog_approved_dogfood`는 완료 evidence로 기록하되,
+  향후 반복 실행은 여전히 explicit approval 없이는 금지한다.
+
+### 판단 기준
+
+- `quality-evidence` must be `complete` only when every scorecard row is
+  `9.5/10` or higher and the audit includes
+  `interaction_status: "answered"`, `approved native dialog dogfood passed`,
+  and `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1`.
+- Native dialog dogfood remains a human-approved local operation, never a CI or
+  scheduled automation step.
+
 ## 2026-07-06 PromptLane Native Dialog AppleScript Separator
 
 - [x] CHECK: 승인형 native dialog dogfood가 operator approval env를 받은 뒤에도
@@ -12,13 +36,13 @@
 - [x] GREEN: `src/mcp/native-elicitation.ts`에서 `display dialog` modifier들은 한
   명령으로 유지하되, 결과 `return`만 별도 AppleScript statement로 분리했다.
 - [x] EFFECT: native dialog fallback이 AppleScript syntax error로 즉시 cancel되는
-  문제를 제거했다. 다만 실제 승인 dogfood는 operator dialog 응답을 받지 못해
-  아직 완료 evidence로 기록하지 않는다.
+  문제를 제거했다. 이후 explicit operator approval 재실행에서 approved dogfood가
+  통과했다.
 
 ### 판단 기준
 
-- Do not mark `native_dialog_approved_dogfood` complete until the approved
-  dogfood returns `interaction_status: "answered"`.
+- `native_dialog_approved_dogfood` may be complete only because the approved
+  dogfood returned `interaction_status: "answered"`.
 - Keep the macOS dialog command local-only and free of prompt archive/storage
   side effects.
 

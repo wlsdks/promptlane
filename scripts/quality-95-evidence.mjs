@@ -241,10 +241,8 @@ function readCompletedEvidence() {
     native_dialog_preflight:
       nativeDialogAudit.includes("corepack pnpm smoke:mcp-native-dialog") &&
       nativeDialogAudit.includes("mcp native dialog preflight passed") &&
-      nativeDialogAudit.includes("pending native_dialog_preflight evidence") &&
-      nativeDialogAudit.includes(
-        "does not complete `native_dialog_approved_dogfood`",
-      ),
+      nativeDialogAudit.includes("native_dialog_preflight") &&
+      nativeDialogAudit.includes("smoke:mcp-elicitation"),
     web_user_flow_current_main_evidence:
       plan.includes("web_user_flow_current_main_evidence") &&
       plan.includes("corepack pnpm dogfood:web-user-flow") &&
