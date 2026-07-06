@@ -1,5 +1,27 @@
 # 작업 계획
 
+## 2026-07-06 PromptLane Native Dialog AppleScript Separator
+
+- [x] CHECK: 승인형 native dialog dogfood가 operator approval env를 받은 뒤에도
+  `interaction_status: timeout`으로 실패했다. 직접 osascript 진단은 동작했지만
+  native fallback이 만든 AppleScript는 `giving up after N return ...`을 한
+  statement로 만들어 syntax error를 냈다.
+- [x] RED: `src/mcp/ask-clarifying-questions-tool.test.ts`에 macOS native dialog
+  script가 `giving up after N`과 `return`을 줄바꿈으로 분리해야 한다는 테스트를
+  추가했고 기존 구현에서 실패했다.
+- [x] GREEN: `src/mcp/native-elicitation.ts`에서 `display dialog` modifier들은 한
+  명령으로 유지하되, 결과 `return`만 별도 AppleScript statement로 분리했다.
+- [x] EFFECT: native dialog fallback이 AppleScript syntax error로 즉시 cancel되는
+  문제를 제거했다. 다만 실제 승인 dogfood는 operator dialog 응답을 받지 못해
+  아직 완료 evidence로 기록하지 않는다.
+
+### 판단 기준
+
+- Do not mark `native_dialog_approved_dogfood` complete until the approved
+  dogfood returns `interaction_status: "answered"`.
+- Keep the macOS dialog command local-only and free of prompt archive/storage
+  side effects.
+
 ## 2026-07-06 PromptLane Native Dialog Operator Brief
 
 - [x] CHECK: 남은 9.5 blocker는 승인형 native dialog dogfood뿐인데,

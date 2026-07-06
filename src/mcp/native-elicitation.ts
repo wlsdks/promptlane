@@ -59,7 +59,7 @@ async function runWithOsascript(
   for (const prompt of options.prompts) {
     const dialogText = formatDialogText(prompt);
     const exampleDefault = prompt.example ?? "";
-    const script = [
+    const dialogCommand = [
       `set theResult to display dialog ${quoteOsascript(dialogText)}`,
       `default answer ${quoteOsascript(exampleDefault)}`,
       `with title "prompt-coach"`,
@@ -67,8 +67,11 @@ async function runWithOsascript(
       `default button "Submit"`,
       `cancel button "Cancel"`,
       `giving up after ${timeoutS}`,
-      `return (text returned of theResult) & ":::" & (gave up of theResult)`,
     ].join(" ");
+    const script = [
+      dialogCommand,
+      `return (text returned of theResult) & ":::" & (gave up of theResult)`,
+    ].join("\n");
 
     const result = await runner("osascript", ["-e", script], {
       timeoutMs: (timeoutS + 5) * 1000,

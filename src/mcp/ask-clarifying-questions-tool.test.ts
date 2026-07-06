@@ -178,6 +178,33 @@ describe("askClarifyingQuestionsTool", () => {
     expect(result.interaction_status).toBe("timeout");
   });
 
+  it("separates macOS dialog statements so the return command is not parsed as part of display dialog", async () => {
+    const { nativeElicitInput } = await import("./native-elicitation.js");
+    let script = "";
+    const result = await nativeElicitInput({
+      platform: "darwin",
+      timeoutSeconds: 5,
+      prompts: [
+        {
+          axis: "goal_clarity",
+          ask: "이 작업의 정확한 목표를 한 문장으로 적어주실 수 있나요?",
+          example: "src/server/routes/prompts.ts 의 삭제 API 500 버그를 고쳐주세요.",
+        },
+      ],
+      runner: async (_command, args) => {
+        script = args[1] ?? "";
+        return { stdout: "Fix the delete API:::false", exitCode: 0 };
+      },
+    });
+
+    expect(script).toContain("giving up after 5\nreturn");
+    expect(script).not.toContain("giving up after 5 return");
+    expect(result).toEqual({
+      action: "accept",
+      content: { goal_clarity: "Fix the delete API" },
+    });
+  });
+
   it("respects allow_native_dialog=false even when env is set", async () => {
     const previous = process.env.PROMPT_COACH_NATIVE_DIALOG;
     process.env.PROMPT_COACH_NATIVE_DIALOG = "1";
