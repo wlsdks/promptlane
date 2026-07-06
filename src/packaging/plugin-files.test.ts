@@ -941,7 +941,7 @@ describe("plugin packaging files", () => {
     expect(backlog).not.toContain("scheduled_ui_patrol_preflight");
   });
 
-  it("ships native dialog preflight evidence without treating it as approved dogfood", () => {
+  it("ships native dialog preflight and approved dogfood evidence", () => {
     const packageJson = JSON.parse(
       readFileSync(join(process.cwd(), "package.json"), "utf8"),
     ) as { files: string[] };
@@ -964,11 +964,17 @@ describe("plugin packaging files", () => {
     expect(qualityScript).toContain("native_dialog_preflight");
     expect(audit).toContain("corepack pnpm smoke:mcp-native-dialog");
     expect(audit).toContain("mcp native dialog preflight passed");
-    expect(audit).toContain("pending native_dialog_preflight evidence");
+    expect(audit).toContain("native_dialog_preflight");
     expect(audit).toContain(
-      "does not complete `native_dialog_approved_dogfood`",
+      "PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved",
+    );
+    expect(audit).toContain('interaction_status: "answered"');
+    expect(audit).toContain("approved native dialog dogfood passed");
+    expect(audit).toContain(
+      "completed `native_dialog_approved_dogfood` evidence",
     );
     expect(backlog).toContain("native_dialog_preflight");
+    expect(backlog).toContain("approved native-dialog evidence");
   });
 
   it("ships a repeatable 9.5 quality evidence summary command", () => {
@@ -1054,10 +1060,8 @@ describe("plugin packaging files", () => {
       expect(content).toContain("prompt-coach quality-evidence --json");
       expect(content).toContain("axis_evidence_coverage");
       expect(content).toContain("scorecard_review_candidates");
-      expect(content).toContain("scorecard_level_below_9_5");
       expect(content).toContain("recommended_next_slices");
       expect(content).toContain("blocked_by_external_event");
-      expect(content).toContain("blocked_reason");
       expect(content).toContain("product_positioning_metadata_alignment");
       expect(content).toContain("manual_ui_patrol_artifact_evidence");
       expect(content).toContain("local_ui_patrol_evidence");
@@ -1078,15 +1082,14 @@ describe("plugin packaging files", () => {
       expect(content).toContain("promptlane_95_quality");
       expect(content).toContain("scorecard_axes");
       expect(content).toContain("native_dialog_approved_dogfood");
-      expect(content).toContain("blocker `remaining_evidence`");
-      expect(content).toContain("blocker `next_action`");
+      expect(content).toContain("native_dialog_approved_dogfood");
     }
     expect(plan).toContain("| Product planning and positioning | 9.5/10 |");
     expect(plan).toContain("| Local-first privacy boundary | 9.5/10 |");
     expect(plan).toContain("| Setup, doctor, and MCP smoke | 9.5/10 |");
     expect(plan).toContain("| Loop memory and continuation | 9.5/10 |");
     expect(plan).toContain("| Release stability | 9.5/10 |");
-    expect(plan).toContain("| Codex and Claude Code integration | 9.0/10 |");
+    expect(plan).toContain("| Codex and Claude Code integration | 9.5/10 |");
     expect(plan).toContain("| Web UI and operational evidence | 9.5/10 |");
     for (const content of [localEvidence, backlog, plan]) {
       expect(content).toContain("corepack pnpm smoke:hooks");
@@ -1140,7 +1143,9 @@ describe("plugin packaging files", () => {
     expect(evidenceScript).toContain("below_target");
     expect(evidenceScript).toContain("requireComplete");
     expect(evidenceScript).toContain("pending_operator_approval");
-    expect(evidenceScript).toContain("Do not claim 9.5 completion");
+    expect(evidenceScript).toContain(
+      "Run the full release gate before claiming the long-running goal complete.",
+    );
   });
 
   it("keeps the active loop snapshot MCP contract branded as PromptLane", () => {

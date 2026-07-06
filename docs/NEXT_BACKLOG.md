@@ -169,9 +169,9 @@ Decision:
   the evidence bars needed to move product planning, privacy, Codex/Claude
   integration, setup/MCP smoke, loop memory, web operations, and release
   stability from beta-grade to 9.5/10.
-- The next executable quality slice is explicit operator-approved native ask UI
-  dogfood. Web operations use local `ui-patrol` and `dogfood:web-user-flow`
-  evidence rather than scheduled GitHub Actions evidence.
+- The explicit operator-approved native ask UI dogfood slice is complete. Web
+  operations use local `ui-patrol` and `dogfood:web-user-flow` evidence rather
+  than scheduled GitHub Actions evidence.
 - The 9.5 quality plan now includes an Evidence Progress Ledger with PR #417,
   PR #419, PR #421, PR #425, PR #427, PR #429, PR #433, PR #447, PR #449,
   PR #450, PR #457, PR #458, PR #460, PR #464, workflow_dispatch run
@@ -179,12 +179,11 @@ Decision:
   `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md`, the missing `schedule`
   event, and Remaining 9.5 blockers.
 - `corepack pnpm evidence:quality` emits the machine-readable
-  `promptlane_95_quality` summary. It includes `scorecard_axes` and
-  `native_dialog_approved_dogfood` blockers so
-  agents do not claim 9.5 completion while any scorecard axis or direct
-  evidence blocker is still pending. Release/goal-completion checks can run
-  `corepack pnpm evidence:quality -- --require-complete` to fail closed while
-  that summary is not `complete`. JSON parsers should use
+  `promptlane_95_quality` summary. It includes `scorecard_axes` and direct
+  evidence checks so agents do not claim 9.5 completion unless every scorecard
+  axis and direct evidence item is complete. Release/goal-completion checks can
+  run `corepack pnpm evidence:quality -- --require-complete` to fail closed if
+  that summary regresses from `complete`. JSON parsers should use
   `corepack pnpm --silent evidence:quality` or
   `node scripts/quality-95-evidence.mjs` to avoid package-manager banners.
   Installed CLI users can inspect the same summary with
@@ -193,10 +192,9 @@ Decision:
   `prompt-coach quality-evidence --operator-brief` to print the focused
   native-dialog approval checklist without opening the dialog.
   The JSON includes `axis_evidence_coverage`, which separates satisfied local
-  proof such as `local_95_evidence_sweep` and
-  `web_user_flow_current_main_evidence` from remaining gaps such as
-  `scorecard_level_below_9_5` and
-  `native_dialog_approved_dogfood`.
+  proof such as `local_95_evidence_sweep`,
+  `web_user_flow_current_main_evidence`, and the approved
+  `native_dialog_approved_dogfood` pass from any future remaining gaps.
   The JSON also includes `scorecard_review_candidates`, which lists axes whose
   local evidence is present and whose only remaining gap is
   `scorecard_level_below_9_5`, without treating those axes as complete.
@@ -204,39 +202,37 @@ Decision:
   recorded local evidence actions and puts `scorecard_review_candidates` first
   when review candidates exist. After `web_user_flow_current_main_evidence`,
   `privacy_raw_free_regression_sweep`, and
-  `codex_claude_setup_smoke_refresh` were run and recorded, the remaining
-  externally blocked action is native-dialog approved dogfood. Each external
-  recommendation carries
-  `blocked_by_external_event` so agents can distinguish local work from
-  operator wait states.
+  `codex_claude_setup_smoke_refresh`, and approved native-dialog dogfood were
+  run and recorded, no external quality action remains. If a future
+  recommendation is approval-gated, it must carry `blocked_by_external_event`
+  so agents can distinguish local work from operator wait states.
   That local scorecard review is now applied for the five non-external
   candidates: local-first privacy boundary, setup/doctor/MCP smoke, loop memory
   and continuation, web UI and operational evidence, and release stability are
   9.5/10 in the scorecard. Codex/Claude operator dogfood and native-dialog
-  approved dogfood remain pending.
+  approved dogfood are now recorded.
   Product planning is now also 9.5/10 after
   `docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md` recorded current GitHub
   repository metadata, README/package/plugin metadata, the PromptLane product
   contract, Loopdeck legacy decision, backlog, and goal-audit alignment.
   `quality-evidence` records this as
   `product_positioning_metadata_alignment`.
-  Codex/Claude operator dogfood and native-dialog approved dogfood remain
-  pending.
+  Codex/Claude operator dogfood and native-dialog approved dogfood are now
+  recorded.
   `docs/UI_PATROL_EVIDENCE_2026-07-06.md` records the current local
   workflow_dispatch artifact, local `corepack pnpm ui-patrol`, and
   `dogfood:web-user-flow` browser evidence. `quality-evidence` records this as
   `manual_ui_patrol_artifact_evidence` and `local_ui_patrol_evidence`.
   Scheduled GitHub Actions evidence is no longer a blocker or requirement.
   `docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md` records current
-  non-operator setup, hook, MCP, elicitation, no-dialog fallback, first-loop,
-  and loop-memory evidence. `quality-evidence` records this as
-  `codex_claude_local_integration_evidence`, while
-  `native_dialog_approved_dogfood` remains pending until explicit operator
-  approval exists.
-  `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md` is also shipped as
-  `native_dialog_preflight` evidence: it proves MCP elicitation and no-dialog
-  fallback behavior while explicitly refusing to treat that as
+  setup, hook, MCP, elicitation, no-dialog fallback, first-loop, loop-memory,
+  and approved native-dialog evidence. `quality-evidence` records this as
+  `codex_claude_local_integration_evidence` plus completed
   `native_dialog_approved_dogfood`.
+  `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md` is also shipped as
+  `native_dialog_preflight` and approved native-dialog evidence: it proves MCP
+  elicitation, no-dialog fallback behavior, and the explicitly approved
+  `native_dialog_approved_dogfood` pass.
 - `quality-evidence` now includes structured external action criteria on its
   recommended next slices. The native dialog operator dogfood recommendation
   includes `blocked_reason`, preconditions, completion evidence, and guardrails

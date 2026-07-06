@@ -53,7 +53,7 @@ describe("quality-evidence CLI command", () => {
     };
 
     expect(parsed.check).toBe("promptlane_95_quality");
-    expect(parsed.status).toBe("pending");
+    expect(parsed.status).toBe("complete");
     expect(parsed).not.toHaveProperty("next_recheck_utc");
     expect(parsed.scorecard_axes).toHaveLength(7);
     expect(parsed.scorecard_axes).toEqual(
@@ -112,16 +112,14 @@ describe("quality-evidence CLI command", () => {
         }),
         expect.objectContaining({
           id: "codex_and_claude_code_integration",
-          status: "blocked_external",
+          status: "complete",
           satisfied_evidence: expect.arrayContaining([
             "codex_claude_setup_smoke_refresh",
             "codex_claude_local_integration_evidence",
             "native_dialog_preflight",
             "local_95_evidence_sweep",
           ]),
-          remaining_evidence: expect.arrayContaining([
-            "native_dialog_approved_dogfood",
-          ]),
+          remaining_evidence: [],
         }),
       ]),
     );
@@ -136,14 +134,7 @@ describe("quality-evidence CLI command", () => {
         }),
       ]),
     );
-    expect(parsed.blockers).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: "native_dialog_approved_dogfood",
-          status: "pending_operator_approval",
-        }),
-      ]),
-    );
+    expect(parsed.blockers).toEqual([]);
     expect(parsed.blockers).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({ id: "scheduled_ui_patrol" }),
@@ -153,38 +144,12 @@ describe("quality-evidence CLI command", () => {
       ]),
     );
     expect(parsed.evidence.native_dialog_approved_dogfood).toMatchObject({
-      status: "pending_operator_approval",
-      approval_status: "operator_approval_required",
+      status: "complete",
+      approval_status: "operator_approved_answer_recorded",
       approved_run_required: true,
-      preconditions: expect.arrayContaining([
-        "The operator explicitly approves opening a native OS dialog.",
-      ]),
+      preconditions: [],
     });
-    expect(parsed.recommended_next_slices[0]).toMatchObject({
-      id: "native_dialog_operator_dogfood",
-      priority: 100,
-      blocked_by_external_event: true,
-      command:
-        "PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved",
-      blocked_reason: "operator_approval_required",
-    });
-    expect(parsed.recommended_next_slices).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: "native_dialog_operator_dogfood",
-          blocked_reason: "operator_approval_required",
-          preconditions: expect.arrayContaining([
-            "The operator explicitly approves opening a native OS dialog.",
-          ]),
-          completion_evidence: expect.arrayContaining([
-            'interaction_status: "answered"',
-          ]),
-          guardrails: expect.arrayContaining([
-            "Do not run this command in automated CI or scheduled checks.",
-          ]),
-        }),
-      ]),
-    );
+    expect(parsed.recommended_next_slices).toEqual([]);
     expect(parsed.recommended_next_slices).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -211,41 +176,24 @@ describe("quality-evidence CLI command", () => {
     const text = qualityEvidenceForCli();
 
     expect(text).toContain("PromptLane 9.5 quality evidence");
-    expect(text).toContain("Status: pending");
+    expect(text).toContain("Status: complete");
     expect(text).not.toContain("Next recheck UTC:");
     expect(text).toContain("Scorecard axes: 7");
-    expect(text).toContain("Blockers: 2");
+    expect(text).toContain("Blockers: 0");
     expect(text).toContain("Blockers");
-    expect(parsed.blockers).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: "scorecard_axis:codex_and_claude_code_integration",
-          remaining_evidence: expect.arrayContaining([
-            "native_dialog_approved_dogfood",
-            "scorecard_level_below_9_5",
-          ]),
-        }),
-      ]),
-    );
-    expect(text).toContain(
+    expect(text).toContain("- none");
+    expect(parsed.blockers).toEqual([]);
+    expect(text).not.toContain(
       "- scorecard_axis:codex_and_claude_code_integration: below_target",
     );
-    expect(text).toContain(
+    expect(text).not.toContain(
       "remaining_evidence=native_dialog_approved_dogfood,scorecard_level_below_9_5",
-    );
-    expect(text).toContain(
-      "next_action=Complete remaining evidence for Codex and Claude Code integration: native_dialog_approved_dogfood, scorecard_level_below_9_5.",
     );
     expect(text).not.toContain(
       "- scorecard_axis:web_ui_and_operational_evidence: below_target",
     );
     expect(text).not.toContain("scheduled_ui_patrol");
-    expect(text).toContain(
-      "- native_dialog_approved_dogfood: pending_operator_approval",
-    );
-    expect(text).toContain(
-      "next_action=Get explicit operator approval before running PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved.",
-    );
+    expect(text).toContain("- native_dialog_approved_dogfood: complete");
     expect(text).toContain("Axis evidence coverage");
     expect(text).toContain("product_planning_and_positioning: complete");
     expect(text).toContain("local_first_privacy_boundary: complete");
@@ -255,43 +203,42 @@ describe("quality-evidence CLI command", () => {
     );
     expect(text).toContain("remaining=none");
     expect(text).toContain(
-      "codex_and_claude_code_integration: blocked_external",
+      "codex_and_claude_code_integration: complete",
     );
     expect(text).toContain(
       "satisfied=codex_claude_setup_smoke_refresh,codex_claude_local_integration_evidence,native_dialog_preflight,local_95_evidence_sweep",
     );
-    expect(text).toContain("remaining=native_dialog_approved_dogfood");
+    expect(text).toContain("remaining=none");
     expect(text).toContain("Scorecard review candidates");
     expect(text).toContain("- none");
     expect(text).toContain("External evidence status");
     expect(text).toContain(
-      "native_dialog_approved_dogfood: pending_operator_approval approved_run_required=yes",
+      "native_dialog_approved_dogfood: complete approved_run_required=yes",
     );
-    expect(text).toContain("approval_status=operator_approval_required");
-    expect(text).toContain(
+    expect(text).toContain("approval_status=operator_approved_answer_recorded");
+    expect(text).not.toContain(
       "preconditions=The operator explicitly approves opening a native OS dialog.",
     );
     expect(text).toContain("native_dialog_approved_dogfood");
     expect(text).toContain("Recommended next slices");
-    expect(text).toContain("external event: yes");
-    expect(text).toContain("blocked_reason=operator_approval_required");
+    expect(text).toContain("- none");
+    expect(text).not.toContain("external event: yes");
+    expect(text).not.toContain("blocked_reason=operator_approval_required");
     expect(text).toContain("Privacy: local-only");
     expect(text).not.toContain(process.cwd());
   });
 
-  it("fails closed when requireComplete is set and evidence is pending", () => {
-    expect(() => qualityEvidenceForCli({ requireComplete: true })).toThrow(
-      /promptlane_95_quality pending/,
-    );
+  it("does not fail closed when requireComplete is set and evidence is complete", () => {
+    expect(() => qualityEvidenceForCli({ requireComplete: true })).not.toThrow();
   });
 
   it("prints a focused operator brief for the approval-gated native dialog dogfood", () => {
     const brief = qualityEvidenceForCli({ operatorBrief: true });
 
     expect(brief).toContain("PromptLane native dialog operator brief");
-    expect(brief).toContain("Status: pending_operator_approval");
-    expect(brief).toContain("approval_status=operator_approval_required");
-    expect(brief).toContain(
+    expect(brief).toContain("Status: complete");
+    expect(brief).toContain("approval_status=operator_approved_answer_recorded");
+    expect(brief).not.toContain(
       "Command: PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved",
     );
     expect(brief).toContain(
@@ -300,13 +247,13 @@ describe("quality-evidence CLI command", () => {
     expect(brief).toContain(
       "Expected refusal: command refuses before opening a native dialog unless PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 is set.",
     );
-    expect(brief).toContain(
+    expect(brief).not.toContain(
       "Preconditions: The operator explicitly approves opening a native OS dialog.",
     );
-    expect(brief).toContain(
+    expect(brief).not.toContain(
       'Completion evidence: interaction_status: "answered"; approved native dialog dogfood passed',
     );
-    expect(brief).toContain(
+    expect(brief).not.toContain(
       "Guardrails: Do not run this command in automated CI or scheduled checks.",
     );
     expect(brief).toContain(
