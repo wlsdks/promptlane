@@ -64,7 +64,7 @@ describe("createPromptRewriteGuardOutput", () => {
       "PromptLane rewrite guidance",
     );
     expect(output?.hookSpecificOutput.additionalContext).not.toContain(
-      "prompt-coach rewrite guidance",
+      "promptlane rewrite guidance",
     );
   });
 
@@ -100,7 +100,7 @@ describe("createPromptRewriteGuardOutput", () => {
       expect(output.decision).toBe("block");
       expect(output.reason).toContain("개선된 프롬프트:");
       expect(output.reason).toContain("주의사항:");
-      expect(output.reason).toContain("prompt-coach가 이 프롬프트를 제출 전");
+      expect(output.reason).toContain("promptlane가 이 프롬프트를 제출 전");
       expect(output.reason).not.toContain("Improved prompt:");
     }
   });
@@ -119,10 +119,10 @@ describe("createPromptRewriteGuardOutput", () => {
         "PromptLane 개선안 가이드",
       );
       expect(output.hookSpecificOutput.additionalContext).not.toContain(
-        "prompt-coach rewrite guidance",
+        "promptlane rewrite guidance",
       );
       expect(output.hookSpecificOutput.additionalContext).not.toContain(
-        "prompt-coach 개선안 가이드",
+        "promptlane 개선안 가이드",
       );
     }
   });
@@ -160,7 +160,7 @@ describe("createPromptRewriteGuardOutput", () => {
       expect(output).toBeDefined();
       if (output && "hookSpecificOutput" in output && !("decision" in output)) {
         const additionalContext = output.hookSpecificOutput.additionalContext;
-        expect(additionalContext).toContain("[prompt-coach coach]");
+        expect(additionalContext).toContain("[promptlane coach]");
         expect(additionalContext).toContain("AskUserQuestion");
         expect(additionalContext).toContain("1.");
         expect(additionalContext).not.toContain("decision");

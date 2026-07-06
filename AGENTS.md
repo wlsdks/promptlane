@@ -5,7 +5,7 @@
 ## 프로젝트 요약
 
 - 제품명은 **PromptLane**이다.
-- 현재 npm package, 기본 CLI, hook command, Claude Code slash namespace, canonical MCP server name은 compatibility window 동안 계속 `prompt-coach`다.
+- 현재 npm package, 기본 CLI, hook command, Claude Code slash namespace, canonical MCP server name은 compatibility window 동안 계속 `promptlane`다.
 - 포지셔닝은 "local-first prompt improvement workspace for Codex, Claude Code, and long-running coding-agent work"다.
 - 핵심 가치는 Codex/Claude Code 프롬프트를 로컬에서 기록, 점수화, 개선하고, 필요한 경우 worktree, branch, loop snapshot, continuation brief, user-approved memory, instruction patch proposal까지 안전하게 이어 다음 요청을 더 좋게 만드는 것이다.
 - MVP 원칙은 local-first, explicit setup, fail-open hooks, redacted Markdown archive, SQLite index, no hidden provider calls, no automatic prompt resubmission이다.
@@ -15,8 +15,8 @@
 
 - 구조 판단 전: `docs/ARCHITECTURE.md`
 - 제품/PromptLane 기획 판단 전: `docs/PROMPTLANE.md`, `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md`
-- 과거 Loopdeck 결정 확인 전: `docs/LOOPDECK.md`
-- Loopdeck/`loopdeck` 문자열 추가 또는 변경 전: `docs/LOOPDECK-LEGACY-SURFACES.md`
+- 과거 PromptLane 결정 확인 전: `docs/PROMPTLANE.md`
+- PromptLane/`promptlane` 문자열 추가 또는 변경 전: `docs/PROMPTLANE-LEGACY-SURFACES.md`
 - loop snapshot/schema/privacy 판단 전: `docs/LOOP-SNAPSHOT-SCHEMA.md`
 - 현재 우선순위 확인: `docs/NEXT_BACKLOG.md`, `tasks/todo.md`
 - Codex/Claude Code harness 판단 전: `docs/AGENT-HARNESS.md`
@@ -58,7 +58,7 @@ Node 지원 범위는 `package.json#engines.node`가 authoritative하다. depend
 - Hook은 fail-open이어야 한다. 실패가 Codex/Claude Code 작업을 막으면 안 된다.
 - `UserPromptSubmit` stdout은 agent context 또는 사용자-visible output이 될 수 있으므로 특히 raw-free로 유지한다.
 - Agent judge/rewrite 기능은 사용자가 제어하는 Codex/Claude Code/Gemini CLI 세션이 MCP로 redacted packet을 받아 평가하는 opt-in 흐름만 허용한다.
-- `prompt-coach`가 provider 인증정보를 추출, 저장, proxy하거나 숨은 외부 LLM 호출을 해서는 안 된다.
+- `promptlane`가 provider 인증정보를 추출, 저장, proxy하거나 숨은 외부 LLM 호출을 해서는 안 된다.
 - Loop snapshot은 prompt IDs, safe labels, counts, outcome metadata, approved memory metadata를 저장한다. raw transcript ingestion이나 private Codex/Claude state scraping은 금지한다.
 - AGENTS.md/CLAUDE.md/project docs 변경은 proposal 또는 explicit confirmation이 있는 apply command로만 수행한다. 자동 instruction write는 금지한다.
 
@@ -77,7 +77,7 @@ Node 지원 범위는 `package.json#engines.node`가 authoritative하다. depend
 - Codex와 Claude Code는 부가 통합이 아니라 PromptLane의 1급 실행 표면이다.
 - Codex integration은 AGENTS.md, hooks, MCP, plugins, skills, worktrees, explicit automations를 기준으로 설계한다.
 - Claude Code integration은 plugin components, skills/commands, hooks, MCP servers, monitors, `CLAUDE.md`를 기준으로 설계한다.
-- 기존 `prompt-coach` runtime IDs는 compatibility contract다. `loopdeck` CLI alias는 legacy compatibility alias로 존재하지만, package/plugin/slash/MCP server-name migration은 dedicated plan 없이 진행하지 않는다.
+- 기존 `promptlane` runtime IDs는 compatibility contract다. `promptlane` CLI alias는 legacy compatibility alias로 존재하지만, package/plugin/slash/MCP server-name migration은 dedicated plan 없이 진행하지 않는다.
 - Worktree/session 분석은 기존 loop snapshots와 git-safe metadata에서만 파생한다. private app DB나 raw transcript store를 읽는 방향으로 확장하지 않는다.
 
 ## UI And Design

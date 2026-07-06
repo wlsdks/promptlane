@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { initializePromptCoach } from "../config/config.js";
+import { initializePromptLane } from "../config/config.js";
 import { runSessionStartHook } from "./session-start.js";
 
 const tempDirs: string[] = [];
@@ -22,7 +22,7 @@ describe("runSessionStartHook", () => {
   it("opens the web UI when the local server is already reachable", async () => {
     const dir = createTempDir();
     const dataDir = join(dir, "data");
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
     const openedUrls: string[] = [];
 
     const result = await runSessionStartHook({
@@ -44,7 +44,7 @@ describe("runSessionStartHook", () => {
   it("skips opening the web UI when the local server is not reachable, and does not spawn one", async () => {
     const dir = createTempDir();
     const dataDir = join(dir, "data");
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
     const openedUrls: string[] = [];
 
     const result = await runSessionStartHook({
@@ -66,7 +66,7 @@ describe("runSessionStartHook", () => {
   it("does not re-open the web UI for a new session against the same running server", async () => {
     const dir = createTempDir();
     const dataDir = join(dir, "data");
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
     const openedUrls: string[] = [];
 
     // Two distinct sessions (different session ids) talking to the same
@@ -100,7 +100,7 @@ describe("runSessionStartHook", () => {
   it("re-opens the web UI after the server restarts (new instance id)", async () => {
     const dir = createTempDir();
     const dataDir = join(dir, "data");
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
     const openedUrls: string[] = [];
     const payload = JSON.stringify({
       hook_event_name: "SessionStart",
@@ -132,7 +132,7 @@ describe("runSessionStartHook", () => {
   it("is disabled unless setup or install-hook opted into open-web", async () => {
     const dir = createTempDir();
     const dataDir = join(dir, "data");
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
     const openedUrls: string[] = [];
 
     const result = await runSessionStartHook({
@@ -149,7 +149,7 @@ describe("runSessionStartHook", () => {
 });
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-session-start-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-session-start-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;

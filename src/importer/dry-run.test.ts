@@ -154,7 +154,7 @@ describe("import dry-run", () => {
   });
 
   it("explains a missing source path without leaking the raw OS error", () => {
-    const dir = join(tmpdir(), `prompt-coach-missing-${randomUUID()}`);
+    const dir = join(tmpdir(), `promptlane-missing-${randomUUID()}`);
     mkdirSync(dir, { recursive: true });
     tempDirs.push(dir);
     const missing = join(dir, "does-not-exist.jsonl");
@@ -190,7 +190,7 @@ describe("import dry-run", () => {
 });
 
 function writeJsonl(records: Array<Record<string, unknown> | string>): string {
-  const dir = join(tmpdir(), `prompt-coach-import-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-import-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
 

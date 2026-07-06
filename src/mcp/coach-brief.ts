@@ -1,7 +1,7 @@
 import { improvementNextActionRequiresAsk } from "./improvement-next-action.js";
 import type {
   CoachPromptToolResult,
-  GetPromptCoachStatusToolResult,
+  GetPromptLaneStatusToolResult,
   ImprovePromptToolResult,
   ReviewProjectInstructionsToolResult,
   ScorePromptArchiveToolResult,
@@ -9,7 +9,7 @@ import type {
 } from "./score-tool-types.js";
 
 export function createAgentCoachBrief(input: {
-  status: GetPromptCoachStatusToolResult;
+  status: GetPromptLaneStatusToolResult;
   latestScore?: ScorePromptToolResult;
   improvement?: ImprovePromptToolResult;
   archive?: ScorePromptArchiveToolResult;
@@ -21,13 +21,13 @@ export function createAgentCoachBrief(input: {
       summary:
         "No captured prompt archive is available for coaching in this data directory.",
       next_actions: [
-        "Run prompt-coach start to see the shortest setup -> real prompt -> coach path.",
-        "Run prompt-coach setup --profile coach --register-mcp, then submit one real Claude Code or Codex prompt.",
-        "Run prompt-coach server if connected tools cannot reach the local service.",
-        "Run prompt-coach doctor claude-code or prompt-coach doctor codex if capture still does not work.",
+        "Run promptlane start to see the shortest setup -> real prompt -> coach path.",
+        "Run promptlane setup --profile coach --register-mcp, then submit one real Claude Code or Codex prompt.",
+        "Run promptlane server if connected tools cannot reach the local service.",
+        "Run promptlane doctor claude-code or promptlane doctor codex if capture still does not work.",
       ],
       suggested_user_response:
-        "I cannot coach the latest prompt yet because prompt-coach has no ready archive. Run prompt-coach start, finish the coach setup, then capture one real request first.",
+        "I cannot coach the latest prompt yet because promptlane has no ready archive. Run promptlane start, finish the coach setup, then capture one real request first.",
     };
   }
 

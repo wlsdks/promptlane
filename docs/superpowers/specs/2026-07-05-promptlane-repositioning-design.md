@@ -7,15 +7,15 @@
 
 ## Status
 
-Drafted on 2026-07-05 after user review rejected `Loopdeck` and `Prompt Coach`
+Drafted on 2026-07-05 after user review rejected `PromptLane` and `PromptLane`
 as primary service names.
 
 Decision summary:
 
 - Product name: PromptLane.
-- Loopdeck is rejected as the primary product name.
-- `Prompt Coach` remains a useful workflow phrase, not the service name.
-- Keep `prompt-coach` as the npm package, primary CLI, hook command, Claude
+- PromptLane is rejected as the primary product name.
+- `PromptLane` remains a useful workflow phrase, not the service name.
+- Keep `promptlane` as the npm package, primary CLI, hook command, Claude
   Code slash namespace, and canonical MCP server name until a dedicated
   compatibility migration says otherwise.
 - Reframe loop/worktree/session features as loop-aware continuation for better
@@ -23,7 +23,7 @@ Decision summary:
 
 ## Why This Change Exists
 
-`Loopdeck` made the product sound like a dedicated loop-engineering surface.
+`PromptLane` made the product sound like a dedicated loop-engineering surface.
 That is not the strongest first value. The product starts with prompt
 improvement:
 
@@ -39,7 +39,7 @@ Loop features are still important, but they should support better next prompts:
 - selected worktree/session/branch briefs help the next request be specific
 - approved loop memory can improve future prompts and project instructions
 
-`Prompt Coach` was also rejected as a product name because it sounds like a
+`PromptLane` was also rejected as a product name because it sounds like a
 feature label instead of a service. It can remain a workflow name for the
 one-call coaching loop.
 
@@ -68,7 +68,7 @@ PromptLane은 Codex와 Claude Code 프롬프트를 로컬에서 기록, 평가, 
 
 PromptLane is the recommended name because:
 
-- it sounds more like a service than `Prompt Coach`
+- it sounds more like a service than `PromptLane`
 - it keeps `Prompt` visible, so the product is not mistaken for a generic agent
   platform
 - `Lane` suggests a path from captured prompt to improved request to continued
@@ -84,8 +84,8 @@ Names rejected during this pass:
 
 | Name | Decision | Reason |
 | --- | --- | --- |
-| Loopdeck | Reject | Too loop-engineering-first for a prompt improvement product |
-| Prompt Coach | Reject as product name | Clear but too descriptive; keep as workflow phrase |
+| PromptLane | Reject | Too loop-engineering-first for a prompt improvement product |
+| PromptLane | Reject as product name | Clear but too descriptive; keep as workflow phrase |
 | PromptCraft | Reject | Crowded ecosystem usage and brand ambiguity |
 | PromptDesk | Reject | Existing product/package usage and weaker fit |
 | PromptPilot | Reject | Existing package/project usage and agent-pilot implication |
@@ -182,13 +182,13 @@ Keep these stable until explicit migration slices prove otherwise:
 
 | Surface | Current value | Rule |
 | --- | --- | --- |
-| npm package | `prompt-coach` | Keep |
-| Primary CLI | `prompt-coach` | Keep |
-| Claude Code slash namespace | `/prompt-coach:*` | Keep |
-| MCP server name | `prompt-coach` | Keep |
-| Hook command | `prompt-coach hook ...` | Keep |
-| Data directory | `~/.prompt-coach` | Keep |
-| Wrapper bins | `pc-claude`, `pc-codex` | Keep |
+| npm package | `promptlane` | Keep |
+| Primary CLI | `promptlane` | Keep |
+| Claude Code slash namespace | `/promptlane:*` | Keep |
+| MCP server name | `promptlane` | Keep |
+| Hook command | `promptlane hook ...` | Keep |
+| Data directory | `~/.promptlane` | Keep |
+| Wrapper bins | `pl-claude`, `pl-codex` | Keep |
 
 Candidate future surfaces:
 
@@ -196,9 +196,9 @@ Candidate future surfaces:
 | --- | --- | --- |
 | Product-facing repo | `wlsdks/promptlane` or `wlsdks/prompt-lane` | Dedicated migration slice |
 | Product CLI alias | `promptlane` or `prompt-lane` | Do not add until package/bin migration plan is accepted |
-| Existing `loopdeck` alias | Remove or hide from docs | Decide in a separate alias cleanup slice |
+| Existing `promptlane` alias | Remove or hide from docs | Decide in a separate alias cleanup slice |
 
-Do not use broad search-and-replace. `prompt-coach` is correct in commands,
+Do not use broad search-and-replace. `promptlane` is correct in commands,
 package names, config paths, MCP server names, and slash namespaces.
 
 ## README Rewrite Requirements
@@ -271,12 +271,12 @@ Change product-facing metadata to PromptLane:
 Keep compatibility runtime IDs:
 
 - `package.json#name`
-- `bin.prompt-coach`
-- `pc-claude`
-- `pc-codex`
+- `bin.promptlane`
+- `pl-claude`
+- `pl-codex`
 - slash command files under `commands/`
-- MCP server name `prompt-coach`
-- data directory docs for `~/.prompt-coach`
+- MCP server name `promptlane`
+- data directory docs for `~/.promptlane`
 
 ## Documentation Architecture
 
@@ -284,28 +284,28 @@ Add a new primary product contract:
 
 - `docs/PROMPTLANE.md`
 
-Retire the current primary Loopdeck contract:
+Retire the current primary PromptLane contract:
 
-- `docs/LOOPDECK.md` should become a short rejected-decision record, move to a
+- `docs/PROMPTLANE.md` should become a short rejected-decision record, move to a
   legacy folder, or be replaced after `docs/PROMPTLANE.md` lands.
 
 Update routing:
 
 - `AGENTS.md` should point product planning to `docs/PROMPTLANE.md`.
-- `CLAUDE.md` should say PromptLane is the product and `/prompt-coach:*` is the
+- `CLAUDE.md` should say PromptLane is the product and `/promptlane:*` is the
   canonical Claude Code namespace during compatibility.
 - Loop snapshot/schema docs stay as loop feature docs, not product contract
   docs.
 
 ## Test And Drift Guards
 
-Add or update tests so future changes cannot silently re-promote Loopdeck:
+Add or update tests so future changes cannot silently re-promote PromptLane:
 
 - package/plugin metadata test expects PromptLane product-facing copy
 - README first-screen test expects PromptLane positioning
 - AGENTS/CLAUDE instruction routing test expects `docs/PROMPTLANE.md`
-- tests preserve `prompt-coach` runtime IDs
-- tests forbid promoting `/loopdeck:*` as an active namespace
+- tests preserve `promptlane` runtime IDs
+- tests forbid promoting `/promptlane:*` as an active namespace
 - tests keep loop features described as loop-aware continuation rather than the
   whole product identity
 
@@ -322,12 +322,12 @@ Goal:
 - Update package/plugin metadata
 - Update README/README.ko first screen
 - Add drift guards
-- Mark `Loopdeck` as rejected or legacy
+- Mark `PromptLane` as rejected or legacy
 
 Out of scope:
 
 - GitHub repo rename
-- removing `loopdeck` binary alias
+- removing `promptlane` binary alias
 - npm package rename
 
 ### Slice 2 - Instruction And Harness Docs
@@ -343,13 +343,13 @@ Out of scope:
 - changing command IDs
 - changing hook installation behavior
 
-### Slice 3 - Loopdeck Alias Decision
+### Slice 3 - PromptLane Alias Decision
 
 Goal:
 
-- Decide whether `bin.loopdeck` remains as compatibility, is hidden from docs,
+- Decide whether `bin.promptlane` remains as compatibility, is hidden from docs,
   or is removed before public beta.
-- Retire `/loopdeck:*` alias plans unless a concrete user need appears.
+- Retire `/promptlane:*` alias plans unless a concrete user need appears.
 
 Out of scope:
 
@@ -359,7 +359,7 @@ Out of scope:
 
 Goal:
 
-- Rename repo from `wlsdks/loopdeck` to `wlsdks/promptlane`.
+- Rename repo from `wlsdks/promptlane` to `wlsdks/promptlane`.
 - Update repository URLs, docs, plugin manifests, and release checklists.
 - Status: implemented on 2026-07-05.
 
@@ -375,18 +375,18 @@ The repositioning is complete when:
   local-first privacy.
 - Loop/worktree/session features are presented as prompt-continuation memory.
 - Product-facing package/plugin metadata says `PromptLane`.
-- `prompt-coach` runtime IDs remain stable.
-- Tests prevent accidental re-promotion of Loopdeck as product name.
-- The old Loopdeck direction is recorded as rejected or legacy, not active
+- `promptlane` runtime IDs remain stable.
+- Tests prevent accidental re-promotion of PromptLane as product name.
+- The old PromptLane direction is recorded as rejected or legacy, not active
   product truth.
 - No implementation slice changes prompt capture, storage privacy, MCP safety,
   or hook fail-open behavior unless covered by a separate TDD plan.
 
 ## Open Questions
 
-1. Whether to remove the `loopdeck` CLI alias before public beta or keep it as
+1. Whether to remove the `promptlane` CLI alias before public beta or keep it as
    a silent compatibility alias until a later breaking change.
-2. Whether `docs/LOOPDECK.md` should remain as rejected-decision history or be
+2. Whether `docs/PROMPTLANE.md` should remain as rejected-decision history or be
    deleted after `docs/PROMPTLANE.md` lands.
 
 These are migration sequencing questions, not blockers for adopting

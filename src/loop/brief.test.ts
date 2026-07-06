@@ -20,6 +20,8 @@ describe("createLoopBrief", () => {
     expect(brief.prompt).toContain("## Goal");
     expect(brief.prompt).toContain("Continue the current coding-agent loop");
     expect(brief.prompt).toContain("local PromptLane snapshot");
+    expect(brief.prompt).not.toContain("PromptCoach");
+    expect(brief.prompt).not.toContain("prompt-coach");
     expect(brief.prompt).not.toContain("Loopdeck");
     expect(brief.prompt).toContain("## Context");
     expect(brief.prompt).toContain("project: private-project");
@@ -120,7 +122,7 @@ function loopSnapshot(patch: Partial<LoopSnapshot>): LoopSnapshot {
     },
     next_brief: {
       generated: false,
-      summary: "Run prompt-coach loop brief to generate the next request.",
+      summary: "Run promptlane loop brief to generate the next request.",
     },
     privacy: {
       stores_prompt_bodies: false,

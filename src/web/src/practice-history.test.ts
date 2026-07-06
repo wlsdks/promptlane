@@ -143,7 +143,7 @@ describe("practice history", () => {
       now: new Date("2026-05-03T01:06:00.000Z"),
     });
     storage.setItem(
-      "prompt-coach.practice-history.v1",
+      "promptlane.practice-history.v1",
       JSON.stringify([
         valid,
         { ...valid, id: "bad-outcome", outcome: "auto_approved" },

@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  defaultPromptCoachEntry,
+  defaultPromptLaneEntry,
   mcpRegistrationCommand,
   mcpRegistrationSpec,
 } from "./agent-access.js";
 
-describe("defaultPromptCoachEntry", () => {
-  it("falls back to a PATH-based prompt-coach binary when argv[1] is not a dist entrypoint", () => {
-    const entry = defaultPromptCoachEntry();
-    expect(entry).toEqual({ command: "prompt-coach", args: [] });
+describe("defaultPromptLaneEntry", () => {
+  it("falls back to a PATH-based promptlane binary when argv[1] is not a dist entrypoint", () => {
+    const entry = defaultPromptLaneEntry();
+    expect(entry).toEqual({ command: "promptlane", args: [] });
   });
 });
 
@@ -25,7 +25,7 @@ describe("mcpRegistrationSpec with an explicit entry", () => {
       args: [
         "mcp",
         "add",
-        "prompt-coach",
+        "promptlane",
         "--",
         "/usr/local/bin/node",
         "/Users/example/repo/dist/cli/index.js",
@@ -47,7 +47,7 @@ describe("mcpRegistrationSpec with an explicit entry", () => {
         "add",
         "--transport",
         "stdio",
-        "prompt-coach",
+        "promptlane",
         "--",
         "/usr/local/bin/node",
         "/Users/example/repo/dist/cli/index.js",
@@ -56,15 +56,15 @@ describe("mcpRegistrationSpec with an explicit entry", () => {
     });
   });
 
-  it("preserves the existing PATH-based phrasing when entry uses prompt-coach directly", () => {
+  it("preserves the existing PATH-based phrasing when entry uses promptlane directly", () => {
     expect(
-      mcpRegistrationCommand("codex", { command: "prompt-coach", args: [] }),
-    ).toBe("codex mcp add prompt-coach -- prompt-coach mcp");
+      mcpRegistrationCommand("codex", { command: "promptlane", args: [] }),
+    ).toBe("codex mcp add promptlane -- promptlane mcp");
     expect(
       mcpRegistrationCommand("claude-code", {
-        command: "prompt-coach",
+        command: "promptlane",
         args: [],
       }),
-    ).toBe("claude mcp add --transport stdio prompt-coach -- prompt-coach mcp");
+    ).toBe("claude mcp add --transport stdio promptlane -- promptlane mcp");
   });
 });

@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { normalizeClaudeCodePayload } from "../../adapters/claude-code.js";
-import { initializePromptCoach } from "../../config/config.js";
+import { initializePromptLane } from "../../config/config.js";
 import { redactPrompt } from "../../redaction/redact.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
 import { reviewProjectInstructionsForCli } from "./review-project-instructions.js";
@@ -24,7 +24,7 @@ afterEach(() => {
 describe("review-project-instructions CLI", () => {
   it("returns a friendly empty-archive error when no project has been captured", () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
 
     const text = reviewProjectInstructionsForCli({ dataDir });
     expect(text).toContain("Project instruction review");
@@ -106,7 +106,7 @@ async function seedOneProject(
   dataDir: string,
   projectCwd: string,
 ): Promise<void> {
-  const init = initializePromptCoach({ dataDir });
+  const init = initializePromptLane({ dataDir });
   const storage = createSqlitePromptStorage({
     dataDir,
     hmacSecret: init.hookAuth.web_session_secret,
@@ -134,7 +134,7 @@ async function seedOneProject(
 }
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-rpi-cli-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-rpi-cli-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;

@@ -1,5 +1,5 @@
 {
-  "name": "prompt-coach",
+  "name": "promptlane",
   "owner": {
     "name": "PromptLane contributors",
     "email": "wlsdks@users.noreply.github.com"
@@ -10,13 +10,13 @@
   },
   "plugins": [
     {
-      "name": "prompt-coach",
+      "name": "promptlane",
       "source": "./",
       "description": "Use PromptLane to capture Claude Code and Codex prompts locally, redact secrets before storage, improve next requests, and prepare loop-aware continuation briefs.",
       "category": "memory",
       "tags": [
-        "loopdeck",
-        "prompt-coach",
+        "promptlane",
+        "promptlane",
         "loop-engineering",
         "meta-prompting",
         "memory",

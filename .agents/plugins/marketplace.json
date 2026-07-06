@@ -1,14 +1,14 @@
 {
-  "name": "prompt-coach-local",
+  "name": "promptlane-local",
   "interface": {
-    "displayName": "Prompt Memory Local"
+    "displayName": "PromptLane Local"
   },
   "plugins": [
     {
-      "name": "prompt-coach",
+      "name": "promptlane",
       "source": {
         "source": "local",
-        "path": "./plugins/prompt-coach"
+        "path": "./plugins/promptlane"
       },
       "policy": {
         "installation": "AVAILABLE",

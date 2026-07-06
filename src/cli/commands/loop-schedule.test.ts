@@ -22,7 +22,7 @@ afterEach(() => {
 describe("installLoopSchedule", () => {
   it("dry-runs an explicit LaunchAgent for service-source loop collection without writing", () => {
     const dir = createTempDir();
-    const plistPath = join(dir, "LaunchAgents", "com.prompt-coach.loop.plist");
+    const plistPath = join(dir, "LaunchAgents", "com.promptlane.loop.plist");
     const dataDir = join(dir, "data");
     const cwdPrefix = "/Users/example/private-project";
 
@@ -39,7 +39,7 @@ describe("installLoopSchedule", () => {
     expect(result.changed).toBe(true);
     expect(result.dryRun).toBe(true);
     expect(() => readFileSync(plistPath, "utf8")).toThrow();
-    expect(result.nextPlist).toContain("com.prompt-coach.loop");
+    expect(result.nextPlist).toContain("com.promptlane.loop");
     expect(result.nextPlist).toContain("<integer>600</integer>");
     expect(result.nextPlist).toContain("<string>loop</string>");
     expect(result.nextPlist).toContain("<string>collect</string>");
@@ -56,7 +56,7 @@ describe("installLoopSchedule", () => {
 
   it("writes the LaunchAgent only when explicitly not dry-run", () => {
     const dir = createTempDir();
-    const plistPath = join(dir, "LaunchAgents", "com.prompt-coach.loop.plist");
+    const plistPath = join(dir, "LaunchAgents", "com.promptlane.loop.plist");
 
     const result = installLoopSchedule({
       cwdPrefix: "/Users/example/private-project",
@@ -70,7 +70,7 @@ describe("installLoopSchedule", () => {
     expect(result.changed).toBe(true);
     expect(result.dryRun).toBe(false);
     expect(result.started).toBe(false);
-    expect(plist).toContain("com.prompt-coach.loop");
+    expect(plist).toContain("com.promptlane.loop");
     expect(plist).toContain("<key>StartInterval</key>");
     expect(plist).toContain("<key>WorkingDirectory</key>");
     expect(plist).toContain("<string>--source</string>");
@@ -96,7 +96,7 @@ describe("installLoopSchedule", () => {
 describe("loopScheduleStatus", () => {
   it("reports a missing macOS LaunchAgent as not installed", () => {
     const dir = createTempDir();
-    const plistPath = join(dir, "LaunchAgents", "com.prompt-coach.loop.plist");
+    const plistPath = join(dir, "LaunchAgents", "com.promptlane.loop.plist");
 
     const result = loopScheduleStatus({
       platform: "darwin",
@@ -110,7 +110,7 @@ describe("loopScheduleStatus", () => {
 
   it("reports an existing macOS LaunchAgent as installed", () => {
     const dir = createTempDir();
-    const plistPath = join(dir, "LaunchAgents", "com.prompt-coach.loop.plist");
+    const plistPath = join(dir, "LaunchAgents", "com.promptlane.loop.plist");
     installLoopSchedule({
       cwdPrefix: "/Users/example/private-project",
       platform: "darwin",
@@ -145,7 +145,7 @@ describe("loopScheduleStatus", () => {
 describe("uninstallLoopSchedule", () => {
   it("removes an explicit macOS LaunchAgent plist", () => {
     const dir = createTempDir();
-    const plistPath = join(dir, "LaunchAgents", "com.prompt-coach.loop.plist");
+    const plistPath = join(dir, "LaunchAgents", "com.promptlane.loop.plist");
     installLoopSchedule({
       cwdPrefix: "/Users/example/private-project",
       platform: "darwin",
@@ -166,7 +166,7 @@ describe("uninstallLoopSchedule", () => {
 
   it("is idempotent when the macOS LaunchAgent plist is already absent", () => {
     const dir = createTempDir();
-    const plistPath = join(dir, "LaunchAgents", "com.prompt-coach.loop.plist");
+    const plistPath = join(dir, "LaunchAgents", "com.promptlane.loop.plist");
 
     const result = uninstallLoopSchedule({
       platform: "darwin",
@@ -196,7 +196,7 @@ describe("uninstallLoopSchedule", () => {
 });
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-loop-schedule-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-loop-schedule-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;

@@ -30,7 +30,7 @@ Use this checklist before publishing a public beta or npm package.
 - [ ] `corepack pnpm e2e:browser`
 - [ ] `corepack pnpm smoke:release`
 - [ ] `corepack pnpm evidence:quality -- --require-complete`
-- [ ] `pnpm prompt-coach quality-evidence --require-complete`
+- [ ] `pnpm promptlane quality-evidence --require-complete`
 - [ ] `git diff --check`
 
 For machine-readable inspection of the 9.5 quality summary, use
@@ -42,7 +42,7 @@ may include package-manager execution banners around stdout.
 
 Confirm `corepack pnpm pack:dry-run` includes:
 
-- [ ] built CLI files under `dist/cli` (including `pc-claude.js`, `pc-codex.js`)
+- [ ] built CLI files under `dist/cli` (including `pl-claude.js`, `pl-codex.js`)
 - [ ] built server files under `dist/server`
 - [ ] built web assets under `dist/web`
 - [ ] `README.md`, `README.ko.md`
@@ -113,8 +113,8 @@ Confirm `corepack pnpm pack:dry-run` excludes:
 - [ ] Project list and policy toggle work in the web UI without exposing raw project paths.
 - [ ] `capture_disabled` project policy blocks new ingest for that project.
 - [ ] `capture_disabled` project policy skips matching import candidates for known projects.
-- [ ] `prompt-coach import --dry-run --save-job` stores a raw-free job summary.
-- [ ] `prompt-coach import --execute` imports prompt candidates and supports resume/idempotency.
+- [ ] `promptlane import --dry-run --save-job` stores a raw-free job summary.
+- [ ] `promptlane import --execute` imports prompt candidates and supports resume/idempotency.
 - [ ] Imported-only filter works in CLI/API list flows.
 - [ ] Prompt detail shows local analysis and a PromptLane improvement draft.
 - [ ] PromptLane improvement drafts can be copied and saved without overwriting the original prompt.
@@ -133,10 +133,10 @@ Confirm `corepack pnpm pack:dry-run` excludes:
 
 `corepack pnpm smoke:release` automates the core local smoke path below with an isolated temporary data directory and HOME.
 
-- [ ] `prompt-coach init`
-- [ ] `prompt-coach server`
-- [ ] `prompt-coach install-hook claude-code --dry-run`
-- [ ] `prompt-coach install-hook codex --dry-run`
+- [ ] `promptlane init`
+- [ ] `promptlane server`
+- [ ] `promptlane install-hook claude-code --dry-run`
+- [ ] `promptlane install-hook codex --dry-run`
 - [ ] Capture one fixture-like Claude Code prompt.
 - [ ] Capture one fixture-like Codex prompt.
 - [ ] Confirm both prompts appear in CLI.

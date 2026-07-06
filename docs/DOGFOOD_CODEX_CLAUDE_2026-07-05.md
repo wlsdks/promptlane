@@ -10,17 +10,17 @@ calls were required.
 
 | Command | Status | Evidence summary |
 | --- | --- | --- |
-| `corepack pnpm smoke:agent-setup` | PASS | Ran `prompt-coach setup --profile coach --register-mcp` in dry-run and real isolated setup modes, initialized storage for doctor checks, then ran `prompt-coach doctor claude-code` and `prompt-coach doctor codex` against fake provider binaries. |
+| `corepack pnpm smoke:agent-setup` | PASS | Ran `promptlane setup --profile coach --register-mcp` in dry-run and real isolated setup modes, initialized storage for doctor checks, then ran `promptlane doctor claude-code` and `promptlane doctor codex` against fake provider binaries. |
 | `corepack pnpm dogfood:first-coach-loop` | PASS | Built the package, initialized an isolated PromptLane archive, started a local server, captured a Codex prompt through the hook, then ran `coach --json`, `loop collect --json`, and `loop brief --json`. |
-| `corepack pnpm smoke:hooks` | PASS | Verified `prompt-coach` and `loopdeck` compatibility hook status plus Claude Code and Codex fail-open hook behavior. |
+| `corepack pnpm smoke:hooks` | PASS | Verified `promptlane` and `promptlane` compatibility hook status plus Claude Code and Codex fail-open hook behavior. |
 | `corepack pnpm smoke:mcp-coach-loop` | PASS | Started the MCP server against an isolated archive and exercised score, one-call coach, improve, clarification apply, and clarification record flows through structured MCP responses. The smoke seeds linked loop outcome metadata, verifies `score_prompt effectiveness evidence`, and verifies `coach_prompt` agent brief effectiveness coverage with a review-first unmeasured prompt action. |
 | `corepack pnpm dogfood:loop-memory-approval` | PASS | Captured a Codex prompt, collected a loop snapshot, called MCP `record_loop_outcome`, `propose_loop_memory_candidate`, `record_loop_memory`, and `propose_instruction_patch`, then verified the instruction file was not written. |
 
 ## Integration Coverage
 
-- Codex setup readiness is covered by `prompt-coach doctor codex` inside
+- Codex setup readiness is covered by `promptlane doctor codex` inside
   `smoke:agent-setup`.
-- Claude Code setup readiness is covered by `prompt-coach doctor claude-code`
+- Claude Code setup readiness is covered by `promptlane doctor claude-code`
   inside `smoke:agent-setup`.
 - Hook behavior is covered for both tools by `smoke:hooks`, including fail-open
   behavior when no local PromptLane server is available.
@@ -29,7 +29,7 @@ calls were required.
 - Agent-readable `score_prompt effectiveness evidence` is covered by
   `smoke:mcp-coach-loop`, proving Codex and Claude Code can inspect stored
   prompt impact evidence through MCP structured content without opening the web
-  UI or shelling out to `prompt-coach show --json`.
+  UI or shelling out to `promptlane show --json`.
 - Agent-readable `coach_prompt` effectiveness guidance is covered by
   `smoke:mcp-coach-loop`, proving the default one-call coach path tells Codex
   and Claude Code to review unmeasured prompts before claiming archive-wide
@@ -54,7 +54,7 @@ calls were required.
 
 ## Human-only Remaining Steps
 
-- `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved`
+- `PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved`
   still requires explicit operator approval because it can open a native OS
   dialog.
 - A real installed Codex and Claude Code session should periodically repeat the

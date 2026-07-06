@@ -112,7 +112,7 @@ export function LoopActivitySummary({
       )}
       {status.project_memory.approved_count > 0 && (
         <div className="loop-memory-action">
-          <code>prompt-coach loop instruction-patch --target-file AGENTS.md</code>
+          <code>promptlane loop instruction-patch --target-file AGENTS.md</code>
           <button
             className="loop-copy-button"
             disabled={patchBusy}

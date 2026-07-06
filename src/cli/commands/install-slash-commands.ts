@@ -10,7 +10,7 @@ import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const NAMESPACE = "prompt-coach";
+const NAMESPACE = "promptlane";
 
 export type SlashCommandInstallOptions = {
   sourceDir: string;
@@ -27,7 +27,7 @@ export type SlashCommandInstallResult = {
   removed: string[];
 };
 
-export function installPromptCoachSlashCommands(
+export function installPromptLaneSlashCommands(
   options: SlashCommandInstallOptions,
 ): SlashCommandInstallResult {
   const namespaceDir = join(options.targetDir, NAMESPACE);
@@ -101,7 +101,7 @@ export function defaultClaudeCommandsDir(): string {
   return join(homedir(), ".claude", "commands");
 }
 
-export function defaultPromptCoachSlashCommandsSource(): string {
+export function defaultPromptLaneSlashCommandsSource(): string {
   // dist/cli/commands/install-slash-commands.js  →  ../../../commands
   // src/cli/commands/install-slash-commands.ts   →  ../../../commands
   return join(

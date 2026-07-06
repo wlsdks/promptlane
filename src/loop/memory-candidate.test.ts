@@ -117,7 +117,7 @@ function loopSnapshot(patch: Partial<LoopSnapshot>): LoopSnapshot {
     },
     next_brief: {
       generated: false,
-      summary: "Run prompt-coach loop brief to generate the next request.",
+      summary: "Run promptlane loop brief to generate the next request.",
     },
     privacy: {
       stores_prompt_bodies: false,

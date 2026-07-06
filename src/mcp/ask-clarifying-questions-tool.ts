@@ -12,8 +12,8 @@ import {
   type NativeElicitInputResult,
   type NativeRunner,
 } from "./native-elicitation.js";
-import type { PromptCoachMcpToolDefinition } from "./score-tool-definitions.js";
-import type { PromptCoachMcpServerOptions } from "./server.js";
+import type { PromptLaneMcpToolDefinition } from "./score-tool-definitions.js";
+import type { PromptLaneMcpServerOptions } from "./server.js";
 
 const LOCAL_READ_ONLY_TOOL_ANNOTATIONS = {
   destructiveHint: false,
@@ -30,7 +30,7 @@ export type AskClarifyingQuestionsToolArguments = {
    * Opt-in: when the MCP client does not advertise capabilities.elicitation,
    * fall back to a local OS-native dialog (macOS osascript, Linux zenity)
    * instead of returning metadata-only. Defaults to false. The
-   * PROMPT_COACH_NATIVE_DIALOG=1 environment variable opts in implicitly.
+   * PROMPTLANE_NATIVE_DIALOG=1 environment variable opts in implicitly.
    */
   allow_native_dialog?: boolean;
   /** Test-only injection. Hidden from the public input schema. */
@@ -67,7 +67,7 @@ export type AskClarifyingQuestionsToolResult =
     };
 
 const ASK_CLARIFYING_REQUEST_MESSAGE =
-  "Please answer these clarifying questions before prompt-coach composes the rewrite.";
+  "Please answer these clarifying questions before promptlane composes the rewrite.";
 
 const NEXT_ACTION_BY_STATUS: Record<
   AskClarifyingQuestionsInteractionStatus,
@@ -85,11 +85,11 @@ const NEXT_ACTION_BY_STATUS: Record<
     "The elicitation request timed out before the user answered. Ask the user the listed clarifying_questions through your native ask UI, then call apply_clarifications with verbatim user answers.",
 };
 
-export const ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "ask_clarifying_questions",
     description:
-      "Score the supplied prompt with prompt-coach's local rules; if any prompt-quality axis is missing, ask the user a small set of clarifying questions through MCP elicitation/create and compose the final approval-ready rewrite from the user's verbatim answers. Falls back to returning clarifying_questions metadata when the client does not advertise elicitation support, when the user declines, or when the elicitation request times out — never auto-submits a rewrite. Local-only, copy-based, no external LLM calls, no input storage.",
+      "Score the supplied prompt with promptlane's local rules; if any prompt-quality axis is missing, ask the user a small set of clarifying questions through MCP elicitation/create and compose the final approval-ready rewrite from the user's verbatim answers. Falls back to returning clarifying_questions metadata when the client does not advertise elicitation support, when the user declines, or when the elicitation request times out — never auto-submits a rewrite. Local-only, copy-based, no external LLM calls, no input storage.",
     annotations: {
       ...LOCAL_READ_ONLY_TOOL_ANNOTATIONS,
       title: "Ask clarifying questions and compose draft",
@@ -118,7 +118,7 @@ export const ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION: PromptCoachMcpToolDefinit
         allow_native_dialog: {
           type: "boolean",
           description:
-            "Opt in to a local OS-native dialog fallback when the MCP client does not advertise elicitation support. Defaults to false unless PROMPT_COACH_NATIVE_DIALOG=1 is set.",
+            "Opt in to a local OS-native dialog fallback when the MCP client does not advertise elicitation support. Defaults to false unless PROMPTLANE_NATIVE_DIALOG=1 is set.",
         },
       },
       additionalProperties: false,
@@ -195,7 +195,7 @@ export const ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION: PromptCoachMcpToolDefinit
 
 export async function askClarifyingQuestionsTool(
   args: AskClarifyingQuestionsToolArguments,
-  options: PromptCoachMcpServerOptions = {},
+  options: PromptLaneMcpServerOptions = {},
 ): Promise<AskClarifyingQuestionsToolResult> {
   if (typeof args.prompt !== "string" || args.prompt.trim().length === 0) {
     return {
@@ -286,7 +286,7 @@ function shouldUseNativeFallback(
 ): boolean {
   if (args.allow_native_dialog === true) return true;
   if (args.allow_native_dialog === false) return false;
-  return process.env.PROMPT_COACH_NATIVE_DIALOG === "1";
+  return process.env.PROMPTLANE_NATIVE_DIALOG === "1";
 }
 
 async function runNativeFallback(

@@ -47,14 +47,14 @@ Use Codex's current durable surfaces:
 Codex-facing setup should keep these commands working:
 
 ```bash
-corepack pnpm prompt-coach setup --profile coach --register-mcp --open-web
-corepack pnpm prompt-coach doctor codex
+corepack pnpm promptlane setup --profile coach --register-mcp --open-web
+corepack pnpm promptlane doctor codex
 corepack pnpm smoke:agent-setup
 corepack pnpm dogfood:first-coach-loop
 corepack pnpm dogfood:loop-memory-approval
-corepack pnpm prompt-coach loop status
-corepack pnpm prompt-coach loop collect
-corepack pnpm prompt-coach loop brief
+corepack pnpm promptlane loop status
+corepack pnpm promptlane loop collect
+corepack pnpm promptlane loop brief
 ```
 
 Acceptance criteria:
@@ -64,7 +64,7 @@ Acceptance criteria:
 - MCP status and brief tools return structured, local-only data.
 - Worktree awareness is derived from git-safe labels and existing snapshots.
 - No feature reads private Codex databases or raw transcript stores.
-- Any scheduled collection is opt-in and calls explicit `prompt-coach` commands.
+- Any scheduled collection is opt-in and calls explicit `promptlane` commands.
 
 ## Claude Code Surfaces
 
@@ -80,7 +80,7 @@ Use Claude Code's plugin-oriented surfaces:
 Claude-facing setup should keep these commands and checks working:
 
 ```bash
-corepack pnpm prompt-coach doctor claude-code
+corepack pnpm promptlane doctor claude-code
 corepack pnpm smoke:agent-setup
 corepack pnpm dogfood:first-coach-loop
 corepack pnpm dogfood:loop-memory-approval
@@ -92,8 +92,8 @@ corepack pnpm smoke:hooks
 
 Acceptance criteria:
 
-- `/prompt-coach:*` remains the supported slash namespace during the migration.
-- `/loopdeck:*` is not added until a dedicated namespace migration plan is
+- `/promptlane:*` remains the supported slash namespace during the migration.
+- `/promptlane:*` is not added until a dedicated namespace migration plan is
   implemented.
 - MCP write flows return metadata-only responses.
 - User-visible or model-visible hook output does not include raw prompt bodies,
@@ -123,7 +123,7 @@ Required properties:
 - return explicit unavailable/setup guidance instead of transport-level crashes
 - avoid raw prompt bodies, compact summaries, transcripts, raw local paths,
   secret-looking tokens, and provider credentials
-- keep old `prompt-coach` tool/server compatibility during the PromptLane
+- keep old `promptlane` tool/server compatibility during the PromptLane
   compatibility window
 
 Write-capable tools must require explicit user-approved arguments when they

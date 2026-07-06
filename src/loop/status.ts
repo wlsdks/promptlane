@@ -3,9 +3,9 @@ import type { LoopBriefCompactBoundary } from "./brief.js";
 import type { LoopMemoryCandidateDecision } from "./memory-candidate.js";
 import type { LoopSnapshot } from "./types.js";
 
-export type LoopdeckStatusLevel = "ready" | "empty";
+export type PromptLaneStatusLevel = "ready" | "empty";
 
-export type LoopdeckStatusPrivacy = {
+export type PromptLaneStatusPrivacy = {
   local_only: true;
   external_calls: false;
   returns_prompt_bodies: false;
@@ -13,7 +13,7 @@ export type LoopdeckStatusPrivacy = {
   returns_compact_content: false;
 };
 
-export type LoopdeckStatusSnapshot = {
+export type PromptLaneStatusSnapshot = {
   id: string;
   created_at: string;
   tool: string;
@@ -27,20 +27,20 @@ export type LoopdeckStatusSnapshot = {
   outcome_status: LoopSnapshot["outcome"]["status"];
 };
 
-export type LoopdeckStatusProjectMemory = {
+export type PromptLaneStatusProjectMemory = {
   approved_count: number;
   included_in_brief: boolean;
 };
 
-export type LoopdeckStatusMemoryCandidate = {
+export type PromptLaneStatusMemoryCandidate = {
   eligible: boolean;
   reason: LoopMemoryCandidateDecision["reason"];
   next_action:
-    | "prompt-coach loop memory-approve"
-    | "prompt-coach loop memory-candidate";
+    | "promptlane loop memory-approve"
+    | "promptlane loop memory-candidate";
 };
 
-export type LoopdeckStatusActivityWorktree = {
+export type PromptLaneStatusActivityWorktree = {
   worktree: string;
   branch?: string;
   sessions: number;
@@ -51,7 +51,7 @@ export type LoopdeckStatusActivityWorktree = {
   evidence_count: number;
 };
 
-export type LoopdeckStatusActivityMergeReadiness = {
+export type PromptLaneStatusActivityMergeReadiness = {
   status: "ready" | "needs_review" | "missing_evidence";
   evidence: "evidence present" | "missing evidence";
   next_action:
@@ -60,14 +60,14 @@ export type LoopdeckStatusActivityMergeReadiness = {
     | "record loop outcome evidence";
 };
 
-export type LoopdeckStatusActivityCommandCenterItem =
-  LoopdeckStatusActivityWorktree & {
+export type PromptLaneStatusActivityCommandCenterItem =
+  PromptLaneStatusActivityWorktree & {
     recommendation: "review before merge" | "ready for continuation";
     continuation_command: string;
-    merge_readiness: LoopdeckStatusActivityMergeReadiness;
+    merge_readiness: PromptLaneStatusActivityMergeReadiness;
   };
 
-export type LoopdeckStatusActivityReviewPacket = {
+export type PromptLaneStatusActivityReviewPacket = {
   title: "Review-before-merge packet";
   status: "ready" | "needs_review" | "blocked";
   summary: string;
@@ -85,25 +85,25 @@ export type LoopdeckStatusActivityReviewPacket = {
   ready_count: number;
   needs_review_count: number;
   missing_evidence_count: number;
-  actions: LoopdeckStatusActivityMergeReadiness["next_action"][];
+  actions: PromptLaneStatusActivityMergeReadiness["next_action"][];
   checklist: Array<{
     label:
       | "Record missing evidence before merge"
       | "Review non-passing worktrees before merge"
       | "Compare ready evidence before merge";
     status: "required";
-    action: LoopdeckStatusActivityMergeReadiness["next_action"];
+    action: PromptLaneStatusActivityMergeReadiness["next_action"];
   }>;
 };
 
-export type LoopdeckStatusActivityCommandCenter = {
+export type PromptLaneStatusActivityCommandCenter = {
   title: "Multi-worktree review";
   primary_action: string;
-  review_packet: LoopdeckStatusActivityReviewPacket;
-  review_items: LoopdeckStatusActivityCommandCenterItem[];
+  review_packet: PromptLaneStatusActivityReviewPacket;
+  review_items: PromptLaneStatusActivityCommandCenterItem[];
 };
 
-export type LoopdeckStatusActivityRecentDecision = {
+export type PromptLaneStatusActivityRecentDecision = {
   snapshot_id: string;
   worktree: string;
   decision: "merge" | "continue" | "defer";
@@ -112,7 +112,7 @@ export type LoopdeckStatusActivityRecentDecision = {
   created_at: string;
 };
 
-export type LoopdeckStatusActivity = {
+export type PromptLaneStatusActivity = {
   active_worktrees: number;
   active_sessions: number;
   latest_branch?: string;
@@ -121,29 +121,29 @@ export type LoopdeckStatusActivity = {
   next_action:
     | "compare loop snapshots by worktree before merging agent output"
     | "continue current worktree loop";
-  recent_decisions?: LoopdeckStatusActivityRecentDecision[];
-  worktrees: LoopdeckStatusActivityWorktree[];
-  command_center?: LoopdeckStatusActivityCommandCenter;
+  recent_decisions?: PromptLaneStatusActivityRecentDecision[];
+  worktrees: PromptLaneStatusActivityWorktree[];
+  command_center?: PromptLaneStatusActivityCommandCenter;
 };
 
-export type LoopdeckStatus = {
-  status: LoopdeckStatusLevel;
+export type PromptLaneStatus = {
+  status: PromptLaneStatusLevel;
   snapshot_count: number;
-  activity: LoopdeckStatusActivity;
-  project_memory: LoopdeckStatusProjectMemory;
-  memory_candidate?: LoopdeckStatusMemoryCandidate;
-  latest_snapshot?: LoopdeckStatusSnapshot;
+  activity: PromptLaneStatusActivity;
+  project_memory: PromptLaneStatusProjectMemory;
+  memory_candidate?: PromptLaneStatusMemoryCandidate;
+  latest_snapshot?: PromptLaneStatusSnapshot;
   latest_compact_boundary?: LoopBriefCompactBoundary;
   next_action: string;
   next_actions: string[];
-  privacy: LoopdeckStatusPrivacy;
+  privacy: PromptLaneStatusPrivacy;
 };
 
 type CompactBoundaryCandidate = Parameters<
   typeof latestCompactBoundaryAfterSnapshot
 >[1][number];
 
-export function createLoopdeckStatus(input: {
+export function createPromptLaneStatus(input: {
   snapshots: readonly LoopSnapshot[];
   compactBoundaries: readonly CompactBoundaryCandidate[];
   includeLatest?: boolean;
@@ -152,8 +152,8 @@ export function createLoopdeckStatus(input: {
     LoopMemoryCandidateDecision,
     "eligible" | "reason" | "snapshot_id"
   >;
-  mergeDecisions?: readonly LoopdeckStatusActivityRecentDecision[];
-}): LoopdeckStatus {
+  mergeDecisions?: readonly PromptLaneStatusActivityRecentDecision[];
+}): PromptLaneStatus {
   const latest = input.snapshots.at(0);
   const projectMemoryCount = input.projectMemoryCount ?? 0;
   const compactBoundary = latest
@@ -161,10 +161,10 @@ export function createLoopdeckStatus(input: {
     : undefined;
   const hasSnapshots = input.snapshots.length > 0;
   const nextAction = compactBoundary
-    ? "prompt-coach loop collect"
+    ? "promptlane loop collect"
     : hasSnapshots
-      ? "prompt-coach loop brief"
-      : "prompt-coach loop collect";
+      ? "promptlane loop brief"
+      : "promptlane loop collect";
 
   return {
     status: hasSnapshots ? "ready" : "empty",
@@ -176,13 +176,13 @@ export function createLoopdeckStatus(input: {
     },
     ...(input.memoryCandidate
       ? {
-          memory_candidate: toLoopdeckStatusMemoryCandidate(
+          memory_candidate: toPromptLaneStatusMemoryCandidate(
             input.memoryCandidate,
           ),
         }
       : {}),
     ...(latest && input.includeLatest !== false
-      ? { latest_snapshot: toLoopdeckStatusSnapshot(latest) }
+      ? { latest_snapshot: toPromptLaneStatusSnapshot(latest) }
       : {}),
     ...(compactBoundary ? { latest_compact_boundary: compactBoundary } : {}),
     next_action: nextAction,
@@ -191,14 +191,14 @@ export function createLoopdeckStatus(input: {
       compactBoundary,
       memoryCandidate: input.memoryCandidate,
     }),
-    privacy: loopdeckStatusPrivacy(),
+    privacy: promptlaneStatusPrivacy(),
   };
 }
 
 export function summarizeLoopActivity(
   snapshots: readonly LoopSnapshot[],
-  mergeDecisions: readonly LoopdeckStatusActivityRecentDecision[] = [],
-): LoopdeckStatusActivity {
+  mergeDecisions: readonly PromptLaneStatusActivityRecentDecision[] = [],
+): PromptLaneStatusActivity {
   const latest = snapshots.at(0);
   const activeWorktrees = uniqueNonEmpty(
     snapshots.map((snapshot) => snapshot.worktree_label),
@@ -225,7 +225,7 @@ export function summarizeLoopActivity(
     worktrees,
     ...(needsReview
       ? {
-          command_center: createLoopdeckCommandCenter(
+          command_center: createPromptLaneCommandCenter(
             worktrees,
             mergeDecisions,
           ),
@@ -235,8 +235,8 @@ export function summarizeLoopActivity(
 }
 
 function toRecentDecision(
-  decision: LoopdeckStatusActivityRecentDecision,
-): LoopdeckStatusActivityRecentDecision {
+  decision: PromptLaneStatusActivityRecentDecision,
+): PromptLaneStatusActivityRecentDecision {
   return {
     snapshot_id: decision.snapshot_id,
     worktree: decision.worktree,
@@ -247,10 +247,10 @@ function toRecentDecision(
   };
 }
 
-export function createLoopdeckCommandCenter(
-  worktrees: LoopdeckStatusActivityWorktree[],
-  mergeDecisions: readonly LoopdeckStatusActivityRecentDecision[],
-): LoopdeckStatusActivityCommandCenter {
+export function createPromptLaneCommandCenter(
+  worktrees: PromptLaneStatusActivityWorktree[],
+  mergeDecisions: readonly PromptLaneStatusActivityRecentDecision[],
+): PromptLaneStatusActivityCommandCenter {
   const reviewItems = worktrees.map((worktree) => ({
     ...worktree,
     recommendation:
@@ -275,9 +275,9 @@ export function createLoopdeckCommandCenter(
 }
 
 function createReviewPacket(
-  reviewItems: LoopdeckStatusActivityCommandCenterItem[],
-  mergeDecisions: readonly LoopdeckStatusActivityRecentDecision[] = [],
-): LoopdeckStatusActivityReviewPacket {
+  reviewItems: PromptLaneStatusActivityCommandCenterItem[],
+  mergeDecisions: readonly PromptLaneStatusActivityRecentDecision[] = [],
+): PromptLaneStatusActivityReviewPacket {
   const readyCount = reviewItems.filter(
     (item) => item.merge_readiness.status === "ready",
   ).length;
@@ -331,9 +331,9 @@ function createReviewPacket(
 }
 
 function decisionAdvisoryForReviewPacket(
-  mergeDecisions: readonly LoopdeckStatusActivityRecentDecision[],
-  reviewItems: readonly LoopdeckStatusActivityCommandCenterItem[],
-): LoopdeckStatusActivityReviewPacket["decision_advisory"] | undefined {
+  mergeDecisions: readonly PromptLaneStatusActivityRecentDecision[],
+  reviewItems: readonly PromptLaneStatusActivityCommandCenterItem[],
+): PromptLaneStatusActivityReviewPacket["decision_advisory"] | undefined {
   const worktrees = new Set(reviewItems.map((item) => item.worktree));
   const decision = mergeDecisions.find((item) => worktrees.has(item.worktree));
   if (!decision) return undefined;
@@ -345,9 +345,9 @@ function decisionAdvisoryForReviewPacket(
 }
 
 function decisionAdvisoryNextAction(
-  decision: LoopdeckStatusActivityRecentDecision["decision"],
+  decision: PromptLaneStatusActivityRecentDecision["decision"],
 ): NonNullable<
-  LoopdeckStatusActivityReviewPacket["decision_advisory"]
+  PromptLaneStatusActivityReviewPacket["decision_advisory"]
 >["next_action"] {
   if (decision === "merge") {
     return "confirm recent merge decision before merge";
@@ -359,8 +359,8 @@ function decisionAdvisoryNextAction(
 }
 
 function checklistLabelForAction(
-  action: LoopdeckStatusActivityMergeReadiness["next_action"],
-): LoopdeckStatusActivityReviewPacket["checklist"][number]["label"] {
+  action: PromptLaneStatusActivityMergeReadiness["next_action"],
+): PromptLaneStatusActivityReviewPacket["checklist"][number]["label"] {
   if (action === "record loop outcome evidence") {
     return "Record missing evidence before merge";
   }
@@ -371,8 +371,8 @@ function checklistLabelForAction(
 }
 
 function mergeReadinessForWorktree(
-  worktree: LoopdeckStatusActivityWorktree,
-): LoopdeckStatusActivityMergeReadiness {
+  worktree: PromptLaneStatusActivityWorktree,
+): PromptLaneStatusActivityMergeReadiness {
   if (worktree.evidence_count === 0) {
     return {
       status: "missing_evidence",
@@ -397,10 +397,10 @@ function mergeReadinessForWorktree(
 }
 
 function continuationCommandForWorktree(
-  worktree: LoopdeckStatusActivityWorktree,
+  worktree: PromptLaneStatusActivityWorktree,
 ): string {
   return [
-    "prompt-coach loop brief",
+    "promptlane loop brief",
     `--worktree ${worktree.worktree}`,
     worktree.branch ? `--branch ${worktree.branch}` : undefined,
   ]
@@ -410,7 +410,7 @@ function continuationCommandForWorktree(
 
 function summarizeWorktreeActivity(
   snapshots: readonly LoopSnapshot[],
-): LoopdeckStatusActivityWorktree[] {
+): PromptLaneStatusActivityWorktree[] {
   const groups = new Map<
     string,
     {
@@ -456,21 +456,21 @@ function summarizeWorktreeActivity(
     );
 }
 
-export function toLoopdeckStatusMemoryCandidate(
+export function toPromptLaneStatusMemoryCandidate(
   decision: Pick<LoopMemoryCandidateDecision, "eligible" | "reason">,
-): LoopdeckStatusMemoryCandidate {
+): PromptLaneStatusMemoryCandidate {
   return {
     eligible: decision.eligible,
     reason: decision.reason,
     next_action: decision.eligible
-      ? "prompt-coach loop memory-approve"
-      : "prompt-coach loop memory-candidate",
+      ? "promptlane loop memory-approve"
+      : "promptlane loop memory-candidate",
   };
 }
 
-export function toLoopdeckStatusSnapshot(
+export function toPromptLaneStatusSnapshot(
   snapshot: LoopSnapshot,
-): LoopdeckStatusSnapshot {
+): PromptLaneStatusSnapshot {
   return {
     id: snapshot.id,
     created_at: snapshot.created_at,
@@ -488,7 +488,7 @@ export function toLoopdeckStatusSnapshot(
   };
 }
 
-export function loopdeckStatusPrivacy(): LoopdeckStatusPrivacy {
+export function promptlaneStatusPrivacy(): PromptLaneStatusPrivacy {
   return {
     local_only: true,
     external_calls: false,
@@ -505,21 +505,21 @@ function nextActionsForStatus(input: {
 }): string[] {
   if (!input.hasSnapshots) {
     return [
-      "Run prompt-coach loop collect to create the first local loop snapshot.",
+      "Run promptlane loop collect to create the first local loop snapshot.",
       "Capture at least one Claude Code or Codex prompt before expecting useful loop context.",
     ];
   }
 
   if (input.compactBoundary) {
     return withMemoryCandidateAction(input.memoryCandidate, [
-      "Run prompt-coach loop collect again after compaction to refresh the snapshot.",
-      "Then use prompt-coach loop brief or prepare_loop_brief for a continuation prompt.",
+      "Run promptlane loop collect again after compaction to refresh the snapshot.",
+      "Then use promptlane loop brief or prepare_loop_brief for a continuation prompt.",
     ]);
   }
 
   return withMemoryCandidateAction(input.memoryCandidate, [
-    "Use prompt-coach loop brief or prepare_loop_brief to get a copy-ready continuation prompt.",
-    "Run prompt-coach loop collect again after the next agent turn to refresh the snapshot.",
+    "Use promptlane loop brief or prepare_loop_brief to get a copy-ready continuation prompt.",
+    "Run promptlane loop collect again after the next agent turn to refresh the snapshot.",
   ]);
 }
 
@@ -530,7 +530,7 @@ function withMemoryCandidateAction(
   if (!memoryCandidate?.eligible) return actions;
   return [
     ...actions,
-    "Run prompt-coach loop memory-approve after reviewing the latest passed loop outcome.",
+    "Run promptlane loop memory-approve after reviewing the latest passed loop outcome.",
   ];
 }
 

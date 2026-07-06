@@ -1,4 +1,4 @@
-# Loopdeck Goal Audit - 2026-07-05
+# PromptLane Goal Audit - 2026-07-05
 
 ## Purpose
 
@@ -7,7 +7,7 @@ state. It is not a release note and it does not mark the goal complete.
 
 Goal under audit:
 
-- evolve `prompt-coach` toward PromptLane, a local-first prompt improvement
+- evolve `promptlane` toward PromptLane, a local-first prompt improvement
   workspace with loop-aware continuation
 - finish strong product planning before broad development
 - keep Codex and Claude Code as first-class integration surfaces
@@ -22,7 +22,7 @@ Verified repository state:
 
 - GitHub repository: `wlsdks/promptlane`
 - Runtime compatibility IDs: package, CLI, hook command, Claude Code slash
-  namespace, and canonical MCP server remain `prompt-coach`
+  namespace, and canonical MCP server remain `promptlane`
 - Latest merged main commit at audit time:
   `2f99c10 docs: close codex claude dogfood log`
 - Open PRs at audit time: none
@@ -37,7 +37,7 @@ Verified CI and operational evidence:
 - PR #342 added this goal audit and passed `test (22)` and `test (24)` before
   merge.
 - PR #343 added an operator-approved native-dialog dogfood harness guarded by
-  `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1` and passed `test (22)` and `test
+  `PROMPTLANE_NATIVE_DIALOG_APPROVED=1` and passed `test (22)` and `test
   (24)` before merge.
 - PR #344 refreshed this audit after the native-dialog dogfood harness and
   passed `test (22)` and `test (24)` before merge.
@@ -47,14 +47,14 @@ Verified CI and operational evidence:
 - PR #346 moved pnpm build-script approvals from `package.json#pnpm` to
   `pnpm-workspace.yaml`, keeping `better-sqlite3` and `esbuild` as the only
   approved build dependencies; the PR passed `test (22)` and `test (24)`.
-- PR #347 through #349 refreshed the Loopdeck audit, closed stale source
+- PR #347 through #349 refreshed the PromptLane audit, closed stale source
   hygiene work, and aligned package publishing docs after the hygiene work.
 - PR #350 through #355 aligned MCP, CLI, Claude command, infrastructure,
-  hook, and docs copy with the Loopdeck product surface while preserving
-  `prompt-coach` command and namespace compatibility.
+  hook, and docs copy with the PromptLane product surface while preserving
+  `promptlane` command and namespace compatibility.
 - PR #356 corrected the Codex plugin hook lifecycle marker mapping.
 - PR #357 made Codex plugin hooks setup-driven by removing active bundled
-  plugin hooks, so explicit `prompt-coach setup` remains the hook installation
+  plugin hooks, so explicit `promptlane setup` remains the hook installation
   path and setup-installed user hooks are not duplicated by plugin discovery.
 - PR #358 refreshed the reuse-copy audit after the local manual-copy fallback
   landed, so the original clipboard failure is no longer tracked as an open
@@ -88,7 +88,7 @@ Verified CI and operational evidence:
 - PR #368 disabled duplicate save for reopened saved drafts with `Already
   saved` copy and browser E2E coverage, so reopening a stored draft does not
   create another saved-draft row.
-- PR #369 added a docs drift guard so the Loopdeck goal audit and next backlog
+- PR #369 added a docs drift guard so the PromptLane goal audit and next backlog
   keep citing the saved-draft reuse work from PR #366 through PR #368.
 - PR #370 closed the stale reuse audit next slice and now requires fresh
   user-flow evidence before opening more reuse-flow work.
@@ -150,7 +150,7 @@ Verified CI and operational evidence:
 
 | Requirement | Current state | Evidence | Status |
 | --- | --- | --- | --- |
-| Product name and positioning | PromptLane is the product direction while `prompt-coach` remains the compatibility runtime ID. Loopdeck is legacy terminology and a compatibility CLI alias. | `docs/PROMPTLANE.md`, `docs/LOOPDECK.md`, `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md`, repo `wlsdks/promptlane` | Satisfied for current compatibility window |
+| Product name and positioning | PromptLane is the product direction while `promptlane` remains the compatibility runtime ID. PromptLane is legacy terminology and a compatibility CLI alias. | `docs/PROMPTLANE.md`, `docs/PROMPTLANE.md`, `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md`, repo `wlsdks/promptlane` | Satisfied for current compatibility window |
 | Existing feature portfolio decision | Keep/improve/defer/reject decisions are documented. | Feature portfolio matrix in `docs/PROMPTLANE.md` and the PromptLane repositioning spec | Satisfied for current slices |
 | Codex and Claude Code first-class integration | Hook, MCP, instruction, plugin, smoke, and dogfood paths are documented and verified through repeatable local-only evidence. `smoke:agent-setup` verifies setup/doctor happy paths with isolated fake provider binaries. The native-dialog dogfood command still refuses to open OS dialogs unless the operator approval env is set. | `docs/AGENT-HARNESS.md`, `docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md`, `AGENTS.md`, `CLAUDE.md`, MCP smoke scripts, `scripts/agent-setup-smoke.mjs`, native dogfood audits, `scripts/mcp-native-dialog-approved.mjs` | Satisfied for automated local dogfood; real answered OS-dialog run still needs operator approval |
 | Loop data model | Loop snapshot and memory schema contracts exist and runtime slices have landed. | `docs/LOOP-SNAPSHOT-SCHEMA.md`, loop CLI/MCP/web implementation, status and selected worktree slices | Satisfied for MVP loop metadata model |
@@ -191,7 +191,7 @@ evidence for the pending integration and operational items:
    screenshots.
 3. Ask for explicit operator approval before opening a native OS dialog.
 4. When approval is granted, run
-   `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved`
+   `PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved`
    and record whether the final MCP response is `interaction_status:
    "answered"` without prompt-body leakage or external calls.
 5. Continue treating dependency and package-manager warnings as reliability

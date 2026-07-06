@@ -51,7 +51,7 @@ export function registerImproveCommand(program: Command): void {
   program
     .command("improve")
     .description("Generate an approval-ready improved prompt locally.")
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--text <prompt>", "Prompt text to improve.")
     .option("--stdin", "Read prompt text from stdin.")
     .option("--latest", "Improve the latest stored prompt without printing it.")
@@ -191,7 +191,7 @@ function readPromptInput(options: ImproveCliOptions): string {
   }
 
   throw new UserError(
-    '--text or --stdin is required for prompt improvement. Try: prompt-coach improve --text "add caching to fetchUser"',
+    '--text or --stdin is required for prompt improvement. Try: promptlane improve --text "add caching to fetchUser"',
   );
 }
 

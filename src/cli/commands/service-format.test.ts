@@ -22,7 +22,7 @@ describe("classifyLaunchctlError", () => {
   it("maps not-found stderr to not_loaded", () => {
     expect(
       classifyLaunchctlError(
-        "Could not find specified service: gui/501/com.prompt-coach.server",
+        "Could not find specified service: gui/501/com.promptlane.server",
       ),
     ).toBe("not_loaded");
     expect(classifyLaunchctlError("service not loaded")).toBe("not_loaded");
@@ -59,10 +59,10 @@ describe("explainLaunchctlError", () => {
   it("returns a next-step hint per code", () => {
     expect(explainLaunchctlError("already_loaded")).toMatch(/already loaded/i);
     expect(explainLaunchctlError("already_loaded")).toMatch(
-      /prompt-coach service stop/,
+      /promptlane service stop/,
     );
     expect(explainLaunchctlError("not_loaded")).toMatch(
-      /prompt-coach service install/,
+      /promptlane service install/,
     );
     expect(explainLaunchctlError("denied")).toMatch(/Full Disk Access/);
     expect(explainLaunchctlError("unsupported_platform")).toMatch(/macOS/);
@@ -86,7 +86,7 @@ describe("formatServiceCommandPlain", () => {
       error: "Bootstrap failed: 5: Input/output error",
     });
     expect(text).toMatch(/already loaded/i);
-    expect(text).toMatch(/prompt-coach service stop/);
+    expect(text).toMatch(/promptlane service stop/);
     expect(text).not.toContain("Bootstrap failed: 5");
   });
 
@@ -118,16 +118,16 @@ describe("formatServiceCommandJson", () => {
       ok: false,
       supported: true,
       error:
-        "Could not find specified service: gui/501/com.prompt-coach.server",
+        "Could not find specified service: gui/501/com.promptlane.server",
     });
     const parsed = JSON.parse(json);
     expect(parsed.ok).toBe(false);
     expect(parsed.supported).toBe(true);
     expect(parsed.error).toBe(
-      "Could not find specified service: gui/501/com.prompt-coach.server",
+      "Could not find specified service: gui/501/com.promptlane.server",
     );
     expect(parsed.error_code).toBe("not_loaded");
-    expect(parsed.error_hint).toMatch(/prompt-coach service install/);
+    expect(parsed.error_hint).toMatch(/promptlane service install/);
   });
 
   it("omits error fields when ok is true", () => {
@@ -146,13 +146,13 @@ describe("formatServiceInstallPlain / Json", () => {
       supported: true,
       changed: true,
       dryRun: false,
-      plistPath: "/Users/me/Library/LaunchAgents/com.prompt-coach.server.plist",
+      plistPath: "/Users/me/Library/LaunchAgents/com.promptlane.server.plist",
       backupPath: undefined,
       started: true,
     });
     expect(text).toMatch(/installed/);
     expect(text).toContain(
-      "/Users/me/Library/LaunchAgents/com.prompt-coach.server.plist",
+      "/Users/me/Library/LaunchAgents/com.promptlane.server.plist",
     );
     expect(text).toMatch(/started/);
   });

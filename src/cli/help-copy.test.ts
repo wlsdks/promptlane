@@ -28,10 +28,10 @@ function nestedHelpFor(commandPath: string, subcommandPath: string): string {
 }
 
 describe("CLI help copy", () => {
-  it("presents the root command as the PromptLane workbench while preserving the prompt-coach command id", () => {
+  it("presents the root command as the PromptLane workbench while preserving the promptlane command id", () => {
     const help = createProgram().helpInformation();
 
-    expect(help).toContain("Usage: prompt-coach");
+    expect(help).toContain("Usage: promptlane");
     expect(help).toContain(
       "Local-first prompt improvement workspace",
     );
@@ -64,10 +64,10 @@ describe("CLI help copy", () => {
     expect(help).toContain("Uninstall the PromptLane status line");
     expect(help).toContain("Report PromptLane 9.5 quality evidence");
     expect(help).toContain("Install a login service for the local PromptLane server.");
-    expect(help).not.toContain("local prompt-coach HTTP server");
-    expect(help).not.toContain("local prompt-coach MCP server");
-    expect(help).not.toContain("prompt-coach capture hook");
-    expect(help).not.toContain("prompt-coach status line");
-    expect(help).not.toContain("local prompt-coach server");
+    expect(help).not.toContain("local promptlane HTTP server");
+    expect(help).not.toContain("local promptlane MCP server");
+    expect(help).not.toContain("promptlane capture hook");
+    expect(help).not.toContain("promptlane status line");
+    expect(help).not.toContain("local promptlane server");
   });
 });

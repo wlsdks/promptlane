@@ -1,4 +1,4 @@
-# prompt-coach PRD
+# promptlane PRD
 
 Date: 2026-05-01
 
@@ -6,7 +6,7 @@ Status: Public beta candidate
 
 ## 1. Product Positioning
 
-`prompt-coach` is an AI coding prompt memory and improvement workspace, local-first.
+`promptlane` is an AI coding prompt memory and improvement workspace, local-first.
 
 It records prompts entered into AI coding tools such as Claude Code and Codex, stores them locally, helps users search and review them, analyzes weak prompting patterns, and helps users write better follow-up requests.
 
@@ -145,27 +145,27 @@ SQLite must be rebuildable from Markdown where applicable. User-owned policy and
 
 Required public commands:
 
-- `prompt-coach setup`
-- `prompt-coach init`
-- `prompt-coach doctor`
-- `prompt-coach hook`
-- `prompt-coach install-hook`
-- `prompt-coach uninstall-hook`
-- `prompt-coach statusline`
-- `prompt-coach install-statusline`
-- `prompt-coach uninstall-statusline`
-- `prompt-coach service`
-- `prompt-coach server`
-- `prompt-coach list`
-- `prompt-coach search`
-- `prompt-coach show`
-- `prompt-coach open`
-- `prompt-coach delete`
-- `prompt-coach rebuild-index`
-- `prompt-coach import`
-- `prompt-coach import-job`
-- `prompt-coach export`
-- `prompt-coach improve`
+- `promptlane setup`
+- `promptlane init`
+- `promptlane doctor`
+- `promptlane hook`
+- `promptlane install-hook`
+- `promptlane uninstall-hook`
+- `promptlane statusline`
+- `promptlane install-statusline`
+- `promptlane uninstall-statusline`
+- `promptlane service`
+- `promptlane server`
+- `promptlane list`
+- `promptlane search`
+- `promptlane show`
+- `promptlane open`
+- `promptlane delete`
+- `promptlane rebuild-index`
+- `promptlane import`
+- `promptlane import-job`
+- `promptlane export`
+- `promptlane improve`
 
 CLI behavior:
 
@@ -204,7 +204,7 @@ Required screens:
 
 - archive list
 - prompt detail
-- Prompt Coach panel
+- PromptLane panel
 - quality/dashboard view
 - project policy screen
 - anonymized export screen
@@ -233,7 +233,7 @@ Analysis should identify:
 - sensitive content signals
 - reuse/bookmark/copy signals
 
-Prompt Coach should:
+PromptLane should:
 
 - generate a clearer draft
 - preserve user intent
@@ -336,7 +336,7 @@ Benchmark v1 measures:
 
 - privacy leak count
 - retrieval top-k
-- Prompt Coach gap fix rate
+- PromptLane gap fix rate
 - Prompt Quality Score calibration
 - analytics usefulness
 - local runtime latency
@@ -350,7 +350,7 @@ The public beta is acceptable when:
 - prompts are redacted before persistent storage
 - Markdown and SQLite records are created
 - CLI and web UI can list/search/show/delete prompts
-- Prompt Coach can produce and save copy-based improvement drafts
+- PromptLane can produce and save copy-based improvement drafts
 - project capture policy is enforced
 - CLI import dry-run/execute/resume works
 - anonymized export preview/job flow works
@@ -360,7 +360,7 @@ The public beta is acceptable when:
 
 ## 17. Open Questions
 
-- How should beta users provide feedback on Prompt Coach quality?
+- How should beta users provide feedback on PromptLane quality?
 - When should semantic search be introduced, and should it be local-only?
 - Should web import upload be added before a stable release?
 - Which platforms should be considered officially supported after the beta?

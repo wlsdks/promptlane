@@ -15,14 +15,14 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cliPath = join(repoRoot, "dist", "cli", "index.js");
-const tempRoot = mkdtempSync(join(tmpdir(), "prompt-coach-agent-setup-smoke-"));
+const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-agent-setup-smoke-"));
 const homeDir = join(tempRoot, "home");
 const binDir = join(tempRoot, "bin");
 const dataDir = join(tempRoot, "data");
 const settingsPath = join(tempRoot, "claude-settings.json");
 const hooksPath = join(tempRoot, "codex-hooks.json");
 const configPath = join(tempRoot, "codex-config.toml");
-const plistPath = join(tempRoot, "LaunchAgents", "com.prompt-coach.server.plist");
+const plistPath = join(tempRoot, "LaunchAgents", "com.promptlane.server.plist");
 const mcpConfigPath = join(tempRoot, "mcp-config.json");
 const env = {
   ...process.env,
@@ -38,7 +38,7 @@ try {
   writeExecutable(join(binDir, "claude"));
   writeExecutable(join(binDir, "codex"));
 
-  step("Run prompt-coach setup --profile coach --register-mcp dry-run");
+  step("Run promptlane setup --profile coach --register-mcp dry-run");
   const dryRun = runCli([
     "setup",
     "--profile",
@@ -67,7 +67,7 @@ try {
   step("Initialize storage for doctor checks");
   runCli(["init", "--data-dir", dataDir]);
 
-  step("Run prompt-coach setup --profile coach --register-mcp");
+  step("Run promptlane setup --profile coach --register-mcp");
   const setup = runCli([
     "setup",
     "--profile",
@@ -92,11 +92,11 @@ try {
   const claudeSettings = readFileSync(settingsPath, "utf8");
   const codexHooks = readFileSync(hooksPath, "utf8");
   const codexConfig = readFileSync(configPath, "utf8");
-  assertIncludes(claudeSettings, "prompt-coach hook claude-code");
-  assertIncludes(codexHooks, "prompt-coach hook codex");
+  assertIncludes(claudeSettings, "promptlane hook claude-code");
+  assertIncludes(codexHooks, "promptlane hook codex");
   assertIncludes(codexConfig, "hooks = true");
 
-  step("Run prompt-coach doctor claude-code");
+  step("Run promptlane doctor claude-code");
   const claudeDoctor = runCli([
     "doctor",
     "claude-code",
@@ -107,11 +107,11 @@ try {
     "--mcp-config-path",
     mcpConfigPath,
   ]);
-  assertIncludes(claudeDoctor.stdout, "prompt-coach doctor: claude-code");
+  assertIncludes(claudeDoctor.stdout, "promptlane doctor: claude-code");
   assertIncludes(claudeDoctor.stdout, "Claude Code hook");
   assertNoSecretOutput(claudeDoctor);
 
-  step("Run prompt-coach doctor codex");
+  step("Run promptlane doctor codex");
   const codexDoctor = runCli([
     "doctor",
     "codex",
@@ -124,12 +124,12 @@ try {
     "--mcp-config-path",
     mcpConfigPath,
   ]);
-  assertIncludes(codexDoctor.stdout, "prompt-coach doctor: codex");
+  assertIncludes(codexDoctor.stdout, "promptlane doctor: codex");
   assertIncludes(codexDoctor.stdout, "Codex hook");
   assertIncludes(codexDoctor.stdout, "hooks enabled");
   assertNoSecretOutput(codexDoctor);
 
-  console.log("prompt-coach agent setup smoke passed");
+  console.log("promptlane agent setup smoke passed");
 } finally {
   rmSync(tempRoot, { recursive: true, force: true });
 }
@@ -145,7 +145,7 @@ function runCli(args) {
   }
   if (result.status !== 0) {
     throw new Error(
-      `prompt-coach ${args.join(" ")} exited ${result.status}\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`,
+      `promptlane ${args.join(" ")} exited ${result.status}\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`,
     );
   }
   return result;

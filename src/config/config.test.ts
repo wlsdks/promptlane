@@ -11,9 +11,9 @@ import { randomUUID } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
-  initializePromptCoach,
+  initializePromptLane,
   loadHookAuth,
-  loadPromptCoachConfig,
+  loadPromptLaneConfig,
   updateAutoJudgeSettings,
 } from "./config.js";
 
@@ -28,17 +28,17 @@ afterEach(() => {
   }
 });
 
-describe("initializePromptCoach", () => {
+describe("initializePromptLane", () => {
   it("creates config, hook auth, and required directories", () => {
     const dataDir = createTempDir();
 
-    const result = initializePromptCoach({
+    const result = initializePromptLane({
       dataDir,
       now: new Date("2026-05-01T00:00:00.000Z"),
     });
 
     expect(result.created).toEqual({ config: true, hookAuth: true });
-    expect(loadPromptCoachConfig(dataDir)).toEqual(result.config);
+    expect(loadPromptLaneConfig(dataDir)).toEqual(result.config);
     expect(loadHookAuth(dataDir)).toEqual(result.hookAuth);
     expect(result.hookAuth.app_token).toMatch(/^pm_app_/);
     expect(result.hookAuth.ingest_token).toMatch(/^pm_ingest_/);
@@ -53,8 +53,8 @@ describe("initializePromptCoach", () => {
   it("is idempotent and does not rotate existing secrets", () => {
     const dataDir = createTempDir();
 
-    const first = initializePromptCoach({ dataDir });
-    const second = initializePromptCoach({ dataDir });
+    const first = initializePromptLane({ dataDir });
+    const second = initializePromptLane({ dataDir });
 
     expect(second.created).toEqual({ config: false, hookAuth: false });
     expect(second.config).toEqual(first.config);
@@ -63,7 +63,7 @@ describe("initializePromptCoach", () => {
 
   it("defaults auto_judge to disabled on a fresh init", () => {
     const dataDir = createTempDir();
-    const result = initializePromptCoach({ dataDir });
+    const result = initializePromptLane({ dataDir });
 
     expect(result.config.auto_judge).toEqual({
       enabled: false,
@@ -75,7 +75,7 @@ describe("initializePromptCoach", () => {
 
   it("merges auto_judge patches without losing untouched fields", () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
 
     const enabled = updateAutoJudgeSettings(dataDir, { enabled: true });
     expect(enabled).toMatchObject({
@@ -96,24 +96,24 @@ describe("initializePromptCoach", () => {
       per_minute_limit: 1,
     });
 
-    const persisted = loadPromptCoachConfig(dataDir);
+    const persisted = loadPromptLaneConfig(dataDir);
     expect(persisted.auto_judge).toEqual(tightened);
   });
 
   it("defaults experimental_rules to an empty array on a fresh init", () => {
     const dataDir = createTempDir();
-    const result = initializePromptCoach({ dataDir });
+    const result = initializePromptLane({ dataDir });
 
     expect(result.config.experimental_rules).toEqual([]);
-    expect(loadPromptCoachConfig(dataDir).experimental_rules).toEqual([]);
+    expect(loadPromptLaneConfig(dataDir).experimental_rules).toEqual([]);
   });
 
   it("loads excluded_project_roots from config.json so server enforces them", () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
 
     // Default
-    expect(loadPromptCoachConfig(dataDir).excluded_project_roots).toEqual([]);
+    expect(loadPromptLaneConfig(dataDir).excluded_project_roots).toEqual([]);
 
     // User edits config.json directly to add a global opt-out
     const configPath = join(dataDir, "config.json");
@@ -124,7 +124,7 @@ describe("initializePromptCoach", () => {
     config.excluded_project_roots = ["/Users/example/private-project"];
     writeFileSync(configPath, JSON.stringify(config, null, 2));
 
-    expect(loadPromptCoachConfig(dataDir).excluded_project_roots).toEqual([
+    expect(loadPromptLaneConfig(dataDir).excluded_project_roots).toEqual([
       "/Users/example/private-project",
     ]);
   });
@@ -135,7 +135,7 @@ describe("initializePromptCoach", () => {
     }
 
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
 
     expect(modeOf(dataDir)).toBe(0o700);
     expect(modeOf(join(dataDir, "config.json"))).toBe(0o600);
@@ -144,7 +144,7 @@ describe("initializePromptCoach", () => {
 });
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-config-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-config-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;

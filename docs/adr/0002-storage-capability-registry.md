@@ -133,7 +133,7 @@ for local-first reliability and harder for agent-facing MCP tools to explain.
   compatibility-window catalogue should keep tools visible in `tools/list` and
   make storage/setup failure explicit through structured
   `storage_unavailable` results. This preserves discoverability for Claude
-  Code and Codex agents: they can still see `get_prompt_coach_status`,
+  Code and Codex agents: they can still see `get_promptlane_status`,
   `coach_prompt`, and the relevant setup guidance even before the local
   archive exists.
 - Hiding storage-backed tools from `tools/list` is deferred until there is a
@@ -160,6 +160,6 @@ const storage = requireStorageCapabilities(options.storage, [
 
 For Fastify routes, missing capabilities should fail during route
 registration or server creation with a clear message. For MCP during the
-`prompt-coach` to Loopdeck compatibility window, the capability declaration
+`promptlane` to PromptLane compatibility window, the capability declaration
 should feed handler setup errors and status guidance rather than filtering
 `tools/list`.

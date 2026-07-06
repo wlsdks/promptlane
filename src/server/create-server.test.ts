@@ -5,7 +5,7 @@ import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { initializePromptCoach } from "../config/config.js";
+import { initializePromptLane } from "../config/config.js";
 import type { LoopSnapshot } from "../loop/types.js";
 import { createServer } from "./create-server.js";
 import type { CompactBoundary } from "../storage/compact-boundaries.js";
@@ -47,9 +47,9 @@ afterEach(() => {
 });
 
 function createPersistedTestDataDir(): string {
-  const dataDir = join(tmpdir(), `prompt-coach-server-${randomUUID()}`);
+  const dataDir = join(tmpdir(), `promptlane-server-${randomUUID()}`);
   mkdirSync(dataDir, { recursive: true });
-  initializePromptCoach({ dataDir });
+  initializePromptLane({ dataDir });
   persistedDataDirs.push(dataDir);
   return dataDir;
 }
@@ -113,7 +113,7 @@ describe("createServer P2 ingest boundary", () => {
       .csrf_token;
 
     expect(session.statusCode).toBe(200);
-    expect(cookie).toContain("prompt_coach_session=");
+    expect(cookie).toContain("promptlane_session=");
     expect(csrfToken).toBeTypeOf("string");
 
     const noCsrf = await server.inject({
@@ -160,7 +160,7 @@ describe("createServer P2 ingest boundary", () => {
     expect(response.statusCode).toBe(200);
     expect(response.json()).toMatchObject({
       data: {
-        data_dir: "/tmp/prompt-coach-test",
+        data_dir: "/tmp/promptlane-test",
         redaction_mode: "mask",
         server: {
           host: "127.0.0.1",
@@ -280,7 +280,7 @@ describe("createServer P2 ingest boundary", () => {
         items: [
           {
             project_id: "proj_memory",
-            label: "prompt-coach",
+            label: "promptlane",
             alias: "workbench",
             path_kind: "project_root",
             prompt_count: 2,
@@ -691,7 +691,7 @@ describe("createServer P2 ingest boundary", () => {
       },
     });
     expect(response.json<{ data: { prompt: string } }>().data.prompt).toContain(
-      "prompt-coach loop collect again",
+      "promptlane loop collect again",
     );
     expect(serialized).not.toContain("Make this better");
     expect(serialized).not.toContain("Compact summary with sk-proj-secret");
@@ -874,7 +874,7 @@ describe("createServer P2 ingest boundary", () => {
           action: "copy selected continuation brief",
           reason:
             "uses the selected worktree/session/branch filters without auto-submitting",
-          command: "prompt-coach loop brief --worktree review-worktree",
+          command: "promptlane loop brief --worktree review-worktree",
           writes_files: false,
           external_calls: false,
         },
@@ -1811,7 +1811,7 @@ describe("createServer P2 ingest boundary", () => {
           command_hint: {
             label: "Copy review brief command",
             command:
-              "prompt-coach loop brief --worktree review-worktree --branch codex/agent-loop-memory-design",
+              "promptlane loop brief --worktree review-worktree --branch codex/agent-loop-memory-design",
             provenance: {
               label: "Command provenance",
               source: "existing command-center continuation command",
@@ -2137,8 +2137,8 @@ describe("createServer P2 ingest boundary", () => {
           },
         },
         next_actions: [
-          "prompt-coach loop brief",
-          "prompt-coach loop instruction-patch --target-file AGENTS.md",
+          "promptlane loop brief",
+          "promptlane loop instruction-patch --target-file AGENTS.md",
         ],
         privacy: {
           local_only: true,
@@ -2266,7 +2266,7 @@ describe("createServer P2 ingest boundary", () => {
         apply_gate: {
           web_apply_available: false,
           confirm_command:
-            "prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply",
+            "promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply",
           mcp_tool: "apply_instruction_patch",
           reason:
             "web review does not write files; apply through CLI or MCP with explicit confirmation",
@@ -2717,7 +2717,7 @@ describe("createServer P2 ingest boundary", () => {
     expect(storage.events).toHaveLength(1);
     expect(storage.events[0]?.event.tool).toBe("claude-code");
     expect(storage.events[0]?.event.cwd).toBe(
-      "/Users/example/side-project/prompt-coach",
+      "/Users/example/side-project/promptlane",
     );
     expect(storage.events[0]?.redaction.stored_text).toContain(
       "[REDACTED:email]",
@@ -2759,8 +2759,8 @@ describe("createServer P2 ingest boundary", () => {
       source_event: "UserPromptSubmit",
       session_id: "codex-session-123",
       turn_id: "turn-456",
-      cwd: "/Users/example/side-project/prompt-coach",
-      transcript_path: "/Users/example/.codex/sessions/prompt-coach.jsonl",
+      cwd: "/Users/example/side-project/promptlane",
+      transcript_path: "/Users/example/.codex/sessions/promptlane.jsonl",
       model: "gpt-5.5",
       adapter_version: "codex-v1",
     });
@@ -3307,7 +3307,7 @@ type TestServerOptions = {
 
 function createTestServer(options: TestServerOptions = {}) {
   return createServer({
-    dataDir: options.dataDir ?? "/tmp/prompt-coach-test",
+    dataDir: options.dataDir ?? "/tmp/promptlane-test",
     autoJudge: options.autoJudge,
     auth: {
       appToken: "app-token",
@@ -3377,7 +3377,7 @@ function createMemoryStorage() {
         items: [
           {
             project_id: "proj_memory",
-            label: "prompt-coach",
+            label: "promptlane",
             alias: "workbench",
             path_kind: "project_root" as const,
             prompt_count: 2,
@@ -3405,7 +3405,7 @@ function createMemoryStorage() {
       policyUpdates.push({ projectId, patch, actor });
       return {
         project_id: projectId,
-        label: "prompt-coach",
+        label: "promptlane",
         alias: typeof patch.alias === "string" ? patch.alias : "workbench",
         path_kind: "project_root" as const,
         prompt_count: 2,
@@ -3667,7 +3667,7 @@ function loopSnapshot(patch: Partial<LoopSnapshot> = {}): LoopSnapshot {
     },
     next_brief: {
       generated: false,
-      summary: "Run prompt-coach loop brief to generate the next request.",
+      summary: "Run promptlane loop brief to generate the next request.",
     },
     privacy: {
       local_only: true,

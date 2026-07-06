@@ -43,7 +43,7 @@ drift and wastes agent context.
 Keep repo-level instruction files short and route deeper work to docs:
 
 - Product planning: `docs/PROMPTLANE.md`, `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md`
-- Legacy naming surfaces: `docs/LOOPDECK.md`, `docs/LOOPDECK-LEGACY-SURFACES.md`
+- Legacy naming surfaces: `docs/PROMPTLANE.md`, `docs/PROMPTLANE-LEGACY-SURFACES.md`
 - Current operational queue: `docs/NEXT_BACKLOG.md`
 - Harness details: `docs/AGENT-HARNESS.md`
 - Architecture: `docs/ARCHITECTURE.md`
@@ -105,13 +105,13 @@ Practical rule:
 During the PromptLane compatibility window, use this wording consistently:
 
 - Product name: PromptLane
-- npm package: `prompt-coach`
-- primary compatibility CLI: `prompt-coach`
-- legacy CLI alias: `loopdeck`
-- canonical MCP server name: `prompt-coach`
-- Claude Code slash namespace: `/prompt-coach:*`
-- `/loopdeck:*` remains unshipped legacy alias planning unless a later migration
+- npm package: `promptlane`
+- primary compatibility CLI: `promptlane`
+- legacy CLI alias: `promptlane`
+- canonical MCP server name: `promptlane`
+- Claude Code slash namespace: `/promptlane:*`
+- `/promptlane:*` remains unshipped legacy alias planning unless a later migration
   proves it is still needed
 
-Do not introduce deprecation language for `prompt-coach` runtime identifiers
+Do not introduce deprecation language for `promptlane` runtime identifiers
 until the deprecation readiness plan says the evidence gates are satisfied.

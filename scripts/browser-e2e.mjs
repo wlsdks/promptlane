@@ -17,7 +17,7 @@ import { chromium } from "playwright";
 
 const repoRoot = resolve(new URL("..", import.meta.url).pathname);
 const cliPath = join(repoRoot, "dist", "cli", "index.js");
-const tempRoot = mkdtempSync(join(tmpdir(), "prompt-coach-browser-e2e-"));
+const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-browser-e2e-"));
 const dataDir = join(tempRoot, "data");
 const homeDir = join(tempRoot, "home");
 const screenshotDir = process.env.SCREENSHOT_DIR
@@ -42,8 +42,8 @@ try {
   writeFileSync(
     join(privateProjectDir, "AGENTS.md"),
     [
-      "# prompt-coach",
-      "prompt-coach is a local-first developer tool built with TypeScript and SQLite.",
+      "# promptlane",
+      "promptlane is a local-first developer tool built with TypeScript and SQLite.",
       "Agents plan in tasks/todo.md, avoid reverting user changes, commit, and push.",
       "Run pnpm test, pnpm lint, pnpm build, and Playwright E2E after UI changes.",
       "Never expose secrets, prompt bodies, raw paths, tokens, stdout, or stderr leaks.",
@@ -153,12 +153,12 @@ try {
   );
   await assertText(
     page,
-    "prompt-coach:score_prompt prompt_id=",
+    "promptlane:score_prompt prompt_id=",
     "Detail should expose a stored prompt MCP score command.",
   );
   await assertText(
     page,
-    "prompt-coach:prepare_agent_rewrite prompt_id=",
+    "promptlane:prepare_agent_rewrite prompt_id=",
     "Detail should expose a stored prompt agent rewrite command.",
   );
   await captureScreenshot(page, "detail-desktop");
@@ -466,7 +466,7 @@ try {
   );
   await assertText(
     page,
-    "get_prompt_coach_status",
+    "get_promptlane_status",
     "MCP page should expose the preflight status tool.",
   );
   await assertText(
@@ -546,7 +546,7 @@ function step(message) {
 }
 
 function insertJudgeScoreForClaudePrompt({ score, reason }) {
-  const dbPath = join(dataDir, "prompt-coach.sqlite");
+  const dbPath = join(dataDir, "promptlane.sqlite");
   const db = new Database(dbPath);
   try {
     const row = db
@@ -577,7 +577,7 @@ function insertJudgeScoreForClaudePrompt({ score, reason }) {
 }
 
 function insertLoopOutcomeForClaudePrompt() {
-  const dbPath = join(dataDir, "prompt-coach.sqlite");
+  const dbPath = join(dataDir, "promptlane.sqlite");
   const db = new Database(dbPath);
   try {
     const row = db
@@ -664,7 +664,7 @@ function runCli(args) {
   });
   if (result.status !== 0) {
     throw new Error(
-      `CLI failed: prompt-coach ${args.join(" ")}\n${result.stderr}`,
+      `CLI failed: promptlane ${args.join(" ")}\n${result.stderr}`,
     );
   }
   return result.stdout.trim();
@@ -743,8 +743,8 @@ async function captureScreenshot(page, name) {
 
 async function forceClipboardFailure(page) {
   await page.evaluate(() => {
-    if (!window.__promptCoachE2eClipboard) {
-      Object.defineProperty(window, "__promptCoachE2eClipboard", {
+    if (!window.__promptLaneE2eClipboard) {
+      Object.defineProperty(window, "__promptLaneE2eClipboard", {
         configurable: true,
         value: {
           clipboard: navigator.clipboard,
@@ -767,7 +767,7 @@ async function forceClipboardFailure(page) {
 
 async function restoreClipboard(page) {
   await page.evaluate(() => {
-    const clipboardState = window.__promptCoachE2eClipboard;
+    const clipboardState = window.__promptLaneE2eClipboard;
     if (!clipboardState) {
       return;
     }
@@ -779,7 +779,7 @@ async function restoreClipboard(page) {
       configurable: true,
       value: clipboardState.clipboard,
     });
-    Reflect.deleteProperty(window, "__promptCoachE2eClipboard");
+    Reflect.deleteProperty(window, "__promptLaneE2eClipboard");
   });
 }
 
@@ -790,7 +790,7 @@ async function assertText(page, expected, message) {
 
 async function currentPromptDetail(page) {
   const text = await page.locator("body").innerText();
-  const match = text.match(/prompt-coach:score_prompt prompt_id=(\S+)/);
+  const match = text.match(/promptlane:score_prompt prompt_id=(\S+)/);
   assert(match, "Detail view should expose the selected prompt id.");
   return page.evaluate(async (promptId) => {
     const response = await fetch(`/api/v1/prompts/${promptId}`);

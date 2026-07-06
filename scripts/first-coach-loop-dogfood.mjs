@@ -15,13 +15,13 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cliPath = join(repoRoot, "dist", "cli", "index.js");
-const tempRoot = mkdtempSync(join(tmpdir(), "prompt-coach-first-loop-"));
+const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-first-loop-"));
 const dataDir = join(tempRoot, "data");
 const homeDir = join(tempRoot, "home");
 const projectDir = join(homeDir, "project");
 const serverPort = 20_000 + Math.floor(Math.random() * 20_000);
 const serverBaseUrl = `http://127.0.0.1:${serverPort}`;
-const secret = "PROMPT_COACH_FIRST_LOOP_SECRET sk-proj-firstloop1234567890";
+const secret = "PROMPTLANE_FIRST_LOOP_SECRET sk-proj-firstloop1234567890";
 const cliEnv = {
   ...process.env,
   HOME: homeDir,
@@ -172,12 +172,12 @@ function runCli(args, options = {}) {
   });
   if (result.status !== 0) {
     throw new Error(
-      `CLI failed: prompt-coach ${args.join(" ")}\n${result.stderr}`,
+      `CLI failed: promptlane ${args.join(" ")}\n${result.stderr}`,
     );
   }
   if (result.stderr.trim()) {
     throw new Error(
-      `CLI printed unexpected stderr: prompt-coach ${args.join(" ")}\n${result.stderr}`,
+      `CLI printed unexpected stderr: promptlane ${args.join(" ")}\n${result.stderr}`,
     );
   }
   return result.stdout.trim();

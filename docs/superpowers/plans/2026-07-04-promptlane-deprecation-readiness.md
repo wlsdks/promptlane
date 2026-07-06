@@ -1,11 +1,11 @@
-# Loopdeck Deprecation Readiness
+# PromptLane Deprecation Readiness
 
 Historical naming note:
 
 - Current product name: PromptLane.
-- Current runtime id: `prompt-coach`.
-- This document preserves an older Loopdeck compatibility decision. See `docs/PROMPTLANE.md` for the active product contract.
-- See `docs/LOOPDECK-LEGACY-SURFACES.md` before adding or changing any Loopdeck/`loopdeck` surface.
+- Current runtime id: `promptlane`.
+- This document preserves an older PromptLane compatibility decision. See `docs/PROMPTLANE.md` for the active product contract.
+- See `docs/PROMPTLANE-LEGACY-SURFACES.md` before adding or changing any PromptLane/`promptlane` surface.
 
 **Date:** 2026-07-04
 **Slice:** R7 Deprecation Window Readiness
@@ -13,11 +13,11 @@ Historical naming note:
 
 ## Current Position
 
-`prompt-coach` remains the compatibility runtime id. The product-facing name is
-Loopdeck, but `/prompt-coach:* remains supported`, the npm package name remains
-`prompt-coach`, the Claude Code plugin name remains `prompt-coach`, the Codex
-plugin id remains `prompt-coach`, hook commands keep `prompt-coach hook ...`,
-and the canonical MCP server name remains `prompt-coach`.
+`promptlane` remains the compatibility runtime id. The product-facing name is
+PromptLane, but `/promptlane:* remains supported`, the npm package name remains
+`promptlane`, the Claude Code plugin name remains `promptlane`, the Codex
+plugin id remains `promptlane`, hook commands keep `promptlane hook ...`,
+and the canonical MCP server name remains `promptlane`.
 
 Do not show a deprecation banner yet. Do not remove the old namespace. Do not
 tell users they must migrate saved slash command snippets yet.
@@ -26,8 +26,8 @@ tell users they must migrate saved slash command snippets yet.
 
 Use this only when an alias is added while every old id remains supported:
 
-> Loopdeck now includes an additional alias for `<surface>`. Existing
-> `prompt-coach` commands, `/prompt-coach:*` slash commands, plugin ids, hook
+> PromptLane now includes an additional alias for `<surface>`. Existing
+> `promptlane` commands, `/promptlane:*` slash commands, plugin ids, hook
 > commands, and MCP server registrations keep working. No migration is required.
 
 Required evidence:
@@ -76,14 +76,14 @@ Required evidence:
 
 Before any deprecation banner, support docs must say:
 
-- saved `/prompt-coach:*` snippets keep working
-- new `/loopdeck:*` snippets are optional only after a real alias namespace ships
+- saved `/promptlane:*` snippets keep working
+- new `/promptlane:*` snippets are optional only after a real alias namespace ships
 - users should not bulk-rewrite snippets until the alias is smoke-tested
-- rollback is to keep or restore `/prompt-coach:*`
+- rollback is to keep or restore `/promptlane:*`
 
 ## Minimum evidence before deprecation
 
-Do not mark `/prompt-coach:*`, plugin ids, hook commands, or MCP server names as
+Do not mark `/promptlane:*`, plugin ids, hook commands, or MCP server names as
 deprecated until all of these are true:
 
 - alias-only implementation exists for that exact surface
@@ -98,7 +98,7 @@ deprecated until all of these are true:
 
 Rollback smoke:
 
-- keep existing `prompt-coach` CLI, `/prompt-coach:*`, plugin ids, hook commands,
+- keep existing `promptlane` CLI, `/promptlane:*`, plugin ids, hook commands,
   and MCP server names functional after ignoring any new alias
 - verify no prompt body, transcript, compact summary, raw path, API token, or
   provider credential is printed

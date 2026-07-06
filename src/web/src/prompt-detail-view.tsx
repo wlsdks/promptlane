@@ -169,7 +169,7 @@ export function PromptDetailView({
         )}
         <JudgeScorePanel prompt={prompt} />
         <LoopOutcomeEvidencePanel prompt={prompt} />
-        <PromptCoachPanel
+        <PromptLanePanel
           answersByAxis={answersByAxis}
           copied={copiedImprovement}
           improvement={improvement}
@@ -354,7 +354,7 @@ function effectivenessFromOutcomes(
   };
 }
 
-function PromptCoachPanel({
+function PromptLanePanel({
   answersByAxis,
   copied,
   improvement,

@@ -22,7 +22,7 @@ queue.
   and accepted in PR #318.
 - PromptLane direction is active while the public npm package, CLI command,
   Claude Code slash commands, Codex plugin id, hook command, and canonical MCP
-  server name remain `prompt-coach` during the compatibility window.
+  server name remain `promptlane` during the compatibility window.
 - The first loop-aware continuation runtime slices have landed: loop snapshots, continuation
   briefs, compact boundary awareness, worktree/session/branch selected
   continuation, command-center summaries, local merge decision metadata,
@@ -61,11 +61,11 @@ Current integration policy:
 Current goal audit:
 
 - `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md` maps
-  why Loopdeck and Prompt Coach were rejected as primary product names and keeps
-  `prompt-coach` as the runtime compatibility id.
+  why PromptLane and PromptLane were rejected as primary product names and keeps
+  `promptlane` as the runtime compatibility id.
 - PR #343 added an approval-gated native-dialog dogfood command. It proves the
   command refuses to open a native OS dialog without
-  `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1`, but it does not replace the
+  `PROMPTLANE_NATIVE_DIALOG_APPROVED=1`, but it does not replace the
   remaining human-approved answered-dialog dogfood.
 - PR #345 cleared dependency security alerts for `vite`, `esbuild`, and
   `fast-uri`.
@@ -73,7 +73,7 @@ Current goal audit:
   `pnpm-workspace.yaml`.
 - PR #357 made the Codex plugin hook installation setup-driven so plugin
   discovery does not duplicate user-level hooks installed by
-  `prompt-coach setup`.
+  `promptlane setup`.
 - PR #358 refreshed the reuse-copy audit after the local manual-copy fallback
   landed.
 - PR #359 strengthened browser E2E so both `Copy draft` and
@@ -93,7 +93,7 @@ Current goal audit:
   missing loop snapshot, compact boundary, memory, or merge-decision storage
   fails with one raw-free local configuration problem instead of an empty
   PromptLane status.
-- PR #369 added a docs drift guard so the Loopdeck goal audit and next backlog
+- PR #369 added a docs drift guard so the PromptLane goal audit and next backlog
   continue citing the saved-draft reuse flow after PR #366 through PR #368.
 - PR #370 closed the stale reuse audit next slice; no immediate reuse-flow
   slice remains until fresh user-flow evidence creates one.
@@ -187,9 +187,9 @@ Decision:
   `corepack pnpm --silent evidence:quality` or
   `node scripts/quality-95-evidence.mjs` to avoid package-manager banners.
   Installed CLI users can inspect the same summary with
-  `prompt-coach quality-evidence --json` and fail closed with
-  `prompt-coach quality-evidence --require-complete`. They can also run
-  `prompt-coach quality-evidence --operator-brief` to print the focused
+  `promptlane quality-evidence --json` and fail closed with
+  `promptlane quality-evidence --require-complete`. They can also run
+  `promptlane quality-evidence --operator-brief` to print the focused
   native-dialog approval checklist without opening the dialog.
   The JSON includes `axis_evidence_coverage`, which separates satisfied local
   proof such as `local_95_evidence_sweep`,
@@ -214,7 +214,7 @@ Decision:
   Product planning is now also 9.5/10 after
   `docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md` recorded current GitHub
   repository metadata, README/package/plugin metadata, the PromptLane product
-  contract, Loopdeck legacy decision, backlog, and goal-audit alignment.
+  contract, PromptLane legacy decision, backlog, and goal-audit alignment.
   `quality-evidence` records this as
   `product_positioning_metadata_alignment`.
   Codex/Claude operator dogfood and native-dialog approved dogfood are now
@@ -238,9 +238,9 @@ Decision:
   includes `blocked_reason`, preconditions, completion evidence, and guardrails
   so agents can unblock the remaining 9.5 work without running approval-gated
   native UI automatically.
-- The human `prompt-coach quality-evidence` summary now renders external
+- The human `promptlane quality-evidence` summary now renders external
   evidence status directly: native dialog approved-run requirement.
-  `prompt-coach quality-evidence --operator-brief` prints only the current
+  `promptlane quality-evidence --operator-brief` prints only the current
   approval status, command, refusal preflight command, preconditions,
   completion evidence, and guardrails for that remaining dogfood step, while
   explicitly not running it. The refusal preflight command is
@@ -249,7 +249,7 @@ Decision:
   blocker `next_action`, so agents no longer need to switch to JSON output just
   to decide which lower-level evidence keeps an axis below 9.5.
 - PR #478 moved that quality evidence gate onto the installed product CLI. Main
-  CI run `28753458359` passed Node 22 and Node 24 after merge, so `prompt-coach
+  CI run `28753458359` passed Node 22 and Node 24 after merge, so `promptlane
   quality-evidence --require-complete` is now a current default-branch release
   and goal-completion guard rather than only a repo-local npm script.
 - The earlier GitHub Actions Node 20 runtime annotation and Node 24
@@ -274,7 +274,7 @@ Decision:
   `recommended_next_slices` item, `corepack pnpm smoke:agent-setup` passed on
   current main-derived work. The smoke rebuilt server/web assets, exercised
   setup dry-run, setup with MCP registration, Claude Code doctor, and Codex
-  doctor, then ended with `prompt-coach agent setup smoke passed`. This
+  doctor, then ended with `promptlane agent setup smoke passed`. This
   refreshes local Codex/Claude setup evidence without opening provider CLIs or
   treating native-dialog dogfood as complete.
 - `docs/LOCAL_95_EVIDENCE_2026-07-06.md` records the current local 9.5 evidence
@@ -298,7 +298,7 @@ Decision:
   preserve a measurable before/after signal instead of only returning a rewrite.
 - Prompt-linked outcome evidence, CLI prompt outcome evidence, and Prompt effectiveness verdict
   are landed evidence-quality slices: prompt detail,
-  storage `getPrompt()`, `prompt-coach show --json`, and the web prompt detail
+  storage `getPrompt()`, `promptlane show --json`, and the web prompt detail
   now connect `expected_impact` predictions to actual raw-free loop outcomes
   and an `effectiveness` verdict without treating that as scheduled
   `ui-patrol` or native-dialog completion evidence.
@@ -310,11 +310,11 @@ Decision:
   `score_prompt` now exposes raw-free `effectiveness` verdict and calibration
   counts for stored prompt ids so Codex and Claude Code can inspect impact
   evidence through structured MCP content without opening the web UI or running
-  `prompt-coach show --json`. PR #462 and latest main CI run `28750281428`
+  `promptlane show --json`. PR #462 and latest main CI run `28750281428`
   proved this on the default branch.
 - Archive-level effectiveness summary is the active follow-up: archive score
-  reports now expose `effectiveness_summary` through `prompt-coach score
-  --json`, human `prompt-coach score` output, `/api/v1/score`, and MCP
+  reports now expose `effectiveness_summary` through `promptlane score
+  --json`, human `promptlane score` output, `/api/v1/score`, and MCP
   `score_prompt_archive`, allowing Codex and Claude Code to compare measured vs
   unmeasured prompts, proven/mixed/unproven verdicts, linked outcomes, tests
   run, safe evidence refs, and next action before claiming prompt improvement
@@ -350,7 +350,7 @@ Rationale:
 - MCP registry cleanup is valuable, but ADR 0001 deliberately avoids a broad
   rewrite until a tool-list change creates real pressure.
 - More rename or plugin alias work has lower product value than making the
-  current `prompt-coach` compatibility runtime safer and easier to extend after
+  current `promptlane` compatibility runtime safer and easier to extend after
   the PromptLane product-facing contract lands.
 - Security and package-manager hygiene should remain tightly scoped: update the
   smallest dependency/config surface that removes the alert or warning, then
@@ -359,7 +359,7 @@ Rationale:
   `docs/NPM_PUBLISHING.md` and `docs/PACKAGE_CONTENTS.md`; avoid allowing
   public beta gates to drift back to PATH-dependent bare `pnpm` commands.
 - README contributor gates should follow the same rule: use `corepack pnpm`
-  for release/build/package verification, while preserving `prompt-coach`
+  for release/build/package verification, while preserving `promptlane`
   as the compatibility runtime in user-facing command examples.
 
 ## Prioritized Queue
@@ -425,7 +425,7 @@ Completed:
 - prompt-linked outcome evidence: prompt detail API and web detail can show
   raw-free loop outcome status, summary, evidence refs, and test-count metadata
   for prompts included in explicit loop snapshots
-- CLI prompt outcome evidence: `prompt-coach show --json` reads the same
+- CLI prompt outcome evidence: `promptlane show --json` reads the same
   storage-level `loop_outcomes` contract so agent-native workflows can inspect
   actual outcome evidence alongside the stored prompt metadata
 
@@ -505,7 +505,7 @@ Scope:
 - Existing native dialog preflight/smoke harnesses have passed; use
   `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md` as the evidence baseline.
 - `corepack pnpm dogfood:mcp-native-dialog-approved` now exists and refuses to
-  run unless `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1` is set.
+  run unless `PROMPTLANE_NATIVE_DIALOG_APPROVED=1` is set.
 - Do not open OS dialogs unexpectedly from automated tests.
 - Treat this as integration evidence; do not block core loop-memory work on it.
 

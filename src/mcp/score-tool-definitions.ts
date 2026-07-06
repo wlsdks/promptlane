@@ -11,7 +11,7 @@ import { APPLY_CLARIFICATIONS_TOOL_DEFINITION } from "./apply-clarifications-too
 import { ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION } from "./ask-clarifying-questions-tool.js";
 import {
   APPLY_INSTRUCTION_PATCH_TOOL_DEFINITION,
-  GET_LOOPDECK_STATUS_TOOL_DEFINITION,
+  GET_PROMPTLANE_LOOP_STATUS_TOOL_DEFINITION,
   PREPARE_LOOP_BRIEF_TOOL_DEFINITION,
   PROPOSE_INSTRUCTION_PATCH_TOOL_DEFINITION,
   PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION,
@@ -34,7 +34,7 @@ type JsonValue =
 
 type JsonObject = { readonly [key: string]: JsonValue };
 
-export type PromptCoachMcpToolDefinition = {
+export type PromptLaneMcpToolDefinition = {
   readonly name: string;
   readonly description: string;
   readonly annotations: JsonObject;
@@ -86,11 +86,11 @@ const TOOL_ERROR_OUTPUT_SCHEMA = {
   },
 } as const;
 
-export const GET_PROMPT_COACH_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const GET_PROMPTLANE_STATUS_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
-    name: "get_prompt_coach_status",
+    name: "get_promptlane_status",
     description:
-      "Check whether the local PromptLane archive is initialized and has captured prompts before calling scoring tools. Use this first when the user asks if prompt-coach is working, whether Claude Code/Codex prompts are being captured, or which prompt-coach MCP tool to call next. Returns local readiness, safe counts, latest prompt metadata, available tool names, and next actions. It never returns prompt bodies, raw absolute paths, secrets, or external LLM results.",
+      "Check whether the local PromptLane archive is initialized and has captured prompts before calling scoring tools. Use this first when the user asks if promptlane is working, whether Claude Code/Codex prompts are being captured, or which promptlane MCP tool to call next. Returns local readiness, safe counts, latest prompt metadata, available tool names, and next actions. It never returns prompt bodies, raw absolute paths, secrets, or external LLM results.",
     annotations: {
       ...LOCAL_READ_ONLY_TOOL_ANNOTATIONS,
       title: "PromptLane status preflight",
@@ -157,10 +157,10 @@ export const GET_PROMPT_COACH_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefiniti
     },
   } as const;
 
-export const SCORE_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
+export const SCORE_PROMPT_TOOL_DEFINITION: PromptLaneMcpToolDefinition = {
   name: "score_prompt",
   description:
-    "Score a coding prompt with prompt-coach's local deterministic 0-100 Prompt Quality Score. Use this when the user asks Claude Code or Codex to evaluate the current request, a pasted prompt, a stored prompt id, or the latest captured prompt. The tool does not call external LLMs, does not store direct prompt input, and does not return prompt bodies.",
+    "Score a coding prompt with promptlane's local deterministic 0-100 Prompt Quality Score. Use this when the user asks Claude Code or Codex to evaluate the current request, a pasted prompt, a stored prompt id, or the latest captured prompt. The tool does not call external LLMs, does not store direct prompt input, and does not return prompt bodies.",
   annotations: {
     ...LOCAL_READ_ONLY_TOOL_ANNOTATIONS,
     title: "Prompt quality score",
@@ -245,7 +245,7 @@ export const SCORE_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
   },
 } as const;
 
-export const IMPROVE_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
+export const IMPROVE_PROMPT_TOOL_DEFINITION: PromptLaneMcpToolDefinition = {
   name: "improve_prompt",
   description:
     "Generate an approval-ready improved coding prompt draft with PromptLane's local deterministic improver. Use this when the user asks Claude Code or Codex to rewrite, clarify, or upgrade the current request, a pasted prompt, a stored prompt id, or the latest captured prompt before resubmitting it. The tool is copy-based: it never auto-submits the draft, never calls external LLMs, does not store direct prompt input, and does not return the original stored prompt body.",
@@ -371,7 +371,7 @@ export const IMPROVE_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
   },
 } as const;
 
-export const SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "score_prompt_archive",
     description:
@@ -571,11 +571,11 @@ export const SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION: PromptCoachMcpToolDefinition 
     },
   } as const;
 
-export const REVIEW_PROJECT_INSTRUCTIONS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const REVIEW_PROJECT_INSTRUCTIONS_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "review_project_instructions",
     description:
-      "Review a local project's Claude Code/Codex instruction files such as AGENTS.md and CLAUDE.md using prompt-coach's deterministic local rubric. Use this when the user asks whether project rules are good enough, wants agent instructions scored, or wants suggestions for improving coding-agent behavior. With no project_id, set latest=true or omit project_id to review the most recently captured project. The tool can rescan local instruction files, but returns only file metadata, checklist scores, and suggestions; it never returns file bodies, raw absolute paths, or calls external LLMs.",
+      "Review a local project's Claude Code/Codex instruction files such as AGENTS.md and CLAUDE.md using promptlane's deterministic local rubric. Use this when the user asks whether project rules are good enough, wants agent instructions scored, or wants suggestions for improving coding-agent behavior. With no project_id, set latest=true or omit project_id to review the most recently captured project. The tool can rescan local instruction files, but returns only file metadata, checklist scores, and suggestions; it never returns file bodies, raw absolute paths, or calls external LLMs.",
     annotations: {
       ...LOCAL_READ_ONLY_TOOL_ANNOTATIONS,
       title: "Project instruction review",
@@ -586,7 +586,7 @@ export const REVIEW_PROJECT_INSTRUCTIONS_TOOL_DEFINITION: PromptCoachMcpToolDefi
         project_id: {
           type: "string",
           description:
-            "Optional prompt-coach project id from the Projects UI/API. Use this for an exact project.",
+            "Optional promptlane project id from the Projects UI/API. Use this for an exact project.",
         },
         latest: {
           type: "boolean",
@@ -733,10 +733,10 @@ export const REVIEW_PROJECT_INSTRUCTIONS_TOOL_DEFINITION: PromptCoachMcpToolDefi
     },
   } as const;
 
-export const COACH_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
+export const COACH_PROMPT_TOOL_DEFINITION: PromptLaneMcpToolDefinition = {
   name: "coach_prompt",
   description:
-    "Run prompt-coach's one-call agent coaching workflow for Claude Code or Codex. Use this when the user asks to coach the latest request, check whether the prompt is good enough, improve it, summarize recurring habits, review project rules, or generate the next better request without opening the web UI. It combines local status, latest prompt score, approval-required rewrite, archive habit review, and optional AGENTS.md/CLAUDE.md rule review. It is read-only, local-only, never auto-submits drafts, and never returns prompt bodies, raw paths, instruction file bodies, secrets, or external LLM results.",
+    "Run promptlane's one-call agent coaching workflow for Claude Code or Codex. Use this when the user asks to coach the latest request, check whether the prompt is good enough, improve it, summarize recurring habits, review project rules, or generate the next better request without opening the web UI. It combines local status, latest prompt score, approval-required rewrite, archive habit review, and optional AGENTS.md/CLAUDE.md rule review. It is read-only, local-only, never auto-submits drafts, and never returns prompt bodies, raw paths, instruction file bodies, secrets, or external LLM results.",
   annotations: {
     ...LOCAL_READ_ONLY_TOOL_ANNOTATIONS,
     title: "One-call prompt coach",
@@ -792,7 +792,7 @@ export const COACH_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
     properties: {
       mode: { const: "agent_coach" },
       generated_at: { type: "string" },
-      status: GET_PROMPT_COACH_STATUS_TOOL_DEFINITION.outputSchema,
+      status: GET_PROMPTLANE_STATUS_TOOL_DEFINITION.outputSchema,
       latest_score: SCORE_PROMPT_TOOL_DEFINITION.outputSchema,
       improvement: IMPROVE_PROMPT_TOOL_DEFINITION.outputSchema,
       archive: SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION.outputSchema,
@@ -853,15 +853,15 @@ export const COACH_PROMPT_TOOL_DEFINITION: PromptCoachMcpToolDefinition = {
   },
 } as const;
 
-export const PROMPT_COACH_MCP_TOOL_DEFINITIONS: readonly PromptCoachMcpToolDefinition[] = [
-    GET_PROMPT_COACH_STATUS_TOOL_DEFINITION,
+export const PROMPTLANE_MCP_TOOL_DEFINITIONS: readonly PromptLaneMcpToolDefinition[] = [
+    GET_PROMPTLANE_STATUS_TOOL_DEFINITION,
     COACH_PROMPT_TOOL_DEFINITION,
     SCORE_PROMPT_TOOL_DEFINITION,
     IMPROVE_PROMPT_TOOL_DEFINITION,
     APPLY_CLARIFICATIONS_TOOL_DEFINITION,
     ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION,
     RECORD_CLARIFICATIONS_TOOL_DEFINITION,
-    GET_LOOPDECK_STATUS_TOOL_DEFINITION,
+    GET_PROMPTLANE_LOOP_STATUS_TOOL_DEFINITION,
     PREPARE_LOOP_BRIEF_TOOL_DEFINITION,
     RECORD_LOOP_OUTCOME_TOOL_DEFINITION,
     PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION,
@@ -876,4 +876,4 @@ export const PROMPT_COACH_MCP_TOOL_DEFINITIONS: readonly PromptCoachMcpToolDefin
     RECORD_AGENT_JUDGMENTS_TOOL_DEFINITION,
 ];
 
-export const listPromptCoachMcpToolNames = (): string[] => PROMPT_COACH_MCP_TOOL_DEFINITIONS.map((tool) => tool.name);
+export const listPromptLaneMcpToolNames = (): string[] => PROMPTLANE_MCP_TOOL_DEFINITIONS.map((tool) => tool.name);

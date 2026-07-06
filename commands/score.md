@@ -13,7 +13,7 @@ archive. Pick the scope based on the user's request.
 Prefer the MCP tool when it is available:
 
 ```text
-prompt-coach:score_prompt latest=true
+promptlane:score_prompt latest=true
 ```
 
 Ask it to include concise suggestions and summarize:
@@ -25,10 +25,10 @@ Ask it to include concise suggestions and summarize:
 If MCP is not configured, use the privacy-safe CLI fallback:
 
 ```bash
-prompt-coach score --latest --json
+promptlane score --latest --json
 ```
 
-If no captured prompt exists yet, tell the user to run `prompt-coach setup`
+If no captured prompt exists yet, tell the user to run `promptlane setup`
 and submit one Claude Code or Codex prompt first.
 
 ## Accumulated archive
@@ -36,13 +36,13 @@ and submit one Claude Code or Codex prompt first.
 Prefer the MCP tool when it is available:
 
 ```text
-prompt-coach:score_prompt_archive
+promptlane:score_prompt_archive
 ```
 
 If MCP is not configured, run:
 
 ```bash
-prompt-coach score --json
+promptlane score --json
 ```
 
 Summarize the average archive score, recurring quality gaps, and the lowest
@@ -51,8 +51,8 @@ scoring prompt ids.
 If the user asks to focus on one tool, use:
 
 ```bash
-prompt-coach score --tool claude-code --json
-prompt-coach score --tool codex --json
+promptlane score --tool claude-code --json
+promptlane score --tool codex --json
 ```
 
 ## Safety

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to prompt-coach will be documented in this file.
+All notable changes to promptlane will be documented in this file.
 
 The format follows a simple reverse-chronological release log. This project is
 currently pre-release, so entries may change before `1.0.0`.
@@ -9,33 +9,33 @@ currently pre-release, so entries may change before `1.0.0`.
 
 This is the first public beta. The release covers local capture, storage,
 search, deletion, prompt analysis, project policy, transcript import,
-anonymized export, Prompt Coach drafts, Prompt Practice workspace, MCP scoring
+anonymized export, PromptLane drafts, Prompt Practice workspace, MCP scoring
 tools, benchmark/release validation, and an English/Korean web UI.
 
 ### Added
 
 #### Setup and capture
 
-- `prompt-coach setup`, `prompt-coach init`, `prompt-coach doctor`,
-  `prompt-coach hook`, `prompt-coach install-hook`/`uninstall-hook`,
-  `prompt-coach statusline`/`install-statusline`/`uninstall-statusline`,
-  and `prompt-coach service` for guided local installation and diagnostics.
+- `promptlane setup`, `promptlane init`, `promptlane doctor`,
+  `promptlane hook`, `promptlane install-hook`/`uninstall-hook`,
+  `promptlane statusline`/`install-statusline`/`uninstall-statusline`,
+  and `promptlane service` for guided local installation and diagnostics.
 - `setup --profile coach` to register a low-friction rewrite guidance profile
   through hook context, with a Claude Code status line installed when
   Claude Code is detected.
-- `setup --register-mcp` to register `prompt-coach mcp` with detected
+- `setup --register-mcp` to register `promptlane mcp` with detected
   Claude Code and/or Codex CLIs.
-- `prompt-coach start --open-web` to launch the local server and open the
+- `promptlane start --open-web` to launch the local server and open the
   web workspace on a new agent session.
 - Claude Code hook wrapper, settings install, and doctor checks.
 - Codex beta hook adapter, install, and doctor checks.
-- `prompt-coach buddy` for hook diagnostics during a live session.
+- `promptlane buddy` for hook diagnostics during a live session.
 
 #### Storage and recovery
 
 - Markdown source-of-truth archive with SQLite/FTS search index.
 - Hard delete across Markdown, DB rows, FTS, events, and drafts.
-- `prompt-coach rebuild-index` to reconstruct the SQLite index from the
+- `promptlane rebuild-index` to reconstruct the SQLite index from the
   Markdown archive.
 - Project quality profiles persisted in SQLite.
 - Reused-prompt focus, duplicate prompt candidate detection, and
@@ -56,11 +56,11 @@ tools, benchmark/release validation, and an English/Korean web UI.
   summary, sensitive count, residual identifier count, and small-set warning.
 - English/Korean language switch.
 
-#### Prompt Coach and Prompt Practice
+#### PromptLane and Prompt Practice
 
 - Local rule-based analysis preview (`local-rules-v1`) and checklist.
-- `prompt-coach improve` and `prompt-coach coach` commands.
-- Approval-based Prompt Coach with copy/save improvement draft, latest-saved
+- `promptlane improve` and `promptlane coach` commands.
+- Approval-based PromptLane with copy/save improvement draft, latest-saved
   draft fetch, and related-draft cleanup on prompt deletion.
 - Coach follow-up commands and recommended next agent action.
 - Prompt Practice workspace with one-click builder, fixed-draft copy action,
@@ -68,15 +68,15 @@ tools, benchmark/release validation, and an English/Korean web UI.
 
 #### Import and export
 
-- `prompt-coach import` with `--dry-run`, `--save-job`, `--execute`,
-  `--resume`, and `prompt-coach import-job` for transcript import jobs.
+- `promptlane import` with `--dry-run`, `--save-job`, `--execute`,
+  `--resume`, and `promptlane import-job` for transcript import jobs.
 - Capture-disabled project import skip and imported-only filtering.
-- `prompt-coach export --anonymized` with `--preview` and `--job` for
+- `promptlane export --anonymized` with `--preview` and `--job` for
   raw-free anonymized export.
 
 #### MCP and agent workflows
 
-- Local stdio MCP server (`prompt-coach mcp`) with prompt scoring tools.
+- Local stdio MCP server (`promptlane mcp`) with prompt scoring tools.
 - Agent prompt wrappers, agent-assisted rewrite workflow, and
   agent-mediated judge tools for explicit redacted-packet handoff.
 - Prompt rewrite guard that prevents silent prompt resubmission.
@@ -118,7 +118,7 @@ tools, benchmark/release validation, and an English/Korean web UI.
   Korean section headers, copy, and safety notes.
 - `score_prompt_archive` returns Korean practice plan, gap rule labels,
   and next-prompt template when `language: "ko"` is set.
-- `coach_prompt` and `prompt-coach coach --language ko` forward the
+- `coach_prompt` and `promptlane coach --language ko` forward the
   language argument all the way through the archive call.
 - Hook rewrite-guard emits Korean block/context messages for Korean
   prompts; web UI auto-detects Korean from `navigator.language` on first
@@ -128,7 +128,7 @@ tools, benchmark/release validation, and an English/Korean web UI.
 
 - Web prompt detail shows per-criterion `earned/weight` next to each
   checklist item so the score is no longer a single opaque number.
-- `prompt-coach show <id> --explain` renders the same per-axis breakdown
+- `promptlane show <id> --explain` renders the same per-axis breakdown
   on the terminal.
 - MCP `score_prompt` already returns the breakdown; the plugin doc now
   describes it explicitly so agents can relay the per-axis explanation.
@@ -168,7 +168,7 @@ tools, benchmark/release validation, and an English/Korean web UI.
 - Installed Claude Code and Codex hooks now use a stable absolute CLI path
   so that hook execution survives `npm`/`pnpm` global path differences.
 - Existing Claude Code status line commands are preserved and chained when
-  the prompt-coach status line is installed, and restored on uninstall.
+  the promptlane status line is installed, and restored on uninstall.
 - Multiline Claude Code status line output is preserved instead of being
   collapsed to a single line.
 - Web filter controls now have stable accessible names so that screen
@@ -179,7 +179,7 @@ tools, benchmark/release validation, and an English/Korean web UI.
   with the next-step hint added in the same release.
 - Claude Code adapter normalizes `session_id` before hashing it into
   the idempotency key, matching Codex behavior.
-- `prompt-coach open <id>` validates the id before printing a URL,
+- `promptlane open <id>` validates the id before printing a URL,
   matching `show`/`delete`. The `runImportDryRun` ENOENT now produces
   a friendly message that does not echo the resolved local path.
 
@@ -196,10 +196,10 @@ tools, benchmark/release validation, and an English/Korean web UI.
 - Privacy regression checks for Markdown, SQLite, FTS, browser APIs, import
   jobs, export jobs, hook output, and npm publish tokens across every
   surface.
-- Prompt Coach output redaction hardened so that improvement drafts and
+- PromptLane output redaction hardened so that improvement drafts and
   follow-up commands do not leak prompt body, raw paths, or tokens.
 - Agent judge / MCP rewrite handoff is opt-in and routes through the user's
-  active Claude Code/Codex/Gemini CLI session; prompt-coach does not extract
+  active Claude Code/Codex/Gemini CLI session; promptlane does not extract
   or proxy provider credentials and does not call external LLMs from its own
   process.
 - Pre-publish privacy audit grep mirrors the live detector list so a

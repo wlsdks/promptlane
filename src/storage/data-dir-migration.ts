@@ -3,7 +3,7 @@ import { homedir } from "node:os";
 import { resolve, sep } from "node:path";
 
 export const LEGACY_DATA_DIR_NAME = ".prompt-memory";
-export const NEW_DATA_DIR_NAME = ".prompt-coach";
+export const NEW_DATA_DIR_NAME = ".promptlane";
 
 export type DataDirMigrationOptions = {
   legacyPath?: string;

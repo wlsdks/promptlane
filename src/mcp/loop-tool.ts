@@ -1,4 +1,4 @@
-import { loadHookAuth, loadPromptCoachConfig } from "../config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../config/config.js";
 import {
   createLoopBrief,
   latestCompactBoundaryAfterSnapshot,
@@ -13,14 +13,14 @@ import {
   hasLoopSnapshotSelection,
   selectLoopSnapshot,
 } from "../loop/snapshot-selection.js";
-import { createLoopdeckStatus, loopdeckStatusPrivacy } from "../loop/status.js";
+import { createPromptLaneStatus, promptlaneStatusPrivacy } from "../loop/status.js";
 import { createSqlitePromptStorage } from "../storage/sqlite.js";
 import type { ScorePromptToolOptions } from "./score-tool-types.js";
 import type {
   ApplyInstructionPatchToolArguments,
   ApplyInstructionPatchToolResult,
-  GetLoopdeckStatusToolArguments,
-  GetLoopdeckStatusToolResult,
+  GetPromptLaneLoopStatusToolArguments,
+  GetPromptLaneLoopStatusToolResult,
   PrepareLoopBriefToolArguments,
   PrepareLoopBriefToolResult,
   ProposeInstructionPatchToolArguments,
@@ -35,7 +35,7 @@ import type {
 import { storageUnavailableMessage } from "./storage-unavailable.js";
 
 const LOOP_TOOL_NAMES = [
-  "get_loopdeck_status",
+  "get_promptlane_loop_status",
   "prepare_loop_brief",
   "record_loop_outcome",
   "propose_loop_memory_candidate",
@@ -44,14 +44,14 @@ const LOOP_TOOL_NAMES = [
   "apply_instruction_patch",
 ];
 
-export function getLoopdeckStatusTool(
-  args: GetLoopdeckStatusToolArguments,
+export function getPromptLaneLoopStatusTool(
+  args: GetPromptLaneLoopStatusToolArguments,
   options: ScorePromptToolOptions = {},
-): GetLoopdeckStatusToolResult {
-  const privacy = loopdeckStatusPrivacy();
+): GetPromptLaneLoopStatusToolResult {
+  const privacy = promptlaneStatusPrivacy();
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -61,7 +61,7 @@ export function getLoopdeckStatusTool(
     try {
       const snapshots = storage.listLoopSnapshots({ limit: 100 }).items;
       const latest = snapshots.at(0);
-      const status = createLoopdeckStatus({
+      const status = createPromptLaneStatus({
         snapshots,
         compactBoundaries: storage.listCompactBoundaries({ limit: 20 }).items,
         includeLatest: args.include_latest !== false,
@@ -85,10 +85,10 @@ export function getLoopdeckStatusTool(
       status: "setup_needed",
       snapshot_count: 0,
       available_tools: LOOP_TOOL_NAMES,
-      next_action: "prompt-coach setup",
+      next_action: "promptlane setup",
       next_actions: [
-        "Run prompt-coach init or prompt-coach setup before using PromptLane MCP tools.",
-        "Then run prompt-coach loop collect from the project you want to continue.",
+        "Run promptlane init or promptlane setup before using PromptLane MCP tools.",
+        "Then run promptlane loop collect from the project you want to continue.",
       ],
       privacy,
     };
@@ -113,7 +113,7 @@ export function prepareLoopBriefTool(
   }
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -132,7 +132,7 @@ export function prepareLoopBriefTool(
           "not_found",
           hasSelection
             ? "No loop snapshot matched the selected worktree/session/branch filters."
-            : "No loop snapshot found. Run `prompt-coach loop collect` first.",
+            : "No loop snapshot found. Run `promptlane loop collect` first.",
         );
       }
 
@@ -206,7 +206,7 @@ export function recordLoopOutcomeTool(
   }
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -220,7 +220,7 @@ export function recordLoopOutcomeTool(
       if (!snapshotId) {
         return loopToolError(
           "not_found",
-          "No loop snapshot found. Run `prompt-coach loop collect` first.",
+          "No loop snapshot found. Run `promptlane loop collect` first.",
         );
       }
 
@@ -242,7 +242,7 @@ export function recordLoopOutcomeTool(
         snapshot_id: snapshot.id,
         outcome: snapshot.outcome,
         next_action:
-          "Use prepare_loop_brief to continue the loop or run prompt-coach loop collect after the next agent turn.",
+          "Use prepare_loop_brief to continue the loop or run promptlane loop collect after the next agent turn.",
         privacy: {
           ...loopToolPrivacy(),
           stores_prompt_bodies: false,
@@ -272,7 +272,7 @@ export function proposeLoopMemoryCandidateTool(
   }
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -284,7 +284,7 @@ export function proposeLoopMemoryCandidateTool(
       if (!snapshot) {
         return loopToolError(
           "not_found",
-          "No loop snapshot found. Run `prompt-coach loop collect` first.",
+          "No loop snapshot found. Run `promptlane loop collect` first.",
         );
       }
 
@@ -329,7 +329,7 @@ export function recordLoopMemoryTool(
   }
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -341,7 +341,7 @@ export function recordLoopMemoryTool(
       if (!snapshot) {
         return loopToolError(
           "not_found",
-          "No loop snapshot found. Run `prompt-coach loop collect` first.",
+          "No loop snapshot found. Run `promptlane loop collect` first.",
         );
       }
 
@@ -408,7 +408,7 @@ export function proposeInstructionPatchTool(
   }
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -420,7 +420,7 @@ export function proposeInstructionPatchTool(
       if (!memory) {
         return loopToolError(
           "not_found",
-          "No loop memory found. Run `prompt-coach loop memory-approve` first.",
+          "No loop memory found. Run `promptlane loop memory-approve` first.",
         );
       }
       return proposeInstructionPatchFromMemory({ memory, targetFile });
@@ -454,7 +454,7 @@ export function applyInstructionPatchTool(
   }
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -466,7 +466,7 @@ export function applyInstructionPatchTool(
       if (!memory) {
         return loopToolError(
           "not_found",
-          "No loop memory found. Run `prompt-coach loop memory-approve` first.",
+          "No loop memory found. Run `promptlane loop memory-approve` first.",
         );
       }
       return applyInstructionPatchFromMemory({

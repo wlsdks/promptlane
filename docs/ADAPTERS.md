@@ -1,6 +1,6 @@
 # Adapter Guide
 
-`prompt-coach` adapters normalize tool-specific hook payloads into one internal event contract.
+`promptlane` adapters normalize tool-specific hook payloads into one internal event contract.
 
 ## Adapter Contract
 
@@ -39,15 +39,15 @@ Tool-specific fields such as `turn_id`, `transcript_path`, `model`, or `permissi
 
 - Tool name: `claude-code`
 - Ingest route: `/api/v1/ingest/claude-code`
-- Hook command: `prompt-coach hook claude-code`
-- Install command: `prompt-coach install-hook claude-code`
+- Hook command: `promptlane hook claude-code`
+- Install command: `promptlane install-hook claude-code`
 
 ### Codex Beta
 
 - Tool name: `codex`
 - Ingest route: `/api/v1/ingest/codex`
-- Hook command: `prompt-coach hook codex`
-- Install command: `prompt-coach install-hook codex`
+- Hook command: `promptlane hook codex`
+- Install command: `promptlane install-hook codex`
 - Status: beta
 
 Codex hooks require `[features].hooks = true` in `config.toml`.

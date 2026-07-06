@@ -1,4 +1,4 @@
-# prompt-coach Implementation Plan
+# promptlane Implementation Plan
 
 Date: 2026-05-01
 
@@ -13,7 +13,7 @@ Related docs:
 
 ## 1. Purpose
 
-This plan breaks `prompt-coach` into implementation phases and release gates.
+This plan breaks `promptlane` into implementation phases and release gates.
 
 The product identity is:
 
@@ -99,8 +99,8 @@ Package smoke:
 
 ```sh
 npm pack
-npm install -g ./prompt-coach-<version>.tgz
-prompt-coach --help
+npm install -g ./promptlane-<version>.tgz
+promptlane --help
 ```
 
 ## 6. Current Implemented Surface

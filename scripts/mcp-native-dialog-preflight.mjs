@@ -17,7 +17,7 @@ const child = spawn(process.execPath, [cliPath, "mcp"], {
   cwd: repoRoot,
   env: {
     ...process.env,
-    PROMPT_COACH_NATIVE_DIALOG: "0",
+    PROMPTLANE_NATIVE_DIALOG: "0",
   },
   stdio: ["pipe", "pipe", "pipe"],
 });
@@ -70,7 +70,7 @@ send({
     protocolVersion: "2025-06-18",
     capabilities: {},
     clientInfo: {
-      name: "prompt-coach-mcp-native-dialog-preflight",
+      name: "promptlane-mcp-native-dialog-preflight",
       version: "0.0.0",
     },
   },
@@ -139,8 +139,8 @@ function finish(error) {
 function assertSmokeResult() {
   assertEqual(
     initializeResponse?.result?.serverInfo?.name,
-    "prompt-coach",
-    "Initialize should return prompt-coach serverInfo.",
+    "promptlane",
+    "Initialize should return promptlane serverInfo.",
   );
 
   const tool = toolsListResponse?.result?.tools?.find(

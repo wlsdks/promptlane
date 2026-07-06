@@ -8,7 +8,7 @@ allowed-tools: Bash
 Prefer the MCP tool when it is available:
 
 ```text
-prompt-coach:coach_prompt
+promptlane:coach_prompt
 ```
 
 Use this as the default command when the user wants prompt coaching inside
@@ -19,8 +19,8 @@ request guidance in one call.
 If MCP is not configured, use the privacy-safe CLI fallback:
 
 ```bash
-prompt-coach coach --json
-loopdeck coach --json
+promptlane coach --json
+promptlane coach --json
 ```
 
 Summarize the result as:

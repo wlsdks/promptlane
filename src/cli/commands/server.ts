@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import type { Command } from "commander";
 import { fileURLToPath } from "node:url";
 
-import { loadHookAuth, loadPromptCoachConfig } from "../../config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../../config/config.js";
 import {
   createJudgeWorker,
   type JudgeWorker,
@@ -27,17 +27,17 @@ export function registerServerCommand(program: Command): void {
     .description(
       "Run the local PromptLane HTTP server (web UI, capture, MCP routes).",
     )
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .action(async (options: ServerCommandOptions) => {
-      const started = await startPromptCoachServer(options);
+      const started = await startPromptLaneServer(options);
       console.log(started.url);
     });
 }
 
-export async function startPromptCoachServer(
+export async function startPromptLaneServer(
   options: ServerCommandOptions = {},
 ): Promise<StartedServer> {
-  const config = loadPromptCoachConfig(options.dataDir);
+  const config = loadPromptLaneConfig(options.dataDir);
   const hookAuth = loadHookAuth(options.dataDir);
   const storage = createSqlitePromptStorage({
     dataDir: config.data_dir,
@@ -65,7 +65,7 @@ export async function startPromptCoachServer(
 
   const judgeWorker = createJudgeWorker({
     storage,
-    getSettings: () => loadPromptCoachConfig(options.dataDir).auto_judge,
+    getSettings: () => loadPromptLaneConfig(options.dataDir).auto_judge,
   });
   judgeWorker.start();
 

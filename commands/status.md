@@ -8,25 +8,25 @@ allowed-tools: Bash
 First check that the CLI is installed:
 
 ```bash
-command -v prompt-coach || command -v loopdeck
+command -v promptlane || command -v promptlane
 ```
 
 If this returns nothing, report that the plugin is installed but neither the
-`prompt-coach` CLI nor the `loopdeck` alias is on `PATH` yet.
+`promptlane` CLI nor the `promptlane` alias is on `PATH` yet.
 
-Run the `prompt-coach` commands by default. If only the product-name alias is
-available, use the matching `loopdeck` command:
+Run the `promptlane` commands by default. If only the product-name alias is
+available, use the matching `promptlane` command:
 
 ```bash
-prompt-coach doctor claude-code
-loopdeck doctor claude-code
-prompt-coach statusline claude-code
+promptlane doctor claude-code
+promptlane doctor claude-code
+promptlane statusline claude-code
 ```
 
 If Codex is installed, also run:
 
 ```bash
-prompt-coach doctor codex
+promptlane doctor codex
 ```
 
 Report whether the local server is reachable, the hook is installed, and the

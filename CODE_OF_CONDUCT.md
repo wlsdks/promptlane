@@ -1,6 +1,6 @@
 # Code Of Conduct
 
-prompt-coach uses a simple contribution standard:
+promptlane uses a simple contribution standard:
 
 - Be respectful and direct.
 - Keep discussion focused on the project and the technical tradeoffs.

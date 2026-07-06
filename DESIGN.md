@@ -1,8 +1,8 @@
 # DESIGN.md
 
-`prompt-coach`의 전용 웹 UI 디자인 시스템이다. AI 에이전트는 UI 작업 전에 이 문서를 읽고, 로컬 우선 프롬프트 아카이브에 맞는 조용하고 정밀한 developer tool UI를 만든다.
+`promptlane`의 전용 웹 UI 디자인 시스템이다. AI 에이전트는 UI 작업 전에 이 문서를 읽고, 로컬 우선 프롬프트 아카이브에 맞는 조용하고 정밀한 developer tool UI를 만든다.
 
-이 문서는 `/Users/jinan/side-project/oh-my-ontology`의 Linear-base dark indigo 디자인 시스템을 1차 기준으로 삼는다. 로컬 디자인 가이드 컬렉션 `/Users/jinan/ai/awesome-design-md`는 보조 reference다. 특정 브랜드를 복제하지 않지만, `oh-my-ontology`의 절제된 흑백, 단일 인디고, mono caption, hairline surface hierarchy를 `prompt-coach`의 developer tool 화면에 맞게 적용한다.
+이 문서는 `/Users/jinan/side-project/oh-my-ontology`의 Linear-base dark indigo 디자인 시스템을 1차 기준으로 삼는다. 로컬 디자인 가이드 컬렉션 `/Users/jinan/ai/awesome-design-md`는 보조 reference다. 특정 브랜드를 복제하지 않지만, `oh-my-ontology`의 절제된 흑백, 단일 인디고, mono caption, hairline surface hierarchy를 `promptlane`의 developer tool 화면에 맞게 적용한다.
 
 UI를 크게 바꾸는 작업, 특히 Dashboard, onboarding, detail coach 화면은 먼저 `/Users/jinan/ai/awesome-design-md`에서 관련 reference를 확인한다. 로컬 파일이 stub이면 `getdesign`으로 해당 reference를 확인하고, 적용한 판단은 `docs/design-references/` 또는 이 문서에 남긴다.
 

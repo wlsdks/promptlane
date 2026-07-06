@@ -43,7 +43,7 @@ describe("MCP stdio server", () => {
     );
   });
 
-  it("uses PromptLane archive copy in agent-facing tool descriptions while preserving prompt-coach commands", async () => {
+  it("uses PromptLane archive copy in agent-facing tool descriptions while preserving promptlane commands", async () => {
     const response = await handleMcpMessage({
       jsonrpc: "2.0",
       id: "tool-copy",
@@ -54,14 +54,11 @@ describe("MCP stdio server", () => {
     const joinedDescriptions = collectDescriptionStrings(tools).join("\n");
 
     expect(joinedDescriptions).toContain("local PromptLane archive");
-    expect(joinedDescriptions).not.toContain("local Loopdeck archive");
-    expect(joinedDescriptions).not.toContain("local prompt-coach archive");
-    expect(joinedDescriptions).not.toContain("prompt-coach archive");
-    expect(joinedDescriptions).not.toContain("prompt-coach storage");
-    expect(joinedDescriptions).not.toContain("Prompt Coach");
-    expect(joinedDescriptions).toContain("prompt-coach MCP tool");
+    expect(joinedDescriptions).not.toContain("local promptlane archive");
+    expect(joinedDescriptions).not.toContain("promptlane archive");
+    expect(joinedDescriptions).not.toContain("promptlane storage");
+    expect(joinedDescriptions).toContain("promptlane MCP tool");
     expect(JSON.stringify(tools)).toContain("PromptLane status preflight");
-    expect(JSON.stringify(tools)).not.toContain("Loopdeck status preflight");
     expect(JSON.stringify(tools)).not.toContain("Prompt-memory status preflight");
   });
 
@@ -78,7 +75,7 @@ describe("MCP stdio server", () => {
       result: {
         tools: [
           expect.objectContaining({
-            name: "get_prompt_coach_status",
+            name: "get_promptlane_status",
           }),
           expect.objectContaining({
             name: "coach_prompt",
@@ -106,7 +103,7 @@ describe("MCP stdio server", () => {
             name: "record_clarifications",
           }),
           expect.objectContaining({
-            name: "get_loopdeck_status",
+            name: "get_promptlane_loop_status",
             outputSchema: expect.objectContaining({
               properties: expect.objectContaining({
                 activity: expect.objectContaining({
@@ -548,7 +545,7 @@ describe("MCP stdio server", () => {
         },
       },
       {
-        dataDir: join(tmpdir(), `prompt-coach-missing-${randomUUID()}`),
+        dataDir: join(tmpdir(), `promptlane-missing-${randomUUID()}`),
       },
     );
 
@@ -708,7 +705,7 @@ describe("MCP stdio server", () => {
         },
       },
       {
-        dataDir: join(tmpdir(), `prompt-coach-missing-${randomUUID()}`),
+        dataDir: join(tmpdir(), `promptlane-missing-${randomUUID()}`),
       },
     );
 
@@ -727,19 +724,19 @@ describe("MCP stdio server", () => {
     });
   });
 
-  it("returns text MCP content for get_prompt_coach_status calls", async () => {
+  it("returns text MCP content for get_promptlane_status calls", async () => {
     const response = await handleMcpMessage(
       {
         jsonrpc: "2.0",
         id: "status-1",
         method: "tools/call",
         params: {
-          name: "get_prompt_coach_status",
+          name: "get_promptlane_status",
           arguments: {},
         },
       },
       {
-        dataDir: join(tmpdir(), `prompt-coach-missing-${randomUUID()}`),
+        dataDir: join(tmpdir(), `promptlane-missing-${randomUUID()}`),
       },
     );
 
@@ -770,7 +767,7 @@ describe("MCP stdio server", () => {
         },
       },
       {
-        dataDir: join(tmpdir(), `prompt-coach-missing-${randomUUID()}`),
+        dataDir: join(tmpdir(), `promptlane-missing-${randomUUID()}`),
       },
     );
 
@@ -791,7 +788,7 @@ describe("MCP stdio server", () => {
           }),
           agent_brief: expect.objectContaining({
             next_actions: expect.arrayContaining([
-              expect.stringContaining("prompt-coach setup"),
+              expect.stringContaining("promptlane setup"),
             ]),
           }),
           privacy: expect.objectContaining({

@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
   "date": "2026-07-04",
-  "purpose": "Compatibility inventory before Loopdeck runtime id rename work.",
+  "purpose": "Compatibility inventory before PromptLane runtime id rename work.",
   "package": {
-    "name": "prompt-coach",
+    "name": "promptlane",
     "bins": {
-      "prompt-coach": "./dist/cli/index.js",
-      "loopdeck": "./dist/cli/index.js",
-      "pc-claude": "./dist/cli/pc-claude.js",
-      "pc-codex": "./dist/cli/pc-codex.js"
+      "promptlane": "./dist/cli/index.js",
+      "promptlane": "./dist/cli/index.js",
+      "pl-claude": "./dist/cli/pl-claude.js",
+      "pl-codex": "./dist/cli/pl-codex.js"
     },
     "repository": "https://github.com/wlsdks/promptlane.git"
   },
   "claude_code_plugin": {
     "manifest": ".claude-plugin/plugin.json",
-    "manifest_name": "prompt-coach",
-    "slash_namespace": "/prompt-coach:*",
+    "manifest_name": "promptlane",
+    "slash_namespace": "/promptlane:*",
     "command_files": [
       "./commands/buddy.md",
       "./commands/coach.md",
@@ -30,15 +30,15 @@
     ]
   },
   "codex_plugin": {
-    "manifest": "plugins/prompt-coach/.codex-plugin/plugin.json",
-    "manifest_name": "prompt-coach",
+    "manifest": "plugins/promptlane/.codex-plugin/plugin.json",
+    "manifest_name": "promptlane",
     "display_name": "PromptLane",
-    "install_path": "plugins/prompt-coach",
-    "hook_install": "prompt-coach setup --profile coach --register-mcp --open-web"
+    "install_path": "plugins/promptlane",
+    "hook_install": "promptlane setup --profile coach --register-mcp --open-web"
   },
   "mcp": {
-    "canonical_server_name": "prompt-coach",
-    "command": "prompt-coach mcp",
+    "canonical_server_name": "promptlane",
+    "command": "promptlane mcp",
     "docs": [
       "README.md",
       "README.ko.md",
@@ -46,10 +46,10 @@
     ]
   },
   "invariants": [
-    "Do not remove /prompt-coach:*.",
+    "Do not remove /promptlane:*.",
     "Do not rename package.json#name.",
     "Do not rename plugin ids.",
-    "Do not remove the prompt-coach binary.",
+    "Do not remove the promptlane binary.",
     "Do not rename hook commands without hook binary compatibility smoke.",
     "Do not rename MCP server examples without an MCP compatibility decision."
   ],

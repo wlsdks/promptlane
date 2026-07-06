@@ -16,7 +16,7 @@ opt-in.
 
 `quality-evidence` records this audit as both `native_dialog_preflight` evidence
 and completed `native_dialog_approved_dogfood` evidence because the explicitly
-approved local run of `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm
+approved local run of `PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm
 dogfood:mcp-native-dialog-approved` completed with an answered interaction.
 
 ## Commands Run
@@ -24,7 +24,7 @@ dogfood:mcp-native-dialog-approved` completed with an answered interaction.
 ```bash
 corepack pnpm smoke:mcp-native-dialog
 corepack pnpm smoke:mcp-elicitation
-PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved
+PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved
 ```
 
 Both commands rebuild the package before running the smoke harness.
@@ -33,8 +33,8 @@ Both commands rebuild the package before running the smoke harness.
 
 `smoke:mcp-native-dialog`:
 
-- Starts the real `prompt-coach mcp` server over stdio.
-- Forces `PROMPT_COACH_NATIVE_DIALOG=0`.
+- Starts the real `promptlane mcp` server over stdio.
+- Forces `PROMPTLANE_NATIVE_DIALOG=0`.
 - Calls `ask_clarifying_questions` with `allow_native_dialog: false`.
 - Confirms `tools/list` exposes `allow_native_dialog` as a strict boolean
   schema property.
@@ -46,7 +46,7 @@ Both commands rebuild the package before running the smoke harness.
 
 `smoke:mcp-elicitation`:
 
-- Starts the real `prompt-coach mcp` server over stdio.
+- Starts the real `promptlane mcp` server over stdio.
 - Advertises MCP `capabilities.elicitation`.
 - Confirms the tool sends a server-initiated `elicitation/create` request.
 - The smoke client answers the request with deterministic Korean answers.
@@ -62,7 +62,7 @@ Both commands rebuild the package before running the smoke harness.
 - Was run only after the operator explicitly approved opening a native macOS
   dialog.
 - Command:
-  `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved`.
+  `PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved`.
 - Opened the native dialog fallback through the real MCP server path.
 - The operator answered the dialog instead of relying on fabricated input.
 - Confirms the final response reports `interaction_status: "answered"`.
@@ -101,7 +101,7 @@ path. The canonical path remains:
 1. Use MCP `elicitation/create` when the client supports it.
 2. Otherwise return `clarifying_questions` and let the agent ask through its
    native ask UI.
-3. Use `allow_native_dialog: true` or `PROMPT_COACH_NATIVE_DIALOG=1` only for an
+3. Use `allow_native_dialog: true` or `PROMPTLANE_NATIVE_DIALOG=1` only for an
    explicitly approved local dogfood run.
 
 ## Manual Dogfood Contract
@@ -112,7 +112,7 @@ Run a real interactive session again only after operator approval:
 2. Run:
 
    ```bash
-   PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved
+   PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved
    ```
 
 3. Answer one or two dialog questions.
@@ -120,5 +120,5 @@ Run a real interactive session again only after operator approval:
    secret leakage, no external calls, and no auto-submission.
 
 The approved dogfood command refuses to run unless
-`PROMPT_COACH_NATIVE_DIALOG_APPROVED=1` is set. Do not add it to automated CI or
+`PROMPTLANE_NATIVE_DIALOG_APPROVED=1` is set. Do not add it to automated CI or
 scheduled checks.

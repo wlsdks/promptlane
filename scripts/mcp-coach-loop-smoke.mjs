@@ -6,7 +6,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { normalizeClaudeCodePayload } from "../dist/adapters/claude-code.js";
-import { loadHookAuth, loadPromptCoachConfig } from "../dist/config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../dist/config/config.js";
 import { redactPrompt } from "../dist/redaction/redact.js";
 import { createSqlitePromptStorage } from "../dist/storage/sqlite.js";
 
@@ -16,7 +16,7 @@ const timeoutMs = 10_000;
 
 assertFileExists(cliPath, "Run `pnpm build` before MCP coach loop smoke.");
 
-const dataDir = mkdtempSync(join(tmpdir(), "prompt-coach-mcp-loop-"));
+const dataDir = mkdtempSync(join(tmpdir(), "promptlane-mcp-loop-"));
 let child;
 let buffer = "";
 let stderr = "";
@@ -45,7 +45,7 @@ try {
     protocolVersion: "2025-06-18",
     capabilities: {},
     clientInfo: {
-      name: "prompt-coach-mcp-coach-loop-smoke",
+      name: "promptlane-mcp-coach-loop-smoke",
       version: "0.0.0",
     },
   });
@@ -119,12 +119,12 @@ function initArchive(dataDir) {
     encoding: "utf8",
   });
   if (result.status !== 0) {
-    throw new Error(`prompt-coach init failed:\n${result.stderr}`);
+    throw new Error(`promptlane init failed:\n${result.stderr}`);
   }
 }
 
 function seedStoredPrompt(dataDir) {
-  const config = loadPromptCoachConfig(dataDir);
+  const config = loadPromptLaneConfig(dataDir);
   const auth = loadHookAuth(dataDir);
   const storage = createSqlitePromptStorage({
     dataDir: config.data_dir,
@@ -135,8 +135,8 @@ function seedStoredPrompt(dataDir) {
     const event = normalizeClaudeCodePayload(
       {
         session_id: "mcp-coach-loop-smoke-session",
-        transcript_path: join(dataDir, "prompt-coach-smoke-transcript.jsonl"),
-        cwd: join(dataDir, "prompt-coach-smoke-project"),
+        transcript_path: join(dataDir, "promptlane-smoke-transcript.jsonl"),
+        cwd: join(dataDir, "promptlane-smoke-project"),
         permission_mode: "default",
         hook_event_name: "UserPromptSubmit",
         prompt: "html 한번 열어봐줘",
@@ -156,8 +156,8 @@ function seedStoredPrompt(dataDir) {
     const unmeasuredEvent = normalizeClaudeCodePayload(
       {
         session_id: "mcp-coach-loop-smoke-unmeasured-session",
-        transcript_path: join(dataDir, "prompt-coach-smoke-transcript-2.jsonl"),
-        cwd: join(dataDir, "prompt-coach-smoke-project"),
+        transcript_path: join(dataDir, "promptlane-smoke-transcript-2.jsonl"),
+        cwd: join(dataDir, "promptlane-smoke-project"),
         permission_mode: "default",
         hook_event_name: "UserPromptSubmit",
         prompt:
@@ -174,7 +174,7 @@ function seedStoredPrompt(dataDir) {
       created_at: "2026-07-05T00:05:00.000Z",
       tool: "claude-code",
       source: "mcp",
-      cwd_label: "prompt-coach-smoke-project",
+      cwd_label: "promptlane-smoke-project",
       project_id: "proj_mcp_coach_smoke",
       prompt_ids: [promptId],
       event_counts: {
@@ -275,8 +275,8 @@ function buildAnswers(questions) {
 function assertSmokeResult({ initialize, score, improve, applied, recorded, coach }) {
   assertEqual(
     initialize?.result?.serverInfo?.name,
-    "prompt-coach",
-    "Initialize should return prompt-coach serverInfo.",
+    "promptlane",
+    "Initialize should return promptlane serverInfo.",
   );
   assertEqual(score?.is_error === true, false, "score_prompt should pass.");
   assertEqual(
@@ -373,7 +373,7 @@ function assertNoUnsafeCoachBrief(coach) {
     "coach_prompt agent brief should not return raw data-dir paths.",
   );
   assertEqual(
-    serialized.includes("prompt-coach-smoke-transcript"),
+    serialized.includes("promptlane-smoke-transcript"),
     false,
     "coach_prompt agent brief should not return transcript paths.",
   );

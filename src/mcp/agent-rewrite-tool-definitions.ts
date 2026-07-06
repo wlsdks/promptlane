@@ -1,4 +1,4 @@
-import type { PromptCoachMcpToolDefinition } from "./score-tool-definitions.js";
+import type { PromptLaneMcpToolDefinition } from "./score-tool-definitions.js";
 
 const LOCAL_READ_ONLY_TOOL_ANNOTATIONS = {
   destructiveHint: false,
@@ -40,11 +40,11 @@ const QUALITY_CRITERION_SCHEMA = {
   ],
 } as const;
 
-export const PREPARE_AGENT_REWRITE_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const PREPARE_AGENT_REWRITE_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "prepare_agent_rewrite",
     description:
-      "Prepare a redacted prompt-rewrite packet for the current Claude Code, Codex, or Gemini CLI agent session to rewrite semantically. Use this when the user explicitly wants the active coding agent to improve the latest or selected stored prompt beyond prompt-coach's local deterministic rewrite. prompt-coach itself does not call external LLMs or route provider credentials; it returns one redacted prompt, local score metadata, a local baseline draft, and a strict rewrite contract. The active user-controlled agent should then produce an improved prompt and call record_agent_rewrite.",
+      "Prepare a redacted prompt-rewrite packet for the current Claude Code, Codex, or Gemini CLI agent session to rewrite semantically. Use this when the user explicitly wants the active coding agent to improve the latest or selected stored prompt beyond promptlane's local deterministic rewrite. promptlane itself does not call external LLMs or route provider credentials; it returns one redacted prompt, local score metadata, a local baseline draft, and a strict rewrite contract. The active user-controlled agent should then produce an improved prompt and call record_agent_rewrite.",
     annotations: {
       ...LOCAL_READ_ONLY_TOOL_ANNOTATIONS,
       title: "Prepare agent prompt rewrite",
@@ -65,7 +65,7 @@ export const PREPARE_AGENT_REWRITE_TOOL_DEFINITION: PromptCoachMcpToolDefinition
         include_local_baseline: {
           type: "boolean",
           description:
-            "Whether to include prompt-coach's local deterministic rewrite as a baseline. Defaults to true.",
+            "Whether to include promptlane's local deterministic rewrite as a baseline. Defaults to true.",
         },
       },
       additionalProperties: false,
@@ -129,7 +129,7 @@ export const PREPARE_AGENT_REWRITE_TOOL_DEFINITION: PromptCoachMcpToolDefinition
           type: "object",
           required: [
             "local_only",
-            "external_calls_by_prompt_coach",
+            "external_calls_by_promptlane",
             "intended_external_rewriter",
             "returns_redacted_prompt_body",
             "returns_raw_prompt_body",
@@ -139,7 +139,7 @@ export const PREPARE_AGENT_REWRITE_TOOL_DEFINITION: PromptCoachMcpToolDefinition
           ],
           properties: {
             local_only: { const: true },
-            external_calls_by_prompt_coach: { const: false },
+            external_calls_by_promptlane: { const: false },
             intended_external_rewriter: { const: "current_agent_session" },
             returns_redacted_prompt_body: { const: true },
             returns_raw_prompt_body: { const: false },
@@ -168,11 +168,11 @@ export const PREPARE_AGENT_REWRITE_TOOL_DEFINITION: PromptCoachMcpToolDefinition
     },
   } as const;
 
-export const RECORD_AGENT_REWRITE_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const RECORD_AGENT_REWRITE_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "record_agent_rewrite",
     description:
-      "Store an approval-ready prompt rewrite produced by the current Claude Code, Codex, or Gemini CLI agent session after prepare_agent_rewrite. Use this only after the active agent has rewritten the redacted packet and the user wants that improved draft saved locally. This writes a redacted improvement draft plus provider metadata; it never stores the original prompt body, never returns the rewrite body, never stores raw paths, and prompt-coach does not call external LLMs through this tool.",
+      "Store an approval-ready prompt rewrite produced by the current Claude Code, Codex, or Gemini CLI agent session after prepare_agent_rewrite. Use this only after the active agent has rewritten the redacted packet and the user wants that improved draft saved locally. This writes a redacted improvement draft plus provider metadata; it never stores the original prompt body, never returns the rewrite body, never stores raw paths, and promptlane does not call external LLMs through this tool.",
     annotations: {
       ...LOCAL_WRITE_TOOL_ANNOTATIONS,
       title: "Record agent prompt rewrite",
@@ -238,7 +238,7 @@ export const RECORD_AGENT_REWRITE_TOOL_DEFINITION: PromptCoachMcpToolDefinition 
           type: "object",
           required: [
             "local_only",
-            "external_calls_by_prompt_coach",
+            "external_calls_by_promptlane",
             "stores_original_prompt_body",
             "stores_rewrite_draft",
             "returns_rewrite_draft",
@@ -246,7 +246,7 @@ export const RECORD_AGENT_REWRITE_TOOL_DEFINITION: PromptCoachMcpToolDefinition 
           ],
           properties: {
             local_only: { const: true },
-            external_calls_by_prompt_coach: { const: false },
+            external_calls_by_promptlane: { const: false },
             stores_original_prompt_body: { const: false },
             stores_rewrite_draft: { const: true },
             returns_rewrite_draft: { const: false },

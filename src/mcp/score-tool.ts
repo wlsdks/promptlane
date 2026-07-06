@@ -1,7 +1,7 @@
 import { analyzePrompt } from "../analysis/analyze.js";
 import { createArchiveScoreReport } from "../analysis/archive-score.js";
 import { improvePrompt, type PromptImprovement } from "../analysis/improve.js";
-import { loadHookAuth, loadPromptCoachConfig } from "../config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../config/config.js";
 import type { PromptAnalysisPreview } from "../shared/schema.js";
 import { createSqlitePromptStorage } from "../storage/sqlite.js";
 import type { PromptEffectiveness, PromptSummary } from "../storage/ports.js";
@@ -29,12 +29,12 @@ export type {
   RecordAgentRewriteToolArguments,
   RecordAgentRewriteToolResult,
 } from "./agent-rewrite-tool-types.js";
-import { listPromptCoachMcpToolNames } from "./score-tool-definitions.js";
+import { listPromptLaneMcpToolNames } from "./score-tool-definitions.js";
 import type {
   CoachPromptToolArguments,
   CoachPromptToolResult,
-  GetPromptCoachStatusToolArguments,
-  GetPromptCoachStatusToolResult,
+  GetPromptLaneStatusToolArguments,
+  GetPromptLaneStatusToolResult,
   ImprovePromptToolArguments,
   ImprovePromptToolResult,
   ReviewProjectInstructionsToolArguments,
@@ -48,24 +48,24 @@ import type {
 
 export {
   COACH_PROMPT_TOOL_DEFINITION,
-  GET_PROMPT_COACH_STATUS_TOOL_DEFINITION,
+  GET_PROMPTLANE_STATUS_TOOL_DEFINITION,
   IMPROVE_PROMPT_TOOL_DEFINITION,
   PREPARE_AGENT_REWRITE_TOOL_DEFINITION,
   PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION,
-  PROMPT_COACH_MCP_TOOL_DEFINITIONS,
+  PROMPTLANE_MCP_TOOL_DEFINITIONS,
   RECORD_AGENT_REWRITE_TOOL_DEFINITION,
   RECORD_AGENT_JUDGMENTS_TOOL_DEFINITION,
   REVIEW_PROJECT_INSTRUCTIONS_TOOL_DEFINITION,
   SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION,
   SCORE_PROMPT_TOOL_DEFINITION,
-  listPromptCoachMcpToolNames,
+  listPromptLaneMcpToolNames,
 } from "./score-tool-definitions.js";
 
 export type {
   CoachPromptToolArguments,
   CoachPromptToolResult,
-  GetPromptCoachStatusToolArguments,
-  GetPromptCoachStatusToolResult,
+  GetPromptLaneStatusToolArguments,
+  GetPromptLaneStatusToolResult,
   ImprovePromptToolArguments,
   ImprovePromptToolResult,
   ReviewProjectInstructionsToolArguments,
@@ -82,7 +82,7 @@ export function coachPromptTool(
   options: ScorePromptToolOptions = {},
 ): CoachPromptToolResult {
   const generatedAt = (options.now ?? new Date()).toISOString();
-  const status = getPromptCoachStatusTool({}, options);
+  const status = getPromptLaneStatusTool({}, options);
   const includeLatestScore = args.include_latest_score !== false;
   const includeImprovement = args.include_improvement !== false;
   const includeArchive = args.include_archive !== false;
@@ -217,7 +217,7 @@ export function scorePromptArchiveTool(
   options: ScorePromptToolOptions = {},
 ): ScorePromptArchiveToolResult {
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -250,10 +250,10 @@ export function scorePromptArchiveTool(
   }
 }
 
-export function getPromptCoachStatusTool(
-  args: GetPromptCoachStatusToolArguments,
+export function getPromptLaneStatusTool(
+  args: GetPromptLaneStatusToolArguments,
   options: ScorePromptToolOptions = {},
-): GetPromptCoachStatusToolResult {
+): GetPromptLaneStatusToolResult {
   const privacy = {
     local_only: true,
     external_calls: false,
@@ -262,7 +262,7 @@ export function getPromptCoachStatusTool(
   } as const;
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -296,8 +296,8 @@ export function getPromptCoachStatusTool(
                 "Use review_project_instructions to check AGENTS.md/CLAUDE.md quality for a captured project.",
               ]
             : [
-                "Capture at least one Claude Code or Codex prompt, then rerun get_prompt_coach_status.",
-                "Run prompt-coach setup if hooks are not installed yet.",
+                "Capture at least one Claude Code or Codex prompt, then rerun get_promptlane_status.",
+                "Run promptlane setup if hooks are not installed yet.",
               ],
         privacy,
       };
@@ -313,8 +313,8 @@ export function getPromptCoachStatusTool(
       project_count: 0,
       available_tools: availableMcpToolNames(),
       next_actions: [
-        "Run prompt-coach init or prompt-coach setup before using archive-backed MCP tools.",
-        "After setup, capture a Claude Code or Codex prompt and rerun get_prompt_coach_status.",
+        "Run promptlane init or promptlane setup before using archive-backed MCP tools.",
+        "After setup, capture a Claude Code or Codex prompt and rerun get_promptlane_status.",
       ],
       privacy,
     };
@@ -333,7 +333,7 @@ export function reviewProjectInstructionsTool(
   }
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -402,7 +402,7 @@ function withStoredPrompt(
   options: ScorePromptToolOptions,
 ): ScorePromptToolResult {
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -427,7 +427,7 @@ function withStoredPrompt(
       if (!prompt?.analysis) {
         return toolError(
           "not_found",
-          `Prompt not found or not analyzed: ${id}. Run get_prompt_coach_status to confirm the archive state, or pass a \`prompt\` text argument instead.`,
+          `Prompt not found or not analyzed: ${id}. Run get_promptlane_status to confirm the archive state, or pass a \`prompt\` text argument instead.`,
         );
       }
 
@@ -496,7 +496,7 @@ function toSafeLatestPrompt(prompt: PromptSummary) {
 }
 
 function availableMcpToolNames(): string[] {
-  return listPromptCoachMcpToolNames();
+  return listPromptLaneMcpToolNames();
 }
 
 function withStoredPromptImprovement(
@@ -504,7 +504,7 @@ function withStoredPromptImprovement(
   options: ScorePromptToolOptions,
 ): ImprovePromptToolResult {
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -529,7 +529,7 @@ function withStoredPromptImprovement(
       if (!prompt?.analysis) {
         return improvementToolError(
           "not_found",
-          `Prompt not found or not analyzed: ${id}. Run get_prompt_coach_status to confirm the archive state, or pass a \`prompt\` text argument instead.`,
+          `Prompt not found or not analyzed: ${id}. Run get_promptlane_status to confirm the archive state, or pass a \`prompt\` text argument instead.`,
         );
       }
 

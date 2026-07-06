@@ -2,14 +2,14 @@
 
 > **For agentic workers:** This is a product and architecture design spec. Implementation must start from a separate implementation plan and use TDD. Do not rename packages, remotes, or public commands from this document alone.
 
-**Goal:** Reposition `prompt-coach` into a local-first agent loop memory and meta-prompting workbench that is tightly integrated with Codex and Claude Code.
+**Goal:** Reposition `promptlane` into a local-first agent loop memory and meta-prompting workbench that is tightly integrated with Codex and Claude Code.
 
 **Current product name:** PromptLane
 
-**Superseded naming note:** This spec originally recommended `Loopdeck`.
+**Superseded naming note:** This spec originally recommended `PromptLane`.
 That name is now rejected as the primary product name because it makes the
 product sound loop-engineering-first. Use `PromptLane` for product-facing copy;
-keep `prompt-coach` as the runtime compatibility ID; keep `loopdeck` only as a
+keep `promptlane` as the runtime compatibility ID; keep `promptlane` only as a
 legacy CLI alias or historical planning term.
 
 **Repository target:** `wlsdks/promptlane`
@@ -22,13 +22,13 @@ document alone.
 
 ---
 
-## 1. Why This Is Bigger Than Prompt Coaching
+## 1. Why This Is Bigger Than PromptLaneing
 
 The current product captures prompts from Claude Code and Codex, scores them, and produces copy-based improvements. That remains useful, but it is no longer enough for the 2026 agent workflow.
 
 The stronger product thesis is:
 
-> Loopdeck is a local-first workbench for recording, understanding, and improving coding-agent loops across Codex, Claude Code, worktrees, and long-running sessions.
+> PromptLane is a local-first workbench for recording, understanding, and improving coding-agent loops across Codex, Claude Code, worktrees, and long-running sessions.
 
 The unit of value should move from a single prompt to an agent loop:
 
@@ -40,7 +40,7 @@ The unit of value should move from a single prompt to an agent loop:
 - what the next loop prompt should say
 - whether a second agent reviewed the result
 
-The current name `prompt-coach` is accurate for the old scope but too narrow for this. It implies prompt linting. The target product is closer to loop observability, prompt memory, agent handoff, and meta-prompt synthesis.
+The current name `promptlane` is accurate for the old scope but too narrow for this. It implies prompt linting. The target product is closer to loop observability, prompt memory, agent handoff, and meta-prompt synthesis.
 
 ## 2. Current Evidence
 
@@ -48,7 +48,7 @@ The current name `prompt-coach` is accurate for the old scope but too narrow for
 
 Verified locally:
 
-- package name: `prompt-coach`
+- package name: `promptlane`
 - current GitHub repo metadata via `gh repo view`: `wlsdks/promptlane`
 - local git remote points at `https://github.com/wlsdks/promptlane.git`
 - Node 22 baseline: `PATH=/Users/jinan/.nvm/versions/node/v22.15.0/bin:$PATH corepack pnpm test`
@@ -66,7 +66,7 @@ Existing product surfaces:
 
 Planning gaps before development:
 
-- The first version of this spec defined direction and a first slice, but did not explicitly decide which existing features stay unchanged, which become Loopdeck features, which should be deprecated, and which are new.
+- The first version of this spec defined direction and a first slice, but did not explicitly decide which existing features stay unchanged, which become PromptLane features, which should be deprecated, and which are new.
 - It did not define acceptance criteria per Codex and Claude Code integration surface.
 - It did not separate "core product" from "harness/instruction docs" strongly enough.
 - It did not define a stop condition for avoiding overbuilt agent-runtime infrastructure.
@@ -97,11 +97,11 @@ Development must start from this portfolio decision, not from novelty.
 | Import/export jobs                      | Prompt/archive-oriented                                                                                     | **Keep; defer loop export**         | Loop snapshots should not be exported into project docs until privacy and usefulness are proven.                           |
 | `coach_prompt` one-call MCP workflow    | Existing one-call agent workflow                                                                            | **Improve after loop model**        | It should eventually include latest loop status and brief, but not in Slice 1.                                             |
 | Project policies                        | capture/export flags exist                                                                                  | **Extend later**                    | Add loop capture/export policy only after loop data exists.                                                                |
-| Agent wrappers `pc-claude` / `pc-codex` | Experimental initial prompt wrappers                                                                        | **Do not expand now**               | Hooks and MCP are tighter official surfaces. Wrappers do not cover later interactive turns.                                |
+| Agent wrappers `pl-claude` / `pl-codex` | Experimental initial prompt wrappers                                                                        | **Do not expand now**               | Hooks and MCP are tighter official surfaces. Wrappers do not cover later interactive turns.                                |
 | Cron/service                            | Server service exists; `loop collect --source service` now provides an explicit one-shot collection command | **Improve after manual proof**      | Periodic collection is useful, but scheduling must stay opt-in and call an explicit command rather than hidden automation. |
 | Full trace ingestion                    | Not implemented                                                                                             | **Do not build now**                | OpenAI/ADK-style traces are useful references, but ingesting full traces/transcripts risks privacy and scope explosion.    |
 | Semantic vector memory                  | Not implemented                                                                                             | **Do not build by default**         | Start with structured SQLite summaries. Add embeddings only if exact search and structured fields are insufficient.        |
-| Repo/package rename                     | Partially renamed repo metadata, package still `prompt-coach`                                               | **Plan, do not execute in Slice 1** | Branding is important but should not block proving the loop model.                                                         |
+| Repo/package rename                     | Partially renamed repo metadata, package still `promptlane`                                               | **Plan, do not execute in Slice 1** | Branding is important but should not block proving the loop model.                                                         |
 
 This matrix is the planning gate. If an implementation task is not supported by one row above, it belongs in a later proposal.
 
@@ -122,21 +122,21 @@ The current agent ecosystem points toward traces, memory, worktrees, hooks, eval
 
 ### Name
 
-Recommended name: **Loopdeck**
+Recommended name: **PromptLane**
 
 Why:
 
 - "Loop" matches the current market language: loop engineering, agent loops, review loops, continuation loops.
 - "Deck" suggests an operating surface: cards, runs, sessions, worktrees, next moves.
 - It is broader than prompts without becoming vague like "agent platform."
-- npm availability check returned 404 for `loopdeck` at the time of investigation.
+- npm availability check returned 404 for `promptlane` at the time of investigation.
 
 Alternatives considered:
 
 - `loopwright`: strong engineering feel, but visually close to Playwright and may imply browser automation.
 - `agent-loop-memory`: descriptive but too long and not brandable.
-- `prompt-loop`: better than prompt-coach, but still too prompt-centric.
-- `loopdeck-ai`: useful fallback if `loopdeck` is unavailable on GitHub/npm, but less clean.
+- `prompt-loop`: better than promptlane, but still too prompt-centric.
+- `promptlane-ai`: useful fallback if `promptlane` is unavailable on GitHub/npm, but less clean.
 
 ### Repository And Description
 
@@ -170,10 +170,10 @@ worktrees
 
 Rename sequencing:
 
-1. Rename GitHub repository from `wlsdks/prompt-coach` to `wlsdks/promptlane`. (**implemented**)
-2. Update local `origin` from stale prompt-coach/prompt-memory URLs to the new repo URL. (**implemented**)
-3. Update README and docs to say `PromptLane` as product name while preserving `prompt-coach` as the current CLI/package during a compatibility window. (**implemented**)
-4. Add `loopdeck` CLI/package rename as a separate migration plan because it touches npm, plugin commands, docs, binary names, package files, and tests.
+1. Rename GitHub repository from `wlsdks/promptlane` to `wlsdks/promptlane`. (**implemented**)
+2. Update local `origin` from stale promptlane/prompt-memory URLs to the new repo URL. (**implemented**)
+3. Update README and docs to say `PromptLane` as product name while preserving `promptlane` as the current CLI/package during a compatibility window. (**implemented**)
+4. Add `promptlane` CLI/package rename as a separate migration plan because it touches npm, plugin commands, docs, binary names, package files, and tests.
 
 Do not rename the npm package and CLI command in the same commit as the product/repo rename. That would mix brand migration with runtime compatibility risk.
 
@@ -190,13 +190,13 @@ Use these official surfaces:
 - `.codex/hooks.json` or inline hooks for `UserPromptSubmit`, `Stop`, `PostToolUse`, `PreCompact`, `PostCompact`, `SessionStart`, `SubagentStart`, and `SubagentStop`.
 - MCP server for agent-readable loop status, loop brief, prompt archive search, review packets, and record operations.
 - Worktree metadata from git plus Codex-managed worktree paths when discoverable through safe local inspection.
-- Automations only as a user-facing scheduling surface; Loopdeck should not secretly create Codex automations without explicit setup.
+- Automations only as a user-facing scheduling surface; PromptLane should not secretly create Codex automations without explicit setup.
 
-Required Codex-facing Loopdeck capabilities:
+Required Codex-facing PromptLane capabilities:
 
-- `loopdeck status`: show whether hooks, MCP, server, and capture are active for the current repo.
-- `loopdeck loop collect`: collect one loop snapshot for the current cwd/session.
-- MCP `get_loopdeck_status`: expose safe readiness and next actions.
+- `promptlane status`: show whether hooks, MCP, server, and capture are active for the current repo.
+- `promptlane loop collect`: collect one loop snapshot for the current cwd/session.
+- MCP `get_promptlane_status`: expose safe readiness and next actions.
 - MCP `prepare_loop_brief`: return a raw-free continuation prompt for the active agent.
 - MCP `record_loop_outcome`: record user-approved outcome metadata after a loop.
 - Hook `UserPromptSubmit`: capture prompt and attach safe coach context where enabled.
@@ -205,7 +205,7 @@ Required Codex-facing Loopdeck capabilities:
 
 Codex acceptance criteria:
 
-- `prompt-coach setup --profile coach --register-mcp --open-web` still works during the Loopdeck transition.
+- `promptlane setup --profile coach --register-mcp --open-web` still works during the PromptLane transition.
 - Project `.codex/config.toml` and hook examples use current Codex surfaces: `AGENTS.md`, MCP server config, lifecycle hooks, and worktrees.
 - The loop collector does not require reading `$CODEX_HOME` private state or Codex app databases.
 - Worktree awareness comes from git commands and safe labels first. Codex-managed worktree metadata is used only when it is exposed through documented or user-approved local surfaces.
@@ -221,16 +221,16 @@ Use these Claude Code surfaces:
 - MCP server for loop memory and active-agent rewrite/judge handoff
 - `CLAUDE.md` for Claude-specific repo behavior, with `AGENTS.md` as the cross-agent source of truth
 
-Future Claude-facing Loopdeck namespace target:
+Future Claude-facing PromptLane namespace target:
 
-- `/loopdeck:setup`
-- `/loopdeck:status`
-- `/loopdeck:loop`
-- `/loopdeck:brief`
-- `/loopdeck:review-loop`
-- `/loopdeck:open`
+- `/promptlane:setup`
+- `/promptlane:status`
+- `/promptlane:loop`
+- `/promptlane:brief`
+- `/promptlane:review-loop`
+- `/promptlane:open`
 
-Current Claude Code slash commands remain `/prompt-coach:*`. The `/loopdeck:*`
+Current Claude Code slash commands remain `/promptlane:*`. The `/promptlane:*`
 namespace must not ship until the dedicated plugin rename plan proves a dual
 namespace migration path.
 
@@ -238,15 +238,15 @@ Claude Code acceptance criteria:
 
 - Claude Code plugin setup remains explicit and consent-based.
 - Claude Code hooks preserve the `UserPromptSubmit` stdout safety rule: do not print raw prompt bodies or secrets into model-visible output.
-- The Claude plugin can expose `/loopdeck:*` commands later, but existing `/prompt-coach:*` commands must continue during migration.
+- The Claude plugin can expose `/promptlane:*` commands later, but existing `/promptlane:*` commands must continue during migration.
 - Claude Code MCP usage follows the same active-agent mediated pattern as the existing rewrite/judge tools.
 - Hook examples use deterministic shell hooks for collection and reserve prompt/agent hooks for review suggestions only.
 
 ## 4.1 Why Not Build A Generic Agent Runtime
 
-Loopdeck should not compete with LangGraph, ADK, Temporal, or hosted agent runtimes. Those systems own durable execution, graph orchestration, and generalized tool dispatch.
+PromptLane should not compete with LangGraph, ADK, Temporal, or hosted agent runtimes. Those systems own durable execution, graph orchestration, and generalized tool dispatch.
 
-Loopdeck's lane is narrower:
+PromptLane's lane is narrower:
 
 - local capture of coding-agent prompts and loop metadata
 - privacy-safe summaries of work across sessions/worktrees
@@ -296,7 +296,7 @@ Do not duplicate the whole AGENTS.md content. Duplication causes drift.
 
 Add or revise:
 
-- `docs/LOOPDECK.md`: product thesis, loop model, user workflows. (**implemented as the product contract**)
+- `docs/PROMPTLANE.md`: product thesis, loop model, user workflows. (**implemented as the product contract**)
 - `docs/AGENT-HARNESS.md`: Codex and Claude Code integration contract, hooks, MCP tools, plugin commands, setup verification. (**implemented as the public harness contract**)
 - `docs/INSTRUCTION-FILES.md`: AGENTS.md/CLAUDE.md structure, max-size guidance, nested override policy, examples. (**implemented as the instruction layering contract**)
 - `docs/LOOP-SNAPSHOT-SCHEMA.md`: loop snapshot schema and privacy rules. (**implemented as the schema/privacy contract**)
@@ -315,7 +315,7 @@ Required harness document set before large implementation:
 
 | Document                       | Purpose                                                            | Required before                 | Status      |
 | ------------------------------ | ------------------------------------------------------------------ | ------------------------------- | ----------- |
-| `docs/LOOPDECK.md`             | Product thesis, loop model, user workflows, feature portfolio      | Brand migration or web Loops UI | implemented |
+| `docs/PROMPTLANE.md`             | Product thesis, loop model, user workflows, feature portfolio      | Brand migration or web Loops UI | implemented |
 | `docs/AGENT-HARNESS.md`        | Codex/Claude Code hooks, MCP, plugin commands, setup verification  | Hook/MCP loop integration       | implemented |
 | `docs/INSTRUCTION-FILES.md`    | AGENTS.md/CLAUDE.md layering, size limits, examples, anti-patterns | AGENTS/CLAUDE rewrite           | implemented |
 | `docs/LOOP-SNAPSHOT-SCHEMA.md` | Storage schema, privacy fields, raw-data exclusions                | SQLite loop snapshot migration  | implemented |
@@ -385,7 +385,7 @@ Storage rules:
 
 ## 7. Self-Improving Behavior
 
-Loopdeck can improve itself only through an approval-based loop.
+PromptLane can improve itself only through an approval-based loop.
 
 Allowed:
 
@@ -467,9 +467,9 @@ Add:
 - `src/loop/snapshot.ts`
 - `src/loop/brief.ts`
 - storage port and SQLite migration for loop snapshots
-- CLI `prompt-coach loop status`
-- CLI `prompt-coach loop collect`
-- CLI `prompt-coach loop brief`
+- CLI `promptlane loop status`
+- CLI `promptlane loop collect`
+- CLI `promptlane loop brief`
 - tests for privacy-safe snapshots and continuation brief generation
 
 Verification:
@@ -484,7 +484,7 @@ PATH=/Users/jinan/.nvm/versions/node/v22.15.0/bin:$PATH corepack pnpm lint
 
 Add:
 
-- `get_loopdeck_status`
+- `get_promptlane_status`
 - `prepare_loop_brief`
 - `record_loop_outcome`
 
@@ -495,14 +495,14 @@ Verification:
 - MCP tool list includes new tools.
 - `structuredContent` is returned.
 - results contain no prompt bodies or raw paths.
-- existing `prompt-coach` MCP tools still pass.
+- existing `promptlane` MCP tools still pass.
 
 ### Slice 3: Codex/Claude Hook Snapshot
 
 Add:
 
 - Stop hook loop collection (**implemented first under the current
-  `prompt-coach` CLI/package name**)
+  `promptlane` CLI/package name**)
 - PreCompact/PostCompact boundary metadata (**implemented as metadata plus
   optional HMAC content hash; raw summaries and custom instructions are not
   stored**)
@@ -510,7 +510,7 @@ Add:
   registration**)
 - hook trust/setup docs (**updated for metadata-only compact boundaries**)
 - loop status and brief awareness (**implemented for CLI `loop status`, CLI
-  `loop brief`, MCP `get_loopdeck_status`, and MCP `prepare_loop_brief`; it
+  `loop brief`, MCP `get_promptlane_status`, and MCP `prepare_loop_brief`; it
   only reports safe compact boundary metadata newer than the latest loop
   snapshot**)
 
@@ -550,14 +550,14 @@ Verification:
 
 Add:
 
-- `prompt-coach loop collect --source service` for cron or LaunchAgent one-shot
+- `promptlane loop collect --source service` for cron or LaunchAgent one-shot
   collection (**implemented**)
 - output that labels service-origin snapshots without prompt bodies or raw paths
   (**implemented**)
-- opt-in macOS LaunchAgent preview/install via `prompt-coach loop schedule
+- opt-in macOS LaunchAgent preview/install via `promptlane loop schedule
 install` (**implemented; dry-run supported**)
-- explicit scheduler lifecycle commands via `prompt-coach loop schedule status`
-  and `prompt-coach loop schedule uninstall` (**implemented; plist-only status
+- explicit scheduler lifecycle commands via `promptlane loop schedule status`
+  and `promptlane loop schedule uninstall` (**implemented; plist-only status
   and removal**)
 
 Do not add:
@@ -573,7 +573,7 @@ Add:
 
 - deterministic decision gate for the latest loop outcome
   (**implemented in `decideLoopMemoryCandidate`**)
-- CLI `prompt-coach loop memory-candidate` for a local, copy-reviewable memory
+- CLI `promptlane loop memory-candidate` for a local, copy-reviewable memory
   candidate (**implemented**)
 - MCP `propose_loop_memory_candidate` so Codex and Claude Code can ask whether
   a verified loop outcome is eligible for user-approved memory (**implemented**)
@@ -595,7 +595,7 @@ Add:
 
 - local SQLite `loop_memories` records for user-approved memory candidates
   (**implemented**)
-- CLI `prompt-coach loop memory-approve` to record the latest eligible
+- CLI `promptlane loop memory-approve` to record the latest eligible
   candidate after approval (**implemented**)
 - MCP `record_loop_memory` so Codex and Claude Code can persist approved loop
   memory metadata without touching instruction files (**implemented**)
@@ -613,10 +613,10 @@ Do not add:
 
 Add:
 
-- pure proposal generator that converts the latest approved Loopdeck memory
+- pure proposal generator that converts the latest approved PromptLane memory
   into a reviewable unified diff for `AGENTS.md` or `CLAUDE.md`
   (**implemented**)
-- CLI `prompt-coach loop instruction-patch --target-file AGENTS.md` for local
+- CLI `promptlane loop instruction-patch --target-file AGENTS.md` for local
   review without file writes (**implemented**)
 - MCP `propose_instruction_patch` so Codex and Claude Code can ask for the
   same proposal through a structured local-only tool (**implemented**)
@@ -633,10 +633,10 @@ Do not add:
 
 Add:
 
-- pure apply function that appends the latest approved Loopdeck memory to
+- pure apply function that appends the latest approved PromptLane memory to
   `AGENTS.md` or `CLAUDE.md` only when explicit confirmation is present
   (**implemented**)
-- CLI `prompt-coach loop instruction-apply --target-file AGENTS.md
+- CLI `promptlane loop instruction-apply --target-file AGENTS.md
 --confirm-apply` for deliberate local file writes (**implemented**)
 - MCP `apply_instruction_patch` for Codex and Claude Code, requiring
   `confirm_apply=true` and returning no raw paths (**implemented**)
@@ -655,16 +655,16 @@ Do not add:
 
 Add:
 
-- product name in README/docs: Loopdeck (**implemented**)
+- product name in README/docs: PromptLane (**implemented**)
 - GitHub repo rename and remote update (**implemented**)
 - package/plugin product-facing metadata update (**implemented**)
 - explicit compatibility statement that npm package name, CLI binary, and
-  plugin command ids remain `prompt-coach` during the transition
+  plugin command ids remain `promptlane` during the transition
   (**implemented**)
 
 Do not add:
 
-- `loopdeck` CLI/package alias in the same slice
+- `promptlane` CLI/package alias in the same slice
 - npm package rename
 - plugin command id rename
 - marketplace command rename without compatibility aliases
@@ -678,8 +678,8 @@ Add:
 - model-level tests proving no prompt bodies, compact summaries, custom
   instructions, transcript bodies, raw paths, or secret-looking tokens are
   returned
-- CLI `prompt-coach loop status` powered by the shared model
-- MCP `get_loopdeck_status` powered by the shared model, with MCP-only
+- CLI `promptlane loop status` powered by the shared model
+- MCP `get_promptlane_status` powered by the shared model, with MCP-only
   `available_tools` added at the boundary
 - `/api/v1/loops` response with a top-level `status` object from the shared
   model plus list items from the same safe snapshot mapper
@@ -700,7 +700,7 @@ Add:
 
 - `createLoopBrief` optional approved memory input for local, raw-free memory
   statements
-- CLI `prompt-coach loop brief` inclusion of latest approved loop memories
+- CLI `promptlane loop brief` inclusion of latest approved loop memories
 - MCP `prepare_loop_brief` inclusion of latest approved loop memories
 - `/api/v1/loops/:id/brief` inclusion of latest approved loop memories
 - focused tests proving the brief includes memory statements and safe evidence
@@ -722,7 +722,7 @@ Add:
 
 - `listLoopMemories({ projectId })` storage filtering that joins
   `loop_memories.snapshot_id` to `loop_snapshots.id`
-- CLI `prompt-coach loop brief` project-scoped approved memory lookup using
+- CLI `promptlane loop brief` project-scoped approved memory lookup using
   the latest snapshot `project_id`
 - MCP `prepare_loop_brief` project-scoped approved memory lookup using the
   latest snapshot `project_id`
@@ -743,11 +743,11 @@ Do not add:
 
 Add:
 
-- shared `LoopdeckStatus.project_memory` summary with only
+- shared `PromptLaneStatus.project_memory` summary with only
   `approved_count` and `included_in_brief`
-- CLI `prompt-coach loop status` text and JSON showing the latest snapshot
+- CLI `promptlane loop status` text and JSON showing the latest snapshot
   project's approved memory count
-- MCP `get_loopdeck_status` result and schema exposing the same count
+- MCP `get_promptlane_status` result and schema exposing the same count
 - `/api/v1/loops` status payload exposing the same count for the latest
   snapshot project
 - web Loops summary header showing the approved memory count
@@ -766,19 +766,19 @@ Do not add:
 
 Add:
 
-- `package.json#bin.loopdeck` pointing to the same compiled CLI entrypoint as
-  `prompt-coach`
-- packaging tests proving `prompt-coach` remains the package name and primary
-  compatibility command while `loopdeck` is available as a product-name CLI
+- `package.json#bin.promptlane` pointing to the same compiled CLI entrypoint as
+  `promptlane`
+- packaging tests proving `promptlane` remains the package name and primary
+  compatibility command while `promptlane` is available as a product-name CLI
   alias
 - README and package contents docs explaining that existing scripts and plugin
-  commands should keep using `prompt-coach`, while new manual terminal workflows
-  may use `loopdeck`
+  commands should keep using `promptlane`, while new manual terminal workflows
+  may use `promptlane`
 
 Do not add:
 
 - npm package rename
-- removal of `prompt-coach` bin
+- removal of `promptlane` bin
 - plugin command id rename
 - hook marker rename
 - MCP server name rename
@@ -787,11 +787,11 @@ Do not add:
 
 Add:
 
-- shared `LoopdeckStatus.memory_candidate` summary with only `eligible`,
+- shared `PromptLaneStatus.memory_candidate` summary with only `eligible`,
   `reason`, and `next_action`
-- CLI `prompt-coach loop status` text and JSON showing whether the latest loop
+- CLI `promptlane loop status` text and JSON showing whether the latest loop
   can be approved into local project memory
-- MCP `get_loopdeck_status` result and schema exposing the same raw-free
+- MCP `get_promptlane_status` result and schema exposing the same raw-free
   candidate summary
 - `/api/v1/loops` status payload exposing the same candidate summary for the
   latest snapshot
@@ -812,20 +812,20 @@ Do not add:
 
 Add:
 
-- Claude Code command docs that check for either `prompt-coach` or `loopdeck`
+- Claude Code command docs that check for either `promptlane` or `promptlane`
   when running manual CLI fallbacks
-- setup/status/coach command docs that show `loopdeck` as the product-name CLI
-  alias while preserving existing `prompt-coach` examples
-- Codex plugin default prompt that advertises the `loopdeck` CLI alias for
+- setup/status/coach command docs that show `promptlane` as the product-name CLI
+  alias while preserving existing `promptlane` examples
+- Codex plugin default prompt that advertises the `promptlane` CLI alias for
   manual terminal workflows
 - README and PLUGINS documentation clarifying that Claude Code slash commands
-  remain under `/prompt-coach:*` during the migration
+  remain under `/promptlane:*` during the migration
 - packaging tests proving this compatibility guidance is present
 
 Do not add:
 
-- `/loopdeck:*` slash command namespace before a dedicated plugin rename plan
-- removal of `/prompt-coach:*` commands
+- `/promptlane:*` slash command namespace before a dedicated plugin rename plan
+- removal of `/promptlane:*` commands
 - plugin id rename
 - hook marker rename
 - MCP server name rename
@@ -834,7 +834,7 @@ Do not add:
 
 Add:
 
-- CLI `prompt-coach loop memory-approve --json` result with structured
+- CLI `promptlane loop memory-approve --json` result with structured
   `next_actions`
 - CLI text output that lists the immediate follow-up commands after recording
   memory
@@ -881,7 +881,7 @@ Do not add:
 Add:
 
 - web API `GET /api/v1/loops/instruction-patch?target_file=AGENTS.md` for the
-  latest approved Loopdeck memory
+  latest approved PromptLane memory
 - server-side reuse of the same pure `proposeInstructionPatchFromMemory`
   generator as CLI and MCP
 - web client `getLoopInstructionPatch()` helper
@@ -903,20 +903,20 @@ Do not add:
 
 Add:
 
-- `docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md` as the
+- `docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md` as the
   compatibility gate for plugin id and slash namespace migration
 - packaging tests proving the plan exists and locks the current
-  `prompt-coach` package, primary CLI, plugin id, `/prompt-coach:*` slash
+  `promptlane` package, primary CLI, plugin id, `/promptlane:*` slash
   namespace, hook marker, and MCP server compatibility requirements
 - README and PLUGINS links that route future rename work through the dedicated
   plan instead of ad hoc copy changes
 
 Do not add:
 
-- `/loopdeck:*` slash commands
+- `/promptlane:*` slash commands
 - plugin id rename
 - npm package rename
-- removal of the `prompt-coach` CLI
+- removal of the `promptlane` CLI
 - hook marker rename
 - MCP server name rename
 
@@ -927,7 +927,7 @@ Add:
 - structured `apply_gate` on instruction patch proposals explaining that web
   review cannot write files
 - CLI confirm command in that gate:
-  `prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply`
+  `promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply`
 - MCP apply tool name in that gate: `apply_instruction_patch`
 - web review panel copy that shows the gate and keeps the panel review-only
 - focused tests proving CLI/MCP/API/web client proposals expose the same gate
@@ -946,7 +946,7 @@ Do not add:
 
 Add:
 
-- shared `LoopdeckStatus.activity` summary derived from existing loop snapshots
+- shared `PromptLaneStatus.activity` summary derived from existing loop snapshots
 - raw-free counts for active worktrees and active sessions
 - latest branch and latest worktree label when already present in safe snapshot
   metadata
@@ -968,13 +968,13 @@ Do not add:
 
 Add:
 
-- `LoopdeckStatus.activity.worktrees` detail derived only from existing local
+- `PromptLaneStatus.activity.worktrees` detail derived only from existing local
   loop snapshots
 - per-worktree safe label, session count, snapshot count, latest snapshot id,
   latest timestamp, latest branch when already present, and latest outcome
   status
 - CLI `loop status` worktree detail lines capped to the first recent groups
-- MCP `get_loopdeck_status`, `/api/v1/loops`, web API type, and Loops summary
+- MCP `get_promptlane_status`, `/api/v1/loops`, web API type, and Loops summary
   display of the same raw-free detail model
 - focused tests proving worktree detail does not expose prompt bodies, raw
   paths, compact summaries, secrets, transcripts, or external LLM results
@@ -1088,9 +1088,9 @@ Do not add:
 
 Add:
 
-- dedicated `docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-issue-slices.md`
+- dedicated `docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-issue-slices.md`
   that decomposes the rename plan into independently shippable issues
-- compatibility invariants that preserve `prompt-coach` package, binary,
+- compatibility invariants that preserve `promptlane` package, binary,
   plugin id, hook command, slash command, and MCP server-name contracts until
   each later phase has proof
 - per-slice RED/GREEN expectations and smoke gates for Fresh install, Codex
@@ -1100,7 +1100,7 @@ Add:
 
 Do not add:
 
-- `/loopdeck:*` command files
+- `/promptlane:*` command files
 - package, plugin id, hook marker, or MCP server-name rename
 - deprecation banners
 - hidden external LLM, hosted migration, or provider credential proxy
@@ -1109,7 +1109,7 @@ Do not add:
 
 Add:
 
-- dedicated `docs/superpowers/plans/2026-07-04-loopdeck-runtime-id-inventory.json`
+- dedicated `docs/superpowers/plans/2026-07-04-promptlane-runtime-id-inventory.json`
   with the current package, binary, Claude Code plugin, Codex plugin, command,
   hook, and MCP server-name compatibility surface
 - packaging test coverage that compares the inventory against live manifests,
@@ -1119,7 +1119,7 @@ Add:
 Do not add:
 
 - runtime rename behavior
-- `/loopdeck:*` command aliases
+- `/promptlane:*` command aliases
 - package, plugin id, hook command, or MCP server-name changes
 - prompt bodies, transcript text, compact summaries, raw paths, API tokens, or
   provider credentials
@@ -1128,18 +1128,18 @@ Do not add:
 
 Add:
 
-- README, README.ko, and PLUGINS documentation that names `/loopdeck:*` as a
+- README, README.ko, and PLUGINS documentation that names `/promptlane:*` as a
   future alias-only slash namespace
-- packaging test coverage that proves the docs mention both `/prompt-coach:*`
-  and `/loopdeck:*` while package, plugin ids, and Claude Code command files
+- packaging test coverage that proves the docs mention both `/promptlane:*`
+  and `/promptlane:*` while package, plugin ids, and Claude Code command files
   remain unchanged
-- compatibility wording that `/loopdeck:*` must not become the only namespace
+- compatibility wording that `/promptlane:*` must not become the only namespace
   and is not shipped as command files in this slice
 
 Do not add:
 
-- `/loopdeck:*` command files
-- Claude Code plugin manifest command entries for loopdeck aliases
+- `/promptlane:*` command files
+- Claude Code plugin manifest command entries for promptlane aliases
 - package, plugin id, hook command, or MCP server-name changes
 - runtime command alias behavior
 
@@ -1148,34 +1148,34 @@ Do not add:
 Add:
 
 - R3 decision artifact documenting that current Claude Code command namespace is
-  tied to plugin identity, so `commands/loopdeck-*.md` would not create
-  `/loopdeck:*`
-- packaging test coverage that keeps `/prompt-coach:*` required and prevents
-  accidental loopdeck command file/manifest additions
+  tied to plugin identity, so `commands/promptlane-*.md` would not create
+  `/promptlane:*`
+- packaging test coverage that keeps `/promptlane:*` required and prevents
+  accidental promptlane command file/manifest additions
 - safe future paths: dual plugin package, official namespace alias support, or a
   later major rename window with smoke and rollback gates
 
 Do not add:
 
-- `/loopdeck:*` command files
-- Claude Code plugin manifest command entries for loopdeck aliases
+- `/promptlane:*` command files
+- Claude Code plugin manifest command entries for promptlane aliases
 - package, plugin id, hook command, or MCP server-name changes
 
 ### Slice 4.33: Codex Plugin Display Rename Without ID Rename
 
 Add:
 
-- Codex plugin interface copy and default prompts that use Loopdeck as the
+- Codex plugin interface copy and default prompts that use PromptLane as the
   product-facing name
 - Codex skill copy that explains the compatibility CLI command remains
-  `prompt-coach`
+  `promptlane`
 - packaging test coverage that locks Codex plugin id, install path, skill path,
-  and hook command compatibility while display copy says Loopdeck
+  and hook command compatibility while display copy says PromptLane
 
 Do not add:
 
 - Codex plugin id rename
-- `plugins/prompt-coach` install path rename
+- `plugins/promptlane` install path rename
 - hook command changes
 - MCP server-name changes
 
@@ -1183,7 +1183,7 @@ Do not add:
 
 Add:
 
-- hook binary smoke script that runs built `prompt-coach` and `loopdeck`
+- hook binary smoke script that runs built `promptlane` and `promptlane`
   entrypoints through `hook status`, `hook claude-code`, and `hook codex`
 - packaging test coverage that ships the smoke script and keeps both package
   binaries mapped to the same compiled CLI entrypoint
@@ -1193,7 +1193,7 @@ Add:
 Do not add:
 
 - hook command changes in installed Claude Code or Codex configs
-- `loopdeck hook ...` as the primary installed hook command
+- `promptlane hook ...` as the primary installed hook command
 - raw prompt, transcript, compact summary, raw path, API token, or provider
   credential output
 
@@ -1201,16 +1201,16 @@ Do not add:
 
 Add:
 
-- R6 decision artifact documenting that `prompt-coach` remains the canonical MCP
-  server name during the Loopdeck compatibility window
+- R6 decision artifact documenting that `promptlane` remains the canonical MCP
+  server name during the PromptLane compatibility window
 - official Codex and Claude Code MCP command-shape references showing the server
   name is user-chosen persisted configuration
 - packaging test coverage that keeps README, README.ko, PLUGINS, slash setup
-  docs, and web MCP snippets on `prompt-coach mcp`
+  docs, and web MCP snippets on `promptlane mcp`
 
 Do not add:
 
-- `mcp add loopdeck` examples
+- `mcp add promptlane` examples
 - MCP server-name rename
 - hidden hosted service, provider credential proxy, or external LLM call
 - prompt body, transcript, compact summary, raw path, API token, or provider
@@ -1222,8 +1222,8 @@ Add:
 
 - R7 readiness artifact with alias-only, deprecation, and breaking release note
   templates
-- support guidance for saved `/prompt-coach:*` slash command snippets
-- minimum evidence gates before marking any `prompt-coach` runtime id deprecated
+- support guidance for saved `/promptlane:*` slash command snippets
+- minimum evidence gates before marking any `promptlane` runtime id deprecated
 - rollback and upgrade smoke requirements for future rename slices
 - packaging test coverage that confirms readiness exists while public README and
   PLUGINS do not show a deprecation banner yet
@@ -1231,7 +1231,7 @@ Add:
 Do not add:
 
 - deprecation banners
-- removal of `/prompt-coach:*`, plugin ids, hook commands, package names, or MCP
+- removal of `/promptlane:*`, plugin ids, hook commands, package names, or MCP
   server names
 - breaking-change language outside the readiness artifact
 
@@ -1305,14 +1305,14 @@ Do not add:
 
 Add:
 
-- shared `LoopdeckStatus.activity.command_center` summary for review-before-merge
+- shared `PromptLaneStatus.activity.command_center` summary for review-before-merge
   situations
 - raw-free review queue items derived from existing safe worktree metadata:
   worktree label, branch, latest snapshot id/time, outcome status, sessions,
   snapshots, and recommendation
 - CLI `loop status` text output that names the command center, primary action,
   and top review items
-- MCP `get_loopdeck_status` output schema coverage for the command center
+- MCP `get_promptlane_status` output schema coverage for the command center
 - web Loops summary rendering that shows the command center before inline
   worktree open actions
 - focused domain, CLI, MCP schema, and web tests proving the command center does
@@ -1338,7 +1338,7 @@ Add:
   and Claude Code can see the exact filtered `loop brief` command for that
   worktree
 - CLI `loop status` output that prints each review item's continuation command
-- MCP `get_loopdeck_status` schema coverage for `continuation_command`
+- MCP `get_promptlane_status` schema coverage for `continuation_command`
 - web command-center item `Copy review brief` actions that call the existing
   selected worktree brief API with worktree/branch filters
 - App-level clipboard handling that reuses the existing local-only
@@ -1374,7 +1374,7 @@ Add:
   - passed latest outcome with evidence means `ready`
 - CLI `loop status` text output that prints merge readiness and evidence count
   for each review item
-- MCP `get_loopdeck_status` output schema coverage for the new fields
+- MCP `get_promptlane_status` output schema coverage for the new fields
 - web Loops command-center rendering for merge readiness and evidence ref count
 - focused domain, CLI, MCP schema/runtime, and web tests proving the grouping
   does not reveal evidence ref strings, outcome summaries, prompt bodies, raw
@@ -1395,7 +1395,7 @@ Do not add:
 
 Add:
 
-- `review_packet` metadata on `LoopdeckStatus.activity.command_center`, derived
+- `review_packet` metadata on `PromptLaneStatus.activity.command_center`, derived
   only from existing command-center review items
 - aggregate packet status with explicit precedence:
   - any missing evidence means `blocked`
@@ -1405,7 +1405,7 @@ Add:
 - packet summary and next action labels designed for Codex and Claude Code to
   read before a human decides whether to merge or continue a worktree
 - CLI `loop status` output for packet status, summary, and next action
-- MCP `get_loopdeck_status` output schema coverage for the packet contract
+- MCP `get_promptlane_status` output schema coverage for the packet contract
 - web Loops command-center rendering for the packet summary
 - focused domain, CLI, MCP schema/runtime, and web tests proving the packet does
   not reveal evidence ref strings, outcome summaries, prompt bodies, raw paths,
@@ -1437,7 +1437,7 @@ Add:
 - read-only `required` status for each checklist item; completion persistence is
   deferred to a later explicit journal slice
 - CLI `loop status` output for checklist labels and status
-- MCP `get_loopdeck_status` output schema coverage for checklist entries
+- MCP `get_promptlane_status` output schema coverage for checklist entries
 - web Loops command-center rendering for the human checklist
 - focused domain, CLI, MCP schema/runtime, and web tests proving checklist
   entries do not reveal evidence ref strings, outcome summaries, prompt bodies,
@@ -1477,8 +1477,8 @@ Decision:
 
 Add:
 
-- `prompt-coach loop decision record --worktree <name> --decision <merge|continue|defer> --reason <text>`
-- `prompt-coach loop decision list`
+- `promptlane loop decision record --worktree <name> --decision <merge|continue|defer> --reason <text>`
+- `promptlane loop decision list`
 - local SQLite journal table for merge decisions
 - privacy guard rejecting raw local paths and secret-looking tokens in decision
   reasons
@@ -1510,10 +1510,10 @@ Decision:
 
 Add:
 
-- `LoopdeckStatus.activity.recent_decisions`, limited to the latest three local
+- `PromptLaneStatus.activity.recent_decisions`, limited to the latest three local
   decisions
 - CLI `loop status` lines for recent decisions
-- MCP `get_loopdeck_status` schema/runtime coverage for the read-only field
+- MCP `get_promptlane_status` schema/runtime coverage for the read-only field
 - `/api/v1/loops` status propagation for recent decisions
 - web Loops summary rendering for recent decisions
 - focused domain, CLI, MCP schema/runtime, and web tests proving the field does
@@ -1523,7 +1523,7 @@ Add:
 
 Do not add:
 
-- merge decision writes outside `prompt-coach loop decision record`
+- merge decision writes outside `promptlane loop decision record`
 - MCP write tools, web write buttons, checklist completion state, or approval
   toggles
 - automatic merge, branch checkout, conflict prediction, diff inspection, or git
@@ -1553,7 +1553,7 @@ Add:
   - `honor recent defer decision before merge`
   - `confirm recent merge decision before merge`
 - CLI `loop status` advisory output
-- MCP `get_loopdeck_status` schema/runtime coverage for the advisory
+- MCP `get_promptlane_status` schema/runtime coverage for the advisory
 - web Loops command-center rendering for the advisory
 - focused domain, CLI, MCP schema/runtime, and web tests proving the advisory
   remains read-only and does not reveal prompt bodies, outcome summaries,
@@ -1943,7 +1943,7 @@ Add:
   - action: `copy selected continuation brief`
   - reason:
     - `uses the selected worktree/session/branch filters without auto-submitting`
-  - command: `prompt-coach loop brief --worktree ...` plus optional `--session`
+  - command: `promptlane loop brief --worktree ...` plus optional `--session`
     and `--branch` filters
   - writes_files: `false`
   - external_calls: `false`
@@ -2076,7 +2076,7 @@ Decision:
 - The provenance should be raw-free and deterministic: it is derived from the
   existing command-center continuation command that was already computed from
   safe selected worktree metadata.
-- The provenance must not imply that Loopdeck read git state, checked branch
+- The provenance must not imply that PromptLane read git state, checked branch
   freshness, executed the command, wrote files, or contacted external services.
 
 Add:
@@ -2229,7 +2229,7 @@ Decision:
   the Codex/Claude Code handoff explicit without trying to control either tool's
   UI or submit prompts on the user's behalf.
 - This is necessary because Codex and Claude Code are primary runtime surfaces
-  for Loopdeck, and the web detail panel should connect copy-ready loop memory
+  for PromptLane, and the web detail panel should connect copy-ready loop memory
   to the next human-controlled agent request.
 
 Add:
@@ -2242,7 +2242,7 @@ Add:
   - instruction:
     `paste the copied continuation brief into the active agent request box`
   - reason:
-    `keeps Loopdeck as the local handoff source while the user controls submission`
+    `keeps PromptLane as the local handoff source while the user controls submission`
   - auto_submit: `false`
   - writes_files: `false`
   - external_calls: `false`
@@ -2268,7 +2268,7 @@ Decision:
   copy the selected brief, paste it into Codex or Claude Code, submit manually,
   then collect the next loop snapshot after the agent turn. This closes the
   operator loop without automating either agent UI.
-- This is needed because Loopdeck is not just a prompt archive; it is a
+- This is needed because PromptLane is not just a prompt archive; it is a
   local-first loop memory workbench. The selected detail panel should tell a
   human or active agent how to continue and how to return the result to local
   loop memory.
@@ -2348,7 +2348,7 @@ Decision:
 - Selected worktree detail should state that the next loop snapshot is the
   source of truth for local loop memory. It should explicitly say this is not a
   transcript import flow.
-- This is needed because Loopdeck is becoming an agent loop memory workbench,
+- This is needed because PromptLane is becoming an agent loop memory workbench,
   not a transcript vault. The selected detail panel must keep the local-first
   memory boundary visible during Codex/Claude Code continuation handoff.
 
@@ -2361,7 +2361,7 @@ Add:
   - not_transcript_import:
     `transcript import is not used as the source of truth`
   - reason:
-    `Loopdeck records explicit loop snapshots instead of importing agent transcripts`
+    `PromptLane records explicit loop snapshots instead of importing agent transcripts`
   - stores_transcripts: `false`
   - writes_files: `false`
   - external_calls: `false`
@@ -2386,7 +2386,7 @@ Do not add:
 Decision:
 
 - Selected worktree detail should show the privacy boundary for the
-  source-of-truth model. It should say that Loopdeck stores local loop metadata
+  source-of-truth model. It should say that PromptLane stores local loop metadata
   in the local database and Markdown archive, while not storing prompt bodies,
   transcripts, raw paths, or provider credentials.
 - This is needed because the source-of-truth note explains what should count as
@@ -2429,7 +2429,7 @@ Decision:
   handoff. It should state that the copied continuation brief is reviewed by the
   operator before manual submission in Codex or Claude Code.
 - This is needed because paste destination and handoff checklist explain where
-  the brief goes, but the UI should also make clear that Loopdeck does not
+  the brief goes, but the UI should also make clear that PromptLane does not
   automatically submit or execute the handoff.
 
 Add:
@@ -2468,7 +2468,7 @@ Decision:
   next loop snapshot after continuation handoff. It should state that the
   operator runs the loop collection flow after the agent turn.
 - This is needed because the handoff checklist says to collect the next
-  snapshot, but does not explicitly prevent misreading Loopdeck as a background
+  snapshot, but does not explicitly prevent misreading PromptLane as a background
   transcript watcher or agent UI scraper.
 
 Add:
@@ -2659,7 +2659,7 @@ Decision:
 - Selected worktree detail should state that reviewing the continuation safety
   guidance does not create stored state or synchronize review state elsewhere.
 - This is needed because the ordering note tells the operator to review safety
-  guidance first, but should not imply Loopdeck tracks a completed checklist or
+  guidance first, but should not imply PromptLane tracks a completed checklist or
   persists a reviewed flag.
 
 Add:
@@ -2668,7 +2668,7 @@ Add:
   `continuation_safety_non_persistence_note` with:
   - label: `Safety review state`
   - state:
-    `reviewed guidance state is not stored or synchronized by Loopdeck`
+    `reviewed guidance state is not stored or synchronized by PromptLane`
   - reminder:
     `operator re-checks safety guidance each time before manual agent submission`
   - reason:
@@ -2891,7 +2891,7 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that retrying the selected brief copy is
-  a manual operator action and that Loopdeck does not automatically retry
+  a manual operator action and that PromptLane does not automatically retry
   clipboard writes or submit prompts.
 - This is needed because retry guidance should not be mistaken for background
   clipboard recovery, hidden prompt submission, or agent UI automation.
@@ -2904,7 +2904,7 @@ Add:
   - retry_scope:
     `operator manually retries the selected brief copy action`
   - not_automatic:
-    `Loopdeck does not automatically retry clipboard writes or submit prompts`
+    `PromptLane does not automatically retry clipboard writes or submit prompts`
   - reason:
     `keeps retry control with the operator before any Codex or Claude Code paste`
   - writes_files: `false`
@@ -2972,7 +2972,7 @@ Decision:
 - Selected worktree detail should state that the operator verifies the active
   Codex or Claude Code request box before paste.
 - This is needed because target-agent checking should not be mistaken for
-  Loopdeck inspecting agent UI state, reading target contents, or validating
+  PromptLane inspecting agent UI state, reading target contents, or validating
   target-agent safety automatically.
 
 Add:
@@ -2983,7 +2983,7 @@ Add:
   - check:
     `operator verifies the active Codex or Claude Code request box before paste`
   - not_inspection:
-    `Loopdeck does not inspect agent UI state or target contents`
+    `PromptLane does not inspect agent UI state or target contents`
   - reason:
     `keeps target selection manual before any continuation handoff`
   - writes_files: `false`
@@ -3024,9 +3024,9 @@ Add:
   - boundary:
     `paste destination is a manual operator choice in Codex or Claude Code`
   - not_verified:
-    `Loopdeck does not verify active windows, target contents, or paste success`
+    `PromptLane does not verify active windows, target contents, or paste success`
   - reason:
-    `keeps destination verification outside Loopdeck automation before submission`
+    `keeps destination verification outside PromptLane automation before submission`
   - writes_files: `false`
   - external_calls: `false`
 - web API typing and selected worktree detail rendering inside continuation
@@ -3057,7 +3057,7 @@ Decision:
 - Selected worktree detail should state that the operator submits the pasted
   brief manually in Codex or Claude Code.
 - This is needed because final submission guidance should not be mistaken for
-  Loopdeck pressing Enter, clicking submit, detecting submission success, or
+  PromptLane pressing Enter, clicking submit, detecting submission success, or
   recording submitted state.
 
 Add:
@@ -3068,7 +3068,7 @@ Add:
   - submission:
     `operator submits the pasted brief manually in Codex or Claude Code`
   - not_automated:
-    `Loopdeck does not press enter, click submit, or record submitted state`
+    `PromptLane does not press enter, click submit, or record submitted state`
   - reason:
     `keeps final agent execution under operator control after paste`
   - writes_files: `false`
@@ -3100,7 +3100,7 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that agent response and submission
-  result stay outside Loopdeck until the next explicit loop snapshot.
+  result stay outside PromptLane until the next explicit loop snapshot.
 - This is needed because post-submission guidance should not be mistaken for
   submission result detection, submitted state persistence, transcript watching,
   or agent UI monitoring.
@@ -3111,9 +3111,9 @@ Add:
   `continuation_safety_submission_result_non_persistence_note` with:
   - label: `Submission result non-persistence`
   - result_scope:
-    `agent response and submission result stay outside Loopdeck until the next explicit loop snapshot`
+    `agent response and submission result stay outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync submitted state after handoff`
+    `PromptLane does not detect, store, or sync submitted state after handoff`
   - reason:
     `keeps post-submission evidence tied to explicit loop collection instead of UI monitoring`
   - writes_files: `false`
@@ -3159,7 +3159,7 @@ Add:
   - reminder:
     `collect the next loop snapshot explicitly after the agent response is ready`
   - not_background:
-    `Loopdeck does not start collection from submission, transcript changes, or agent UI activity`
+    `PromptLane does not start collection from submission, transcript changes, or agent UI activity`
   - reason:
     `keeps post-submission collection operator-triggered and local-first`
   - writes_files: `false`
@@ -3207,7 +3207,7 @@ Add:
   - result_scope:
     `collection result is not persisted until the operator records the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not store, sync, or infer collection result state from agent UI activity`
+    `PromptLane does not store, sync, or infer collection result state from agent UI activity`
   - reason:
     `keeps collection evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -3256,7 +3256,7 @@ Add:
   - retry:
     `operator reruns the explicit loop collection flow when retry is needed`
   - not_automated:
-    `Loopdeck does not automatically retry collection commands or hidden recovery actions`
+    `PromptLane does not automatically retry collection commands or hidden recovery actions`
   - reason:
     `keeps retry control local and operator-triggered after collection uncertainty`
   - writes_files: `false`
@@ -3293,7 +3293,7 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that retry attempt and retry outcome
-  state stay outside Loopdeck until the next explicit loop snapshot.
+  state stay outside PromptLane until the next explicit loop snapshot.
 - This is needed because manual collection retry guidance should not be mistaken
   for retry success/failure detection, retry outcome persistence, or retry state
   synchronization.
@@ -3304,9 +3304,9 @@ Add:
   `continuation_safety_retry_outcome_non_persistence_note` with:
   - label: `Retry outcome non-persistence`
   - outcome_scope:
-    `retry attempt and outcome stay outside Loopdeck until the next explicit loop snapshot`
+    `retry attempt and outcome stay outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync retry success or failure state`
+    `PromptLane does not detect, store, or sync retry success or failure state`
   - reason:
     `keeps retry evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -3357,7 +3357,7 @@ Add:
   - freshness_check:
     `operator checks freshness against the latest explicit loop snapshot evidence`
   - not_verified:
-    `Loopdeck does not verify freshness from git status, transcripts, or agent UI activity`
+    `PromptLane does not verify freshness from git status, transcripts, or agent UI activity`
   - reason:
     `keeps evidence freshness review tied to local snapshot metadata`
   - writes_files: `false`
@@ -3396,7 +3396,7 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that freshness result state stays
-  outside Loopdeck until the next explicit loop snapshot.
+  outside PromptLane until the next explicit loop snapshot.
 - This is needed because the collection evidence freshness boundary should not
   be mistaken for freshness result detection, persistence, or state
   synchronization.
@@ -3407,9 +3407,9 @@ Add:
   `continuation_safety_freshness_result_non_persistence_note` with:
   - label: `Freshness result non-persistence`
   - result_scope:
-    `freshness result stays outside Loopdeck until the next explicit loop snapshot`
+    `freshness result stays outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync freshness result state`
+    `PromptLane does not detect, store, or sync freshness result state`
   - reason:
     `keeps freshness evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -3463,7 +3463,7 @@ Add:
   - reminder:
     `collect a new explicit loop snapshot when evidence freshness is uncertain`
   - not_automated:
-    `Loopdeck does not verify freshness or start collection automatically`
+    `PromptLane does not verify freshness or start collection automatically`
   - reason:
     `keeps freshness uncertainty resolution operator-triggered and local-first`
   - writes_files: `false`
@@ -3505,7 +3505,7 @@ Decision:
 - Selected worktree detail should advise the operator to review freshness
   uncertainty before merge decisions.
 - This is needed because freshness uncertainty can affect whether a continuation
-  handoff is ready to merge, but Loopdeck should not approve merges, verify
+  handoff is ready to merge, but PromptLane should not approve merges, verify
   freshness, or write merge readiness state from this note.
 
 Add:
@@ -3516,7 +3516,7 @@ Add:
   - advisory:
     `review freshness uncertainty before merge decisions`
   - not_decision:
-    `Loopdeck does not approve merges or verify freshness before merge`
+    `PromptLane does not approve merges or verify freshness before merge`
   - reason:
     `keeps merge readiness separate from freshness uncertainty review`
   - writes_files: `false`
@@ -3569,7 +3569,7 @@ Add:
   - advisory:
     `review freshness uncertainty before approving loop memory`
   - not_decision:
-    `Loopdeck does not approve memory or verify freshness from this note`
+    `PromptLane does not approve memory or verify freshness from this note`
   - reason:
     `keeps memory approval separate from freshness uncertainty review`
   - writes_files: `false`
@@ -3623,7 +3623,7 @@ Add:
   - reminder:
     `collect a new explicit loop snapshot after approving loop memory`
   - not_automated:
-    `Loopdeck does not start collection from memory approval or approval state changes`
+    `PromptLane does not start collection from memory approval or approval state changes`
   - reason:
     `keeps post-approval collection operator-triggered and local-first`
   - writes_files: `false`
@@ -3664,10 +3664,10 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that post-memory-approval collection
-  result state stays outside Loopdeck until the next explicit loop snapshot is
+  result state stays outside PromptLane until the next explicit loop snapshot is
   recorded.
 - This is needed because the operator may collect after memory approval, but
-  Loopdeck should not infer, persist, or synchronize that collection result from
+  PromptLane should not infer, persist, or synchronize that collection result from
   approval state, agent UI activity, transcripts, or hidden collection checks.
 
 Add:
@@ -3677,9 +3677,9 @@ Add:
   with:
   - label: `Post-memory-approval collection result non-persistence`
   - result_scope:
-    `post-approval collection result stays outside Loopdeck until the next explicit loop snapshot`
+    `post-approval collection result stays outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync post-approval collection result state`
+    `PromptLane does not detect, store, or sync post-approval collection result state`
   - reason:
     `keeps post-approval collection evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -3736,7 +3736,7 @@ Add:
   - retry:
     `operator reruns the explicit post-approval loop collection flow when retry is needed`
   - not_automated:
-    `Loopdeck does not automatically retry post-approval collection commands or hidden recovery actions`
+    `PromptLane does not automatically retry post-approval collection commands or hidden recovery actions`
   - reason:
     `keeps post-approval collection retry control local and operator-triggered`
   - writes_files: `false`
@@ -3780,8 +3780,8 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that post-memory-approval retry outcome
-  stays outside Loopdeck until the next explicit loop snapshot.
-- This is needed because the retry boundary would otherwise imply that Loopdeck
+  stays outside PromptLane until the next explicit loop snapshot.
+- This is needed because the retry boundary would otherwise imply that PromptLane
   can observe retry success or failure. It cannot and should not detect, store,
   or sync post-approval retry outcome state.
 
@@ -3792,9 +3792,9 @@ Add:
   with:
   - label: `Post-memory-approval retry outcome non-persistence`
   - outcome_scope:
-    `post-approval retry outcome stays outside Loopdeck until the next explicit loop snapshot`
+    `post-approval retry outcome stays outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync post-approval retry success or failure state`
+    `PromptLane does not detect, store, or sync post-approval retry success or failure state`
   - reason:
     `keeps post-approval retry evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -3840,7 +3840,7 @@ Decision:
 - Selected worktree detail should state that post-memory-approval retry evidence
   freshness is checked manually against the latest explicit loop snapshot.
 - This is needed because post-approval retry outcome can be stale after another
-  loop turn. Loopdeck should present the review boundary without reading git
+  loop turn. PromptLane should present the review boundary without reading git
   status, transcripts, or agent UI activity.
 
 Add:
@@ -3852,7 +3852,7 @@ Add:
   - review:
     `operator checks retry evidence freshness against the latest explicit loop snapshot`
   - not_verified:
-    `Loopdeck does not verify post-approval retry freshness from git status, transcripts, or agent UI activity`
+    `PromptLane does not verify post-approval retry freshness from git status, transcripts, or agent UI activity`
   - reason:
     `keeps post-approval retry freshness review tied to local snapshot metadata`
   - writes_files: `false`
@@ -3898,8 +3898,8 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that post-memory-approval retry
-  freshness result stays outside Loopdeck until the next explicit loop snapshot.
-- This is needed because the freshness boundary should not imply that Loopdeck
+  freshness result stays outside PromptLane until the next explicit loop snapshot.
+- This is needed because the freshness boundary should not imply that PromptLane
   can observe or retain freshness review outcomes. It cannot and should not
   detect, store, or sync post-approval retry freshness result state.
 
@@ -3910,9 +3910,9 @@ Add:
   with:
   - label: `Post-memory-approval retry freshness result non-persistence`
   - result_scope:
-    `post-approval retry freshness result stays outside Loopdeck until the next explicit loop snapshot`
+    `post-approval retry freshness result stays outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync post-approval retry freshness result state`
+    `PromptLane does not detect, store, or sync post-approval retry freshness result state`
   - reason:
     `keeps post-approval retry freshness evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -3975,7 +3975,7 @@ Add:
   - reminder:
     `collect a new explicit loop snapshot when post-approval retry freshness is uncertain`
   - not_automated:
-    `Loopdeck does not verify post-approval retry freshness or start collection automatically`
+    `PromptLane does not verify post-approval retry freshness or start collection automatically`
   - reason:
     `keeps post-approval retry freshness uncertainty resolution operator-triggered and local-first`
   - writes_files: `false`
@@ -4038,7 +4038,7 @@ Add:
   - advisory:
     `review post-approval retry freshness uncertainty before approving loop memory again`
   - not_decision:
-    `Loopdeck does not approve memory or verify post-approval retry freshness from this advisory`
+    `PromptLane does not approve memory or verify post-approval retry freshness from this advisory`
   - reason:
     `keeps renewed memory approval separate from retry freshness uncertainty review`
   - writes_files: `false`
@@ -4091,7 +4091,7 @@ Decision:
   be collected after approving loop memory again following a post-approval
   retry.
 - This is needed because renewed memory approval can be mistaken for a trigger
-  that starts collection automatically; Loopdeck should keep the collection
+  that starts collection automatically; PromptLane should keep the collection
   boundary operator-triggered and local-first.
 
 Add:
@@ -4104,7 +4104,7 @@ Add:
   - reminder:
     `collect a new explicit loop snapshot after approving loop memory again`
   - not_automated:
-    `Loopdeck does not start collection from renewed memory approval or approval state changes`
+    `PromptLane does not start collection from renewed memory approval or approval state changes`
   - reason:
     `keeps renewed-memory-approval collection operator-triggered and local-first`
   - writes_files: `false`
@@ -4155,9 +4155,9 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that renewed-memory-approval collection
-  result state stays outside Loopdeck until the next explicit loop snapshot.
+  result state stays outside PromptLane until the next explicit loop snapshot.
 - This is needed because the renewed approval collection reminder should not
-  imply that Loopdeck detects, stores, or synchronizes the result of that
+  imply that PromptLane detects, stores, or synchronizes the result of that
   collection attempt.
 
 Add:
@@ -4168,9 +4168,9 @@ Add:
   - label:
     `Post-memory-approval retry renewed-memory-approval collection result non-persistence`
   - result_scope:
-    `renewed-memory-approval collection result stays outside Loopdeck until the next explicit loop snapshot`
+    `renewed-memory-approval collection result stays outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync renewed-memory-approval collection result state`
+    `PromptLane does not detect, store, or sync renewed-memory-approval collection result state`
   - reason:
     `keeps renewed-memory-approval collection evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -4237,7 +4237,7 @@ Add:
   - reminder:
     `collect a new explicit loop snapshot when renewed-memory-approval collection result is uncertain`
   - not_automated:
-    `Loopdeck does not verify renewed-memory-approval collection result or start collection automatically`
+    `PromptLane does not verify renewed-memory-approval collection result or start collection automatically`
   - reason:
     `keeps renewed-memory-approval collection uncertainty resolution operator-triggered and local-first`
   - writes_files: `false`
@@ -4304,7 +4304,7 @@ Add:
   - advisory:
     `review renewed-memory-approval freshness uncertainty before merge decisions`
   - not_decision:
-    `Loopdeck does not approve merges or verify renewed-memory-approval freshness before merge`
+    `PromptLane does not approve merges or verify renewed-memory-approval freshness before merge`
   - reason:
     `keeps merge readiness separate from renewed-memory-approval freshness uncertainty review`
   - writes_files: `false`
@@ -4355,7 +4355,7 @@ Decision:
 - Selected worktree detail should state that renewed-memory-approval freshness
   uncertainty should be reviewed before continuation handoff.
 - This is needed because the operator can manually hand off a continuation
-  brief after renewed memory approval; Loopdeck should cue the freshness review
+  brief after renewed memory approval; PromptLane should cue the freshness review
   without approving handoffs, inspecting agent UI, or verifying freshness before
   handoff.
 
@@ -4369,7 +4369,7 @@ Add:
   - advisory:
     `review renewed-memory-approval freshness uncertainty before continuation handoff`
   - not_decision:
-    `Loopdeck does not approve handoffs or verify renewed-memory-approval freshness before handoff`
+    `PromptLane does not approve handoffs or verify renewed-memory-approval freshness before handoff`
   - reason:
     `keeps continuation handoff separate from renewed-memory-approval freshness uncertainty review`
   - writes_files: `false`
@@ -4421,7 +4421,7 @@ Decision:
 - Selected worktree detail should state that renewed-memory-approval freshness
   uncertainty should be reviewed before pasting into Codex or Claude Code.
 - This is needed because paste is the point where the local continuation brief
-  crosses into an agent request box; Loopdeck should cue the freshness review
+  crosses into an agent request box; PromptLane should cue the freshness review
   without approving paste targets, inspecting active windows, or verifying
   freshness before paste.
 
@@ -4435,7 +4435,7 @@ Add:
   - advisory:
     `review renewed-memory-approval freshness uncertainty before pasting into Codex or Claude Code`
   - not_decision:
-    `Loopdeck does not approve paste targets or verify renewed-memory-approval freshness before paste`
+    `PromptLane does not approve paste targets or verify renewed-memory-approval freshness before paste`
   - reason:
     `keeps paste readiness separate from renewed-memory-approval freshness uncertainty review`
   - writes_files: `false`
@@ -4489,7 +4489,7 @@ Decision:
 - Selected worktree detail should state that renewed-memory-approval freshness
   uncertainty should be reviewed before submitting in Codex or Claude Code.
 - This is needed because submission is the last manual gate before the agent
-  acts on the pasted brief; Loopdeck should cue the freshness review without
+  acts on the pasted brief; PromptLane should cue the freshness review without
   approving submissions, pressing submit, or verifying freshness before submit.
 
 Add:
@@ -4502,7 +4502,7 @@ Add:
   - advisory:
     `review renewed-memory-approval freshness uncertainty before submitting in Codex or Claude Code`
   - not_decision:
-    `Loopdeck does not approve submissions or verify renewed-memory-approval freshness before submit`
+    `PromptLane does not approve submissions or verify renewed-memory-approval freshness before submit`
   - reason:
     `keeps submission readiness separate from renewed-memory-approval freshness uncertainty review`
   - writes_files: `false`
@@ -4558,7 +4558,7 @@ Decision:
   be collected after submission when renewed-memory-approval freshness is
   uncertain.
 - This is needed because submission can make freshness and agent response state
-  diverge from the approved memory; Loopdeck should cue explicit local snapshot
+  diverge from the approved memory; PromptLane should cue explicit local snapshot
   collection without monitoring submitted state, agent responses, or freshness
   after submit.
 
@@ -4572,7 +4572,7 @@ Add:
   - advisory:
     `collect a new explicit loop snapshot after submission when renewed-memory-approval freshness is uncertain`
   - not_automated:
-    `Loopdeck does not monitor submitted state, agent responses, or renewed-memory-approval freshness after submit`
+    `PromptLane does not monitor submitted state, agent responses, or renewed-memory-approval freshness after submit`
   - reason:
     `keeps post-submit freshness review tied to explicit local snapshot collection`
   - writes_files: `false`
@@ -4623,9 +4623,9 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that post-submit collection result state
-  stays outside Loopdeck until the next explicit loop snapshot.
+  stays outside PromptLane until the next explicit loop snapshot.
 - This is needed because the post-submit freshness advisory asks the operator
-  to collect a new explicit loop snapshot, but Loopdeck should not imply that it
+  to collect a new explicit loop snapshot, but PromptLane should not imply that it
   detects, stores, or synchronizes the result of that collection attempt.
 
 Add:
@@ -4636,9 +4636,9 @@ Add:
   - label:
     `Post-memory-approval retry renewed-memory-approval post-submit collection result non-persistence`
   - result_scope:
-    `post-submit collection result stays outside Loopdeck until the next explicit loop snapshot`
+    `post-submit collection result stays outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync post-submit collection result state`
+    `PromptLane does not detect, store, or sync post-submit collection result state`
   - reason:
     `keeps post-submit collection evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -4693,7 +4693,7 @@ Decision:
 - Selected worktree detail should state that post-submit collection retry is a
   manual operator action.
 - This is needed because the post-submit collection result boundary can leave
-  uncertainty, but Loopdeck should not imply that it retries collection commands
+  uncertainty, but PromptLane should not imply that it retries collection commands
   or performs hidden recovery actions.
 
 Add:
@@ -4706,7 +4706,7 @@ Add:
   - retry:
     `operator reruns the explicit post-submit loop collection flow when retry is needed`
   - not_automated:
-    `Loopdeck does not automatically retry post-submit collection commands or hidden recovery actions`
+    `PromptLane does not automatically retry post-submit collection commands or hidden recovery actions`
   - reason:
     `keeps post-submit collection retry control local and operator-triggered`
   - writes_files: `false`
@@ -4760,9 +4760,9 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that post-submit retry attempt and
-  outcome stay outside Loopdeck until the next explicit loop snapshot.
+  outcome stay outside PromptLane until the next explicit loop snapshot.
 - This is needed because the post-submit collection retry boundary should not
-  imply that Loopdeck detects, stores, or syncs retry success/failure state
+  imply that PromptLane detects, stores, or syncs retry success/failure state
   after the operator reruns the explicit post-submit collection flow.
 
 Add:
@@ -4773,9 +4773,9 @@ Add:
   - label:
     `Post-memory-approval retry renewed-memory-approval post-submit retry outcome non-persistence`
   - outcome_scope:
-    `post-submit retry attempt and outcome stay outside Loopdeck until the next explicit loop snapshot`
+    `post-submit retry attempt and outcome stay outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync post-submit retry success or failure state`
+    `PromptLane does not detect, store, or sync post-submit retry success or failure state`
   - reason:
     `keeps post-submit retry evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -4833,7 +4833,7 @@ Decision:
 - Selected worktree detail should state that the operator checks post-submit
   retry evidence freshness against the latest explicit loop snapshot.
 - This is needed because the post-submit retry outcome boundary should not
-  imply that Loopdeck verifies evidence freshness from git status, transcripts,
+  imply that PromptLane verifies evidence freshness from git status, transcripts,
   or agent UI activity after retry.
 
 Add:
@@ -4846,7 +4846,7 @@ Add:
   - freshness_scope:
     `operator checks post-submit retry evidence freshness against the latest explicit loop snapshot`
   - not_verified:
-    `Loopdeck does not verify post-submit retry evidence freshness from git status, transcripts, or agent UI activity`
+    `PromptLane does not verify post-submit retry evidence freshness from git status, transcripts, or agent UI activity`
   - reason:
     `keeps post-submit retry evidence freshness review tied to local snapshot metadata`
   - writes_files: `false`
@@ -4902,9 +4902,9 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that post-submit retry freshness result
-  stays outside Loopdeck until the next explicit loop snapshot.
+  stays outside PromptLane until the next explicit loop snapshot.
 - This is needed because the post-submit retry evidence freshness boundary
-  should not imply that Loopdeck detects, stores, or syncs freshness result
+  should not imply that PromptLane detects, stores, or syncs freshness result
   state after the operator checks it.
 
 Add:
@@ -4915,9 +4915,9 @@ Add:
   - label:
     `Post-memory-approval retry renewed-memory-approval post-submit retry freshness result non-persistence`
   - result_scope:
-    `post-submit retry freshness result stays outside Loopdeck until the next explicit loop snapshot`
+    `post-submit retry freshness result stays outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync post-submit retry freshness result state`
+    `PromptLane does not detect, store, or sync post-submit retry freshness result state`
   - reason:
     `keeps post-submit retry freshness evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -4988,7 +4988,7 @@ Add:
   - collection_trigger:
     `collect a new explicit loop snapshot when post-submit retry freshness is uncertain`
   - not_automated:
-    `Loopdeck does not verify post-submit retry freshness or start collection automatically`
+    `PromptLane does not verify post-submit retry freshness or start collection automatically`
   - reason:
     `keeps post-submit retry freshness uncertainty resolution operator-triggered and local-first`
   - writes_files: `false`
@@ -5048,7 +5048,7 @@ Decision:
 - Selected worktree detail should advise the operator to review post-submit
   retry freshness uncertainty before approving loop memory again.
 - This is needed because renewed memory approval must remain separate from
-  post-submit retry freshness uncertainty review. Loopdeck should not imply that
+  post-submit retry freshness uncertainty review. PromptLane should not imply that
   this advisory approves memory or verifies freshness.
 
 Add:
@@ -5061,7 +5061,7 @@ Add:
   - advisory:
     `review post-submit retry freshness uncertainty before approving loop memory again`
   - not_decision:
-    `Loopdeck does not approve memory or verify post-submit retry freshness from this advisory`
+    `PromptLane does not approve memory or verify post-submit retry freshness from this advisory`
   - reason:
     `keeps renewed memory approval separate from post-submit retry freshness uncertainty review`
   - writes_files: `false`
@@ -5123,7 +5123,7 @@ Decision:
 - Selected worktree detail should remind the operator to collect a new explicit
   loop snapshot after approving loop memory again after post-submit retry.
 - This is needed because renewed memory approval after post-submit retry can
-  change the next local memory input, but Loopdeck must not start collection or
+  change the next local memory input, but PromptLane must not start collection or
   infer approval from hidden approval signals.
 
 Add:
@@ -5136,7 +5136,7 @@ Add:
   - reminder:
     `collect a new explicit loop snapshot after approving loop memory again after post-submit retry`
   - not_automated:
-    `Loopdeck does not start collection from post-submit retry renewed memory approval or hidden approval signals`
+    `PromptLane does not start collection from post-submit retry renewed memory approval or hidden approval signals`
   - reason:
     `keeps post-submit retry renewed-memory-approval collection operator-triggered and local-first`
   - writes_files: `false`
@@ -5198,10 +5198,10 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that post-submit retry
-  renewed-memory-approval collection result state stays outside Loopdeck until
+  renewed-memory-approval collection result state stays outside PromptLane until
   the next explicit loop snapshot.
-- This is needed because the collection reminder can otherwise imply Loopdeck
-  tracks whether that collection completed. Loopdeck should not detect, store,
+- This is needed because the collection reminder can otherwise imply PromptLane
+  tracks whether that collection completed. PromptLane should not detect, store,
   or sync post-submit retry renewed-memory-approval collection result state.
 
 Add:
@@ -5212,9 +5212,9 @@ Add:
   - label:
     `Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval collection result non-persistence`
   - result_scope:
-    `post-submit retry renewed-memory-approval collection result stays outside Loopdeck until the next explicit loop snapshot`
+    `post-submit retry renewed-memory-approval collection result stays outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync post-submit retry renewed-memory-approval collection result state`
+    `PromptLane does not detect, store, or sync post-submit retry renewed-memory-approval collection result state`
   - reason:
     `keeps post-submit retry renewed-memory-approval collection evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -5280,7 +5280,7 @@ Decision:
   result is uncertain.
 - This is needed because the non-persistence note prevents hidden state
   tracking, but the UI still needs to say what the operator should do next
-  when they cannot tell whether that collection result is usable. Loopdeck
+  when they cannot tell whether that collection result is usable. PromptLane
   should not verify the result or start collection automatically.
 
 Add:
@@ -5293,7 +5293,7 @@ Add:
   - reminder:
     `collect a new explicit loop snapshot when post-submit retry renewed-memory-approval collection result is uncertain`
   - not_automated:
-    `Loopdeck does not verify post-submit retry renewed-memory-approval collection result or start collection automatically`
+    `PromptLane does not verify post-submit retry renewed-memory-approval collection result or start collection automatically`
   - reason:
     `keeps post-submit retry renewed-memory-approval collection uncertainty resolution operator-triggered and local-first`
   - writes_files: `false`
@@ -5361,7 +5361,7 @@ Decision:
 - This is needed because the collection uncertainty reminder tells the operator
   how to recover uncertain collection state, but merge readiness must still
   stay separate from post-submit retry renewed-memory-approval freshness review.
-  Loopdeck should not approve merges or verify freshness before merge.
+  PromptLane should not approve merges or verify freshness before merge.
 
 Add:
 
@@ -5373,7 +5373,7 @@ Add:
   - advisory:
     `review post-submit retry renewed-memory-approval freshness uncertainty before merge decisions`
   - not_decision:
-    `Loopdeck does not approve merges or verify post-submit retry renewed-memory-approval freshness before merge`
+    `PromptLane does not approve merges or verify post-submit retry renewed-memory-approval freshness before merge`
   - reason:
     `keeps merge readiness separate from post-submit retry renewed-memory-approval freshness uncertainty review`
   - writes_files: `false`
@@ -5439,7 +5439,7 @@ Decision:
   retry renewed-memory-approval freshness uncertainty before continuation
   handoff.
 - This is needed because continuation handoff can move stale or uncertain work
-  into Codex or Claude Code even when merge remains separately gated. Loopdeck
+  into Codex or Claude Code even when merge remains separately gated. PromptLane
   should not approve handoffs or verify freshness before handoff.
 
 Add:
@@ -5452,7 +5452,7 @@ Add:
   - advisory:
     `review post-submit retry renewed-memory-approval freshness uncertainty before continuation handoff`
   - not_decision:
-    `Loopdeck does not approve handoffs or verify post-submit retry renewed-memory-approval freshness before handoff`
+    `PromptLane does not approve handoffs or verify post-submit retry renewed-memory-approval freshness before handoff`
   - reason:
     `keeps continuation handoff separate from post-submit retry renewed-memory-approval freshness uncertainty review`
   - writes_files: `false`
@@ -5518,8 +5518,8 @@ Decision:
   retry renewed-memory-approval freshness uncertainty before pasting into Codex
   or Claude Code.
 - This is needed because paste is the last step before the copied continuation
-  brief leaves Loopdeck's local workspace and enters an agent request box.
-  Loopdeck should not approve paste targets or verify freshness before paste.
+  brief leaves PromptLane's local workspace and enters an agent request box.
+  PromptLane should not approve paste targets or verify freshness before paste.
 
 Add:
 
@@ -5531,7 +5531,7 @@ Add:
   - advisory:
     `review post-submit retry renewed-memory-approval freshness uncertainty before pasting into Codex or Claude Code`
   - not_decision:
-    `Loopdeck does not approve paste targets or verify post-submit retry renewed-memory-approval freshness before paste`
+    `PromptLane does not approve paste targets or verify post-submit retry renewed-memory-approval freshness before paste`
   - reason:
     `keeps paste readiness separate from post-submit retry renewed-memory-approval freshness uncertainty review`
   - writes_files: `false`
@@ -5598,7 +5598,7 @@ Decision:
   retry renewed-memory-approval freshness uncertainty before submitting in
   Codex or Claude Code.
 - This is needed because submission is the point where the pasted continuation
-  brief becomes an agent action. Loopdeck should not approve submissions,
+  brief becomes an agent action. PromptLane should not approve submissions,
   verify freshness, press Enter, click submit, or record submitted state.
 
 Add:
@@ -5611,7 +5611,7 @@ Add:
   - advisory:
     `review post-submit retry renewed-memory-approval freshness uncertainty before submitting in Codex or Claude Code`
   - not_decision:
-    `Loopdeck does not approve submissions or verify post-submit retry renewed-memory-approval freshness before submit`
+    `PromptLane does not approve submissions or verify post-submit retry renewed-memory-approval freshness before submit`
   - reason:
     `keeps submission readiness separate from post-submit retry renewed-memory-approval freshness uncertainty review`
   - writes_files: `false`
@@ -5678,7 +5678,7 @@ Decision:
   loop snapshot after submission when post-submit retry renewed-memory-approval
   freshness is uncertain.
 - This is needed because after the operator submits in Codex or Claude Code,
-  Loopdeck should not monitor submitted state, agent responses, or freshness
+  PromptLane should not monitor submitted state, agent responses, or freshness
   changes. The next trustworthy memory input remains an explicit local loop
   snapshot.
 
@@ -5692,7 +5692,7 @@ Add:
   - advisory:
     `collect a new explicit loop snapshot after submission when post-submit retry renewed-memory-approval freshness is uncertain`
   - not_automated:
-    `Loopdeck does not monitor submitted state, agent responses, or post-submit retry renewed-memory-approval freshness after submit`
+    `PromptLane does not monitor submitted state, agent responses, or post-submit retry renewed-memory-approval freshness after submit`
   - reason:
     `keeps post-submit retry renewed-memory-approval freshness review tied to explicit local snapshot collection`
   - writes_files: `false`
@@ -5735,10 +5735,10 @@ Do not add:
 Decision:
 
 - Selected worktree detail should state that post-submit collection result after
-  post-submit retry renewed-memory-approval stays outside Loopdeck until the
+  post-submit retry renewed-memory-approval stays outside PromptLane until the
   next explicit loop snapshot.
 - This is needed because the post-submit freshness advisory could otherwise be
-  misread as completion tracking. Loopdeck should not detect, store, or sync
+  misread as completion tracking. PromptLane should not detect, store, or sync
   the collection result state from Codex, Claude Code, transcripts, or agent UI
   activity.
 
@@ -5750,9 +5750,9 @@ Add:
   - label:
     `Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval post-submit collection result non-persistence`
   - result_scope:
-    `post-submit retry renewed-memory-approval post-submit collection result stays outside Loopdeck until the next explicit loop snapshot`
+    `post-submit retry renewed-memory-approval post-submit collection result stays outside PromptLane until the next explicit loop snapshot`
   - not_stored:
-    `Loopdeck does not detect, store, or sync post-submit retry renewed-memory-approval post-submit collection result state`
+    `PromptLane does not detect, store, or sync post-submit retry renewed-memory-approval post-submit collection result state`
   - reason:
     `keeps post-submit retry renewed-memory-approval post-submit collection evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -5803,7 +5803,7 @@ Decision:
   renewed-memory-approval is uncertain.
 - This is needed because the non-persistence note only states where result
   state does not live. The operator still needs a raw-free next action when
-  result uncertainty remains, without Loopdeck verifying that result or starting
+  result uncertainty remains, without PromptLane verifying that result or starting
   collection automatically.
 
 Add:
@@ -5816,7 +5816,7 @@ Add:
   - reminder:
     `collect a new explicit loop snapshot when post-submit retry renewed-memory-approval post-submit collection result is uncertain`
   - not_automated:
-    `Loopdeck does not verify post-submit retry renewed-memory-approval post-submit collection result or start collection automatically`
+    `PromptLane does not verify post-submit retry renewed-memory-approval post-submit collection result or start collection automatically`
   - reason:
     `keeps post-submit retry renewed-memory-approval post-submit collection uncertainty resolution operator-triggered and local-first`
   - writes_files: `false`
@@ -5870,7 +5870,7 @@ Decision:
   collection freshness uncertainty before merge decisions after post-submit
   retry renewed-memory-approval.
 - This is needed because collection uncertainty can affect merge readiness, but
-  Loopdeck must not approve merges or verify freshness before merge. Merge
+  PromptLane must not approve merges or verify freshness before merge. Merge
   readiness remains an operator decision based on explicit local snapshot
   evidence.
 
@@ -5884,7 +5884,7 @@ Add:
   - advisory:
     `review post-submit retry renewed-memory-approval post-submit collection freshness uncertainty before merge decisions`
   - not_decision:
-    `Loopdeck does not approve merges or verify post-submit retry renewed-memory-approval post-submit collection freshness before merge`
+    `PromptLane does not approve merges or verify post-submit retry renewed-memory-approval post-submit collection freshness before merge`
   - reason:
     `keeps merge readiness separate from post-submit retry renewed-memory-approval post-submit collection freshness uncertainty review`
   - writes_files: `false`
@@ -5938,7 +5938,7 @@ Decision:
   collection freshness uncertainty before continuation handoff after
   post-submit retry renewed-memory-approval.
 - This is needed because collection uncertainty can affect the next handoff,
-  but Loopdeck must not approve handoffs or verify freshness before handoff.
+  but PromptLane must not approve handoffs or verify freshness before handoff.
   Handoff readiness remains an operator decision based on explicit local
   snapshot evidence.
 
@@ -5952,7 +5952,7 @@ Add:
   - advisory:
     `review post-submit retry renewed-memory-approval post-submit collection freshness uncertainty before continuation handoff`
   - not_decision:
-    `Loopdeck does not approve handoffs or verify post-submit retry renewed-memory-approval post-submit collection freshness before handoff`
+    `PromptLane does not approve handoffs or verify post-submit retry renewed-memory-approval post-submit collection freshness before handoff`
   - reason:
     `keeps continuation handoff separate from post-submit retry renewed-memory-approval post-submit collection freshness uncertainty review`
   - writes_files: `false`
@@ -6006,7 +6006,7 @@ Decision:
   collection freshness uncertainty before pasting into Codex or Claude Code
   after post-submit retry renewed-memory-approval.
 - This is needed because collection uncertainty can affect whether the copied
-  continuation brief is still suitable for the target agent, but Loopdeck must
+  continuation brief is still suitable for the target agent, but PromptLane must
   not approve paste targets or verify freshness before paste. Paste readiness
   remains an operator decision based on explicit local snapshot evidence.
 
@@ -6020,7 +6020,7 @@ Add:
   - advisory:
     `review post-submit retry renewed-memory-approval post-submit collection freshness uncertainty before pasting into Codex or Claude Code`
   - not_decision:
-    `Loopdeck does not approve paste targets or verify post-submit retry renewed-memory-approval post-submit collection freshness before paste`
+    `PromptLane does not approve paste targets or verify post-submit retry renewed-memory-approval post-submit collection freshness before paste`
   - reason:
     `keeps paste readiness separate from post-submit retry renewed-memory-approval post-submit collection freshness uncertainty review`
   - writes_files: `false`
@@ -6075,7 +6075,7 @@ Decision:
   collection freshness uncertainty before submitting in Codex or Claude Code
   after post-submit retry renewed-memory-approval.
 - This is needed because collection uncertainty can affect whether the pasted
-  continuation brief is still ready to submit, but Loopdeck must not approve
+  continuation brief is still ready to submit, but PromptLane must not approve
   submissions or verify freshness before submit. Submission readiness remains
   an operator decision based on explicit local snapshot evidence.
 
@@ -6089,7 +6089,7 @@ Add:
   - advisory:
     `review post-submit retry renewed-memory-approval post-submit collection freshness uncertainty before submitting in Codex or Claude Code`
   - not_decision:
-    `Loopdeck does not approve submissions or verify post-submit retry renewed-memory-approval post-submit collection freshness before submit`
+    `PromptLane does not approve submissions or verify post-submit retry renewed-memory-approval post-submit collection freshness before submit`
   - reason:
     `keeps submission readiness separate from post-submit retry renewed-memory-approval post-submit collection freshness uncertainty review`
   - writes_files: `false`
@@ -6143,7 +6143,7 @@ Decision:
   loop snapshot after submission when post-submit retry renewed-memory-approval
   post-submit collection freshness is uncertain.
 - This is needed because freshness uncertainty after submit must be resolved by
-  explicit local snapshot collection, but Loopdeck must not monitor submitted
+  explicit local snapshot collection, but PromptLane must not monitor submitted
   state, agent responses, or freshness after submit.
 
 Add:
@@ -6156,7 +6156,7 @@ Add:
   - advisory:
     `collect a new explicit loop snapshot after submission when post-submit retry renewed-memory-approval post-submit collection freshness is uncertain`
   - not_monitored:
-    `Loopdeck does not monitor submitted state, agent responses, or post-submit retry renewed-memory-approval post-submit collection freshness after submit`
+    `PromptLane does not monitor submitted state, agent responses, or post-submit retry renewed-memory-approval post-submit collection freshness after submit`
   - reason:
     `keeps post-submit retry renewed-memory-approval post-submit collection freshness review tied to explicit local snapshot collection`
   - writes_files: `false`
@@ -6208,10 +6208,10 @@ Decision:
 
 - Selected worktree detail should clarify that post-submit retry
   renewed-memory-approval post-submit collection freshness result state stays
-  outside Loopdeck until the next explicit loop snapshot.
+  outside PromptLane until the next explicit loop snapshot.
 - This is needed because the post-submit collection post-submit freshness
   advisory asks the operator to collect a new explicit loop snapshot when
-  freshness is uncertain, but Loopdeck must not detect, store, sync, or infer
+  freshness is uncertain, but PromptLane must not detect, store, sync, or infer
   freshness result state.
 
 Add:
@@ -6222,9 +6222,9 @@ Add:
   - label:
     `Post-memory-approval retry renewed-memory-approval post-submit retry renewed-memory-approval post-submit collection freshness result non-persistence`
   - not_stored:
-    `post-submit retry renewed-memory-approval post-submit collection freshness result stays outside Loopdeck until the next explicit loop snapshot`
+    `post-submit retry renewed-memory-approval post-submit collection freshness result stays outside PromptLane until the next explicit loop snapshot`
   - not_detected:
-    `Loopdeck does not detect, store, or sync post-submit retry renewed-memory-approval post-submit collection freshness result state`
+    `PromptLane does not detect, store, or sync post-submit retry renewed-memory-approval post-submit collection freshness result state`
   - reason:
     `keeps post-submit retry renewed-memory-approval post-submit collection freshness evidence tied to explicit local snapshot recording`
   - writes_files: `false`
@@ -6293,7 +6293,7 @@ Do not touch web UI or rename package in Slice 1.
 
 Resolved for the first development phase:
 
-- Keep the public CLI command as `prompt-coach` through Slice 1. `loopdeck` can become an alias or package rename only in a brand migration slice.
+- Keep the public CLI command as `promptlane` through Slice 1. `promptlane` can become an alias or package rename only in a brand migration slice.
 - Raw local paths are not stored or returned by default. A future explicit local diagnostic flag may show them to the local user only.
 - Loop snapshots are stored in the local SQLite database first. Markdown export into a project is opt-in and deferred.
 - Codex and Claude Code plugin surfaces may keep separate packaging, but command text and workflow docs should eventually be generated from shared source to reduce drift.
@@ -6304,12 +6304,12 @@ Resolved for the first development phase:
 
 Still open:
 
-- What exact product/package migration date should move from `prompt-coach` to `loopdeck`?
+- What exact product/package migration date should move from `promptlane` to `promptlane`?
 - Should loop snapshots get a numeric "loop quality" score, or only structured outcome status and evidence?
 
 ## 12. Decision
 
-Proceed with Loopdeck as the product direction, but treat the planning document as the primary artifact until the go/no-go gate is satisfied.
+Proceed with PromptLane as the product direction, but treat the planning document as the primary artifact until the go/no-go gate is satisfied.
 
 The immediate next artifact should be:
 
@@ -6317,7 +6317,7 @@ The immediate next artifact should be:
 docs/superpowers/plans/2026-07-04-loop-snapshot-cli-implementation.md
 ```
 
-The plan must use TDD and preserve the existing `prompt-coach` command until a separate brand migration plan is approved.
+The plan must use TDD and preserve the existing `promptlane` command until a separate brand migration plan is approved.
 
 ## 13. Sources Checked
 

@@ -10,10 +10,10 @@ import {
   proposeInstructionPatchFromMemory,
 } from "../../loop/instruction-patch.js";
 import {
-  createLoopdeckCommandCenter,
-  createLoopdeckStatus,
-  type LoopdeckStatusActivityMergeReadiness,
-  toLoopdeckStatusSnapshot,
+  createPromptLaneCommandCenter,
+  createPromptLaneStatus,
+  type PromptLaneStatusActivityMergeReadiness,
+  toPromptLaneStatusSnapshot,
 } from "../../loop/status.js";
 import { decideLoopMemoryCandidate } from "../../loop/memory-candidate.js";
 import {
@@ -100,7 +100,7 @@ export function registerLoopRoutes(
           projectId: latest.project_id,
         }).items
       : [];
-    const status = createLoopdeckStatus({
+    const status = createPromptLaneStatus({
       snapshots,
       compactBoundaries: boundaries,
       projectMemoryCount: projectMemories.length,
@@ -127,7 +127,7 @@ export function registerLoopRoutes(
           );
 
           return {
-            ...toLoopdeckStatusSnapshot(snapshot),
+            ...toPromptLaneStatusSnapshot(snapshot),
             compact_boundary: compactBoundary,
           };
         }),
@@ -172,7 +172,7 @@ export function registerLoopRoutes(
         }).items
       : [];
     const reviewStatus = latestSnapshot
-      ? createLoopdeckStatus({
+      ? createPromptLaneStatus({
           snapshots: allSnapshots,
           compactBoundaries: boundaries,
           projectMemoryCount: 0,
@@ -182,7 +182,7 @@ export function registerLoopRoutes(
     const commandCenter =
       reviewStatus?.activity.command_center ??
       (reviewStatus
-        ? createLoopdeckCommandCenter(reviewStatus.activity.worktrees, mergeDecisions)
+        ? createPromptLaneCommandCenter(reviewStatus.activity.worktrees, mergeDecisions)
         : undefined);
     const reviewPacket = commandCenter?.review_packet;
     const reviewItem = commandCenter?.review_items.find(
@@ -406,7 +406,7 @@ export function registerLoopRoutes(
             }
           : {}),
         items: snapshots.map((snapshot) => ({
-          ...toLoopdeckStatusSnapshot(snapshot),
+          ...toPromptLaneStatusSnapshot(snapshot),
           compact_boundary: latestCompactBoundaryAfterSnapshot(
             snapshot,
             boundaries,
@@ -574,8 +574,8 @@ export function registerLoopRoutes(
         next_action:
           "use recorded memory as local context in future loop briefs",
         next_actions: [
-          "prompt-coach loop brief",
-          "prompt-coach loop instruction-patch --target-file AGENTS.md",
+          "promptlane loop brief",
+          "promptlane loop instruction-patch --target-file AGENTS.md",
         ],
         privacy: {
           local_only: true,
@@ -2130,16 +2130,16 @@ function postCollectionReviewNoteFor(): {
 }
 
 function briefRationaleFor(
-  mergeReadiness: LoopdeckStatusActivityMergeReadiness,
+  mergeReadiness: PromptLaneStatusActivityMergeReadiness,
 ): {
   label: "Brief rationale";
-  merge_readiness: LoopdeckStatusActivityMergeReadiness["status"];
+  merge_readiness: PromptLaneStatusActivityMergeReadiness["status"];
   reason:
     | "selected brief continues a ready worktree after evidence comparison"
     | "selected brief continues review work without marking it merge-ready"
     | "selected brief can continue evidence collection before merge";
   next_action: "copy selected continuation brief";
-  merge_gate: LoopdeckStatusActivityMergeReadiness["next_action"];
+  merge_gate: PromptLaneStatusActivityMergeReadiness["next_action"];
 } {
   if (mergeReadiness.status === "missing_evidence") {
     return {

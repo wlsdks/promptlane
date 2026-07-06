@@ -785,7 +785,7 @@ export function App() {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `prompt-coach-${exportPayload.job_id}.json`;
+    anchor.download = `promptlane-${exportPayload.job_id}.json`;
     anchor.click();
     URL.revokeObjectURL(url);
   }
@@ -830,7 +830,7 @@ export function App() {
         <div className="sidebar-header">
           <div className="brand">
             <Database size={16} />
-            <span className="sidebar-label">prompt-coach</span>
+            <span className="sidebar-label">promptlane</span>
           </div>
           <button
             aria-expanded={!sidebarCollapsed}
@@ -2305,7 +2305,7 @@ function SettingsView({
         <p className="muted">
           Use the CLI doctor command for detailed diagnostics.
         </p>
-        <code>prompt-coach doctor claude-code</code>
+        <code>promptlane doctor claude-code</code>
       </section>
     </div>
   );
@@ -2326,7 +2326,7 @@ function ProjectsView({
     return (
       <div className="panel empty">
         <h2>No project records yet.</h2>
-        <code>prompt-coach setup</code>
+        <code>promptlane setup</code>
       </div>
     );
   }
@@ -2555,7 +2555,7 @@ function ExportView({
       ) : (
         <section className="panel empty">
           <h2>No preview yet.</h2>
-          <code>prompt-coach export --anonymized --preview</code>
+          <code>promptlane export --anonymized --preview</code>
         </section>
       )}
 
@@ -2868,11 +2868,11 @@ function emptyPromptCommands(
   }
 
   return [
-    "prompt-coach start",
-    "prompt-coach setup --profile coach",
-    "prompt-coach doctor claude-code",
-    "prompt-coach doctor codex",
-    "prompt-coach coach",
+    "promptlane start",
+    "promptlane setup --profile coach",
+    "promptlane doctor claude-code",
+    "promptlane doctor codex",
+    "promptlane coach",
   ];
 }
 

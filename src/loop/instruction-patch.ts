@@ -81,7 +81,7 @@ export function proposeInstructionPatchFromMemory(input: {
       "review this patch proposal, then apply it manually only if the instruction belongs in the project",
     apply_gate: {
       web_apply_available: false,
-      confirm_command: `prompt-coach loop instruction-apply --target-file ${targetFile} --confirm-apply`,
+      confirm_command: `promptlane loop instruction-apply --target-file ${targetFile} --confirm-apply`,
       mcp_tool: "apply_instruction_patch",
       reason:
         "web review does not write files; apply through CLI or MCP with explicit confirmation",

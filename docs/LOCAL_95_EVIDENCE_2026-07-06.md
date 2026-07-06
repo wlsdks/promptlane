@@ -8,14 +8,14 @@ state.
 It does not complete the remaining externally gated evidence:
 
 - native dialog approved dogfood still requires explicit operator approval
-  before running `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm
+  before running `PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm
   dogfood:mcp-native-dialog-approved`.
 
 ## Command Evidence
 
 | Command | Result | Evidence |
 | --- | --- | --- |
-| `corepack pnpm smoke:hooks` | PASS | Built server/web assets, verified `prompt-coach` hook status, Claude Code fail-open, Codex fail-open, `loopdeck` compatibility hook status, and compatibility fail-open paths. Ended with `hook binary smoke passed`. |
+| `corepack pnpm smoke:hooks` | PASS | Built server/web assets, verified `promptlane` hook status, Claude Code fail-open, Codex fail-open, `promptlane` compatibility hook status, and compatibility fail-open paths. Ended with `hook binary smoke passed`. |
 | `corepack pnpm smoke:mcp-coach-loop` | PASS | Built server/web assets, started the stdio MCP smoke path, and exercised score, coach, improve, clarification, record, and effectiveness evidence flows. Ended with `mcp coach loop smoke passed`. |
 | `corepack pnpm dogfood:first-coach-loop` | PASS | Built server/web assets, initialized an isolated PromptLane archive, started a local server, captured a Codex prompt through the hook, ran `coach --json`, `loop collect --json`, and `loop brief --json`. Ended with `first coach loop dogfood passed`. |
 | `corepack pnpm dogfood:loop-memory-approval` | PASS | Built server/web assets, captured a Codex prompt through the local server, collected a loop snapshot, started MCP, recorded a loop outcome, proposed a memory candidate, recorded approved memory, and proposed an instruction patch. Ended with `loop memory approval dogfood passed`. |

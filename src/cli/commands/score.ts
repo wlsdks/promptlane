@@ -6,7 +6,7 @@ import {
   type ArchiveScoreOptions,
   type ArchiveScoreReport,
 } from "../../analysis/archive-score.js";
-import { loadHookAuth, loadPromptCoachConfig } from "../../config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../../config/config.js";
 import {
   scorePromptTool,
   type ScorePromptToolResult,
@@ -34,7 +34,7 @@ export function registerScoreCommand(program: Command): void {
     .description(
       "Score the local prompt archive without returning prompt bodies.",
     )
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--json", "Print JSON.")
     .option(
       "--text <prompt>",
@@ -102,13 +102,13 @@ function readScorePromptInput(options: ScoreCliOptions): string {
 
   if (raw === undefined) {
     throw new UserError(
-      '--text or --stdin is required to score text directly. Try: prompt-coach score --text "add caching to fetchUser"',
+      '--text or --stdin is required to score text directly. Try: promptlane score --text "add caching to fetchUser"',
     );
   }
 
   if (!raw.trim()) {
     throw new UserError(
-      'Prompt must not be empty. Try: prompt-coach score --text "add caching to fetchUser"',
+      'Prompt must not be empty. Try: promptlane score --text "add caching to fetchUser"',
     );
   }
 
@@ -163,7 +163,7 @@ function withStorage<T>(
   dataDir: string | undefined,
   callback: (storage: ReturnType<typeof createSqlitePromptStorage>) => T,
 ): T {
-  const config = loadPromptCoachConfig(dataDir);
+  const config = loadPromptLaneConfig(dataDir);
   const hookAuth = loadHookAuth(dataDir);
   const storage = createSqlitePromptStorage({
     dataDir: config.data_dir,
@@ -228,7 +228,7 @@ function formatArchiveScoreReport(report: ArchiveScoreReport): string {
   if (report.archive_score.scored_prompts === 0) {
     lines.push(
       "",
-      "No prompts captured yet. Run prompt-coach start to see the shortest setup -> real prompt -> score path.",
+      "No prompts captured yet. Run promptlane start to see the shortest setup -> real prompt -> score path.",
     );
   }
 

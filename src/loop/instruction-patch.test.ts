@@ -50,7 +50,7 @@ describe("proposeInstructionPatchFromMemory", () => {
     expect(proposal.apply_gate).toEqual({
       web_apply_available: false,
       confirm_command:
-        "prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply",
+        "promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply",
       mcp_tool: "apply_instruction_patch",
       reason:
         "web review does not write files; apply through CLI or MCP with explicit confirmation",
@@ -69,7 +69,7 @@ describe("proposeInstructionPatchFromMemory", () => {
   });
 
   it("applies an approved memory to AGENTS.md only after explicit confirmation", () => {
-    const targetDir = join(tmpdir(), `prompt-coach-instruction-${Date.now()}`);
+    const targetDir = join(tmpdir(), `promptlane-instruction-${Date.now()}`);
     const targetPath = join(targetDir, "AGENTS.md");
     try {
       mkdirSync(targetDir, { recursive: true });

@@ -15,14 +15,14 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cliPath = join(repoRoot, "dist", "cli", "index.js");
-const tempRoot = mkdtempSync(join(tmpdir(), "prompt-coach-loop-memory-"));
+const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-loop-memory-"));
 const dataDir = join(tempRoot, "data");
 const homeDir = join(tempRoot, "home");
 const projectDir = join(homeDir, "project");
 const instructionFile = join(projectDir, "AGENTS.md");
 const serverPort = 20_000 + Math.floor(Math.random() * 20_000);
 const serverBaseUrl = `http://127.0.0.1:${serverPort}`;
-const secret = "PROMPT_COACH_LOOP_MEMORY_SECRET sk-proj-loopmemory1234567890";
+const secret = "PROMPTLANE_LOOP_MEMORY_SECRET sk-proj-loopmemory1234567890";
 const timeoutMs = 10_000;
 const cliEnv = {
   ...process.env,
@@ -106,7 +106,7 @@ try {
     protocolVersion: "2025-06-18",
     capabilities: {},
     clientInfo: {
-      name: "prompt-coach-loop-memory-approval-dogfood",
+      name: "promptlane-loop-memory-approval-dogfood",
       version: "0.0.0",
     },
   });
@@ -281,12 +281,12 @@ function runCli(args, options = {}) {
   });
   if (result.status !== 0) {
     throw new Error(
-      `CLI failed: prompt-coach ${args.join(" ")}\n${result.stderr}`,
+      `CLI failed: promptlane ${args.join(" ")}\n${result.stderr}`,
     );
   }
   if (result.stderr.trim()) {
     throw new Error(
-      `CLI printed unexpected stderr: prompt-coach ${args.join(" ")}\n${result.stderr}`,
+      `CLI printed unexpected stderr: promptlane ${args.join(" ")}\n${result.stderr}`,
     );
   }
   return result.stdout.trim();

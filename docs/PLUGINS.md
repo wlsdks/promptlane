@@ -2,10 +2,10 @@
 
 PromptLane is a local-first prompt improvement workspace with loop-aware continuation
 for Codex, Claude Code, and long-running coding-agent work.
-`prompt-coach` remains the compatibility package, CLI, hook command, slash
+`promptlane` remains the compatibility package, CLI, hook command, slash
 namespace, and MCP server name.
 
-`prompt-coach` supports two integration layers:
+`promptlane` supports two integration layers:
 
 - an explicit setup command that installs hooks and, where supported, a local
   server service
@@ -15,15 +15,15 @@ namespace, and MCP server name.
 ## Why Setup Is Still Required
 
 Installing a package should not silently edit user-level agent settings, install
-login services, or start a background server. `prompt-coach setup` is the
+login services, or start a background server. `promptlane setup` is the
 consent step that performs those local changes.
 
 The plugin package is therefore discovery and convenience, not hidden
 installation. Users who want active prompt coaching should still run:
 
 ```sh
-prompt-coach start
-prompt-coach setup --profile coach --register-mcp --open-web
+promptlane start
+promptlane setup --profile coach --register-mcp --open-web
 ```
 
 The coach profile installs capture hooks, low-friction rewrite guidance through
@@ -32,15 +32,15 @@ line when Claude Code is detected. `--register-mcp` is explicit consent to run
 the detected agent CLI registration commands for the PromptLane MCP server,
 which gives the active agent session access to coach/rewrite/judge tools. From a
 development checkout, run `pnpm setup`; it registers MCP with absolute Node +
-`dist/cli/index.js` paths so Codex does not require a global `prompt-coach`
-binary in `PATH`. Plain `prompt-coach setup` remains available for passive
+`dist/cli/index.js` paths so Codex does not require a global `promptlane`
+binary in `PATH`. Plain `promptlane setup` remains available for passive
 capture only.
 
 Users who want the web workspace to open automatically when Claude Code or Codex
 starts can explicitly add `--open-web`:
 
 ```sh
-prompt-coach setup --profile coach --register-mcp --open-web
+promptlane setup --profile coach --register-mcp --open-web
 ```
 
 This installs a `SessionStart` hook, ensures the local server is available, and
@@ -50,7 +50,7 @@ installing a plugin should not surprise users by launching a browser.
 Use a preview first when reviewing changes:
 
 ```sh
-prompt-coach setup --profile coach --register-mcp --dry-run
+promptlane setup --profile coach --register-mcp --dry-run
 ```
 
 ## Codex Plugin
@@ -58,16 +58,16 @@ prompt-coach setup --profile coach --register-mcp --dry-run
 The repo-local Codex plugin lives in:
 
 ```text
-plugins/prompt-coach
+plugins/promptlane
 ```
 
 It includes:
 
 - `.codex-plugin/plugin.json` for plugin metadata
-- `skills/prompt-coach/SKILL.md` so Codex can help install, diagnose, and use
+- `skills/promptlane/SKILL.md` so Codex can help install, diagnose, and use
   the archive
 
-The Codex plugin does not bundle active Codex hooks; setup installs user-level hooks explicitly. This prevents plugin-managed hooks and setup-installed hooks from both firing for the same `UserPromptSubmit` event. `prompt-coach setup`
+The Codex plugin does not bundle active Codex hooks; setup installs user-level hooks explicitly. This prevents plugin-managed hooks and setup-installed hooks from both firing for the same `UserPromptSubmit` event. `promptlane setup`
 remains the reliable path for normal users because setup records an absolute CLI
 command and can configure the local service.
 
@@ -77,9 +77,9 @@ Claude Code can consume this repository as a plugin marketplace:
 
 ```text
 /plugin marketplace add wlsdks/promptlane
-/plugin install prompt-coach
+/plugin install promptlane
 /reload-plugins
-/prompt-coach:setup
+/promptlane:setup
 ```
 
 The Claude Code plugin files live in:
@@ -91,60 +91,60 @@ commands
 
 The plugin exposes:
 
-- `/prompt-coach:setup` to preview and run local setup
-- `/prompt-coach:status` to run doctor and statusLine checks
-- `/prompt-coach:buddy` to show the side-pane buddy command and one-shot
+- `/promptlane:setup` to preview and run local setup
+- `/promptlane:status` to run doctor and statusLine checks
+- `/promptlane:buddy` to show the side-pane buddy command and one-shot
   checks
-- `/prompt-coach:coach` to run the one-call prompt coach workflow inside
+- `/promptlane:coach` to run the one-call prompt coach workflow inside
   Claude Code
-- `/prompt-coach:score` to score the latest captured request or the
+- `/promptlane:score` to score the latest captured request or the
   accumulated archive
-- `/prompt-coach:judge` to ask the active Claude Code session to judge a
+- `/promptlane:judge` to ask the active Claude Code session to judge a
   bounded batch of low-scoring redacted prompts through MCP
-- `/prompt-coach:improve-last` to generate an approval-ready rewrite for the
+- `/promptlane:improve-last` to generate an approval-ready rewrite for the
   latest captured request, in either deterministic or active-agent mode
-- `/prompt-coach:habits` to summarize recurring prompt habit gaps
-- `/prompt-coach:open` to open the local archive
+- `/promptlane:habits` to summarize recurring prompt habit gaps
+- `/promptlane:open` to open the local archive
 
-Claude Code slash commands remain under `/prompt-coach:*` during the PromptLane
-compatibility window. The npm package also installs a legacy `loopdeck` CLI alias for manual
+Claude Code slash commands remain under `/promptlane:*` during the PromptLane
+compatibility window. The npm package also installs a legacy `promptlane` CLI alias for manual
 terminal fallbacks, but plugin command ids stay stable until a dedicated plugin
 rename plan is implemented. That gate is documented in
-`docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md`.
-`/loopdeck:*` is a planned alias-only slash namespace for a later compatibility
+`docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md`.
+`/promptlane:*` is a planned alias-only slash namespace for a later compatibility
 slice. Do not ship it as the only namespace; this package does not include
-`/loopdeck:*` command files yet, and `/prompt-coach:*` remains required.
+`/promptlane:*` command files yet, and `/promptlane:*` remains required.
 
 Prompt capture still uses Claude Code hook configuration in settings files. The
 supported install paths are:
 
 ```sh
-prompt-coach setup --profile coach --register-mcp --open-web
-prompt-coach install-hook claude-code
+promptlane setup --profile coach --register-mcp --open-web
+promptlane install-hook claude-code
 ```
 
 The coach profile also installs the optional Claude Code status line. It can be
 managed manually with:
 
 ```sh
-prompt-coach install-statusline claude-code
-prompt-coach statusline claude-code
+promptlane install-statusline claude-code
+promptlane statusline claude-code
 ```
 
 This status line reports capture readiness, server health, the latest prompt
 score when available, and the last ingest status. Claude Code supports one
-`statusLine` command, so prompt-coach preserves an existing HUD by chaining the
-previous command and the prompt-coach command into one status line. Uninstall
-restores the previous command when prompt-coach captured it during install. The
+`statusLine` command, so promptlane preserves an existing HUD by chaining the
+previous command and the promptlane command into one status line. Uninstall
+restores the previous command when promptlane captured it during install. The
 setup command must ask before installing it.
 
 Claude Code and Codex can also use an always-on side-pane buddy in a second
 terminal pane:
 
 ```sh
-prompt-coach buddy
-prompt-coach buddy --once
-prompt-coach buddy --json
+promptlane buddy
+promptlane buddy --once
+promptlane buddy --json
 ```
 
 The buddy prints latest prompt score, tool, top gap, habit score, and the next
@@ -152,24 +152,24 @@ move without returning prompt bodies, raw paths, or secrets.
 
 ## Agent Wrappers
 
-The npm package also ships experimental `pc-claude` and `pc-codex` binaries.
+The npm package also ships experimental `pl-claude` and `pl-codex` binaries.
 They sit in front of the real agent binary for the initial prompt argument:
 
 ```sh
-pc-claude --pc-mode auto -- "fix this"
-pc-codex --pc-mode auto -- "fix this"
-pc-codex --pc-mode auto -- exec "fix this"
+pl-claude --pc-mode auto -- "fix this"
+pl-codex --pc-mode auto -- "fix this"
+pl-codex --pc-mode auto -- exec "fix this"
 ```
 
 Use `--pc-dry-run` to inspect the local rewrite plan without launching the real
 agent:
 
 ```sh
-pc-claude --pc-mode auto --pc-dry-run -- "fix this"
-pc-codex --pc-mode auto --pc-dry-run -- "fix this"
+pl-claude --pc-mode auto --pc-dry-run -- "fix this"
+pl-codex --pc-mode auto --pc-dry-run -- "fix this"
 ```
 
-Run `pc-claude --pc-help` or `pc-codex --pc-help` to see every supported flag
+Run `pl-claude --pc-help` or `pl-codex --pc-help` to see every supported flag
 (`--pc-mode`, `--pc-min-score`, `--pc-language`, `--pc-dry-run`) with working
 example invocations.
 
@@ -189,22 +189,22 @@ uses the exact CLI path from the current installation.
 
 ## MCP Prompt Scoring
 
-`prompt-coach` also ships a local stdio MCP server:
+`promptlane` also ships a local stdio MCP server:
 
 ```sh
-prompt-coach mcp
+promptlane mcp
 ```
 
 This server exposes twenty model-controlled tools:
 
-- `get_prompt_coach_status`
+- `get_promptlane_status`
 - `coach_prompt`
 - `score_prompt`
 - `improve_prompt`
 - `apply_clarifications`
 - `ask_clarifying_questions`
 - `record_clarifications`
-- `get_loopdeck_status`
+- `get_promptlane_status`
 - `prepare_loop_brief`
 - `record_loop_outcome`
 - `propose_loop_memory_candidate`
@@ -221,9 +221,9 @@ This server exposes twenty model-controlled tools:
 `coach_prompt` is the default agent-facing workflow. It combines local archive
 status, latest prompt score, approval-required rewrite, recent habit review,
 project instruction review, and next request guidance in one read-only call.
-`get_prompt_coach_status` checks local archive readiness and returns safe
+`get_promptlane_status` checks local archive readiness and returns safe
 counts, latest prompt metadata, available tool names, and next actions.
-`get_loopdeck_status` checks whether local loop snapshots exist and returns
+`get_promptlane_status` checks whether local loop snapshots exist and returns
 safe latest-loop metadata. It also reports safe compact-boundary metadata when
 a compact happened after the latest snapshot. `prepare_loop_brief` returns a
 copy-ready continuation prompt from the latest PromptLane snapshot, or from the
@@ -248,19 +248,19 @@ explicit apply gate. The web review panel does not write those files.
 `confirm_apply` is true, is idempotent by source memory id, and does not return
 raw paths.
 
-The local CLI mirrors that loop surface with `prompt-coach loop status`,
-`prompt-coach loop collect`, `prompt-coach loop brief`, and
-`prompt-coach loop memory-candidate`; approved memories are recorded with
-`prompt-coach loop memory-approve`. `prompt-coach loop brief` accepts optional
+The local CLI mirrors that loop surface with `promptlane loop status`,
+`promptlane loop collect`, `promptlane loop brief`, and
+`promptlane loop memory-candidate`; approved memories are recorded with
+`promptlane loop memory-approve`. `promptlane loop brief` accepts optional
 `--worktree`, `--session`, and `--branch` filters so Codex or Claude Code can
 continue the same selected worktree/session/branch even when another worktree
 has a newer snapshot. Use
-`prompt-coach loop instruction-patch --target-file AGENTS.md` to generate the
+`promptlane loop instruction-patch --target-file AGENTS.md` to generate the
 review-only instruction patch. Use
-`prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply`
+`promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply`
 only after reviewing the proposal and intending to write the file; the web
-review panel intentionally has no apply button. `get_loopdeck_status`,
-`/api/v1/loops`, and `prompt-coach loop status` include raw-free worktree and
+review panel intentionally has no apply button. `get_promptlane_status`,
+`/api/v1/loops`, and `promptlane loop status` include raw-free worktree and
 session activity counts plus per-worktree safe labels, snapshot counts, and
 latest outcome status so active agents can notice parallel work before merging
 or handing off. The web Loops view can open and deep-link a selected worktree
@@ -268,12 +268,12 @@ detail panel through `/api/v1/loops/worktrees/:worktree`, still limited to safe
 loop metadata. The drilldown can also be narrowed with
 `/loops?worktree=<safe-label>&session=<safe-session-id>&branch=<safe-branch>`,
 backed by the API `session_id` and `branch` filters and still raw-free. Use
-`prompt-coach loop collect --source service` as the explicit one-shot command
+`promptlane loop collect --source service` as the explicit one-shot command
 for cron or LaunchAgent collection; it does not silently install a scheduler.
-The opt-in macOS schedule is `prompt-coach loop schedule install`; use
+The opt-in macOS schedule is `promptlane loop schedule install`; use
 `--dry-run` to inspect the LaunchAgent before writing it. Use
-`prompt-coach loop schedule status` to check whether the plist exists and
-`prompt-coach loop schedule uninstall` to remove it. `loop status` prints
+`promptlane loop schedule status` to check whether the plist exists and
+`promptlane loop schedule uninstall` to remove it. `loop status` prints
 snapshot readiness, latest safe loop metadata, and compact refresh guidance
 without prompt bodies, compact summaries, custom compact instructions, or raw
 paths.
@@ -324,7 +324,7 @@ avoid raw absolute paths, and the instruction review tool avoids file bodies and
 raw absolute paths. The agent rewrite/judge packets are explicit because they
 return redacted prompt bodies to the active user-controlled agent session for
 rewrite or evaluation; that agent may send the packet through its provider
-session according to the user's tool setup. `prompt-coach` does not extract,
+session according to the user's tool setup. `promptlane` does not extract,
 proxy, or reuse provider credentials. Read tool definitions are marked
 read-only, idempotent, and local-only through MCP annotations.
 `record_agent_rewrite` and
@@ -336,7 +336,7 @@ structured result. If MCP is not configured, users can run the same local archiv
 review through:
 
 ```sh
-prompt-coach score --json
+promptlane score --json
 ```
 
 ## Prompt Rewrite Guard
@@ -345,8 +345,8 @@ For users who want a stronger query-rewriting workflow, the hook can be
 installed with an opt-in guard:
 
 ```sh
-prompt-coach install-hook claude-code --rewrite-guard block-and-copy --rewrite-min-score 80
-prompt-coach install-hook codex --rewrite-guard block-and-copy --rewrite-min-score 80
+promptlane install-hook claude-code --rewrite-guard block-and-copy --rewrite-min-score 80
+promptlane install-hook codex --rewrite-guard block-and-copy --rewrite-min-score 80
 ```
 
 This uses the official `UserPromptSubmit` hook decision path where supported.
@@ -357,10 +357,10 @@ rewrite the interactive composer, or auto-submit prompts. If local ingest is
 unavailable or fails, the hook fails open and does not block.
 
 The installed hook set also includes `Stop`, `PreCompact`, and `PostCompact`.
-Stop events are handled locally: prompt-coach collects a PromptLane snapshot from
+Stop events are handled locally: promptlane collects a PromptLane snapshot from
 recent prompt metadata without posting the lifecycle event to the prompt ingest
 route. Compact events record only safe boundary metadata and an optional HMAC
-content hash; prompt-coach does not store prompt bodies, raw paths, transcript
+content hash; promptlane does not store prompt bodies, raw paths, transcript
 contents, custom compact instructions, or compact summaries.
 
 `--rewrite-guard context` is less disruptive: it allows the original prompt to
@@ -370,51 +370,51 @@ replacement because the original submitted prompt remains part of the turn.
 Claude Code registration:
 
 ```sh
-claude mcp add --transport stdio prompt-coach -- prompt-coach mcp
+claude mcp add --transport stdio promptlane -- promptlane mcp
 ```
 
 Codex registration:
 
 ```sh
-codex mcp add prompt-coach -- prompt-coach mcp
+codex mcp add promptlane -- promptlane mcp
 ```
 
-The manual commands above assume `prompt-coach` is globally available in
+The manual commands above assume `promptlane` is globally available in
 `PATH`. In a cloned checkout, use `pnpm setup` or
-`pnpm prompt-coach setup --profile coach --register-mcp --open-web` so the MCP
+`pnpm promptlane setup --profile coach --register-mcp --open-web` so the MCP
 registration uses absolute paths.
 
-After registration, `prompt-coach doctor claude-code` and
-`prompt-coach doctor codex` report MCP command access. The doctor command first
+After registration, `promptlane doctor claude-code` and
+`promptlane doctor codex` report MCP command access. The doctor command first
 inspects known local config files, then uses read-only `claude mcp list` or
 `codex mcp list` as a fallback when config-file detection is inconclusive.
 
 Use `--data-dir` when the archive is not in the default location:
 
 ```sh
-prompt-coach mcp --data-dir /path/to/prompt-coach-data
+promptlane mcp --data-dir /path/to/promptlane-data
 ```
 
 For agent-native usage, prefer MCP first and CLI fallback second:
 
 ```text
-prompt-coach:score_prompt latest=true
-prompt-coach:improve_prompt latest=true
-prompt-coach:score_prompt_archive max_prompts=200
-prompt-coach:review_project_instructions latest=true
-prompt-coach:coach_prompt
-prompt-coach:prepare_agent_rewrite latest=true
-prompt-coach:record_agent_rewrite provider=codex prompt_id=...
-prompt-coach:prepare_agent_judge_batch selection=low_score max_prompts=5
-prompt-coach:record_agent_judgments provider=codex judgments=[...]
+promptlane:score_prompt latest=true
+promptlane:improve_prompt latest=true
+promptlane:score_prompt_archive max_prompts=200
+promptlane:review_project_instructions latest=true
+promptlane:coach_prompt
+promptlane:prepare_agent_rewrite latest=true
+promptlane:record_agent_rewrite provider=codex prompt_id=...
+promptlane:prepare_agent_judge_batch selection=low_score max_prompts=5
+promptlane:record_agent_judgments provider=codex judgments=[...]
 ```
 
 ```sh
-prompt-coach coach
-prompt-coach coach --json
-prompt-coach score --latest --json
-prompt-coach improve --latest --json
-prompt-coach score --json --limit 200
+promptlane coach
+promptlane coach --json
+promptlane score --latest --json
+promptlane improve --latest --json
+promptlane score --json --limit 200
 ```
 
 ## Local-First Boundary

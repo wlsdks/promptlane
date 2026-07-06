@@ -38,7 +38,7 @@ if (nativeDialog.status !== "complete") {
     id: "native_dialog_approved_dogfood",
     status: nativeDialog.status,
     next_action:
-      "Get explicit operator approval before running PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved.",
+      "Get explicit operator approval before running PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved.",
   });
 }
 
@@ -116,7 +116,7 @@ function readNativeDialogEvidence() {
   const approvedAnswered =
     audit.includes("approved native dialog dogfood passed") &&
     audit.includes('interaction_status: "answered"') &&
-    audit.includes("PROMPT_COACH_NATIVE_DIALOG_APPROVED=1");
+    audit.includes("PROMPTLANE_NATIVE_DIALOG_APPROVED=1");
 
   return {
     check: "native_dialog_approved_dogfood",
@@ -168,7 +168,7 @@ function readCompletedEvidence() {
     readme = readFileSync("README.md", "utf8");
     packageJson = readFileSync("package.json", "utf8");
     codexPlugin = readFileSync(
-      "plugins/prompt-coach/.codex-plugin/plugin.json",
+      "plugins/promptlane/.codex-plugin/plugin.json",
       "utf8",
     );
     claudePlugin = readFileSync(".claude-plugin/plugin.json", "utf8");
@@ -204,7 +204,7 @@ function readCompletedEvidence() {
     product_positioning_metadata_alignment:
       productEvidence.includes("wlsdks/promptlane") &&
       productEvidence.includes("Prompt improvement is the first value") &&
-      productEvidence.includes("Loopdeck is historical or compatibility-only") &&
+      productEvidence.includes("PromptLane is historical or compatibility-only") &&
       productEvidence.includes("GitHub repository metadata") &&
       promptlane.includes("Product name: PromptLane.") &&
       promptlane.includes("PromptLane starts with prompt improvement") &&
@@ -255,7 +255,7 @@ function readCompletedEvidence() {
     codex_claude_setup_smoke_refresh:
       plan.includes("codex_claude_setup_smoke_refresh") &&
       plan.includes("corepack pnpm smoke:agent-setup") &&
-      plan.includes("prompt-coach agent setup smoke passed"),
+      plan.includes("promptlane agent setup smoke passed"),
     local_95_evidence_sweep:
       plan.includes("docs/LOCAL_95_EVIDENCE_2026-07-06.md") &&
       localEvidence.includes("corepack pnpm smoke:hooks") &&
@@ -405,7 +405,7 @@ function recommendedNextSlices({
       axis: "scorecard_review",
       priority: 10,
       blocked_by_external_event: false,
-      command: "prompt-coach quality-evidence --json",
+      command: "promptlane quality-evidence --json",
       expected_effect:
         "Review axes whose local evidence is present and whose only remaining gap is scorecard_level_below_9_5.",
     });
@@ -464,7 +464,7 @@ function recommendedNextSlices({
       blocked_by_external_event: true,
       blocked_reason: "operator_approval_required",
       command:
-        "PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved",
+        "PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved",
       preconditions: [
         "The operator explicitly approves opening a native OS dialog.",
       ],

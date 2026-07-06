@@ -4,7 +4,7 @@ Date: 2026-05-02
 
 ## Purpose
 
-Benchmark v1 is the local regression benchmark for `prompt-coach`. It checks whether the product is still delivering its core value to Claude Code and Codex users:
+Benchmark v1 is the local regression benchmark for `promptlane`. It checks whether the product is still delivering its core value to Claude Code and Codex users:
 
 - finding previously useful prompts again
 - surfacing weak prompting habits
@@ -72,7 +72,7 @@ Pass threshold:
 
 - `>= 0.8`
 
-### 3. Prompt Coach Quality
+### 3. PromptLane Quality
 
 Checks:
 
@@ -172,7 +172,7 @@ Output:
 
 This is reported only — there is no pass threshold on lift today, since the synthetic corpus does not exercise spec-style language. Once real user fixtures land (P2-1), the average lift becomes a meaningful trend signal.
 
-To enable a rule for live ingest, edit `~/.prompt-coach/config.json`:
+To enable a rule for live ingest, edit `~/.promptlane/config.json`:
 
 ```json
 {

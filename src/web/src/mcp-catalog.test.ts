@@ -37,7 +37,7 @@ describe("mcp catalog", () => {
   it("keeps tool catalog privacy-safe", () => {
     expect(MCP_TOOL_CATALOG).toHaveLength(10);
     expect(MCP_TOOL_CATALOG.map((tool) => tool.name)).toEqual([
-      "get_prompt_coach_status",
+      "get_promptlane_status",
       "coach_prompt",
       "score_prompt",
       "improve_prompt",
@@ -55,7 +55,7 @@ describe("mcp catalog", () => {
 
   it("keeps the recommended flow coach-first after readiness", () => {
     expect(MCP_FLOW_STEPS.map((step) => step.tool)).toEqual([
-      "get_prompt_coach_status",
+      "get_promptlane_status",
       "coach_prompt",
       "score_prompt",
       "improve_prompt",
@@ -68,12 +68,12 @@ describe("mcp catalog", () => {
     const readiness = createMcpReadiness({});
 
     expect(readiness.tone).toBe("muted");
-    expect(readiness.firstCall).toBe("get_prompt_coach_status");
+    expect(readiness.firstCall).toBe("get_promptlane_status");
   });
 
   it("promotes one-call coaching after prompts are captured", () => {
     const settings: SettingsResponse = {
-      data_dir: "/tmp/prompt-coach",
+      data_dir: "/tmp/promptlane",
       excluded_project_roots: [],
       redaction_mode: "mask",
       server: { host: "127.0.0.1", port: 17373 },
@@ -106,7 +106,6 @@ describe("mcp catalog", () => {
     expect(readiness.summary).toBe(
       "Start the local PromptLane server before using Claude Code or Codex MCP tools.",
     );
-    expect(readiness.summary).not.toContain("Loopdeck");
-    expect(readiness.summary).not.toContain("local prompt-coach server");
+    expect(readiness.summary).not.toContain("local promptlane server");
   });
 });

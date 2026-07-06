@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { loadPromptCoachConfig } from "../config/config.js";
+import { loadPromptLaneConfig } from "../config/config.js";
 import type { HookRunResult } from "./wrapper.js";
 
 type SessionStartPayload = {
@@ -35,11 +35,11 @@ export async function runSessionStartHook(
       return emptyResult();
     }
 
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const url = `http://${config.server.host}:${config.server.port}`;
     const healthUrl = `${url}/api/v1/health`;
 
-    // Server lifecycle is owned by `prompt-coach service`. Do not spawn a
+    // Server lifecycle is owned by `promptlane service`. Do not spawn a
     // server here; spawning from a SessionStart hook risks a detached child
     // binding 17373 with the wrong data dir and is what produced the
     // 2026-05-09 401 incident. If the server is not running we simply fail

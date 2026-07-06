@@ -8,7 +8,7 @@ import { parsePromptMarkdown } from "./markdown.js";
 let sandbox: string;
 
 beforeEach(() => {
-  sandbox = mkdtempSync(join(tmpdir(), "prompt-coach-md-parse-"));
+  sandbox = mkdtempSync(join(tmpdir(), "promptlane-md-parse-"));
 });
 
 afterEach(() => {

@@ -1,23 +1,23 @@
-# Loopdeck Next Runtime Value Slice
+# PromptLane Next Runtime Value Slice
 
 Historical naming note:
 
 - Current product name: PromptLane.
-- Current runtime id: `prompt-coach`.
-- This document preserves an older Loopdeck compatibility decision. See `docs/PROMPTLANE.md` for the active product contract.
-- See `docs/LOOPDECK-LEGACY-SURFACES.md` before adding or changing any Loopdeck/`loopdeck` surface.
+- Current runtime id: `promptlane`.
+- This document preserves an older PromptLane compatibility decision. See `docs/PROMPTLANE.md` for the active product contract.
+- See `docs/PROMPTLANE-LEGACY-SURFACES.md` before adding or changing any PromptLane/`promptlane` surface.
 
 Decision: Selected Worktree Continuation Brief Parity
 
 This is not a rename slice. The runtime id compatibility line is now blocked on
 future evidence, not on more immediate docs. The next value should improve the
 agent loop itself: when a user reviews a specific worktree, session, or branch
-in Loopdeck, Codex and Claude Code should be able to request a continuation
+in PromptLane, Codex and Claude Code should be able to request a continuation
 brief for that same selected loop instead of only the globally latest snapshot.
 
 ## Why This Slice
 
-Loopdeck already has:
+PromptLane already has:
 
 - worktree/session/branch-aware loop snapshot metadata
 - Web worktree drilldown with `worktree`, `session`, and `branch` filters
@@ -135,40 +135,40 @@ Decision:
   because concurrent Codex and Claude Code worktrees need a review-before-merge
   view before any future merge workflow is credible.
 - The first command-center slice is read-only and uses only safe metadata that
-  already exists in `LoopdeckStatus.activity`.
+  already exists in `PromptLaneStatus.activity`.
 - Merge automation, branch checkout, conflict prediction, hidden external model
   calls, and file writes remain out of scope.
 
 Implementation checkpoint:
 
-- `LoopdeckStatus.activity.command_center` now exposes a raw-free
+- `PromptLaneStatus.activity.command_center` now exposes a raw-free
   multi-worktree review summary when multiple worktrees or sessions are active.
-- CLI `loop status`, MCP `get_loopdeck_status`, and the web Loops summary expose
+- CLI `loop status`, MCP `get_promptlane_status`, and the web Loops summary expose
   the same command center contract.
 - Command-center review items now include a safe `continuation_command`, CLI
-  `loop status` prints that command, MCP `get_loopdeck_status` schemas it, and
+  `loop status` prints that command, MCP `get_promptlane_status` schemas it, and
   the web Loops summary can copy a filtered selected brief for each worktree.
 - Command-center review items now include `evidence_count` and
   `merge_readiness`, derived from the latest snapshot outcome metadata without
   returning evidence ref strings or outcome summaries.
-- CLI `loop status`, MCP `get_loopdeck_status`, and the web Loops summary now
+- CLI `loop status`, MCP `get_promptlane_status`, and the web Loops summary now
   show whether each worktree is ready, needs review, or is missing evidence
   before any future merge workflow.
-- `LoopdeckStatus.activity.command_center.review_packet` now aggregates those
+- `PromptLaneStatus.activity.command_center.review_packet` now aggregates those
   readiness signals into a read-only review-before-merge packet with counts,
   status, summary, next action, and safe action labels.
-- CLI `loop status`, MCP `get_loopdeck_status`, and the web Loops summary expose
+- CLI `loop status`, MCP `get_promptlane_status`, and the web Loops summary expose
   the packet without reading diffs, checking out branches, calling external
   models, or writing git/project state.
 - `review_packet.checklist` now exposes a read-only human checklist derived from
   safe aggregate actions, so Codex and Claude Code can tell the user what to do
   before a merge decision without storing completion state.
 - Local merge decisions now have a CLI-only journal boundary:
-  `prompt-coach loop decision record/list` stores an explicit local operator
+  `promptlane loop decision record/list` stores an explicit local operator
   decision for a selected worktree without prompt bodies, raw paths, external
   calls, or git writes.
-- Recent merge decisions now flow read-only through `LoopdeckStatus.activity`,
-  CLI `loop status`, MCP `get_loopdeck_status`, `/api/v1/loops`, and the web
+- Recent merge decisions now flow read-only through `PromptLaneStatus.activity`,
+  CLI `loop status`, MCP `get_promptlane_status`, `/api/v1/loops`, and the web
   Loops summary so Codex and Claude Code can see prior human decisions without
   gaining a write-capable merge journal tool.
 - Recent merge decisions now influence review packet next-action text only via
@@ -248,7 +248,7 @@ Implementation checkpoint:
   explaining that the next loop snapshot is local loop memory input rather than
   a transcript import.
 - Selected worktree detail now includes a raw-free privacy boundary note,
-  explaining that Loopdeck stores loop metadata in the local database and
+  explaining that PromptLane stores loop metadata in the local database and
   Markdown archive only, without prompt bodies, transcripts, raw paths, or
   provider credentials.
 - Selected worktree detail now includes a raw-free operator review gate,
@@ -256,7 +256,7 @@ Implementation checkpoint:
   manually submitted in Codex or Claude Code.
 - Selected worktree detail now includes a raw-free collection responsibility
   note, explaining that the operator explicitly collects the next loop snapshot
-  after the agent turn and that Loopdeck does not watch transcripts or scrape
+  after the agent turn and that PromptLane does not watch transcripts or scrape
   agent UI in the background.
 - Selected worktree detail now includes a raw-free pre-merge advisory,
   explaining that merge decisions should wait until the next loop snapshot is
@@ -293,7 +293,7 @@ Implementation checkpoint:
   does not submit prompts or store review state.
 - Selected worktree detail now includes a raw-free selected-brief copy retry
   note, explaining that retrying the selected brief copy is a manual operator
-  action and Loopdeck does not automatically retry clipboard writes or submit
+  action and PromptLane does not automatically retry clipboard writes or submit
   prompts.
 - Selected worktree detail now includes a raw-free selected-brief pre-paste
   confirmation note, explaining that the operator confirms the copied brief
@@ -301,255 +301,255 @@ Implementation checkpoint:
   approving safety review.
 - Selected worktree detail now includes a raw-free selected-brief target-agent
   check note, explaining that the operator verifies the active Codex or Claude
-  Code request box before paste, without Loopdeck inspecting agent UI state or
+  Code request box before paste, without PromptLane inspecting agent UI state or
   target contents.
 - Selected worktree detail now includes a raw-free paste destination
   verification boundary note, explaining that paste destination is a manual
-  operator choice in Codex or Claude Code, without Loopdeck verifying active
+  operator choice in Codex or Claude Code, without PromptLane verifying active
   windows, target contents, or paste success.
 - Selected worktree detail now includes a raw-free manual submission boundary
   note, explaining that the operator submits the pasted brief manually in Codex
-  or Claude Code, without Loopdeck pressing Enter, clicking submit, or
+  or Claude Code, without PromptLane pressing Enter, clicking submit, or
   recording submitted state.
 - Selected worktree detail now includes a raw-free submission result
   non-persistence note, explaining that agent response and submission result
-  stay outside Loopdeck until the next explicit loop snapshot, without Loopdeck
+  stay outside PromptLane until the next explicit loop snapshot, without PromptLane
   detecting, storing, or syncing submitted state after handoff.
 - Selected worktree detail now includes a raw-free post-submission collection
   reminder boundary note, explaining that the operator collects the next loop
-  snapshot explicitly after the agent response is ready, without Loopdeck
+  snapshot explicitly after the agent response is ready, without PromptLane
   starting collection from submission, transcript changes, or agent UI activity.
 - Selected worktree detail now includes a raw-free collection result
   non-persistence note, explaining that collection result state is not persisted
-  until the operator records the next explicit loop snapshot, without Loopdeck
+  until the operator records the next explicit loop snapshot, without PromptLane
   storing, syncing, or inferring collection result state from agent UI activity.
 - Selected worktree detail now includes a raw-free collection retry boundary
   note, explaining that the operator reruns the explicit loop collection flow
-  when retry is needed, without Loopdeck automatically retrying collection
+  when retry is needed, without PromptLane automatically retrying collection
   commands or hidden recovery actions.
 - Selected worktree detail now includes a raw-free retry outcome
   non-persistence note, explaining that retry attempt and outcome stay outside
-  Loopdeck until the next explicit loop snapshot, without Loopdeck detecting,
+  PromptLane until the next explicit loop snapshot, without PromptLane detecting,
   storing, or syncing retry success or failure state.
 - Selected worktree detail now includes a raw-free collection evidence
   freshness boundary note, explaining that the operator checks freshness
-  against the latest explicit loop snapshot evidence, without Loopdeck
+  against the latest explicit loop snapshot evidence, without PromptLane
   verifying freshness from git status, transcripts, or agent UI activity.
 - Selected worktree detail now includes a raw-free freshness result
   non-persistence note, explaining that freshness result state stays outside
-  Loopdeck until the next explicit loop snapshot, without Loopdeck detecting,
+  PromptLane until the next explicit loop snapshot, without PromptLane detecting,
   storing, or syncing freshness result state.
 - Selected worktree detail now includes a raw-free freshness uncertainty
   collection reminder, explaining that the operator collects a new explicit
-  loop snapshot when evidence freshness is uncertain, without Loopdeck
+  loop snapshot when evidence freshness is uncertain, without PromptLane
   verifying freshness or starting collection automatically.
 - Selected worktree detail now includes a raw-free pre-merge freshness
   advisory, explaining that the operator reviews freshness uncertainty before
-  merge decisions, without Loopdeck approving merges or verifying freshness
+  merge decisions, without PromptLane approving merges or verifying freshness
   before merge.
 - Selected worktree detail now includes a raw-free pre-memory-approval
   freshness advisory, explaining that the operator reviews freshness
-  uncertainty before approving loop memory, without Loopdeck approving memory
+  uncertainty before approving loop memory, without PromptLane approving memory
   or verifying freshness from this note.
 - Selected worktree detail now includes a raw-free post-memory-approval
   collection reminder, explaining that the operator collects a new explicit
-  loop snapshot after approving loop memory, without Loopdeck starting
+  loop snapshot after approving loop memory, without PromptLane starting
   collection from approval or approval state changes.
 - Selected worktree detail now includes a raw-free post-memory-approval
   collection result non-persistence note, explaining that post-approval
-  collection result state stays outside Loopdeck until the next explicit loop
-  snapshot, without Loopdeck detecting, storing, or syncing that result state.
+  collection result state stays outside PromptLane until the next explicit loop
+  snapshot, without PromptLane detecting, storing, or syncing that result state.
 - Selected worktree detail now includes a raw-free post-memory-approval
   collection retry boundary note, explaining that the operator reruns the
   explicit post-approval loop collection flow when retry is needed, without
-  Loopdeck automatically retrying commands or hidden recovery actions.
+  PromptLane automatically retrying commands or hidden recovery actions.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   outcome non-persistence note, explaining that post-approval retry outcome
-  state stays outside Loopdeck until the next explicit loop snapshot, without
-  Loopdeck detecting, storing, or syncing retry success or failure state.
+  state stays outside PromptLane until the next explicit loop snapshot, without
+  PromptLane detecting, storing, or syncing retry success or failure state.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   evidence freshness boundary note, explaining that the operator checks retry
-  evidence freshness against the latest explicit loop snapshot, without Loopdeck
+  evidence freshness against the latest explicit loop snapshot, without PromptLane
   verifying freshness from git status, transcripts, or agent UI activity.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   freshness result non-persistence note, explaining that retry freshness result
-  state stays outside Loopdeck until the next explicit loop snapshot, without
-  Loopdeck detecting, storing, or syncing that state.
+  state stays outside PromptLane until the next explicit loop snapshot, without
+  PromptLane detecting, storing, or syncing that state.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   freshness uncertainty collection reminder, explaining that the operator
   collects a new explicit loop snapshot when post-approval retry freshness is
-  uncertain, without Loopdeck verifying freshness or starting collection
+  uncertain, without PromptLane verifying freshness or starting collection
   automatically.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   pre-memory-approval freshness advisory, explaining that the operator reviews
   post-approval retry freshness uncertainty before approving loop memory again,
-  without Loopdeck approving memory or verifying freshness from this advisory.
+  without PromptLane approving memory or verifying freshness from this advisory.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval collection reminder, explaining that the operator
   collects a new explicit loop snapshot after approving loop memory again,
-  without Loopdeck starting collection from renewed approval state changes.
+  without PromptLane starting collection from renewed approval state changes.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval collection result non-persistence note, explaining
-  that renewed-memory-approval collection result state stays outside Loopdeck
-  until the next explicit loop snapshot, without Loopdeck detecting, storing,
+  that renewed-memory-approval collection result state stays outside PromptLane
+  until the next explicit loop snapshot, without PromptLane detecting, storing,
   or syncing that result state.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval collection uncertainty reminder, explaining that the
   operator collects a new explicit loop snapshot when renewed-memory-approval
-  collection result is uncertain, without Loopdeck verifying the result or
+  collection result is uncertain, without PromptLane verifying the result or
   starting collection automatically.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval pre-merge freshness advisory, explaining that the
   operator reviews renewed-memory-approval freshness uncertainty before merge
-  decisions, without Loopdeck approving merges or verifying freshness before
+  decisions, without PromptLane approving merges or verifying freshness before
   merge.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval pre-handoff freshness advisory, explaining that the
   operator reviews renewed-memory-approval freshness uncertainty before
-  continuation handoff, without Loopdeck approving handoffs or verifying
+  continuation handoff, without PromptLane approving handoffs or verifying
   freshness before handoff.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval pre-paste freshness advisory, explaining that the
   operator reviews renewed-memory-approval freshness uncertainty before pasting
-  into Codex or Claude Code, without Loopdeck approving paste targets or
+  into Codex or Claude Code, without PromptLane approving paste targets or
   verifying freshness before paste.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval pre-submit freshness advisory, explaining that the
   operator reviews renewed-memory-approval freshness uncertainty before
-  submitting in Codex or Claude Code, without Loopdeck approving submissions or
+  submitting in Codex or Claude Code, without PromptLane approving submissions or
   verifying freshness before submit.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit freshness advisory, explaining that the
   operator collects a new explicit loop snapshot after submission when
-  renewed-memory-approval freshness is uncertain, without Loopdeck monitoring
+  renewed-memory-approval freshness is uncertain, without PromptLane monitoring
   submitted state, agent responses, or renewed-memory-approval freshness after
   submit.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit collection result non-persistence note,
-  explaining that post-submit collection result state stays outside Loopdeck
-  until the next explicit loop snapshot, without Loopdeck detecting, storing,
+  explaining that post-submit collection result state stays outside PromptLane
+  until the next explicit loop snapshot, without PromptLane detecting, storing,
   or syncing that state.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit collection retry boundary note, explaining
   that the operator reruns the explicit post-submit loop collection flow when
-  retry is needed, without Loopdeck automatically retrying commands or hidden
+  retry is needed, without PromptLane automatically retrying commands or hidden
   recovery actions.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry outcome non-persistence note,
-  explaining that post-submit retry attempt and outcome stay outside Loopdeck
-  until the next explicit loop snapshot, without Loopdeck detecting, storing,
+  explaining that post-submit retry attempt and outcome stay outside PromptLane
+  until the next explicit loop snapshot, without PromptLane detecting, storing,
   or syncing retry success/failure state.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry evidence freshness boundary note,
   explaining that the operator checks post-submit retry evidence freshness
-  against the latest explicit loop snapshot, without Loopdeck verifying
+  against the latest explicit loop snapshot, without PromptLane verifying
   freshness from git status, transcripts, or agent UI activity.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry freshness result non-persistence
   note, explaining that post-submit retry freshness result state stays outside
-  Loopdeck until the next explicit loop snapshot, without Loopdeck detecting,
+  PromptLane until the next explicit loop snapshot, without PromptLane detecting,
   storing, or syncing that state.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry freshness uncertainty collection
   reminder, explaining that the operator collects a new explicit loop snapshot
-  when post-submit retry freshness is uncertain, without Loopdeck verifying
+  when post-submit retry freshness is uncertain, without PromptLane verifying
   freshness or starting collection automatically.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry pre-memory-approval freshness
   advisory, explaining that the operator reviews post-submit retry freshness
-  uncertainty before approving loop memory again, without Loopdeck approving
+  uncertainty before approving loop memory again, without PromptLane approving
   memory or verifying freshness from the advisory.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval collection
   reminder, explaining that the operator collects a new explicit loop snapshot
-  after approving loop memory again after post-submit retry, without Loopdeck
+  after approving loop memory again after post-submit retry, without PromptLane
   starting collection from hidden approval signals.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval collection
   result non-persistence note, explaining that post-submit retry
-  renewed-memory-approval collection result state stays outside Loopdeck until
-  the next explicit loop snapshot, without Loopdeck detecting, storing, or
+  renewed-memory-approval collection result state stays outside PromptLane until
+  the next explicit loop snapshot, without PromptLane detecting, storing, or
   syncing that state.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval collection
   uncertainty reminder, explaining that the operator collects a new explicit
   loop snapshot when post-submit retry renewed-memory-approval collection
-  result is uncertain, without Loopdeck verifying that result or starting
+  result is uncertain, without PromptLane verifying that result or starting
   collection automatically.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval pre-merge
   freshness advisory, explaining that the operator reviews post-submit retry
   renewed-memory-approval freshness uncertainty before merge decisions, without
-  Loopdeck approving merges or verifying freshness before merge.
+  PromptLane approving merges or verifying freshness before merge.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval pre-handoff
   freshness advisory, explaining that the operator reviews post-submit retry
   renewed-memory-approval freshness uncertainty before continuation handoff,
-  without Loopdeck approving handoffs or verifying freshness before handoff.
+  without PromptLane approving handoffs or verifying freshness before handoff.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval pre-paste
   freshness advisory, explaining that the operator reviews post-submit retry
   renewed-memory-approval freshness uncertainty before pasting into Codex or
-  Claude Code, without Loopdeck approving paste targets or verifying freshness
+  Claude Code, without PromptLane approving paste targets or verifying freshness
   before paste.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval pre-submit
   freshness advisory, explaining that the operator reviews post-submit retry
   renewed-memory-approval freshness uncertainty before submitting in Codex or
-  Claude Code, without Loopdeck approving submissions or verifying freshness
+  Claude Code, without PromptLane approving submissions or verifying freshness
   before submit.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval post-submit
   freshness advisory, explaining that the operator collects a new explicit loop
   snapshot after submission when post-submit retry renewed-memory-approval
-  freshness is uncertain, without Loopdeck monitoring submitted state, agent
+  freshness is uncertain, without PromptLane monitoring submitted state, agent
   responses, or freshness after submit.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval post-submit
   collection result non-persistence note, explaining that post-submit
-  collection result state after renewed-memory-approval stays outside Loopdeck
-  until the next explicit loop snapshot, without Loopdeck detecting, storing,
+  collection result state after renewed-memory-approval stays outside PromptLane
+  until the next explicit loop snapshot, without PromptLane detecting, storing,
   or syncing that state.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval post-submit
   collection uncertainty reminder, explaining that the operator collects a new
   explicit loop snapshot when post-submit collection result after
-  renewed-memory-approval is uncertain, without Loopdeck verifying that result
+  renewed-memory-approval is uncertain, without PromptLane verifying that result
   or starting collection automatically.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval post-submit
   collection pre-merge freshness advisory, explaining that the operator reviews
   post-submit collection freshness uncertainty before merge decisions, without
-  Loopdeck approving merges or verifying freshness before merge.
+  PromptLane approving merges or verifying freshness before merge.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval post-submit
   collection pre-handoff freshness advisory, explaining that the operator
   reviews post-submit collection freshness uncertainty before continuation
-  handoff, without Loopdeck approving handoffs or verifying freshness before
+  handoff, without PromptLane approving handoffs or verifying freshness before
   handoff.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval post-submit
   collection pre-paste freshness advisory, explaining that the operator reviews
   post-submit collection freshness uncertainty before pasting into Codex or
-  Claude Code, without Loopdeck approving paste targets or verifying freshness
+  Claude Code, without PromptLane approving paste targets or verifying freshness
   before paste.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval post-submit
   collection pre-submit freshness advisory, explaining that the operator
   reviews post-submit collection freshness uncertainty before submitting in
-  Codex or Claude Code, without Loopdeck approving submissions or verifying
+  Codex or Claude Code, without PromptLane approving submissions or verifying
   freshness before submit.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval post-submit
   collection post-submit freshness advisory, explaining that the operator
   collects a new explicit loop snapshot after submission when post-submit
-  collection freshness is uncertain, without Loopdeck monitoring submitted
+  collection freshness is uncertain, without PromptLane monitoring submitted
   state, agent responses, or freshness after submit.
 - Selected worktree detail now includes a raw-free post-memory-approval retry
   renewed-memory-approval post-submit retry renewed-memory-approval post-submit
   collection freshness result non-persistence note, explaining that freshness
-  result state stays outside Loopdeck until the next explicit loop snapshot,
-  without Loopdeck detecting, storing, or syncing that state.
+  result state stays outside PromptLane until the next explicit loop snapshot,
+  without PromptLane detecting, storing, or syncing that state.
 - The next runtime slice should decide whether selected worktree detail needs a
   raw-free post-memory-approval retry renewed-memory-approval post-submit retry
   renewed-memory-approval post-submit collection freshness uncertainty

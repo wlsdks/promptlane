@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { loadHookAuth, loadPromptCoachConfig } from "../config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../config/config.js";
 import { collectLoopSnapshot } from "../loop/collect.js";
 import { createSqlitePromptStorage } from "../storage/sqlite.js";
 import {
@@ -39,23 +39,23 @@ export type RunClaudeCodeHookOptions = {
 export async function runClaudeCodeHook(
   options: RunClaudeCodeHookOptions,
 ): Promise<HookRunResult> {
-  return runPromptCoachHook(options, "claude-code");
+  return runPromptLaneHook(options, "claude-code");
 }
 
 export async function runCodexHook(
   options: RunClaudeCodeHookOptions,
 ): Promise<HookRunResult> {
-  return runPromptCoachHook(options, "codex");
+  return runPromptLaneHook(options, "codex");
 }
 
-async function runPromptCoachHook(
+async function runPromptLaneHook(
   options: RunClaudeCodeHookOptions,
   tool: "claude-code" | "codex",
 ): Promise<HookRunResult> {
   let stdout = "";
   try {
     const payload = JSON.parse(options.stdin);
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const hookAuth = loadHookAuth(options.dataDir);
     if (isCompactHookPayload(payload)) {
       recordCompactBoundaryFromHook(payload, tool, {

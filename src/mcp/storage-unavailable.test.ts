@@ -6,7 +6,7 @@ describe("storageUnavailableMessage", () => {
   it("returns one raw-free MCP storage setup message", () => {
     const error = Object.assign(
       new Error(
-        "ENOENT: no such file or directory, open '/Users/example/private/prompt-coach.sqlite'",
+        "ENOENT: no such file or directory, open '/Users/example/private/promptlane.sqlite'",
       ),
       { code: "ENOENT" },
     );
@@ -14,11 +14,10 @@ describe("storageUnavailableMessage", () => {
     const message = storageUnavailableMessage(error);
 
     expect(message).toBe(
-      "Local PromptLane archive is not available. Run `prompt-coach setup --profile coach --register-mcp`, then submit one real Claude Code or Codex prompt. If capture still does not work, run `prompt-coach doctor claude-code` or `prompt-coach doctor codex`. For custom storage, initialize it with `prompt-coach init --data-dir <path>` and pass the same --data-dir to the MCP server. Reason: ENOENT.",
+      "Local PromptLane archive is not available. Run `promptlane setup --profile coach --register-mcp`, then submit one real Claude Code or Codex prompt. If capture still does not work, run `promptlane doctor claude-code` or `promptlane doctor codex`. For custom storage, initialize it with `promptlane init --data-dir <path>` and pass the same --data-dir to the MCP server. Reason: ENOENT.",
     );
-    expect(message).not.toContain("Loopdeck");
     expect(message).not.toContain("/Users/example");
-    expect(message).not.toContain("prompt-coach.sqlite");
+    expect(message).not.toContain("promptlane.sqlite");
   });
 
   it("does not include arbitrary error messages without a stable code", () => {
@@ -27,9 +26,8 @@ describe("storageUnavailableMessage", () => {
     );
 
     expect(message).toBe(
-      "Local PromptLane archive is not available. Run `prompt-coach setup --profile coach --register-mcp`, then submit one real Claude Code or Codex prompt. If capture still does not work, run `prompt-coach doctor claude-code` or `prompt-coach doctor codex`. For custom storage, initialize it with `prompt-coach init --data-dir <path>` and pass the same --data-dir to the MCP server.",
+      "Local PromptLane archive is not available. Run `promptlane setup --profile coach --register-mcp`, then submit one real Claude Code or Codex prompt. If capture still does not work, run `promptlane doctor claude-code` or `promptlane doctor codex`. For custom storage, initialize it with `promptlane init --data-dir <path>` and pass the same --data-dir to the MCP server.",
     );
-    expect(message).not.toContain("Loopdeck");
     expect(message).not.toContain("/tmp/private");
   });
 });

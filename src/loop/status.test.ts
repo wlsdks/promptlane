@@ -2,11 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import type { CompactBoundary } from "../storage/compact-boundaries.js";
 import type { LoopSnapshot } from "./types.js";
-import { createLoopdeckStatus } from "./status.js";
+import { createPromptLaneStatus } from "./status.js";
 
-describe("createLoopdeckStatus", () => {
+describe("createPromptLaneStatus", () => {
   it("returns ready status with a safe latest snapshot and compact refresh action", () => {
-    const status = createLoopdeckStatus({
+    const status = createPromptLaneStatus({
       snapshots: [loopSnapshot()],
       compactBoundaries: [compactBoundary()],
     });
@@ -27,9 +27,9 @@ describe("createLoopdeckStatus", () => {
         trigger: "auto",
         after_latest_snapshot: true,
       },
-      next_action: "prompt-coach loop collect",
+      next_action: "promptlane loop collect",
       next_actions: expect.arrayContaining([
-        expect.stringContaining("prompt-coach loop collect"),
+        expect.stringContaining("promptlane loop collect"),
       ]),
       privacy: {
         local_only: true,
@@ -45,7 +45,7 @@ describe("createLoopdeckStatus", () => {
   });
 
   it("returns empty guidance without a latest snapshot", () => {
-    const status = createLoopdeckStatus({
+    const status = createPromptLaneStatus({
       snapshots: [],
       compactBoundaries: [],
     });
@@ -53,16 +53,16 @@ describe("createLoopdeckStatus", () => {
     expect(status).toMatchObject({
       status: "empty",
       snapshot_count: 0,
-      next_action: "prompt-coach loop collect",
+      next_action: "promptlane loop collect",
       next_actions: expect.arrayContaining([
-        expect.stringContaining("prompt-coach loop collect"),
+        expect.stringContaining("promptlane loop collect"),
       ]),
     });
     expect(status).not.toHaveProperty("latest_snapshot");
   });
 
   it("can hide latest snapshot details while preserving counts and actions", () => {
-    const status = createLoopdeckStatus({
+    const status = createPromptLaneStatus({
       snapshots: [loopSnapshot()],
       compactBoundaries: [],
       includeLatest: false,
@@ -71,11 +71,11 @@ describe("createLoopdeckStatus", () => {
     expect(status.status).toBe("ready");
     expect(status.snapshot_count).toBe(1);
     expect(status.latest_snapshot).toBeUndefined();
-    expect(status.next_action).toBe("prompt-coach loop brief");
+    expect(status.next_action).toBe("promptlane loop brief");
   });
 
   it("reports project-approved memory availability without memory contents", () => {
-    const status = createLoopdeckStatus({
+    const status = createPromptLaneStatus({
       snapshots: [loopSnapshot()],
       compactBoundaries: [],
       projectMemoryCount: 2,
@@ -94,11 +94,11 @@ describe("createLoopdeckStatus", () => {
     expect(status.memory_candidate).toEqual({
       eligible: true,
       reason: "passed_with_evidence",
-      next_action: "prompt-coach loop memory-approve",
+      next_action: "promptlane loop memory-approve",
     });
     expect(status.next_actions).toEqual(
       expect.arrayContaining([
-        expect.stringContaining("prompt-coach loop memory-approve"),
+        expect.stringContaining("promptlane loop memory-approve"),
       ]),
     );
     expect(serialized).not.toContain(
@@ -109,7 +109,7 @@ describe("createLoopdeckStatus", () => {
   });
 
   it("summarizes worktree and session activity without prompt bodies or raw paths", () => {
-    const status = createLoopdeckStatus({
+    const status = createPromptLaneStatus({
       snapshots: [
         loopSnapshot({
           id: "loop_latest",
@@ -218,7 +218,7 @@ describe("createLoopdeckStatus", () => {
             evidence_count: 1,
             recommendation: "ready for continuation",
             continuation_command:
-              "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+              "promptlane loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
             merge_readiness: {
               status: "ready",
               evidence: "evidence present",
@@ -236,7 +236,7 @@ describe("createLoopdeckStatus", () => {
             evidence_count: 1,
             recommendation: "ready for continuation",
             continuation_command:
-              "prompt-coach loop brief --worktree main-worktree --branch codex/agent-loop-memory-design",
+              "promptlane loop brief --worktree main-worktree --branch codex/agent-loop-memory-design",
             merge_readiness: {
               status: "ready",
               evidence: "evidence present",
@@ -252,7 +252,7 @@ describe("createLoopdeckStatus", () => {
   });
 
   it("builds a raw-free multi-worktree command center for merge review", () => {
-    const status = createLoopdeckStatus({
+    const status = createPromptLaneStatus({
       snapshots: [
         loopSnapshot({
           id: "loop_needs_review",
@@ -334,7 +334,7 @@ describe("createLoopdeckStatus", () => {
           snapshots: 1,
           recommendation: "review before merge",
           continuation_command:
-            "prompt-coach loop brief --worktree agent-loop-worktree --branch feature/agent-loop",
+            "promptlane loop brief --worktree agent-loop-worktree --branch feature/agent-loop",
           merge_readiness: {
             status: "needs_review",
             evidence: "evidence present",
@@ -352,7 +352,7 @@ describe("createLoopdeckStatus", () => {
           snapshots: 1,
           recommendation: "ready for continuation",
           continuation_command:
-            "prompt-coach loop brief --worktree main-worktree --branch main",
+            "promptlane loop brief --worktree main-worktree --branch main",
           merge_readiness: {
             status: "ready",
             evidence: "evidence present",
@@ -370,7 +370,7 @@ describe("createLoopdeckStatus", () => {
           snapshots: 1,
           recommendation: "ready for continuation",
           continuation_command:
-            "prompt-coach loop brief --worktree missing-evidence-worktree --branch feature/missing-evidence",
+            "promptlane loop brief --worktree missing-evidence-worktree --branch feature/missing-evidence",
           merge_readiness: {
             status: "missing_evidence",
             evidence: "missing evidence",

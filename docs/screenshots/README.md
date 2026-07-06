@@ -8,8 +8,8 @@
 
    ```sh
    pnpm build
-   PROMPT_COACH_DATA_DIR="$(mktemp -d)" pnpm prompt-coach init --data-dir "$PROMPT_COACH_DATA_DIR"
-   pnpm prompt-coach server --data-dir "$PROMPT_COACH_DATA_DIR"
+   PROMPTLANE_DATA_DIR="$(mktemp -d)" pnpm promptlane init --data-dir "$PROMPTLANE_DATA_DIR"
+   pnpm promptlane server --data-dir "$PROMPTLANE_DATA_DIR"
    ```
 
 2. 다른 터미널에서 fixture prompt 몇 개를 ingest (real prompt로 sensitive

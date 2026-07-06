@@ -161,7 +161,7 @@ Snapshots may store:
 
 ### CLI
 
-`prompt-coach loop status`, `loop collect`, and `loop brief` may read snapshots.
+`promptlane loop status`, `loop collect`, and `loop brief` may read snapshots.
 
 CLI output must:
 
@@ -251,7 +251,7 @@ When changing the schema:
 2. Add or update focused domain tests.
 3. Add or update SQLite migration/storage tests if persistence changes.
 4. Update CLI/MCP/web schema tests for affected public surfaces.
-5. Update this document and `docs/LOOPDECK.md` if the product contract changes.
+5. Update this document and `docs/PROMPTLANE.md` if the product contract changes.
 6. Run the relevant focused tests, then the full gate before merge.
 
 Default full gate:

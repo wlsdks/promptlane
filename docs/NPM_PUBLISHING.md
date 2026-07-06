@@ -14,7 +14,7 @@ npm whoami
 The unscoped package name currently appears available:
 
 ```sh
-npm view prompt-coach version
+npm view promptlane version
 # E404 Not Found
 ```
 
@@ -39,17 +39,17 @@ Recommended version:
 Why `--tag beta`:
 
 - users must intentionally install the beta tag
-- `npm install -g prompt-coach@beta` gets the prerelease
+- `npm install -g promptlane@beta` gets the prerelease
 - the `latest` tag remains unused until the package is stable enough
 
 ## Install Commands After Publish
 
 ```sh
-npm install -g prompt-coach@beta
-prompt-coach setup
-prompt-coach doctor claude-code
-prompt-coach doctor codex
-prompt-coach server
+npm install -g promptlane@beta
+promptlane setup
+promptlane doctor claude-code
+promptlane doctor codex
+promptlane server
 ```
 
 ## Required Local Gate Before Publishing
@@ -80,9 +80,9 @@ TARBALL="$(npm pack --json --ignore-scripts | node -e 'process.stdin.on("data",d
 TMP_HOME="$(mktemp -d)"
 TMP_PREFIX="$(mktemp -d)"
 HOME="$TMP_HOME" npm install -g --prefix "$TMP_PREFIX" "./$TARBALL"
-"$TMP_PREFIX/bin/prompt-coach" --help
-"$TMP_PREFIX/bin/pc-claude" --pc-help
-"$TMP_PREFIX/bin/pc-codex" --pc-help
+"$TMP_PREFIX/bin/promptlane" --help
+"$TMP_PREFIX/bin/pl-claude" --pc-help
+"$TMP_PREFIX/bin/pl-codex" --pc-help
 ```
 
 ## Publish Checklist
@@ -93,13 +93,12 @@ HOME="$TMP_HOME" npm install -g --prefix "$TMP_PREFIX" "./$TARBALL"
       vitest in `src/shared/version.test.ts` enforces this on every run)
 - [ ] README is available in English and Korean and matches the actual feature set
 - [ ] package contents contain built CLI/server/web assets
-- [ ] all four bin entries exist after build:
-  - `bin.prompt-coach` → `dist/cli/index.js`
-  - `bin.loopdeck` → `dist/cli/index.js`
-  - `bin.pc-claude` → `dist/cli/pc-claude.js`
-  - `bin.pc-codex` → `dist/cli/pc-codex.js`
+- [ ] all three bin entries exist after build:
+  - `bin.promptlane` → `dist/cli/index.js`
+  - `bin.pl-claude` → `dist/cli/pl-claude.js`
+  - `bin.pl-codex` → `dist/cli/pl-codex.js`
 - [ ] each bin file is executable after build (`scripts/fix-bin-mode.mjs`
-      runs as part of `pnpm build:server` and chmods all four)
+      runs as part of `pnpm build:server` and chmods all three)
 - [ ] `corepack pnpm pack:dry-run` excludes `dist/**/*.map` (source maps stay local)
 - [ ] full release checklist (`docs/RELEASE_CHECKLIST.md`) passes
 - [ ] pre-publish privacy audit (`docs/PRE_PUBLISH_PRIVACY_AUDIT.md`) passes
@@ -111,7 +110,7 @@ HOME="$TMP_HOME" npm install -g --prefix "$TMP_PREFIX" "./$TARBALL"
 
 - `corepack pnpm smoke:release` fails
 - `corepack pnpm pack:dry-run` does not include `dist/cli`, `dist/server`, or `dist/web`
-- npm reports that `prompt-coach` is already taken by another owner
+- npm reports that `promptlane` is already taken by another owner
 - the npm account cannot complete 2FA/OTP
 - README still claims a feature that is not implemented
 
@@ -119,9 +118,9 @@ HOME="$TMP_HOME" npm install -g --prefix "$TMP_PREFIX" "./$TARBALL"
 
 ```sh
 npm whoami
-npm view prompt-coach version
+npm view promptlane version
 npm access list packages stark97 --json
 npm publish --tag beta
-npm dist-tag ls prompt-coach
-npm view prompt-coach versions --json
+npm dist-tag ls promptlane
+npm view promptlane versions --json
 ```

@@ -1,9 +1,9 @@
 import { homedir, platform } from "node:os";
 import { isAbsolute, resolve, sep } from "node:path";
 
-export const DEFAULT_DATA_DIR = "~/.prompt-coach";
+export const DEFAULT_DATA_DIR = "~/.promptlane";
 
-export type PromptCoachPaths = {
+export type PromptLanePaths = {
   dataDir: string;
   configPath: string;
   hookAuthPath: string;
@@ -27,16 +27,16 @@ export function resolveHomePath(input: string, home = homedir()): string {
   return resolve(input);
 }
 
-export function getPromptCoachPaths(
+export function getPromptLanePaths(
   dataDir = DEFAULT_DATA_DIR,
-): PromptCoachPaths {
+): PromptLanePaths {
   const root = resolveHomePath(dataDir);
 
   return {
     dataDir: root,
     configPath: resolve(root, "config.json"),
     hookAuthPath: resolve(root, "hook-auth.json"),
-    databasePath: resolve(root, "prompt-coach.sqlite"),
+    databasePath: resolve(root, "promptlane.sqlite"),
     promptsDir: resolve(root, "prompts"),
     logsDir: resolve(root, "logs"),
     diagnosticLogPath: resolve(root, "logs", "diagnostic.log"),

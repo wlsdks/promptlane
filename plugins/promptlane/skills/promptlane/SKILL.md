@@ -1,12 +1,12 @@
 ---
-name: prompt-coach
+name: promptlane
 description: Use when the user wants to install, verify, search, or troubleshoot PromptLane, the local prompt improvement workspace for Codex or Claude Code.
 ---
 
 # PromptLane
 
 Use this skill when the user wants Codex to work with PromptLane through the local
-CLI/archive. The compatibility CLI command remains `prompt-coach` during the
+CLI/archive. The compatibility CLI command remains `promptlane` during the
 PromptLane compatibility window.
 
 ## What This Plugin Does
@@ -20,15 +20,15 @@ the installed package so PromptLane writes one explicit user-level hook
 configuration:
 
 ```sh
-prompt-coach start
-prompt-coach setup --profile coach --register-mcp --open-web
+promptlane start
+promptlane setup --profile coach --register-mcp --open-web
 ```
 
 The coach profile installs capture hooks, low-friction rewrite guidance, local
 server startup where supported, and the Claude Code status line when Claude Code
 is detected. `--register-mcp` also registers the MCP server with detected Claude
 Code/Codex CLIs so the active agent can call coach/rewrite/judge tools. Use
-plain `prompt-coach setup` only when the user wants passive capture without
+plain `promptlane setup` only when the user wants passive capture without
 coaching.
 
 Setup-installed hooks use `UserPromptSubmit` for prompt capture/rewrite guidance,
@@ -39,20 +39,20 @@ and optional HMAC content hashes, not prompt bodies, raw paths, custom compact
 instructions, compact summaries, or transcript contents.
 
 After setup, ask the user to send one real coding prompt in Claude Code or
-Codex, then run `prompt-coach coach`. Use `doctor` and manual MCP registration
+Codex, then run `promptlane coach`. Use `doctor` and manual MCP registration
 only if capture or agent-native commands do not appear.
 
 Toggle the `UserPromptSubmit` rewrite guard between four modes
 (`off`, `context`, `ask`, `block-and-copy`) without remembering CLI flags:
 
 ```sh
-prompt-coach hook status        # see the mode currently installed per tool
-prompt-coach setup --rewrite-guard ask --no-service --skip-statusline
+promptlane hook status        # see the mode currently installed per tool
+promptlane setup --rewrite-guard ask --no-service --skip-statusline
 ```
 
 In `ask` mode, when a captured Codex prompt scores low and clears the
 trigger gate (length ≥ 30, score < 60, not an acknowledgment), the
-hook tells the active agent to call the prompt-coach
+hook tells the active agent to call the promptlane
 `ask_clarifying_questions` MCP tool with `allow_native_dialog: true`.
 The MCP tool prefers `elicitation/create` and falls back to a native
 OS dialog (osascript / zenity / PowerShell InputBox) when the host
@@ -74,19 +74,19 @@ is the safer Codex configuration for a cloned checkout.
 Check Codex capture:
 
 ```sh
-prompt-coach doctor codex
+promptlane doctor codex
 ```
 
 Check Claude Code capture:
 
 ```sh
-prompt-coach doctor claude-code
+promptlane doctor claude-code
 ```
 
 Open the web archive:
 
 ```sh
-prompt-coach server
+promptlane server
 ```
 
 Then visit `http://127.0.0.1:17373`.
@@ -94,7 +94,7 @@ Then visit `http://127.0.0.1:17373`.
 Run the local MCP score server when Codex needs to score a prompt on request:
 
 ```sh
-prompt-coach mcp
+promptlane mcp
 ```
 
 ## Agent-Native Workflows
@@ -102,41 +102,41 @@ prompt-coach mcp
 Use these workflows before sending the user to the web UI:
 
 - Always-on side pane: tell the user to open a second terminal pane and run
-  `prompt-coach buddy`. Use `prompt-coach buddy --once` for a one-shot text
-  snapshot or `prompt-coach buddy --json` for automation. This is the
+  `promptlane buddy`. Use `promptlane buddy --once` for a one-shot text
+  snapshot or `promptlane buddy --json` for automation. This is the
   cross-agent alternative to a persistent right-side UI panel.
-- Full coach workflow: call `prompt-coach:coach_prompt`. If MCP is
-  unavailable, run `prompt-coach coach --json`. Use this as the default when
+- Full coach workflow: call `promptlane:coach_prompt`. If MCP is
+  unavailable, run `promptlane coach --json`. Use this as the default when
   the user asks to coach, evaluate, improve, or prepare the next request.
-- Latest prompt score: call `prompt-coach:score_prompt` with `latest=true`.
-  If MCP is unavailable, run `prompt-coach score --latest --json`.
-- Latest prompt rewrite: call `prompt-coach:improve_prompt` with
+- Latest prompt score: call `promptlane:score_prompt` with `latest=true`.
+  If MCP is unavailable, run `promptlane score --latest --json`.
+- Latest prompt rewrite: call `promptlane:improve_prompt` with
   `latest=true`. If MCP is unavailable, run
-  `prompt-coach improve --latest --json`.
+  `promptlane improve --latest --json`.
 - Agent-assisted latest prompt rewrite: call
-  `prompt-coach:prepare_agent_rewrite` with `latest=true`, rewrite the returned
+  `promptlane:prepare_agent_rewrite` with `latest=true`, rewrite the returned
   redacted prompt in the active Codex/Claude Code session, ask for approval,
-  then call `prompt-coach:record_agent_rewrite` only if the user wants the
+  then call `promptlane:record_agent_rewrite` only if the user wants the
   improved draft saved. Use this when the user wants semantic LLM help beyond
   the local deterministic rewrite.
-- Habit review: call `prompt-coach:score_prompt_archive` with
+- Habit review: call `promptlane:score_prompt_archive` with
   `max_prompts=200` and summarize recurring gaps, practice plan, and low-score
   ids.
-- Project rules review: call `prompt-coach:review_project_instructions` with
+- Project rules review: call `promptlane:review_project_instructions` with
   `latest=true` for AGENTS.md / CLAUDE.md quality checks.
 - Next request template: use `score_prompt_archive` and turn
   `next_prompt_template` plus `practice_plan` into one approval-ready template.
 - One-command setup: prefer
-  `prompt-coach setup --profile coach --register-mcp --open-web` over asking
+  `promptlane setup --profile coach --register-mcp --open-web` over asking
   the user to install hooks, rewrite guidance, status line, and MCP registration
-  separately. Use `prompt-coach install-hook codex` only for focused manual
+  separately. Use `promptlane install-hook codex` only for focused manual
   repair when setup cannot be rerun. In a cloned checkout, prefer `pnpm setup`.
   For a new user, show
-  `prompt-coach start` first so the happy path stays
+  `promptlane start` first so the happy path stays
   `setup -> one real prompt -> coach`.
 - Initial prompt wrapper: when the user wants one-click rewrite before launching
-  a new agent session, suggest `pc-claude --pc-mode auto -- "..."` or
-  `pc-codex --pc-mode auto -- "..."`. Use `--pc-dry-run` first when verifying.
+  a new agent session, suggest `pl-claude --pc-mode auto -- "..."` or
+  `pl-codex --pc-mode auto -- "..."`. Use `--pc-dry-run` first when verifying.
   Be clear that wrappers rewrite only the initial prompt argument, not every
   later interactive message.
 
@@ -145,7 +145,7 @@ project policy controls, export, or a visual review of trends.
 
 The MCP tools are:
 
-- `get_prompt_coach_status` for local setup, capture readiness, and next calls
+- `get_promptlane_status` for local setup, capture readiness, and next calls
 - `coach_prompt` for the default one-call Claude Code/Codex prompt coach
   workflow
 - `score_prompt` for one current, pasted, stored, or latest prompt
@@ -166,7 +166,7 @@ low scoring prompts, or summarize recurring prompt quality gaps. If MCP is not
 configured, fall back to:
 
 ```sh
-prompt-coach score --json
+promptlane score --json
 ```
 
 MCP tools return local structured metadata with declared output schemas without
@@ -201,6 +201,6 @@ human-in-the-loop flow, not automatic replacement or auto-submit.
 - Do not add hidden external LLM calls. Archive-backed analysis is local by
   default; agent-judge mode is allowed only through the explicit MCP packet and
   the active user-controlled agent session.
-- Agent-assisted rewrite follows the same boundary: prompt-coach prepares a
+- Agent-assisted rewrite follows the same boundary: promptlane prepares a
   redacted packet and records a redacted draft, while the current user-controlled
   agent session performs the semantic rewrite.

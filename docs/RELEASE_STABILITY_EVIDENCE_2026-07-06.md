@@ -10,7 +10,7 @@ operator-approved blocker.
 | Command | Result | Evidence |
 | --- | --- | --- |
 | `corepack pnpm smoke:release` | PASS | Built the package, initialized an isolated data directory and HOME, previewed Claude Code and Codex hook installers without touching real user config, started the local server, ingested Claude Code and Codex prompt fixtures, verified CLI list/search/show/rebuild-index, executed transcript import, verified imported-only filtering, previewed and executed anonymized export, then verified SQLite, Markdown, FTS, and delete cleanup. |
-| `corepack pnpm pack:dry-run` | PASS | Built server and web assets, ran the package dry-run wrapper, and produced `prompt-coach-0.1.0-beta.0.tgz` with 344 files including this release evidence document. |
+| `corepack pnpm pack:dry-run` | PASS | Built server and web assets, ran the package dry-run wrapper, and produced `promptlane-0.1.0-beta.0.tgz` with 344 files including this release evidence document. |
 
 ## Local Release Gate
 

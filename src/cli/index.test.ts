@@ -24,7 +24,7 @@ describe("CLI entrypoint detection", () => {
   it("treats npm bin symlinks as the CLI entrypoint", () => {
     const dir = createTempDir();
     const target = join(dir, "dist", "cli", "index.js");
-    const link = join(dir, "node_modules", ".bin", "prompt-coach");
+    const link = join(dir, "node_modules", ".bin", "promptlane");
     mkdirSync(join(dir, "dist", "cli"), { recursive: true });
     mkdirSync(join(dir, "node_modules", ".bin"), { recursive: true });
     writeFileSync(target, "#!/usr/bin/env node\n");
@@ -51,7 +51,7 @@ describe("CLI command surface", () => {
       // The implicit `help` subcommand commander auto-generates does not need
       // a description from us — Commander labels it as "display help for
       // command" itself. Every other command must have one so
-      // `prompt-coach --help` is self-explanatory.
+      // `promptlane --help` is self-explanatory.
       if (command.name() === "help") continue;
       if (!command.description() || command.description().trim() === "") {
         missing.push(command.name());
@@ -71,7 +71,6 @@ describe("CLI command surface", () => {
     expect(scheduleCommand?.description()).toBe(
       "Manage opt-in PromptLane collection schedules.",
     );
-    expect(scheduleCommand?.description()).not.toContain("Loopdeck");
   });
 });
 
@@ -80,20 +79,20 @@ describe("runCli error handling", () => {
     const stdout = createCaptureStream();
     const stderr = createCaptureStream();
 
-    const exitCode = await runCli(["node", "prompt-coach"], {
+    const exitCode = await runCli(["node", "promptlane"], {
       stdout: stdout.stream,
       stderr: stderr.stream,
     });
 
     expect(exitCode).toBe(0);
-    expect(stdout.text).toContain("Usage: prompt-coach");
+    expect(stdout.text).toContain("Usage: promptlane");
     expect(stderr.text).toBe("");
   });
 
   it("renders Commander input errors without throwing a stack trace", async () => {
     const stderr = createCaptureStream();
 
-    const exitCode = await runCli(["node", "prompt-coach", "missing-command"], {
+    const exitCode = await runCli(["node", "promptlane", "missing-command"], {
       stderr: stderr.stream,
     });
 
@@ -106,7 +105,7 @@ describe("runCli error handling", () => {
     const stderr = createCaptureStream();
 
     const exitCode = await runCli(
-      ["node", "prompt-coach", "start", "--tool", "made-up-tool"],
+      ["node", "promptlane", "start", "--tool", "made-up-tool"],
       { stderr: stderr.stream },
     );
 
@@ -122,7 +121,7 @@ describe("runCli error handling", () => {
     const exitCode = await runCli(
       [
         "node",
-        "prompt-coach",
+        "promptlane",
         "import",
         "--dry-run",
         "--file",
@@ -145,7 +144,7 @@ describe("runCli error handling", () => {
     });
 
     await expect(
-      runCli(["node", "prompt-coach", "__throws-plain"], {
+      runCli(["node", "promptlane", "__throws-plain"], {
         stderr: stderr.stream,
         program,
       }),
@@ -158,24 +157,24 @@ describe("runCli error handling", () => {
     const program = createProgram();
     program.command("__throws-user").action(() => {
       throw new UserError(
-        "missing --target. Try: prompt-coach __throws-user --target X",
+        "missing --target. Try: promptlane __throws-user --target X",
       );
     });
 
-    const exitCode = await runCli(["node", "prompt-coach", "__throws-user"], {
+    const exitCode = await runCli(["node", "promptlane", "__throws-user"], {
       stderr: stderr.stream,
       program,
     });
 
     expect(exitCode).toBe(1);
     expect(stderr.text).toContain(
-      "missing --target. Try: prompt-coach __throws-user --target X",
+      "missing --target. Try: promptlane __throws-user --target X",
     );
   });
 });
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-cli-entry-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-cli-entry-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;

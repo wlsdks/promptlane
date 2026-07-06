@@ -31,7 +31,7 @@ import type {
   RedactionPolicy,
 } from "../shared/schema.js";
 import { DAY_MS } from "../shared/time.js";
-import { getPromptCoachPaths, supportsPosixMode } from "./paths.js";
+import { getPromptLanePaths, supportsPosixMode } from "./paths.js";
 import {
   markPromptImprovementDraftCopied,
   readPromptImprovementDrafts,
@@ -169,7 +169,7 @@ export type SqlitePromptStorage = PromptStoragePort &
 export function createSqlitePromptStorage(
   options: SqlitePromptStorageOptions,
 ): SqlitePromptStorage {
-  const paths = getPromptCoachPaths(options.dataDir);
+  const paths = getPromptLanePaths(options.dataDir);
   mkdirSync(paths.dataDir, { recursive: true, mode: 0o700 });
   mkdirSync(paths.promptsDir, { recursive: true, mode: 0o700 });
 

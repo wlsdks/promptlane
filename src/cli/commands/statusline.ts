@@ -22,7 +22,7 @@ import {
   directionGlyph,
   type ArchiveTrend,
 } from "../../analysis/archive-trend.js";
-import { loadHookAuth, loadPromptCoachConfig } from "../../config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../../config/config.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
 import { doctorClaudeCode } from "./doctor.js";
 import type { ClaudeSettings } from "./install-hook.js";
@@ -57,12 +57,12 @@ export type StatusLineInstallResult = {
 
 type ChainedStatusLineOptions = {
   previous: string;
-  promptCoach: string;
+  promptLane: string;
 };
 
 type RenderChainedStatusLineOptions = {
   previousCommand: string;
-  promptCoachCommand: string;
+  promptLaneCommand: string;
   stdin?: string;
   runCommand?: StatusLineCommandRunner;
 };
@@ -74,7 +74,7 @@ type StatusLineCommandRunner = (
   stdout?: string | Buffer | null;
 };
 
-const STATUSLINE_MARKER = "prompt-coach statusline claude-code";
+const STATUSLINE_MARKER = "promptlane statusline claude-code";
 
 export function registerStatusLineCommand(program: Command): void {
   registerRenderStatusLineCommand(program);
@@ -88,7 +88,7 @@ function registerRenderStatusLineCommand(program: Command): void {
     .command("statusline")
     .description("Render the PromptLane status line for Claude Code.")
     .argument("<tool>", "Tool to render a status line for.")
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--settings-path <path>", "Override Claude Code settings path.")
     .action(async (tool: string, options: StatusLineOptions) => {
       if (tool !== "claude-code") {
@@ -109,7 +109,7 @@ function registerChainedStatusLineCommand(program: Command): void {
     )
     .argument("<tool>", "Tool to render a chained status line for.")
     .requiredOption("--previous <base64url>", "Previous status line command.")
-    .requiredOption("--prompt-coach <base64url>", "PromptLane status line command.")
+    .requiredOption("--promptlane <base64url>", "PromptLane status line command.")
     .action((tool: string, options: ChainedStatusLineOptions) => {
       if (tool !== "claude-code") {
         throw new UserError(
@@ -120,7 +120,7 @@ function registerChainedStatusLineCommand(program: Command): void {
       console.log(
         renderChainedClaudeCodeStatusLine({
           previousCommand: decodeStatusLineCommand(options.previous),
-          promptCoachCommand: decodeStatusLineCommand(options.promptCoach),
+          promptLaneCommand: decodeStatusLineCommand(options.promptLane),
           stdin: readStatusLineStdin(),
         }),
       );
@@ -133,7 +133,7 @@ function registerInstallStatusLineCommand(program: Command): void {
     .description("Install the PromptLane status line for Claude Code.")
     .argument("<tool>", "Tool to install status line for.")
     .option("--settings-path <path>", "Override Claude Code settings path.")
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--dry-run", "Preview settings change without writing.")
     .action((tool: string, options: StatusLineInstallOptions) => {
       if (tool !== "claude-code") {
@@ -240,11 +240,11 @@ export function renderChainedClaudeCodeStatusLine(
   const previous = normalizePreviousStatusLineOutput(
     runCommand(options.previousCommand, options.stdin).stdout,
   );
-  const promptCoach = normalizePromptCoachStatusLineOutput(
-    runCommand(options.promptCoachCommand, options.stdin).stdout,
+  const promptLane = normalizePromptLaneStatusLineOutput(
+    runCommand(options.promptLaneCommand, options.stdin).stdout,
   );
 
-  return [previous, promptCoach].filter(Boolean).join("\n");
+  return [previous, promptLane].filter(Boolean).join("\n");
 }
 
 function formatLatestScoreForStatusLine(
@@ -262,7 +262,7 @@ function formatLatestScoreForStatusLine(
   const score = `${STATUSLINE_PREFIX} score ${result.quality_score.value}/${result.quality_score.max} ${result.quality_score.band}${trendSuffix}`;
 
   return gap
-    ? `${score} | weakest: ${gap.label} | run: /prompt-coach:improve-last`
+    ? `${score} | weakest: ${gap.label} | run: /promptlane:improve-last`
     : score;
 }
 
@@ -270,7 +270,7 @@ function readArchiveTrend(
   options: StatusLineOptions,
 ): ArchiveTrend | undefined {
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     const storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -363,7 +363,7 @@ function ensureStatusLine(
   const currentCommand = settings.statusLine?.command;
   const previousCommand = currentCommand
     ? (extractPreviousStatusLineCommand(currentCommand) ??
-      (isPromptCoachStatusLine(currentCommand) ? undefined : currentCommand))
+      (isPromptLaneStatusLine(currentCommand) ? undefined : currentCommand))
     : undefined;
 
   return {
@@ -380,7 +380,7 @@ function ensureStatusLine(
 function removeStatusLine(settings: StatusLineSettings): StatusLineSettings {
   const command = settings.statusLine?.command;
 
-  if (!command || !isPromptCoachStatusLine(command)) {
+  if (!command || !isPromptLaneStatusLine(command)) {
     return settings;
   }
 
@@ -409,16 +409,16 @@ function buildStatusLineCommand(dataDir?: string): string {
 
 function buildChainedStatusLineCommand(
   previousCommand: string,
-  promptCoachCommand: string,
+  promptLaneCommand: string,
 ): string {
   return `${markerAssignment(STATUSLINE_MARKER)} ${shellQuote(
     process.execPath,
   )} ${shellQuote(cliEntryPath())} statusline-chain claude-code --previous ${shellQuote(
     encodeStatusLineCommand(previousCommand),
-  )} --prompt-coach ${shellQuote(encodeStatusLineCommand(promptCoachCommand))}`;
+  )} --promptlane ${shellQuote(encodeStatusLineCommand(promptLaneCommand))}`;
 }
 
-function isPromptCoachStatusLine(command: string | undefined): boolean {
+function isPromptLaneStatusLine(command: string | undefined): boolean {
   return Boolean(command?.includes(STATUSLINE_MARKER));
 }
 
@@ -503,7 +503,7 @@ function normalizePreviousStatusLineOutput(
     .trim();
 }
 
-function normalizePromptCoachStatusLineOutput(
+function normalizePromptLaneStatusLineOutput(
   output: string | Buffer | null | undefined,
 ): string {
   if (!output) {
@@ -519,7 +519,7 @@ function normalizePromptCoachStatusLineOutput(
 }
 
 function markerAssignment(marker: string): string {
-  return `PROMPT_COACH_STATUSLINE=${shellQuote(marker)}`;
+  return `PROMPTLANE_STATUSLINE=${shellQuote(marker)}`;
 }
 
 function shellQuote(value: string): string {
@@ -544,7 +544,7 @@ function writeSettingsWithBackup(
 ): string | undefined {
   mkdirSync(dirname(settingsPath), { recursive: true, mode: 0o700 });
   const backupPath = existsSync(settingsPath)
-    ? `${settingsPath}.prompt-coach.${Date.now()}.bak`
+    ? `${settingsPath}.promptlane.${Date.now()}.bak`
     : undefined;
 
   if (backupPath) {

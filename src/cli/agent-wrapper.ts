@@ -245,9 +245,9 @@ export function parseWrapperArgs(
   env: NodeJS.ProcessEnv = process.env,
 ): ParsedWrapperArgs {
   const wrapper: AgentWrapperOptions = {
-    mode: parseWrapperMode(env.PROMPT_COACH_WRAPPER_MODE) ?? "ask",
-    minScore: parseMinScore(env.PROMPT_COACH_WRAPPER_MIN_SCORE),
-    language: parseLanguage(env.PROMPT_COACH_WRAPPER_LANGUAGE),
+    mode: parseWrapperMode(env.PROMPTLANE_WRAPPER_MODE) ?? "ask",
+    minScore: parseMinScore(env.PROMPTLANE_WRAPPER_MIN_SCORE),
+    language: parseLanguage(env.PROMPTLANE_WRAPPER_LANGUAGE),
     dryRun: false,
     agentPath: defaultAgentCommand(tool, env),
   };
@@ -302,10 +302,10 @@ function defaultAgentCommand(
   env: NodeJS.ProcessEnv,
 ): string {
   if (tool === "claude") {
-    return env.PROMPT_COACH_CLAUDE_BIN ?? "claude";
+    return env.PROMPTLANE_CLAUDE_BIN ?? "claude";
   }
 
-  return env.PROMPT_COACH_CODEX_BIN ?? "codex";
+  return env.PROMPTLANE_CODEX_BIN ?? "codex";
 }
 
 function parseInlineWrapperOption(
@@ -524,7 +524,7 @@ async function askForApproval(options: {
 }): Promise<boolean> {
   options.stdout.write(
     [
-      `prompt-coach: score ${options.score}/100 below ${options.threshold}.`,
+      `promptlane: score ${options.score}/100 below ${options.threshold}.`,
       "Improved prompt:",
       options.prompt,
       "",

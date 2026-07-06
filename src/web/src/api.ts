@@ -225,8 +225,8 @@ export type LoopListResponse = {
         | "missing_summary"
         | "unsafe_summary";
       next_action:
-        | "prompt-coach loop memory-approve"
-        | "prompt-coach loop memory-candidate";
+        | "promptlane loop memory-approve"
+        | "promptlane loop memory-candidate";
     };
     latest_snapshot?: LoopSummary;
     latest_compact_boundary?: LoopSummary["compact_boundary"];

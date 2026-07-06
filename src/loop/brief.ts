@@ -73,7 +73,7 @@ export function createLoopBrief(input: {
         ? [
             "## Compaction Boundary",
             `${input.compactBoundary.event_name} at ${input.compactBoundary.created_at} (${input.compactBoundary.trigger}).`,
-            "Run prompt-coach loop collect again if the next turn needs post-compact context.",
+            "Run promptlane loop collect again if the next turn needs post-compact context.",
             "",
           ]
         : []),

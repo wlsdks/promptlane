@@ -24,7 +24,7 @@ describe("installService", () => {
     const plistPath = join(
       dir,
       "LaunchAgents",
-      "com.prompt-coach.server.plist",
+      "com.promptlane.server.plist",
     );
 
     const result = installService({
@@ -38,7 +38,7 @@ describe("installService", () => {
     expect(result.changed).toBe(true);
     expect(result.supported).toBe(true);
     expect(result.started).toBe(false);
-    expect(plist).toContain("com.prompt-coach.server");
+    expect(plist).toContain("com.promptlane.server");
     expect(plist).toContain("<string>server</string>");
     expect(plist).toContain("<string>--data-dir</string>");
     expect(plist).toContain(`<string>${dataDir}</string>`);
@@ -51,7 +51,7 @@ describe("installService", () => {
     const plistPath = join(
       dir,
       "LaunchAgents",
-      "com.prompt-coach.server.plist",
+      "com.promptlane.server.plist",
     );
 
     const result = installService({
@@ -63,7 +63,7 @@ describe("installService", () => {
     expect(result.changed).toBe(true);
     expect(result.dryRun).toBe(true);
     expect(() => readFileSync(plistPath, "utf8")).toThrow();
-    expect(result.nextPlist).toContain("com.prompt-coach.server");
+    expect(result.nextPlist).toContain("com.promptlane.server");
   });
 
   it("reports unsupported platforms without writing", () => {
@@ -82,7 +82,7 @@ describe("installService", () => {
 });
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-service-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-service-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;

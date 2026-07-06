@@ -5,8 +5,8 @@ import { join } from "node:path";
 
 const binPaths = [
   join(process.cwd(), "dist", "cli", "index.js"),
-  join(process.cwd(), "dist", "cli", "pc-claude.js"),
-  join(process.cwd(), "dist", "cli", "pc-codex.js"),
+  join(process.cwd(), "dist", "cli", "pl-claude.js"),
+  join(process.cwd(), "dist", "cli", "pl-codex.js"),
 ];
 
 if (platform() !== "win32") {

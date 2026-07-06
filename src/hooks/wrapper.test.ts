@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { normalizeClaudeCodePayload } from "../adapters/claude-code.js";
 import { normalizeCodexPayload } from "../adapters/codex.js";
-import { initializePromptCoach } from "../config/config.js";
+import { initializePromptLane } from "../config/config.js";
 import { redactPrompt } from "../redaction/redact.js";
 import { createSqlitePromptStorage } from "../storage/sqlite.js";
 import { readLastHookStatus } from "./hook-status.js";
@@ -26,7 +26,7 @@ afterEach(() => {
 describe("runClaudeCodeHook", () => {
   it("reads stdin, token file, and posts to local ingest without stdout/stderr", async () => {
     const dataDir = createTempDir();
-    const init = initializePromptCoach({ dataDir });
+    const init = initializePromptLane({ dataDir });
     const posted: unknown[] = [];
 
     const result = await runClaudeCodeHook({
@@ -68,7 +68,7 @@ describe("runClaudeCodeHook", () => {
 
   it("records a failed last_ingest_status when the post throws so doctor can surface it", async () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
 
     await runClaudeCodeHook({
       stdin: JSON.stringify({
@@ -90,7 +90,7 @@ describe("runClaudeCodeHook", () => {
 
   it("can block and copy a weak prompt when rewrite guard is enabled", async () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
     const copied: string[] = [];
 
     const result = await runClaudeCodeHook({
@@ -126,7 +126,7 @@ describe("runClaudeCodeHook", () => {
 
   it("does not block when ingest returns a non-ok response", async () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
 
     const result = await runClaudeCodeHook({
       stdin: JSON.stringify({
@@ -192,7 +192,7 @@ describe("runClaudeCodeHook", () => {
 
   it("records compact boundary metadata without storing compact content or posting to prompt ingest", async () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
     const posted: unknown[] = [];
 
     const result = await runClaudeCodeHook({
@@ -241,7 +241,7 @@ describe("runClaudeCodeHook", () => {
 describe("runCodexHook", () => {
   it("posts Codex hook payload to the Codex ingest route", async () => {
     const dataDir = createTempDir();
-    const init = initializePromptCoach({ dataDir });
+    const init = initializePromptLane({ dataDir });
     const posted: unknown[] = [];
 
     const result = await runCodexHook({
@@ -280,7 +280,7 @@ describe("runCodexHook", () => {
 
   it("keeps Codex rewrite-guard context output empty so hook guidance stays out of the user-visible chat", async () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
 
     const result = await runCodexHook({
       stdin: JSON.stringify({
@@ -297,7 +297,7 @@ describe("runCodexHook", () => {
 
   it("does not set suppressOutput on Claude Code rewrite-guard output (existing behavior)", async () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
 
     const result = await runClaudeCodeHook({
       stdin: JSON.stringify({
@@ -363,7 +363,7 @@ describe("runCodexHook", () => {
 
   it("records pre-compact boundary metadata without storing custom instructions or posting to prompt ingest", async () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
     const posted: unknown[] = [];
 
     const result = await runCodexHook({
@@ -409,7 +409,7 @@ async function seedPrompt(
   dataDir: string,
   tool: "claude-code" | "codex",
 ): Promise<void> {
-  initializePromptCoach({ dataDir });
+  initializePromptLane({ dataDir });
   const storage = openStorage(dataDir);
   try {
     const event =
@@ -449,7 +449,7 @@ async function seedPrompt(
 function openStorage(
   dataDir: string,
 ): ReturnType<typeof createSqlitePromptStorage> {
-  const init = initializePromptCoach({ dataDir });
+  const init = initializePromptLane({ dataDir });
   return createSqlitePromptStorage({
     dataDir,
     hmacSecret: init.hookAuth.web_session_secret,
@@ -458,7 +458,7 @@ function openStorage(
 }
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-hook-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-hook-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;

@@ -33,7 +33,7 @@ export function createProgram(): Command {
   const program = new Command();
 
   program
-    .name("prompt-coach")
+    .name("promptlane")
     .description(
       "Local-first prompt improvement workspace for Codex and Claude Code.",
     )

@@ -41,7 +41,7 @@ export type ServiceInstallResult = {
   startError?: string;
 };
 
-const SERVICE_LABEL = "com.prompt-coach.server";
+const SERVICE_LABEL = "com.promptlane.server";
 
 export function registerServiceCommand(program: Command): void {
   const service = program
@@ -51,7 +51,7 @@ export function registerServiceCommand(program: Command): void {
   service
     .command("install")
     .description("Install a login service for the local PromptLane server.")
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--plist-path <path>", "Override macOS LaunchAgent plist path.")
     .option("--dry-run", "Print intended service change without writing.")
     .option("--no-start", "Install service without starting it now.")
@@ -159,7 +159,7 @@ export function installService(
   if (changed) {
     mkdirSync(dirname(plistPath), { recursive: true, mode: 0o700 });
     if (existsSync(plistPath)) {
-      backupPath = `${plistPath}.prompt-coach.${Date.now()}.bak`;
+      backupPath = `${plistPath}.promptlane.${Date.now()}.bak`;
       copyFileSync(plistPath, backupPath);
     }
     writeFileSync(plistPath, nextPlist, { mode: 0o600 });
@@ -312,7 +312,7 @@ function defaultLaunchAgentPath(): string {
 }
 
 function logPath(fileName: string): string {
-  return join(homedir(), ".prompt-coach", "logs", fileName);
+  return join(homedir(), ".promptlane", "logs", fileName);
 }
 
 function launchdDomain(): string {

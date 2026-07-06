@@ -6,7 +6,7 @@ Status: Phase 2 planning input
 
 ## Conclusion
 
-`prompt-coach` has moved beyond the first MVP. It already includes local capture, local storage, search, delete, hook install/diagnostics, web UI, local rule-based analysis, tags, quality gaps, dashboard metrics, reuse signals, duplicate detection, project policy, import, export, Prompt Coach, benchmark, and release smoke coverage.
+`promptlane` has moved beyond the first MVP. It already includes local capture, local storage, search, delete, hook install/diagnostics, web UI, local rule-based analysis, tags, quality gaps, dashboard metrics, reuse signals, duplicate detection, project policy, import, export, PromptLane, benchmark, and release smoke coverage.
 
 The next work should not simply add more analysis features. The strongest improvements are the ones that reduce user effort and release risk:
 
@@ -32,7 +32,7 @@ The next work should not simply add more analysis features. The strongest improv
 
 ## User Workflow Efficiency
 
-The strongest current workflow is "find, inspect, and reuse prompts that already exist." The web UI opens directly on useful product surfaces instead of a marketing page, search/filter state is visible, dashboard drilldown links back to prompt lists, and Prompt Coach gives a copy-based improvement path.
+The strongest current workflow is "find, inspect, and reuse prompts that already exist." The web UI opens directly on useful product surfaces instead of a marketing page, search/filter state is visible, dashboard drilldown links back to prompt lists, and PromptLane gives a copy-based improvement path.
 
 The remaining workflow gap is deeper prompt iteration. The product can propose a better draft, but it does not yet compare versions, measure downstream task success, or learn from accepted/rejected improvements.
 

@@ -1,4 +1,4 @@
-import type { LoopdeckStatusActivityMergeReadiness } from "../loop/status.js";
+import type { PromptLaneStatusActivityMergeReadiness } from "../loop/status.js";
 
 type SnapshotAgeCandidate = {
   id: string;
@@ -226,15 +226,15 @@ export function snapshotAgeFor(input: {
 }
 
 export function readinessSummaryFor(
-  mergeReadiness: LoopdeckStatusActivityMergeReadiness,
+  mergeReadiness: PromptLaneStatusActivityMergeReadiness,
 ): {
   label: "Readiness summary";
-  status: LoopdeckStatusActivityMergeReadiness["status"];
+  status: PromptLaneStatusActivityMergeReadiness["status"];
   reason:
     | "selected worktree has recorded evidence and passing outcome"
     | "latest selected worktree outcome is not passing"
     | "latest selected worktree outcome has no evidence refs";
-  next_action: LoopdeckStatusActivityMergeReadiness["next_action"];
+  next_action: PromptLaneStatusActivityMergeReadiness["next_action"];
 } {
   if (mergeReadiness.status === "missing_evidence") {
     return {
@@ -295,7 +295,7 @@ function selectedBriefCommand(selection: {
   branch?: string;
 }): string {
   const parts = [
-    "prompt-coach",
+    "promptlane",
     "loop",
     "brief",
     "--worktree",

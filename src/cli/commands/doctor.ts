@@ -4,15 +4,15 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import type { Command } from "commander";
 
-import { loadHookAuth, loadPromptCoachConfig } from "../../config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../../config/config.js";
 import { diagnoseIngestFailure } from "./doctor-diagnose-ingest.js";
 import {
   readLastHookStatus,
   type LastHookStatus,
 } from "../../hooks/hook-status.js";
 import {
-  countPromptCoachCodexHooks,
-  hasPromptCoachHook,
+  countPromptLaneCodexHooks,
+  hasPromptLaneHook,
   isCodexHooksFeatureEnabled,
   type ClaudeSettings,
   type CodexHooksSettings,
@@ -90,7 +90,7 @@ export function registerDoctorCommand(program: Command): void {
       "Diagnose Claude Code or Codex setup (server, ingest token, hook, MCP).",
     )
     .argument("<tool>", "Tool to inspect.")
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--settings-path <path>", "Override Claude Code settings path.")
     .option("--hooks-path <path>", "Override Codex hooks.json path.")
     .option("--config-path <path>", "Override Codex config.toml path.")
@@ -151,7 +151,7 @@ export function formatDoctorResult(
       : formatClaudeSettings(result as DoctorClaudeCodeResult);
   const ok = result.server.ok && result.token.ok && result.settings.ok;
   const lines = [
-    `prompt-coach doctor: ${tool}`,
+    `promptlane doctor: ${tool}`,
     `Status: ${ok ? "ready" : "needs attention"}`,
     "",
     "Checks:",
@@ -204,14 +204,14 @@ function doctorNextSteps(
   const steps: string[] = [];
   if (!result.server.ok) {
     steps.push(
-      "Run prompt-coach server or prompt-coach setup --profile coach.",
+      "Run promptlane server or promptlane setup --profile coach.",
     );
   }
   if (!result.token.ok) {
-    steps.push("Run prompt-coach init or prompt-coach setup --profile coach.");
+    steps.push("Run promptlane init or promptlane setup --profile coach.");
   }
   if (!result.settings.ok) {
-    steps.push(`Run prompt-coach install-hook ${tool}.`);
+    steps.push(`Run promptlane install-hook ${tool}.`);
   }
   if (!result.mcp.registered) {
     steps.push(`Register MCP: ${mcpRegistrationCommand(tool)}.`);
@@ -225,7 +225,7 @@ function doctorNextSteps(
     (result as DoctorCodexResult).settings.duplicateHooks
   ) {
     steps.push(
-      "Run prompt-coach install-hook codex to normalize duplicate hooks in the same Codex hooks file.",
+      "Run promptlane install-hook codex to normalize duplicate hooks in the same Codex hooks file.",
     );
     steps.push(
       "If Codex hook sources still show both user and project, remove one PromptLane hook registration manually.",
@@ -254,7 +254,7 @@ function configuredDataDirFor(
   options: DoctorClaudeCodeOptions | DoctorCodexOptions | undefined,
 ): string {
   try {
-    return loadPromptCoachConfig(options?.dataDir).data_dir;
+    return loadPromptLaneConfig(options?.dataDir).data_dir;
   } catch {
     return options?.dataDir ?? "";
   }
@@ -328,7 +328,7 @@ function inspectSettings(
     const settings = JSON.parse(
       readFileSync(settingsPath, "utf8"),
     ) as ClaudeSettings;
-    const hookInstalled = hasPromptCoachHook(settings);
+    const hookInstalled = hasPromptLaneHook(settings);
     return { ok: hookInstalled, invalid: false, hookInstalled };
   } catch {
     return { ok: false, invalid: true, hookInstalled: false };
@@ -355,7 +355,7 @@ function inspectCodexSettings(
   }
 
   const hookSources: string[] = [];
-  let promptCoachHookCount = 0;
+  let promptLaneHookCount = 0;
   let invalid = false;
   let codexHooksEnabled = false;
 
@@ -368,8 +368,8 @@ function inspectCodexSettings(
         const settings = JSON.parse(
           readFileSync(source.hooksPath, "utf8"),
         ) as CodexHooksSettings;
-        const sourceHookCount = countPromptCoachCodexHooks(settings);
-        promptCoachHookCount += sourceHookCount;
+        const sourceHookCount = countPromptLaneCodexHooks(settings);
+        promptLaneHookCount += sourceHookCount;
         if (sourceHookCount > 0) {
           hookSources.push(source.name);
         }
@@ -392,7 +392,7 @@ function inspectCodexSettings(
   }
 
   const hookInstalled = hookSources.length > 0;
-  const duplicateHooks = promptCoachHookCount > 1;
+  const duplicateHooks = promptLaneHookCount > 1;
 
   return {
     ok: hookInstalled && codexHooksEnabled && !duplicateHooks && !invalid,
@@ -400,7 +400,7 @@ function inspectCodexSettings(
     hookInstalled,
     codexHooksEnabled,
     duplicateHooks,
-    hookCount: promptCoachHookCount,
+    hookCount: promptLaneHookCount,
     hookSources,
   };
 }
@@ -415,7 +415,7 @@ function inspectMcpRegistration(options: {
     try {
       if (
         existsSync(path) &&
-        looksLikePromptCoachMcpConfig(readFileSync(path, "utf8"))
+        looksLikePromptLaneMcpConfig(readFileSync(path, "utf8"))
       ) {
         return true;
       }
@@ -429,10 +429,10 @@ function inspectMcpRegistration(options: {
     : false;
 }
 
-function looksLikePromptCoachMcpConfig(text: string): boolean {
+function looksLikePromptLaneMcpConfig(text: string): boolean {
   const normalized = text.toLowerCase();
   return (
-    normalized.includes("prompt-coach") &&
+    normalized.includes("promptlane") &&
     /(^|[\s"'[\],=:.-])mcp($|[\s"'[\],=:.-])/.test(normalized)
   );
 }
@@ -448,7 +448,7 @@ function inspectMcpRegistrationFromCli(
       return false;
     }
 
-    return String(result.stdout).toLowerCase().includes("prompt-coach");
+    return String(result.stdout).toLowerCase().includes("promptlane");
   } catch {
     return false;
   }
@@ -474,7 +474,7 @@ async function inspectServer(
   }
 
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 500);
 

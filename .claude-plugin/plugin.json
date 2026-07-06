@@ -1,5 +1,5 @@
 {
-  "name": "prompt-coach",
+  "name": "promptlane",
   "description": "PromptLane is a local-first prompt improvement workspace for Claude Code, Codex, and long-running coding-agent work.",
   "version": "0.1.0-beta.0",
   "author": {
@@ -23,8 +23,8 @@
   "license": "MIT",
   "keywords": [
     "promptlane",
-    "loopdeck",
-    "prompt-coach",
+    "promptlane",
+    "promptlane",
     "prompt-improvement",
     "meta-prompting",
     "memory",

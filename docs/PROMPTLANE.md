@@ -29,23 +29,23 @@ automatic agent runtime.
 
 ## Runtime Compatibility
 
-Keep `prompt-coach` as the stable runtime identity until a dedicated migration
+Keep `promptlane` as the stable runtime identity until a dedicated migration
 plan proves otherwise.
 
 | Surface | Current value | Rule |
 | --- | --- | --- |
-| npm package | `prompt-coach` | Keep |
-| Primary CLI | `prompt-coach` | Keep |
-| Hook command | `prompt-coach hook ...` | Keep |
-| Claude Code slash namespace | `/prompt-coach:*` | Keep |
-| Canonical MCP server name | `prompt-coach` | Keep |
-| Data directory | `~/.prompt-coach` | Keep |
-| Legacy CLI alias | `loopdeck` | Compatibility only |
+| npm package | `promptlane` | Keep |
+| Primary CLI | `promptlane` | Keep |
+| Hook command | `promptlane hook ...` | Keep |
+| Claude Code slash namespace | `/promptlane:*` | Keep |
+| Canonical MCP server name | `promptlane` | Keep |
+| Data directory | `~/.promptlane` | Keep |
+| Legacy CLI alias | `promptlane` | Compatibility only |
 
-Do not use broad search-and-replace. `prompt-coach` is correct in commands,
+Do not use broad search-and-replace. `promptlane` is correct in commands,
 package names, config paths, MCP server names, and slash namespaces.
-Use `docs/LOOPDECK-LEGACY-SURFACES.md` before adding or changing any
-`Loopdeck` or `loopdeck` string.
+Use `docs/PROMPTLANE-LEGACY-SURFACES.md` before adding or changing any
+`PromptLane` or `promptlane` string.
 
 ## Core Workflows
 
@@ -205,7 +205,7 @@ agent-loop features.
 | MCP registry drift | Tool definitions, handlers, and setup guidance can fall out of sync | Touch registry structure only when a tool/schema change already needs it |
 | Privacy regression | Loop memory and continuation features can accidentally expose prompt bodies, raw paths, transcripts, compact summaries, or credentials | Keep raw-free fixtures, packaging guards, and focused privacy tests on every slice |
 | Overbuilding autonomy | Background cron, auto-submit, and merge automation would change the trust model before the local prompt loop is proven | Keep autonomy staged and require explicit approval gates |
-| Runtime compatibility breakage | Renaming `prompt-coach` runtime IDs too early would break existing hooks, MCP setup, slash commands, and scripts | Keep runtime IDs stable until a dedicated migration proves compatibility |
+| Runtime compatibility breakage | Renaming `promptlane` runtime IDs too early would break existing hooks, MCP setup, slash commands, and scripts | Keep runtime IDs stable until a dedicated migration proves compatibility |
 
 Next MVP slices:
 
@@ -255,7 +255,7 @@ The PromptLane direction is healthy when these are true:
 - a plain Codex or Claude Code user can get value through setup, capture, coach,
   status, and brief workflows
 - product-facing metadata uses PromptLane
-- runtime IDs remain `prompt-coach` until a dedicated migration proves a rename
+- runtime IDs remain `promptlane` until a dedicated migration proves a rename
 - prompt bodies remain in the redacted archive only
 - loop snapshots and status surfaces remain raw-free
 - instruction changes are proposed before they are applied

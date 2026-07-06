@@ -10,7 +10,7 @@ The product identity is:
 
 > AI coding prompt memory and improvement workspace, local-first.
 
-In practical terms, `prompt-coach` is a developer tool that records prompts entered into AI coding tools such as Claude Code and Codex, stores them locally, helps users find them again, analyzes weak prompting patterns, and helps users rewrite the next request more clearly.
+In practical terms, `promptlane` is a developer tool that records prompts entered into AI coding tools such as Claude Code and Codex, stores them locally, helps users find them again, analyzes weak prompting patterns, and helps users rewrite the next request more clearly.
 
 ## Verification Gates
 
@@ -41,16 +41,16 @@ Benchmark v1 result from the audit run:
 
 Available:
 
-- `prompt-coach setup`
-- `prompt-coach init`
-- `prompt-coach doctor`
-- `prompt-coach hook`
-- `prompt-coach install-hook`
-- `prompt-coach uninstall-hook`
-- `prompt-coach statusline`
-- `prompt-coach install-statusline`
-- `prompt-coach uninstall-statusline`
-- `prompt-coach service`
+- `promptlane setup`
+- `promptlane init`
+- `promptlane doctor`
+- `promptlane hook`
+- `promptlane install-hook`
+- `promptlane uninstall-hook`
+- `promptlane statusline`
+- `promptlane install-statusline`
+- `promptlane uninstall-statusline`
+- `promptlane service`
 - Claude Code hook support
 - Codex beta hook support
 - fail-open hook wrapper
@@ -75,7 +75,7 @@ Available:
 - SQLite index
 - SQLite FTS search index
 - hard delete across Markdown, DB rows, FTS, events, and drafts
-- `prompt-coach rebuild-index`
+- `promptlane rebuild-index`
 
 Storage model:
 
@@ -90,10 +90,10 @@ Verdict:
 
 Available:
 
-- `prompt-coach list`
-- `prompt-coach search`
-- `prompt-coach show`
-- `prompt-coach open`
+- `promptlane list`
+- `promptlane search`
+- `promptlane show`
+- `promptlane open`
 - web archive list
 - web prompt detail
 - tool, project, tag, quality-gap, and imported-only filters
@@ -109,11 +109,11 @@ Verdict:
 
 - complete for the "find an old useful prompt again" value proposition
 
-### 4. Prompt Coach And Improvement Drafts
+### 4. PromptLane And Improvement Drafts
 
 Available:
 
-- `prompt-coach improve`
+- `promptlane improve`
 - local rule-based prompt improvement
 - analysis preview and improvement draft in the prompt detail UI
 - copy improvement draft
@@ -129,7 +129,7 @@ Storage and safety:
 
 Verdict:
 
-- the copy-based Prompt Coach workflow is implemented
+- the copy-based PromptLane workflow is implemented
 - quality is still a rule-based baseline and should be improved with beta feedback
 
 ### 5. Prompt Habit Analysis
@@ -180,11 +180,11 @@ Verdict:
 
 Available:
 
-- `prompt-coach import --dry-run`
-- `prompt-coach import --save-job`
-- `prompt-coach import --execute`
-- `prompt-coach import --resume`
-- `prompt-coach import-job`
+- `promptlane import --dry-run`
+- `promptlane import --save-job`
+- `promptlane import --execute`
+- `promptlane import --resume`
+- `promptlane import-job`
 - malformed line tolerance
 - assistant/tool/unsupported role skip
 - large line skip
@@ -207,8 +207,8 @@ Verdict:
 
 Available:
 
-- `prompt-coach export --anonymized --preview`
-- `prompt-coach export --anonymized --job`
+- `promptlane export --anonymized --preview`
+- `promptlane export --anonymized --job`
 - web export preview
 - web export execution
 - included/excluded field summary
@@ -234,7 +234,7 @@ Available:
 
 - archive list
 - prompt detail
-- Prompt Coach panel
+- PromptLane panel
 - project policy screen
 - export screen
 - dashboard/quality view
@@ -311,7 +311,7 @@ Verdict:
 ## Remaining Risks
 
 - Benchmark v1 uses synthetic fixtures, so it does not fully represent real-user usefulness.
-- Prompt Coach is rule-based and may not improve complex coding requests deeply enough.
+- PromptLane is rule-based and may not improve complex coding requests deeply enough.
 - Settings/local diagnostics can expose some raw paths to the local user.
 - `better-sqlite3` has platform-specific native install risk.
 - Codex support should remain labeled as a beta adapter.
@@ -322,4 +322,4 @@ Verdict:
 2. Decide whether to tag and publish the public beta.
 3. Lock Node 22/24 release gates in GitHub Actions.
 4. Expand macOS/Windows/Linux arm64 smoke coverage.
-5. Design beta feedback collection for Prompt Coach quality.
+5. Design beta feedback collection for PromptLane quality.

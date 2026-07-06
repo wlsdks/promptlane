@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cliPath = join(repoRoot, "dist", "cli", "index.js");
 const timeoutMs = 90_000;
-const approvalEnv = "PROMPT_COACH_NATIVE_DIALOG_APPROVED";
+const approvalEnv = "PROMPTLANE_NATIVE_DIALOG_APPROVED";
 
 if (process.env[approvalEnv] !== "1") {
   console.error(
@@ -26,7 +26,7 @@ const child = spawn(process.execPath, [cliPath, "mcp"], {
   cwd: repoRoot,
   env: {
     ...process.env,
-    PROMPT_COACH_NATIVE_DIALOG: "1",
+    PROMPTLANE_NATIVE_DIALOG: "1",
   },
   stdio: ["pipe", "pipe", "pipe"],
 });
@@ -78,7 +78,7 @@ send({
     protocolVersion: "2025-06-18",
     capabilities: {},
     clientInfo: {
-      name: "prompt-coach-mcp-native-dialog-approved",
+      name: "promptlane-mcp-native-dialog-approved",
       version: "0.0.0",
     },
   },
@@ -141,8 +141,8 @@ function finish(error) {
 function assertDogfoodResult() {
   assertEqual(
     initializeResponse?.result?.serverInfo?.name,
-    "prompt-coach",
-    "Initialize should return prompt-coach serverInfo.",
+    "promptlane",
+    "Initialize should return promptlane serverInfo.",
   );
 
   const structured = finalResponse?.result?.structuredContent;

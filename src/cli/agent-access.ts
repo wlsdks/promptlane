@@ -5,29 +5,29 @@ export type AgentCommandSpec = {
   args: string[];
 };
 
-export type PromptCoachEntry = {
+export type PromptLaneEntry = {
   command: string;
   args: string[];
 };
 
 const DIST_CLI_PATTERN = /[/\\]dist[/\\]cli[/\\]index\.js$/;
 
-export const PUBLISHED_PROMPT_COACH_ENTRY: PromptCoachEntry = {
-  command: "prompt-coach",
+export const PUBLISHED_PROMPTLANE_ENTRY: PromptLaneEntry = {
+  command: "promptlane",
   args: [],
 };
 
-export function defaultPromptCoachEntry(): PromptCoachEntry {
+export function defaultPromptLaneEntry(): PromptLaneEntry {
   const cliPath = process.argv[1];
   if (typeof cliPath === "string" && DIST_CLI_PATTERN.test(cliPath)) {
     return { command: process.execPath, args: [cliPath] };
   }
-  return { ...PUBLISHED_PROMPT_COACH_ENTRY };
+  return { ...PUBLISHED_PROMPTLANE_ENTRY };
 }
 
 export function mcpRegistrationSpec(
   tool: AgentTool,
-  entry: PromptCoachEntry = defaultPromptCoachEntry(),
+  entry: PromptLaneEntry = defaultPromptLaneEntry(),
 ): AgentCommandSpec {
   if (tool === "claude-code") {
     return {
@@ -37,7 +37,7 @@ export function mcpRegistrationSpec(
         "add",
         "--transport",
         "stdio",
-        "prompt-coach",
+        "promptlane",
         "--",
         entry.command,
         ...entry.args,
@@ -51,7 +51,7 @@ export function mcpRegistrationSpec(
     args: [
       "mcp",
       "add",
-      "prompt-coach",
+      "promptlane",
       "--",
       entry.command,
       ...entry.args,
@@ -70,12 +70,12 @@ export function mcpListSpec(tool: AgentTool): AgentCommandSpec {
 
 export function mcpRegistrationCommand(
   tool: AgentTool,
-  entry?: PromptCoachEntry,
+  entry?: PromptLaneEntry,
 ): string {
   const spec = mcpRegistrationSpec(tool, entry);
   return [spec.command, ...spec.args].join(" ");
 }
 
 export function doctorCommand(tool: AgentTool): string {
-  return `prompt-coach doctor ${tool}`;
+  return `promptlane doctor ${tool}`;
 }

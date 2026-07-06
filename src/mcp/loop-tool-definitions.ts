@@ -1,4 +1,4 @@
-import type { PromptCoachMcpToolDefinition } from "./score-tool-definitions.js";
+import type { PromptLaneMcpToolDefinition } from "./score-tool-definitions.js";
 
 const LOCAL_LOOP_READ_ONLY_TOOL_ANNOTATIONS = {
   destructiveHint: false,
@@ -45,11 +45,11 @@ const TOOL_ERROR_OUTPUT_SCHEMA = {
   },
 } as const;
 
-export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const GET_PROMPTLANE_LOOP_STATUS_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
-    name: "get_loopdeck_status",
+    name: "get_promptlane_loop_status",
     description:
-      "Check whether local PromptLane loop snapshots are available for the current PromptLane archive. Use this when Codex or Claude Code needs to know if a previous loop can be continued or whether the user should run `prompt-coach loop collect` first. Returns safe loop metadata, available loop tools, next actions, and privacy flags. It never returns prompt bodies, raw absolute paths, secrets, transcripts, or external LLM results.",
+      "Check whether local PromptLane loop snapshots are available for the current PromptLane archive. Use this when Codex or Claude Code needs to know if a previous loop can be continued or whether the user should run `promptlane loop collect` first. Returns safe loop metadata, available loop tools, next actions, and privacy flags. It never returns prompt bodies, raw absolute paths, secrets, transcripts, or external LLM results.",
     annotations: {
       ...LOCAL_LOOP_READ_ONLY_TOOL_ANNOTATIONS,
       title: "PromptLane loop status",
@@ -346,8 +346,8 @@ export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
             next_action: {
               type: "string",
               enum: [
-                "prompt-coach loop memory-approve",
-                "prompt-coach loop memory-candidate",
+                "promptlane loop memory-approve",
+                "promptlane loop memory-candidate",
               ],
             },
           },
@@ -375,11 +375,11 @@ export const GET_LOOPDECK_STATUS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
     },
   } as const;
 
-export const PREPARE_LOOP_BRIEF_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const PREPARE_LOOP_BRIEF_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "prepare_loop_brief",
     description:
-      "Prepare a copy-ready continuation prompt from a local PromptLane snapshot. Use this when Codex or Claude Code is resuming an agent loop, handing off work across sessions/worktrees, or needs the next prompt after `prompt-coach loop collect`. Omit filters for the latest snapshot, or pass worktree/session/branch filters to continue a selected loop. This is read-only and never auto-submits the prompt. It returns prompt ids and loop metadata only, never prompt bodies, raw paths, secrets, transcripts, or external LLM results.",
+      "Prepare a copy-ready continuation prompt from a local PromptLane snapshot. Use this when Codex or Claude Code is resuming an agent loop, handing off work across sessions/worktrees, or needs the next prompt after `promptlane loop collect`. Omit filters for the latest snapshot, or pass worktree/session/branch filters to continue a selected loop. This is read-only and never auto-submits the prompt. It returns prompt ids and loop metadata only, never prompt bodies, raw paths, secrets, transcripts, or external LLM results.",
     annotations: {
       ...LOCAL_LOOP_READ_ONLY_TOOL_ANNOTATIONS,
       title: "Prepare PromptLane continuation brief",
@@ -455,7 +455,7 @@ export const PREPARE_LOOP_BRIEF_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
     },
   } as const;
 
-export const RECORD_LOOP_OUTCOME_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const RECORD_LOOP_OUTCOME_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "record_loop_outcome",
     description:
@@ -540,7 +540,7 @@ export const RECORD_LOOP_OUTCOME_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
     },
   } as const;
 
-export const PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "propose_loop_memory_candidate",
     description:
@@ -610,7 +610,7 @@ export const PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION: PromptCoachMcpToolDe
     },
   } as const;
 
-export const RECORD_LOOP_MEMORY_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const RECORD_LOOP_MEMORY_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "record_loop_memory",
     description:
@@ -688,7 +688,7 @@ export const RECORD_LOOP_MEMORY_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
     },
   } as const;
 
-export const PROPOSE_INSTRUCTION_PATCH_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const PROPOSE_INSTRUCTION_PATCH_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "propose_instruction_patch",
     description:
@@ -770,7 +770,7 @@ export const PROPOSE_INSTRUCTION_PATCH_TOOL_DEFINITION: PromptCoachMcpToolDefini
     },
   } as const;
 
-export const APPLY_INSTRUCTION_PATCH_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const APPLY_INSTRUCTION_PATCH_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "apply_instruction_patch",
     description:

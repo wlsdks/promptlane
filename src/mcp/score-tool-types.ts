@@ -43,7 +43,7 @@ export type ReviewProjectInstructionsToolArguments = {
   include_suggestions?: boolean;
 };
 
-export type GetPromptCoachStatusToolArguments = {
+export type GetPromptLaneStatusToolArguments = {
   include_latest?: boolean;
 };
 
@@ -128,7 +128,7 @@ export type ReviewProjectInstructionsToolResult =
       message: string;
     };
 
-export type GetPromptCoachStatusToolResult = {
+export type GetPromptLaneStatusToolResult = {
   status: "ready" | "empty" | "setup_needed";
   total_prompts: number;
   scored_prompts: number;
@@ -156,7 +156,7 @@ export type GetPromptCoachStatusToolResult = {
 export type CoachPromptToolResult = {
   mode: "agent_coach";
   generated_at: string;
-  status: GetPromptCoachStatusToolResult;
+  status: GetPromptLaneStatusToolResult;
   latest_score?: ScorePromptToolResult;
   improvement?: ImprovePromptToolResult;
   archive?: ScorePromptArchiveToolResult;

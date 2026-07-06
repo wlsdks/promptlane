@@ -4,12 +4,12 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { initializePromptCoach } from "../config/config.js";
+import { initializePromptLane } from "../config/config.js";
 import type { LoopSnapshot } from "../loop/types.js";
 import { createSqlitePromptStorage } from "../storage/sqlite.js";
 import {
   applyInstructionPatchTool,
-  getLoopdeckStatusTool,
+  getPromptLaneLoopStatusTool,
   prepareLoopBriefTool,
   proposeInstructionPatchTool,
   proposeLoopMemoryCandidateTool,
@@ -26,7 +26,7 @@ afterEach(() => {
   }
 });
 
-describe("Loopdeck MCP tools", () => {
+describe("PromptLane MCP tools", () => {
   it("returns latest loop status without prompt bodies or raw paths", () => {
     const dataDir = seedLoopSnapshot({
       outcome: {
@@ -40,7 +40,7 @@ describe("Loopdeck MCP tools", () => {
     seedLoopMergeDecision(dataDir);
     seedOtherProjectMemory(dataDir);
 
-    const result = getLoopdeckStatusTool({}, { dataDir });
+    const result = getPromptLaneLoopStatusTool({}, { dataDir });
     const serialized = JSON.stringify(result);
 
     expect(result).toMatchObject({
@@ -131,7 +131,7 @@ describe("Loopdeck MCP tools", () => {
       memory_candidate: {
         eligible: true,
         reason: "passed_with_evidence",
-        next_action: "prompt-coach loop memory-approve",
+        next_action: "promptlane loop memory-approve",
       },
       latest_snapshot: {
         id: "loop_mcp",
@@ -141,7 +141,7 @@ describe("Loopdeck MCP tools", () => {
         average_prompt_score: 58,
         outcome_status: "passed",
       },
-      next_action: "prompt-coach loop brief",
+      next_action: "promptlane loop brief",
       next_actions: expect.arrayContaining([
         expect.stringContaining("prepare_loop_brief"),
       ]),
@@ -168,7 +168,7 @@ describe("Loopdeck MCP tools", () => {
   it("reports compact boundaries newer than the latest loop snapshot", () => {
     const dataDir = seedLoopSnapshot({ withCompactBoundary: true });
 
-    const result = getLoopdeckStatusTool({}, { dataDir });
+    const result = getPromptLaneLoopStatusTool({}, { dataDir });
     const serialized = JSON.stringify(result);
 
     expect(result).toMatchObject({
@@ -181,7 +181,7 @@ describe("Loopdeck MCP tools", () => {
         after_latest_snapshot: true,
       },
       next_actions: expect.arrayContaining([
-        expect.stringContaining("prompt-coach loop collect"),
+        expect.stringContaining("promptlane loop collect"),
       ]),
     });
     expect(serialized).not.toContain("Compact summary with sk-proj-secret");
@@ -315,21 +315,21 @@ describe("Loopdeck MCP tools", () => {
     });
     expect(result.prompt).toContain("## Compaction Boundary");
     expect(result.prompt).toContain("PostCompact at 2026-07-04T01:05:00.000Z");
-    expect(result.prompt).toContain("Run prompt-coach loop collect again");
+    expect(result.prompt).toContain("Run promptlane loop collect again");
     expect(serialized).not.toContain("Compact summary with sk-proj-secret");
     expect(serialized).not.toContain("/Users/example");
   });
 
   it("returns actionable guidance when no loop snapshot exists", () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
 
     const result = prepareLoopBriefTool({}, { dataDir });
 
     expect(result).toEqual({
       is_error: true,
       error_code: "not_found",
-      message: "No loop snapshot found. Run `prompt-coach loop collect` first.",
+      message: "No loop snapshot found. Run `promptlane loop collect` first.",
     });
   });
 
@@ -480,7 +480,7 @@ describe("Loopdeck MCP tools", () => {
       apply_gate: {
         web_apply_available: false,
         confirm_command:
-          "prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply",
+          "promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply",
         mcp_tool: "apply_instruction_patch",
         reason:
           "web review does not write files; apply through CLI or MCP with explicit confirmation",
@@ -582,7 +582,7 @@ function seedLoopSnapshot(
   } = {},
 ): string {
   const dataDir = createTempDir();
-  const init = initializePromptCoach({ dataDir });
+  const init = initializePromptLane({ dataDir });
   const storage = createSqlitePromptStorage({
     dataDir,
     hmacSecret: init.hookAuth.web_session_secret,
@@ -643,7 +643,7 @@ function loopSnapshot(patch: Partial<LoopSnapshot> = {}): LoopSnapshot {
     },
     next_brief: {
       generated: false,
-      summary: "Run prompt-coach loop brief to generate the next request.",
+      summary: "Run promptlane loop brief to generate the next request.",
     },
     privacy: {
       stores_prompt_bodies: false,
@@ -655,7 +655,7 @@ function loopSnapshot(patch: Partial<LoopSnapshot> = {}): LoopSnapshot {
 }
 
 function seedOtherProjectMemory(dataDir: string): void {
-  const init = initializePromptCoach({ dataDir });
+  const init = initializePromptLane({ dataDir });
   const storage = createSqlitePromptStorage({
     dataDir,
     hmacSecret: init.hookAuth.web_session_secret,
@@ -691,7 +691,7 @@ function seedOtherProjectMemory(dataDir: string): void {
 }
 
 function seedLoopMergeDecision(dataDir: string): void {
-  const init = initializePromptCoach({ dataDir });
+  const init = initializePromptLane({ dataDir });
   const storage = createSqlitePromptStorage({
     dataDir,
     hmacSecret: init.hookAuth.web_session_secret,
@@ -712,7 +712,7 @@ function seedLoopMergeDecision(dataDir: string): void {
 }
 
 function seedNewerOtherWorktreeSnapshot(dataDir: string): void {
-  const init = initializePromptCoach({ dataDir });
+  const init = initializePromptLane({ dataDir });
   const storage = createSqlitePromptStorage({
     dataDir,
     hmacSecret: init.hookAuth.web_session_secret,
@@ -738,7 +738,7 @@ function seedNewerOtherWorktreeSnapshot(dataDir: string): void {
 }
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-loop-mcp-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-loop-mcp-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;

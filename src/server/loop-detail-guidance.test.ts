@@ -23,7 +23,7 @@ describe("loop detail guidance", () => {
       reason:
         "uses the selected worktree/session/branch filters without auto-submitting",
       command:
-        "prompt-coach loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
+        "promptlane loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
       writes_files: false,
       external_calls: false,
     });

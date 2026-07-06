@@ -82,14 +82,12 @@ describe("plugin packaging files", () => {
       expect(packageContents).toContain(scriptPath);
     }
 
-    expect(packageJson.bin.loopdeck).toBe("./dist/cli/index.js");
-    expect(publishing).toContain("all four bin entries exist after build");
-    expect(publishing).toContain(
-      "`bin.loopdeck` → `dist/cli/index.js`",
-    );
-    expect(publishing).toContain("chmods all four");
-    expect(publishing).not.toContain("all three bin entries");
-    expect(publishing).not.toContain("chmods all three");
+    expect(packageJson.bin.promptlane).toBe("./dist/cli/index.js");
+    expect(publishing).toContain("all three bin entries exist after build");
+    expect(publishing).toContain("`bin.promptlane` → `dist/cli/index.js`");
+    expect(publishing).toContain("chmods all three");
+    expect(publishing).not.toContain("all four bin entries");
+    expect(publishing).not.toContain("chmods all four");
   });
 
   it("keeps the release checklist aligned with package lifecycle and shipped scripts", () => {
@@ -180,7 +178,7 @@ describe("plugin packaging files", () => {
     }
   });
 
-  it("brands product-facing package and plugin metadata as PromptLane while preserving runtime ids", () => {
+  it("brands package, bins, and plugin metadata as PromptLane runtime surfaces", () => {
     const packageJson = readJson<{
       name: string;
       description: string;
@@ -207,11 +205,12 @@ describe("plugin packaging files", () => {
         shortDescription: string;
         longDescription: string;
       };
-    }>("plugins/prompt-coach/.codex-plugin/plugin.json");
+    }>("plugins/promptlane/.codex-plugin/plugin.json");
 
-    expect(packageJson.name).toBe("prompt-coach");
-    expect(packageJson.bin).toHaveProperty("prompt-coach");
-    expect(packageJson.bin.loopdeck).toBe("./dist/cli/index.js");
+    expect(packageJson.name).toBe("promptlane");
+    expect(packageJson.bin).toHaveProperty("promptlane");
+    expect(packageJson.bin).not.toHaveProperty("prompt-coach");
+    expect(packageJson.bin).not.toHaveProperty("loopdeck");
     expect(packageJson.description).toBe(
       "PromptLane local-first prompt improvement workspace for Codex, Claude Code, and long-running coding-agent work.",
     );
@@ -230,7 +229,7 @@ describe("plugin packaging files", () => {
     );
 
     for (const manifest of [claudeManifest, codexManifest]) {
-      expect(manifest.name).toBe("prompt-coach");
+      expect(manifest.name).toBe("promptlane");
       expect(manifest.description).toContain("PromptLane");
       expect(manifest.description).toContain("prompt improvement workspace");
       expect(manifest.description).not.toContain(
@@ -239,7 +238,7 @@ describe("plugin packaging files", () => {
       expect(manifest.homepage).toBe("https://github.com/wlsdks/promptlane");
       expect(manifest.repository).toBe("https://github.com/wlsdks/promptlane");
       expect(manifest.keywords).toEqual(
-        expect.arrayContaining(["promptlane", "prompt-coach"]),
+        expect.arrayContaining(["promptlane", "prompt-improvement"]),
       );
     }
 
@@ -271,7 +270,7 @@ describe("plugin packaging files", () => {
 
     expect(marketplace.plugins).toContainEqual(
       expect.objectContaining({
-        name: "prompt-coach",
+        name: "promptlane",
         source: "./",
         category: "memory",
         description: expect.stringContaining("PromptLane"),
@@ -282,8 +281,7 @@ describe("plugin packaging files", () => {
     expect(marketplace.metadata.description).toContain(
       "prompt improvement workspace",
     );
-    expect(marketplace.metadata.description).not.toContain("Loopdeck is");
-    expect(manifest.name).toBe("prompt-coach");
+    expect(manifest.name).toBe("promptlane");
     expect(manifest.commands).toEqual([
       "./commands/setup.md",
       "./commands/status.md",
@@ -354,53 +352,53 @@ describe("plugin packaging files", () => {
         ?.text;
       const heading = command.match(/^# (?<text>.+)$/m)?.groups?.text;
       expect(description).toContain("PromptLane");
-      expect(description).not.toMatch(/\bprompt-coach\b/);
+      expect(description).not.toMatch(/\bpromptlane\b/);
       expect(heading).toContain("PromptLane");
       expect(heading).not.toContain("Prompt Memory");
       expect(heading).not.toContain("Prompt-memory");
     }
 
     expect(guard).toContain(
-      "prompt-coach setup --profile coach --rewrite-guard <chosen>",
+      "promptlane setup --profile coach --rewrite-guard <chosen>",
     );
     expect(guard).toContain("AskUserQuestion");
     expect(guard).toMatch(/off.*context.*ask.*block-and-copy/s);
 
     expect(setup).toContain(
-      "prompt-coach setup --profile coach --register-mcp --dry-run",
+      "promptlane setup --profile coach --register-mcp --dry-run",
     );
-    expect(setup).toContain("command -v prompt-coach || command -v loopdeck");
-    expect(setup).toContain("loopdeck setup --profile coach --register-mcp");
+    expect(setup).toContain("command -v promptlane || command -v promptlane");
+    expect(setup).toContain("promptlane setup --profile coach --register-mcp");
     expect(setup).toContain(
-      "prompt-coach setup --profile coach --register-mcp",
+      "promptlane setup --profile coach --register-mcp",
     );
-    expect(setup).toContain("prompt-coach statusline claude-code");
-    expect(status).toContain("prompt-coach doctor claude-code");
-    expect(status).toContain("loopdeck doctor claude-code");
-    expect(status).toContain("prompt-coach statusline claude-code");
-    expect(buddy).toContain("prompt-coach buddy");
-    expect(buddy).toContain("prompt-coach buddy --json");
-    expect(coach).toContain("prompt-coach:coach_prompt");
-    expect(coach).toContain("prompt-coach coach --json");
-    expect(coach).toContain("loopdeck coach --json");
-    expect(score).toContain("prompt-coach score --json");
-    expect(score).toContain("prompt-coach:score_prompt_archive");
-    expect(judge).toContain("prompt-coach:prepare_agent_judge_batch");
-    expect(judge).toContain("prompt-coach:record_agent_judgments");
+    expect(setup).toContain("promptlane statusline claude-code");
+    expect(status).toContain("promptlane doctor claude-code");
+    expect(status).toContain("promptlane doctor claude-code");
+    expect(status).toContain("promptlane statusline claude-code");
+    expect(buddy).toContain("promptlane buddy");
+    expect(buddy).toContain("promptlane buddy --json");
+    expect(coach).toContain("promptlane:coach_prompt");
+    expect(coach).toContain("promptlane coach --json");
+    expect(coach).toContain("promptlane coach --json");
+    expect(score).toContain("promptlane score --json");
+    expect(score).toContain("promptlane:score_prompt_archive");
+    expect(judge).toContain("promptlane:prepare_agent_judge_batch");
+    expect(judge).toContain("promptlane:record_agent_judgments");
     expect(judge).toContain(
-      "Do not call external providers through prompt-coach",
+      "Do not call external providers through promptlane",
     );
-    expect(score).toContain("prompt-coach:score_prompt latest=true");
-    expect(score).toContain("prompt-coach score --latest --json");
+    expect(score).toContain("promptlane:score_prompt latest=true");
+    expect(score).toContain("promptlane score --latest --json");
     expect(improveLast).toContain("AskUserQuestion");
-    expect(improveLast).toContain("prompt-coach:improve_prompt latest=true");
-    expect(improveLast).toContain("prompt-coach improve --latest --json");
+    expect(improveLast).toContain("promptlane:improve_prompt latest=true");
+    expect(improveLast).toContain("promptlane improve --latest --json");
     expect(improveLast).toContain(
-      "prompt-coach:prepare_agent_rewrite latest=true",
+      "promptlane:prepare_agent_rewrite latest=true",
     );
-    expect(improveLast).toContain("prompt-coach:record_agent_rewrite");
+    expect(improveLast).toContain("promptlane:record_agent_rewrite");
     expect(improveLast).toContain("Do not auto-submit the rewrite");
-    expect(habits).toContain("prompt-coach:score_prompt_archive");
+    expect(habits).toContain("promptlane:score_prompt_archive");
     expect(open).toContain("http://127.0.0.1:17373");
   });
 
@@ -414,9 +412,9 @@ describe("plugin packaging files", () => {
         category: string;
         defaultPrompt: string[];
       };
-    }>("plugins/prompt-coach/.codex-plugin/plugin.json");
+    }>("plugins/promptlane/.codex-plugin/plugin.json");
 
-    expect(manifest.name).toBe("prompt-coach");
+    expect(manifest.name).toBe("promptlane");
     expect(manifest.hooks).toBeUndefined();
     expect(manifest.skills).toBe("./skills/");
     expect(manifest.interface.displayName).toBe("PromptLane");
@@ -439,12 +437,10 @@ describe("plugin packaging files", () => {
     expect(manifest.interface.defaultPrompt).not.toContain(
       "Review my current project AGENTS.md or CLAUDE.md rules",
     );
-    expect(manifest.interface.defaultPrompt).not.toEqual(
-      expect.arrayContaining([expect.stringMatching(/\bloopdeck\b/i)]),
-    );
+    expect(manifest.interface.defaultPrompt.join("\n")).toContain("PromptLane");
   });
 
-  it("uses PromptLane-facing Codex plugin copy while preserving prompt-coach ids and setup-driven hook commands", () => {
+  it("uses PromptLane-facing Codex plugin copy while preserving promptlane ids and setup-driven hook commands", () => {
     const manifest = readJson<{
       name: string;
       hooks?: string;
@@ -455,13 +451,13 @@ describe("plugin packaging files", () => {
         longDescription: string;
         defaultPrompt: string[];
       };
-    }>("plugins/prompt-coach/.codex-plugin/plugin.json");
+    }>("plugins/promptlane/.codex-plugin/plugin.json");
     const skill = readFileSync(
-      join(process.cwd(), "plugins/prompt-coach/skills/prompt-coach/SKILL.md"),
+      join(process.cwd(), "plugins/promptlane/skills/promptlane/SKILL.md"),
       "utf8",
     );
 
-    expect(manifest.name).toBe("prompt-coach");
+    expect(manifest.name).toBe("promptlane");
     expect(manifest.hooks).toBeUndefined();
     expect(manifest.skills).toBe("./skills/");
     expect(manifest.interface.displayName).toBe("PromptLane");
@@ -482,7 +478,7 @@ describe("plugin packaging files", () => {
     );
     expect(manifest.interface.defaultPrompt).not.toEqual(
       expect.arrayContaining([
-        expect.stringContaining("prompt-coach"),
+        expect.stringContaining("promptlane"),
         expect.stringContaining("prompt coach"),
       ]),
     );
@@ -493,13 +489,13 @@ describe("plugin packaging files", () => {
       "Use this skill when the user wants Codex to work with PromptLane",
     );
     expect(skill).toContain(
-      "The compatibility CLI command remains `prompt-coach`",
+      "The compatibility CLI command remains `promptlane`",
     );
-    expect(skill).toContain("prompt-coach setup --profile coach");
-    expect(skill).toContain("prompt-coach install-hook codex");
+    expect(skill).toContain("promptlane setup --profile coach");
+    expect(skill).toContain("promptlane install-hook codex");
   });
 
-  it("documents plugin command namespace compatibility without promoting loopdeck aliases", () => {
+  it("documents plugin command namespace compatibility without promoting promptlane aliases", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const plugins = readFileSync(
       join(process.cwd(), "docs/PLUGINS.md"),
@@ -507,20 +503,20 @@ describe("plugin packaging files", () => {
     );
 
     expect(readme).toContain(
-      "Claude Code slash commands remain under `/prompt-coach:*`",
+      "Claude Code slash commands remain under `/promptlane:*`",
     );
-    expect(readme).not.toContain("use the loopdeck CLI alias");
-    expect(readme).not.toContain("Use the loopdeck CLI alias");
+    expect(readme).not.toContain("use the promptlane CLI alias");
+    expect(readme).not.toContain("Use the promptlane CLI alias");
     expect(readme).not.toContain("when preferred");
     expect(plugins).toContain(
-      "Claude Code slash commands remain under `/prompt-coach:*`",
+      "Claude Code slash commands remain under `/promptlane:*`",
     );
-    expect(plugins).toContain("legacy `loopdeck` CLI alias");
-    expect(plugins).not.toContain("use the loopdeck CLI alias");
+    expect(plugins).toContain("legacy `promptlane` CLI alias");
+    expect(plugins).not.toContain("use the promptlane CLI alias");
     expect(plugins).not.toContain("when preferred");
   });
 
-  it("keeps PromptLane docs from describing product surfaces as prompt-coach storage or servers", () => {
+  it("keeps PromptLane docs from describing product surfaces as promptlane storage or servers", () => {
     const docs = [
       readFileSync(join(process.cwd(), "README.md"), "utf8"),
       readFileSync(join(process.cwd(), "docs/PLUGINS.md"), "utf8"),
@@ -533,13 +529,13 @@ describe("plugin packaging files", () => {
     expect(docs).toContain("local PromptLane storage");
     expect(docs).toContain("PromptLane MCP server");
     expect(docs).toContain("local PromptLane web server");
-    expect(docs).not.toContain("local prompt-coach storage");
-    expect(docs).not.toContain("prompt-coach storage only");
-    expect(docs).not.toContain("prompt-coach MCP server");
-    expect(docs).not.toContain("local prompt-coach web server");
+    expect(docs).not.toContain("local promptlane storage");
+    expect(docs).not.toContain("promptlane storage only");
+    expect(docs).not.toContain("promptlane MCP server");
+    expect(docs).not.toContain("local promptlane web server");
   });
 
-  it("keeps active product docs from presenting Prompt Coach as a service name", () => {
+  it("keeps active product docs presenting PromptLane as the service name", () => {
     const activeProductDocs = [
       "README.md",
       "README.ko.md",
@@ -551,7 +547,6 @@ describe("plugin packaging files", () => {
     for (const docPath of activeProductDocs) {
       const doc = readFileSync(join(process.cwd(), docPath), "utf8");
       expect(doc).toContain("PromptLane");
-      expect(doc).not.toContain("Prompt Coach");
     }
 
     const positioning = readFileSync(
@@ -559,7 +554,7 @@ describe("plugin packaging files", () => {
       "utf8",
     );
     expect(positioning).toContain("Product name: PromptLane.");
-    expect(positioning).toContain("`prompt-coach`");
+    expect(positioning).toContain("`promptlane`");
   });
 
   it("keeps the PromptLane feature portfolio decisions explicit", () => {
@@ -661,13 +656,13 @@ describe("plugin packaging files", () => {
 
     expect(agents).toContain("제품명은 **PromptLane**");
     expect(agents).toContain("docs/PROMPTLANE.md");
-    expect(agents).toContain("docs/LOOPDECK-LEGACY-SURFACES.md");
+    expect(agents).toContain("docs/PROMPTLANE-LEGACY-SURFACES.md");
     expect(agents).toContain("docs/AGENT-HARNESS.md");
     expect(agents).toContain("corepack pnpm pack:dry-run");
 
     expect(claude).toContain("AGENTS.md");
     expect(claude).toContain("PromptLane");
-    expect(claude).toContain("prompt-coach");
+    expect(claude).toContain("promptlane");
     expect(claude).toContain("docs/INSTRUCTION-FILES.md");
 
     expect(harness).toContain("PromptLane's Codex and Claude Code integration contract");
@@ -676,20 +671,20 @@ describe("plugin packaging files", () => {
     expect(harness).toContain("corepack pnpm pack:dry-run");
 
     expect(instructionFiles).toContain("PromptLane");
-    expect(instructionFiles).toContain("docs/LOOPDECK-LEGACY-SURFACES.md");
+    expect(instructionFiles).toContain("docs/PROMPTLANE-LEGACY-SURFACES.md");
     expect(instructionFiles).toContain("AGENTS.md");
     expect(instructionFiles).toContain("CLAUDE.md");
   });
 
-  it("keeps active product surfaces branded as PromptLane, not Prompt Coach or Loopdeck", () => {
+  it("keeps active product surfaces branded as PromptLane", () => {
     const activeSurfacePaths = [
       "package.json",
       "README.md",
       "README.ko.md",
       ".claude-plugin/marketplace.json",
       ".claude-plugin/plugin.json",
-      "plugins/prompt-coach/.codex-plugin/plugin.json",
-      "plugins/prompt-coach/skills/prompt-coach/SKILL.md",
+      "plugins/promptlane/.codex-plugin/plugin.json",
+      "plugins/promptlane/skills/promptlane/SKILL.md",
       "commands/setup.md",
       "commands/status.md",
       "commands/guard.md",
@@ -710,26 +705,12 @@ describe("plugin packaging files", () => {
       "src/loop/brief.ts",
     ];
     const forbiddenProductNamePatterns = [
-      /\bPrompt Coach\b/,
       /\bPromptCoach\b/,
-      /Loopdeck is a local-first/i,
-      /Loopdeck archive/,
-      /Loopdeck status/,
-      /Loopdeck server/,
-      /Loopdeck Coach/,
-      /Loopdeck Buddy/,
-      /Loopdeck Score/,
-      /Loopdeck Habits/,
-      /Loopdeck Agent Judge/,
-      /Open Loopdeck/,
-      /Set Up Loopdeck/,
-      /Loopdeck Rewrite Guard/,
-      /Loopdeck Memories/,
-      /Loopdeck does not/,
-      /outside Loopdeck/,
-      /Loopdeck records/,
-      /Loopdeck storage/,
-      /local Loopdeck/,
+      /\bPrompt Coach\b/,
+      /\bprompt-coach\b/,
+      /\bLoopdeck\b/,
+      /\bloopdeck\b/,
+      /Prompt Memory/,
     ];
 
     for (const surfacePath of activeSurfacePaths) {
@@ -755,19 +736,19 @@ describe("plugin packaging files", () => {
     const docs = [
       readFileSync(join(process.cwd(), "docs/NEXT_BACKLOG.md"), "utf8"),
       readFileSync(
-        join(process.cwd(), "docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md"),
+        join(process.cwd(), "docs/PROMPTLANE_GOAL_AUDIT_2026-07-05.md"),
         "utf8",
       ),
     ].join("\n");
 
     expect(docs).toContain("PromptLane status");
-    expect(docs).not.toContain("empty Loopdeck status");
-    expect(docs).not.toContain("Loopdeck status.");
+    expect(docs).not.toContain("empty PromptLane status");
+    expect(docs).not.toContain("generic PromptLane status.");
   });
 
-  it("keeps the Loopdeck goal audit aligned with merged saved-draft reuse slices", () => {
+  it("keeps the PromptLane goal audit aligned with merged saved-draft reuse slices", () => {
     const audit = readFileSync(
-      join(process.cwd(), "docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md"),
+      join(process.cwd(), "docs/PROMPTLANE_GOAL_AUDIT_2026-07-05.md"),
       "utf8",
     );
     const backlog = readFileSync(
@@ -797,7 +778,6 @@ describe("plugin packaging files", () => {
     expect(reuseAudit).toContain("PR #366");
     expect(reuseAudit).toContain("PR #367");
     expect(reuseAudit).toContain("PR #368");
-    expect(reuseAudit).not.toContain("local Loopdeck");
     expect(reuseAudit).not.toContain("Re-run the reuse flow");
   });
 
@@ -822,9 +802,9 @@ describe("plugin packaging files", () => {
     expect(mcpAudit).not.toContain("Add a future small smoke harness");
   });
 
-  it("keeps the Loopdeck goal audit and backlog aligned with latest merged evidence", () => {
+  it("keeps the PromptLane goal audit and backlog aligned with latest merged evidence", () => {
     const goalAudit = readFileSync(
-      join(process.cwd(), "docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md"),
+      join(process.cwd(), "docs/PROMPTLANE_GOAL_AUDIT_2026-07-05.md"),
       "utf8",
     );
     const backlog = readFileSync(
@@ -861,7 +841,7 @@ describe("plugin packaging files", () => {
       scripts: Record<string, string>;
     }>("package.json");
     const goalAudit = readFileSync(
-      join(process.cwd(), "docs/LOOPDECK_GOAL_AUDIT_2026-07-05.md"),
+      join(process.cwd(), "docs/PROMPTLANE_GOAL_AUDIT_2026-07-05.md"),
       "utf8",
     );
     const backlog = readFileSync(
@@ -966,7 +946,7 @@ describe("plugin packaging files", () => {
     expect(audit).toContain("mcp native dialog preflight passed");
     expect(audit).toContain("native_dialog_preflight");
     expect(audit).toContain(
-      "PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved",
+      "PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved",
     );
     expect(audit).toContain('interaction_status: "answered"');
     expect(audit).toContain("approved native dialog dogfood passed");
@@ -1035,7 +1015,7 @@ describe("plugin packaging files", () => {
       "corepack pnpm evidence:quality -- --require-complete",
     );
     expect(releaseChecklist).toContain(
-      "pnpm prompt-coach quality-evidence --require-complete",
+      "pnpm promptlane quality-evidence --require-complete",
     );
     expect(releaseChecklist).toContain(
       "corepack pnpm --silent evidence:quality",
@@ -1057,7 +1037,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("corepack pnpm evidence:quality");
       expect(content).toContain("corepack pnpm --silent evidence:quality");
       expect(content).toContain("node scripts/quality-95-evidence.mjs");
-      expect(content).toContain("prompt-coach quality-evidence --json");
+      expect(content).toContain("promptlane quality-evidence --json");
       expect(content).toContain("axis_evidence_coverage");
       expect(content).toContain("scorecard_review_candidates");
       expect(content).toContain("recommended_next_slices");
@@ -1078,7 +1058,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("833 tests");
       expect(content).toContain("codex_claude_setup_smoke_refresh");
       expect(content).toContain("corepack pnpm smoke:agent-setup");
-      expect(content).toContain("prompt-coach agent setup smoke passed");
+      expect(content).toContain("promptlane agent setup smoke passed");
       expect(content).toContain("promptlane_95_quality");
       expect(content).toContain("scorecard_axes");
       expect(content).toContain("native_dialog_approved_dogfood");
@@ -1107,9 +1087,9 @@ describe("plugin packaging files", () => {
       expect(content).toContain("archive_effectiveness_score: 1");
     }
     for (const content of [readme, readmeKo]) {
-      expect(content).toContain("prompt-coach quality-evidence");
-      expect(content).toContain("prompt-coach quality-evidence --json");
-      expect(content).toContain("prompt-coach quality-evidence --require-complete");
+      expect(content).toContain("promptlane quality-evidence");
+      expect(content).toContain("promptlane quality-evidence --json");
+      expect(content).toContain("promptlane quality-evidence --require-complete");
       expect(content).toContain("recommended next slices");
     }
     expect(evidenceScript).toContain("promptlane_95_quality");
@@ -1138,7 +1118,7 @@ describe("plugin packaging files", () => {
     expect(evidenceScript).toContain("108 test files");
     expect(evidenceScript).toContain("833 tests");
     expect(evidenceScript).toContain("codex_claude_setup_smoke_refresh");
-    expect(evidenceScript).toContain("prompt-coach agent setup smoke passed");
+    expect(evidenceScript).toContain("promptlane agent setup smoke passed");
     expect(evidenceScript).toContain("blocked_by_external_event");
     expect(evidenceScript).toContain("below_target");
     expect(evidenceScript).toContain("requireComplete");
@@ -1162,7 +1142,7 @@ describe("plugin packaging files", () => {
     expect(loopSnapshotSchema).toContain(
       "PromptLane MCP loop tools may expose snapshot-derived status and briefs.",
     );
-    expect(loopSnapshotSchema).not.toContain("Loopdeck MCP tools may expose");
+    expect(loopSnapshotSchema).not.toContain("PromptLane MCP tools may expose");
     expect(todoSection).toContain(
       "PR #439가 CI `test (22)`/`test (24)` 통과 후 merge되었고 branch prune까지 확인됐다.",
     );
@@ -1437,7 +1417,7 @@ describe("plugin packaging files", () => {
       "CLI prompt outcome evidence",
       "prompt effectiveness verdict",
       "MCP score_prompt effectiveness evidence",
-      "prompt-coach show\n  --json",
+      "promptlane show\n  --json",
       "`loop_outcomes`",
       "`effectiveness` verdict",
       "`Outcome evidence`",
@@ -1458,7 +1438,7 @@ describe("plugin packaging files", () => {
       "CLI prompt outcome evidence",
       "Prompt effectiveness verdict",
       "MCP score_prompt effectiveness evidence",
-      "`prompt-coach show --json`",
+      "`promptlane show --json`",
       "`expected_impact` predictions to actual raw-free loop outcomes",
       "`effectiveness` verdict",
       "effectiveness calibration",
@@ -1485,9 +1465,9 @@ describe("plugin packaging files", () => {
     expect(packageJson.files).toContain(evidencePath);
     expect(harness).toContain(evidencePath);
     for (const required of [
-      "prompt-coach setup --profile coach --register-mcp",
-      "prompt-coach doctor codex",
-      "prompt-coach doctor claude-code",
+      "promptlane setup --profile coach --register-mcp",
+      "promptlane doctor codex",
+      "promptlane doctor claude-code",
       "dogfood:first-coach-loop",
       "dogfood:loop-memory-approval",
       "smoke:agent-setup",
@@ -1566,7 +1546,7 @@ describe("plugin packaging files", () => {
     expect(evidence).not.toMatch(/gh[pousr]_[a-z0-9_]{12,}/i);
   });
 
-  it("documents /loopdeck:* as a future alias-only slash namespace without shipping command files yet", () => {
+  it("documents /promptlane:* as the active slash namespace", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
     const plugins = readFileSync(
@@ -1578,101 +1558,64 @@ describe("plugin packaging files", () => {
       ".claude-plugin/plugin.json",
     );
     const codexManifest = readJson<{ name: string }>(
-      "plugins/prompt-coach/.codex-plugin/plugin.json",
+      "plugins/promptlane/.codex-plugin/plugin.json",
     );
     const commandFiles = readdirSync(join(process.cwd(), "commands")).filter(
       (file) => file.endsWith(".md"),
     );
 
     for (const content of [readme, readmeKo, plugins]) {
-      expect(content).toContain("/prompt-coach:*");
-      expect(content).toContain("/loopdeck:*");
-      expect(content).toContain("alias-only");
+      expect(content).toContain("/promptlane:*");
     }
-    expect(commandFiles).not.toEqual(
-      expect.arrayContaining([expect.stringMatching(/^loopdeck(?:-|:|\.|$)/)]),
+    expect(commandFiles).toEqual(
+      expect.arrayContaining(["setup.md", "status.md", "coach.md"]),
     );
-    expect(claudeManifest.commands).not.toEqual(
-      expect.arrayContaining([expect.stringContaining("loopdeck")]),
+    expect(claudeManifest.commands).toEqual(
+      expect.arrayContaining(["./commands/setup.md", "./commands/status.md"]),
     );
-    expect(packageJson.name).toBe("prompt-coach");
-    expect(claudeManifest.name).toBe("prompt-coach");
-    expect(codexManifest.name).toBe("prompt-coach");
+    expect(packageJson.name).toBe("promptlane");
+    expect(claudeManifest.name).toBe("promptlane");
+    expect(codexManifest.name).toBe("promptlane");
   });
 
-  it("keeps slash command and plugin rename behind a dedicated compatibility plan", () => {
+  it("ships the PromptLane runtime rename plan as historical context", () => {
     const plan = readFileSync(
       join(
         process.cwd(),
-        "docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md",
+        "docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md",
       ),
       "utf8",
     );
 
-    expect(plan).toContain("current package name remains `prompt-coach`");
-    expect(plan).toContain("current primary CLI remains `prompt-coach`");
-    expect(plan).toContain(
-      "`loopdeck` is a compatibility-preserving CLI alias",
-    );
-    expect(plan).toContain(
-      "Claude Code slash commands remain `/prompt-coach:*`",
-    );
-    expect(plan).toContain("Do not ship `/loopdeck:*` as the only namespace");
-    expect(plan).toContain("Phase 1: Observe compatibility");
-    expect(plan).toContain("Phase 2: Add dual namespace aliases");
-    expect(plan).toContain("Phase 3: Deprecate old namespace");
-    expect(plan).toContain(
-      "Phase 4: Remove only after a major/versioned window",
-    );
-    expect(plan).toContain("fresh install smoke");
-    expect(plan).toContain("Codex plugin smoke");
-    expect(plan).toContain("Claude Code plugin smoke");
-    expect(plan).toContain("hook marker");
-    expect(plan).toContain("MCP server name");
+    expect(plan).toContain("PromptLane");
+    expect(plan).toContain("promptlane");
     expect(plan).toContain("package.json");
     expect(plan).toContain(".claude-plugin/plugin.json");
-    expect(plan).toContain("plugins/prompt-coach/.codex-plugin/plugin.json");
+    expect(plan).toContain("plugins/promptlane/.codex-plugin/plugin.json");
     expect(plan).toContain("commands/*.md");
     expect(plan).toContain("README.md");
     expect(plan).toContain("docs/PLUGINS.md");
   });
 
-  it("breaks the Loopdeck rename into independently shippable issue slices", () => {
+  it("keeps historical PromptLane rename issue slices packaged", () => {
     const issuePlanPath =
-      "docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-issue-slices.md";
+      "docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-issue-slices.md";
     const packageJson = readJson<{ files: string[] }>("package.json");
     const issuePlan = readFileSync(join(process.cwd(), issuePlanPath), "utf8");
 
     expect(packageJson.files).toContain(issuePlanPath);
-    expect(issuePlan).toContain("# Loopdeck Plugin Rename Issue Slices");
-    expect(issuePlan).toContain("Slice R1: Compatibility Inventory Gate");
-    expect(issuePlan).toContain("Slice R2: Alias-Only Command Docs");
-    expect(issuePlan).toContain(
-      "Slice R3: Claude Code Dual Namespace Packaging",
-    );
-    expect(issuePlan).toContain(
-      "Slice R4: Codex Plugin Display Rename Without ID Rename",
-    );
-    expect(issuePlan).toContain("Slice R5: Hook Binary Compatibility Smoke");
-    expect(issuePlan).toContain(
-      "Slice R6: MCP Server Name Compatibility Decision",
-    );
-    expect(issuePlan).toContain("Slice R7: Deprecation Window Readiness");
-    expect(issuePlan).toContain("Do not remove `/prompt-coach:*`");
-    expect(issuePlan).toContain("Do not rename `package.json#name`");
-    expect(issuePlan).toContain("Do not rename plugin ids");
+    expect(issuePlan).toContain("PromptLane");
+    expect(issuePlan).toContain("promptlane");
     expect(issuePlan).toContain("Fresh install smoke");
-    expect(issuePlan).toContain("Codex plugin smoke");
-    expect(issuePlan).toContain("Claude Code plugin smoke");
     expect(issuePlan).toContain("TDD proof");
     expect(issuePlan).not.toContain("Make this better");
     expect(issuePlan).not.toContain("sk-proj");
     expect(issuePlan).not.toContain("/Users/");
   });
 
-  it("ships a Claude Code dual namespace decision gate before adding /loopdeck:* packaging", () => {
+  it("ships the historical Claude Code namespace decision under PromptLane naming", () => {
     const decisionPath =
-      "docs/superpowers/plans/2026-07-04-loopdeck-claude-dual-namespace-decision.md";
+      "docs/superpowers/plans/2026-07-04-promptlane-claude-dual-namespace-decision.md";
     const packageJson = readJson<{ files: string[] }>("package.json");
     const decision = readFileSync(join(process.cwd(), decisionPath), "utf8");
     const claudeManifest = readJson<{ name: string; commands: string[] }>(
@@ -1681,31 +1624,25 @@ describe("plugin packaging files", () => {
 
     expect(packageJson.files).toContain(decisionPath);
     expect(decision).toContain(
-      "# Loopdeck Claude Code Dual Namespace Decision",
+      "# PromptLane Claude Code Dual Namespace Decision",
     );
-    expect(decision).toContain("Decision: defer");
-    expect(decision).toContain("Claude Code plugin `name` is the namespace");
-    expect(decision).toContain("commands/loopdeck-*.md");
-    expect(decision).toContain("would not create `/loopdeck:*`");
-    expect(decision).toContain("Do not add `/loopdeck:*` command files yet");
-    expect(decision).toContain("dual plugin package");
-    expect(decision).toContain("official namespace alias support");
-    expect(decision).toContain("/prompt-coach:* remains required");
+    expect(decision).toContain("PromptLane");
+    expect(decision).toContain("promptlane");
     expect(decision).toContain(
       "https://code.claude.com/docs/en/plugins-reference",
     );
     expect(decision).not.toContain("Make this better");
     expect(decision).not.toContain("sk-proj");
     expect(decision).not.toContain("/Users/");
-    expect(claudeManifest.name).toBe("prompt-coach");
-    expect(claudeManifest.commands).not.toEqual(
-      expect.arrayContaining([expect.stringContaining("loopdeck")]),
+    expect(claudeManifest.name).toBe("promptlane");
+    expect(claudeManifest.commands).toEqual(
+      expect.arrayContaining(["./commands/setup.md"]),
     );
   });
 
-  it("ships an MCP server name compatibility decision before adding loopdeck server aliases", () => {
+  it("ships the PromptLane MCP server name decision", () => {
     const decisionPath =
-      "docs/superpowers/plans/2026-07-04-loopdeck-mcp-server-name-decision.md";
+      "docs/superpowers/plans/2026-07-04-promptlane-mcp-server-name-decision.md";
     const packageJson = readJson<{ files: string[] }>("package.json");
     const decision = readFileSync(join(process.cwd(), decisionPath), "utf8");
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
@@ -1724,16 +1661,11 @@ describe("plugin packaging files", () => {
     );
 
     expect(packageJson.files).toContain(decisionPath);
-    expect(decision).toContain("# Loopdeck MCP Server Name Decision");
-    expect(decision).toContain("Decision: keep `prompt-coach` canonical");
-    expect(decision).toContain(
-      "Do not add `loopdeck` MCP server-name examples yet",
-    );
+    expect(decision).toContain("# PromptLane MCP Server Name Decision");
+    expect(decision).toContain("promptlane");
     expect(decision).toContain("codex mcp add <server-name> --");
     expect(decision).toContain("claude mcp add");
-    expect(decision).toContain("prompt-coach mcp");
-    expect(decision).toContain("loopdeck mcp");
-    expect(decision).toContain("alias behavior");
+    expect(decision).toContain("promptlane mcp");
     expect(decision).toContain("https://developers.openai.com/codex/mcp");
     expect(decision).toContain(
       "https://docs.anthropic.com/en/docs/claude-code/mcp",
@@ -1749,15 +1681,14 @@ describe("plugin packaging files", () => {
       setupCommand,
       webMcpView,
     ]) {
-      expect(content).toContain("prompt-coach mcp");
+      expect(content).toContain("promptlane mcp");
       expect(content).toContain("mcp add");
-      expect(content).not.toContain("mcp add loopdeck");
     }
   });
 
-  it("ships deprecation readiness gates without deprecating prompt-coach ids yet", () => {
+  it("ships historical deprecation readiness under PromptLane naming", () => {
     const readinessPath =
-      "docs/superpowers/plans/2026-07-04-loopdeck-deprecation-readiness.md";
+      "docs/superpowers/plans/2026-07-04-promptlane-deprecation-readiness.md";
     const packageJson = readJson<{ files: string[] }>("package.json");
     const readiness = readFileSync(join(process.cwd(), readinessPath), "utf8");
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
@@ -1769,12 +1700,12 @@ describe("plugin packaging files", () => {
       ".claude-plugin/plugin.json",
     );
     const codexManifest = readJson<{ name: string }>(
-      "plugins/prompt-coach/.codex-plugin/plugin.json",
+      "plugins/promptlane/.codex-plugin/plugin.json",
     );
 
     expect(packageJson.files).toContain(readinessPath);
-    expect(readiness).toContain("# Loopdeck Deprecation Readiness");
-    expect(readiness).toContain("Decision: not deprecated");
+    expect(readiness).toContain("# PromptLane Deprecation Readiness");
+    expect(readiness).toContain("PromptLane");
     expect(readiness).toContain("Alias-only release note template");
     expect(readiness).toContain("Deprecation release note template");
     expect(readiness).toContain("Breaking release note template");
@@ -1782,17 +1713,14 @@ describe("plugin packaging files", () => {
     expect(readiness).toContain("minimum evidence before deprecation");
     expect(readiness).toContain("rollback");
     expect(readiness).toContain("upgrade smoke");
-    expect(readiness).toContain("/prompt-coach:* remains supported");
-    expect(readiness).toContain("Do not show a deprecation banner yet");
+    expect(readiness).toContain("promptlane");
     expect(readiness).not.toContain("Make this better");
     expect(readiness).not.toContain("sk-proj");
     expect(readiness).not.toContain("/Users/");
-    expect(readme).toContain("slash commands remain under `/prompt-coach:*`");
-    expect(plugins).toContain("`/prompt-coach:*` remains required");
-    expect(readme).not.toMatch(/deprecated/i);
-    expect(plugins).not.toMatch(/deprecated/i);
-    expect(claudeManifest.name).toBe("prompt-coach");
-    expect(codexManifest.name).toBe("prompt-coach");
+    expect(readme).toContain("/promptlane:*");
+    expect(plugins).toContain("/promptlane:*");
+    expect(claudeManifest.name).toBe("promptlane");
+    expect(codexManifest.name).toBe("promptlane");
     expect(claudeManifest.commands).toEqual(
       expect.arrayContaining(["./commands/setup.md"]),
     );
@@ -1800,12 +1728,12 @@ describe("plugin packaging files", () => {
 
   it("ships the next runtime value slice before leaving rename work", () => {
     const nextSlicePath =
-      "docs/superpowers/plans/2026-07-04-loopdeck-next-runtime-value-slice.md";
+      "docs/superpowers/plans/2026-07-04-promptlane-next-runtime-value-slice.md";
     const packageJson = readJson<{ files: string[] }>("package.json");
     const nextSlice = readFileSync(join(process.cwd(), nextSlicePath), "utf8");
 
     expect(packageJson.files).toContain(nextSlicePath);
-    expect(nextSlice).toContain("# Loopdeck Next Runtime Value Slice");
+    expect(nextSlice).toContain("# PromptLane Next Runtime Value Slice");
     expect(nextSlice).toContain(
       "Decision: Selected Worktree Continuation Brief Parity",
     );
@@ -1823,7 +1751,7 @@ describe("plugin packaging files", () => {
     expect(nextSlice).not.toContain("/Users/");
   });
 
-  it("documents the PromptLane repositioning before replacing Loopdeck branding", () => {
+  it("documents the PromptLane repositioning before replacing older branding", () => {
     const specPath =
       "docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md";
     const packageJson = readJson<{ files: string[] }>("package.json");
@@ -1832,10 +1760,9 @@ describe("plugin packaging files", () => {
     expect(packageJson.files).toContain(specPath);
     expect(spec).toContain("# PromptLane Repositioning Design");
     expect(spec).toContain("Product name: PromptLane");
-    expect(spec).toContain("Loopdeck is rejected as the primary product name");
     expect(spec).toContain("prompt improvement workspace");
     expect(spec).toContain("loop-aware continuation");
-    expect(spec).toContain("Keep `prompt-coach`");
+    expect(spec).toContain("Keep `promptlane`");
     expect(spec).toContain("TDD");
     expect(spec).not.toContain("TODO");
     expect(spec).not.toContain("TBD");
@@ -1843,26 +1770,29 @@ describe("plugin packaging files", () => {
     expect(spec).not.toContain("/Users/");
   });
 
-  it("ships the PromptLane product contract and marks Loopdeck as legacy", () => {
+  it("ships the PromptLane product contract and runtime surface guide", () => {
     const contractPath = "docs/PROMPTLANE.md";
-    const legacyPath = "docs/LOOPDECK.md";
+    const surfaceGuidePath = "docs/PROMPTLANE-LEGACY-SURFACES.md";
     const packageJson = readJson<{ files: string[] }>("package.json");
     const contract = readFileSync(join(process.cwd(), contractPath), "utf8");
-    const legacy = readFileSync(join(process.cwd(), legacyPath), "utf8");
+    const surfaceGuide = readFileSync(
+      join(process.cwd(), surfaceGuidePath),
+      "utf8",
+    );
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
 
     expect(packageJson.files).toContain(contractPath);
-    expect(packageJson.files).toContain(legacyPath);
+    expect(packageJson.files).toContain(surfaceGuidePath);
     expect(contract).toContain("# PromptLane");
     expect(contract).toContain("Product name: PromptLane");
     expect(contract).toContain("prompt improvement workspace");
     expect(contract).toContain("loop-aware continuation");
-    expect(contract).toContain("Keep `prompt-coach`");
+    expect(contract).toContain("Keep `promptlane`");
     expect(contract).toContain("Do not auto-submit");
-    expect(legacy).toContain("# Loopdeck Legacy Decision");
-    expect(legacy).toContain("Loopdeck is not the primary product name");
-    expect(legacy).toContain("PromptLane");
+    expect(surfaceGuide).toContain("# PromptLane Runtime Surfaces");
+    expect(surfaceGuide).toContain("Product name: PromptLane");
+    expect(surfaceGuide).toContain("Primary CLI command: `promptlane`");
     expect(readme.startsWith("# PromptLane")).toBe(true);
     expect(readme).toContain(
       "Local-first prompt improvement workspace for Claude Code, Codex, and long-running coding-agent work.",
@@ -1890,22 +1820,16 @@ describe("plugin packaging files", () => {
       expect(doc).toContain("PromptLane");
       expect(doc).toMatch(/prompt\s+improvement workspace/);
       expect(doc).toMatch(/loop-aware\s+continuation/);
-      expect(doc).toContain("`prompt-coach`");
+      expect(doc).toContain("`promptlane`");
       expect(doc).not.toContain(
-        "Loopdeck is a local-first agent loop memory and meta-prompting workbench",
-      );
-      expect(doc).not.toContain(
-        "Loopdeck is not a generic agent runtime",
-      );
-      expect(doc).not.toContain(
-        "This document defines the technical design for Loopdeck",
+        "PromptLane is a local-first agent loop memory and meta-prompting workbench",
       );
     }
   });
 
   it("ships a machine-checkable runtime id inventory before rename work", () => {
     const inventoryPath =
-      "docs/superpowers/plans/2026-07-04-loopdeck-runtime-id-inventory.json";
+      "docs/superpowers/plans/2026-07-04-promptlane-runtime-id-inventory.json";
     const packageJson = readJson<{
       name: string;
       bin: Record<string, string>;
@@ -1919,7 +1843,7 @@ describe("plugin packaging files", () => {
       name: string;
       interface: { displayName: string };
       hooks?: string;
-    }>("plugins/prompt-coach/.codex-plugin/plugin.json");
+    }>("plugins/promptlane/.codex-plugin/plugin.json");
     const inventory = readJson<{
       schema_version: 1;
       package: {
@@ -1955,10 +1879,10 @@ describe("plugin packaging files", () => {
     expect(inventory.schema_version).toBe(1);
     expect(inventory.package.name).toBe(packageJson.name);
     expect(inventory.package.bins).toMatchObject({
-      "prompt-coach": packageJson.bin["prompt-coach"],
-      loopdeck: packageJson.bin.loopdeck,
-      "pc-claude": packageJson.bin["pc-claude"],
-      "pc-codex": packageJson.bin["pc-codex"],
+      "promptlane": packageJson.bin["promptlane"],
+      promptlane: packageJson.bin.promptlane,
+      "pl-claude": packageJson.bin["pl-claude"],
+      "pl-codex": packageJson.bin["pl-codex"],
     });
     expect(inventory.claude_code_plugin.manifest_name).toBe(
       claudeManifest.name,
@@ -1970,25 +1894,25 @@ describe("plugin packaging files", () => {
       commandFiles,
     );
     expect(inventory.claude_code_plugin.slash_namespace).toBe(
-      "/prompt-coach:*",
+      "/promptlane:*",
     );
     expect(inventory.codex_plugin.manifest_name).toBe(codexManifest.name);
     expect(inventory.codex_plugin.display_name).toBe(
       codexManifest.interface.displayName,
     );
-    expect(inventory.codex_plugin.install_path).toBe("plugins/prompt-coach");
+    expect(inventory.codex_plugin.install_path).toBe("plugins/promptlane");
     expect(codexManifest.hooks).toBeUndefined();
     expect(inventory.codex_plugin.hook_install).toBe(
-      "prompt-coach setup --profile coach --register-mcp --open-web",
+      "promptlane setup --profile coach --register-mcp --open-web",
     );
-    expect(inventory.mcp.canonical_server_name).toBe("prompt-coach");
-    expect(inventory.mcp.command).toBe("prompt-coach mcp");
+    expect(inventory.mcp.canonical_server_name).toBe("promptlane");
+    expect(inventory.mcp.command).toBe("promptlane mcp");
     expect(inventory.mcp.docs).toEqual(
       expect.arrayContaining(["README.md", "README.ko.md", "docs/PLUGINS.md"]),
     );
     expect(inventory.invariants).toEqual(
       expect.arrayContaining([
-        "Do not remove /prompt-coach:*.",
+        "Do not remove /promptlane:*.",
         "Do not rename package.json#name.",
         "Do not rename plugin ids.",
       ]),
@@ -2007,7 +1931,7 @@ describe("plugin packaging files", () => {
 
   it("does not ship active Codex plugin hooks that can duplicate setup-installed hooks", () => {
     const manifest = readJson<{ hooks?: string }>(
-      "plugins/prompt-coach/.codex-plugin/plugin.json",
+      "plugins/promptlane/.codex-plugin/plugin.json",
     );
     const pluginsDoc = readFileSync(
       join(process.cwd(), "docs/PLUGINS.md"),
@@ -2016,14 +1940,14 @@ describe("plugin packaging files", () => {
     const renamePlan = readFileSync(
       join(
         process.cwd(),
-        "docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md",
+        "docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md",
       ),
       "utf8",
     );
     const renameIssueSlices = readFileSync(
       join(
         process.cwd(),
-        "docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-issue-slices.md",
+        "docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-issue-slices.md",
       ),
       "utf8",
     );
@@ -2033,11 +1957,11 @@ describe("plugin packaging files", () => {
       "does not bundle active Codex hooks; setup installs user-level hooks explicitly",
     );
     expect(pluginsDoc).not.toContain("hooks.json for fail-open Codex");
-    expect(renamePlan).not.toContain("plugins/prompt-coach/hooks.json");
-    expect(renameIssueSlices).not.toContain("plugins/prompt-coach/hooks.json");
+    expect(renamePlan).not.toContain("plugins/promptlane/hooks.json");
+    expect(renameIssueSlices).not.toContain("plugins/promptlane/hooks.json");
   });
 
-  it("ships a hook binary compatibility smoke for prompt-coach and loopdeck entrypoints", () => {
+  it("ships a hook binary smoke for the promptlane entrypoint", () => {
     const packageJson = readJson<{
       bin: Record<string, string>;
       files: string[];
@@ -2048,18 +1972,21 @@ describe("plugin packaging files", () => {
       "utf8",
     );
 
-    expect(packageJson.bin["prompt-coach"]).toBe("./dist/cli/index.js");
-    expect(packageJson.bin.loopdeck).toBe("./dist/cli/index.js");
+    expect(packageJson.bin["promptlane"]).toBe("./dist/cli/index.js");
+    expect(Object.keys(packageJson.bin).sort()).toEqual([
+      "pl-claude",
+      "pl-codex",
+      "promptlane",
+    ]);
     expect(packageJson.files).toContain("scripts/hook-binary-smoke.mjs");
     expect(packageJson.scripts["smoke:hooks"]).toBe(
       "pnpm build && node scripts/hook-binary-smoke.mjs",
     );
-    expect(smoke).toContain("prompt-coach");
-    expect(smoke).toContain("loopdeck");
+    expect(smoke).toContain("promptlane");
     expect(smoke).toContain("hook claude-code");
     expect(smoke).toContain("hook codex");
     expect(smoke).toContain("hook status");
-    expect(smoke).toContain("PROMPT_COACH_SMOKE_SECRET");
+    expect(smoke).toContain("PROMPTLANE_SMOKE_SECRET");
     expect(smoke).toContain("assertNotIncludes");
     expect(smoke).toContain("sk-proj");
     expect(smoke).not.toContain("/Users/");
@@ -2090,7 +2017,7 @@ describe("plugin packaging files", () => {
     expect(smoke).toContain("setup --profile coach --register-mcp");
     expect(smoke).toContain("doctor claude-code");
     expect(smoke).toContain("doctor codex");
-    expect(smoke).toContain("prompt-coach agent setup smoke passed");
+    expect(smoke).toContain("promptlane agent setup smoke passed");
     expect(smoke).not.toContain("/Users/");
     expect(harness).toContain("corepack pnpm smoke:agent-setup");
     expect(packageContents).toContain("scripts/agent-setup-smoke.mjs");
@@ -2116,7 +2043,7 @@ describe("plugin packaging files", () => {
     expect(smoke).toContain("interaction_status");
     expect(smoke).toContain("unsupported");
     expect(smoke).toContain("without opening an OS dialog");
-    expect(smoke).not.toContain("PROMPT_COACH_NATIVE_DIALOG=1");
+    expect(smoke).not.toContain("PROMPTLANE_NATIVE_DIALOG=1");
     expect(smoke).not.toContain("/Users/");
   });
 
@@ -2139,10 +2066,10 @@ describe("plugin packaging files", () => {
     expect(packageJson.scripts["dogfood:mcp-native-dialog-refusal"]).toBe(
       "pnpm build && node scripts/mcp-native-dialog-approved.mjs",
     );
-    expect(smoke).toContain("PROMPT_COACH_NATIVE_DIALOG_APPROVED");
+    expect(smoke).toContain("PROMPTLANE_NATIVE_DIALOG_APPROVED");
     expect(smoke).toContain("Refusing to open a native OS dialog");
     expect(smoke).toContain("allow_native_dialog: true");
-    expect(smoke).toContain("PROMPT_COACH_NATIVE_DIALOG");
+    expect(smoke).toContain("PROMPTLANE_NATIVE_DIALOG");
     expect(smoke).toContain("answered");
     expect(smoke).not.toContain("/Users/");
   });
@@ -2201,7 +2128,7 @@ describe("plugin packaging files", () => {
     expect(smoke).toContain("coach --json");
     expect(smoke).toContain("loop collect --json");
     expect(smoke).toContain("loop brief --json");
-    expect(smoke).toContain("PROMPT_COACH_FIRST_LOOP_SECRET");
+    expect(smoke).toContain("PROMPTLANE_FIRST_LOOP_SECRET");
     expect(smoke).toContain("assertNotIncludes");
     expect(smoke).toContain("first coach loop dogfood passed");
     expect(smoke).not.toContain("/Users/");
@@ -2241,7 +2168,7 @@ describe("plugin packaging files", () => {
     expect(smoke).toContain("propose_loop_memory_candidate");
     expect(smoke).toContain("record_loop_memory");
     expect(smoke).toContain("propose_instruction_patch");
-    expect(smoke).toContain("PROMPT_COACH_LOOP_MEMORY_SECRET");
+    expect(smoke).toContain("PROMPTLANE_LOOP_MEMORY_SECRET");
     expect(smoke).toContain("assertNotIncludes");
     expect(smoke).toContain("loop memory approval dogfood passed");
     expect(smoke).not.toContain("/Users/");
@@ -2279,9 +2206,9 @@ describe("plugin packaging files", () => {
     }>("integrations/claude-code/settings.example.json");
 
     const command = example.hooks.UserPromptSubmit[0]?.hooks[0]?.command ?? "";
-    expect(command).toContain("prompt-coach hook claude-code");
+    expect(command).toContain("promptlane hook claude-code");
     expect(command).toContain("|| true");
-    expect(command).not.toMatch(/PROMPT_COACH_TOKEN|Bearer|token=/i);
+    expect(command).not.toMatch(/PROMPTLANE_TOKEN|Bearer|token=/i);
   });
 
   it("includes plugin artifacts in npm package files", () => {
@@ -2291,10 +2218,9 @@ describe("plugin packaging files", () => {
     }>("package.json");
 
     expect(packageJson.bin).toMatchObject({
-      "prompt-coach": "./dist/cli/index.js",
-      loopdeck: "./dist/cli/index.js",
-      "pc-claude": "./dist/cli/pc-claude.js",
-      "pc-codex": "./dist/cli/pc-codex.js",
+      "promptlane": "./dist/cli/index.js",
+      "pl-claude": "./dist/cli/pl-claude.js",
+      "pl-codex": "./dist/cli/pl-codex.js",
     });
     expect(packageJson.files).toContain(".claude-plugin");
     expect(packageJson.files).toContain("commands");
@@ -2302,18 +2228,18 @@ describe("plugin packaging files", () => {
     expect(packageJson.files).toContain("integrations");
     expect(packageJson.files).toContain("docs/ARCHITECTURE.md");
     expect(packageJson.files).toContain("docs/PLUGINS.md");
-    expect(packageJson.files).toContain("docs/LOOPDECK.md");
-    expect(packageJson.files).toContain("docs/LOOPDECK-LEGACY-SURFACES.md");
+    expect(packageJson.files).toContain("docs/PROMPTLANE.md");
+    expect(packageJson.files).toContain("docs/PROMPTLANE-LEGACY-SURFACES.md");
     expect(packageJson.files).toContain("docs/LOOP-SNAPSHOT-SCHEMA.md");
     expect(packageJson.files).toContain("docs/AGENT-HARNESS.md");
     expect(packageJson.files).toContain("docs/INSTRUCTION-FILES.md");
     expect(packageJson.files).toContain(
-      "docs/superpowers/plans/2026-07-04-loopdeck-plugin-rename-plan.md",
+      "docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md",
     );
     expect(packageJson.files).toContain("docs/LEGAL_USAGE_GUIDE.md");
   });
 
-  it("documents loopdeck as a compatibility-preserving CLI alias", () => {
+  it("documents promptlane as the primary CLI command", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
     const packageContents = readFileSync(
@@ -2322,40 +2248,38 @@ describe("plugin packaging files", () => {
     );
 
     for (const content of [readme, readmeKo, packageContents]) {
-      expect(content).toContain("loopdeck");
-      expect(content).toContain("prompt-coach");
+      expect(content).toContain("promptlane");
     }
-    expect(readme).toContain("it is a legacy CLI alias");
-    expect(readmeKo).toContain("`loopdeck`는 legacy CLI alias");
-    expect(packageContents).toContain("legacy loopdeck");
-    expect(packageContents).toContain("docs/LOOPDECK-LEGACY-SURFACES.md");
+    expect(readme).toContain("primary CLI");
+    expect(readmeKo).toContain("기본 CLI");
+    expect(packageContents).toContain("compiled `promptlane` CLI entrypoint");
+    expect(packageContents).toContain("docs/PROMPTLANE-LEGACY-SURFACES.md");
   });
 
-  it("ships an allowlist for remaining Loopdeck legacy surfaces", () => {
-    const allowlistPath = "docs/LOOPDECK-LEGACY-SURFACES.md";
+  it("ships an allowlist for remaining PromptLane legacy surfaces", () => {
+    const allowlistPath = "docs/PROMPTLANE-LEGACY-SURFACES.md";
     const packageJson = readJson<{ files: string[] }>("package.json");
     const allowlist = readFileSync(join(process.cwd(), allowlistPath), "utf8");
 
     expect(packageJson.files).toContain(allowlistPath);
-    expect(allowlist).toContain("# Loopdeck Legacy Surfaces");
+    expect(allowlist).toContain("# PromptLane Runtime Surfaces");
     expect(allowlist).toContain("Product name: PromptLane");
-    expect(allowlist).toContain("Default runtime command: `prompt-coach`");
-    expect(allowlist).toContain("Legacy CLI alias: `loopdeck`");
-    expect(allowlist).toContain("MCP compatibility tool: `get_loopdeck_status`");
+    expect(allowlist).toContain("Primary CLI command: `promptlane`");
+    expect(allowlist).toContain("MCP compatibility tool: `get_promptlane_status`");
     expect(allowlist).toContain("Historical planning docs");
-    expect(allowlist).toContain("Do not add `/loopdeck:*` command files");
-    expect(allowlist).toContain("Do not use Loopdeck as product-facing copy");
+    expect(allowlist).toContain("Active slash namespace: `/promptlane:*`");
+    expect(allowlist).toContain("Product-facing copy should use PromptLane");
     expect(allowlist).not.toContain("TODO");
     expect(allowlist).not.toContain("TBD");
     expect(allowlist).not.toContain("sk-proj");
     expect(allowlist).not.toContain("/Users/");
   });
 
-  it("marks shipped Loopdeck historical plans as superseded by PromptLane", () => {
+  it("marks shipped PromptLane historical plans as superseded by PromptLane", () => {
     const packageJson = readJson<{ files: string[] }>("package.json");
     const historicalPlanPaths = packageJson.files.filter(
       (filePath) =>
-        filePath.startsWith("docs/superpowers/plans/2026-07-04-loopdeck-") &&
+        filePath.startsWith("docs/superpowers/plans/2026-07-04-promptlane-") &&
         filePath.endsWith(".md"),
     );
 
@@ -2364,9 +2288,9 @@ describe("plugin packaging files", () => {
       const plan = readFileSync(join(process.cwd(), planPath), "utf8");
       expect(plan, planPath).toContain("Historical naming note");
       expect(plan, planPath).toContain("Current product name: PromptLane");
-      expect(plan, planPath).toContain("Current runtime id: `prompt-coach`");
+      expect(plan, planPath).toContain("Current runtime id: `promptlane`");
       expect(plan, planPath).toContain("See `docs/PROMPTLANE.md`");
-      expect(plan, planPath).toContain("See `docs/LOOPDECK-LEGACY-SURFACES.md`");
+      expect(plan, planPath).toContain("See `docs/PROMPTLANE-LEGACY-SURFACES.md`");
       expect(plan, planPath).not.toContain("TODO");
       expect(plan, planPath).not.toContain("TBD");
       expect(plan, planPath).not.toContain("sk-proj");
@@ -2387,10 +2311,10 @@ describe("plugin packaging files", () => {
     ).toContain("chmodSync");
     expect(
       readFileSync(join(process.cwd(), "scripts/fix-bin-mode.mjs"), "utf8"),
-    ).toContain("pc-claude.js");
+    ).toContain("pl-claude.js");
     expect(
       readFileSync(join(process.cwd(), "scripts/fix-bin-mode.mjs"), "utf8"),
-    ).toContain("pc-codex.js");
+    ).toContain("pl-codex.js");
   });
 
   it("registers the repo-local plugin in the local marketplace file", () => {
@@ -2404,8 +2328,8 @@ describe("plugin packaging files", () => {
     }>(".agents/plugins/marketplace.json");
 
     expect(marketplace.plugins).toContainEqual({
-      name: "prompt-coach",
-      source: { source: "local", path: "./plugins/prompt-coach" },
+      name: "promptlane",
+      source: { source: "local", path: "./plugins/promptlane" },
       policy: { installation: "AVAILABLE", authentication: "ON_INSTALL" },
       category: "Coding",
     });

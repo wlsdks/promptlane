@@ -46,7 +46,7 @@ export type LoopScheduleUninstallResult = {
   plistPath: string;
 };
 
-const LOOP_SCHEDULE_LABEL = "com.prompt-coach.loop";
+const LOOP_SCHEDULE_LABEL = "com.promptlane.loop";
 const DEFAULT_INTERVAL_SECONDS = 900;
 
 export function registerLoopScheduleCommand(loop: Command): void {
@@ -57,7 +57,7 @@ export function registerLoopScheduleCommand(loop: Command): void {
   schedule
     .command("install")
     .description("Install an explicit LaunchAgent for loop snapshot collection.")
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .option(
       "--cwd-prefix <path>",
       "Project path to collect loop snapshots for.",
@@ -171,7 +171,7 @@ export function installLoopSchedule(
   if (changed) {
     mkdirSync(dirname(plistPath), { recursive: true, mode: 0o700 });
     if (existsSync(plistPath)) {
-      backupPath = `${plistPath}.prompt-coach.${Date.now()}.bak`;
+      backupPath = `${plistPath}.promptlane.${Date.now()}.bak`;
       copyFileSync(plistPath, backupPath);
     }
     writeFileSync(plistPath, nextPlist, { mode: 0o600 });
@@ -287,7 +287,7 @@ function formatLoopScheduleInstallPlain(
     `loop schedule ${action}`,
     `plist ${result.plistPath}`,
     `changed ${result.changed ? "yes" : "no"}`,
-    "command prompt-coach loop collect --source service",
+    "command promptlane loop collect --source service",
     "Privacy: local-only; scheduler calls explicit collection and does not auto-submit prompts.",
   ].join("\n");
 }
@@ -307,7 +307,7 @@ function formatLoopScheduleStatusPlain(
   return [
     `loop schedule ${result.installed ? "installed" : "not installed"}`,
     `plist ${result.plistPath}`,
-    "command prompt-coach loop collect --source service",
+    "command promptlane loop collect --source service",
   ].join("\n");
 }
 
@@ -364,7 +364,7 @@ function defaultLaunchAgentPath(): string {
 }
 
 function logPath(fileName: string): string {
-  return join(homedir(), ".prompt-coach", "logs", fileName);
+  return join(homedir(), ".promptlane", "logs", fileName);
 }
 
 function escapeXml(value: string): string {

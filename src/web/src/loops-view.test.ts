@@ -12,7 +12,7 @@ describe("LoopsView", () => {
     );
 
     expect(html).toContain("PromptLane status ready");
-    expect(html).toContain("Next: prompt-coach loop brief");
+    expect(html).toContain("Next: promptlane loop brief");
     expect(html).toContain("Approved memories 1");
     expect(html).toContain("Active worktrees 2");
     expect(html).toContain("Active sessions 2");
@@ -37,7 +37,7 @@ describe("LoopsView", () => {
     expect(html).toContain("Evidence evidence present");
     expect(html).toContain("Evidence refs 2");
     expect(html).toContain(
-      "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+      "promptlane loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
     );
     expect(html).toContain("Copy review brief");
     expect(html).toContain("agent-loop-worktree 2 snapshots / 2 sessions");
@@ -46,10 +46,10 @@ describe("LoopsView", () => {
     expect(html).toContain("Open main-worktree");
     expect(html).toContain("Memory candidate eligible");
     expect(html).toContain("Approve memory");
-    expect(html).toContain("prompt-coach loop memory-approve");
+    expect(html).toContain("promptlane loop memory-approve");
     expect(html).toContain("Review AGENTS.md patch");
     expect(html).toContain(
-      "prompt-coach loop instruction-patch --target-file AGENTS.md",
+      "promptlane loop instruction-patch --target-file AGENTS.md",
     );
     expect(html).not.toContain("Make this better");
     expect(html).not.toContain("Safe memory statement");
@@ -84,7 +84,7 @@ describe("LoopsView", () => {
       "uses the selected worktree/session/branch filters without auto-submitting",
     );
     expect(html).toContain(
-      "prompt-coach loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
+      "promptlane loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
     );
     expect(html).toContain("No file writes or external calls");
     expect(html).toContain("Command distinction");
@@ -1107,7 +1107,7 @@ describe("LoopsView", () => {
     );
     expect(html).toContain("No command writes or external calls");
     expect(html).toContain(
-      "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+      "promptlane loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
     );
     expect(html).toContain("Missing evidence");
     expect(html).toContain("latest selected worktree outcome has no evidence refs");
@@ -1219,7 +1219,7 @@ function loopList(): LoopListResponse {
               evidence_count: 2,
               recommendation: "review before merge",
               continuation_command:
-                "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+                "promptlane loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
               merge_readiness: {
                 status: "needs_review",
                 evidence: "evidence present",
@@ -1236,7 +1236,7 @@ function loopList(): LoopListResponse {
               evidence_count: 1,
               recommendation: "ready for continuation",
               continuation_command:
-                "prompt-coach loop brief --worktree main-worktree",
+                "promptlane loop brief --worktree main-worktree",
               merge_readiness: {
                 status: "ready",
                 evidence: "evidence present",
@@ -1253,12 +1253,12 @@ function loopList(): LoopListResponse {
       memory_candidate: {
         eligible: true,
         reason: "passed_with_evidence",
-        next_action: "prompt-coach loop memory-approve",
+        next_action: "promptlane loop memory-approve",
       },
       latest_snapshot: loopSummary(),
-      next_action: "prompt-coach loop brief",
+      next_action: "promptlane loop brief",
       next_actions: [
-        "Use prompt-coach loop brief or prepare_loop_brief to get a copy-ready continuation prompt.",
+        "Use promptlane loop brief or prepare_loop_brief to get a copy-ready continuation prompt.",
       ],
       privacy: {
         local_only: true,
@@ -1317,7 +1317,7 @@ function loopWorktree(): LoopWorktreeResponse {
       reason:
         "uses the selected worktree/session/branch filters without auto-submitting",
       command:
-        "prompt-coach loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
+        "promptlane loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
       writes_files: false,
       external_calls: false,
     },
@@ -2241,7 +2241,7 @@ function loopWorktree(): LoopWorktreeResponse {
       command_hint: {
         label: "Copy review brief command",
         command:
-          "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+          "promptlane loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
         provenance: {
           label: "Command provenance",
           source: "existing command-center continuation command",

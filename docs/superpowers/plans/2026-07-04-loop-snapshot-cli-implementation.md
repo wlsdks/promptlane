@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the first Loopdeck slice by adding a privacy-safe loop snapshot model plus `prompt-coach loop collect` and `prompt-coach loop brief`.
+**Goal:** Build the first PromptLane slice by adding a privacy-safe loop snapshot model plus `promptlane loop collect` and `promptlane loop brief`.
 
-**Architecture:** Keep the existing `prompt-coach` CLI/package name. Add a small `src/loop/` domain module that derives loop snapshots and continuation briefs from existing prompt summaries, then persist snapshots through the SQLite storage boundary. CLI code should orchestrate storage and formatting only; prompt analysis and privacy decisions stay in `src/loop` and `src/storage`.
+**Architecture:** Keep the existing `promptlane` CLI/package name. Add a small `src/loop/` domain module that derives loop snapshots and continuation briefs from existing prompt summaries, then persist snapshots through the SQLite storage boundary. CLI code should orchestrate storage and formatting only; prompt analysis and privacy decisions stay in `src/loop` and `src/storage`.
 
 **Tech Stack:** TypeScript, Node.js ESM, Commander, SQLite via `better-sqlite3`, Vitest, pnpm 10 on Node 22.
 
@@ -17,7 +17,7 @@ Before executing this plan, read `docs/superpowers/specs/2026-07-04-agent-loop-m
 This plan is executable only if:
 
 - the first implementation slice is still limited to domain/storage/CLI/docs
-- the public command remains `prompt-coach`
+- the public command remains `promptlane`
 - package, GitHub repository, plugin, hook, MCP, and web UI rename work is deferred
 - loop snapshots store prompt IDs and metadata, not prompt bodies or raw paths
 - Node 22 + pnpm 10 remains the verification baseline for this checkout
@@ -163,7 +163,7 @@ describe("createLoopSnapshotFromPrompts", () => {
       },
       next_brief: {
         generated: false,
-        summary: "Run prompt-coach loop brief to generate the next request.",
+        summary: "Run promptlane loop brief to generate the next request.",
       },
       privacy: {
         local_only: true,
@@ -376,7 +376,7 @@ export function createLoopSnapshotFromPrompts(
     },
     next_brief: {
       generated: false,
-      summary: "Run prompt-coach loop brief to generate the next request.",
+      summary: "Run promptlane loop brief to generate the next request.",
     },
     privacy: {
       stores_prompt_bodies: false,
@@ -518,7 +518,7 @@ function loopSnapshot(patch: Partial<LoopSnapshot>): LoopSnapshot {
     },
     next_brief: {
       generated: false,
-      summary: "Run prompt-coach loop brief to generate the next request.",
+      summary: "Run promptlane loop brief to generate the next request.",
     },
     privacy: {
       stores_prompt_bodies: false,
@@ -578,7 +578,7 @@ export function createLoopBrief(input: { snapshot: LoopSnapshot }): LoopBrief {
     source_snapshot_id: snapshot.id,
     prompt: [
       "## Goal",
-      "Continue the current coding-agent loop using the local Loopdeck snapshot.",
+      "Continue the current coding-agent loop using the local PromptLane snapshot.",
       "",
       "## Context",
       `project: ${snapshot.cwd_label}`,
@@ -651,7 +651,7 @@ Append this test inside `describe("SQLite prompt storage", () => { ... })` in `s
 ```ts
   it("stores and reads privacy-safe loop snapshots", () => {
     const dataDir = createTempDir();
-    initializePromptCoach({ dataDir });
+    initializePromptLane({ dataDir });
     const storage = createSqlitePromptStorage({
       dataDir,
       hmacSecret: "test-secret",
@@ -685,7 +685,7 @@ Append this test inside `describe("SQLite prompt storage", () => { ... })` in `s
       },
       next_brief: {
         generated: false,
-        summary: "Run prompt-coach loop brief to generate the next request.",
+        summary: "Run promptlane loop brief to generate the next request.",
       },
       privacy: {
         stores_prompt_bodies: false,
@@ -981,7 +981,7 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { normalizeClaudeCodePayload } from "../../adapters/claude-code.js";
-import { initializePromptCoach } from "../../config/config.js";
+import { initializePromptLane } from "../../config/config.js";
 import { redactPrompt } from "../../redaction/redact.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
 import { loopBriefForCli, loopCollectForCli } from "./loop.js";
@@ -1065,7 +1065,7 @@ describe("loop CLI command", () => {
 });
 
 async function seedPrompts(dataDir: string): Promise<void> {
-  const init = initializePromptCoach({ dataDir });
+  const init = initializePromptLane({ dataDir });
   const storage = createSqlitePromptStorage({
     dataDir,
     hmacSecret: init.hookAuth.web_session_secret,
@@ -1115,7 +1115,7 @@ function nextDate(values: string[]): () => Date {
 }
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-loop-${crypto.randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-loop-${crypto.randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;
@@ -1147,7 +1147,7 @@ import type { Command } from "commander";
 
 import { createLoopBrief } from "../../loop/brief.js";
 import { createLoopSnapshotFromPrompts } from "../../loop/snapshot.js";
-import { loadHookAuth, loadPromptCoachConfig } from "../../config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../../config/config.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
 import { createProjectKey } from "../../storage/project-id.js";
 import { projectLabel } from "../../storage/project-label.js";
@@ -1172,7 +1172,7 @@ export function registerLoopCommand(program: Command): void {
   loop
     .command("collect")
     .description("Collect a privacy-safe snapshot from recent prompt metadata.")
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--json", "Print JSON.")
     .option("--limit <count>", "Maximum recent prompts to include.")
     .option("--cwd-prefix <path>", "Only include prompts from this project/path.")
@@ -1185,7 +1185,7 @@ export function registerLoopCommand(program: Command): void {
   loop
     .command("brief")
     .description("Print a continuation prompt from the latest loop snapshot.")
-    .option("--data-dir <path>", "Override the prompt-coach data directory.")
+    .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--json", "Print JSON.")
     .action((options: LoopCliOptions) => {
       console.log(loopBriefForCli(options));
@@ -1225,7 +1225,7 @@ export function loopBriefForCli(options: LoopCliOptions = {}): string {
     const snapshot = storage.getLatestLoopSnapshot();
     if (!snapshot) {
       throw new UserError(
-        "No loop snapshot found. Run `prompt-coach loop collect` first.",
+        "No loop snapshot found. Run `promptlane loop collect` first.",
       );
     }
     const brief = createLoopBrief({ snapshot });
@@ -1240,7 +1240,7 @@ function withStorage<T>(
     hmacSecret: string,
   ) => T,
 ): T {
-  const config = loadPromptCoachConfig(dataDir);
+  const config = loadPromptLaneConfig(dataDir);
   const auth = loadHookAuth(dataDir);
   const storage = createSqlitePromptStorage({
     dataDir: config.data_dir,
@@ -1276,7 +1276,7 @@ function formatLoopSnapshot(snapshot: ReturnType<typeof createLoopSnapshotFromPr
       ? `top gaps ${snapshot.quality.top_gaps.join(", ")}`
       : "top gaps none",
     "",
-    "Next: prompt-coach loop brief",
+    "Next: promptlane loop brief",
     "",
     "Privacy: local-only, no prompt bodies, no raw paths.",
   ].join("\n");
@@ -1389,7 +1389,7 @@ In `tasks/todo.md`, add a new implementation section:
 - [x] Loop snapshot domain model and privacy tests
 - [x] Continuation brief formatter
 - [x] SQLite loop snapshot storage
-- [x] `prompt-coach loop collect` and `prompt-coach loop brief`
+- [x] `promptlane loop collect` and `promptlane loop brief`
 - [x] Architecture documentation and focused verification
 
 ### 판단 기준
@@ -1481,16 +1481,16 @@ Expected: branch `codex/agent-loop-memory-design` updates on origin.
 Run:
 
 ```bash
-gh pr edit 280 --repo wlsdks/loopdeck --body-file /tmp/loopdeck-pr-body.md
+gh pr edit 280 --repo wlsdks/promptlane --body-file /tmp/promptlane-pr-body.md
 ```
 
 Use this PR body:
 
 ```md
 ## Summary
-- Adds the Loopdeck product direction and agent loop memory design.
+- Adds the PromptLane product direction and agent loop memory design.
 - Implements the first CLI/storage/domain slice for privacy-safe loop snapshots.
-- Adds `prompt-coach loop collect` and `prompt-coach loop brief` without renaming the package, CLI, hooks, MCP tools, or web UI.
+- Adds `promptlane loop collect` and `promptlane loop brief` without renaming the package, CLI, hooks, MCP tools, or web UI.
 
 ## Verification
 - PATH=/Users/jinan/.nvm/versions/node/v22.15.0/bin:$PATH corepack pnpm vitest run src/loop/snapshot.test.ts src/loop/brief.test.ts src/cli/commands/loop.test.ts
@@ -1512,5 +1512,5 @@ Before marking implementation complete:
 - No new code reads Codex/Claude private transcript databases.
 - No automatic prompt submission is added.
 - Existing prompt archive behavior remains unchanged.
-- `prompt-coach` command remains the public command.
+- `promptlane` command remains the public command.
 - PR does not stage `.codex/`.

@@ -1,13 +1,13 @@
 import type { LoopOutcomeStatus } from "../loop/types.js";
 import type { LoopBriefCompactBoundary } from "../loop/brief.js";
-import type { LoopdeckStatus } from "../loop/status.js";
+import type { PromptLaneStatus } from "../loop/status.js";
 import type {
   InstructionPatchApplyResult,
   InstructionPatchProposal,
 } from "../loop/instruction-patch.js";
 import type { LoopMemoryCandidateDecision } from "../loop/memory-candidate.js";
 
-export type GetLoopdeckStatusToolArguments = {
+export type GetPromptLaneLoopStatusToolArguments = {
   include_latest?: boolean;
 };
 
@@ -45,15 +45,15 @@ export type ApplyInstructionPatchToolArguments = {
   confirm_apply?: boolean;
 };
 
-export type LoopdeckToolPrivacy = {
+export type PromptLaneToolPrivacy = {
   local_only: true;
   external_calls: false;
   returns_prompt_bodies: false;
   returns_raw_paths: false;
 };
 
-export type GetLoopdeckStatusToolResult =
-  | (LoopdeckStatus & {
+export type GetPromptLaneLoopStatusToolResult =
+  | (PromptLaneStatus & {
       available_tools: string[];
     })
   | {
@@ -62,7 +62,7 @@ export type GetLoopdeckStatusToolResult =
       available_tools: string[];
       next_action: string;
       next_actions: string[];
-      privacy: LoopdeckStatus["privacy"];
+      privacy: PromptLaneStatus["privacy"];
     };
 
 export type PrepareLoopBriefToolResult =
@@ -73,7 +73,7 @@ export type PrepareLoopBriefToolResult =
       prompt: string;
       compact_boundary?: LoopBriefCompactBoundary;
       next_action: string;
-      privacy: LoopdeckToolPrivacy & {
+      privacy: PromptLaneToolPrivacy & {
         auto_submits: false;
       };
     }
@@ -89,7 +89,7 @@ export type PrepareLoopBriefToolResult =
       prompt: string;
       compact_boundary?: LoopBriefCompactBoundary;
       next_action: string;
-      privacy: LoopdeckToolPrivacy & {
+      privacy: PromptLaneToolPrivacy & {
         auto_submits: false;
       };
     }
@@ -109,7 +109,7 @@ export type RecordLoopOutcomeToolResult =
         evidence_refs: string[];
       };
       next_action: string;
-      privacy: LoopdeckToolPrivacy & {
+      privacy: PromptLaneToolPrivacy & {
         stores_prompt_bodies: false;
         stores_raw_paths: false;
       };
@@ -123,7 +123,7 @@ export type RecordLoopOutcomeToolResult =
 export type ProposeLoopMemoryCandidateToolResult =
   | (LoopMemoryCandidateDecision & {
       next_action: string;
-      privacy: LoopdeckToolPrivacy & {
+      privacy: PromptLaneToolPrivacy & {
         stores_prompt_bodies: false;
         stores_raw_paths: false;
         auto_writes_memory: false;
@@ -149,7 +149,7 @@ export type RecordLoopMemoryToolResult =
       };
       next_action: string;
       next_actions: string[];
-      privacy: LoopdeckToolPrivacy & {
+      privacy: PromptLaneToolPrivacy & {
         stores_prompt_bodies: false;
         stores_raw_paths: false;
         writes_instruction_files: false;

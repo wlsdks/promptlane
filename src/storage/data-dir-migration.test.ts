@@ -24,7 +24,7 @@ afterEach(() => {
 });
 
 function createTempDir(): string {
-  const dir = join(tmpdir(), `prompt-coach-migrate-${randomUUID()}`);
+  const dir = join(tmpdir(), `promptlane-migrate-${randomUUID()}`);
   mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;
@@ -34,7 +34,7 @@ describe("migrateLegacyDataDir", () => {
   it("renames the legacy directory to the new path when only legacy exists", () => {
     const sandbox = createTempDir();
     const legacyPath = join(sandbox, ".prompt-memory");
-    const newPath = join(sandbox, ".prompt-coach");
+    const newPath = join(sandbox, ".promptlane");
     mkdirSync(legacyPath, { recursive: true });
     writeFileSync(join(legacyPath, "config.json"), '{"a":1}\n');
 
@@ -52,7 +52,7 @@ describe("migrateLegacyDataDir", () => {
   it("returns no-legacy when the legacy directory does not exist", () => {
     const sandbox = createTempDir();
     const legacyPath = join(sandbox, ".prompt-memory");
-    const newPath = join(sandbox, ".prompt-coach");
+    const newPath = join(sandbox, ".promptlane");
 
     const result = migrateLegacyDataDir({ legacyPath, newPath });
 
@@ -63,7 +63,7 @@ describe("migrateLegacyDataDir", () => {
   it("returns new-exists and does NOT overwrite when both directories exist", () => {
     const sandbox = createTempDir();
     const legacyPath = join(sandbox, ".prompt-memory");
-    const newPath = join(sandbox, ".prompt-coach");
+    const newPath = join(sandbox, ".promptlane");
     mkdirSync(legacyPath, { recursive: true });
     mkdirSync(newPath, { recursive: true });
     writeFileSync(join(legacyPath, "legacy.txt"), "legacy\n");
@@ -80,7 +80,7 @@ describe("migrateLegacyDataDir", () => {
   it("dry-run reports ready but does not move", () => {
     const sandbox = createTempDir();
     const legacyPath = join(sandbox, ".prompt-memory");
-    const newPath = join(sandbox, ".prompt-coach");
+    const newPath = join(sandbox, ".promptlane");
     mkdirSync(legacyPath, { recursive: true });
 
     const result = migrateLegacyDataDir({ legacyPath, newPath, dryRun: true });

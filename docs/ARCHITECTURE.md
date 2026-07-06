@@ -4,7 +4,7 @@ PromptLane is a local-first prompt improvement workspace for Claude Code,
 Codex, and long-running coding-agent work. Loop features are loop-aware continuation:
 they help the next prompt stay specific across sessions,
 worktrees, branches, and compact boundaries. The current npm package and CLI
-command remain `prompt-coach` during the compatibility window. The architecture
+command remain `promptlane` during the compatibility window. The architecture
 is intentionally modular without copying a
 Spring-style class hierarchy into Node.js. The project uses TypeScript modules,
 plain functions, explicit ports, and small runtime entrypoints.
@@ -146,7 +146,7 @@ Current known large modules:
   language detection, clipboard side effect, ask-mode trigger gate +
   acknowledgment patterns). Bilingual user-facing strings live in
   `src/hooks/rewrite-guard-copy.ts` so the budget stays under 290 lines.
-- `src/cli/agent-wrapper.ts`: pc-claude/pc-codex argv parsing, prompt
+- `src/cli/agent-wrapper.ts`: pl-claude/pl-codex argv parsing, prompt
   rewriting, and child-process spawning. New domain logic should land in a
   helper module rather than expanding the wrapper.
 
@@ -196,7 +196,7 @@ pressure on them rather than expanding them casually. The line-budget gate in
 - Stored prompt scoring returns metadata, score, checklist (per-axis status,
   reason, suggestion, earned/weight), and an optional `redaction_notice`,
   but never the stored original body.
-- Agent-judge MCP mode is explicit and user-session mediated. `prompt-coach`
+- Agent-judge MCP mode is explicit and user-session mediated. `promptlane`
   can prepare locally redacted prompt packets and store advisory judgment
   metadata, but it must not launch hidden provider calls, proxy provider
   credentials, or store raw prompt bodies for judgments.

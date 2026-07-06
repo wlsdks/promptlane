@@ -1,4 +1,4 @@
-import type { PromptCoachMcpToolDefinition } from "./score-tool-definitions.js";
+import type { PromptLaneMcpToolDefinition } from "./score-tool-definitions.js";
 
 const LOCAL_READ_ONLY_TOOL_ANNOTATIONS = {
   destructiveHint: false,
@@ -40,11 +40,11 @@ const TOOL_ERROR_OUTPUT_SCHEMA = {
   },
 } as const;
 
-export const PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "prepare_agent_judge_batch",
     description:
-      "Prepare a redacted prompt-evaluation packet for the current Claude Code, Codex, or Gemini CLI agent session to judge. Use this when the user asks the active coding agent to evaluate accumulated prompt quality with an LLM judge. prompt-coach itself does not call external LLMs or route provider credentials; it only returns local redacted prompt bodies, metadata, and a rubric so the current user-controlled agent session can evaluate and then call record_agent_judgments. Defaults to recent prompts and returns no raw prompt bodies, raw absolute paths, or secrets.",
+      "Prepare a redacted prompt-evaluation packet for the current Claude Code, Codex, or Gemini CLI agent session to judge. Use this when the user asks the active coding agent to evaluate accumulated prompt quality with an LLM judge. promptlane itself does not call external LLMs or route provider credentials; it only returns local redacted prompt bodies, metadata, and a rubric so the current user-controlled agent session can evaluate and then call record_agent_judgments. Defaults to recent prompts and returns no raw prompt bodies, raw absolute paths, or secrets.",
     annotations: {
       ...LOCAL_READ_ONLY_TOOL_ANNOTATIONS,
       title: "Prepare agent judge packet",
@@ -95,7 +95,7 @@ export const PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION: PromptCoachMcpToolDefini
           type: "object",
           required: [
             "local_only",
-            "external_calls_by_prompt_coach",
+            "external_calls_by_promptlane",
             "intended_external_evaluator",
             "returns_redacted_prompt_bodies",
             "returns_raw_prompt_bodies",
@@ -105,7 +105,7 @@ export const PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION: PromptCoachMcpToolDefini
           ],
           properties: {
             local_only: { const: true },
-            external_calls_by_prompt_coach: { const: false },
+            external_calls_by_promptlane: { const: false },
             intended_external_evaluator: {
               const: "current_agent_session",
             },
@@ -137,11 +137,11 @@ export const PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION: PromptCoachMcpToolDefini
     },
   } as const;
 
-export const RECORD_AGENT_JUDGMENTS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const RECORD_AGENT_JUDGMENTS_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "record_agent_judgments",
     description:
-      "Store advisory prompt-quality judgments produced by the current Claude Code, Codex, or Gemini CLI agent session after prepare_agent_judge_batch. Use this only after the active agent has evaluated the redacted packet. This writes scores, confidence, summaries, risks, and suggestions, but never stores prompt bodies or raw paths. prompt-coach does not call external LLMs through this tool; the active user-controlled agent provides the judgment result.",
+      "Store advisory prompt-quality judgments produced by the current Claude Code, Codex, or Gemini CLI agent session after prepare_agent_judge_batch. Use this only after the active agent has evaluated the redacted packet. This writes scores, confidence, summaries, risks, and suggestions, but never stores prompt bodies or raw paths. promptlane does not call external LLMs through this tool; the active user-controlled agent provides the judgment result.",
     annotations: {
       ...LOCAL_WRITE_TOOL_ANNOTATIONS,
       title: "Record agent prompt judgments",
@@ -187,14 +187,14 @@ export const RECORD_AGENT_JUDGMENTS_TOOL_DEFINITION: PromptCoachMcpToolDefinitio
           type: "object",
           required: [
             "local_only",
-            "external_calls_by_prompt_coach",
+            "external_calls_by_promptlane",
             "stores_prompt_bodies",
             "stores_raw_paths",
             "stores_judgment_results",
           ],
           properties: {
             local_only: { const: true },
-            external_calls_by_prompt_coach: { const: false },
+            external_calls_by_promptlane: { const: false },
             stores_prompt_bodies: { const: false },
             stores_raw_paths: { const: false },
             stores_judgment_results: { const: true },

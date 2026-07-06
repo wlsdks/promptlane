@@ -47,7 +47,7 @@ describe("web api export client", () => {
               memory_candidate: {
                 eligible: true,
                 reason: "passed_with_evidence",
-                next_action: "prompt-coach loop memory-approve",
+                next_action: "promptlane loop memory-approve",
               },
               latest_snapshot: {
                 id: "loop_web",
@@ -60,8 +60,8 @@ describe("web api export client", () => {
                 top_gaps: ["Goal clarity"],
                 outcome_status: "unknown",
               },
-              next_action: "prompt-coach loop collect",
-              next_actions: ["Run prompt-coach loop collect again"],
+              next_action: "promptlane loop collect",
+              next_actions: ["Run promptlane loop collect again"],
               privacy: {
                 local_only: true,
                 external_calls: false,
@@ -106,7 +106,7 @@ describe("web api export client", () => {
 
     expect(loops.items).toHaveLength(1);
     expect(loops.status.status).toBe("ready");
-    expect(loops.status.next_action).toBe("prompt-coach loop collect");
+    expect(loops.status.next_action).toBe("promptlane loop collect");
     expect(loops.status.activity).toMatchObject({
       active_worktrees: 2,
       active_sessions: 2,
@@ -127,7 +127,7 @@ describe("web api export client", () => {
     expect(loops.status.memory_candidate).toEqual({
       eligible: true,
       reason: "passed_with_evidence",
-      next_action: "prompt-coach loop memory-approve",
+      next_action: "promptlane loop memory-approve",
     });
     expect(loops.items[0]).toMatchObject({
       id: "loop_web",
@@ -256,7 +256,7 @@ describe("web api export client", () => {
               reason:
                 "uses the selected worktree/session/branch filters without auto-submitting",
               command:
-                "prompt-coach loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
+                "promptlane loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
               writes_files: false,
               external_calls: false,
             },
@@ -1211,7 +1211,7 @@ describe("web api export client", () => {
               command_hint: {
                 label: "Copy review brief command",
                 command:
-                  "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+                  "promptlane loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
                 provenance: {
                   label: "Command provenance",
                   source: "existing command-center continuation command",
@@ -1282,7 +1282,7 @@ describe("web api export client", () => {
         reason:
           "uses the selected worktree/session/branch filters without auto-submitting",
         command:
-          "prompt-coach loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
+          "promptlane loop brief --worktree agent-loop-worktree --session session-web --branch feature/branch-filter",
         writes_files: false,
         external_calls: false,
       },
@@ -2207,7 +2207,7 @@ describe("web api export client", () => {
         command_hint: {
           label: "Copy review brief command",
           command:
-            "prompt-coach loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
+            "promptlane loop brief --worktree agent-loop-worktree --branch codex/agent-loop-memory-design",
           provenance: {
             label: "Command provenance",
             source: "existing command-center continuation command",
@@ -2267,8 +2267,8 @@ describe("web api export client", () => {
             next_action:
               "use recorded memory as local context in future loop briefs",
             next_actions: [
-              "prompt-coach loop brief",
-              "prompt-coach loop instruction-patch --target-file AGENTS.md",
+              "promptlane loop brief",
+              "promptlane loop instruction-patch --target-file AGENTS.md",
             ],
             privacy: {
               local_only: true,
@@ -2286,8 +2286,8 @@ describe("web api export client", () => {
 
     expect(result.recorded).toBe(true);
     expect(result.next_actions).toEqual([
-      "prompt-coach loop brief",
-      "prompt-coach loop instruction-patch --target-file AGENTS.md",
+      "promptlane loop brief",
+      "promptlane loop instruction-patch --target-file AGENTS.md",
     ]);
     expect(fetchMock).toHaveBeenLastCalledWith("/api/v1/loops/memory/approve", {
       method: "POST",
@@ -2319,7 +2319,7 @@ describe("web api export client", () => {
             apply_gate: {
               web_apply_available: false,
               confirm_command:
-                "prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply",
+                "promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply",
               mcp_tool: "apply_instruction_patch",
               reason:
                 "web review does not write files; apply through CLI or MCP with explicit confirmation",
@@ -2345,7 +2345,7 @@ describe("web api export client", () => {
     expect(proposal.apply_gate).toEqual({
       web_apply_available: false,
       confirm_command:
-        "prompt-coach loop instruction-apply --target-file AGENTS.md --confirm-apply",
+        "promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply",
       mcp_tool: "apply_instruction_patch",
       reason:
         "web review does not write files; apply through CLI or MCP with explicit confirmation",
@@ -2372,7 +2372,7 @@ describe("web api export client", () => {
       if (url === "/api/v1/settings") {
         return jsonResponse({
           data: {
-            data_dir: "/Users/example/.prompt-coach",
+            data_dir: "/Users/example/.promptlane",
             excluded_project_roots: [],
             redaction_mode: "mask",
             server: { host: "127.0.0.1", port: 17373 },
@@ -2457,7 +2457,7 @@ describe("web api export client", () => {
           anonymous_id: "anon_abcdef123456",
           tool: "claude-code",
           coarse_date: "2026-05-02",
-          project_alias: "prompt-coach",
+          project_alias: "promptlane",
           prompt: "Fix [REDACTED:path] with [REDACTED:api_key]",
           tags: ["backend"],
           quality_gaps: ["Verification criteria"],

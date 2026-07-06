@@ -3,10 +3,10 @@ import {
   type ClarifyingAnswer,
   type PromptImprovement,
 } from "../analysis/improve.js";
-import { loadHookAuth, loadPromptCoachConfig } from "../config/config.js";
+import { loadHookAuth, loadPromptLaneConfig } from "../config/config.js";
 import type { PromptQualityCriterion } from "../shared/schema.js";
 import { createSqlitePromptStorage } from "../storage/sqlite.js";
-import type { PromptCoachMcpToolDefinition } from "./score-tool-definitions.js";
+import type { PromptLaneMcpToolDefinition } from "./score-tool-definitions.js";
 import type { ScorePromptToolOptions } from "./score-tool-types.js";
 import { storageUnavailableMessage } from "./storage-unavailable.js";
 
@@ -61,7 +61,7 @@ export type RecordClarificationsToolResult =
 
 const RECORD_CLARIFICATIONS_ANALYZER = "clarifications-v1";
 
-export const RECORD_CLARIFICATIONS_TOOL_DEFINITION: PromptCoachMcpToolDefinition =
+export const RECORD_CLARIFICATIONS_TOOL_DEFINITION: PromptLaneMcpToolDefinition =
   {
     name: "record_clarifications",
     description:
@@ -213,7 +213,7 @@ export function recordClarificationsTool(
 
   let storage: ReturnType<typeof createSqlitePromptStorage> | undefined;
   try {
-    const config = loadPromptCoachConfig(options.dataDir);
+    const config = loadPromptLaneConfig(options.dataDir);
     const auth = loadHookAuth(options.dataDir);
     storage = createSqlitePromptStorage({
       dataDir: config.data_dir,
@@ -271,7 +271,7 @@ export function recordClarificationsTool(
       analyzer: RECORD_CLARIFICATIONS_ANALYZER,
       recorded_at: draft.created_at,
       next_action:
-        "Open the draft in the local archive to review and copy. The draft body is not echoed in this response — fetch it via the local web UI or `prompt-coach show` if needed.",
+        "Open the draft in the local archive to review and copy. The draft body is not echoed in this response — fetch it via the local web UI or `promptlane show` if needed.",
       privacy: {
         local_only: true,
         stores_input: true,

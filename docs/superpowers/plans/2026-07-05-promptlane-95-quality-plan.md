@@ -4,7 +4,7 @@
 
 **Goal:** Raise PromptLane from pre-release beta evidence to a 9.5/10 local-first prompt improvement and agent-loop memory workbench.
 
-**Architecture:** Treat 9.5 as a proof standard, not a slogan. Each score axis must have a measurable bar, current evidence, missing evidence, and one or more TDD slices that close the gap without changing the trust model. Keep `PromptLane` as product name and `prompt-coach` as runtime compatibility id until a dedicated migration proves otherwise.
+**Architecture:** Treat 9.5 as a proof standard, not a slogan. Each score axis must have a measurable bar, current evidence, missing evidence, and one or more TDD slices that close the gap without changing the trust model. Keep `PromptLane` as product name and `promptlane` as runtime compatibility id until a dedicated migration proves otherwise.
 
 **Tech Stack:** TypeScript, Node.js, Commander CLI, Fastify, SQLite, React/Vite, Vitest, Playwright, pnpm, Codex and Claude Code hooks/MCP/plugin surfaces. GitHub Actions is intentionally absent; PromptLane uses local gates and local browser patrol evidence.
 
@@ -14,7 +14,7 @@
 
 | Axis | Current level after latest evidence | 9.5 bar | Evidence that must exist |
 | --- | --- | --- | --- |
-| Product planning and positioning | 9.5/10 | 9.5 bar: every active first-screen surface, plugin surface, README path, and backlog slice says PromptLane is prompt improvement first, loop-aware continuation second, with no product-facing Loopdeck drift. | Packaging guard, README/plugin metadata, repo metadata, docs/PROMPTLANE.md, docs/NEXT_BACKLOG.md, goal audit, expected-impact evidence. |
+| Product planning and positioning | 9.5/10 | 9.5 bar: every active first-screen surface, plugin surface, README path, and backlog slice says PromptLane is prompt improvement first, loop-aware continuation second, with no product-facing PromptLane drift. | Packaging guard, README/plugin metadata, repo metadata, docs/PROMPTLANE.md, docs/NEXT_BACKLOG.md, goal audit, expected-impact evidence. |
 | Local-first privacy boundary | 9.5/10 | 9.5 bar: every hook, MCP, CLI, server, web, export, loop, and dogfood path proves no prompt body, raw path, provider credential, transcript body, compact summary, or external provider call leaks outside the allowed storage layer. | Focused privacy tests, raw-free fixtures, dogfood:first-coach-loop, dogfood:loop-memory-approval, smoke:mcp-coach-loop, browser E2E, release smoke. |
 | Codex and Claude Code integration | 9.5/10 | 9.5 bar: setup, doctor, hook capture, MCP registration, plugin install guidance, slash commands, statusline, and recovery copy are all verified for both tools in isolated smoke and at least one real operator dogfood pass. | smoke:agent-setup, smoke:hooks, dogfood:first-coach-loop, docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md, AGENT-HARNESS, native dialog approved dogfood. |
 | Setup, doctor, and MCP smoke | 9.5/10 | 9.5 bar: setup and doctor smoke proves capture readiness; MCP smoke proves score/improve/clarify/record loop; failure states produce raw-free recovery actions instead of generic errors. | smoke:agent-setup, smoke:mcp-coach-loop, storage_unavailable tests, package checks. |
@@ -73,12 +73,12 @@
   rendering `Outcome evidence` in the web detail flow so expected-impact
   predictions can be checked against finished loop evidence.
 - PR #455 added CLI prompt outcome evidence by moving the same raw-free
-  `loop_outcomes` contract into storage `getPrompt()` so `prompt-coach show
+  `loop_outcomes` contract into storage `getPrompt()` so `promptlane show
   --json`, web detail, and future agent-native consumers share one effectiveness
   evidence source instead of web-only derivation.
 - PR #457 summarized those raw-free linked
   loop outcomes into an `effectiveness` verdict shared by storage
-  `getPrompt()`, `prompt-coach show --json`, and the web prompt detail, so
+  `getPrompt()`, `promptlane show --json`, and the web prompt detail, so
   users and agents can judge actual prompt impact without manually reconciling
   every outcome row.
 - PR #458 closed the prompt effectiveness verdict log after PR #457 passed PR
@@ -92,10 +92,10 @@
   raw-free `effectiveness` verdict and calibration counts through MCP
   `score_prompt` for stored prompt ids, so Codex and Claude Code can inspect
   prompt impact evidence without opening the web UI or shelling out to
-  `prompt-coach show --json`.
+  `promptlane show --json`.
 - The archive effectiveness summary slice adds `effectiveness_summary` to
-  `createArchiveScoreReport()`, `prompt-coach score --json`, the human
-  `prompt-coach score` report, `/api/v1/score`, and MCP
+  `createArchiveScoreReport()`, `promptlane score --json`, the human
+  `promptlane score` report, `/api/v1/score`, and MCP
   `score_prompt_archive`, so agents can judge measured vs unmeasured archive
   prompts, proven/mixed/unproven verdict counts, linked outcomes, tests run,
   safe evidence refs, and next action without prompt bodies or raw paths.
@@ -131,8 +131,8 @@
   or web-operations requirement without a dedicated product decision; local
   gates, local `ui-patrol`, and dogfood commands are authoritative.
 - PR #478 exposed the same 9.5 quality evidence as an installed product CLI:
-  `prompt-coach quality-evidence`, `prompt-coach quality-evidence --json`, and
-  `prompt-coach quality-evidence --require-complete`. The command lists every
+  `promptlane quality-evidence`, `promptlane quality-evidence --json`, and
+  `promptlane quality-evidence --require-complete`. The command lists every
   current scorecard/direct evidence blocker, keeps output local and raw-free,
   and exits nonzero while completion evidence remains pending. Future changes
   use the local gate instead of PR/main test CI.
@@ -148,9 +148,9 @@
   `corepack pnpm --silent evidence:quality` or
   `node scripts/quality-95-evidence.mjs` when another tool needs to parse the
   JSON directly. Installed CLI users can run
-  `prompt-coach quality-evidence --json` or
-  `prompt-coach quality-evidence --require-complete`. They can run
-  `prompt-coach quality-evidence --operator-brief` when they only need the
+  `promptlane quality-evidence --json` or
+  `promptlane quality-evidence --require-complete`. They can run
+  `promptlane quality-evidence --operator-brief` when they only need the
   focused native-dialog approval checklist and do not want to open the dialog.
   The JSON includes `axis_evidence_coverage`, which separates satisfied local
   proof such as `local_95_evidence_sweep`,
@@ -182,7 +182,7 @@
 - `codex_claude_setup_smoke_refresh` was run after becoming the first
   recommendation: `corepack pnpm smoke:agent-setup` rebuilt server/web assets,
   exercised setup dry-run, setup with MCP registration, Claude Code doctor, and
-  Codex doctor, then completed with `prompt-coach agent setup smoke passed` on
+  Codex doctor, then completed with `promptlane agent setup smoke passed` on
   current main-derived work. This refreshes local Codex/Claude setup evidence
   without opening provider CLIs or treating native-dialog dogfood as complete.
 - `docs/LOCAL_95_EVIDENCE_2026-07-06.md` records the current local 9.5 evidence
@@ -204,10 +204,10 @@
   dogfood and native-dialog approved dogfood pending.
 - `docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md` records current GitHub
   repository metadata, README/package/plugin metadata, product contract,
-  backlog, goal audit, and Loopdeck legacy decision evidence. Product planning
+  backlog, goal audit, and PromptLane legacy decision evidence. Product planning
   and positioning is now 9.5/10 because those surfaces consistently present
   PromptLane as prompt improvement first and loop-aware continuation second
-  while keeping `prompt-coach` as the compatibility runtime ID.
+  while keeping `promptlane` as the compatibility runtime ID.
   `quality-evidence` records this as
   `product_positioning_metadata_alignment`.
 - `docs/UI_PATROL_EVIDENCE_2026-07-06.md` records current local web operations
@@ -232,9 +232,9 @@
   blockers. This makes the next operator-approved pass executable
   without changing the rule that native dialog dogfood remains pending until
   real operator-approved evidence exists.
-- The human `prompt-coach quality-evidence` output renders the remaining
+- The human `promptlane quality-evidence` output renders the remaining
   external evidence status directly: the native dialog approved-run
-  requirement. `prompt-coach quality-evidence --operator-brief` renders the
+  requirement. `promptlane quality-evidence --operator-brief` renders the
   current approval status, command, refusal preflight command, preconditions,
   completion evidence, and guardrails for the remaining dogfood step without
   running it. The refusal preflight command is
@@ -245,7 +245,7 @@
   agents can use the product CLI itself to decide whether 9.5 is still blocked
   before claiming completion.
 - The approved native OS ask UI dogfood was completed after explicit operator
-  approval: `PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm
+  approval: `PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm
   dogfood:mcp-native-dialog-approved` completed with `approved native dialog
   dogfood passed` and `interaction_status: "answered"`. This closes
   `native_dialog_approved_dogfood` while preserving the rule that the command
@@ -329,9 +329,9 @@ Expected: pass.
 Add a packaging test requiring `docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md` to contain:
 
 ```md
-prompt-coach setup --profile coach --register-mcp
-prompt-coach doctor codex
-prompt-coach doctor claude-code
+promptlane setup --profile coach --register-mcp
+promptlane doctor codex
+promptlane doctor claude-code
 dogfood:first-coach-loop
 ```
 
@@ -359,7 +359,7 @@ corepack pnpm smoke:mcp-coach-loop
 For native ask UI, only run after explicit approval:
 
 ```bash
-PROMPT_COACH_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved
+PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm dogfood:mcp-native-dialog-approved
 ```
 
 - [ ] **Step 4: Record actual evidence**

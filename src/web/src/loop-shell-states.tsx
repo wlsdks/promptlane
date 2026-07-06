@@ -9,7 +9,7 @@ export function LoopEmptyState() {
         <span className="panel-eyebrow">PromptLane</span>
         <h2>No loop snapshots yet</h2>
         <p>
-          Run <code>prompt-coach loop collect</code> after a Codex or Claude
+          Run <code>promptlane loop collect</code> after a Codex or Claude
           Code turn to create the first local loop snapshot.
         </p>
       </div>
