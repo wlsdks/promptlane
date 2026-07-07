@@ -5275,3 +5275,9 @@
 - [x] RED: Add focused sidebar storage tests for saved collapsed state, missing browser storage, and throwing storage access.
 - [x] GREEN: Extract sidebar collapsed-state localStorage helpers from `App.tsx` into `sidebar-storage`.
 - [x] VERIFY: Focused sidebar-storage tests and web typecheck passed.
+
+## 2026-07-08 Storage Project Label Path Separators
+
+- [x] RED: Add focused storage project-label tests for backslash-separated paths.
+- [x] GREEN: Update storage project labels to trim and split both POSIX and backslash path separators.
+- [x] VERIFY: Focused storage/MCP project-label tests and repo typecheck passed.

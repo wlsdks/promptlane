@@ -14,6 +14,11 @@ describe("projectLabel (storage)", () => {
     expect(projectLabel("/Users/example/foo///")).toBe("foo");
   });
 
+  it("understands backslash-separated paths", () => {
+    expect(projectLabel("C:\\Users\\example\\foo")).toBe("foo");
+    expect(projectLabel("C:\\Users\\example\\foo\\\\")).toBe("foo");
+  });
+
   it("returns the input itself when there is no separator", () => {
     expect(projectLabel("local-project")).toBe("local-project");
   });
