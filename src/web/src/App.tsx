@@ -69,6 +69,7 @@ import {
 import {
   archiveScoreErrorMessage,
   bookmarkErrorMessage,
+  bulkDeleteErrorMessage,
   errorMessageOrDefault,
   exportPreviewErrorMessage,
   improvementDraftSaveErrorMessage,
@@ -322,8 +323,8 @@ export function App() {
       void getArchiveScoreReport()
         .then(setArchiveScore)
         .catch(() => undefined);
-    } catch {
-      setError("Could not bulk delete some prompts.");
+    } catch (error) {
+      setError(bulkDeleteErrorMessage(error));
     } finally {
       setBulkDeleteBusy(false);
     }

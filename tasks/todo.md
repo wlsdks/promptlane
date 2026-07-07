@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Bulk Delete Error Detail
+
+- [x] CHECK: `deletePrompt`는 서버 recovery detail을 Error message에 보존하지만,
+  App bulk delete catch가 generic 문구로 덮어써 archive/search 복구 안내가 UI까지
+  전달되지 않는다.
+- [x] RED: `src/web/src/error-message.test.ts`가 bulk delete recovery detail 보존
+  helper를 요구하게 해 helper missing 실패를 확인했다.
+- [x] GREEN: bulk delete fallback helper를 추가하고 App handler가 API/server recovery
+  detail을 보존하도록 연결했다.
+- [x] VERIFY: focused web helper test, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Bookmark Error Detail
 
 - [x] CHECK: `setPromptBookmark`는 서버 recovery detail을 Error message에 보존하지만,
