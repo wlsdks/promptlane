@@ -113,6 +113,7 @@ import {
   usePromptListQuery,
 } from "./prompt-list-query.js";
 import { useDashboardQuery } from "./dashboard-query.js";
+import { usePromptSelection } from "./prompt-selection.js";
 import { useSelectedPromptQuery } from "./selected-prompt-query.js";
 import { useWorkspaceQuery } from "./workspace-query.js";
 
@@ -154,7 +155,6 @@ export function App() {
   >();
   const [pendingBulkDelete, setPendingBulkDelete] = useState(false);
   const [bulkDeleteBusy, setBulkDeleteBusy] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
   const [copiedPromptId, setCopiedPromptId] = useState<string | undefined>();
   const [copiedImprovementId, setCopiedImprovementId] = useState<
     string | undefined
@@ -175,6 +175,13 @@ export function App() {
       listPrompts,
       onError: setError,
     });
+  const {
+    clearSelection,
+    selectedIds,
+    selectAll: selectAllVisible,
+    setSelectedIds,
+    toggleSelectId,
+  } = usePromptSelection();
   const { selected, setSelected } = useSelectedPromptQuery({
     loadPrompt: getPrompt,
     onError: setError,
@@ -308,26 +315,6 @@ export function App() {
       total: prompts.length,
     };
   }, [prompts, view]);
-
-  function toggleSelectId(id: string): void {
-    setSelectedIds((current) => {
-      const next = new Set(current);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  }
-
-  function selectAllVisible(): void {
-    setSelectedIds(new Set(prompts.map((prompt) => prompt.id)));
-  }
-
-  function clearSelection(): void {
-    setSelectedIds(new Set());
-  }
 
   async function confirmBulkDelete(): Promise<void> {
     const ids = [...selectedIds];
@@ -971,7 +958,7 @@ export function App() {
               prompts={prompts}
               selectedIds={selectedIds}
               onToggleSelect={toggleSelectId}
-              onSelectAll={selectAllVisible}
+              onSelectAll={() => selectAllVisible(prompts)}
               onClearSelection={clearSelection}
               onBulkDelete={() => setPendingBulkDelete(true)}
               bulkDeleteBusy={bulkDeleteBusy}

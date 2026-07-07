@@ -5226,3 +5226,10 @@
 - [x] GREEN: Move loop worktree detail state, route-triggered loading, and worktree selection navigation into `useWorkspaceQuery`.
 - [x] VERIFY: Focused workspace/dashboard query tests, web typecheck, touched-code formatting check, and diff hygiene passed.
 - [x] INTEGRATE: Commit prepared from `codex/promptlane-loop-worktree-query-hook` for PR.
+
+## 2026-07-08 Prompt Selection Hook Extraction
+
+- [x] RED: Add focused prompt selection tests for immutable toggle behavior and visible-row select-all behavior.
+- [x] GREEN: Extract bulk-selection state and helpers from `App.tsx` into `usePromptSelection`.
+- [x] VERIFY: Focused prompt selection/list query tests, web typecheck, touched-code formatting check, and diff hygiene passed.
+- [x] INTEGRATE: Commit prepared from `codex/promptlane-prompt-selection-hook` for PR.
