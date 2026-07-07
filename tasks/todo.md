@@ -5149,3 +5149,10 @@
 - [x] GREEN: Update `get_promptlane_loop_status` setup-needed next action to use `promptlane setup --profile coach --register-mcp` before loop collection.
 - [x] VERIFY: Focused loop MCP/server checks and diff hygiene passed.
 - [x] INTEGRATE: Commit prepared from `codex/promptlane-loop-mcp-setup-guidance` for PR.
+
+## 2026-07-08 Goal Audit Evidence Alignment
+
+- [x] RED: Add focused packaging guards requiring the goal audit and backlog to cite PR #512/#513 and stop carrying stale scheduled-ui-patrol/native-dialog blockers.
+- [x] GREEN: Refresh `docs/PROMPTLANE_GOAL_AUDIT_2026-07-05.md` and `docs/NEXT_BACKLOG.md` to match current local `quality-evidence` status, local browser evidence, approved native-dialog evidence, and first-step MCP guidance.
+- [x] VERIFY: Focused packaging guard, `quality-evidence`, and diff hygiene passed.
+- [x] INTEGRATE: Commit prepared from `codex/promptlane-goal-audit-evidence-alignment` for PR.

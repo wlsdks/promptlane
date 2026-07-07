@@ -118,6 +118,12 @@ Current goal audit:
   coach-loop, first-loop, and loop-memory approval.
 - PR #420 closed the Codex and Claude Code dogfood evidence log after CI passed
   and branch pruning was confirmed.
+- PR #512 clarified `get_promptlane_status` setup-needed and empty-archive
+  next actions so first-time MCP users see explicit setup, one real
+  Codex/Claude Code prompt, and then `coach_prompt` or status recheck.
+- PR #513 clarified `get_promptlane_loop_status` setup-needed guidance so loop
+  MCP users see the same explicit setup/MCP registration command before
+  `promptlane loop collect`.
 - PR #425 updated the main test workflow to `pnpm/action-setup@v6`, removing
   the deprecated Node 20 action runtime annotation from Node 22/24 CI.
 - PR #427 moved `better-sqlite3` to the npm-published 12.x line and patched the

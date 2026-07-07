@@ -815,7 +815,17 @@ describe("plugin packaging files", () => {
     expect(goalAudit).toContain(
       "`2f99c10 docs: close codex claude dogfood log`",
     );
-    for (const prNumber of ["#403", "#405", "#407", "#408", "#417", "#419", "#420"]) {
+    for (const prNumber of [
+      "#403",
+      "#405",
+      "#407",
+      "#408",
+      "#417",
+      "#419",
+      "#420",
+      "#512",
+      "#513",
+    ]) {
       expect(goalAudit).toContain(`PR ${prNumber}`);
       expect(backlog).toContain(`PR ${prNumber}`);
     }
@@ -885,6 +895,11 @@ describe("plugin packaging files", () => {
     expect(remainingPlan).not.toContain("scheduled `ui-patrol`");
     expect(goalAudit).toContain("PR #419");
     expect(goalAudit).toContain("PR #420");
+    expect(goalAudit).toContain("local browser evidence");
+    expect(goalAudit).toContain("quality-evidence");
+    expect(goalAudit).not.toContain("scheduled `ui-patrol` evidence remains pending");
+    expect(goalAudit).not.toContain("first scheduled `ui-patrol` artifact");
+    expect(goalAudit).not.toContain("corepack pnpm evidence:ui-patrol");
     expect(backlog).toContain("PR #419");
     expect(backlog).toContain("PR #420");
   });
@@ -953,6 +968,13 @@ describe("plugin packaging files", () => {
     expect(audit).toContain(
       "completed `native_dialog_approved_dogfood` evidence",
     );
+    const goalAudit = readFileSync(
+      join(process.cwd(), "docs/PROMPTLANE_GOAL_AUDIT_2026-07-05.md"),
+      "utf8",
+    );
+    expect(goalAudit).toContain("native_dialog_approved_dogfood");
+    expect(goalAudit).not.toContain("real answered OS-dialog run still needs operator approval");
+    expect(goalAudit).not.toContain("Pending explicit operator approval");
     expect(backlog).toContain("native_dialog_preflight");
     expect(backlog).toContain("approved native-dialog evidence");
   });
