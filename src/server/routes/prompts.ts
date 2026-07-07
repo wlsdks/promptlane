@@ -326,7 +326,7 @@ export function registerPromptRoutes(
         throw problem(
           404,
           "Not Found",
-          "Improvement draft not found.",
+          "Improvement draft not found. Open the prompt detail from the local archive, review saved drafts, then retry the copy action.",
           request.url,
         );
       }
