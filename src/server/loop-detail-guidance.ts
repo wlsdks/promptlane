@@ -1,4 +1,5 @@
 import type { PromptLaneStatusActivityMergeReadiness } from "../loop/status.js";
+import { quoteForShell } from "../shared/shell-quote.js";
 
 type SnapshotAgeCandidate = {
   id: string;
@@ -303,11 +304,4 @@ function selectedBriefCommand(selection: {
   if (selection.sessionId) parts.push("--session", selection.sessionId);
   if (selection.branch) parts.push("--branch", selection.branch);
   return parts.map(quoteForShell).join(" ");
-}
-
-function quoteForShell(value: string): string {
-  if (/^[A-Za-z0-9_./@:=+-]+$/.test(value)) {
-    return value;
-  }
-  return `'${value.replaceAll("'", "'\\''")}'`;
 }

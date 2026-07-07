@@ -4,6 +4,7 @@ import type { Command } from "commander";
 
 import { resolveCliEntryPath } from "../entry-path.js";
 import { UserError } from "../user-error.js";
+import { quoteForShell } from "../../shared/shell-quote.js";
 
 import type { BuddyStyle } from "./buddy.js";
 
@@ -284,13 +285,6 @@ function formatBuddyCommandPretty(options: CodexHudOptions): string {
     args.push("--data-dir", options.dataDir);
   }
   return args.map(quoteForShell).join(" ");
-}
-
-function quoteForShell(value: string): string {
-  if (/^[A-Za-z0-9_./@:=+-]+$/.test(value)) {
-    return value;
-  }
-  return `'${value.replace(/'/g, "'\\''")}'`;
 }
 
 export function registerInstallCodexHudCommand(program: Command): void {

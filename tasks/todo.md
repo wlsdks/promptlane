@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Shared Shell Quote Helper
+
+- [x] CHECK: selected brief command, brief recovery command, Codex HUD buddy
+  command가 모두 같은 shell-quoting primitive를 쓰지만 각 entrypoint에
+  `quoteForShell` helper가 중복되어 있었다.
+- [x] RED: `src/shared/shell-quote.test.ts`를 추가해 shared `quoteForShell`
+  contract를 먼저 요구했고, 모듈이 없어 실패를 확인했다.
+- [x] GREEN: `src/shared/shell-quote.ts`를 추가하고 CLI/server/loop command
+  rendering 표면이 같은 helper를 import하게 했다. ARCHITECTURE shared helper
+  목록도 갱신했다.
+- [x] VERIFY: shared helper test와 관련 command rendering focused tests,
+  typecheck, formatting/diff checks를 실행한다.
+
 ## 2026-07-08 PromptLane Brief Recovery Command Quoting
 
 - [x] CHECK: selected loop brief가 선택 필터와 일치하는 snapshot을 찾지 못할 때

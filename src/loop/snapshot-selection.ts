@@ -1,5 +1,6 @@
 import type { LoopSnapshot } from "./types.js";
 import { deriveProjectLabel } from "../shared/project-label.js";
+import { quoteForShell } from "../shared/shell-quote.js";
 
 export type LoopSnapshotSelection = {
   worktree?: string;
@@ -62,11 +63,4 @@ function looksLikeRawPath(value: string): boolean {
     value.startsWith("~/") ||
     /^[A-Za-z]:[\\/]/.test(value)
   );
-}
-
-function quoteForShell(value: string): string {
-  if (/^[A-Za-z0-9_./@:=+-]+$/.test(value)) {
-    return value;
-  }
-  return `'${value.replaceAll("'", "'\\''")}'`;
 }

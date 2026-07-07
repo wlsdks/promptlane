@@ -74,15 +74,15 @@ agent state databases. CLI, MCP, hook, and web surfaces should call into
 
 For contributors coming from Spring:
 
-| Spring habit             | Node/TypeScript equivalent in this repo                                         |
-| ------------------------ | ------------------------------------------------------------------------------- |
-| Controller               | Fastify route module in `src/server/routes/*`                                   |
-| Service                  | Pure function module in `src/analysis/*`, `src/exporter/*`, or `src/importer/*` |
+| Spring habit             | Node/TypeScript equivalent in this repo                                                         |
+| ------------------------ | ----------------------------------------------------------------------------------------------- |
+| Controller               | Fastify route module in `src/server/routes/*`                                                   |
+| Service                  | Pure function module in `src/analysis/*`, `src/exporter/*`, or `src/importer/*`                 |
 | Repository               | `src/storage/ports.ts` plus `src/storage/sqlite.ts` (and `sqlite-migrations.ts` for schema/DDL) |
-| DTO / validation         | Zod schemas and exported TypeScript types in `src/shared/schema.ts`             |
-| Configuration bean       | Explicit functions in `src/config/*`                                            |
-| Scheduled/background job | CLI script or command with explicit input/output                                |
-| Aspect/interceptor       | Fastify hook/auth helper or CLI wrapper, not hidden global behavior             |
+| DTO / validation         | Zod schemas and exported TypeScript types in `src/shared/schema.ts`                             |
+| Configuration bean       | Explicit functions in `src/config/*`                                                            |
+| Scheduled/background job | CLI script or command with explicit input/output                                                |
+| Aspect/interceptor       | Fastify hook/auth helper or CLI wrapper, not hidden global behavior                             |
 
 Prefer plain modules and explicit function parameters over container-style
 dependency injection. When a dependency must be swappable, define a small port
@@ -176,6 +176,9 @@ formatter:
 - `src/shared/time.ts`: `MINUTE_MS`, `HOUR_MS`, `DAY_MS`, plus
   `compactTimestamp` for the `prmt_…` id format. Use the constants
   instead of repeating `60 * 60 * 1000`.
+- `src/shared/shell-quote.ts`: `quoteForShell(value)` for copyable local command
+  examples and recovery hints. Use it before rendering argv-like strings that
+  may include user-controlled labels or paths.
 
 These are not release blockers by themselves, but new work should reduce
 pressure on them rather than expanding them casually. The line-budget gate in
