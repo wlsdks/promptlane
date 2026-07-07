@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Instruction Patch Memory Recovery
+
+- [x] CHECK: HTTP/web `GET /api/v1/loops/instruction-patch`는 approved loop
+  memory가 없을 때 CLI/MCP와 달리 "Approve a PromptLane memory first"만
+  반환해 evidence-backed memory 생성 순서를 덜 분명하게 안내했다.
+- [x] RED: `src/server/create-server.test.ts`가 web instruction patch no-memory
+  응답에 first prompt, first score, loop snapshot collect, passed outcome
+  evidence, memory approval 후 retry 안내를 요구하게 해 실패를 확인했다.
+- [x] GREEN: server route가 shared CLI recovery helper를 사용해 web/HTTP
+  표면도 같은 evidence-first 순서를 안내하게 했다.
+- [x] VERIFY: focused server route test, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Instruction Patch Memory Recovery
 
 - [x] CHECK: instruction patch proposal/apply가 approved loop memory가 없을 때

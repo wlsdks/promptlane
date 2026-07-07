@@ -18,6 +18,7 @@ import {
 import { decideLoopMemoryCandidate } from "../../loop/memory-candidate.js";
 import {
   hasLoopSnapshotSelection,
+  loopInstructionPatchNoMemoryCliMessage,
   selectLoopSnapshot,
 } from "../../loop/snapshot-selection.js";
 import type {
@@ -507,7 +508,9 @@ export function registerLoopRoutes(
       throw problem(
         404,
         "Not Found",
-        "No loop memory found. Approve a PromptLane memory first.",
+        loopInstructionPatchNoMemoryCliMessage(
+          `promptlane loop instruction-patch --target-file ${targetFile}`,
+        ),
         request.url,
       );
     }

@@ -2291,6 +2291,27 @@ describe("createServer P2 ingest boundary", () => {
     expect(serialized).not.toContain("sk-proj-secret");
   });
 
+  it("guides web instruction patch users to approve evidence-backed memory first", async () => {
+    const storage = createMemoryStorage();
+    const server = createTestServer({ storage });
+
+    const response = await server.inject({
+      method: "GET",
+      url: "/api/v1/loops/instruction-patch?target_file=AGENTS.md",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toContain(
+      "No loop memory found. Capture one Codex or Claude Code prompt, confirm the first score, collect a loop snapshot, record a passed outcome with safe evidence, then run `promptlane loop memory-approve` before retrying `promptlane loop instruction-patch --target-file AGENTS.md`.",
+    );
+    expect(response.body).not.toContain("/Users/example");
+    expect(response.body).not.toContain("sk-proj-secret");
+  });
+
   it("requires app access and csrf before updating project policy", async () => {
     const storage = createMemoryStorage();
     const server = createTestServer({ storage });
