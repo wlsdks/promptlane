@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Empty Loop First Value Guidance
+
+- [x] CHECK: loop status 모델의 empty 상태는 `loop collect`를 먼저 안내하고
+  prompt capture 필요성을 뒤에 말해, 새 사용자가 빈 snapshot부터 만들 수 있었다.
+- [x] RED: `src/loop/status.test.ts`가 empty loop status에서 Codex/Claude Code
+  prompt capture와 `promptlane coach` first score 확인이 `loop collect`보다 먼저
+  나오도록 요구하게 해 실패를 확인했다.
+- [x] GREEN: empty loop next actions를 first prompt/coach -> loop collect 순서로
+  바꿨다. `next_action`은 실행 가능한 snapshot 생성 명령인 `promptlane loop
+  collect`로 유지한다.
+- [x] VERIFY: focused loop status/MCP tests, typecheck, formatting/diff checks를
+  실행한다.
+
 ## 2026-07-08 PromptLane Loop MCP First Prompt Guidance
 
 - [x] CHECK: 일반 `get_promptlane_status` setup-needed/empty 상태는 첫

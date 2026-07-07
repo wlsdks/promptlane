@@ -55,9 +55,19 @@ describe("createPromptLaneStatus", () => {
       snapshot_count: 0,
       next_action: "promptlane loop collect",
       next_actions: expect.arrayContaining([
+        "Capture one Codex or Claude Code prompt, then run promptlane coach to confirm the first score.",
         expect.stringContaining("promptlane loop collect"),
       ]),
     });
+    expect(
+      status.next_actions.indexOf(
+        "Capture one Codex or Claude Code prompt, then run promptlane coach to confirm the first score.",
+      ),
+    ).toBeLessThan(
+      status.next_actions.findIndex((action) =>
+        action.includes("promptlane loop collect"),
+      ),
+    );
     expect(status).not.toHaveProperty("latest_snapshot");
   });
 

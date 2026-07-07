@@ -518,8 +518,8 @@ function nextActionsForStatus(input: {
 }): string[] {
   if (!input.hasSnapshots) {
     return [
-      "Run promptlane loop collect to create the first local loop snapshot.",
-      "Capture at least one Claude Code or Codex prompt before expecting useful loop context.",
+      "Capture one Codex or Claude Code prompt, then run promptlane coach to confirm the first score.",
+      "Then run promptlane loop collect to create the first local loop snapshot.",
     ];
   }
 

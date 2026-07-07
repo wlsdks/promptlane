@@ -124,6 +124,10 @@ Current goal audit:
 - PR #513 clarified `get_promptlane_loop_status` setup-needed guidance so loop
   MCP users see the same explicit setup/MCP registration command before
   `promptlane loop collect`.
+- PR #564 aligned `get_promptlane_loop_status` setup-needed guidance with
+  `get_promptlane_status`, so first-time MCP loop users see setup, one real
+  Codex/Claude Code prompt, `coach_prompt` or status recheck, and only then
+  `promptlane loop collect`.
 - PR #425 updated the main test workflow to `pnpm/action-setup@v6`, removing
   the deprecated Node 20 action runtime annotation from Node 22/24 CI.
 - PR #427 moved `better-sqlite3` to the npm-published 12.x line and patched the
