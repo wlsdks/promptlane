@@ -477,7 +477,12 @@ export function registerLoopRoutes(
     const snapshot = snapshots.find((item) => item.id === params.id);
 
     if (!snapshot) {
-      throw problem(404, "Not Found", "Loop snapshot not found.", request.url);
+      throw problem(
+        404,
+        "Not Found",
+        "Loop snapshot not found. Run `promptlane loop collect` after the next Codex or Claude Code turn, then retry `promptlane loop brief` for the latest safe continuation brief.",
+        request.url,
+      );
     }
 
     const boundaries = storage.listCompactBoundaries({ limit: 100 }).items;
