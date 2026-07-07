@@ -1,5 +1,15 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Settings Error Detail
+
+- [x] CHECK: `getSettings`가 non-OK 응답에서 `failApi`를 거치지 않아 settings/local
+  server diagnostic 화면에서 session/recovery detail이 UI/API caller까지 전달되지 않는다.
+- [x] RED: `src/web/src/api.test.ts`가 settings non-OK detail 보존을 요구하게 해
+  promise가 reject되지 않는 실패를 확인했다.
+- [x] GREEN: settings API client가 `failApi`를 사용하도록 고쳐 서버 recovery detail을
+  Error message로 보존한다.
+- [x] VERIFY: focused web API test, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Loop Brief Error Detail
 
 - [x] CHECK: `getLoopBrief`가 non-OK 응답에서 `failApi`를 거치지 않아 continuation

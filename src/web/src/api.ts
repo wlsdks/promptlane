@@ -1545,6 +1545,11 @@ export async function getSettings(): Promise<SettingsResponse> {
   const response = await fetch("/api/v1/settings", {
     credentials: "same-origin",
   });
+
+  if (!response.ok) {
+    await failApi(response, "Settings failed");
+  }
+
   const body = (await response.json()) as { data: SettingsResponse };
   return body.data;
 }
