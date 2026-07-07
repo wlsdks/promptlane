@@ -5251,3 +5251,9 @@
 - [x] RED: Add focused prompt filter model tests for empty filters, clear patches, and raw-free path chips.
 - [x] GREEN: Extract active filter chips and filter clearing helpers from `App.tsx` into `prompt-filter-model`, masking cwd filter chips with the local path display helper.
 - [x] VERIFY: Focused prompt-filter/routing tests and web typecheck passed.
+
+## 2026-07-08 Prompt Empty State Model Extraction
+
+- [x] RED: Add focused prompt empty-state tests for first-run setup guidance, quality-gap queues, and filtered reuse empty states.
+- [x] GREEN: Extract prompt list empty-state title, hint, secondary hint, and first-run commands from `App.tsx` into `prompt-empty-state`.
+- [x] VERIFY: Focused prompt-empty-state/filter model tests and web typecheck passed.
