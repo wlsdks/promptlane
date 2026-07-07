@@ -5,7 +5,10 @@ import type {
   LoopWorktreeResponse,
   ProjectSummary,
 } from "./api.js";
-import { loopWorktreeErrorMessage } from "./error-message.js";
+import {
+  loopListErrorMessage,
+  loopWorktreeErrorMessage,
+} from "./error-message.js";
 import type { View } from "./routing.js";
 
 export type LoopWorktreeSelection = {
@@ -108,8 +111,8 @@ export function useWorkspaceQuery({
 
     void listLoops()
       .then(setLoops)
-      .catch(() => undefined);
-  }, [currentView.name, listLoops, loops]);
+      .catch((error) => onError(loopListErrorMessage(error)));
+  }, [currentView.name, listLoops, loops, onError]);
 
   const openLoopWorktree = useCallback(
     async (selection: LoopWorktreeSelection): Promise<void> => {

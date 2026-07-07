@@ -10,6 +10,7 @@ import {
   errorMessageOrDefault,
   exportPreviewErrorMessage,
   improvementDraftSaveErrorMessage,
+  loopListErrorMessage,
   loopWorktreeErrorMessage,
   projectInstructionAnalysisErrorMessage,
   projectPolicyUpdateErrorMessage,
@@ -187,6 +188,16 @@ describe("errorMessageOrDefault", () => {
 
     expect(loopWorktreeErrorMessage(error)).toBe(
       "Loop worktree drilldown failed (404): Worktree snapshot not found. Run `promptlane loop collect --worktree agent-loop-worktree`, then reopen the loop worktree drilldown.",
+    );
+  });
+
+  it("preserves loop list recovery detail", () => {
+    const error = new Error(
+      "Loop list failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the loop list request.",
+    );
+
+    expect(loopListErrorMessage(error)).toBe(
+      "Loop list failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the loop list request.",
     );
   });
 });

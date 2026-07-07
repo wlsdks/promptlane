@@ -81,3 +81,7 @@ export function promptListErrorMessage(error: unknown): string {
 export function loopWorktreeErrorMessage(error: unknown): string {
   return errorMessageOrDefault(error, "Could not load loop worktree detail.");
 }
+
+export function loopListErrorMessage(error: unknown): string {
+  return errorMessageOrDefault(error, "Could not load loop snapshots.");
+}

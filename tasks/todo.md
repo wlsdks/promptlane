@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Loop List Error Detail
+
+- [x] CHECK: `listLoops`는 서버 recovery detail을 Error message에 보존하지만,
+  workspace query loop list catch가 실패를 무시해 loop/session/worktree 복구 안내가
+  UI까지 전달되지 않는다.
+- [x] RED: `src/web/src/error-message.test.ts`가 loop list recovery detail 보존
+  helper를 요구하게 해 helper missing 실패를 확인했다.
+- [x] GREEN: loop list fallback helper를 추가하고 workspace query loop list handler가
+  API/server recovery detail을 사용자-visible error로 전달하도록 연결했다.
+- [x] VERIFY: focused web helper/workspace-query tests, typecheck, format check, diff
+  whitespace check를 실행했다.
+
 ## 2026-07-08 PromptLane Web Loop Worktree Error Detail
 
 - [x] CHECK: `getLoopWorktree`는 서버 recovery detail을 Error message에 보존하지만,
