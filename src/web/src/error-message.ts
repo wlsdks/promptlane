@@ -1,4 +1,7 @@
-export function errorMessageOrDefault(error: unknown, fallback: string): string {
+export function errorMessageOrDefault(
+  error: unknown,
+  fallback: string,
+): string {
   if (error instanceof Error) {
     const message = error.message.trim();
     if (message.length > 0) {
@@ -34,10 +37,7 @@ export function archiveScoreErrorMessage(error: unknown): string {
 }
 
 export function improvementDraftSaveErrorMessage(error: unknown): string {
-  return errorMessageOrDefault(
-    error,
-    "Could not save the improvement draft.",
-  );
+  return errorMessageOrDefault(error, "Could not save the improvement draft.");
 }
 
 export function bookmarkErrorMessage(error: unknown): string {
@@ -64,4 +64,8 @@ export function copyUsageEventErrorMessage(error: unknown): string {
 
 export function askEventSummaryErrorMessage(error: unknown): string {
   return errorMessageOrDefault(error, "Could not load ask events.");
+}
+
+export function similarPromptsErrorMessage(error: unknown): string {
+  return errorMessageOrDefault(error, "Could not load similar prompts.");
 }

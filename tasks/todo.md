@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Similar Prompts Error Detail
+
+- [x] CHECK: `getSimilarPrompts`는 서버 recovery detail을 Error message에 보존하지만,
+  Prompt detail similar prompts 패널 catch가 generic 문구로 덮어써 archive/detail 복구
+  안내가 UI까지 전달되지 않는다.
+- [x] RED: `src/web/src/error-message.test.ts`가 similar prompts recovery detail 보존
+  helper를 요구하게 해 helper missing 실패를 확인했다.
+- [x] GREEN: similar prompts fallback helper를 추가하고 Prompt detail panel handler가
+  API/server recovery detail을 보존하도록 연결했다.
+- [x] VERIFY: focused web helper test, typecheck, diff whitespace check를 실행했다.
+
 ## 2026-07-08 PromptLane Web Ask Events Error Detail
 
 - [x] CHECK: `getAskEventSummary`는 서버 recovery detail을 Error message에 보존하지만,
