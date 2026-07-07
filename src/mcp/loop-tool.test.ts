@@ -368,7 +368,8 @@ describe("PromptLane MCP tools", () => {
     expect(result).toEqual({
       is_error: true,
       error_code: "not_found",
-      message: "No loop snapshot found. Run `promptlane loop collect` first.",
+      message:
+        "No loop snapshot found. Send one Codex or Claude Code prompt, call coach_prompt or rerun get_promptlane_status to confirm the first score, then run `promptlane loop collect` before retrying prepare_loop_brief.",
     });
   });
 

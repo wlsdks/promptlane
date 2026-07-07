@@ -11,6 +11,7 @@ import {
 import { decideLoopMemoryCandidate } from "../loop/memory-candidate.js";
 import {
   hasLoopSnapshotSelection,
+  loopBriefNoSnapshotMcpMessage,
   selectLoopSnapshot,
   selectedLoopSnapshotNotFoundMessage,
 } from "../loop/snapshot-selection.js";
@@ -139,7 +140,7 @@ export function prepareLoopBriefTool(
           "not_found",
           hasSelection
             ? selectedLoopSnapshotNotFoundMessage(selection)
-            : "No loop snapshot found. Run `promptlane loop collect` first.",
+            : loopBriefNoSnapshotMcpMessage(),
         );
       }
 

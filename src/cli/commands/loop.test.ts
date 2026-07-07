@@ -139,6 +139,15 @@ describe("loop CLI command", () => {
     expect(text).not.toContain("/Users/example");
   });
 
+  it("guides first-time loop brief users through prompt capture before collect", () => {
+    const dataDir = createTempDir();
+    initializePromptLane({ dataDir });
+
+    expect(() => loopBriefForCli({ dataDir })).toThrow(
+      "No loop snapshot found. Send one Codex or Claude Code prompt, run `promptlane coach` to confirm the first score, then run `promptlane loop collect` before retrying `promptlane loop brief`.",
+    );
+  });
+
   it("prints approved loop memories in the latest continuation brief", async () => {
     const dataDir = createTempDir();
     await seedPrompts(dataDir);

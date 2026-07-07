@@ -19,6 +19,7 @@ import {
 } from "../../loop/memory-candidate.js";
 import {
   hasLoopSnapshotSelection,
+  loopBriefNoSnapshotCliMessage,
   selectLoopSnapshot,
   selectedLoopSnapshotNotFoundMessage,
 } from "../../loop/snapshot-selection.js";
@@ -258,7 +259,7 @@ export function loopBriefForCli(options: LoopCliOptions = {}): string {
       throw new UserError(
         hasSelection
           ? selectedLoopSnapshotNotFoundMessage(selection)
-          : "No loop snapshot found. Run `promptlane loop collect` first.",
+          : loopBriefNoSnapshotCliMessage(),
       );
     }
     const compactBoundary = latestCompactBoundaryAfterSnapshot(

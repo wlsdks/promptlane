@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Loop Brief First-Prompt Recovery
+
+- [x] CHECK: empty archive에서 `promptlane loop brief`와 MCP
+  `prepare_loop_brief`는 바로 `loop collect`만 안내해, 첫 사용자에게 먼저
+  Codex/Claude Code prompt를 캡처하고 coach/score를 확인해야 한다는 순서가
+  약했다.
+- [x] RED: CLI/MCP loop brief no-snapshot tests가 first prompt + coach/score
+  확인 후 `promptlane loop collect`를 실행하라는 recovery message를 요구하게 해
+  실패를 확인했다.
+- [x] GREEN: CLI/MCP 표면별 no-snapshot recovery message를
+  `loop/snapshot-selection` helper로 공유하고, selected-filter recovery는 그대로
+  유지했다.
+- [x] VERIFY: focused loop CLI/MCP tests, typecheck, formatting/diff checks를
+  실행한다.
+
 ## 2026-07-08 PromptLane Quality Operator Brief Complete State
 
 - [x] CHECK: `promptlane quality-evidence --operator-brief`는 현재
