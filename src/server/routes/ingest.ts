@@ -200,7 +200,7 @@ function normalizePayload(
         instance,
         error.issues.map((issue) => ({
           field: issue.path.join("."),
-          message: issue.code,
+          message: issue.message,
         })),
       );
     }

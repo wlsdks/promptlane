@@ -3142,6 +3142,34 @@ describe("createServer P2 ingest boundary", () => {
     expect(response.body).not.toContain("sk-proj-secret");
   });
 
+  it("returns readable ingest validation issue messages", async () => {
+    const server = createTestServer();
+
+    const response = await server.inject({
+      method: "POST",
+      url: "/api/v1/ingest/claude-code",
+      headers: {
+        host: "127.0.0.1:17373",
+        authorization: "Bearer ingest-token",
+      },
+      payload: {
+        ...claudeFixture,
+        hook_event_name: "SessionStart",
+        prompt: "do not echo sk-proj-1234567890abcdef",
+      },
+    });
+
+    expect(response.statusCode).toBe(422);
+    const problem = response.json<{
+      errors: Array<{ field: string; message: string }>;
+    }>();
+    const error = problem.errors[0];
+    expect(error?.field).toBe("hook_event_name");
+    expect(error?.message).toContain("UserPromptSubmit");
+    expect(error?.message).not.toBe("invalid_value");
+    expect(response.body).not.toContain("sk-proj-1234567890abcdef");
+  });
+
   it("normalizes, redacts, and stores a valid Claude Code fixture", async () => {
     const storage = createMemoryStorage();
     const server = createTestServer({ storage });

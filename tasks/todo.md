@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Ingest Zod Error Message
+
+- [x] CHECK: ingest route `normalizePayload` Zod error mapper가 structured problem
+  `errors` 항목에 human-readable `issue.message` 대신 내부 `issue.code`를 넣어 agent
+  hook payload validation 복구 기준을 보기 어렵다.
+- [x] RED: `src/server/create-server.test.ts`가 invalid `hook_event_name` ingest 응답에서
+  `UserPromptSubmit` 기준을 포함하고 `invalid_value` code만 노출하지 않도록 요구하게 해
+  실패를 확인했다.
+- [x] GREEN: ingest route Zod mapper가 `issue.message`를 problem error message로
+  보내도록 고쳤다.
+- [x] VERIFY: focused server create-server test, typecheck, implementation format check,
+  diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Server Zod Error Message
 
 - [x] CHECK: 공통 `createServer` Zod error handler가 structured problem `errors`
