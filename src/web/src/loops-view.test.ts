@@ -57,6 +57,48 @@ describe("LoopsView", () => {
     expect(html).not.toContain("/Users/example");
   });
 
+  it("renders empty loop first-value next steps before the collect command", () => {
+    const firstScoreAction =
+      "Capture one Codex or Claude Code prompt, then run promptlane coach to confirm the first score.";
+    const collectAction =
+      "Then run promptlane loop collect to create the first local loop snapshot.";
+    const loops = loopList();
+    loops.status = {
+      ...loops.status,
+      status: "empty",
+      snapshot_count: 0,
+      activity: {
+        active_worktrees: 0,
+        active_sessions: 0,
+        needs_review: false,
+        next_action: "continue current worktree loop",
+        worktrees: [],
+      },
+      project_memory: {
+        approved_count: 0,
+        included_in_brief: false,
+      },
+      memory_candidate: undefined,
+      latest_snapshot: undefined,
+      next_action: "promptlane loop collect",
+      next_actions: [firstScoreAction, collectAction],
+    };
+    loops.items = [];
+
+    const html = renderToStaticMarkup(
+      createElement(LoopsView, { loading: false, loops }),
+    );
+
+    expect(html).toContain("PromptLane status empty");
+    expect(html).toContain("Next steps");
+    expect(html).toContain(firstScoreAction);
+    expect(html.indexOf("confirm the first score")).toBeLessThan(
+      html.indexOf("promptlane loop collect"),
+    );
+    expect(html).not.toContain("Make this better");
+    expect(html).not.toContain("/Users/example");
+  });
+
   it("renders a selected worktree drilldown without prompt bodies or raw paths", () => {
     const html = renderToStaticMarkup(
       createElement(LoopsView, {

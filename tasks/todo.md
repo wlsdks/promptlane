@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Empty Loop Next Actions
+
+- [x] CHECK: loop status 모델과 MCP는 empty loop 상태에서 first prompt/coach 이후
+  `loop collect`를 안내하지만, web Loops empty panel은 서버 `next_actions`를
+  렌더링하지 않고 정적 `loop collect` 문구만 보여줬다.
+- [x] RED: `src/web/src/loops-view.test.ts`가 empty loop panel에 상태 라벨,
+  `Next steps`, first prompt/coach action, 그리고 collect action 순서를 요구하게
+  해 실패를 확인했다.
+- [x] GREEN: `LoopEmptyState`가 서버 `status`와 최대 3개의 `next_actions`를
+  렌더링하게 하고, empty panel의 next-step text styling을 summary status line과
+  맞췄다.
+- [x] VERIFY: focused LoopsView test, typecheck, formatting/diff checks, rendered
+  web validation을 실행한다.
+
 ## 2026-07-08 PromptLane Empty Loop First Value Guidance
 
 - [x] CHECK: loop status 모델의 empty 상태는 `loop collect`를 먼저 안내하고

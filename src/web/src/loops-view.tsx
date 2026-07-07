@@ -115,7 +115,12 @@ export function LoopsView({
   }
 
   if (!loops || items.length === 0) {
-    return <LoopEmptyState />;
+    return (
+      <LoopEmptyState
+        nextActions={loops?.status.next_actions}
+        status={loops?.status.status}
+      />
+    );
   }
 
   return (

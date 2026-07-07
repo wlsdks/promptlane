@@ -26,7 +26,8 @@
   max-width: 720px;
 }
 
-.loops-summary .loops-status-line {
+.loops-summary .loops-status-line,
+.loops-empty .loops-status-line {
   color: var(--pm-text);
   font-size: 13px;
   font-weight: 700;
