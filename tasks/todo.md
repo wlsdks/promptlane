@@ -5257,3 +5257,9 @@
 - [x] RED: Add focused prompt empty-state tests for first-run setup guidance, quality-gap queues, and filtered reuse empty states.
 - [x] GREEN: Extract prompt list empty-state title, hint, secondary hint, and first-run commands from `App.tsx` into `prompt-empty-state`.
 - [x] VERIFY: Focused prompt-empty-state/filter model tests and web typecheck passed.
+
+## 2026-07-08 Archive Review Model Extraction
+
+- [x] RED: Add focused archive review model tests for reviewable score bands and the six-prompt review queue limit.
+- [x] GREEN: Extract archive review prompt selection from `App.tsx` into `archive-review-model`.
+- [x] VERIFY: Focused archive-review/measurement tests and web typecheck passed.

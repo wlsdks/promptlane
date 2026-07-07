@@ -19,6 +19,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 import type { PromptImprovement } from "../../analysis/improve.js";
+import { selectReviewPrompts } from "./archive-review-model.js";
 import {
   analyzeProjectInstructions,
   approveLoopMemory,
@@ -1697,8 +1698,9 @@ function ArchiveScoreReviewPanel({
   onSelect(id: string): void;
 }) {
   const [practiceCopied, setPracticeCopied] = useState(false);
-  const reviewPrompts =
-    report?.low_score_prompts.filter(isReviewableScorePrompt).slice(0, 6) ?? [];
+  const reviewPrompts = report
+    ? selectReviewPrompts(report.low_score_prompts)
+    : [];
   const weakOrNeedsWorkCount = report
     ? report.distribution.weak + report.distribution.needs_work
     : 0;
@@ -2465,16 +2467,6 @@ function StatusBadge({ prompt }: { prompt: PromptSummary }) {
 
 function projectLabel(path: string): string {
   return path.split("/").filter(Boolean).at(-1) ?? path;
-}
-
-function isReviewableScorePrompt(
-  prompt: ArchiveScoreReport["low_score_prompts"][number],
-): boolean {
-  return (
-    prompt.quality_score < 70 ||
-    prompt.quality_score_band === "needs_work" ||
-    prompt.quality_score_band === "weak"
-  );
 }
 
 const SIDEBAR_COLLAPSED_STORAGE_KEY = "pm:sidebar-collapsed";
