@@ -225,7 +225,7 @@ function doctorNextSteps(
   const steps: string[] = [];
   if (!result.server.ok) {
     steps.push(
-      "Run promptlane server or promptlane setup --profile coach.",
+      "Run promptlane service start or promptlane server. If the service is not installed, run promptlane setup --profile coach.",
     );
   }
   if (!result.token.ok) {
@@ -400,10 +400,7 @@ function inspectCodexSettings(
 
   for (const source of sources) {
     try {
-      if (
-        source.hooksPath &&
-        existsSync(source.hooksPath)
-      ) {
+      if (source.hooksPath && existsSync(source.hooksPath)) {
         const settings = JSON.parse(
           readFileSync(source.hooksPath, "utf8"),
         ) as CodexHooksSettings;

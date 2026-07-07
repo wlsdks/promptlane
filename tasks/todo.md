@@ -5353,3 +5353,9 @@
 - [x] RED: Add focused loop status test requiring multi-worktree status `next_actions` to surface selected continuation commands.
 - [x] GREEN: Reuse the command-center continuation commands in top-level status actions so MCP/CLI agents can choose the intended worktree/branch without digging through nested review items.
 - [x] VERIFY: Focused loop status/MCP/CLI loop tests, typecheck, and diff hygiene passed.
+
+## 2026-07-08 Doctor Service Recovery Guidance
+
+- [x] RED: Add focused doctor output expectation requiring server-down recovery to mention `promptlane service start` before falling back to foreground `promptlane server`.
+- [x] GREEN: Align doctor server recovery guidance with setup's background-service path while preserving setup fallback for uninstalled services.
+- [x] VERIFY: Focused doctor/setup/start tests, typecheck, and diff hygiene passed.

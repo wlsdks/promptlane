@@ -139,6 +139,9 @@ describe("doctorClaudeCode", () => {
     expect(output).toContain("Local server: not reachable");
     expect(output).toContain("MCP command access: not detected");
     expect(output).toContain("Register MCP: claude mcp add");
+    expect(output).toContain(
+      "Run promptlane service start or promptlane server.",
+    );
     expect(output).toContain("promptlane setup --profile coach");
     expect(output).toContain("Use --json for automation.");
   });
@@ -212,7 +215,7 @@ describe("doctorClaudeCode", () => {
       mcpConfigPath,
       JSON.stringify({
         mcpServers: {
-          "promptlane": {
+          promptlane: {
             command: "promptlane",
             args: ["mcp"],
           },
@@ -523,8 +526,7 @@ describe("doctorCodex", () => {
         commands.push([command, ...args].join(" "));
         return {
           status: 0,
-          stdout:
-            "Name             Command\npromptlane    promptlane mcp\n",
+          stdout: "Name             Command\npromptlane    promptlane mcp\n",
         };
       },
     });
