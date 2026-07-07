@@ -90,6 +90,7 @@ import {
   formatTrendDate,
 } from "./formatters.js";
 import { McpToolsView } from "./mcp-tools-view.js";
+import { getPromptEmptyState } from "./prompt-empty-state.js";
 import {
   activeFilterChips,
   clearFilterPatch,
@@ -102,7 +103,6 @@ import {
   exportFieldLabel,
   isQualityGapKey,
   qualityGapKeyFromLabel,
-  qualityGapLabel,
 } from "./quality-options.js";
 import {
   filtersFromLocation,
@@ -1160,16 +1160,17 @@ function PromptList({
   }
 
   if (prompts.length === 0) {
-    const commands = emptyPromptCommands(focus, qualityGap);
-    const secondary = emptyPromptSecondaryHint(focus, qualityGap);
+    const emptyState = getPromptEmptyState({ focus, qualityGap });
     return (
       <div className="panel empty">
-        <h2>{emptyPromptTitle(focus, qualityGap)}</h2>
-        <p>{emptyPromptHint(focus, qualityGap)}</p>
-        {secondary ? <p className="empty-secondary-hint">{secondary}</p> : null}
-        {commands.length > 0 ? (
+        <h2>{emptyState.title}</h2>
+        <p>{emptyState.hint}</p>
+        {emptyState.secondary ? (
+          <p className="empty-secondary-hint">{emptyState.secondary}</p>
+        ) : null}
+        {emptyState.commands.length > 0 ? (
           <div className="empty-command-list" aria-label="First run commands">
-            {commands.map((command) => (
+            {emptyState.commands.map((command) => (
               <code key={command}>{command}</code>
             ))}
           </div>
@@ -2474,63 +2475,6 @@ function isReviewableScorePrompt(
     prompt.quality_score_band === "needs_work" ||
     prompt.quality_score_band === "weak"
   );
-}
-
-function emptyPromptTitle(
-  focus?: PromptFilters["focus"],
-  qualityGap?: PromptQualityGap,
-): string {
-  const gapLabel = qualityGapLabel(qualityGap);
-  if (gapLabel) return `${gapLabel} queue is empty.`;
-  if (focus === "saved") return "No saved prompts.";
-  if (focus === "reused") return "No reused prompts.";
-  if (focus === "duplicated") return "No duplicate candidates.";
-  if (focus === "quality-gap") return "No prompts need quality improvements.";
-  return "Capture your first coding prompt.";
-}
-
-function emptyPromptHint(
-  focus?: PromptFilters["focus"],
-  qualityGap?: PromptQualityGap,
-): string {
-  const gapLabel = qualityGapLabel(qualityGap);
-  if (gapLabel) return `No prompts have weak or missing ${gapLabel}.`;
-  if (focus === "saved")
-    return "Save prompts for later from the detail screen.";
-  if (focus === "reused")
-    return "Prompts you copied or saved will appear here.";
-  if (focus === "duplicated")
-    return "Repeated stored prompt bodies will appear here.";
-  if (focus === "quality-gap")
-    return "Try adding verification criteria, output format, and scope.";
-  return "Run coach setup, send one Codex or Claude Code request, then check the first score and improvement suggestion.";
-}
-
-function emptyPromptSecondaryHint(
-  focus?: PromptFilters["focus"],
-  qualityGap?: PromptQualityGap,
-): string | undefined {
-  if (focus || qualityGap) {
-    return "Clear filters to return to the full archive.";
-  }
-  return undefined;
-}
-
-function emptyPromptCommands(
-  focus?: PromptFilters["focus"],
-  qualityGap?: PromptQualityGap,
-): string[] {
-  if (focus || qualityGap) {
-    return [];
-  }
-
-  return [
-    "promptlane start",
-    "promptlane setup --profile coach",
-    "promptlane doctor claude-code",
-    "promptlane doctor codex",
-    "promptlane coach",
-  ];
 }
 
 const SIDEBAR_COLLAPSED_STORAGE_KEY = "pm:sidebar-collapsed";
