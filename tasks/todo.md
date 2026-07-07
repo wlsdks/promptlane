@@ -5163,3 +5163,10 @@
 - [x] GREEN: Rename the fixed `2f99c10` pointer to an initial audit baseline and clarify that later merged PR evidence extends it.
 - [x] VERIFY: Focused packaging guard and diff hygiene passed.
 - [x] INTEGRATE: Commit prepared from `codex/promptlane-goal-audit-baseline-copy` for PR.
+
+## 2026-07-08 Quality Evidence Release Gate Guidance
+
+- [x] RED: Add focused CLI and packaging expectations requiring `quality-evidence` JSON/text to expose the local release gate commands before goal completion claims.
+- [x] GREEN: Add `release_gate` to `scripts/quality-95-evidence.mjs`, render it in `promptlane quality-evidence`, and document the field in backlog/9.5 plan.
+- [x] VERIFY: Focused CLI, packaging, quality-evidence, build, built-CLI output, and diff hygiene checks passed.
+- [x] INTEGRATE: Commit prepared from `codex/promptlane-quality-release-gate-guidance` for PR.

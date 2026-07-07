@@ -49,6 +49,10 @@ describe("quality-evidence CLI command", () => {
           preconditions: string[];
         };
       };
+      release_gate: Array<{
+        command: string;
+        purpose: string;
+      }>;
       next_recheck_utc?: string;
     };
 
@@ -150,6 +154,32 @@ describe("quality-evidence CLI command", () => {
       preconditions: [],
     });
     expect(parsed.recommended_next_slices).toEqual([]);
+    expect(parsed.release_gate).toEqual([
+      {
+        command: "corepack pnpm test",
+        purpose: "Run the full unit and integration test suite.",
+      },
+      {
+        command: "corepack pnpm lint",
+        purpose: "Check static lint rules.",
+      },
+      {
+        command: "corepack pnpm build",
+        purpose: "Build CLI, server, web, and packaged runtime assets.",
+      },
+      {
+        command: "corepack pnpm pack:dry-run",
+        purpose: "Verify the npm package contents and lifecycle wrapper.",
+      },
+      {
+        command: "corepack pnpm evidence:quality -- --require-complete",
+        purpose: "Fail closed unless all 9.5 quality evidence remains complete.",
+      },
+      {
+        command: "git diff --check",
+        purpose: "Reject whitespace and patch hygiene regressions.",
+      },
+    ]);
     expect(parsed.recommended_next_slices).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -222,6 +252,16 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain("native_dialog_approved_dogfood");
     expect(text).toContain("Recommended next slices");
     expect(text).toContain("- none");
+    expect(text).toContain("Release gate");
+    expect(text).toContain(
+      "- corepack pnpm test - Run the full unit and integration test suite.",
+    );
+    expect(text).toContain(
+      "- corepack pnpm evidence:quality -- --require-complete - Fail closed unless all 9.5 quality evidence remains complete.",
+    );
+    expect(text).toContain(
+      "- git diff --check - Reject whitespace and patch hygiene regressions.",
+    );
     expect(text).not.toContain("external event: yes");
     expect(text).not.toContain("blocked_reason=operator_approval_required");
     expect(text).toContain("Privacy: local-only");

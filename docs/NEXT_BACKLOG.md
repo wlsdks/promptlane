@@ -212,6 +212,12 @@ Decision:
   run and recorded, no external quality action remains. If a future
   recommendation is approval-gated, it must carry `blocked_by_external_event`
   so agents can distinguish local work from operator wait states.
+  The JSON also includes `release_gate`: the local commands to run before any
+  final long-running-goal completion claim, currently `corepack pnpm test`,
+  `corepack pnpm lint`, `corepack pnpm build`,
+  `corepack pnpm pack:dry-run`,
+  `corepack pnpm evidence:quality -- --require-complete`, and
+  `git diff --check`.
   That local scorecard review is now applied for the five non-external
   candidates: local-first privacy boundary, setup/doctor/MCP smoke, loop memory
   and continuation, web UI and operational evidence, and release stability are

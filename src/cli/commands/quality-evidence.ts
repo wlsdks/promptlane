@@ -44,6 +44,10 @@ type QualityEvidenceSummary = {
     available_after_utc?: string;
     expected_effect: string;
   }>;
+  release_gate?: Array<{
+    command: string;
+    purpose: string;
+  }>;
   evidence?: {
     native_dialog_approved_dogfood?: {
       status: string;
@@ -173,6 +177,12 @@ function formatSummary(summary: QualityEvidenceSummary): string {
         )
       : ["- none"];
   const externalEvidenceRows = formatExternalEvidenceRows(summary);
+  const releaseGateRows =
+    summary.release_gate && summary.release_gate.length > 0
+      ? summary.release_gate.map(
+          (step) => `- ${step.command} - ${step.purpose}`,
+        )
+      : ["- none"];
 
   return [
     "PromptLane 9.5 quality evidence",
@@ -197,6 +207,9 @@ function formatSummary(summary: QualityEvidenceSummary): string {
     "",
     "Recommended next slices",
     ...recommendedRows,
+    "",
+    "Release gate",
+    ...releaseGateRows,
     "",
     `Next action: ${summary.next_action}`,
     "",

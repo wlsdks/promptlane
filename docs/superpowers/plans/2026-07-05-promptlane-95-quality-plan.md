@@ -232,6 +232,11 @@
   blockers. This makes the next operator-approved pass executable
   without changing the rule that native dialog dogfood remains pending until
   real operator-approved evidence exists.
+- `quality-evidence` also emits a structured `release_gate` list for the local
+  completion gate: `corepack pnpm test`, `corepack pnpm lint`,
+  `corepack pnpm build`, `corepack pnpm pack:dry-run`,
+  `corepack pnpm evidence:quality -- --require-complete`, and
+  `git diff --check`.
 - The human `promptlane quality-evidence` output renders the remaining
   external evidence status directly: the native dialog approved-run
   requirement. `promptlane quality-evidence --operator-brief` renders the

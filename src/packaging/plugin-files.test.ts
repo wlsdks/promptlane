@@ -1064,6 +1064,11 @@ describe("plugin packaging files", () => {
       expect(content).toContain("axis_evidence_coverage");
       expect(content).toContain("scorecard_review_candidates");
       expect(content).toContain("recommended_next_slices");
+      expect(content).toContain("release_gate");
+      expect(content).toContain("corepack pnpm test");
+      expect(content).toContain("corepack pnpm lint");
+      expect(content).toContain("corepack pnpm build");
+      expect(content).toContain("corepack pnpm pack:dry-run");
       expect(content).toContain("blocked_by_external_event");
       expect(content).toContain("product_positioning_metadata_alignment");
       expect(content).toContain("manual_ui_patrol_artifact_evidence");

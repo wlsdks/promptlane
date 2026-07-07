@@ -51,6 +51,32 @@ const recommendedNextSlicesValue = recommendedNextSlices({
 const nextRecheckUtc = nextRecheckUtcFromRecommendations(
   recommendedNextSlicesValue,
 );
+const releaseGate = [
+  {
+    command: "corepack pnpm test",
+    purpose: "Run the full unit and integration test suite.",
+  },
+  {
+    command: "corepack pnpm lint",
+    purpose: "Check static lint rules.",
+  },
+  {
+    command: "corepack pnpm build",
+    purpose: "Build CLI, server, web, and packaged runtime assets.",
+  },
+  {
+    command: "corepack pnpm pack:dry-run",
+    purpose: "Verify the npm package contents and lifecycle wrapper.",
+  },
+  {
+    command: "corepack pnpm evidence:quality -- --require-complete",
+    purpose: "Fail closed unless all 9.5 quality evidence remains complete.",
+  },
+  {
+    command: "git diff --check",
+    purpose: "Reject whitespace and patch hygiene regressions.",
+  },
+];
 
 const summary = {
   check: "promptlane_95_quality",
@@ -66,6 +92,7 @@ const summary = {
   },
   blockers,
   recommended_next_slices: recommendedNextSlicesValue,
+  release_gate: releaseGate,
   ...(nextRecheckUtc ? { next_recheck_utc: nextRecheckUtc } : {}),
   next_action:
     blockers.length === 0
