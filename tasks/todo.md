@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Quality Dashboard Error Detail
+
+- [x] CHECK: `getQualityDashboard`는 서버 recovery detail을 Error message에 보존하지만,
+  dashboard query 초기 로딩 catch가 실패를 무시해 quality/dashboard 복구 안내가
+  UI까지 전달되지 않는다.
+- [x] RED: `src/web/src/error-message.test.ts`가 quality dashboard recovery detail 보존
+  helper를 요구하게 해 helper missing 실패를 확인했다.
+- [x] GREEN: quality dashboard fallback helper를 추가하고 dashboard query handler가
+  API/server recovery detail을 사용자-visible error로 전달하도록 연결했다.
+- [x] VERIFY: focused web helper/dashboard-query tests, typecheck, format check, diff
+  whitespace check를 실행했다.
+
 ## 2026-07-08 PromptLane Web Project List Error Detail
 
 - [x] CHECK: `listProjects`는 서버 recovery detail을 Error message에 보존하지만,

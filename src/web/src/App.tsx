@@ -226,6 +226,7 @@ export function App() {
     getArchiveScoreReport,
     getCoachFeedbackSummary,
     getQualityDashboard,
+    onError: setError,
     trendDays,
     viewName: view.name,
   });

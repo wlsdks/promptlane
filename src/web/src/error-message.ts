@@ -89,3 +89,7 @@ export function loopListErrorMessage(error: unknown): string {
 export function projectListErrorMessage(error: unknown): string {
   return errorMessageOrDefault(error, "Could not load projects.");
 }
+
+export function qualityDashboardErrorMessage(error: unknown): string {
+  return errorMessageOrDefault(error, "Could not load the quality dashboard.");
+}

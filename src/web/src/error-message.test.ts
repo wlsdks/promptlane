@@ -15,6 +15,7 @@ import {
   projectInstructionAnalysisErrorMessage,
   projectListErrorMessage,
   projectPolicyUpdateErrorMessage,
+  qualityDashboardErrorMessage,
   promptListErrorMessage,
   selectedPromptErrorMessage,
   similarPromptsErrorMessage,
@@ -209,6 +210,16 @@ describe("errorMessageOrDefault", () => {
 
     expect(projectListErrorMessage(error)).toBe(
       "Project list failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the project list request.",
+    );
+  });
+
+  it("preserves quality dashboard recovery detail", () => {
+    const error = new Error(
+      "Quality dashboard failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the quality dashboard request.",
+    );
+
+    expect(qualityDashboardErrorMessage(error)).toBe(
+      "Quality dashboard failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the quality dashboard request.",
     );
   });
 });
