@@ -17,6 +17,10 @@ describe("projectLabel (mcp)", () => {
     expect(projectLabel("C:\\Users\\example\\foo")).toBe("foo");
   });
 
+  it("trims whitespace and trailing backslash separators", () => {
+    expect(projectLabel("  C:\\Users\\example\\foo\\  ")).toBe("foo");
+  });
+
   it("falls back to 'project' when there is no segment", () => {
     expect(projectLabel("")).toBe("project");
     expect(projectLabel("/")).toBe("project");

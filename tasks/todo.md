@@ -5287,3 +5287,9 @@
 - [x] RED: Add focused archive-score test for backslash-separated cwd/cwdPrefix project labels.
 - [x] GREEN: Update archive score project labels to trim and split both POSIX and backslash path separators.
 - [x] VERIFY: Focused archive-score/storage project-label tests and repo typecheck passed.
+
+## 2026-07-08 MCP Project Label Normalization
+
+- [x] RED: Add focused MCP project-label test for whitespace plus trailing backslash separators.
+- [x] GREEN: Normalize MCP project labels by trimming before removing POSIX/backslash trailing separators.
+- [x] VERIFY: Focused MCP project-label/score-tool tests and repo typecheck passed.
