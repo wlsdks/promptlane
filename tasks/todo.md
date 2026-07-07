@@ -5239,3 +5239,9 @@
 - [x] RED: Add focused tests for route-driven page chrome labels and detail queue navigation.
 - [x] GREEN: Extract `getVisibleChrome` and `getQueueNavigation` from `App.tsx` into a pure `app-view` helper.
 - [x] VERIFY: Focused app-view/routing tests and web typecheck passed.
+
+## 2026-07-08 Setup Checks Model Extraction
+
+- [x] RED: Add focused setup check tests for first-run guidance, raw-free local path display, and attention states.
+- [x] GREEN: Extract setup checks, setup status labels, and local path display from `App.tsx` into a pure `setup-checks` helper.
+- [x] VERIFY: Focused setup-checks tests and web typecheck passed.
