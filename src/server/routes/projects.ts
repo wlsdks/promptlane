@@ -52,7 +52,12 @@ export function registerProjectRoutes(
     );
 
     if (!result) {
-      throw problem(404, "Not Found", "Project not found.", request.url);
+      throw problem(
+        404,
+        "Not Found",
+        "Project not found. Refresh the local project list, then retry the policy change from an existing project.",
+        request.url,
+      );
     }
 
     return { data: result };

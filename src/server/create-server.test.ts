@@ -2639,6 +2639,39 @@ describe("createServer P2 ingest boundary", () => {
     expect(updated.body).not.toContain("/Users/example/private-project");
   });
 
+  it("guides missing project policy users back to project list refresh", async () => {
+    const storage = createMemoryStorage();
+    const server = createTestServer({ storage });
+    const session = await server.inject({
+      method: "GET",
+      url: "/api/v1/session",
+      headers: { host: "127.0.0.1:17373" },
+    });
+    const cookie = String(session.headers["set-cookie"]);
+    const csrfToken = session.json<{ data: { csrf_token: string } }>().data
+      .csrf_token;
+
+    const response = await server.inject({
+      method: "PATCH",
+      url: "/api/v1/projects/proj_missing/policy",
+      headers: {
+        host: "127.0.0.1:17373",
+        cookie,
+        "x-csrf-token": csrfToken,
+      },
+      payload: { capture_disabled: true },
+    });
+
+    expect(response.statusCode).toBe(404);
+    const detail = response.json<{ detail: string }>().detail;
+    expect(detail).toBe(
+      "Project not found. Refresh the local project list, then retry the policy change from an existing project.",
+    );
+    expect(detail).not.toContain("proj_missing");
+    expect(response.body).not.toContain("/Users/example");
+    expect(response.body).not.toContain("sk-proj-secret");
+  });
+
   it("analyzes project instruction files behind csrf without exposing raw bodies or paths", async () => {
     const storage = createMemoryStorage();
     const server = createTestServer({ storage });
@@ -3756,6 +3789,7 @@ function createMemoryStorage() {
       patch: Record<string, unknown>,
       actor: "cli" | "web" | "system",
     ) {
+      if (projectId !== "proj_memory") return undefined;
       policyUpdates.push({ projectId, patch, actor });
       return {
         project_id: projectId,
