@@ -584,7 +584,23 @@ describe("getPromptLaneStatusTool", () => {
     );
 
     expect(result.status).toBe("setup_needed");
-    expect(result.next_actions[0]).toContain("promptlane init");
+    expect(result.next_actions[0]).toContain("promptlane setup --profile coach");
+    expect(result.next_actions[1]).toBe(
+      "Send one Codex or Claude Code prompt, then call coach_prompt or rerun get_promptlane_status.",
+    );
+  });
+
+  it("gives the first MCP action when setup exists but no prompts are captured", () => {
+    const dataDir = createTempDir();
+    initializePromptLane({ dataDir });
+
+    const result = getPromptLaneStatusTool({}, { dataDir });
+
+    expect(result.status).toBe("empty");
+    expect(result.next_actions[0]).toBe(
+      "Send one Codex or Claude Code prompt, then call coach_prompt or rerun get_promptlane_status.",
+    );
+    expect(result.next_actions[1]).toContain("promptlane setup --profile coach");
   });
 });
 

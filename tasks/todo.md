@@ -5135,3 +5135,10 @@
 - [x] GREEN: Replace safety guidance phrases such as `PromptLane does not ...`, `outside PromptLane`, and `PromptLane records ...` with PromptLane wording while preserving internal `PromptLaneStatus` compatibility identifiers.
 - [x] VERIFY: Focused API/web tests, full test/lint/build, pack dry-run, and diff check passed.
 - [x] INTEGRATE: PR #383 was merged to `main`; branch was pruned.
+
+## 2026-07-08 MCP First Prompt Next Step
+
+- [x] RED: Add focused MCP status expectations for setup-needed and empty archives to require a concrete first prompt action.
+- [x] GREEN: Update `get_promptlane_status` next actions to point users through `promptlane setup --profile coach --register-mcp`, then one Codex or Claude Code prompt, then `coach_prompt` or status recheck.
+- [x] VERIFY: Focused MCP status/server checks and diff hygiene passed.
+- [x] INTEGRATE: Commit prepared from `codex/promptlane-mcp-status-first-step` for PR.
