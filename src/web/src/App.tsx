@@ -69,6 +69,7 @@ import {
 import {
   errorMessageOrDefault,
   projectInstructionAnalysisErrorMessage,
+  projectPolicyUpdateErrorMessage,
 } from "./error-message.js";
 import { CoachFeedbackPanel } from "./coach-feedback-panel.js";
 import { createPromptHabitCoach } from "./habit-coach.js";
@@ -530,8 +531,8 @@ export function App() {
         capture_disabled: !project.policy.capture_disabled,
       });
       updateProject(updated);
-    } catch {
-      setError("Could not save the project capture policy.");
+    } catch (error) {
+      setError(projectPolicyUpdateErrorMessage(error));
     }
   }
 

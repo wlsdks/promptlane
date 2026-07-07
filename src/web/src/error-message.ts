@@ -14,3 +14,10 @@ export function projectInstructionAnalysisErrorMessage(error: unknown): string {
     "Could not analyze project instruction files.",
   );
 }
+
+export function projectPolicyUpdateErrorMessage(error: unknown): string {
+  return errorMessageOrDefault(
+    error,
+    "Could not save the project capture policy.",
+  );
+}

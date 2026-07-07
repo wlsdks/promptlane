@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   errorMessageOrDefault,
   projectInstructionAnalysisErrorMessage,
+  projectPolicyUpdateErrorMessage,
 } from "./error-message.js";
 
 describe("errorMessageOrDefault", () => {
@@ -44,6 +45,16 @@ describe("errorMessageOrDefault", () => {
 
     expect(projectInstructionAnalysisErrorMessage(error)).toBe(
       "Project instruction analysis failed (404): Project not found. Refresh the local project list, then retry instruction analysis from an existing project.",
+    );
+  });
+
+  it("preserves project policy update recovery detail", () => {
+    const error = new Error(
+      "Project policy update failed (404): Project not found. Refresh the local project list, then retry the policy change from an existing project.",
+    );
+
+    expect(projectPolicyUpdateErrorMessage(error)).toBe(
+      "Project policy update failed (404): Project not found. Refresh the local project list, then retry the policy change from an existing project.",
     );
   });
 });
