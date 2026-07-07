@@ -719,6 +719,30 @@ describe("createServer P2 ingest boundary", () => {
     expect(response.body).not.toContain("sk-proj-secret");
   });
 
+  it("guides missing explicit web loop brief users to recollect before retrying latest brief", async () => {
+    const storage = createMemoryStorage();
+    storage.loopSnapshots.push(loopSnapshot({ id: "loop_web" }));
+    const server = createTestServer({ storage });
+
+    const response = await server.inject({
+      method: "GET",
+      url: "/api/v1/loops/missing-loop/brief",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+    });
+
+    expect(response.statusCode).toBe(404);
+    const detail = response.json<{ detail: string }>().detail;
+    expect(response.body).toContain(
+      "Loop snapshot not found. Run `promptlane loop collect` after the next Codex or Claude Code turn, then retry `promptlane loop brief` for the latest safe continuation brief.",
+    );
+    expect(detail).not.toContain("missing-loop");
+    expect(response.body).not.toContain("/Users/example");
+    expect(response.body).not.toContain("sk-proj-secret");
+  });
+
   it("guides selected web loop brief users to collect matching filters before retrying", async () => {
     const storage = createMemoryStorage();
     storage.loopSnapshots.push(

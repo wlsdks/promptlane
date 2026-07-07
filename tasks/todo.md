@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Explicit Brief Recovery
+
+- [x] CHECK: HTTP/web `GET /api/v1/loops/:id/brief`는 explicit snapshot id가
+  없을 때 "Loop snapshot not found."만 반환해, stale detail link에서 최신 safe
+  continuation brief로 복구하는 방법을 안내하지 않았다.
+- [x] RED: `src/server/create-server.test.ts`가 missing explicit loop brief
+  응답에 next Codex/Claude Code turn 후 `promptlane loop collect`를 실행하고
+  latest `promptlane loop brief`로 retry하라는 raw-free 안내를 요구하게 해 실패를
+  확인했다.
+- [x] GREEN: explicit snapshot brief route의 404 detail을 raw-free recovery
+  문구로 교체했다.
+- [x] VERIFY: focused server route test, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web Brief Recovery
 
 - [x] CHECK: HTTP/web `GET /api/v1/loops/brief`는 snapshot이 없거나 선택
