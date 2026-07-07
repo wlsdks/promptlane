@@ -1993,6 +1993,12 @@ function getQualityDashboard(
     useful_prompts: readUsefulPrompts(db),
     duplicate_prompt_groups: readDuplicatePromptGroups(db),
     project_profiles: readProjectQualityProfiles(db, qualityRows),
+    privacy: {
+      local_only: true,
+      external_calls: false,
+      returns_prompt_bodies: false,
+      returns_raw_paths: false,
+    },
   };
 }
 

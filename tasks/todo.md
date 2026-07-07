@@ -5329,3 +5329,9 @@
 - [x] RED: Expand quality dashboard test to reject raw project paths in serialized dashboard output.
 - [x] GREEN: Return stable project ids for project distribution/profile keys while preserving labels and internal aggregation.
 - [x] VERIFY: Focused sqlite storage/project-label tests, typecheck, and diff hygiene passed.
+
+## 2026-07-08 Quality Dashboard Privacy Contract
+
+- [x] RED: Add focused quality dashboard test requiring a local-only raw-free privacy block.
+- [x] GREEN: Add `privacy` metadata to storage and web quality dashboard contracts.
+- [x] VERIFY: Focused sqlite storage/web measurement tests, typecheck, and diff hygiene passed.

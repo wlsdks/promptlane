@@ -809,6 +809,12 @@ describe("SQLite prompt storage", () => {
       scored_prompts: 3,
       max: 100,
     });
+    expect(dashboard.privacy).toEqual({
+      local_only: true,
+      external_calls: false,
+      returns_prompt_bodies: false,
+      returns_raw_paths: false,
+    });
     expect(dashboard.recent.last_7_days).toBe(3);
     expect(dashboard.trend.daily).toEqual([
       {

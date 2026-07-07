@@ -1194,6 +1194,12 @@ export type QualityDashboard = {
       count: number;
     };
   }>;
+  privacy: {
+    local_only: true;
+    external_calls: false;
+    returns_prompt_bodies: false;
+    returns_raw_paths: false;
+  };
 };
 
 export type DistributionBucket = {
