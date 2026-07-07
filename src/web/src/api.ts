@@ -1710,8 +1710,12 @@ async function failApi(response: Response, label: string): Promise<never> {
     const body = (await response.json()) as {
       detail?: unknown;
       title?: unknown;
+      message?: unknown;
     };
-    detail = apiErrorText(body.detail) || apiErrorText(body.title);
+    detail =
+      apiErrorText(body.detail) ||
+      apiErrorText(body.title) ||
+      apiErrorText(body.message);
   } catch {
     // body may not be JSON, that is fine.
   }

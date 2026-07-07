@@ -2785,6 +2785,21 @@ describe("web api export client", () => {
     );
   });
 
+  it("uses the response message when detail and title are absent", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(429, {
+          message: "Too many local web requests. Wait briefly, then retry.",
+        }),
+      );
+    const { deletePrompt } = await import("./api.js");
+
+    await expect(deletePrompt("prmt_x")).rejects.toThrow(
+      "Delete failed (429): Too many local web requests. Wait briefly, then retry.",
+    );
+  });
+
   it("still surfaces the status when the error body is not JSON", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web API Error Message Fallback
+
+- [x] CHECK: web API client `failApi`가 canonical `detail/title`만 읽어 Fastify 기본
+  또는 중간 계층의 `{ message }` error body에서는 복구 안내 대신 상태 코드만 노출한다.
+- [x] RED: `src/web/src/api.test.ts`가 message-only 429 응답에서 message recovery hint를
+  보존하도록 요구하게 해 `Delete failed (429)` 실패를 확인했다.
+- [x] GREEN: `failApi`가 `detail -> title -> message` 순서로 문자열 recovery hint를
+  fallback하도록 고쳤다.
+- [x] VERIFY: focused web API test, typecheck, code format check, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web API Error String Fallback
 
 - [x] CHECK: web API client `failApi`가 `detail?.trim()`에 직접 의존해 malformed
