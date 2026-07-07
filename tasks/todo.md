@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Coach Feedback Recovery
+
+- [x] CHECK: HTTP/web `POST /api/v1/prompts/:id/coach-feedback`는 stale/missing
+  prompt에서 coach feedback 기록을 시도할 때 "Prompt not found."만 반환해, local
+  archive/search로 복구하는 방법이 덜 분명했다.
+- [x] RED: `src/server/create-server.test.ts`가 valid-but-missing prompt id와
+  coach feedback payload에서 archive/search recovery detail과 raw-free detail을
+  요구하게 해 실패를 확인했다.
+- [x] GREEN: coach-feedback route의 missing prompt 404 detail을 local
+  archive/search recovery 안내로 교체했고, test memory storage의 feedback helper를
+  실제 존재 여부 기반으로 맞췄다.
+- [x] VERIFY: focused server route test, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web Delete Recovery
 
 - [x] CHECK: HTTP/web `DELETE /api/v1/prompts/:id`는 stale/missing prompt에서
