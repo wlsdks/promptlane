@@ -290,7 +290,12 @@ export function registerPromptRoutes(
     const draft = storage.createPromptImprovementDraft(params.id, body);
 
     if (!draft) {
-      throw problem(404, "Not Found", "Prompt not found.", request.url);
+      throw problem(
+        404,
+        "Not Found",
+        "Prompt not found. Open the local archive or search prompts before saving an improvement draft.",
+        request.url,
+      );
     }
 
     return { data: draft };

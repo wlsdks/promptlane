@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Improvement Recovery
+
+- [x] CHECK: HTTP/web `POST /api/v1/prompts/:id/improvements`는 stale/missing
+  prompt에서 improvement draft 저장을 시도할 때 "Prompt not found."만 반환해,
+  local archive/search로 복구하는 방법이 덜 분명했다.
+- [x] RED: `src/server/create-server.test.ts`가 valid-but-missing prompt id와
+  유효한 improvement payload에서 archive/search recovery detail과 raw-free
+  detail을 요구하게 해 실패를 확인했다.
+- [x] GREEN: improvement draft 생성 route의 missing prompt 404 detail을 local
+  archive/search recovery 안내로 교체했다.
+- [x] VERIFY: focused server route test, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web Prompt Detail Recovery
 
 - [x] CHECK: HTTP/web `GET /api/v1/prompts/:id`는 stale/missing prompt detail

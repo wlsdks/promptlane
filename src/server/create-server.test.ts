@@ -15,6 +15,7 @@ import type {
   ExportJob,
   ProjectInstructionReview,
   PromptDetail,
+  PromptImprovementDraft,
   PromptStoragePort,
 } from "../storage/ports.js";
 
@@ -155,6 +156,42 @@ describe("createServer P2 ingest boundary", () => {
     const detail = response.json<{ detail: string }>().detail;
     expect(detail).toBe(
       "Prompt not found. Open the local archive or search prompts before retrying this prompt detail link.",
+    );
+    expect(detail).not.toContain("deadbeefdead");
+    expect(response.body).not.toContain("/Users/example");
+    expect(response.body).not.toContain("sk-proj-secret");
+  });
+
+  it("guides missing prompt improvement users back to local archive search", async () => {
+    const storage = createMemoryStorage();
+    const server = createTestServer({ storage });
+    const session = await server.inject({
+      method: "GET",
+      url: "/api/v1/session",
+      headers: { host: "127.0.0.1:17373" },
+    });
+    const cookie = String(session.headers["set-cookie"]);
+    const csrfToken = session.json<{ data: { csrf_token: string } }>().data
+      .csrf_token;
+
+    const response = await server.inject({
+      method: "POST",
+      url: "/api/v1/prompts/prmt_20260501_100000_deadbeefdead/improvements",
+      headers: {
+        host: "127.0.0.1:17373",
+        cookie,
+        "x-csrf-token": csrfToken,
+      },
+      payload: {
+        draft_text: "Use a smaller focused test before broader verification.",
+        analyzer: "local-test",
+      },
+    });
+
+    expect(response.statusCode).toBe(404);
+    const detail = response.json<{ detail: string }>().detail;
+    expect(detail).toBe(
+      "Prompt not found. Open the local archive or search prompts before saving an improvement draft.",
     );
     expect(detail).not.toContain("deadbeefdead");
     expect(response.body).not.toContain("/Users/example");
@@ -3482,6 +3519,7 @@ function createMemoryStorage() {
   const compactBoundaries: CompactBoundary[] = [];
   const loopMemories: LoopMemory[] = [];
   const loopMergeDecisions: LoopMergeDecision[] = [];
+  const improvementDrafts: PromptImprovementDraft[] = [];
   const coachFeedback: Array<{
     id: string;
     prompt_id: string;
@@ -3698,6 +3736,38 @@ function createMemoryStorage() {
         updated: false,
         usefulness: { copied_count: 0, bookmarked: false },
       };
+    },
+    createPromptImprovementDraft(
+      promptId: string,
+      input: {
+        draft_text: string;
+        analyzer: string;
+        changed_sections?: PromptImprovementDraft["changed_sections"];
+        safety_notes?: string[];
+      },
+    ) {
+      if (!this.getPrompt(promptId)) return undefined;
+      const draft: PromptImprovementDraft = {
+        id: `impdraft_${improvementDrafts.length + 1}`,
+        prompt_id: promptId,
+        draft_text: input.draft_text,
+        analyzer: input.analyzer,
+        changed_sections: input.changed_sections ?? [],
+        safety_notes: input.safety_notes ?? [],
+        is_sensitive: false,
+        redaction_policy: "mask",
+        created_at: "2026-05-04T00:00:00.000Z",
+      };
+      improvementDrafts.unshift(draft);
+      return draft;
+    },
+    markPromptImprovementDraftCopied(promptId: string, draftId: string) {
+      const draft = improvementDrafts.find(
+        (item) => item.prompt_id === promptId && item.id === draftId,
+      );
+      if (!draft) return { updated: false };
+      draft.copied_at = "2026-05-04T00:00:00.000Z";
+      return { updated: true, draft };
     },
     recordCoachFeedback(promptId: string, rating: string) {
       const id = `cfb_${coachFeedback.length + 1}`;
