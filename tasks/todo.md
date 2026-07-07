@@ -5245,3 +5245,9 @@
 - [x] RED: Add focused setup check tests for first-run guidance, raw-free local path display, and attention states.
 - [x] GREEN: Extract setup checks, setup status labels, and local path display from `App.tsx` into a pure `setup-checks` helper.
 - [x] VERIFY: Focused setup-checks tests and web typecheck passed.
+
+## 2026-07-08 Prompt Filter Model Extraction
+
+- [x] RED: Add focused prompt filter model tests for empty filters, clear patches, and raw-free path chips.
+- [x] GREEN: Extract active filter chips and filter clearing helpers from `App.tsx` into `prompt-filter-model`, masking cwd filter chips with the local path display helper.
+- [x] VERIFY: Focused prompt-filter/routing tests and web typecheck passed.
