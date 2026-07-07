@@ -218,13 +218,14 @@ function formatCmuxInstructions(
   options: CodexHudOptions,
 ): string {
   const buddyCommand = buddyArgv.map(quoteForShell).join(" ");
+  const buddyCommandPretty = formatBuddyCommandPretty(options);
   return [
     "Codex HUD via cmux",
     "",
     "  cmux does not expose a CLI split-pane command, so open a new pane",
     "  via cmux's split shortcut (default Cmd+D / Cmd+Shift+D) and run:",
     "",
-    `    $ promptlane buddy --style ${options.style} --interval ${options.interval}`,
+    `    $ ${buddyCommandPretty}`,
     "",
     "  If promptlane is not on PATH, use the absolute form:",
     `    $ ${buddyCommand}`,
@@ -236,12 +237,13 @@ function formatNoneInstructions(
   options: CodexHudOptions,
 ): string {
   const buddyCommand = buddyArgv.map(quoteForShell).join(" ");
+  const buddyCommandPretty = formatBuddyCommandPretty(options);
   return [
     "Codex HUD: no multiplexer detected",
     "",
     "  Open a separate terminal window or pane and run:",
     "",
-    `    $ promptlane buddy --style ${options.style} --interval ${options.interval}`,
+    `    $ ${buddyCommandPretty}`,
     "",
     "  If promptlane is not on PATH, use the absolute form:",
     `    $ ${buddyCommand}`,
@@ -254,7 +256,7 @@ function cmuxInstructions(
 ): { shortcut: string; buddy_command_pretty: string; buddy_argv: string[] } {
   return {
     shortcut: "cmux split shortcut (default Cmd+D / Cmd+Shift+D)",
-    buddy_command_pretty: `promptlane buddy --style ${options.style} --interval ${options.interval}`,
+    buddy_command_pretty: formatBuddyCommandPretty(options),
     buddy_argv: buddyArgv,
   };
 }
@@ -264,9 +266,24 @@ function noneInstructions(
   options: CodexHudOptions,
 ): { buddy_command_pretty: string; buddy_argv: string[] } {
   return {
-    buddy_command_pretty: `promptlane buddy --style ${options.style} --interval ${options.interval}`,
+    buddy_command_pretty: formatBuddyCommandPretty(options),
     buddy_argv: buddyArgv,
   };
+}
+
+function formatBuddyCommandPretty(options: CodexHudOptions): string {
+  const args = [
+    "promptlane",
+    "buddy",
+    "--style",
+    options.style,
+    "--interval",
+    String(options.interval),
+  ];
+  if (options.dataDir) {
+    args.push("--data-dir", options.dataDir);
+  }
+  return args.map(quoteForShell).join(" ");
 }
 
 function quoteForShell(value: string): string {

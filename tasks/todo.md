@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Codex HUD Custom Data Dir
+
+- [x] CHECK: `install-codex-hud`는 `--data-dir`를 실제 buddy argv에는 전달하지만,
+  cmux/no multiplexer 안내의 `promptlane buddy ...` pretty command에는 빠뜨려
+  custom storage 사용자가 다른 archive를 볼 수 있었다.
+- [x] RED: `src/cli/commands/install-codex-hud.test.ts`에 cmux/no multiplexer
+  JSON instructions가 custom `--data-dir`를 runnable pretty command에 보존해야
+  한다는 focused tests를 추가해 실패를 확인했다.
+- [x] GREEN: text/JSON instructions가 공유 `formatBuddyCommandPretty` helper를
+  사용하게 하고, custom data-dir 값은 기존 shell quoting 규칙으로 렌더링한다.
+- [x] VERIFY: focused HUD CLI test, typecheck, formatting/diff checks를 실행했다.
+
 ## 2026-07-08 PromptLane Buddy Setup Actions
 
 - [x] CHECK: MCP/coach/loop setup-needed 흐름은 custom data-dir 복구 안내를

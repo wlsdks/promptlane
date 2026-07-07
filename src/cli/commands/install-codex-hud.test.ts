@@ -151,6 +151,42 @@ describe("renderCodexHudInstall (dry-run / instructions)", () => {
     expect(parsed.command[0]).toBe("tmux");
   });
 
+  it("cmux JSON instructions preserve custom data-dir in the runnable buddy command", () => {
+    const result = renderCodexHudInstall({
+      ...baseOptions,
+      multiplexer: "cmux",
+      dataDir: "/tmp/promptlane custom",
+      json: true,
+    });
+    const parsed = JSON.parse(result.text) as {
+      instructions: { buddy_command_pretty: string; buddy_argv: string[] };
+    };
+
+    expect(parsed.instructions.buddy_command_pretty).toBe(
+      "promptlane buddy --style block --interval 5 --data-dir '/tmp/promptlane custom'",
+    );
+    expect(parsed.instructions.buddy_argv).toContain("--data-dir");
+    expect(parsed.instructions.buddy_argv).toContain("/tmp/promptlane custom");
+  });
+
+  it("no-multiplexer JSON instructions preserve custom data-dir in the runnable buddy command", () => {
+    const result = renderCodexHudInstall({
+      ...baseOptions,
+      multiplexer: "none",
+      dataDir: "/tmp/promptlane custom",
+      json: true,
+    });
+    const parsed = JSON.parse(result.text) as {
+      instructions: { buddy_command_pretty: string; buddy_argv: string[] };
+    };
+
+    expect(parsed.instructions.buddy_command_pretty).toBe(
+      "promptlane buddy --style block --interval 5 --data-dir '/tmp/promptlane custom'",
+    );
+    expect(parsed.instructions.buddy_argv).toContain("--data-dir");
+    expect(parsed.instructions.buddy_argv).toContain("/tmp/promptlane custom");
+  });
+
   it("rejects unsupported --pane values", () => {
     expect(() =>
       renderCodexHudInstall({
