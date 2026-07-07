@@ -2193,6 +2193,37 @@ describe("createServer P2 ingest boundary", () => {
     expect(response.body).not.toContain("/Users/");
   });
 
+  it("guides web memory approval users to capture evidence before approving memory", async () => {
+    const storage = createMemoryStorage();
+    const server = createTestServer({ storage });
+    const session = await server.inject({
+      method: "GET",
+      url: "/api/v1/session",
+      headers: { host: "127.0.0.1:17373" },
+    });
+    const cookie = String(session.headers["set-cookie"]);
+    const csrfToken = session.json<{ data: { csrf_token: string } }>().data
+      .csrf_token;
+
+    const response = await server.inject({
+      method: "POST",
+      url: "/api/v1/loops/memory/approve",
+      headers: {
+        host: "127.0.0.1:17373",
+        cookie,
+        "x-csrf-token": csrfToken,
+      },
+      payload: { approved_by: "web" },
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toContain(
+      "No loop snapshot found. Send one Codex or Claude Code prompt, run `promptlane coach` to confirm the first score, run `promptlane loop collect`, then record a passed loop outcome with safe evidence before retrying `promptlane loop memory-approve`.",
+    );
+    expect(response.body).not.toContain("/Users/example");
+    expect(response.body).not.toContain("sk-proj-secret");
+  });
+
   it("hides and rejects already approved latest web memory candidates", async () => {
     const storage = createMemoryStorage();
     storage.loopSnapshots.push(

@@ -19,6 +19,7 @@ import { decideLoopMemoryCandidate } from "../../loop/memory-candidate.js";
 import {
   hasLoopSnapshotSelection,
   loopInstructionPatchNoMemoryCliMessage,
+  loopMemoryNoSnapshotCliMessage,
   selectLoopSnapshot,
 } from "../../loop/snapshot-selection.js";
 import type {
@@ -530,7 +531,12 @@ export function registerLoopRoutes(
     const latest = storage.getLatestLoopSnapshot();
 
     if (!latest) {
-      throw problem(404, "Not Found", "Loop snapshot not found.", request.url);
+      throw problem(
+        404,
+        "Not Found",
+        loopMemoryNoSnapshotCliMessage("promptlane loop memory-approve"),
+        request.url,
+      );
     }
 
     const decision = decideLoopMemoryCandidate(latest);

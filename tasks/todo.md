@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Memory Approval Recovery
+
+- [x] CHECK: HTTP/web `POST /api/v1/loops/memory/approve`는 loop snapshot이
+  없을 때 "Loop snapshot not found."만 반환해, memory approval 전에 필요한
+  first prompt/score/collect/outcome evidence 순서를 안내하지 않았다.
+- [x] RED: `src/server/create-server.test.ts`가 web memory approval no-snapshot
+  응답에 first prompt, first score, loop snapshot collect, passed outcome
+  evidence 후 retry 안내를 요구하게 해 실패를 확인했다.
+- [x] GREEN: server route가 shared memory no-snapshot recovery helper를 사용해
+  web/HTTP approval 표면도 evidence-first 순서를 안내하게 했다.
+- [x] VERIFY: focused server route test, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web Instruction Patch Memory Recovery
 
 - [x] CHECK: HTTP/web `GET /api/v1/loops/instruction-patch`는 approved loop
