@@ -137,9 +137,6 @@ export function App() {
     string | undefined
   >();
   const [measurementBusy, setMeasurementBusy] = useState(false);
-  const [loopWorktree, setLoopWorktree] = useState<
-    LoopWorktreeResponse | undefined
-  >();
   const [projectInstructionBusy, setProjectInstructionBusy] = useState<
     Record<string, boolean>
   >({});
@@ -196,10 +193,20 @@ export function App() {
     trendDays,
     viewName: view.name,
   });
-  const { loops, projects, setLoops, updateProject } = useWorkspaceQuery({
+  const {
+    loops,
+    loopWorktree,
+    openLoopWorktree,
+    projects,
+    setLoops,
+    updateProject,
+  } = useWorkspaceQuery({
+    currentView: view,
+    getLoopWorktree,
     listLoops,
     listProjects,
-    viewName: view.name,
+    navigate,
+    onError: setError,
   });
 
   useEffect(() => {
@@ -256,24 +263,6 @@ export function App() {
       .then(setSettings)
       .catch(() => undefined);
   }, []);
-
-  useEffect(() => {
-    if (view.name !== "loops" || !view.worktree) {
-      return;
-    }
-    if (
-      loopWorktree?.worktree === view.worktree &&
-      loopWorktree.session_id === view.session &&
-      loopWorktree.branch === view.branch
-    ) {
-      return;
-    }
-
-    void openLoopWorktree(view.worktree, {
-      branch: view.branch,
-      session: view.session,
-    });
-  }, [loopWorktree?.worktree, view]);
 
   const visibleTitle = useMemo(() => {
     if (view.name === "settings") return "Settings";
@@ -373,36 +362,6 @@ export function App() {
       setLoops(nextLoops);
     } catch {
       setError("Could not approve loop memory.");
-    }
-  }
-
-  async function openLoopWorktree(
-    worktree: string,
-    options: { branch?: string; session?: string } = {},
-  ): Promise<void> {
-    setError(undefined);
-    try {
-      setLoopWorktree(
-        await getLoopWorktree(worktree, {
-          branch: options.branch,
-          sessionId: options.session,
-        }),
-      );
-      if (
-        view.name === "loops" &&
-        (view.worktree !== worktree ||
-          view.session !== options.session ||
-          view.branch !== options.branch)
-      ) {
-        navigate({
-          name: "loops",
-          worktree,
-          ...(options.session ? { session: options.session } : {}),
-          ...(options.branch ? { branch: options.branch } : {}),
-        });
-      }
-    } catch {
-      setError("Could not load loop worktree detail.");
     }
   }
 
@@ -1094,7 +1053,7 @@ export function App() {
               copyCommandCenterLoopBrief(selection)
             }
             onCopySelectedBrief={(detail) => copySelectedLoopBrief(detail)}
-            onSelectWorktree={(worktree) => openLoopWorktree(worktree)}
+            onSelectWorktree={(worktree) => openLoopWorktree({ worktree })}
             worktreeDetail={loopWorktree}
           />
         )}

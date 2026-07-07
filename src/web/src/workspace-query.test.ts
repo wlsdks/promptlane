@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import type { ProjectSummary } from "./api.js";
+import type { LoopWorktreeResponse, ProjectSummary } from "./api.js";
 import {
+  isCurrentLoopWorktreeDetail,
   shouldLoadLoops,
   shouldLoadProjects,
+  shouldNavigateLoopWorktree,
   updateProjectListItem,
 } from "./workspace-query.js";
 
@@ -26,6 +28,12 @@ const baseProject = {
     version: 1,
   },
 } satisfies ProjectSummary;
+
+const loopDetail = {
+  worktree: "/workspace/promptlane",
+  session_id: "session-1",
+  branch: "main",
+} as unknown as LoopWorktreeResponse;
 
 describe("workspace query", () => {
   it("loads projects only when the projects view has no cached rows", () => {
@@ -57,5 +65,48 @@ describe("workspace query", () => {
 
     expect(updated[0]).toBe(baseProject);
     expect(updated[1]).toEqual(updatedProject);
+  });
+
+  it("reuses cached loop worktree detail only when route filters match", () => {
+    expect(
+      isCurrentLoopWorktreeDetail(loopDetail, {
+        worktree: "/workspace/promptlane",
+        session: "session-1",
+        branch: "main",
+      }),
+    ).toBe(true);
+    expect(
+      isCurrentLoopWorktreeDetail(loopDetail, {
+        worktree: "/workspace/promptlane",
+        session: "session-2",
+        branch: "main",
+      }),
+    ).toBe(false);
+    expect(
+      isCurrentLoopWorktreeDetail(undefined, {
+        worktree: "/workspace/promptlane",
+      }),
+    ).toBe(false);
+  });
+
+  it("navigates after selecting a different loop worktree scope", () => {
+    expect(
+      shouldNavigateLoopWorktree(
+        { name: "list" },
+        { worktree: "/workspace/promptlane" },
+      ),
+    ).toBe(false);
+    expect(
+      shouldNavigateLoopWorktree(
+        { name: "loops", worktree: "/workspace/promptlane" },
+        { worktree: "/workspace/promptlane" },
+      ),
+    ).toBe(false);
+    expect(
+      shouldNavigateLoopWorktree(
+        { name: "loops", worktree: "/workspace/promptlane" },
+        { worktree: "/workspace/promptlane", branch: "feature" },
+      ),
+    ).toBe(true);
   });
 });

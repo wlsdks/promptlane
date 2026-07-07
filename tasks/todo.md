@@ -5219,3 +5219,10 @@
 - [x] GREEN: Extract projects and loops list automatic loading state from `App.tsx` into `useWorkspaceQuery` while leaving loop worktree navigation in `App.tsx`.
 - [x] VERIFY: Focused workspace/dashboard query tests, web typecheck, touched-code formatting check, and diff hygiene passed.
 - [x] INTEGRATE: Commit prepared from `codex/promptlane-workspace-query-hook` for PR.
+
+## 2026-07-08 Loop Worktree Query Hook Extraction
+
+- [x] RED: Add focused workspace query tests for cached loop worktree detail matching and loop route navigation decisions.
+- [x] GREEN: Move loop worktree detail state, route-triggered loading, and worktree selection navigation into `useWorkspaceQuery`.
+- [x] VERIFY: Focused workspace/dashboard query tests, web typecheck, touched-code formatting check, and diff hygiene passed.
+- [x] INTEGRATE: Commit prepared from `codex/promptlane-loop-worktree-query-hook` for PR.
