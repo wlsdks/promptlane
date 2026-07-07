@@ -5377,3 +5377,9 @@
 - [x] RED: Add focused ingest diagnosis test requiring server-owner mismatch detection when the running server uses `--data-dir=<path>` syntax.
 - [x] GREEN: Teach the doctor ingest process parser to recognize both spaced and equals-style `--data-dir` arguments while keeping mismatch hints raw-free.
 - [x] VERIFY: Focused ingest diagnosis/doctor tests, typecheck, touched-file formatting, and diff hygiene passed.
+
+## 2026-07-08 Doctor Quoted Data Dir Parsing
+
+- [x] RED: Add focused ingest diagnosis test proving matching quoted data-dir values with spaces must not be misdiagnosed as a server-owner mismatch.
+- [x] GREEN: Parse quoted `--data-dir` values for both spaced and equals-style arguments before comparing normalized local data directories.
+- [x] VERIFY: Focused ingest diagnosis/doctor tests, typecheck, touched-file formatting, and diff hygiene passed.

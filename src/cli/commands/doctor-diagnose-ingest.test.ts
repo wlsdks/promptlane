@@ -89,6 +89,25 @@ describe("diagnoseIngestFailure", () => {
     expect(diagnosis.hint).toContain("install-hook claude-code");
   });
 
+  it("does not report owner mismatch for matching quoted data-dir with spaces", () => {
+    const runner = staticRunner({
+      lsofStdout: "p99999\n",
+      psStdout:
+        '/path/node /path/cli.js server --data-dir "/Users/x/PromptLane Data"\n',
+    });
+
+    const diagnosis = diagnoseIngestFailure({
+      tool: "claude-code",
+      status: 401,
+      configuredDataDir: "/Users/x/PromptLane Data",
+      commandRunner: runner,
+      readFile: () => "",
+    });
+
+    expect(diagnosis.cause).toBe<IngestFailureCause>("token_stale");
+    expect(diagnosis.hint).toContain("install-hook claude-code");
+  });
+
   it("returns 'token_stale' when no command runner is wired (best-effort fallback)", () => {
     const diagnosis = diagnoseIngestFailure({
       tool: "claude-code",

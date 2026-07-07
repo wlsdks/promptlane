@@ -121,8 +121,11 @@ function parseLsofPid(stdout: string): number | undefined {
 }
 
 function parseDataDirArgument(commandLine: string): string | undefined {
-  const match = commandLine.match(/--data-dir(?:\s+|=)(\S+)/);
-  return match ? normalizePath(match[1]) : undefined;
+  const match = commandLine.match(
+    /--data-dir(?:\s+|=)(?:"([^"]+)"|'([^']+)'|(\S+))/,
+  );
+  const value = match?.[1] ?? match?.[2] ?? match?.[3];
+  return value ? normalizePath(value) : undefined;
 }
 
 function logHasAbiMismatch({
