@@ -12,6 +12,7 @@ import {
   improvementDraftSaveErrorMessage,
   projectInstructionAnalysisErrorMessage,
   projectPolicyUpdateErrorMessage,
+  similarPromptsErrorMessage,
 } from "./error-message.js";
 
 describe("errorMessageOrDefault", () => {
@@ -26,9 +27,9 @@ describe("errorMessageOrDefault", () => {
   });
 
   it("uses the fallback for non-Error throws", () => {
-    expect(errorMessageOrDefault("failed", "Could not approve loop memory.")).toBe(
-      "Could not approve loop memory.",
-    );
+    expect(
+      errorMessageOrDefault("failed", "Could not approve loop memory."),
+    ).toBe("Could not approve loop memory.");
   });
 
   it("trims Error recovery detail before showing it", () => {
@@ -143,6 +144,16 @@ describe("errorMessageOrDefault", () => {
 
     expect(askEventSummaryErrorMessage(error)).toBe(
       "Ask event summary unavailable (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the ask events summary.",
+    );
+  });
+
+  it("preserves similar prompts recovery detail", () => {
+    const error = new Error(
+      "Similar prompts unavailable (404): Prompt not found. Open the local archive, select an existing prompt, then retry similar prompt lookup.",
+    );
+
+    expect(similarPromptsErrorMessage(error)).toBe(
+      "Similar prompts unavailable (404): Prompt not found. Open the local archive, select an existing prompt, then retry similar prompt lookup.",
     );
   });
 });

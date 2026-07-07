@@ -31,6 +31,7 @@ import {
   type PromptSummary,
 } from "./api.js";
 import { formatDate } from "./formatters.js";
+import { similarPromptsErrorMessage } from "./error-message.js";
 import type { Language } from "./i18n.js";
 import { improvementModeLabel } from "./improvement-mode-label.js";
 import { improvementSaveState } from "./improvement-save-state.js";
@@ -472,8 +473,8 @@ function PromptLanePanel({
             <div>
               <h3>{manualCopyFallback.title}</h3>
               <p>
-                Clipboard access is unavailable here; select the draft below
-                and copy it manually.
+                Clipboard access is unavailable here; select the draft below and
+                copy it manually.
               </p>
             </div>
             <button onClick={onCloseManualCopyFallback} type="button">
@@ -764,8 +765,8 @@ function SimilarPromptsPanel({
       .then((next) => {
         if (!cancelled) setItems(next);
       })
-      .catch(() => {
-        if (!cancelled) setError("Could not load similar prompts.");
+      .catch((error) => {
+        if (!cancelled) setError(similarPromptsErrorMessage(error));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
