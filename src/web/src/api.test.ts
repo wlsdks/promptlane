@@ -2564,6 +2564,15 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports malformed health responses without returning incomplete server status", async () => {
+    fetchMock.mockResolvedValueOnce(jsonResponse({}));
+    const { getHealth } = await import("./api.js");
+
+    await expect(getHealth()).rejects.toThrow(
+      "Health check failed: Invalid response.",
+    );
+  });
+
   it("preserves loop list recovery detail on failed responses", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

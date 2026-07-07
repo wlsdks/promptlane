@@ -2166,8 +2166,9 @@ export async function getHealth(): Promise<{
     await failApi(response, "Health check failed");
   }
 
-  return response.json() as Promise<{
-    ok: boolean;
-    version: string;
-  }>;
+  const body = (await response.json()) as { ok?: unknown; version?: unknown };
+  if (typeof body.ok !== "boolean" || typeof body.version !== "string") {
+    throw new Error("Health check failed: Invalid response.");
+  }
+  return { ok: body.ok, version: body.version };
 }
