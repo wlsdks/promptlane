@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   archiveScoreErrorMessage,
+  archiveScoreQueryErrorMessage,
   askEventSummaryErrorMessage,
   bookmarkErrorMessage,
   bulkDeleteErrorMessage,
@@ -89,6 +90,16 @@ describe("errorMessageOrDefault", () => {
     );
 
     expect(archiveScoreErrorMessage(error)).toBe(
+      "Archive score report failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the archive score request.",
+    );
+  });
+
+  it("preserves archive score query recovery detail", () => {
+    const error = new Error(
+      "Archive score report failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the archive score request.",
+    );
+
+    expect(archiveScoreQueryErrorMessage(error)).toBe(
       "Archive score report failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the archive score request.",
     );
   });

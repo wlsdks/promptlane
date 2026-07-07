@@ -10,7 +10,10 @@ import {
   needsDashboardData,
   type View,
 } from "./routing.js";
-import { qualityDashboardErrorMessage } from "./error-message.js";
+import {
+  archiveScoreQueryErrorMessage,
+  qualityDashboardErrorMessage,
+} from "./error-message.js";
 
 export function shouldLoadDashboard(
   viewName: View["name"],
@@ -85,8 +88,8 @@ export function useDashboardQuery({
 
     void getArchiveScoreReport()
       .then(setArchiveScore)
-      .catch(() => undefined);
-  }, [archiveScore, getArchiveScoreReport, viewName]);
+      .catch((error) => onError(archiveScoreQueryErrorMessage(error)));
+  }, [archiveScore, getArchiveScoreReport, onError, viewName]);
 
   useEffect(() => {
     if (!shouldLoadCoachFeedback(viewName, Boolean(coachFeedback))) {
