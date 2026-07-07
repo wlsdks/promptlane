@@ -1453,7 +1453,15 @@ export async function ensureSession(): Promise<void> {
       if (!response.ok) {
         await failApi(response, "Session failed");
       }
-      const body = (await response.json()) as { data: { csrf_token: string } };
+      const body = (await response.json()) as {
+        data?: { csrf_token?: unknown };
+      };
+      if (
+        typeof body.data?.csrf_token !== "string" ||
+        body.data.csrf_token.trim().length === 0
+      ) {
+        throw new Error("Session failed: Invalid session response.");
+      }
       csrfToken = body.data.csrf_token;
     })
     .finally(() => {

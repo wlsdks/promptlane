@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Session Contract Error
+
+- [x] CHECK: web API `ensureSession`이 `/api/v1/session` 성공 응답의 `data.csrf_token`
+  계약을 검증하지 않아 malformed 또는 blank token 응답이 후속 API 호출까지 흘러가며 raw
+  TypeError를 만든다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed session body와 blank csrf token을
+  `Session failed: Invalid session response.`로 fail-close 하도록 요구하게 해 후속
+  `response.ok` TypeError 실패를 확인했다.
+- [x] GREEN: `ensureSession`이 csrf token을 string/non-blank으로 검증하고 깨진 성공
+  응답은 raw 내부 속성명 없이 명확한 session contract 오류로 중단하도록 고쳤다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web API Error Redaction
 
 - [x] CHECK: web API client `failApi`가 structured problem `errors[]`를 browser-visible

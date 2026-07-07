@@ -2467,6 +2467,35 @@ describe("web api export client", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
+  it("reports malformed session bootstrap responses without raw TypeError detail", async () => {
+    fetchMock.mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { listPrompts } = await import("./api.js");
+
+    let caught: unknown;
+    try {
+      await listPrompts({});
+    } catch (error) {
+      caught = error;
+    }
+
+    expect(caught).toBeInstanceOf(Error);
+    expect((caught as Error).message).toBe(
+      "Session failed: Invalid session response.",
+    );
+    expect((caught as Error).message).not.toContain("csrf_token");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("rejects blank session csrf tokens before issuing API requests", async () => {
+    fetchMock.mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "" } }));
+    const { listPrompts } = await import("./api.js");
+
+    await expect(listPrompts({})).rejects.toThrow(
+      "Session failed: Invalid session response.",
+    );
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it("preserves project list recovery detail on failed responses", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
