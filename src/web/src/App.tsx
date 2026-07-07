@@ -126,6 +126,11 @@ import {
   displayLocalPath,
   setupStatusLabel,
 } from "./setup-checks.js";
+import {
+  localStorageForSidebar,
+  persistSidebarCollapsed,
+  readSidebarCollapsed,
+} from "./sidebar-storage.js";
 import { useWorkspaceQuery } from "./workspace-query.js";
 
 const LIVE_MEASUREMENT_REFRESH_MS = 12_000;
@@ -657,7 +662,7 @@ export function App() {
   const toggleSidebar = (): void => {
     setSidebarCollapsed((current) => {
       const next = !current;
-      persistSidebarCollapsed(next);
+      persistSidebarCollapsed(localStorageForSidebar(), next);
       return next;
     });
   };
@@ -2465,27 +2470,4 @@ function FieldList({ items, title }: { items: string[]; title: string }) {
 function StatusBadge({ prompt }: { prompt: PromptSummary }) {
   const label = prompt.is_sensitive ? "redacted" : prompt.index_status;
   return <span className="badge">{label}</span>;
-}
-
-const SIDEBAR_COLLAPSED_STORAGE_KEY = "pm:sidebar-collapsed";
-
-function readSidebarCollapsed(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    return window.localStorage.getItem(SIDEBAR_COLLAPSED_STORAGE_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function persistSidebarCollapsed(collapsed: boolean): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(
-      SIDEBAR_COLLAPSED_STORAGE_KEY,
-      collapsed ? "1" : "0",
-    );
-  } catch {
-    // Storage access can fail in private mode; the in-memory state still works.
-  }
 }
