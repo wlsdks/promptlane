@@ -53,6 +53,10 @@ const nextRecheckUtc = nextRecheckUtcFromRecommendations(
 );
 const releaseGate = [
   {
+    command: "corepack pnpm format",
+    purpose: "Check formatting before release.",
+  },
+  {
     command: "corepack pnpm test",
     purpose: "Run the full unit and integration test suite.",
   },
@@ -69,8 +73,25 @@ const releaseGate = [
     purpose: "Verify the npm package contents and lifecycle wrapper.",
   },
   {
+    command: "corepack pnpm benchmark -- --json",
+    purpose: "Verify local benchmark and privacy leak counters.",
+  },
+  {
+    command: "corepack pnpm e2e:browser",
+    purpose: "Run the browser user-flow regression path.",
+  },
+  {
+    command: "corepack pnpm smoke:release",
+    purpose: "Exercise isolated local release smoke coverage.",
+  },
+  {
     command: "corepack pnpm evidence:quality -- --require-complete",
     purpose: "Fail closed unless all 9.5 quality evidence remains complete.",
+  },
+  {
+    command: "pnpm promptlane quality-evidence --require-complete",
+    purpose:
+      "Verify the built product CLI exposes the same complete quality evidence.",
   },
   {
     command: "git diff --check",

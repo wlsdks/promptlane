@@ -156,6 +156,10 @@ describe("quality-evidence CLI command", () => {
     expect(parsed.recommended_next_slices).toEqual([]);
     expect(parsed.release_gate).toEqual([
       {
+        command: "corepack pnpm format",
+        purpose: "Check formatting before release.",
+      },
+      {
         command: "corepack pnpm test",
         purpose: "Run the full unit and integration test suite.",
       },
@@ -172,8 +176,24 @@ describe("quality-evidence CLI command", () => {
         purpose: "Verify the npm package contents and lifecycle wrapper.",
       },
       {
+        command: "corepack pnpm benchmark -- --json",
+        purpose: "Verify local benchmark and privacy leak counters.",
+      },
+      {
+        command: "corepack pnpm e2e:browser",
+        purpose: "Run the browser user-flow regression path.",
+      },
+      {
+        command: "corepack pnpm smoke:release",
+        purpose: "Exercise isolated local release smoke coverage.",
+      },
+      {
         command: "corepack pnpm evidence:quality -- --require-complete",
         purpose: "Fail closed unless all 9.5 quality evidence remains complete.",
+      },
+      {
+        command: "pnpm promptlane quality-evidence --require-complete",
+        purpose: "Verify the built product CLI exposes the same complete quality evidence.",
       },
       {
         command: "git diff --check",
@@ -257,7 +277,13 @@ describe("quality-evidence CLI command", () => {
       "- corepack pnpm test - Run the full unit and integration test suite.",
     );
     expect(text).toContain(
+      "- corepack pnpm smoke:release - Exercise isolated local release smoke coverage.",
+    );
+    expect(text).toContain(
       "- corepack pnpm evidence:quality -- --require-complete - Fail closed unless all 9.5 quality evidence remains complete.",
+    );
+    expect(text).toContain(
+      "- pnpm promptlane quality-evidence --require-complete - Verify the built product CLI exposes the same complete quality evidence.",
     );
     expect(text).toContain(
       "- git diff --check - Reject whitespace and patch hygiene regressions.",

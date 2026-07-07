@@ -5170,3 +5170,10 @@
 - [x] GREEN: Add `release_gate` to `scripts/quality-95-evidence.mjs`, render it in `promptlane quality-evidence`, and document the field in backlog/9.5 plan.
 - [x] VERIFY: Focused CLI, packaging, quality-evidence, build, built-CLI output, and diff hygiene checks passed.
 - [x] INTEGRATE: Commit prepared from `codex/promptlane-quality-release-gate-guidance` for PR.
+
+## 2026-07-08 Quality Release Gate Checklist Alignment
+
+- [x] RED: Expand focused `quality-evidence` CLI expectations so `release_gate` matches `docs/RELEASE_CHECKLIST.md` verification commands.
+- [x] GREEN: Add format, benchmark, browser E2E, release smoke, and built product CLI quality-evidence checks to the structured `release_gate`, backlog, and 9.5 plan.
+- [x] VERIFY: Focused CLI, packaging, quality-evidence, build, built-CLI output, and diff hygiene checks passed.
+- [x] INTEGRATE: Commit prepared from `codex/promptlane-quality-release-gate-checklist-alignment` for PR.
