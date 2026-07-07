@@ -953,6 +953,17 @@ const UI_TRANSLATIONS: Record<string, string> = {
   "Capture your first coding prompt.": "첫 코딩 프롬프트를 수집하세요.",
   "Run coach setup, send one Codex or Claude Code request, then check the first score and improvement suggestion.":
     "coach 설정을 실행하고 Codex 또는 Claude Code 요청을 하나 보낸 뒤 첫 점수와 개선 제안을 확인하세요.",
+  "No loop snapshots yet": "아직 loop snapshot이 없습니다",
+  "PromptLane status": "PromptLane 상태",
+  "PromptLane status empty": "PromptLane 상태 비어 있음",
+  empty: "비어 있음",
+  "Next steps": "다음 단계",
+  "Capture one Codex or Claude Code prompt, then run promptlane coach to confirm the first score.":
+    "Codex 또는 Claude Code 프롬프트를 하나 캡처한 뒤 promptlane coach로 첫 점수를 확인하세요.",
+  "Then run promptlane loop collect to create the first local loop snapshot.":
+    "그 다음 promptlane loop collect를 실행해 첫 로컬 loop snapshot을 만드세요.",
+  "Local-only. No prompt bodies, raw paths, or compact summaries are shown here.":
+    "로컬 전용입니다. 프롬프트 본문, raw path, compact summary는 여기에 표시하지 않습니다.",
   "Save prompts for later from the detail screen.":
     "상세 화면에서 다시 볼 프롬프트를 저장하세요.",
   "Repeated stored prompt bodies will appear here.":
