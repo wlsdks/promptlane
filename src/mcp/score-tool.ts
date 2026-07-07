@@ -46,6 +46,9 @@ import type {
   ScorePromptToolResult,
 } from "./score-tool-types.js";
 
+const MCP_FIRST_PROMPT_NEXT_STEP =
+  "Send one Codex or Claude Code prompt, then call coach_prompt or rerun get_promptlane_status.";
+
 export {
   COACH_PROMPT_TOOL_DEFINITION,
   GET_PROMPTLANE_STATUS_TOOL_DEFINITION,
@@ -296,8 +299,8 @@ export function getPromptLaneStatusTool(
                 "Use review_project_instructions to check AGENTS.md/CLAUDE.md quality for a captured project.",
               ]
             : [
-                "Capture at least one Claude Code or Codex prompt, then rerun get_promptlane_status.",
-                "Run promptlane setup if hooks are not installed yet.",
+                MCP_FIRST_PROMPT_NEXT_STEP,
+                "Run promptlane setup --profile coach --register-mcp if hooks or MCP registration are not installed yet.",
               ],
         privacy,
       };
@@ -313,8 +316,8 @@ export function getPromptLaneStatusTool(
       project_count: 0,
       available_tools: availableMcpToolNames(),
       next_actions: [
-        "Run promptlane init or promptlane setup before using archive-backed MCP tools.",
-        "After setup, capture a Claude Code or Codex prompt and rerun get_promptlane_status.",
+        "Run promptlane setup --profile coach --register-mcp before using archive-backed MCP tools.",
+        MCP_FIRST_PROMPT_NEXT_STEP,
       ],
       privacy,
     };
