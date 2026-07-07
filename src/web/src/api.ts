@@ -2073,6 +2073,11 @@ export async function getHealth(): Promise<{
   const response = await fetch("/api/v1/health", {
     credentials: "same-origin",
   });
+
+  if (!response.ok) {
+    await failApi(response, "Health check failed");
+  }
+
   return response.json() as Promise<{
     ok: boolean;
     version: string;

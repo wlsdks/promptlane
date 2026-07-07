@@ -2484,6 +2484,20 @@ describe("web api export client", () => {
     );
   });
 
+  it("preserves health check recovery detail on failed responses", async () => {
+    fetchMock.mockResolvedValueOnce(
+      errorResponse(503, {
+        detail:
+          "PromptLane local server is starting. Retry `/api/v1/health` after startup completes.",
+      }),
+    );
+    const { getHealth } = await import("./api.js");
+
+    await expect(getHealth()).rejects.toThrow(
+      "Health check failed (503): PromptLane local server is starting. Retry `/api/v1/health` after startup completes.",
+    );
+  });
+
   it("preserves loop list recovery detail on failed responses", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

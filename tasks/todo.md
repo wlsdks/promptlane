@@ -1,5 +1,15 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Health Error Detail
+
+- [x] CHECK: `getHealth`가 non-OK 응답에서 `failApi`를 거치지 않아 local server
+  readiness/detail 응답을 Error로 보존하지 않고 성공 payload처럼 반환한다.
+- [x] RED: `src/web/src/api.test.ts`가 health non-OK detail 보존을 요구하게 해
+  promise가 `{ detail }`로 resolve되는 실패를 확인했다.
+- [x] GREEN: health API client가 `failApi`를 사용하도록 고쳐 server readiness recovery
+  detail을 Error message로 보존한다.
+- [x] VERIFY: focused web API test, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Prompt List Error Detail
 
 - [x] CHECK: `listPrompts`가 non-OK 응답에서 `failApi`를 거치지 않아 Prompt archive
