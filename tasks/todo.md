@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Export Error Detail Preservation
+
+- [x] CHECK: web API layer는 export job recovery detail을 Error message에 보존하지만,
+  App export execution catch가 generic preview retry 문구로 덮어써 UI까지 전달되지
+  않는다.
+- [x] RED: `src/web/src/error-message.test.ts`가 공백이 섞인 export recovery detail을
+  trim해서 보존해야 한다고 요구하게 해 기존 helper 실패를 확인했다.
+- [x] GREEN: `errorMessageOrDefault`가 trim된 Error message를 반환하도록 고치고,
+  export execution catch가 API/server recovery detail을 보존하도록 적용했다.
+- [x] VERIFY: focused web helper test, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Detail Preservation
 
 - [x] CHECK: web API layer는 RFC 7807 `detail`을 Error message에 보존하지만, App

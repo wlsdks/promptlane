@@ -602,9 +602,12 @@ export function App() {
     try {
       const payload = await executeExportJob(exportPreview.id);
       setExportPayload(payload);
-    } catch {
+    } catch (error) {
       setError(
-        "Could not run the anonymized export. Create a new preview and try again.",
+        errorMessageOrDefault(
+          error,
+          "Could not run the anonymized export. Create a new preview and try again.",
+        ),
       );
     } finally {
       setExportBusy(false);

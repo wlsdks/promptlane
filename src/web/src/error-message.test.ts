@@ -18,4 +18,19 @@ describe("errorMessageOrDefault", () => {
       "Could not approve loop memory.",
     );
   });
+
+  it("trims Error recovery detail before showing it", () => {
+    const error = new Error(
+      "  Export job execution failed (404): Export job not found. Create a new export preview, then run the export from that preview.  ",
+    );
+
+    expect(
+      errorMessageOrDefault(
+        error,
+        "Could not run the anonymized export. Create a new preview and try again.",
+      ),
+    ).toBe(
+      "Export job execution failed (404): Export job not found. Create a new export preview, then run the export from that preview.",
+    );
+  });
 });
