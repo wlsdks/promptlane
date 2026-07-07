@@ -90,8 +90,14 @@
 - [x] REVIEW: PR #511 diff를 코드/harness/web/docs/tasks로 나눠 확인했다. 제품
   코드에는 추가 수정이 필요한 privacy/local-first regression을 찾지 못했고,
   진행 로그의 stale wording만 정리했다.
-- [ ] NEXT: PR #511을 ready로 전환할지, 또는 draft 상태로 두고 maintainer review를
+- [x] NEXT: PR #511을 ready로 전환할지, 또는 draft 상태로 두고 maintainer review를
   기다릴지 결정한다. 전환 전에는 필요한 focused check만 재실행한다.
+- [x] VERIFY: PR ready 전 package-focused `corepack pnpm pack:dry-run`과
+  `git diff --check`가 통과했다.
+- [x] CHECK: PR #511을 ready for review로 전환했다.
+- [ ] NEXT: PR #511 리뷰/머지 후 main 기준으로 다음 small slice를 고른다. 후보는
+  loop/session/worktree continuation UX, MCP status wording, 또는 quality-evidence
+  operator brief 중 가장 직접적인 사용자 마찰이다.
 
 ### 판단 기준
 
