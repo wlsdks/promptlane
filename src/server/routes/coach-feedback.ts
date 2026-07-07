@@ -32,7 +32,12 @@ export function registerCoachFeedbackRoutes(
 
     const entry = storage.recordCoachFeedback(params.id, body.rating);
     if (!entry) {
-      throw problem(404, "Not Found", "Prompt not found.", request.url);
+      throw problem(
+        404,
+        "Not Found",
+        "Prompt not found. Open the local archive or search prompts before recording coach feedback.",
+        request.url,
+      );
     }
 
     return { data: entry };

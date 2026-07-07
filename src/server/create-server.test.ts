@@ -3456,6 +3456,9 @@ describe("createServer P2 ingest boundary", () => {
 
   it("records coach feedback with CSRF and aggregates the summary", async () => {
     const storage = createMemoryStorage();
+    storage.promptDetails.push(
+      promptDetail({ id: "prmt_20260504_100000_aabbccddeeff" }),
+    );
     const server = createTestServer({ storage });
     const session = await server.inject({
       method: "GET",
@@ -3515,6 +3518,39 @@ describe("createServer P2 ingest boundary", () => {
         data: { total: number; helpful: number; helpful_ratio: number };
       }>().data,
     ).toMatchObject({ total: 2, helpful: 1, helpful_ratio: 0.5 });
+  });
+
+  it("guides missing coach feedback users back to local archive search", async () => {
+    const storage = createMemoryStorage();
+    const server = createTestServer({ storage });
+    const session = await server.inject({
+      method: "GET",
+      url: "/api/v1/session",
+      headers: { host: "127.0.0.1:17373" },
+    });
+    const cookie = String(session.headers["set-cookie"]);
+    const csrfToken = session.json<{ data: { csrf_token: string } }>().data
+      .csrf_token;
+
+    const response = await server.inject({
+      method: "POST",
+      url: "/api/v1/prompts/prmt_20260504_100000_deadbeefdead/coach-feedback",
+      headers: {
+        host: "127.0.0.1:17373",
+        cookie,
+        "x-csrf-token": csrfToken,
+      },
+      payload: { rating: "helpful" },
+    });
+
+    expect(response.statusCode).toBe(404);
+    const detail = response.json<{ detail: string }>().detail;
+    expect(detail).toBe(
+      "Prompt not found. Open the local archive or search prompts before recording coach feedback.",
+    );
+    expect(detail).not.toContain("deadbeefdead");
+    expect(response.body).not.toContain("/Users/example");
+    expect(response.body).not.toContain("sk-proj-secret");
   });
 
   it("rejects coach feedback with an unsupported rating", async () => {
@@ -3874,6 +3910,7 @@ function createMemoryStorage() {
       return { updated: true, draft };
     },
     recordCoachFeedback(promptId: string, rating: string) {
+      if (!this.getPrompt(promptId)) return undefined;
       const id = `cfb_${coachFeedback.length + 1}`;
       const entry = {
         id,
