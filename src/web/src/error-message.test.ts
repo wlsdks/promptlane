@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   archiveScoreErrorMessage,
   bookmarkErrorMessage,
+  bulkDeleteErrorMessage,
   errorMessageOrDefault,
   exportPreviewErrorMessage,
   improvementDraftSaveErrorMessage,
@@ -99,6 +100,16 @@ describe("errorMessageOrDefault", () => {
 
     expect(bookmarkErrorMessage(error)).toBe(
       "Bookmark failed (404): Prompt not found. Open the local archive or search prompts before changing bookmark state.",
+    );
+  });
+
+  it("preserves bulk delete recovery detail", () => {
+    const error = new Error(
+      "Delete failed (404): Prompt not found. Open the local archive or search prompts before deleting again.",
+    );
+
+    expect(bulkDeleteErrorMessage(error)).toBe(
+      "Delete failed (404): Prompt not found. Open the local archive or search prompts before deleting again.",
     );
   });
 });

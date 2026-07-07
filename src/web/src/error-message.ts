@@ -43,3 +43,7 @@ export function improvementDraftSaveErrorMessage(error: unknown): string {
 export function bookmarkErrorMessage(error: unknown): string {
   return errorMessageOrDefault(error, "Could not save the bookmark status.");
 }
+
+export function bulkDeleteErrorMessage(error: unknown): string {
+  return errorMessageOrDefault(error, "Could not bulk delete some prompts.");
+}
