@@ -5269,3 +5269,9 @@
 - [x] RED: Add a focused project empty-state test requiring the explicit coach setup command.
 - [x] GREEN: Extract project empty-state copy from `App.tsx` into `project-empty-state` and align the command with `promptlane setup --profile coach`.
 - [x] VERIFY: Focused project/prompt empty-state tests and web typecheck passed.
+
+## 2026-07-08 Sidebar Storage Extraction
+
+- [x] RED: Add focused sidebar storage tests for saved collapsed state, missing browser storage, and throwing storage access.
+- [x] GREEN: Extract sidebar collapsed-state localStorage helpers from `App.tsx` into `sidebar-storage`.
+- [x] VERIFY: Focused sidebar-storage tests and web typecheck passed.
