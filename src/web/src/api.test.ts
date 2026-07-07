@@ -2539,6 +2539,17 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports malformed settings responses without returning incomplete setup data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getSettings } = await import("./api.js");
+
+    await expect(getSettings()).rejects.toThrow(
+      "Settings failed: Invalid response.",
+    );
+  });
+
   it("preserves health check recovery detail on failed responses", async () => {
     fetchMock.mockResolvedValueOnce(
       errorResponse(503, {

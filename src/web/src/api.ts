@@ -1566,8 +1566,20 @@ export async function getSettings(): Promise<SettingsResponse> {
     await failApi(response, "Settings failed");
   }
 
-  const body = (await response.json()) as { data: SettingsResponse };
-  return body.data;
+  const body = (await response.json()) as {
+    data?: {
+      redaction_mode?: unknown;
+      server?: { host?: unknown; port?: unknown };
+    };
+  };
+  if (
+    typeof body.data?.redaction_mode !== "string" ||
+    typeof body.data.server?.host !== "string" ||
+    typeof body.data.server.port !== "number"
+  ) {
+    throw new Error("Settings failed: Invalid response.");
+  }
+  return body.data as SettingsResponse;
 }
 
 export async function listProjects(): Promise<ProjectSummary[]> {
