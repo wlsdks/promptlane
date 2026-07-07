@@ -1566,8 +1566,22 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
     await failApi(response, "Archive score report failed");
   }
 
-  const body = (await response.json()) as { data: ArchiveScoreReport };
-  return body.data;
+  const body = (await response.json()) as {
+    data?: {
+      archive_score?: unknown;
+      practice_plan?: unknown;
+      low_score_prompts?: unknown;
+    };
+  };
+  if (
+    typeof body.data?.archive_score !== "object" ||
+    body.data.archive_score === null ||
+    !Array.isArray(body.data.practice_plan) ||
+    !Array.isArray(body.data.low_score_prompts)
+  ) {
+    throw new Error("Archive score report failed: Invalid response.");
+  }
+  return body.data as ArchiveScoreReport;
 }
 
 export async function getSettings(): Promise<SettingsResponse> {

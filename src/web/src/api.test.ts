@@ -2396,7 +2396,19 @@ describe("web api export client", () => {
       }
 
       if (url === "/api/v1/score?limit=200&low_score_limit=8") {
-        return jsonResponse({ data: { low_score_prompts: [] } });
+        return jsonResponse({
+          data: {
+            archive_score: {
+              average: 0,
+              max: 100,
+              band: "poor",
+              scored_prompts: 0,
+              total_prompts: 0,
+            },
+            practice_plan: [],
+            low_score_prompts: [],
+          },
+        });
       }
 
       throw new Error(`Unexpected URL: ${url}`);
@@ -2428,6 +2440,17 @@ describe("web api export client", () => {
 
     await expect(getArchiveScoreReport()).rejects.toThrow(
       "Archive score report failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the archive score request.",
+    );
+  });
+
+  it("reports malformed archive score responses without returning incomplete practice data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getArchiveScoreReport } = await import("./api.js");
+
+    await expect(getArchiveScoreReport()).rejects.toThrow(
+      "Archive score report failed: Invalid response.",
     );
   });
 

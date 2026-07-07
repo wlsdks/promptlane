@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Archive Score Contract Error
+
+- [x] CHECK: web API `getArchiveScoreReport`가 `/api/v1/score` 성공 응답의 archive
+  score/practice plan 계약을 검증하지 않아 malformed 응답을 `{}` 상태로 first coach loop
+  practice UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed archive score body를
+  `Archive score report failed: Invalid response.`로 reject하도록 요구하게 해 현재 `{}`
+  resolve 실패를 확인했다.
+- [x] GREEN: `getArchiveScoreReport`가 `archive_score`, `practice_plan`,
+  `low_score_prompts` 계약을 확인하고 깨진 성공 응답은 raw-free archive score contract
+  오류로 중단하도록 고쳤다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Quality Dashboard Contract Error
 
 - [x] CHECK: web API `getQualityDashboard`가 `/api/v1/quality` 성공 응답의 첫 화면 품질
