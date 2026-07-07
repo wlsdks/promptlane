@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Saved Draft Copy Recovery
+
+- [x] CHECK: HTTP/web `POST /api/v1/prompts/:id/improvements/:draft_id/copy`는
+  stale/missing saved draft copy에서 "Improvement draft not found."만 반환해,
+  prompt detail/saved drafts로 복구하는 방법이 덜 분명했다.
+- [x] RED: `src/server/create-server.test.ts`가 valid prompt id와 missing draft
+  id에서 saved-drafts recovery detail과 raw-free detail을 요구하게 해 실패를
+  확인했다.
+- [x] GREEN: saved draft copy route의 missing draft 404 detail을 local prompt
+  detail/saved drafts recovery 안내로 교체했다.
+- [x] VERIFY: focused server route test, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web Coach Feedback Recovery
 
 - [x] CHECK: HTTP/web `POST /api/v1/prompts/:id/coach-feedback`는 stale/missing
