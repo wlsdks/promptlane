@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Empty Loop Korean Next Actions
+
+- [x] CHECK: web Loops empty panel이 서버 `next_actions`를 렌더링하게 됐지만,
+  한국어 UI에서도 first prompt/coach/loop collect 안내가 영어로 남아 첫 사용자
+  onboarding 흐름이 섞여 보였다.
+- [x] RED: `src/web/src/i18n.test.ts`가 서버 제공 empty loop first-score action을
+  `localizeElement(..., "ko")`에서 한국어로 번역해야 한다고 요구하게 해 실패를
+  확인했다.
+- [x] GREEN: empty loop heading/status/next-step/action 문구를 `UI_TRANSLATIONS`에
+  추가해 한국어 UI에서도 next action 순서가 자연스럽게 보이게 했다.
+- [x] VERIFY: focused i18n/LoopsView tests, typecheck, formatting/diff checks,
+  rendered Korean web validation을 실행한다.
+
 ## 2026-07-08 PromptLane Web Empty Loop Next Actions
 
 - [x] CHECK: loop status 모델과 MCP는 empty loop 상태에서 first prompt/coach 이후
