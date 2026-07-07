@@ -2452,6 +2452,22 @@ describe("web api export client", () => {
     );
   });
 
+  it("preserves loop list recovery detail on failed responses", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(401, {
+          detail:
+            "Missing or invalid app session. Open a new local PromptLane web session, then retry the loop list request.",
+        }),
+      );
+    const { listLoops } = await import("./api.js");
+
+    await expect(listLoops()).rejects.toThrow(
+      "Loop list failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the loop list request.",
+    );
+  });
+
   it("creates anonymized export previews with csrf and returns raw-free job data", async () => {
     const job: ExportJob = {
       id: "exp_abcdef123456",

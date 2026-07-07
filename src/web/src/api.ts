@@ -1570,6 +1570,11 @@ export async function listLoops(): Promise<LoopListResponse> {
   const response = await fetch("/api/v1/loops", {
     credentials: "same-origin",
   });
+
+  if (!response.ok) {
+    await failApi(response, "Loop list failed");
+  }
+
   const body = (await response.json()) as { data: LoopListResponse };
   return body.data;
 }
