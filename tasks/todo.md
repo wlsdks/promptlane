@@ -5335,3 +5335,9 @@
 - [x] RED: Add focused quality dashboard test requiring a local-only raw-free privacy block.
 - [x] GREEN: Add `privacy` metadata to storage and web quality dashboard contracts.
 - [x] VERIFY: Focused sqlite storage/web measurement tests, typecheck, and diff hygiene passed.
+
+## 2026-07-08 Measurement Dashboard Privacy Fallback
+
+- [x] RED: Add focused measurement test requiring dashboard privacy when archive score data is unavailable.
+- [x] GREEN: Use dashboard privacy metadata as the measurement fallback instead of treating missing archive score as automatically safe.
+- [x] VERIFY: Focused measurement/habit-coach/storage dashboard tests, typecheck, touched-file formatting, and diff hygiene passed.

@@ -72,12 +72,12 @@ export function createArchiveMeasurement({
         rate: item.rate,
       }))
       .sort((a, b) => b.rate - a.rate)[0];
-  const privacyOk = archiveScore
-    ? archiveScore.privacy.local_only &&
-      !archiveScore.privacy.external_calls &&
-      !archiveScore.privacy.returns_prompt_bodies &&
-      !archiveScore.privacy.returns_raw_paths
-    : true;
+  const privacy = archiveScore?.privacy ?? dashboard.privacy;
+  const privacyOk =
+    privacy.local_only &&
+    !privacy.external_calls &&
+    !privacy.returns_prompt_bodies &&
+    !privacy.returns_raw_paths;
 
   return {
     generatedAt: archiveScore?.generated_at,

@@ -59,6 +59,29 @@ describe("createArchiveMeasurement", () => {
       target: "capture",
     });
   });
+
+  it("uses dashboard privacy when archive score data is not available", () => {
+    const measurement = createArchiveMeasurement({
+      dashboard: dashboardFixture({
+        privacy: {
+          local_only: true,
+          external_calls: false,
+          returns_prompt_bodies: false,
+          returns_raw_paths: true,
+        },
+      }),
+    });
+
+    expect(measurement.privacy).toEqual({
+      ok: false,
+      label: "Privacy check needed",
+      detail: "Review measurement output before sharing it.",
+    });
+    expect(measurement.status).toMatchObject({
+      label: "Needs work",
+      tone: "attention",
+    });
+  });
 });
 
 function dashboardFixture(
@@ -98,6 +121,12 @@ function dashboardFixture(
     useful_prompts: [],
     duplicate_prompt_groups: [],
     project_profiles: [],
+    privacy: {
+      local_only: true,
+      external_calls: false,
+      returns_prompt_bodies: false,
+      returns_raw_paths: false,
+    },
     ...overrides,
   };
 }
