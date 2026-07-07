@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Archive Score Error Detail
+
+- [x] CHECK: `getArchiveScoreReport`가 non-OK 응답에서 `failApi`를 거치지 않아
+  archive score session/recovery detail이 Error로 올라오지 않고, App archive
+  measurement catch도 generic 문구로 덮는다.
+- [x] RED: `src/web/src/api.test.ts`가 archive score non-OK detail 보존을 요구하게 해
+  promise가 reject되지 않는 실패를 확인했고, `src/web/src/error-message.test.ts`가
+  archive score UI fallback helper missing 실패를 확인했다.
+- [x] GREEN: archive score API client가 `failApi`를 사용하도록 고치고, App archive
+  score refresh/measurement catch가 Error detail을 보존하도록 연결했다.
+- [x] VERIFY: focused web API/helper tests, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web Export Preview Error Detail
 
 - [x] CHECK: `createExportPreview`는 서버 recovery detail을 Error message에 보존하지만,

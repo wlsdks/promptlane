@@ -1526,6 +1526,11 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
   const response = await fetch("/api/v1/score?limit=200&low_score_limit=8", {
     credentials: "same-origin",
   });
+
+  if (!response.ok) {
+    await failApi(response, "Archive score report failed");
+  }
+
   const body = (await response.json()) as { data: ArchiveScoreReport };
   return body.data;
 }

@@ -67,6 +67,7 @@ import {
   type Language,
 } from "./i18n.js";
 import {
+  archiveScoreErrorMessage,
   errorMessageOrDefault,
   exportPreviewErrorMessage,
   projectInstructionAnalysisErrorMessage,
@@ -560,8 +561,8 @@ export function App() {
       const report = await getArchiveScoreReport();
       setArchiveScore(report);
       setMeasurementCheckedAt(new Date().toISOString());
-    } catch {
-      setError("Could not evaluate the prompt archive.");
+    } catch (error) {
+      setError(archiveScoreErrorMessage(error));
     }
   }
 
@@ -576,8 +577,10 @@ export function App() {
       setDashboard(nextDashboard);
       setArchiveScore(nextArchiveScore);
       setMeasurementCheckedAt(new Date().toISOString());
-    } catch {
-      setError("Could not measure the prompt archive.");
+    } catch (error) {
+      setError(
+        errorMessageOrDefault(error, "Could not measure the prompt archive."),
+      );
     } finally {
       setMeasurementBusy(false);
     }

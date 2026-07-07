@@ -2404,6 +2404,22 @@ describe("web api export client", () => {
     ).toHaveLength(1);
   });
 
+  it("preserves archive score recovery detail on failed responses", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(401, {
+          detail:
+            "Missing or invalid app session. Open a new local PromptLane web session, then retry the archive score request.",
+        }),
+      );
+    const { getArchiveScoreReport } = await import("./api.js");
+
+    await expect(getArchiveScoreReport()).rejects.toThrow(
+      "Archive score report failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the archive score request.",
+    );
+  });
+
   it("creates anonymized export previews with csrf and returns raw-free job data", async () => {
     const job: ExportJob = {
       id: "exp_abcdef123456",

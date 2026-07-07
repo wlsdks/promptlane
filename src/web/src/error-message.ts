@@ -28,3 +28,7 @@ export function exportPreviewErrorMessage(error: unknown): string {
     "Could not create the anonymized export preview.",
   );
 }
+
+export function archiveScoreErrorMessage(error: unknown): string {
+  return errorMessageOrDefault(error, "Could not evaluate the prompt archive.");
+}

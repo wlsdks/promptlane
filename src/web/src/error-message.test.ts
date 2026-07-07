@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  archiveScoreErrorMessage,
   errorMessageOrDefault,
   exportPreviewErrorMessage,
   projectInstructionAnalysisErrorMessage,
@@ -66,6 +67,16 @@ describe("errorMessageOrDefault", () => {
 
     expect(exportPreviewErrorMessage(error)).toBe(
       "Export preview failed (403): Missing or invalid CSRF token. Refresh the local PromptLane web session, then retry the action.",
+    );
+  });
+
+  it("preserves archive score recovery detail", () => {
+    const error = new Error(
+      "Archive score report failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the archive score request.",
+    );
+
+    expect(archiveScoreErrorMessage(error)).toBe(
+      "Archive score report failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the archive score request.",
     );
   });
 });
