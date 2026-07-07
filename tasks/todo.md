@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Usage Event Recovery
+
+- [x] CHECK: HTTP/web `POST /api/v1/prompts/:id/events`는 stale/missing prompt에서
+  usage event 기록을 시도할 때 "Prompt not found."만 반환해, local archive/search로
+  복구하는 방법이 덜 분명했다.
+- [x] RED: `src/server/create-server.test.ts`가 valid-but-missing prompt id와
+  `prompt_copied` payload에서 archive/search recovery detail과 raw-free detail을
+  요구하게 해 실패를 확인했다.
+- [x] GREEN: usage-event route의 missing prompt 404 detail을 local archive/search
+  recovery 안내로 교체했다.
+- [x] VERIFY: focused server route test, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web Bookmark Recovery
 
 - [x] CHECK: HTTP/web `PUT /api/v1/prompts/:id/bookmark`는 stale/missing

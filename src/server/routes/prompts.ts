@@ -262,7 +262,12 @@ export function registerPromptRoutes(
     const result = storage.recordPromptUsage(params.id, body.type);
 
     if (!result.recorded) {
-      throw problem(404, "Not Found", "Prompt not found.", request.url);
+      throw problem(
+        404,
+        "Not Found",
+        "Prompt not found. Open the local archive or search prompts before recording prompt usage.",
+        request.url,
+      );
     }
 
     return { data: result };

@@ -231,6 +231,39 @@ describe("createServer P2 ingest boundary", () => {
     expect(response.body).not.toContain("sk-proj-secret");
   });
 
+  it("guides missing prompt usage-event users back to local archive search", async () => {
+    const storage = createMemoryStorage();
+    const server = createTestServer({ storage });
+    const session = await server.inject({
+      method: "GET",
+      url: "/api/v1/session",
+      headers: { host: "127.0.0.1:17373" },
+    });
+    const cookie = String(session.headers["set-cookie"]);
+    const csrfToken = session.json<{ data: { csrf_token: string } }>().data
+      .csrf_token;
+
+    const response = await server.inject({
+      method: "POST",
+      url: "/api/v1/prompts/prmt_20260501_100000_deadbeefdead/events",
+      headers: {
+        host: "127.0.0.1:17373",
+        cookie,
+        "x-csrf-token": csrfToken,
+      },
+      payload: { type: "prompt_copied" },
+    });
+
+    expect(response.statusCode).toBe(404);
+    const detail = response.json<{ detail: string }>().detail;
+    expect(detail).toBe(
+      "Prompt not found. Open the local archive or search prompts before recording prompt usage.",
+    );
+    expect(detail).not.toContain("deadbeefdead");
+    expect(response.body).not.toContain("/Users/example");
+    expect(response.body).not.toContain("sk-proj-secret");
+  });
+
   it("returns browser-safe settings without exposing secrets", async () => {
     const server = createTestServer({
       excludedProjectRoots: ["/Users/example/private-project"],
