@@ -165,6 +165,23 @@ describe("PromptLane MCP tools", () => {
     );
   });
 
+  it("returns concrete setup guidance when loop storage is unavailable", () => {
+    const result = getPromptLaneLoopStatusTool(
+      {},
+      { dataDir: join(tmpdir(), `promptlane-missing-${randomUUID()}`) },
+    );
+
+    expect(result).toMatchObject({
+      status: "setup_needed",
+      snapshot_count: 0,
+      next_action: "promptlane setup --profile coach --register-mcp",
+      next_actions: [
+        "Run promptlane setup --profile coach --register-mcp before using PromptLane loop MCP tools.",
+        "Then run promptlane loop collect from the project you want to continue.",
+      ],
+    });
+  });
+
   it("reports compact boundaries newer than the latest loop snapshot", () => {
     const dataDir = seedLoopSnapshot({ withCompactBoundary: true });
 

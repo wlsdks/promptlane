@@ -5142,3 +5142,10 @@
 - [x] GREEN: Update `get_promptlane_status` next actions to point users through `promptlane setup --profile coach --register-mcp`, then one Codex or Claude Code prompt, then `coach_prompt` or status recheck.
 - [x] VERIFY: Focused MCP status/server checks and diff hygiene passed.
 - [x] INTEGRATE: Commit prepared from `codex/promptlane-mcp-status-first-step` for PR.
+
+## 2026-07-08 Loop MCP Setup Guidance
+
+- [x] RED: Add focused loop MCP status coverage for unavailable storage setup guidance.
+- [x] GREEN: Update `get_promptlane_loop_status` setup-needed next action to use `promptlane setup --profile coach --register-mcp` before loop collection.
+- [x] VERIFY: Focused loop MCP/server checks and diff hygiene passed.
+- [x] INTEGRATE: Commit prepared from `codex/promptlane-loop-mcp-setup-guidance` for PR.

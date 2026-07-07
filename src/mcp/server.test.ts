@@ -755,6 +755,43 @@ describe("MCP stdio server", () => {
     });
   });
 
+  it("returns text MCP content for get_promptlane_loop_status setup guidance", async () => {
+    const response = await handleMcpMessage(
+      {
+        jsonrpc: "2.0",
+        id: "loop-status-1",
+        method: "tools/call",
+        params: {
+          name: "get_promptlane_loop_status",
+          arguments: {},
+        },
+      },
+      {
+        dataDir: join(tmpdir(), `promptlane-missing-${randomUUID()}`),
+      },
+    );
+
+    expect(response).toMatchObject({
+      jsonrpc: "2.0",
+      id: "loop-status-1",
+      result: {
+        content: [
+          {
+            type: "text",
+            text: expect.stringContaining(
+              "promptlane setup --profile coach --register-mcp",
+            ),
+          },
+        ],
+        structuredContent: expect.objectContaining({
+          status: "setup_needed",
+          next_action: "promptlane setup --profile coach --register-mcp",
+        }),
+        isError: false,
+      },
+    });
+  });
+
   it("returns structured MCP content for coach_prompt setup guidance", async () => {
     const response = await handleMcpMessage(
       {

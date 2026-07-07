@@ -85,9 +85,9 @@ export function getPromptLaneLoopStatusTool(
       status: "setup_needed",
       snapshot_count: 0,
       available_tools: LOOP_TOOL_NAMES,
-      next_action: "promptlane setup",
+      next_action: "promptlane setup --profile coach --register-mcp",
       next_actions: [
-        "Run promptlane init or promptlane setup before using PromptLane MCP tools.",
+        "Run promptlane setup --profile coach --register-mcp before using PromptLane loop MCP tools.",
         "Then run promptlane loop collect from the project you want to continue.",
       ],
       privacy,
