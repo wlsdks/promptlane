@@ -5184,3 +5184,10 @@
 - [x] GREEN: Refresh `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md` to use local browser evidence, approved native-dialog evidence, and the checklist-aligned local release gate.
 - [x] VERIFY: Focused packaging guard, `quality-evidence`, stale blocker scan, and diff hygiene checks passed.
 - [x] INTEGRATE: Commit prepared from `codex/promptlane-release-evidence-policy-alignment` for PR.
+
+## 2026-07-08 Quality Plan Native Evidence Alignment
+
+- [x] RED: Add a focused packaging guard requiring the 9.5 quality plan to cite approved native-dialog evidence and reject stale pending/blocker language.
+- [x] GREEN: Refresh the 9.5 quality plan completion-state copy to match current complete `quality-evidence` output and the approved native-dialog audit.
+- [x] VERIFY: Focused packaging guards, `quality-evidence`, stale blocker scan, and diff hygiene passed.
+- [x] INTEGRATE: Commit prepared from `codex/promptlane-quality-plan-native-evidence-alignment` for PR.

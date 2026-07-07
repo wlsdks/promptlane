@@ -888,7 +888,7 @@ describe("plugin packaging files", () => {
     expect(latestTodo).toContain("dogfood:web-user-flow");
     expect(latestTodo).not.toContain("scheduled `ui-patrol` evidence remains pending");
     expect(latestTodo).not.toContain("corepack pnpm evidence:ui-patrol");
-    const remainingPlan = sectionBetween(plan, "## Remaining 9.5 blockers");
+    const remainingPlan = sectionBetween(plan, "## 9.5 Evidence Completion State");
     expect(remainingPlan).toContain("local browser evidence");
     expect(remainingPlan).not.toContain("scheduled patrol cron");
     expect(remainingPlan).not.toContain("next expected UTC");
@@ -1447,8 +1447,20 @@ describe("plugin packaging files", () => {
     }
     expect(plan).toContain("dogfood:first-coach-loop");
     expect(plan).toContain("dogfood:mcp-native-dialog-approved");
+    expect(plan).toContain("native_dialog_approved_dogfood");
+    expect(plan).toContain("approved native-dialog dogfood");
     expect(plan).toContain("local `ui-patrol`");
     expect(plan).toContain("GitHub Actions is intentionally absent");
+    for (const staleQualityPlanText of [
+      "native-dialog approved dogfood pending",
+      "native-dialog dogfood as a separate blocker",
+      "native dialog dogfood remains pending",
+      "remaining external blockers",
+      "native dialog approved-run requirement",
+      "must not be treated as approved native OS dialog dogfood",
+    ]) {
+      expect(plan).not.toContain(staleQualityPlanText);
+    }
     for (const currentEvidence of [
       "## Evidence Progress Ledger",
       "PR #417",
@@ -1483,7 +1495,7 @@ describe("plugin packaging files", () => {
       "docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md",
       "corepack pnpm smoke:release",
       "no `schedule` event",
-      "Remaining 9.5 blockers",
+      "9.5 Evidence Completion State",
     ]) {
       expect(plan).toContain(currentEvidence);
     }
