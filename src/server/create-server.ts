@@ -119,7 +119,7 @@ export function createServer(options: CreateServerOptions): FastifyInstance {
         problem(
           415,
           "Unsupported Media Type",
-          "The request content-type is not supported.",
+          "The request content-type is not supported. Send JSON with `content-type: application/json`; if this came from an agent hook, reinstall the hook and run `promptlane doctor`.",
           request.url,
         ).problem,
       );

@@ -3056,7 +3056,12 @@ describe("createServer P2 ingest boundary", () => {
     expect(response.json()).toMatchObject({
       status: 415,
       title: "Unsupported Media Type",
+      detail:
+        "The request content-type is not supported. Send JSON with `content-type: application/json`; if this came from an agent hook, reinstall the hook and run `promptlane doctor`.",
     });
+    expect(response.body).not.toContain("<xml/>");
+    expect(response.body).not.toContain("/Users/example");
+    expect(response.body).not.toContain("sk-proj-secret");
   });
 
   it("accepts case-insensitive loopback Host header (RFC 3986 §3.2.2)", async () => {

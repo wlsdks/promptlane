@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Unsupported Media Recovery
+
+- [x] CHECK: unsupported content-type 415는 "The request content-type is not
+  supported."만 반환해, JSON content-type 전송과 agent hook reinstall/doctor 복구
+  경로가 덜 분명했다.
+- [x] RED: `src/server/create-server.test.ts`가 XML ingest request에서 JSON
+  content-type/hook recovery detail과 raw-free detail을 요구하게 해 실패를 확인했다.
+- [x] GREEN: shared Fastify unsupported media 415 detail을 JSON content-type 전송 및
+  agent hook reinstall/doctor recovery 안내로 교체했다.
+- [x] VERIFY: focused server route test, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Malformed JSON Recovery
 
 - [x] CHECK: malformed JSON body 400은 "The request body could not be parsed."만
