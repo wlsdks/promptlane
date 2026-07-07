@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   archiveScoreErrorMessage,
+  askEventSummaryErrorMessage,
   bookmarkErrorMessage,
   bulkDeleteErrorMessage,
   copyUsageEventErrorMessage,
@@ -132,6 +133,16 @@ describe("errorMessageOrDefault", () => {
 
     expect(copyUsageEventErrorMessage(error)).toBe(
       "Prompt event failed (404): Prompt not found. Open the local archive or search prompts before recording copy usage.",
+    );
+  });
+
+  it("preserves ask event summary recovery detail", () => {
+    const error = new Error(
+      "Ask event summary unavailable (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the ask events summary.",
+    );
+
+    expect(askEventSummaryErrorMessage(error)).toBe(
+      "Ask event summary unavailable (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the ask events summary.",
     );
   });
 });

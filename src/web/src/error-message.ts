@@ -61,3 +61,7 @@ export function copyUsageEventErrorMessage(error: unknown): string {
     "Copied the prompt, but could not save the usage event.",
   );
 }
+
+export function askEventSummaryErrorMessage(error: unknown): string {
+  return errorMessageOrDefault(error, "Could not load ask events.");
+}

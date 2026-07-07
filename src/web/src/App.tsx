@@ -68,6 +68,7 @@ import {
 } from "./i18n.js";
 import {
   archiveScoreErrorMessage,
+  askEventSummaryErrorMessage,
   bookmarkErrorMessage,
   bulkDeleteErrorMessage,
   copyUsageEventErrorMessage,
@@ -1963,8 +1964,8 @@ function AskModeSummaryPanel() {
       .then((data) => {
         if (!cancelled) setSummary(data);
       })
-      .catch(() => {
-        if (!cancelled) setError("Could not load ask events.");
+      .catch((error) => {
+        if (!cancelled) setError(askEventSummaryErrorMessage(error));
       });
     return () => {
       cancelled = true;
