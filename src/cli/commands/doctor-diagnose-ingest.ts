@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
+import { getPromptLanePaths } from "../../storage/paths.js";
 import type { DoctorCommandRunner } from "./doctor.js";
 
 export type IngestFailureCause =
@@ -125,7 +126,12 @@ function parseDataDirArgument(commandLine: string): string | undefined {
     /--data-dir(?:\s+|=)(?:"([^"]+)"|'([^']+)'|(\S+))/,
   );
   const value = match?.[1] ?? match?.[2] ?? match?.[3];
-  return value ? normalizePath(value) : undefined;
+  if (value) {
+    return normalizePath(value);
+  }
+  return /(?:^|\s)server(?:\s|$)/.test(commandLine)
+    ? getPromptLanePaths().dataDir
+    : undefined;
 }
 
 function logHasAbiMismatch({

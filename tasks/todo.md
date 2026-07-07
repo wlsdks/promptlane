@@ -5383,3 +5383,9 @@
 - [x] RED: Add focused ingest diagnosis test proving matching quoted data-dir values with spaces must not be misdiagnosed as a server-owner mismatch.
 - [x] GREEN: Parse quoted `--data-dir` values for both spaced and equals-style arguments before comparing normalized local data directories.
 - [x] VERIFY: Focused ingest diagnosis/doctor tests, typecheck, touched-file formatting, and diff hygiene passed.
+
+## 2026-07-08 Doctor Default Data Dir Inference
+
+- [x] RED: Add focused ingest diagnosis test requiring a running `promptlane server` without `--data-dir` to count as the default data directory when the configured doctor data-dir is custom.
+- [x] GREEN: Infer the default PromptLane data directory for bound server commands that omit `--data-dir` so owner mismatch diagnosis stays accurate and raw-free.
+- [x] VERIFY: Focused ingest diagnosis/doctor tests, typecheck, touched-file formatting, and diff hygiene passed.

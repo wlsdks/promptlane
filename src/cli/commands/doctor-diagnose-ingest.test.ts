@@ -50,6 +50,26 @@ describe("diagnoseIngestFailure", () => {
     expect(diagnosis.hint).toContain("promptlane service install");
   });
 
+  it("treats a running server without data-dir as the default data dir", () => {
+    const runner = staticRunner({
+      lsofStdout: "p99999\ncnode\n",
+      psStdout: "/path/node /path/cli.js server\n",
+    });
+
+    const diagnosis = diagnoseIngestFailure({
+      tool: "claude-code",
+      status: 401,
+      configuredDataDir: "/tmp/pm-temp/data",
+      commandRunner: runner,
+      readFile: () => undefined,
+    });
+
+    expect(diagnosis.cause).toBe<IngestFailureCause>("server_owner_mismatch");
+    expect(diagnosis.hint).not.toContain("/tmp/pm-temp/data");
+    expect(diagnosis.hint).not.toContain(".promptlane");
+    expect(diagnosis.hint).toContain("promptlane service install");
+  });
+
   it("returns 'node_abi_mismatch' when server.err.log contains a NODE_MODULE_VERSION error", () => {
     const runner = staticRunner({
       lsofStdout: "p99999\n",
