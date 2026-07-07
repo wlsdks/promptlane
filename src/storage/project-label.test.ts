@@ -19,6 +19,11 @@ describe("projectLabel (storage)", () => {
     expect(projectLabel("C:\\Users\\example\\foo\\\\")).toBe("foo");
   });
 
+  it("trims whitespace before deriving the final segment", () => {
+    expect(projectLabel("  /Users/example/foo/  ")).toBe("foo");
+    expect(projectLabel("  C:\\Users\\example\\foo\\  ")).toBe("foo");
+  });
+
   it("returns the input itself when there is no separator", () => {
     expect(projectLabel("local-project")).toBe("local-project");
   });

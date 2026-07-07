@@ -5293,3 +5293,9 @@
 - [x] RED: Add focused MCP project-label test for whitespace plus trailing backslash separators.
 - [x] GREEN: Normalize MCP project labels by trimming before removing POSIX/backslash trailing separators.
 - [x] VERIFY: Focused MCP project-label/score-tool tests and repo typecheck passed.
+
+## 2026-07-08 Storage Project Label Whitespace Trim
+
+- [x] RED: Add focused storage project-label test for whitespace-wrapped POSIX/backslash paths.
+- [x] GREEN: Trim storage project-label input before removing trailing POSIX/backslash separators.
+- [x] VERIFY: Focused storage project-label/loop status tests and repo typecheck passed.
