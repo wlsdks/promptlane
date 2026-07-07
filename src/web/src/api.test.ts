@@ -2821,6 +2821,28 @@ describe("web api export client", () => {
     );
   });
 
+  it("limits structured problem error details", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(422, {
+          detail: "The request payload is invalid.",
+          errors: [
+            { field: "prompt", message: "Prompt cannot be empty." },
+            { field: "cwd", message: "Path must be absolute." },
+            { field: "session_id", message: "Session is required." },
+            { field: "model", message: "Model name is invalid." },
+            { field: "turn_id", message: "Turn id is invalid." },
+          ],
+        }),
+      );
+    const { deletePrompt } = await import("./api.js");
+
+    await expect(deletePrompt("prmt_x")).rejects.toThrow(
+      "Delete failed (422): The request payload is invalid. prompt: Prompt cannot be empty. cwd: Path must be absolute. session_id: Session is required. 2 more error(s).",
+    );
+  });
+
   it("still surfaces the status when the error body is not JSON", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web API Problem Error Cap
+
+- [x] CHECK: web API client `failApi`가 structured problem `errors[]`를 모두 붙여
+  validation issue가 많을 때 사용자-visible error가 과도하게 길어진다.
+- [x] RED: `src/web/src/api.test.ts`가 첫 3개 issue와 remaining count만 표시하도록
+  요구하게 해 full issue list 노출 실패를 확인했다.
+- [x] GREEN: `apiErrorIssueText`가 최대 3개 field-level issue와 남은 개수를 표시하도록
+  제한했다.
+- [x] VERIFY: focused web API test, typecheck, implementation format check, diff
+  whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web API Problem Errors
 
 - [x] CHECK: server problem responses now expose readable `errors[]` field messages, but

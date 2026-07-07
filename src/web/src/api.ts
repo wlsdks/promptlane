@@ -1738,7 +1738,7 @@ function apiErrorIssueText(value: unknown): string {
   if (!Array.isArray(value)) {
     return "";
   }
-  return value
+  const issues = value
     .map((item) => {
       if (!item || typeof item !== "object") {
         return "";
@@ -1751,8 +1751,13 @@ function apiErrorIssueText(value: unknown): string {
       }
       return field ? `${field}: ${message}` : message;
     })
-    .filter(Boolean)
-    .join(" ");
+    .filter(Boolean);
+  const visibleIssues = issues.slice(0, 3);
+  const remaining = issues.length - visibleIssues.length;
+  if (remaining > 0) {
+    visibleIssues.push(`${remaining} more error(s).`);
+  }
+  return visibleIssues.join(" ");
 }
 
 export async function updateProjectPolicy(
