@@ -1554,6 +1554,11 @@ export async function listProjects(): Promise<ProjectSummary[]> {
   const response = await fetch("/api/v1/projects", {
     credentials: "same-origin",
   });
+
+  if (!response.ok) {
+    await failApi(response, "Project list failed");
+  }
+
   const body = (await response.json()) as {
     data: { items: ProjectSummary[] };
   };

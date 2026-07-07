@@ -1,5 +1,15 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Project List Error Detail
+
+- [x] CHECK: `listProjects`가 non-OK 응답에서 `failApi`를 거치지 않아 project control
+  화면 진입 시 session/recovery detail 대신 `body.data.items` 접근 오류가 날 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 project list non-OK detail 보존을 요구하게 해
+  generic property access 오류로 실패하는 것을 확인했다.
+- [x] GREEN: project list API client가 `failApi`를 사용하도록 고쳐 서버 recovery
+  detail을 Error message로 보존한다.
+- [x] VERIFY: focused web API test, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Quality Dashboard Error Detail
 
 - [x] CHECK: `getQualityDashboard`가 non-OK 응답에서 `failApi`를 거치지 않아
