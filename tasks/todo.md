@@ -5395,3 +5395,13 @@
 - [x] RED: Add a focused packaging/docs drift test requiring landed archive and one-call coach effectiveness work to stop being described as active follow-ups.
 - [x] GREEN: Refresh `docs/NEXT_BACKLOG.md` so archive-level effectiveness summary and `coach_prompt` effectiveness guidance are recorded as landed evidence.
 - [x] VERIFY: Focused packaging docs test, typecheck, and diff hygiene passed.
+
+## 2026-07-08 MCP Custom Data Dir Setup Guidance
+
+- [x] RED: Add focused `get_promptlane_status` test requiring setup-needed MCP
+  guidance to mention custom `--data-dir` initialization without echoing raw
+  local paths.
+- [x] GREEN: Add a raw-free custom storage next action to setup-needed MCP
+  status responses.
+- [x] VERIFY: Focused MCP score-tool tests, typecheck, touched-file formatting,
+  and diff hygiene passed.

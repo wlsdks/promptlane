@@ -318,6 +318,7 @@ export function getPromptLaneStatusTool(
       next_actions: [
         "Run promptlane setup --profile coach --register-mcp before using archive-backed MCP tools.",
         MCP_FIRST_PROMPT_NEXT_STEP,
+        "For custom storage, initialize it with promptlane init --data-dir <path> and pass the same --data-dir to the MCP server.",
       ],
       privacy,
     };

@@ -449,8 +449,7 @@ describe("improvePromptTool", () => {
 
   it("does not route acknowledgment-like prompts through the ask-first next_action", () => {
     const result = improvePromptTool({
-      prompt:
-        "그래! 이 작업을 진행해주고 끝나면 그 다음 단계도 마저 작업해줘",
+      prompt: "그래! 이 작업을 진행해주고 끝나면 그 다음 단계도 마저 작업해줘",
       language: "ko",
     });
 
@@ -578,16 +577,25 @@ describe("getPromptLaneStatusTool", () => {
   });
 
   it("returns a setup-needed status when storage is unavailable", () => {
-    const result = getPromptLaneStatusTool(
-      {},
-      { dataDir: join(tmpdir(), `promptlane-missing-${randomUUID()}`) },
-    );
+    const dataDir = join(tmpdir(), `promptlane-missing-${randomUUID()}`);
+    const result = getPromptLaneStatusTool({}, { dataDir });
+    const serialized = JSON.stringify(result);
 
     expect(result.status).toBe("setup_needed");
-    expect(result.next_actions[0]).toContain("promptlane setup --profile coach");
+    expect(result.next_actions[0]).toContain(
+      "promptlane setup --profile coach",
+    );
     expect(result.next_actions[1]).toBe(
       "Send one Codex or Claude Code prompt, then call coach_prompt or rerun get_promptlane_status.",
     );
+    expect(result.next_actions).toContain(
+      [
+        "For custom storage, initialize it with promptlane init --data-dir <path>",
+        "and pass the same --data-dir to the MCP server.",
+      ].join(" "),
+    );
+    expect(serialized).not.toContain(dataDir);
+    expect(serialized).not.toContain(tmpdir());
   });
 
   it("gives the first MCP action when setup exists but no prompts are captured", () => {
@@ -600,7 +608,9 @@ describe("getPromptLaneStatusTool", () => {
     expect(result.next_actions[0]).toBe(
       "Send one Codex or Claude Code prompt, then call coach_prompt or rerun get_promptlane_status.",
     );
-    expect(result.next_actions[1]).toContain("promptlane setup --profile coach");
+    expect(result.next_actions[1]).toContain(
+      "promptlane setup --profile coach",
+    );
   });
 });
 
