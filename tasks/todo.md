@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Export Job Recovery
+
+- [x] CHECK: HTTP/web `POST /api/v1/exports`는 stale/missing export job 실행에서
+  "Export job not found."만 반환해, 새 export preview를 만든 뒤 해당 preview에서
+  실행해야 한다는 복구 경로가 덜 분명했다.
+- [x] RED: `src/server/create-server.test.ts`가 missing export job id에서
+  preview-creation recovery detail과 raw-free detail을 요구하게 해 실패를 확인했다.
+- [x] GREEN: export execute route의 missing job 404 detail을 new preview creation
+  recovery 안내로 교체했다.
+- [x] VERIFY: focused server route test, typecheck, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web Project Instruction Review Recovery
 
 - [x] CHECK: HTTP/web `GET /api/v1/projects/:id/instructions`는 stale/missing

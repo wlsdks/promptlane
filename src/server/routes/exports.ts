@@ -67,7 +67,12 @@ export function registerExportRoutes(
       }
 
       if (error instanceof Error && error.message.includes("not found")) {
-        throw problem(404, "Not Found", "Export job not found.", request.url);
+        throw problem(
+          404,
+          "Not Found",
+          "Export job not found. Create a new export preview, then run the export from that preview.",
+          request.url,
+        );
       }
 
       throw error;

@@ -2877,6 +2877,39 @@ describe("createServer P2 ingest boundary", () => {
     expect(executed.body).not.toContain("/Users/example/private-project");
   });
 
+  it("guides missing export job users back to preview creation", async () => {
+    const storage = createMemoryStorage();
+    const server = createTestServer({ storage });
+    const session = await server.inject({
+      method: "GET",
+      url: "/api/v1/session",
+      headers: { host: "127.0.0.1:17373" },
+    });
+    const cookie = String(session.headers["set-cookie"]);
+    const csrfToken = session.json<{ data: { csrf_token: string } }>().data
+      .csrf_token;
+
+    const response = await server.inject({
+      method: "POST",
+      url: "/api/v1/exports",
+      headers: {
+        host: "127.0.0.1:17373",
+        cookie,
+        "x-csrf-token": csrfToken,
+      },
+      payload: { job_id: "exp_missing" },
+    });
+
+    expect(response.statusCode).toBe(404);
+    const detail = response.json<{ detail: string }>().detail;
+    expect(detail).toBe(
+      "Export job not found. Create a new export preview, then run the export from that preview.",
+    );
+    expect(detail).not.toContain("exp_missing");
+    expect(response.body).not.toContain("/Users/example");
+    expect(response.body).not.toContain("sk-proj-secret");
+  });
+
   it("serves built web assets with csp and spa fallback", async () => {
     const server = createTestServer({
       webAssets: {
