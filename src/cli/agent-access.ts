@@ -1,3 +1,5 @@
+import { quoteForShell } from "../shared/shell-quote.js";
+
 export type AgentTool = "claude-code" | "codex";
 
 export type AgentCommandSpec = {
@@ -76,7 +78,7 @@ export function mcpRegistrationCommand(
   entry?: PromptLaneEntry,
 ): string {
   const spec = mcpRegistrationSpec(tool, entry);
-  return [spec.command, ...spec.args].join(" ");
+  return [spec.command, ...spec.args].map(quoteForShell).join(" ");
 }
 
 export function doctorCommand(tool: AgentTool): string {

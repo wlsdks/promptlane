@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane MCP Registration Command Quoting
+
+- [x] CHECK: setup/doctor가 사용자에게 보여주는 MCP registration command는
+  `mcpRegistrationSpec` argv를 사람이 복사할 수 있는 문자열로 렌더링하지만,
+  dist entry path에 공백이 있으면 `[command, ...args].join(" ")` 때문에 깨질 수
+  있었다.
+- [x] RED: `src/cli/agent-access.test.ts`에 Codex/Claude Code registration
+  command가 공백 포함 entry path를 shell-quote해야 한다는 focused test를 추가해
+  실패를 확인했다.
+- [x] GREEN: `mcpRegistrationCommand`가 shared `quoteForShell`로 argv를 렌더링하게
+  했다. 기존 PATH 기반 `promptlane mcp` 문구는 그대로 유지된다.
+- [x] VERIFY: focused agent-access/setup/doctor tests, typecheck,
+  formatting/diff checks를 실행한다.
+
 ## 2026-07-08 PromptLane Command Center Command Quoting
 
 - [x] CHECK: command-center continuation command는 web/CLI/MCP status가 공유하는

@@ -67,4 +67,23 @@ describe("mcpRegistrationSpec with an explicit entry", () => {
       }),
     ).toBe("claude mcp add --transport stdio promptlane -- promptlane mcp");
   });
+
+  it("shell-quotes registration commands when the entry path contains spaces", () => {
+    expect(
+      mcpRegistrationCommand("codex", {
+        command: "/usr/local/bin/node",
+        args: ["/Users/example/Prompt Lane/dist/cli/index.js"],
+      }),
+    ).toBe(
+      "codex mcp add promptlane -- /usr/local/bin/node '/Users/example/Prompt Lane/dist/cli/index.js' mcp",
+    );
+    expect(
+      mcpRegistrationCommand("claude-code", {
+        command: "/usr/local/bin/node",
+        args: ["/Users/example/Prompt Lane/dist/cli/index.js"],
+      }),
+    ).toBe(
+      "claude mcp add --transport stdio promptlane -- /usr/local/bin/node '/Users/example/Prompt Lane/dist/cli/index.js' mcp",
+    );
+  });
 });
