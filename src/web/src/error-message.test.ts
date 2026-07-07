@@ -20,6 +20,7 @@ import {
   qualityDashboardErrorMessage,
   promptListErrorMessage,
   selectedPromptErrorMessage,
+  selectedLoopBriefErrorMessage,
   similarPromptsErrorMessage,
 } from "./error-message.js";
 
@@ -212,6 +213,16 @@ describe("errorMessageOrDefault", () => {
 
     expect(loopListErrorMessage(error)).toBe(
       "Loop list failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the loop list request.",
+    );
+  });
+
+  it("preserves selected loop brief recovery detail", () => {
+    const error = new Error(
+      "Selected loop brief failed (404): No loop snapshot found for the selected worktree. Run `promptlane loop collect --worktree agent-loop-worktree`, then retry the continuation brief.",
+    );
+
+    expect(selectedLoopBriefErrorMessage(error)).toBe(
+      "Selected loop brief failed (404): No loop snapshot found for the selected worktree. Run `promptlane loop collect --worktree agent-loop-worktree`, then retry the continuation brief.",
     );
   });
 

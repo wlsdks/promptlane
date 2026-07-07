@@ -90,6 +90,10 @@ export function loopListErrorMessage(error: unknown): string {
   return errorMessageOrDefault(error, "Could not load loop snapshots.");
 }
 
+export function selectedLoopBriefErrorMessage(error: unknown): string {
+  return errorMessageOrDefault(error, "Could not copy selected loop brief.");
+}
+
 export function projectListErrorMessage(error: unknown): string {
   return errorMessageOrDefault(error, "Could not load projects.");
 }

@@ -78,6 +78,7 @@ import {
   improvementDraftSaveErrorMessage,
   projectInstructionAnalysisErrorMessage,
   projectPolicyUpdateErrorMessage,
+  selectedLoopBriefErrorMessage,
 } from "./error-message.js";
 import { CoachFeedbackPanel } from "./coach-feedback-panel.js";
 import { createPromptHabitCoach } from "./habit-coach.js";
@@ -349,12 +350,15 @@ export function App() {
     detail: LoopWorktreeResponse,
   ): Promise<void> {
     setError(undefined);
+    const brief = await getSelectedLoopBrief({
+      worktree: detail.worktree,
+      ...(detail.session_id ? { sessionId: detail.session_id } : {}),
+      ...(detail.branch ? { branch: detail.branch } : {}),
+    }).catch((error) => {
+      setError(selectedLoopBriefErrorMessage(error));
+      throw error;
+    });
     try {
-      const brief = await getSelectedLoopBrief({
-        worktree: detail.worktree,
-        ...(detail.session_id ? { sessionId: detail.session_id } : {}),
-        ...(detail.branch ? { branch: detail.branch } : {}),
-      });
       const copied = await copyTextToClipboard(brief.prompt);
       if (!copied) {
         setError("Could not copy selected loop brief.");
