@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Ingest Too Large Prompt Message
+
+- [x] CHECK: ingest route prompt length validation이 response `detail`은 readable하지만
+  structured problem `errors[0].message`에는 내부 코드식 `too_large`를 노출한다.
+- [x] RED: `src/server/create-server.test.ts`가 oversized prompt ingest 응답에서
+  `errors[0].message`가 `Prompt length limit exceeded.`가 되도록 요구하게 해 실패를
+  확인했다.
+- [x] GREEN: prompt length structured error message를 readable recovery text로 맞췄다.
+- [x] VERIFY: focused server create-server test, typecheck, implementation format check,
+  diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Ingest Empty Prompt Message
 
 - [x] CHECK: ingest route empty prompt validation이 response `detail`은 readable하지만

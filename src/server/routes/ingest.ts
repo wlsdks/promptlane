@@ -142,7 +142,7 @@ async function handlePromptIngest(
         "Payload Too Large",
         "Prompt length limit exceeded.",
         instance,
-        [{ field: "prompt", message: "too_large" }],
+        [{ field: "prompt", message: "Prompt length limit exceeded." }],
       );
     }
     if (result.reason === "policy_lookup_failed") {

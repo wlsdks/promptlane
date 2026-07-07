@@ -3452,6 +3452,12 @@ describe("createServer P2 ingest boundary", () => {
     });
 
     expect(response.statusCode).toBe(413);
+    const problem = response.json<{
+      errors: Array<{ field: string; message: string }>;
+    }>();
+    const error = problem.errors[0];
+    expect(error?.field).toBe("prompt");
+    expect(error?.message).toBe("Prompt length limit exceeded.");
     expect(storage.events).toHaveLength(0);
   });
 
