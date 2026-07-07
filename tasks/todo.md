@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Project List Contract Error
+
+- [x] CHECK: web API `listProjects`가 `/api/v1/projects` 성공 응답의 `data.items`
+  계약을 검증하지 않아 malformed 응답을 오류 대신 `undefined`로 반환할 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed project list body를
+  `Project list failed: Invalid response.`로 reject하도록 요구하게 해 현재 `undefined`
+  resolve 실패를 확인했다.
+- [x] GREEN: `listProjects`가 `items` 배열 계약을 확인하고 깨진 성공 응답은 raw-free
+  project list contract 오류로 중단하도록 고쳤다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Session Contract Error
 
 - [x] CHECK: web API `ensureSession`이 `/api/v1/session` 성공 응답의 `data.csrf_token`

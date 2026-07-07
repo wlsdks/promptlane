@@ -1581,8 +1581,11 @@ export async function listProjects(): Promise<ProjectSummary[]> {
   }
 
   const body = (await response.json()) as {
-    data: { items: ProjectSummary[] };
+    data?: { items?: unknown };
   };
+  if (!Array.isArray(body.data?.items)) {
+    throw new Error("Project list failed: Invalid response.");
+  }
   return body.data.items;
 }
 
