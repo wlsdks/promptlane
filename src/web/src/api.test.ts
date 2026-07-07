@@ -2769,6 +2769,22 @@ describe("web api export client", () => {
     );
   });
 
+  it("uses the response title when detail is not a string", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(403, {
+          detail: { message: "nested detail should not leak" },
+          title: "Open the local archive before deleting again.",
+        }),
+      );
+    const { deletePrompt } = await import("./api.js");
+
+    await expect(deletePrompt("prmt_x")).rejects.toThrow(
+      "Delete failed (403): Open the local archive before deleting again.",
+    );
+  });
+
   it("still surfaces the status when the error body is not JSON", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

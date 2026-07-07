@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web API Error String Fallback
+
+- [x] CHECK: web API client `failApi`가 `detail?.trim()`에 직접 의존해 malformed
+  non-string detail이 있으면 `title` recovery hint까지 catch로 잃고 상태 코드만 노출한다.
+- [x] RED: `src/web/src/api.test.ts`가 non-string detail + useful title 응답에서 title
+  recovery hint를 보존하도록 요구하게 해 `Delete failed (403)` 실패를 확인했다.
+- [x] GREEN: `failApi`가 detail/title 값을 unknown으로 다루고 문자열일 때만 trim해
+  fallback하도록 고쳤다.
+- [x] VERIFY: focused web API test, typecheck, code format check, diff whitespace check를
+  실행한다.
+
 ## 2026-07-08 PromptLane Web API Error Title Fallback
 
 - [x] CHECK: web API client `failApi`가 서버 error body의 `detail`을 trim하지 않아

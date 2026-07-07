@@ -1708,15 +1708,19 @@ async function failApi(response: Response, label: string): Promise<never> {
   let detail = "";
   try {
     const body = (await response.json()) as {
-      detail?: string;
-      title?: string;
+      detail?: unknown;
+      title?: unknown;
     };
-    detail = body.detail?.trim() || body.title?.trim() || "";
+    detail = apiErrorText(body.detail) || apiErrorText(body.title);
   } catch {
     // body may not be JSON, that is fine.
   }
   const suffix = detail ? `: ${detail}` : "";
   throw new Error(`${label} (${response.status})${suffix}`);
+}
+
+function apiErrorText(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
 }
 
 export async function updateProjectPolicy(
