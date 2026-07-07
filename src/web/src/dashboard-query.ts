@@ -12,6 +12,7 @@ import {
 } from "./routing.js";
 import {
   archiveScoreQueryErrorMessage,
+  coachFeedbackQueryErrorMessage,
   qualityDashboardErrorMessage,
 } from "./error-message.js";
 
@@ -98,8 +99,8 @@ export function useDashboardQuery({
 
     void getCoachFeedbackSummary()
       .then(setCoachFeedback)
-      .catch(() => undefined);
-  }, [coachFeedback, getCoachFeedbackSummary, viewName]);
+      .catch((error) => onError(coachFeedbackQueryErrorMessage(error)));
+  }, [coachFeedback, getCoachFeedbackSummary, onError, viewName]);
 
   return {
     archiveScore,

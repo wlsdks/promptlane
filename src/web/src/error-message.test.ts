@@ -6,6 +6,7 @@ import {
   askEventSummaryErrorMessage,
   bookmarkErrorMessage,
   bulkDeleteErrorMessage,
+  coachFeedbackQueryErrorMessage,
   copyUsageEventErrorMessage,
   draftCopyMarkerErrorMessage,
   errorMessageOrDefault,
@@ -231,6 +232,16 @@ describe("errorMessageOrDefault", () => {
 
     expect(qualityDashboardErrorMessage(error)).toBe(
       "Quality dashboard failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the quality dashboard request.",
+    );
+  });
+
+  it("preserves coach feedback query recovery detail", () => {
+    const error = new Error(
+      "Coach feedback summary failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the coach feedback request.",
+    );
+
+    expect(coachFeedbackQueryErrorMessage(error)).toBe(
+      "Coach feedback summary failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the coach feedback request.",
     );
   });
 });

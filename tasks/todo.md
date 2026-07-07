@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Coach Feedback Query Error Detail
+
+- [x] CHECK: `getCoachFeedbackSummary`는 서버 recovery detail을 Error message에 보존하지만,
+  dashboard query 초기 coach feedback catch가 실패를 무시해 feedback 복구 안내가
+  UI까지 전달되지 않는다.
+- [x] RED: `src/web/src/error-message.test.ts`가 coach feedback query recovery detail
+  보존 helper를 요구하게 해 helper missing 실패를 확인했다.
+- [x] GREEN: coach feedback query fallback helper를 추가하고 dashboard query handler가
+  API/server recovery detail을 사용자-visible error로 전달하도록 연결했다.
+- [x] VERIFY: focused web helper/dashboard-query tests, typecheck, format check, diff
+  whitespace check를 실행했다.
+
 ## 2026-07-08 PromptLane Web Archive Score Query Error Detail
 
 - [x] CHECK: `getArchiveScoreReport`는 서버 recovery detail을 Error message에 보존하지만,
