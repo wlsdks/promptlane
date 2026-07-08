@@ -2979,6 +2979,17 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports malformed prompt detail responses without returning incomplete archive data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getPrompt } = await import("./api.js");
+
+    await expect(getPrompt("prmt_x")).rejects.toThrow(
+      "Prompt not found: Invalid response.",
+    );
+  });
+
   it("uses the response title when detail is blank", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

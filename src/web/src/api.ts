@@ -98,6 +98,76 @@ export type PromptListResponse = {
   next_cursor?: string;
 };
 
+function isPromptUsefulness(value: unknown): value is PromptUsefulness {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as PromptUsefulness).copied_count === "number" &&
+    typeof (value as PromptUsefulness).bookmarked === "boolean" &&
+    ((value as PromptUsefulness).last_copied_at === undefined ||
+      typeof (value as PromptUsefulness).last_copied_at === "string") &&
+    ((value as PromptUsefulness).bookmarked_at === undefined ||
+      typeof (value as PromptUsefulness).bookmarked_at === "string")
+  );
+}
+
+function isPromptSummary(value: unknown): value is PromptSummary {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const prompt = value as PromptSummary;
+  return (
+    typeof prompt.id === "string" &&
+    typeof prompt.tool === "string" &&
+    typeof prompt.source_event === "string" &&
+    typeof prompt.session_id === "string" &&
+    typeof prompt.cwd === "string" &&
+    typeof prompt.created_at === "string" &&
+    typeof prompt.received_at === "string" &&
+    typeof prompt.snippet === "string" &&
+    typeof prompt.prompt_length === "number" &&
+    typeof prompt.is_sensitive === "boolean" &&
+    typeof prompt.excluded_from_analysis === "boolean" &&
+    typeof prompt.redaction_policy === "string" &&
+    typeof prompt.adapter_version === "string" &&
+    typeof prompt.index_status === "string" &&
+    Array.isArray(prompt.tags) &&
+    Array.isArray(prompt.quality_gaps) &&
+    typeof prompt.quality_score === "number" &&
+    typeof prompt.quality_score_band === "string" &&
+    isPromptUsefulness(prompt.usefulness) &&
+    typeof prompt.duplicate_count === "number"
+  );
+}
+
+function parsePromptDetailResponse(body: { data?: unknown }): PromptDetail {
+  const detail = body.data;
+  const promptDetail =
+    typeof detail === "object" && detail !== null
+      ? (detail as PromptDetail)
+      : undefined;
+  if (
+    !isPromptSummary(detail) ||
+    promptDetail === undefined ||
+    typeof promptDetail.markdown !== "string" ||
+    !Array.isArray(promptDetail.improvement_drafts) ||
+    (promptDetail.analysis !== undefined &&
+      (typeof promptDetail.analysis !== "object" ||
+        promptDetail.analysis === null)) ||
+    (promptDetail.judge_score !== undefined &&
+      (typeof promptDetail.judge_score !== "object" ||
+        promptDetail.judge_score === null)) ||
+    (promptDetail.loop_outcomes !== undefined &&
+      !Array.isArray(promptDetail.loop_outcomes)) ||
+    (promptDetail.effectiveness !== undefined &&
+      (typeof promptDetail.effectiveness !== "object" ||
+        promptDetail.effectiveness === null))
+  ) {
+    throw new Error("Prompt not found: Invalid response.");
+  }
+  return promptDetail;
+}
+
 function parsePromptListResponse(body: {
   data?: {
     items?: unknown;
@@ -2394,8 +2464,10 @@ export async function getPrompt(id: string): Promise<PromptDetail> {
     await failApi(response, "Prompt not found");
   }
 
-  const body = (await response.json()) as { data: PromptDetail };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parsePromptDetailResponse
+  >[0];
+  return parsePromptDetailResponse(body);
 }
 
 export type AskEventSummary = {
