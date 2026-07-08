@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Export Payload Item Raw Contract Error
+
+- [x] CHECK: `parseAnonymizedExportPayloadResponse`가 export payload item 필수
+  field만 검증하고 raw-like `prompt_body`/`raw_path`/`markdown` extra field를
+  차단하지 않아 anonymized export payload로 raw local path data가 넘어갈 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 export execution payload item의 `raw_path`
+  body를 `Export job execution failed: Invalid response.`로 reject하도록 요구하게 해
+  현재 unsafe export payload resolve 실패를 확인한다.
+- [x] GREEN: anonymized export payload item parser가 anonymous_id/tool/date/project/
+  prompt/tags/gaps 계약을 유지하면서 raw `prompt_body`/`raw_path`/`markdown` fields를
+  차단한다.
+- [x] VERIFY: focused web API export client test, implementation format check,
+  typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Export Preview Raw Contract Error
 
 - [x] CHECK: `parseExportJobResponse`가 export job 필수 field만 검증하고

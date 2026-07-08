@@ -8532,6 +8532,39 @@ describe("web api export client", () => {
     );
   });
 
+  it("rejects anonymized export payload items that include raw-like fields", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            job_id: "exp_abcdef123456",
+            preset: "anonymized_review",
+            redaction_version: "mask-v1",
+            generated_at: "2026-05-02T12:01:00.000Z",
+            count: 1,
+            items: [
+              {
+                anonymous_id: "anon_abcdef123456",
+                tool: "claude-code",
+                coarse_date: "2026-05-02",
+                project_alias: "promptlane",
+                prompt: "Fix [REDACTED:path] with [REDACTED:api_key]",
+                tags: ["backend"],
+                quality_gaps: ["Verification criteria"],
+                raw_path: "/Users/example/private/project",
+              },
+            ],
+          },
+        }),
+      );
+    const { executeExportJob } = await import("./api.js");
+
+    await expect(executeExportJob("exp_abcdef123456")).rejects.toThrow(
+      "Export job execution failed: Invalid response.",
+    );
+  });
+
   it("fetches the coach feedback summary without CSRF and parses ratios", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

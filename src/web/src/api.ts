@@ -4814,7 +4814,10 @@ function parseAnonymizedExportPayloadResponse(body: {
         ) &&
         Array.isArray(
           (item as AnonymizedExportPayload["items"][number]).quality_gaps,
-        ),
+        ) &&
+        (item as { markdown?: unknown }).markdown === undefined &&
+        (item as { prompt_body?: unknown }).prompt_body === undefined &&
+        (item as { raw_path?: unknown }).raw_path === undefined,
     )
   ) {
     throw new Error("Export job execution failed: Invalid response.");
