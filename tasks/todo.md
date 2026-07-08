@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Release Gate Order
+
+- [x] CHECK: `quality-evidence` and `docs/RELEASE_CHECKLIST.md` list
+  `corepack pnpm pack:dry-run` immediately after build, but
+  `docs/NPM_PUBLISHING.md` ran benchmark/e2e/release smoke before package
+  dry-run.
+- [x] RED: packaging guard extracts the NPM publishing Required Local Gate shell
+  block and requires the same ordered release gate before tag/preflight steps.
+- [x] GREEN: NPM publishing runbook now runs `pack:dry-run` before benchmark,
+  browser e2e, release smoke, and package-install smoke.
+- [x] VERIFY: focused packaging guard, formatting, live quality/preflight smoke,
+  and diff hygiene.
+
 ## 2026-07-09 PromptLane Release Checklist Package Docs
 
 - [x] CHECK: live preflight is blocked only by npm auth, but

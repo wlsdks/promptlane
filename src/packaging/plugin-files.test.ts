@@ -25,6 +25,16 @@ function markdownListItems(section: string): string[] {
     .filter((item): item is string => Boolean(item));
 }
 
+function firstShellCodeBlock(section: string): string[] {
+  return (
+    section
+      .match(/```(?:sh)?\n([\s\S]*?)```/)?.[1]
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean) ?? []
+  );
+}
+
 describe("plugin packaging files", () => {
   it("keeps pnpm build-script approvals in pnpm-workspace.yaml", () => {
     const packageJson = readJson<{
@@ -449,6 +459,27 @@ describe("plugin packaging files", () => {
     expect(publishing).toContain("chmods all three");
     expect(publishing).not.toContain("all four bin entries");
     expect(publishing).not.toContain("chmods all four");
+
+    const publishingReleaseGate = firstShellCodeBlock(
+      sectionBetween(publishing, "## Required Local Gate Before Publishing"),
+    );
+    expect(publishingReleaseGate).toEqual([
+      "corepack pnpm format",
+      "corepack pnpm test",
+      "corepack pnpm lint",
+      "corepack pnpm build",
+      "corepack pnpm pack:dry-run",
+      "corepack pnpm --silent benchmark -- --json",
+      "corepack pnpm e2e:browser",
+      "corepack pnpm smoke:release",
+      "corepack pnpm smoke:package-install",
+      "corepack pnpm evidence:quality -- --require-complete",
+      "corepack pnpm promptlane quality-evidence --require-complete",
+      'git tag -fa v1.0.0 -m "promptlane 1.0.0"',
+      "git push origin v1.0.0 --force",
+      "corepack pnpm npm-publish:preflight",
+      "git diff --check",
+    ]);
   });
 
   it("keeps PLUGINS MCP tool list aligned with shipped tool definitions", () => {
