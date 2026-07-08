@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Project Summary Root Raw Contract Error
+
+- [x] CHECK: `parseProjectSummaryResponse`가 project summary root의 raw-like
+  `prompt_body`/`raw_path`/`markdown` extra field를 차단하지 않아 Projects UI state로
+  raw project path data가 넘어갈 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 project list item의 `raw_path` body를
+  `Project list failed: Invalid response.`로 reject하도록 요구하게 해 현재 unsafe
+  project summary resolve 실패를 확인한다.
+- [x] GREEN: project summary parser가 project metadata/policy/nested
+  instruction_review 계약을 유지하면서 raw `prompt_body`/`raw_path`/`markdown` fields를
+  차단한다.
+- [x] VERIFY: focused web API project list tests, implementation format check,
+  typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Project Summary Instruction Review Contract Error
 
 - [x] CHECK: `parseProjectSummaryResponse`가 optional `instruction_review`를 검증하지

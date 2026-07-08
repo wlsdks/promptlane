@@ -7736,6 +7736,42 @@ describe("web api export client", () => {
     );
   });
 
+  it("rejects project list items that include raw-like project fields", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            items: [
+              {
+                project_id: "proj_abcdef123456",
+                label: "promptlane",
+                path_kind: "project_root",
+                prompt_count: 1,
+                sensitive_count: 0,
+                quality_gap_rate: 0,
+                copied_count: 0,
+                bookmarked_count: 0,
+                policy: {
+                  capture_disabled: false,
+                  analysis_disabled: false,
+                  external_analysis_opt_in: false,
+                  export_disabled: false,
+                  version: 1,
+                },
+                raw_path: "/Users/example/private/project",
+              },
+            ],
+          },
+        }),
+      );
+    const { listProjects } = await import("./api.js");
+
+    await expect(listProjects()).rejects.toThrow(
+      "Project list failed: Invalid response.",
+    );
+  });
+
   it("rejects project list items with raw-like instruction review fields", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

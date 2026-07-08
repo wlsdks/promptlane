@@ -4662,6 +4662,9 @@ function parseProjectSummaryResponse(
         version?: unknown;
       };
       instruction_review?: unknown;
+      markdown?: unknown;
+      prompt_body?: unknown;
+      raw_path?: unknown;
     };
   },
   message: string,
@@ -4679,7 +4682,10 @@ function parseProjectSummaryResponse(
     typeof body.data.policy.analysis_disabled !== "boolean" ||
     typeof body.data.policy.external_analysis_opt_in !== "boolean" ||
     typeof body.data.policy.export_disabled !== "boolean" ||
-    typeof body.data.policy.version !== "number"
+    typeof body.data.policy.version !== "number" ||
+    body.data.markdown !== undefined ||
+    body.data.prompt_body !== undefined ||
+    body.data.raw_path !== undefined
   ) {
     throw new Error(`${message}: Invalid response.`);
   }
