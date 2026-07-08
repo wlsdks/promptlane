@@ -8145,6 +8145,27 @@ describe("web api export client", () => {
     );
   });
 
+  it("redacts Windows path strings from failed response issue paths", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(422, {
+          detail: "The request payload is invalid.",
+          errors: [
+            {
+              path: "C:\\Users\\jinan\\prompt-memory\\prompts\\raw.md",
+              message: "Invalid prompt archive path.",
+            },
+          ],
+        }),
+      );
+    const { getSettings } = await import("./api.js");
+
+    await expect(getSettings()).rejects.toThrow(
+      "Settings failed (422): The request payload is invalid. [REDACTED:path]: Invalid prompt archive path.",
+    );
+  });
+
   it("redacts provider credential details from failed response messages", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

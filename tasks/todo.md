@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Issue Windows Path Redaction
+
+- [x] CHECK: `apiErrorIssuePathText`와 `sanitizeApiErrorText`가 Unix/`~/` local path는
+  redaction하지만 `C:\Users\...\raw.md` 같은 Windows-style local path는 failed response
+  issue field에 그대로 남길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 settings failed response `errors[]`의
+  Windows path를 `[REDACTED:path]` field로 표시하도록 요구하게 해 현재 unsafe Windows
+  path issue detail 노출 실패를 확인한다.
+- [x] GREEN: web API error issue path sanitizer와 공통 API error sanitizer가 Windows drive
+  path도 raw local path로 redaction한다.
+- [x] VERIFY: focused web API issue/error redaction tests, implementation format
+  check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Issue Home Path Redaction
 
 - [x] CHECK: `apiErrorIssuePathText`가 `/Users/...` absolute path는 redaction 경로로
