@@ -9544,6 +9544,46 @@ describe("web api export client", () => {
       analyzeProjectInstructions("proj_abcdef123456"),
     ).rejects.toThrow("Project instruction analysis failed: Invalid response.");
   });
+
+  it("rejects project instruction checklist items that include raw-like fields", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            generated_at: "2026-05-03T00:00:00.000Z",
+            analyzer: "local-project-instructions-v1",
+            score: { value: 80, max: 100, band: "good" },
+            files_found: 1,
+            files: [],
+            checklist: [
+              {
+                key: "privacy_safety",
+                label: "Privacy and safety",
+                status: "weak",
+                weight: 20,
+                earned: 10,
+                suggestion: "Keep raw prompt bodies out of docs.",
+                prompt_body: "secret instruction body",
+              },
+            ],
+            suggestions: [],
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              stores_file_bodies: false,
+              returns_file_bodies: false,
+              returns_raw_paths: false,
+            },
+          },
+        }),
+      );
+    const { analyzeProjectInstructions } = await import("./api.js");
+
+    await expect(
+      analyzeProjectInstructions("proj_abcdef123456"),
+    ).rejects.toThrow("Project instruction analysis failed: Invalid response.");
+  });
 });
 
 function jsonResponse(body: unknown): Response {
