@@ -14,6 +14,16 @@ const checks = [];
 check("package version exists", Boolean(version));
 check("package name is promptlane", packageName === "promptlane", packageName);
 check("package is publishable", packageJson.private !== true);
+check(
+  "package manager is pinned",
+  packageJson.packageManager === "pnpm@10.18.0",
+  packageJson.packageManager,
+);
+check(
+  "node engine range is stable",
+  packageJson.engines?.node === ">=22.12 <25",
+  packageJson.engines?.node,
+);
 check("package license is set", packageJson.license === "MIT");
 check(
   "package repository points at GitHub project",

@@ -187,6 +187,14 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain('"dist"');
     expect(preflightScript).toContain('"!dist/**/*.map"');
     expect(preflightScript).toContain("package files exclude dist/**/*.map");
+    expect(preflightScript).toContain("package manager is pinned");
+    expect(preflightScript).toContain(
+      'packageJson.packageManager === "pnpm@10.18.0"',
+    );
+    expect(preflightScript).toContain("node engine range is stable");
+    expect(preflightScript).toContain(
+      'packageJson.engines?.node === ">=22.12 <25"',
+    );
     expect(preflightScript).toContain('"README.md"');
     expect(preflightScript).toContain('"LICENSE"');
     expect(publishing).toContain("corepack pnpm npm-publish:preflight");

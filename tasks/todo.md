@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Engine Manager Preflight Guard
+
+- [x] CHECK: `package.json` pins `packageManager` and Node engine for release
+  install/build behavior, but `scripts/npm-publish-preflight.mjs` did not check
+  them in the final publish gate.
+- [x] RED: focused preflight and packaging guards required machine-readable
+  checks for `package manager is pinned` and `node engine range is stable`.
+- [x] GREEN: npm publish preflight now emits package manager and Node engine
+  checks, and the NPM runbook checklist documents the same release
+  prerequisites.
+- [x] VERIFY: focused preflight/packaging tests, touched-file formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Source Map Exclusion Preflight Guard
 
 - [x] CHECK: release docs require `dist/**/*.map` to stay local-only, and

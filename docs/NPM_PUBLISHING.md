@@ -141,6 +141,7 @@ corepack pnpm smoke:package-install
 
 - [ ] package name is still available or already owned by the maintainer
 - [ ] package is not marked private in `package.json`
+- [ ] package manager is pinned to `pnpm@10.18.0`, and Node engine remains `>=22.12 <25`
 - [ ] license, repository, and bin metadata are present in `package.json`
 - [ ] package files include `dist`, `README.md`, `LICENSE`, and the npm publish preflight script
 - [ ] package files exclude `dist/**/*.map`

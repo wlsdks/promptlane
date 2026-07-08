@@ -73,6 +73,14 @@ describe("npm publish preflight", () => {
           label: "package files exclude dist/**/*.map",
           ok: true,
         }),
+        expect.objectContaining({
+          label: "package manager is pinned",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "node engine range is stable",
+          ok: true,
+        }),
       ]),
     );
   });
