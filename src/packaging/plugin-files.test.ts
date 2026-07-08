@@ -218,10 +218,28 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain('"CODE_OF_CONDUCT.md"');
     expect(preflightScript).toContain('"CONTRIBUTING.md"');
     expect(preflightScript).toContain('"SUPPORT.md"');
+    expect(preflightScript).toContain('"scripts/benchmark.mjs"');
+    expect(preflightScript).toContain('"scripts/agent-setup-smoke.mjs"');
+    expect(preflightScript).toContain('"scripts/browser-e2e.mjs"');
+    expect(preflightScript).toContain('"scripts/first-coach-loop-dogfood.mjs"');
+    expect(preflightScript).toContain(
+      '"scripts/loop-memory-approval-dogfood.mjs"',
+    );
+    expect(preflightScript).toContain('"scripts/hook-binary-smoke.mjs"');
+    expect(preflightScript).toContain('"scripts/mcp-coach-loop-smoke.mjs"');
+    expect(preflightScript).toContain('"scripts/mcp-elicitation-smoke.mjs"');
+    expect(preflightScript).toContain(
+      '"scripts/mcp-native-dialog-approved.mjs"',
+    );
+    expect(preflightScript).toContain(
+      '"scripts/mcp-native-dialog-preflight.mjs"',
+    );
+    expect(preflightScript).toContain('"scripts/quality-95-evidence.mjs"');
     expect(preflightScript).toContain('"scripts/pack-dry-run.mjs"');
     expect(preflightScript).toContain('"scripts/package-install-smoke.mjs"');
     expect(preflightScript).toContain('"scripts/quality-gate.mjs"');
     expect(preflightScript).toContain('"scripts/release-smoke.mjs"');
+    expect(preflightScript).toContain('"scripts/ui-patrol.mjs"');
     expect(preflightScript).toContain('"!dist/**/*.map"');
     expect(preflightScript).toContain("package files exclude dist/**/*.map");
     expect(preflightScript).toContain("package manager is pinned");

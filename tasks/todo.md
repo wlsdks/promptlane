@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Local Verification Scripts Preflight Guard
+
+- [x] CHECK: `package.json#files` and release/package contents docs ship local
+  verification, smoke, dogfood, MCP, benchmark, and UI patrol scripts, but npm
+  publish preflight only checked a small subset before publish.
+- [x] RED: focused preflight and packaging guards required machine-readable
+  checks for the remaining local verification script package-file entries.
+- [x] GREEN: npm publish preflight now checks the release checklist's shipped
+  local verification scripts as package-file entries.
+- [x] VERIFY: focused preflight/packaging tests, skip-npm preflight JSON,
+  touched-file formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Release Evidence Docs Preflight Guard
 
 - [x] CHECK: `package.json#files` ships release evidence docs, but npm publish

@@ -173,6 +173,52 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "package files include scripts/benchmark.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/agent-setup-smoke.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/browser-e2e.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/first-coach-loop-dogfood.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include scripts/loop-memory-approval-dogfood.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/hook-binary-smoke.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/mcp-coach-loop-smoke.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/mcp-elicitation-smoke.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/mcp-native-dialog-approved.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include scripts/mcp-native-dialog-preflight.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/quality-95-evidence.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files include scripts/pack-dry-run.mjs",
           ok: true,
         }),
@@ -186,6 +232,10 @@ describe("npm publish preflight", () => {
         }),
         expect.objectContaining({
           label: "package files include scripts/release-smoke.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/ui-patrol.mjs",
           ok: true,
         }),
         expect.objectContaining({
