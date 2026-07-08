@@ -25,8 +25,19 @@ describe("npm publish preflight", () => {
 
     expect(result.status).toBe(0);
     const parsed = JSON.parse(result.stdout) as {
+      status: string;
+      publish_ready: boolean;
+      next_action: string;
       checks: Array<{ label: string; ok: boolean }>;
     };
+    expect(parsed.status).toBe("inspection");
+    expect(parsed.publish_ready).toBe(false);
+    expect(parsed.next_action).toContain(
+      "Rerun corepack pnpm npm-publish:preflight without --skip-npm",
+    );
+    expect(parsed.next_action).toContain("--skip-git-clean");
+    expect(parsed.next_action).toContain("--skip-git-tag");
+    expect(parsed.next_action).not.toContain("npm publish --tag latest");
     expect(parsed.checks).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Preflight Inspection Status
+
+- [x] CHECK: `--skip-npm`/`--skip-git-*` inspection runs could pass with
+  `status: ready`, which was too easy to mistake for publish approval.
+- [x] RED: focused preflight test requires skipped release checks to report
+  `status: inspection`, `publish_ready: false`, and a rerun-without-skips next
+  action.
+- [x] GREEN: npm publish preflight now distinguishes publish readiness from
+  inspection-only success while preserving a zero exit code for offline checks.
+- [x] VERIFY: focused preflight tests, inspection JSON smoke, formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Preflight Recovery Commands
 
 - [x] CHECK: npm publish preflight JSON exposed `blocking_checks`, but safe

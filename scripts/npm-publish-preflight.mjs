@@ -518,6 +518,8 @@ if (!options.skipNpm) {
 }
 
 const passed = checks.every((item) => item.ok);
+const skippedReleaseChecks = skippedReleaseCheckFlags(options);
+const publishReady = passed && skippedReleaseChecks.length === 0;
 const blockingChecks = checks
   .filter((item) => !item.ok)
   .map((item) => ({
@@ -529,7 +531,8 @@ const summary = {
   package: packageName,
   version,
   expected_tag: expectedTag,
-  status: passed ? "ready" : "blocked",
+  status: passed ? (publishReady ? "ready" : "inspection") : "blocked",
+  publish_ready: publishReady,
   skipped: {
     npm: options.skipNpm,
     git_clean: options.skipGitClean,
@@ -538,7 +541,7 @@ const summary = {
   blocking_checks: blockingChecks,
   checks,
   recovery_commands: recoveryCommands({ passed, checks }),
-  next_action: nextAction({ passed, checks }),
+  next_action: nextAction({ passed, checks, skippedReleaseChecks }),
 };
 
 if (options.json) {
@@ -979,8 +982,20 @@ function check(label, ok, detail = "") {
   });
 }
 
-function nextAction({ passed, checks }) {
+function skippedReleaseCheckFlags({ skipNpm, skipGitClean, skipGitTag }) {
+  return [
+    ...(skipNpm ? ["--skip-npm"] : []),
+    ...(skipGitClean ? ["--skip-git-clean"] : []),
+    ...(skipGitTag ? ["--skip-git-tag"] : []),
+  ];
+}
+
+function nextAction({ passed, checks, skippedReleaseChecks = [] }) {
   if (passed) {
+    if (skippedReleaseChecks.length) {
+      return `Rerun corepack pnpm npm-publish:preflight without ${skippedReleaseChecks.join(", ")} before publishing.`;
+    }
+
     return "Run npm publish --tag latest only if the full release gate has passed.";
   }
 
