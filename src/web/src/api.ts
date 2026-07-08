@@ -1393,7 +1393,10 @@ function parseLoopMemoryApprovalResponse(
       memory?: {
         id?: unknown;
         snapshot_id?: unknown;
+        title?: unknown;
         evidence_refs?: unknown;
+        approved_by?: unknown;
+        created_at?: unknown;
         privacy?: {
           local_only?: unknown;
           stores_prompt_bodies?: unknown;
@@ -1402,6 +1405,7 @@ function parseLoopMemoryApprovalResponse(
           external_calls?: unknown;
         };
       };
+      next_action?: unknown;
       next_actions?: unknown;
       privacy?: {
         local_only?: unknown;
@@ -1418,13 +1422,19 @@ function parseLoopMemoryApprovalResponse(
     body.data?.recorded !== true ||
     typeof body.data.memory?.id !== "string" ||
     typeof body.data.memory.snapshot_id !== "string" ||
+    typeof body.data.memory.title !== "string" ||
     !Array.isArray(body.data.memory.evidence_refs) ||
+    !body.data.memory.evidence_refs.every((ref) => typeof ref === "string") ||
+    typeof body.data.memory.approved_by !== "string" ||
+    typeof body.data.memory.created_at !== "string" ||
     body.data.memory.privacy?.local_only !== true ||
     body.data.memory.privacy.stores_prompt_bodies !== false ||
     body.data.memory.privacy.stores_raw_paths !== false ||
     body.data.memory.privacy.writes_instruction_files !== false ||
     body.data.memory.privacy.external_calls !== false ||
+    typeof body.data.next_action !== "string" ||
     !Array.isArray(body.data.next_actions) ||
+    !body.data.next_actions.every((action) => typeof action === "string") ||
     body.data.privacy?.local_only !== true ||
     body.data.privacy.returns_prompt_bodies !== false ||
     body.data.privacy.returns_raw_paths !== false ||

@@ -2381,6 +2381,48 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports malformed loop memory approval metadata without returning incomplete durable memory data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            recorded: true,
+            memory: {
+              id: "mem_web",
+              snapshot_id: "loop_web",
+              title: "Remember loop outcome for private-project",
+              evidence_refs: ["test:web loops", 7],
+              approved_by: "web",
+              created_at: "2026-07-04T01:10:00.000Z",
+              privacy: {
+                local_only: true,
+                stores_prompt_bodies: false,
+                stores_raw_paths: false,
+                writes_instruction_files: false,
+                external_calls: false,
+              },
+            },
+            next_action:
+              "use recorded memory as local context in future loop briefs",
+            next_actions: ["promptlane loop brief"],
+            privacy: {
+              local_only: true,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+              writes_instruction_files: false,
+              external_calls: false,
+            },
+          },
+        }),
+      );
+    const { approveLoopMemory } = await import("./api.js");
+
+    await expect(approveLoopMemory({ approvedBy: "web" })).rejects.toThrow(
+      "Loop memory approval failed: Invalid response.",
+    );
+  });
+
   it("gets a review-only instruction patch proposal for the latest approved loop memory", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

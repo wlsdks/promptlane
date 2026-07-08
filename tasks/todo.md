@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Loop Memory Approval Contract Error
+
+- [x] CHECK: web API `approveLoopMemory`가 `/api/v1/loops/memory/approve` 성공 응답의
+  durable memory metadata와 next action contract를 일부만 검증해 malformed memory title,
+  approver, evidence ref, next action을 loop memory UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed memory approval metadata body를
+  `Loop memory approval failed: Invalid response.`로 reject하도록 요구하게 해 현재 incomplete
+  approval resolve 실패를 확인한다.
+- [x] GREEN: memory title, approved_by, created_at, string evidence refs, next_action,
+  string-array next_actions 계약을 확인하고 깨진 block은 raw-free approval contract 오류로
+  중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Loop Worktree Items Contract Error
 
 - [x] CHECK: web API `getLoopWorktree`가 `/api/v1/loops/worktrees/:worktree` 성공
