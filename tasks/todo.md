@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Loop Worktree Renewed Memory Collection Uncertainty Contract Error
+
+- [x] CHECK: web API `getLoopWorktree`가 `/api/v1/loops/worktrees/:worktree` 성공 응답의
+  optional `continuation_safety_post_memory_approval_retry_renewed_memory_approval_collection_uncertainty_reminder`
+  계약을 검증하지 않아 PromptLane이 renewed-memory-approval collection result를 verify하거나 collection을
+  자동 시작하는 guidance를 UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed
+  `continuation_safety_post_memory_approval_retry_renewed_memory_approval_collection_uncertainty_reminder.not_automated`
+  body를 `Loop worktree drilldown failed: Invalid response.`로 reject하도록 요구하게 해 현재 unsafe
+  collection uncertainty reminder resolve 실패를 확인한다.
+- [x] GREEN: renewed-memory-approval collection uncertainty reminder label, reminder/not_automated/reason,
+  writes_files, external_calls 계약을 확인하고 깨진 guidance는 raw-free drilldown contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Loop Worktree Renewed Memory Collection Result Contract Error
 
 - [x] CHECK: web API `getLoopWorktree`가 `/api/v1/loops/worktrees/:worktree` 성공 응답의
