@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Server Problem Error Redaction
+
+- [x] CHECK: `problem()` factory가 validation `errors[].message`를 그대로 전달해
+  future route/Zod/custom validation issue가 raw prompt detail, local path, provider token을
+  server problem response에 남길 수 있다.
+- [x] RED: `src/server/errors.test.ts`가 problem error message 안의
+  `prompt_body=...`, `/Users/...`, `sk-proj-...`를 각각 `[REDACTED:...]` token으로
+  치환하도록 요구하게 해 현재 raw message passthrough 실패를 확인한다.
+- [x] GREEN: server problem factory가 `errors[].message`에 한해 raw-detail key phrase와
+  shared sensitive detectors를 적용해 route별 validation mapping을 중앙에서 raw-free로 만든다.
+- [x] VERIFY: focused server problem/validation tests, implementation format
+  check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Description Detail
 
 - [x] CHECK: `failApi`가 auth/OAuth-style failed response의 `error_description`을
