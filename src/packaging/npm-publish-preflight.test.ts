@@ -118,6 +118,14 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "prepack package script is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "prepare package script is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "pack dry-run package script is registered",
           ok: true,
         }),

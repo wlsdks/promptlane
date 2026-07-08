@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Lifecycle Script Preflight Guard
+
+- [x] CHECK: package lifecycle scripts `prepack` and `prepare` rebuild the
+  release artifacts, but npm publish preflight did not fail closed if those
+  lifecycle wrappers drifted before publish.
+- [x] RED: focused npm publish preflight test required machine-readable
+  `prepack` and `prepare` package script registration checks.
+- [x] GREEN: npm publish preflight now checks the lifecycle build wrappers
+  before publish.
+- [x] VERIFY: focused preflight test, skip-npm preflight JSON, formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Core Gate Script Preflight Guard
 
 - [x] CHECK: release checklist requires `format`, `test`, `lint`, and `build`

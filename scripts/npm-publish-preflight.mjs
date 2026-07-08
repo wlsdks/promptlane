@@ -116,6 +116,8 @@ for (const [label, scriptName, expectedCommand] of [
     "build",
     "pnpm clean && pnpm build:server && pnpm build:web",
   ],
+  ["prepack package script is registered", "prepack", "corepack pnpm build"],
+  ["prepare package script is registered", "prepare", "corepack pnpm build"],
   [
     "pack dry-run package script is registered",
     "pack:dry-run",
