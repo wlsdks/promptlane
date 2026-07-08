@@ -7867,6 +7867,23 @@ describe("web api export client", () => {
     );
   });
 
+  it("preserves settings recovery detail from failed response error descriptions", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(401, {
+          error: "invalid_session",
+          error_description:
+            "Missing or invalid app session. Open a new local PromptLane web session, then retry the settings request.",
+        }),
+      );
+    const { getSettings } = await import("./api.js");
+
+    await expect(getSettings()).rejects.toThrow(
+      "Settings failed (401): Missing or invalid app session. Open a new local PromptLane web session, then retry the settings request.",
+    );
+  });
+
   it("preserves settings recovery detail from failed response errors fields", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Description Detail
+
+- [x] CHECK: `failApi`가 auth/OAuth-style failed response의 `error_description`을
+  무시하고 짧은 `error` code만 표시해 settings/session recovery detail이 사라질 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 `error: "invalid_session"`와 함께 온
+  `error_description` recovery sentence를 사용자-visible error suffix로 우선 보존하도록 요구하게 해
+  현재 짧은 code만 표시되는 실패를 확인한다.
+- [x] GREEN: web API failed response detail assembly가 `error_description`을 기존
+  `apiErrorText` sanitizer fallback으로 보내고 `error` code보다 우선 표시한다.
+- [x] VERIFY: focused web API failed response detail/redaction tests, implementation
+  format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web JSON String Error Detail
 
 - [x] CHECK: `failApi`가 failed response JSON body를 object shape로만 해석해
