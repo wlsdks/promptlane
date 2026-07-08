@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Preflight Tag Mismatch Next Action
+
+- [x] CHECK: tag mismatch detail now includes the unpublished 1.0.0 tag refresh
+  policy, but `next_action` still returned generic `Fix blocked checks before
+  publishing.`
+- [x] RED: fake-git preflight test now requires tag mismatch `next_action` to
+  include the tagged checkout path, `git tag -fa v1.0.0`, and version bump path.
+- [x] GREEN: `npm-publish:preflight` now emits a tag mismatch-specific next
+  action instead of generic blocker guidance.
+- [x] VERIFY: focused preflight/packaging guards, touched-file formatting,
+  typecheck, diff hygiene, and post-merge preflight.
+
 ## 2026-07-08 PromptLane Preflight Tag Refresh Guidance
 
 - [x] CHECK: `docs/NPM_PUBLISHING.md` now distinguishes unpublished 1.0.0 tag

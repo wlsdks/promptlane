@@ -45,6 +45,7 @@ exit 1
 
     expect(result.status).toBe(1);
     const parsed = JSON.parse(result.stdout) as {
+      next_action: string;
       checks: Array<{ label: string; ok: boolean; detail?: string }>;
     };
     const tagCheck = parsed.checks.find((check) =>
@@ -60,6 +61,10 @@ exit 1
       "If promptlane@1.0.0 is already published",
     );
     expect(tagCheck?.detail).toContain("bump version and create a new tag");
+    expect(parsed.next_action).toContain("v1.0.0 tag does not point at HEAD");
+    expect(parsed.next_action).toContain("git checkout v1.0.0");
+    expect(parsed.next_action).toContain("git tag -fa v1.0.0");
+    expect(parsed.next_action).toContain("bump version");
     expect(tagCheck?.detail).not.toContain("manual npm checks");
     expect(tagCheck?.detail).not.toContain("predates this preflight");
   });

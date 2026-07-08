@@ -193,6 +193,13 @@ function nextAction({ passed, checks }) {
     return "Bump package.json and src/shared/version.ts, create a new release tag, then rerun the full release gate.";
   }
 
+  const tagMismatch = failedLabels.find((label) =>
+    label.endsWith("tag exists and points at HEAD"),
+  );
+  if (tagMismatch) {
+    return `${expectedTag} tag does not point at HEAD. Run git checkout ${expectedTag} to publish the tagged commit, or if promptlane@${version} is unpublished and HEAD is the intended release, rerun the full release gate and git tag -fa ${expectedTag}; if already published, bump version and create a new tag.`;
+  }
+
   return "Fix blocked checks before publishing.";
 }
 

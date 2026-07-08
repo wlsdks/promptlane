@@ -210,6 +210,12 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain(
       "If promptlane@${version} is already published",
     );
+    expect(preflightScript).toContain(
+      "${expectedTag} tag does not point at HEAD",
+    );
+    expect(preflightScript).toContain(
+      "git tag -fa ${expectedTag}; if already published",
+    );
     expect(preflightScript).not.toContain("manual npm checks");
     expect(preflightScript).not.toContain("predates this preflight");
 
