@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Detail Compact Raw Redaction
+
+- [x] CHECK: `sanitizeApiErrorText`가 prompt/path/markdown raw-like keys는 redaction하지만
+  `compact_summary`/`transcript_body` 같은 loop/session privacy keys는 failed response
+  detail에 그대로 남길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 settings failed response detail의
+  `compact_summary: private loop context...` phrase 전체를 `[REDACTED:compact_summary]`로
+  redaction하도록 요구하게 해 현재 unsafe compact summary 노출 실패를 확인한다.
+- [x] GREEN: web API error sanitizer가 raw detail key pattern을 compact summary와
+  transcript body 계열까지 확장하면서 quoted/unquoted/colon-delimited redaction 계약을 유지한다.
+- [x] VERIFY: focused web API recovery-detail/error redaction tests, implementation
+  format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Detail Colon Raw Redaction
 
 - [x] CHECK: `sanitizeApiErrorText`가 unquoted 단일 토큰 raw-like value는 redaction하지만
