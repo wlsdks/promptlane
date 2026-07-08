@@ -237,6 +237,7 @@ function parsePromptListResponse(body: {
 }): PromptListResponse {
   if (
     !Array.isArray(body.data?.items) ||
+    !isRawFreePromptListRoot(body.data) ||
     !body.data.items.every(isPromptSummary) ||
     (body.data.next_cursor !== undefined &&
       typeof body.data.next_cursor !== "string")
@@ -244,6 +245,27 @@ function parsePromptListResponse(body: {
     throw new Error("Prompt list failed: Invalid response.");
   }
   return body.data as PromptListResponse;
+}
+
+function isRawFreePromptListRoot(value: unknown): value is Partial<{
+  items: PromptSummary[];
+  next_cursor: string;
+}> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const response = value as {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    response.cwd === undefined &&
+    response.markdown === undefined &&
+    response.prompt_body === undefined &&
+    response.raw_path === undefined
+  );
 }
 
 function parsePromptSummaryArrayResponse(

@@ -7635,6 +7635,25 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports unsafe prompt list root data without returning prompt bodies", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            items: [],
+            next_cursor: "cursor-1",
+            prompt_body: "secret prompt body",
+          },
+        }),
+      );
+    const { listPrompts } = await import("./api.js");
+
+    await expect(listPrompts({})).rejects.toThrow(
+      "Prompt list failed: Invalid response.",
+    );
+  });
+
   it("preserves session bootstrap recovery detail on failed responses", async () => {
     fetchMock.mockResolvedValueOnce(
       errorResponse(401, {

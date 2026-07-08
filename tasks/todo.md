@@ -1,5 +1,14 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Prompt List Root Raw Contract Error
+
+- [x] CHECK: web API `listPrompts`가 `/api/v1/prompts` 성공 응답의 root
+  `data` 객체 raw-free 계약을 검증하지 않아 top-level raw prompt body/path-like field가 prompt list UI 데이터로 넘어갈 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed prompt list root `prompt_body`
+  body를 `Prompt list failed: Invalid response.`로 reject하도록 요구하게 해 현재 unsafe root resolve 실패를 확인한다.
+- [x] GREEN: prompt list root object에서 raw body/path-like extra fields를 차단해 item validator를 우회한 raw-free contract 오류도 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Prompt List Item Contract Error
 
 - [x] CHECK: web API `listPrompts`가 `/api/v1/prompts` 성공 응답의
