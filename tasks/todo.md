@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Secret Glob Files Preflight Guard
+
+- [x] CHECK: package contents docs exclude environment files, SQLite databases,
+  logs, and local package artifacts, but npm publish preflight did not guard
+  `package.json#files` against those glob-style entries.
+- [x] RED: focused npm publish preflight test requires a machine-readable
+  secret/database/log/artifact package-files exclusion check.
+- [x] GREEN: npm publish preflight now fails closed if `package.json#files`
+  includes `.env`, key/pem, database, log, or package artifact glob entries.
+- [x] VERIFY: focused preflight/package tests, skip-npm preflight JSON,
+  formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Local-Only Files Preflight Guard
 
 - [x] CHECK: release checklist says package dry-run must exclude source, CI,

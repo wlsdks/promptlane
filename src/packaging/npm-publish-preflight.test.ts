@@ -576,6 +576,11 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label:
+            "package files exclude secret, database, log, and artifact globs",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "pre-publish privacy audit mirrors runtime token detectors",
           ok: true,
         }),

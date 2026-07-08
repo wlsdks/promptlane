@@ -404,6 +404,11 @@ check(
   localOnlyPackageFilesDetail(),
 );
 check(
+  "package files exclude secret, database, log, and artifact globs",
+  packageFilesExcludeSecretDatabaseLogAndArtifactGlobs(),
+  secretDatabaseLogAndArtifactPackageFilesDetail(),
+);
+check(
   "pre-publish privacy audit mirrors runtime token detectors",
   privacyAuditMirrorsRuntimeTokenDetectors(),
   "docs/PRE_PUBLISH_PRIVACY_AUDIT.md should include the token families guarded by src/redaction/detectors.ts",
@@ -639,6 +644,43 @@ function localOnlyPackageFileEntries() {
       (prefix) => normalized === prefix || normalized.startsWith(`${prefix}/`),
     );
   });
+}
+
+function packageFilesExcludeSecretDatabaseLogAndArtifactGlobs() {
+  return secretDatabaseLogAndArtifactPackageFileEntries().length === 0;
+}
+
+function secretDatabaseLogAndArtifactPackageFilesDetail() {
+  const blockedEntries = secretDatabaseLogAndArtifactPackageFileEntries();
+  return blockedEntries.length
+    ? `secret, database, log, or package artifact entries must not ship: ${blockedEntries.join(", ")}`
+    : "package files omit environment, key, database, log, and package artifact globs";
+}
+
+function secretDatabaseLogAndArtifactPackageFileEntries() {
+  if (!Array.isArray(packageJson.files)) {
+    return ["package.json#files is not an array"];
+  }
+  const blockedExactEntries = [
+    ".env",
+    ".env.*",
+    "*.pem",
+    "*.key",
+    "*.db",
+    "*.db-*",
+    "*.sqlite",
+    "*.sqlite3",
+    "*.log",
+    "*.tgz",
+    "npm-debug.log*",
+    "yarn-debug.log*",
+    "yarn-error.log*",
+    "pnpm-debug.log*",
+  ];
+
+  return packageJson.files.filter((entry) =>
+    blockedExactEntries.includes(String(entry).replace(/^\.\//, "")),
+  );
 }
 
 function privacyAuditMirrorsRuntimeTokenDetectors() {
