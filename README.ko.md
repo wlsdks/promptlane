@@ -99,7 +99,7 @@ PromptLane 1.0.0은 local-first Claude Code 및 Codex prompt memory workflow를
 - pnpm `10.x`
 - `better-sqlite3`가 지원하는 플랫폼
 
-CI 대상은 Node 22와 Node 24입니다.
+local release gate는 Node 22와 Node 24에서 검증합니다.
 
 ## 빠른 시작
 
@@ -191,12 +191,13 @@ http://127.0.0.1:17373
 
 ## 지원 플랫폼
 
-현재 release validation 대상:
+release validation은 local-first이며 현재 기준은:
 
-- GitHub Actions의 Linux x64
 - Node.js 22와 24
+- 아래에 문서화된 local release gate
+- maintainer machine의 local browser, release, package smoke
 
-macOS, Linux arm64, Windows 지원을 목표로 하지만 stable release로 주장하려면 `better-sqlite3`, 파일 권한, hook command 동작에 대한 release smoke 검증이 더 필요합니다.
+Linux x64는 현재 local gate로 직접 검증되는 primary development environment입니다. macOS, Linux arm64, Windows 지원을 목표로 하지만 broad platform claim을 하려면 `better-sqlite3`, 파일 권한, hook command 동작에 대한 명시적인 maintainer/operator smoke 검증이 더 필요합니다.
 
 ## 설치 (Development Checkout)와 setup 옵션 reference
 
