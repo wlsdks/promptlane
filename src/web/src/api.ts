@@ -179,8 +179,7 @@ function parsePromptDetailResponse(body: { data?: unknown }): PromptDetail {
     !Array.isArray(promptDetail.improvement_drafts) ||
     !promptDetail.improvement_drafts.every(isPromptImprovementDraft) ||
     (promptDetail.analysis !== undefined &&
-      (typeof promptDetail.analysis !== "object" ||
-        promptDetail.analysis === null)) ||
+      !isPromptDetailAnalysis(promptDetail.analysis)) ||
     (promptDetail.judge_score !== undefined &&
       (typeof promptDetail.judge_score !== "object" ||
         promptDetail.judge_score === null)) ||
@@ -193,6 +192,75 @@ function parsePromptDetailResponse(body: { data?: unknown }): PromptDetail {
     throw new Error("Prompt not found: Invalid response.");
   }
   return promptDetail;
+}
+
+type PromptDetailAnalysis = NonNullable<PromptDetail["analysis"]>;
+type PromptDetailChecklistItem = PromptDetailAnalysis["checklist"][number];
+
+function isPromptDetailAnalysis(value: unknown): value is PromptDetailAnalysis {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const analysis = value as PromptDetailAnalysis & PromptSummaryRawFields;
+  return (
+    Array.isArray(analysis.checklist) &&
+    analysis.checklist.every(isPromptDetailChecklistItem) &&
+    Array.isArray(analysis.tags) &&
+    analysis.tags.every((tag) => typeof tag === "string") &&
+    isPromptQualityScore(analysis.quality_score) &&
+    typeof analysis.analyzer === "string" &&
+    typeof analysis.created_at === "string" &&
+    (analysis.redaction_notice === undefined ||
+      typeof analysis.redaction_notice === "string") &&
+    analysis.markdown === undefined &&
+    analysis.prompt_body === undefined &&
+    analysis.raw_path === undefined
+  );
+}
+
+function isPromptDetailChecklistItem(
+  value: unknown,
+): value is PromptDetailChecklistItem {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const item = value as PromptDetailChecklistItem & PromptSummaryRawFields;
+  return (
+    typeof item.key === "string" &&
+    typeof item.label === "string" &&
+    (item.status === "good" ||
+      item.status === "weak" ||
+      item.status === "missing") &&
+    typeof item.reason === "string" &&
+    (item.suggestion === undefined || typeof item.suggestion === "string") &&
+    item.markdown === undefined &&
+    item.prompt_body === undefined &&
+    item.raw_path === undefined
+  );
+}
+
+function isPromptQualityScore(value: unknown): value is PromptQualityScore {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const score = value as PromptQualityScore & PromptSummaryRawFields;
+  return (
+    typeof score.value === "number" &&
+    score.max === 100 &&
+    typeof score.band === "string" &&
+    Array.isArray(score.breakdown) &&
+    score.breakdown.every(
+      (item) =>
+        typeof item === "object" &&
+        item !== null &&
+        typeof item.key === "string" &&
+        typeof item.weight === "number" &&
+        typeof item.earned === "number",
+    ) &&
+    score.markdown === undefined &&
+    score.prompt_body === undefined &&
+    score.raw_path === undefined
+  );
 }
 
 function isPromptImprovementDraft(

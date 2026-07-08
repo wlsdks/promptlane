@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Prompt Detail Analysis Contract Error
+
+- [x] CHECK: `parsePromptDetailResponse`가 optional `analysis`를 object인지까지만
+  검증해 깨진 checklist shape나 raw-like `prompt_body` field가 prompt detail
+  analysis panel 데이터로 넘어갈 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 prompt detail 내부 malformed
+  `analysis.checklist[].prompt_body` body를 `Prompt not found: Invalid response.`로
+  reject하도록 요구하게 해 현재 unsafe detail resolve 실패를 확인한다.
+- [x] GREEN: prompt detail parser가 analysis checklist/tags/quality_score/analyzer
+  metadata 계약을 확인하고 analysis/checklist item의 raw `prompt_body`/`raw_path`/
+  `markdown` fields를 차단한다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff
+  whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Prompt Detail Draft Contract Error
 
 - [x] CHECK: `parsePromptDetailResponse`가 `improvement_drafts[]`를 배열인지까지만
