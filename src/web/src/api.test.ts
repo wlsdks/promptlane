@@ -3061,6 +3061,17 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports malformed ask event summary responses without returning incomplete ask telemetry", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getAskEventSummary } = await import("./api.js");
+
+    await expect(getAskEventSummary(7)).rejects.toThrow(
+      "Ask event summary unavailable: Invalid response.",
+    );
+  });
+
   it("uses the response title when detail is blank", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

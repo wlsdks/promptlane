@@ -2588,6 +2588,32 @@ export type AskEventSummary = {
   last_triggered_at?: string;
 };
 
+function parseAskEventSummaryResponse(body: {
+  data?: {
+    total_count?: unknown;
+    recent_count?: unknown;
+    axis_counts?: unknown;
+    average_score?: unknown;
+    last_triggered_at?: unknown;
+  };
+}): AskEventSummary {
+  if (
+    typeof body.data?.total_count !== "number" ||
+    typeof body.data.recent_count !== "number" ||
+    typeof body.data.axis_counts !== "object" ||
+    body.data.axis_counts === null ||
+    Object.values(body.data.axis_counts).some(
+      (value) => typeof value !== "number",
+    ) ||
+    typeof body.data.average_score !== "number" ||
+    (body.data.last_triggered_at !== undefined &&
+      typeof body.data.last_triggered_at !== "string")
+  ) {
+    throw new Error("Ask event summary unavailable: Invalid response.");
+  }
+  return body.data as AskEventSummary;
+}
+
 export async function getAskEventSummary(days = 7): Promise<AskEventSummary> {
   await ensureSession();
   const params = new URLSearchParams({ days: String(days) });
@@ -2599,8 +2625,10 @@ export async function getAskEventSummary(days = 7): Promise<AskEventSummary> {
     await failApi(response, "Ask event summary unavailable");
   }
 
-  const body = (await response.json()) as { data: AskEventSummary };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parseAskEventSummaryResponse
+  >[0];
+  return parseAskEventSummaryResponse(body);
 }
 
 export async function getSimilarPrompts(

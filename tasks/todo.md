@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Ask Summary Contract Error
+
+- [x] CHECK: web API `getAskEventSummary`가 `/api/v1/ask-events/summary` 성공 응답의
+  ask/coach telemetry 계약을 검증하지 않아 malformed 응답을 `{}` 상태로 UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed ask event summary body를
+  `Ask event summary unavailable: Invalid response.`로 reject하도록 요구하게 해 현재 `{}`
+  resolve 실패를 확인한다.
+- [x] GREEN: ask event summary 응답의 count, axis count, average score, optional timestamp
+  계약을 확인하고 깨진 성공 응답은 raw-free ask telemetry contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Export Payload Contract Error
 
 - [x] CHECK: web API `executeExportJob`가 `/api/v1/exports` 성공 응답의 anonymized export
