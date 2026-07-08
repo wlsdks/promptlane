@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Coach Feedback Entry Contract Error
+
+- [x] CHECK: web API `sendCoachFeedback`가 `/api/v1/prompts/:id/coach-feedback` 성공
+  응답의 feedback entry 계약을 검증하지 않아 malformed 응답을 `{}` 상태로 first coach
+  feedback UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed coach feedback body를
+  `Coach feedback failed: Invalid response.`로 reject하도록 요구하게 해 현재 `{}` resolve
+  실패를 확인했다.
+- [x] GREEN: feedback entry 응답의 `id`, `prompt_id`, `rating`, `created_at` 계약을
+  확인하고 깨진 성공 응답은 raw-free coach feedback contract 오류로 중단하도록 고쳤다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Project Instruction Review Contract Error
 
 - [x] CHECK: web API `analyzeProjectInstructions`가

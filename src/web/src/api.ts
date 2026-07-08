@@ -2139,6 +2139,27 @@ export type CoachFeedbackEntry = {
   created_at: string;
 };
 
+function parseCoachFeedbackEntryResponse(body: {
+  data?: {
+    id?: unknown;
+    prompt_id?: unknown;
+    rating?: unknown;
+    created_at?: unknown;
+  };
+}): CoachFeedbackEntry {
+  if (
+    typeof body.data?.id !== "string" ||
+    typeof body.data.prompt_id !== "string" ||
+    (body.data.rating !== "helpful" &&
+      body.data.rating !== "not_helpful" &&
+      body.data.rating !== "wrong") ||
+    typeof body.data.created_at !== "string"
+  ) {
+    throw new Error("Coach feedback failed: Invalid response.");
+  }
+  return body.data as CoachFeedbackEntry;
+}
+
 export type CoachFeedbackSummary = {
   total: number;
   helpful: number;
@@ -2198,8 +2219,10 @@ export async function sendCoachFeedback(input: {
     await failApi(response, "Coach feedback failed");
   }
 
-  const body = (await response.json()) as { data: CoachFeedbackEntry };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parseCoachFeedbackEntryResponse
+  >[0];
+  return parseCoachFeedbackEntryResponse(body);
 }
 
 export async function previewImportDryRun(input: {
