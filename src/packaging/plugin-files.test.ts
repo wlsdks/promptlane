@@ -1844,6 +1844,9 @@ describe("plugin packaging files", () => {
       expect(content).toContain("axis_evidence_coverage");
       expect(content).toContain("scorecard_review_candidates");
       expect(content).toContain("recommended_next_slices");
+      expect(content).toContain("release_warnings");
+      expect(content).toContain("real benchmark fixtures are missing");
+      expect(content).toContain("do not claim real-user effectiveness trends");
       expect(content).toContain("release_gate");
       expect(content).toContain("corepack pnpm format");
       expect(content).toContain("corepack pnpm test");

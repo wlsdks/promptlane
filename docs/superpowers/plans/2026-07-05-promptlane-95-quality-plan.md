@@ -165,6 +165,11 @@ dogfood:web-user-flow` passed after main CI run `28750766036`, proving the
   no recommended next slices; future operator-gated recommendations must carry
   `blocked_by_external_event` so agents can distinguish local work from
   operator wait states.
+  The JSON also includes `release_warnings`; currently
+  `real benchmark fixtures are missing` keeps `quality-evidence` complete for
+  the local release gate while warning agents.
+  Important: do not claim real-user effectiveness trends until consent-bearing
+  redacted real fixtures are collected and run.
 - `web_user_flow_current_main_evidence` was dogfooded after becoming the first
   recommendation: `corepack pnpm dogfood:web-user-flow` completed with
   `browser e2e passed` on current main. This refreshes local web workflow

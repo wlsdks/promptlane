@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Quality Evidence Release Warning Docs
+
+- [x] CHECK: `quality-evidence` now emits `release_warnings`, but
+  `docs/NEXT_BACKLOG.md` and the 9.5 plan still described complete quality
+  evidence without the real benchmark fixture caveat.
+- [x] RED: packaging guard requires both docs to mention `release_warnings`,
+  `real benchmark fixtures are missing`, and the instruction to not claim
+  real-user effectiveness trends without consent-bearing real fixtures.
+- [x] GREEN: backlog and 9.5 plan now explain that the warning does not make
+  local release evidence incomplete, but prevents overclaiming real-user
+  effectiveness trends.
+- [x] VERIFY: focused packaging guard, quality evidence JSON smoke,
+  formatting, and diff hygiene.
+
 ## 2026-07-09 PromptLane Quality Evidence Release Warnings
 
 - [x] CHECK: `quality-evidence` returned `status: complete` with no

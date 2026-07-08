@@ -225,6 +225,11 @@ Decision:
   `corepack pnpm evidence:quality -- --require-complete`,
   `corepack pnpm promptlane quality-evidence --require-complete`, and
   `git diff --check`.
+  The JSON also includes `release_warnings`; currently
+  `real benchmark fixtures are missing` keeps `quality-evidence` complete for
+  the local release gate while warning agents.
+  Important: do not claim real-user effectiveness trends until consent-bearing
+  redacted real fixtures are collected and run.
   That local scorecard review is now applied for the five non-external
   candidates: local-first privacy boundary, setup/doctor/MCP smoke, loop memory
   and continuation, web UI and operational evidence, and release stability are
