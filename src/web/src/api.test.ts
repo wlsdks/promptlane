@@ -6337,6 +6337,12 @@ describe("web api export client", () => {
               scored_prompts: 0,
             },
             missing_items: [],
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+            },
           },
         });
       }
@@ -6922,6 +6928,36 @@ describe("web api export client", () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
       .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getQualityDashboard } = await import("./api.js");
+
+    await expect(getQualityDashboard()).rejects.toThrow(
+      "Quality dashboard failed: Invalid response.",
+    );
+  });
+
+  it("reports unsafe quality dashboard privacy flags without returning raw paths", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            total_prompts: 1,
+            quality_score: {
+              average: 42,
+              max: 100,
+              band: "needs_work",
+              scored_prompts: 1,
+            },
+            missing_items: [],
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: true,
+            },
+          },
+        }),
+      );
     const { getQualityDashboard } = await import("./api.js");
 
     await expect(getQualityDashboard()).rejects.toThrow(

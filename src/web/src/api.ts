@@ -3629,6 +3629,21 @@ function isArchiveScorePrivacy(
   );
 }
 
+function isQualityDashboardPrivacy(
+  value: unknown,
+): value is QualityDashboard["privacy"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const privacy = value as QualityDashboard["privacy"];
+  return (
+    privacy.local_only === true &&
+    privacy.external_calls === false &&
+    privacy.returns_prompt_bodies === false &&
+    privacy.returns_raw_paths === false
+  );
+}
+
 function isArchiveScoreSummary(
   value: unknown,
 ): value is ArchiveScoreReport["archive_score"] {
@@ -4314,13 +4329,15 @@ export async function getQualityDashboard(
       total_prompts?: unknown;
       quality_score?: unknown;
       missing_items?: unknown;
+      privacy?: unknown;
     };
   };
   if (
     typeof body.data?.total_prompts !== "number" ||
     typeof body.data.quality_score !== "object" ||
     body.data.quality_score === null ||
-    !Array.isArray(body.data.missing_items)
+    !Array.isArray(body.data.missing_items) ||
+    !isQualityDashboardPrivacy(body.data.privacy)
   ) {
     throw new Error("Quality dashboard failed: Invalid response.");
   }
