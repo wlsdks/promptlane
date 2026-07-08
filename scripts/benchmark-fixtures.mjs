@@ -88,6 +88,8 @@ export function buildNoFixturesReport({ dataset, fixtureSet, detail }) {
     soft_signal: true,
     status: "no_fixtures",
     detail,
+    next_action:
+      "Add consent-bearing redacted real fixtures before using real benchmark trends.",
   };
 }
 

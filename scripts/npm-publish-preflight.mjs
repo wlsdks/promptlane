@@ -126,7 +126,7 @@ for (const [label, scriptName, expectedCommand] of [
   [
     "benchmark package script is registered",
     "benchmark",
-    "corepack pnpm build && node scripts/benchmark.mjs",
+    "node scripts/benchmark-runner.mjs",
   ],
   [
     "browser e2e package script is registered",
@@ -216,6 +216,7 @@ for (const filePath of [
   "SUPPORT.md",
   "scripts/npm-publish-preflight.mjs",
   "scripts/benchmark.mjs",
+  "scripts/benchmark-runner.mjs",
   "scripts/benchmark-fixtures.mjs",
   "scripts/agent-setup-smoke.mjs",
   "scripts/browser-e2e.mjs",

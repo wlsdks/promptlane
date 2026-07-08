@@ -31,6 +31,8 @@ describe("benchmark fixture loading", () => {
         fixture_set: "real",
         soft_signal: true,
         status: "no_fixtures",
+        next_action:
+          "Add consent-bearing redacted real fixtures before using real benchmark trends.",
       }),
     );
   });

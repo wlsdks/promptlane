@@ -235,7 +235,7 @@ corepack pnpm test
 corepack pnpm lint
 corepack pnpm build
 corepack pnpm pack:dry-run
-corepack pnpm benchmark -- --json
+corepack pnpm --silent benchmark -- --json
 corepack pnpm e2e:browser
 corepack pnpm smoke:release
 corepack pnpm smoke:package-install

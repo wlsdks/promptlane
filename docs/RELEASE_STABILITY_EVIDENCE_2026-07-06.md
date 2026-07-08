@@ -21,7 +21,7 @@ making automated tests open OS dialogs.
 - The current local release gate is local-first and matches
   `quality-evidence` `release_gate`: `corepack pnpm format`,
   `corepack pnpm test`, `corepack pnpm lint`, `corepack pnpm build`,
-  `corepack pnpm pack:dry-run`, `corepack pnpm benchmark -- --json`,
+  `corepack pnpm pack:dry-run`, `corepack pnpm --silent benchmark -- --json`,
   `corepack pnpm e2e:browser`, `corepack pnpm smoke:release`,
   `corepack pnpm smoke:package-install`,
   `corepack pnpm evidence:quality -- --require-complete`,

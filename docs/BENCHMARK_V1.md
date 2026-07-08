@@ -18,7 +18,7 @@ This benchmark is intentionally local-only. It does not call an external LLM jud
 
 ```sh
 corepack pnpm benchmark
-corepack pnpm benchmark -- --json
+corepack pnpm --silent benchmark -- --json
 corepack pnpm benchmark -- --fixture-set real      # opt-in, soft signal only
 ```
 
@@ -30,6 +30,9 @@ The command builds the production app first, creates an isolated temporary data 
 - `--fixture-set real` — soft signal. Reads consent-bearing redacted prompts from `docs/benchmark-fixtures/real.json`. If the file is absent the script exits 0 with a `status: no_fixtures` notice. If it exists, threshold misses are reported but the script still exits 0 — so a regression on a noisy real corpus does not break CI but is visible in trend.
 
 The JSON report includes `fixture_set` and `soft_signal` fields so consumers can filter.
+It also includes a top-level `next_action`: synthetic passes say the local
+regression gate is green while still requiring real fixtures before claiming
+real-world effectiveness; real fixture runs stay soft trend signals.
 
 `docs/benchmark-fixtures/real.json` must use this raw-free shape:
 
@@ -241,6 +244,7 @@ Pass thresholds:
   "version": "1.0.0",
   "dataset": "benchmark-v1",
   "pass": true,
+  "next_action": "Synthetic pass means the local regression gate is green; collect real fixtures before claiming real-world effectiveness.",
   "scores": {
     "privacy_leak_count": 0,
     "retrieval_top3": 1,

@@ -73,7 +73,6 @@ describe("plugin packaging files", () => {
     }>("package.json");
 
     for (const scriptName of [
-      "benchmark",
       "e2e:browser",
       "smoke:agent-setup",
       "smoke:hooks",
@@ -94,6 +93,12 @@ describe("plugin packaging files", () => {
     expect(packageJson.scripts["dogfood:web-user-flow"]).toBe(
       "corepack pnpm e2e:browser",
     );
+    expect(packageJson.scripts["benchmark"]).toBe(
+      "node scripts/benchmark-runner.mjs",
+    );
+    expect(
+      readFileSync(join(process.cwd(), "scripts/benchmark-runner.mjs"), "utf8"),
+    ).toContain('spawnSync("corepack", ["pnpm", "build"]');
   });
 
   it("keeps shell command quoting centralized in the shared helper", () => {
@@ -276,6 +281,7 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain('"CONTRIBUTING.md"');
     expect(preflightScript).toContain('"SUPPORT.md"');
     expect(preflightScript).toContain('"scripts/benchmark.mjs"');
+    expect(preflightScript).toContain('"scripts/benchmark-runner.mjs"');
     expect(preflightScript).toContain('"scripts/benchmark-fixtures.mjs"');
     expect(preflightScript).toContain('"scripts/agent-setup-smoke.mjs"');
     expect(preflightScript).toContain('"scripts/browser-e2e.mjs"');
@@ -488,7 +494,7 @@ describe("plugin packaging files", () => {
       "corepack pnpm lint",
       "corepack pnpm build",
       "corepack pnpm pack:dry-run",
-      "corepack pnpm benchmark -- --json",
+      "corepack pnpm --silent benchmark -- --json",
       "corepack pnpm e2e:browser",
       "corepack pnpm smoke:release",
       "corepack pnpm smoke:package-install",
@@ -501,7 +507,7 @@ describe("plugin packaging files", () => {
       "corepack pnpm lint",
       "corepack pnpm build",
       "corepack pnpm pack:dry-run",
-      "corepack pnpm benchmark -- --json",
+      "corepack pnpm --silent benchmark -- --json",
       "corepack pnpm e2e:browser",
       "corepack pnpm smoke:release",
       "corepack pnpm smoke:package-install",
@@ -516,6 +522,9 @@ describe("plugin packaging files", () => {
 
     expect(packageJson.scripts["pack:dry-run"]).toBe(
       "node scripts/pack-dry-run.mjs",
+    );
+    expect(packageJson.scripts["benchmark"]).toBe(
+      "node scripts/benchmark-runner.mjs",
     );
     expect(releaseChecklist).toContain(
       "wrapper strips pnpm-only npm env before `npm pack`",
@@ -548,6 +557,10 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "scripts/benchmark.mjs"),
       "utf8",
     );
+    const benchmarkRunner = readFileSync(
+      join(process.cwd(), "scripts/benchmark-runner.mjs"),
+      "utf8",
+    );
     const benchmarkFixtures = readFileSync(
       join(process.cwd(), "scripts/benchmark-fixtures.mjs"),
       "utf8",
@@ -558,6 +571,7 @@ describe("plugin packaging files", () => {
     );
 
     for (const content of [benchmark, benchmarkSpec]) {
+      expect(content).toContain("next_action");
       expect(content).toContain("archive_effectiveness_score");
       expect(content).toContain("archive_effectiveness_coverage");
       expect(content).toContain("effectiveness_summary");
@@ -567,6 +581,11 @@ describe("plugin packaging files", () => {
       expect(content).toContain("docs/benchmark-fixtures/real.json");
     }
     expect(benchmark).toContain("loadBenchmarkFixtures");
+    expect(benchmarkRunner).toContain("corepack");
+    expect(benchmarkRunner).toContain("pnpm");
+    expect(benchmarkRunner).toContain("build");
+    expect(benchmarkRunner).toContain("--json");
+    expect(benchmarkRunner).toContain("process.stderr.write");
     expect(benchmarkSpec).toContain('"fixtures"');
     expect(benchmarkSpec).toContain('"coach_cases"');
     expect(benchmarkSpec).toContain("adapter");
@@ -576,6 +595,9 @@ describe("plugin packaging files", () => {
     expect(benchmarkSpec).toContain("Pass threshold");
     expect(benchmarkSpec.toLowerCase().replace(/\s+/g, " ")).toContain(
       "coverage is a measurement-depth signal, not a claim of archive-wide proof",
+    );
+    expect(benchmarkSpec).toContain(
+      "Synthetic pass means the local regression gate is green; collect real fixtures before claiming real-world effectiveness.",
     );
   });
 
@@ -654,7 +676,7 @@ describe("plugin packaging files", () => {
         "corepack pnpm test",
         "corepack pnpm lint",
         "corepack pnpm build",
-        "corepack pnpm benchmark -- --json",
+        "corepack pnpm --silent benchmark -- --json",
         "corepack pnpm e2e:browser",
         "corepack pnpm smoke:release",
         "corepack pnpm smoke:package-install",
@@ -1758,7 +1780,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("corepack pnpm lint");
       expect(content).toContain("corepack pnpm build");
       expect(content).toContain("corepack pnpm pack:dry-run");
-      expect(content).toContain("corepack pnpm benchmark -- --json");
+      expect(content).toContain("corepack pnpm --silent benchmark -- --json");
       expect(content).toContain("corepack pnpm e2e:browser");
       expect(content).toContain("corepack pnpm smoke:release");
       expect(content).toContain("corepack pnpm smoke:package-install");
@@ -1813,7 +1835,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("corepack pnpm smoke:release");
       expect(content).toContain("release smoke passed");
       expect(normalizedContent).toContain("quality evidence CLI gate");
-      expect(content).toContain("corepack pnpm benchmark -- --json");
+      expect(content).toContain("corepack pnpm --silent benchmark -- --json");
       expect(content).toContain("privacy_leak_count: 0");
       expect(content).toContain("archive_effectiveness_score: 1");
     }
@@ -2086,7 +2108,7 @@ describe("plugin packaging files", () => {
       "corepack pnpm lint",
       "corepack pnpm build",
       "corepack pnpm pack:dry-run",
-      "corepack pnpm benchmark -- --json",
+      "corepack pnpm --silent benchmark -- --json",
       "corepack pnpm e2e:browser",
       "corepack pnpm smoke:release",
       "corepack pnpm smoke:package-install",

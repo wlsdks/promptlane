@@ -26,7 +26,7 @@ Use this checklist before publishing a stable public release or npm package.
 - [ ] `corepack pnpm lint`
 - [ ] `corepack pnpm build`
 - [ ] `corepack pnpm pack:dry-run`
-- [ ] `corepack pnpm benchmark -- --json`
+- [ ] `corepack pnpm --silent benchmark -- --json`
 - [ ] `corepack pnpm e2e:browser`
 - [ ] `corepack pnpm smoke:release`
 - [ ] `corepack pnpm smoke:package-install`
@@ -80,6 +80,7 @@ Confirm `corepack pnpm pack:dry-run` includes:
 - [ ] `.claude-plugin/` and `commands/` directories
 - [ ] `plugins/` and `integrations/` directories
 - [ ] `scripts/benchmark.mjs`
+- [ ] `scripts/benchmark-runner.mjs`
 - [ ] `scripts/benchmark-fixtures.mjs`
 - [ ] `scripts/agent-setup-smoke.mjs`
 - [ ] `scripts/browser-e2e.mjs`

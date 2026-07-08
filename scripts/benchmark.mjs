@@ -198,6 +198,7 @@ try {
     export_ms: Math.round(exportMs),
   };
   const experimentalComparison = scoreExperimentalRulesAB();
+  const pass = passes(scores);
 
   const report = {
     version: packageJson.version,
@@ -205,7 +206,8 @@ try {
     fixture_set: fixtureSet,
     soft_signal: fixtureSet === "real",
     generated_at: new Date().toISOString(),
-    pass: passes(scores),
+    pass,
+    next_action: benchmarkNextAction({ fixtureSet, pass }),
     scores,
     thresholds,
     counts: {
@@ -691,6 +693,7 @@ function passes(scores) {
 function printReport(report) {
   console.log(`promptlane benchmark ${report.dataset}`);
   console.log(`pass: ${report.pass ? "yes" : "no"}`);
+  console.log(`next_action: ${report.next_action}`);
   for (const [key, value] of Object.entries(report.scores)) {
     console.log(`${key}: ${value}`);
   }
@@ -709,6 +712,18 @@ function printReport(report) {
       console.log(`  examples: ${data.examples.join(", ")}`);
     }
   }
+}
+
+function benchmarkNextAction({ fixtureSet, pass }) {
+  if (fixtureSet === "real") {
+    return pass
+      ? "Real fixture soft signal is healthy; compare trends, but keep synthetic benchmark as the release gate."
+      : "Real fixture soft signal missed thresholds; inspect trends and fixture quality before changing the hard release gate.";
+  }
+
+  return pass
+    ? "Synthetic pass means the local regression gate is green; collect real fixtures before claiming real-world effectiveness."
+    : "Fix failed synthetic benchmark metrics before release.";
 }
 
 async function timed(fn) {

@@ -219,7 +219,7 @@ Decision:
   The JSON also includes `release_gate`: the local commands to run before any
   final long-running-goal completion claim, currently `corepack pnpm format`,
   `corepack pnpm test`, `corepack pnpm lint`, `corepack pnpm build`,
-  `corepack pnpm pack:dry-run`, `corepack pnpm benchmark -- --json`,
+  `corepack pnpm pack:dry-run`, `corepack pnpm --silent benchmark -- --json`,
   `corepack pnpm e2e:browser`, `corepack pnpm smoke:release`,
   `corepack pnpm smoke:package-install`,
   `corepack pnpm evidence:quality -- --require-complete`,
@@ -303,7 +303,7 @@ src/mcp` was run on current main-derived work and passed with 108 test files
   `corepack pnpm dogfood:loop-memory-approval` ended with
   `loop memory approval dogfood passed`, `corepack pnpm smoke:release` ended
   with `release smoke passed` after checking the built product quality evidence CLI gate,
-  and `corepack pnpm benchmark -- --json` returned
+  and `corepack pnpm --silent benchmark -- --json` returned
   `privacy_leak_count: 0` plus `archive_effectiveness_score: 1`.
   This ledger strengthens current local proof while native-dialog approval
   evidence is tracked through the approved audit.
@@ -345,7 +345,7 @@ src/mcp` was run on current main-derived work and passed with 108 test files
   MCP output.
 - Archive effectiveness benchmark evidence is landed: PR #469 added
   `archive_effectiveness_score` as a benchmark hard gate, and
-  `corepack pnpm benchmark -- --json` reported
+  `corepack pnpm --silent benchmark -- --json` reported
   `archive_effectiveness_score: 1`, `privacy_leak_count: 0`, and raw-free
   `effectiveness_summary` coverage from a linked passed loop outcome. Main CI
   run `28751693022` passed `test (22)` and `test (24)` after merge.

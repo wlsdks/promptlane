@@ -12,15 +12,15 @@
 
 ## 9.5 Scorecard
 
-| Axis                              | Current level after latest evidence | 9.5 bar                                                                                                                                                                                                                               | Evidence that must exist                                                                                                                            |
-| --------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Product planning and positioning  | 9.5/10                              | 9.5 bar: every active first-screen surface, plugin surface, README path, and backlog slice says PromptLane is prompt improvement first, loop-aware continuation second, with no product-facing PromptLane drift.                      | Packaging guard, README/plugin metadata, repo metadata, docs/PROMPTLANE.md, docs/NEXT_BACKLOG.md, goal audit, expected-impact evidence.             |
-| Local-first privacy boundary      | 9.5/10                              | 9.5 bar: every hook, MCP, CLI, server, web, export, loop, and dogfood path proves no prompt body, raw path, provider credential, transcript body, compact summary, or external provider call leaks outside the allowed storage layer. | Focused privacy tests, raw-free fixtures, dogfood:first-coach-loop, dogfood:loop-memory-approval, smoke:mcp-coach-loop, browser E2E, release smoke. |
-| Codex and Claude Code integration | 9.5/10                              | 9.5 bar: setup, doctor, hook capture, MCP registration, plugin install guidance, slash commands, statusline, and recovery copy are all verified for both tools in isolated smoke and at least one real operator dogfood pass.         | smoke:agent-setup, smoke:hooks, dogfood:first-coach-loop, docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md, AGENT-HARNESS, native dialog approved dogfood.   |
-| Setup, doctor, and MCP smoke      | 9.5/10                              | 9.5 bar: setup and doctor smoke proves capture readiness; MCP smoke proves score/improve/clarify/record loop; failure states produce raw-free recovery actions instead of generic errors.                                             | smoke:agent-setup, smoke:mcp-coach-loop, storage_unavailable tests, package checks.                                                                 |
-| Loop memory and continuation      | 9.5/10                              | 9.5 bar: collect, brief, outcome, memory candidate, memory approval, instruction patch proposal, and apply gate are proven through CLI and MCP with evidence-first rules and no automatic instruction writes.                         | Loop unit tests, storage evidence guards, dogfood:first-coach-loop, dogfood:loop-memory-approval, prompt-linked outcome evidence.                   |
-| Web UI and operational evidence   | 9.5/10                              | 9.5 bar: archive, detail, coach, saved draft reuse, settings, loops, exports, projects, and mobile layout have local screenshots or browser assertions without depending on hosted CI.                                                | corepack pnpm ui-patrol, dogfood:web-user-flow, browser E2E, screenshot artifacts, in-app Browser audit.                                            |
-| Release stability                 | 9.5/10                              | 9.5 bar: local supported-node gate, pack dry-run, release smoke, package install smoke, first coach loop dogfood, package contents, dependency audit, and release checklist all agree on shipped files and commands.                 | Local release gate, corepack pnpm pack:dry-run, smoke:release, smoke:package-install, dogfood:first-coach-loop, dogfood:loop-memory-approval, docs/RELEASE_CHECKLIST.md. |
+| Axis                              | Current level after latest evidence | 9.5 bar                                                                                                                                                                                                                               | Evidence that must exist                                                                                                                                                 |
+| --------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Product planning and positioning  | 9.5/10                              | 9.5 bar: every active first-screen surface, plugin surface, README path, and backlog slice says PromptLane is prompt improvement first, loop-aware continuation second, with no product-facing PromptLane drift.                      | Packaging guard, README/plugin metadata, repo metadata, docs/PROMPTLANE.md, docs/NEXT_BACKLOG.md, goal audit, expected-impact evidence.                                  |
+| Local-first privacy boundary      | 9.5/10                              | 9.5 bar: every hook, MCP, CLI, server, web, export, loop, and dogfood path proves no prompt body, raw path, provider credential, transcript body, compact summary, or external provider call leaks outside the allowed storage layer. | Focused privacy tests, raw-free fixtures, dogfood:first-coach-loop, dogfood:loop-memory-approval, smoke:mcp-coach-loop, browser E2E, release smoke.                      |
+| Codex and Claude Code integration | 9.5/10                              | 9.5 bar: setup, doctor, hook capture, MCP registration, plugin install guidance, slash commands, statusline, and recovery copy are all verified for both tools in isolated smoke and at least one real operator dogfood pass.         | smoke:agent-setup, smoke:hooks, dogfood:first-coach-loop, docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md, AGENT-HARNESS, native dialog approved dogfood.                        |
+| Setup, doctor, and MCP smoke      | 9.5/10                              | 9.5 bar: setup and doctor smoke proves capture readiness; MCP smoke proves score/improve/clarify/record loop; failure states produce raw-free recovery actions instead of generic errors.                                             | smoke:agent-setup, smoke:mcp-coach-loop, storage_unavailable tests, package checks.                                                                                      |
+| Loop memory and continuation      | 9.5/10                              | 9.5 bar: collect, brief, outcome, memory candidate, memory approval, instruction patch proposal, and apply gate are proven through CLI and MCP with evidence-first rules and no automatic instruction writes.                         | Loop unit tests, storage evidence guards, dogfood:first-coach-loop, dogfood:loop-memory-approval, prompt-linked outcome evidence.                                        |
+| Web UI and operational evidence   | 9.5/10                              | 9.5 bar: archive, detail, coach, saved draft reuse, settings, loops, exports, projects, and mobile layout have local screenshots or browser assertions without depending on hosted CI.                                                | corepack pnpm ui-patrol, dogfood:web-user-flow, browser E2E, screenshot artifacts, in-app Browser audit.                                                                 |
+| Release stability                 | 9.5/10                              | 9.5 bar: local supported-node gate, pack dry-run, release smoke, package install smoke, first coach loop dogfood, package contents, dependency audit, and release checklist all agree on shipped files and commands.                  | Local release gate, corepack pnpm pack:dry-run, smoke:release, smoke:package-install, dogfood:first-coach-loop, dogfood:loop-memory-approval, docs/RELEASE_CHECKLIST.md. |
 
 ## Evidence Progress Ledger
 
@@ -105,7 +105,7 @@ dogfood:web-user-flow` passed after main CI run `28750766036`, proving the
   proven/mixed verdict counts, linked outcomes, tests run, and next action in a
   raw-free web workflow.
 - PR #469 promoted archive effectiveness from a visible summary to a benchmark
-  hard gate: `corepack pnpm benchmark -- --json` now reports
+  hard gate: `corepack pnpm --silent benchmark -- --json` now reports
   `archive_effectiveness_score: 1`, `privacy_leak_count: 0`, and safe
   `effectiveness_summary` coverage backed by a linked passed loop outcome. Main
   CI run `28751693022` passed Node 22 and Node 24 after merge.
@@ -189,7 +189,7 @@ dogfood:web-user-flow` passed after main CI run `28750766036`, proving the
   `corepack pnpm dogfood:loop-memory-approval` ended with
   `loop memory approval dogfood passed`, `corepack pnpm smoke:release` ended
   with `release smoke passed` after checking the built product quality evidence CLI gate,
-  and `corepack pnpm benchmark -- --json` returned
+  and `corepack pnpm --silent benchmark -- --json` returned
   `privacy_leak_count: 0` plus `archive_effectiveness_score: 1`.
   This strengthens the local proof for privacy, Codex/Claude integration,
   setup/MCP smoke, loop memory, and release stability while native-dialog
@@ -231,7 +231,7 @@ dogfood:web-user-flow` passed after main CI run `28750766036`, proving the
 - `quality-evidence` also emits a structured `release_gate` list for the local
   completion gate: `corepack pnpm format`, `corepack pnpm test`,
   `corepack pnpm lint`, `corepack pnpm build`,
-  `corepack pnpm pack:dry-run`, `corepack pnpm benchmark -- --json`,
+  `corepack pnpm pack:dry-run`, `corepack pnpm --silent benchmark -- --json`,
   `corepack pnpm e2e:browser`, `corepack pnpm smoke:release`,
   `corepack pnpm smoke:package-install`,
   `corepack pnpm evidence:quality -- --require-complete`,
@@ -265,7 +265,7 @@ dogfood passed` and `interaction_status: "answered"`. This closes
   coach effectiveness guidance are now repeatable through
   `dogfood:web-user-flow`, browser E2E, focused CLI/storage/web tests,
   `corepack pnpm ui-patrol`, and
-  `corepack pnpm benchmark -- --json`. MCP score_prompt effectiveness evidence
+  `corepack pnpm --silent benchmark -- --json`. MCP score_prompt effectiveness evidence
   is now proven on the default branch through PR #462, main CI `28750281428`,
   and branch pruning. Release smoke evidence is current in
   `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md`. Web operations are judged by

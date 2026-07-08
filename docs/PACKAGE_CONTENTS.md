@@ -63,6 +63,7 @@ The npm package intentionally includes:
 - Codex plugin artifacts under `plugins/promptlane`
 - local verification scripts:
   - `scripts/benchmark.mjs`
+  - `scripts/benchmark-runner.mjs`
   - `scripts/benchmark-fixtures.mjs`
   - `scripts/agent-setup-smoke.mjs`
   - `scripts/browser-e2e.mjs`

@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Benchmark Next Action JSON Signal
+
+- [x] CHECK: benchmark scores and pass/fail existed, but machine-readable
+  output did not give an operator-level next action for distinguishing the
+  synthetic release gate from real-world effectiveness proof.
+- [x] RED: focused benchmark fixture and packaging guards require top-level
+  `next_action` guidance and a JSON-safe benchmark runner path.
+- [x] GREEN: benchmark reports now include `next_action`, no-fixtures real
+  benchmark reports tell operators to add consent-bearing redacted fixtures,
+  and the package benchmark script uses a runner that keeps JSON stdout clean.
+- [x] VERIFY: focused benchmark/package/preflight tests, real benchmark JSON,
+  formatting, typecheck, preflight JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Published Version Detail Guard
 
 - [x] CHECK: npm publish preflight blocks when `promptlane@1.0.0` already
