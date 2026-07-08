@@ -1,0 +1,21 @@
+{
+  "consent_note": "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
+  "fixtures": [
+    {
+      "label": "real_release_review",
+      "adapter": "codex",
+      "query": "release readiness review",
+      "prompt": "Review the redacted release readiness notes and return the next verification step."
+    },
+    {
+      "label": "real_claude_setup",
+      "adapter": "claude-code",
+      "query": "claude setup smoke",
+      "prompt": "Check the redacted Claude setup smoke result and suggest the smallest follow-up."
+    }
+  ],
+  "coach_cases": [
+    "Improve this redacted prompt with verification criteria.",
+    "Turn this redacted setup request into an actionable next-agent handoff."
+  ]
+}

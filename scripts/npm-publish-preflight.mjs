@@ -193,6 +193,7 @@ for (const filePath of [
   "docs/TECH_SPEC.md",
   "docs/IMPLEMENTATION_PLAN.md",
   "docs/BENCHMARK_V1.md",
+  "docs/benchmark-fixtures/real.example.json",
   "docs/FEATURE_AUDIT_2026-05-02.md",
   "docs/PRD2_COMPLETION_AUDIT.md",
   "docs/NPM_PUBLISHING.md",

@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Real Benchmark Fixture Example
+
+- [x] CHECK: the real benchmark loader and spec require consent-bearing
+  redacted `docs/benchmark-fixtures/real.json`, but the shipped package did not
+  include a copyable example that is proven to pass the same loader contract.
+- [x] RED: focused benchmark fixture and packaging tests require
+  `docs/benchmark-fixtures/real.example.json` to exist, load as `real.json`,
+  appear in package/preflight file allowlists, and be linked from the benchmark
+  spec.
+- [x] GREEN: added a raw-free real fixture example, documented the copy path,
+  and included it in npm package/preflight surfaces.
+- [x] VERIFY: focused fixture/package tests, formatting, typecheck, preflight
+  JSON, real no-fixtures JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane Real Benchmark Consent Metadata Guard
 
 - [x] CHECK: real benchmark fixture ingestion required redacted labels,

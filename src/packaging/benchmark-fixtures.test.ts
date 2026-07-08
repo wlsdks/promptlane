@@ -1,4 +1,10 @@
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import {
+  copyFileSync,
+  mkdtempSync,
+  mkdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -90,6 +96,29 @@ describe("benchmark fixture loading", () => {
     expect(loaded.coachCases).toEqual([
       "Improve this redacted prompt with verification criteria.",
     ]);
+  });
+
+  it("keeps the shipped real fixture example loadable as the real fixture file", async () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
+    const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
+    mkdirSync(fixtureDir, { recursive: true });
+    copyFileSync(
+      join(process.cwd(), "docs", "benchmark-fixtures", "real.example.json"),
+      join(fixtureDir, "real.json"),
+    );
+
+    const { loadBenchmarkFixtures } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+
+    const loaded = loadBenchmarkFixtures({
+      fixtureSet: "real",
+      repoRoot: tempRoot,
+    });
+
+    expect(loaded.status).toBe("ready");
+    expect(loaded.fixtures).toHaveLength(2);
+    expect(loaded.coachCases).toHaveLength(2);
   });
 
   it("rejects real fixtures without local benchmark consent metadata", async () => {

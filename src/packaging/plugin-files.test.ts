@@ -249,6 +249,9 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain('"docs/TECH_SPEC.md"');
     expect(preflightScript).toContain('"docs/IMPLEMENTATION_PLAN.md"');
     expect(preflightScript).toContain('"docs/BENCHMARK_V1.md"');
+    expect(preflightScript).toContain(
+      '"docs/benchmark-fixtures/real.example.json"',
+    );
     expect(preflightScript).toContain('"docs/FEATURE_AUDIT_2026-05-02.md"');
     expect(preflightScript).toContain('"docs/PRD2_COMPLETION_AUDIT.md"');
     expect(preflightScript).toContain('"docs/NPM_PUBLISHING.md"');
@@ -569,6 +572,10 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "docs/BENCHMARK_V1.md"),
       "utf8",
     );
+    const realFixtureExample = readFileSync(
+      join(process.cwd(), "docs/benchmark-fixtures/real.example.json"),
+      "utf8",
+    );
 
     for (const content of [benchmark, benchmarkSpec]) {
       expect(content).toContain("next_action");
@@ -581,6 +588,11 @@ describe("plugin packaging files", () => {
       expect(content).toContain("docs/benchmark-fixtures/real.json");
       expect(content).toContain("consent_note");
     }
+    expect(benchmarkSpec).toContain(
+      "docs/benchmark-fixtures/real.example.json",
+    );
+    expect(realFixtureExample).toContain("consent_note");
+    expect(realFixtureExample).toContain("real_release_review");
     expect(benchmark).toContain("loadBenchmarkFixtures");
     expect(benchmarkRunner).toContain("corepack");
     expect(benchmarkRunner).toContain("pnpm");
@@ -3042,6 +3054,9 @@ describe("plugin packaging files", () => {
     expect(packageJson.files).toContain("docs/LOOP-SNAPSHOT-SCHEMA.md");
     expect(packageJson.files).toContain("docs/AGENT-HARNESS.md");
     expect(packageJson.files).toContain("docs/INSTRUCTION-FILES.md");
+    expect(packageJson.files).toContain(
+      "docs/benchmark-fixtures/real.example.json",
+    );
     expect(packageJson.files).toContain(
       "docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md",
     );

@@ -51,6 +51,16 @@ real-world effectiveness; real fixture runs stay soft trend signals.
 }
 ```
 
+Start from the shipped example if you need a local template:
+
+```sh
+mkdir -p docs/benchmark-fixtures
+cp docs/benchmark-fixtures/real.example.json docs/benchmark-fixtures/real.json
+```
+
+Then replace the example prompts with consent-bearing redacted prompts before
+using `--fixture-set real` as a trend signal.
+
 The top-level `consent_note` is required and must record that the prompts were
 approved for local benchmark use after redaction. Each fixture needs a unique
 safe `label`, plus `adapter`, `query`, and `prompt`. Labels must start with a
