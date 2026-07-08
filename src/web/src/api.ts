@@ -1710,8 +1710,22 @@ export async function getLoopWorktree(
     await failApi(response, "Loop worktree drilldown failed");
   }
 
-  const body = (await response.json()) as { data: LoopWorktreeResponse };
-  return body.data;
+  const body = (await response.json()) as {
+    data?: {
+      worktree?: unknown;
+      selection_scope?: unknown;
+      items?: unknown;
+    };
+  };
+  if (
+    typeof body.data?.worktree !== "string" ||
+    typeof body.data.selection_scope !== "object" ||
+    body.data.selection_scope === null ||
+    !Array.isArray(body.data.items)
+  ) {
+    throw new Error("Loop worktree drilldown failed: Invalid response.");
+  }
+  return body.data as LoopWorktreeResponse;
 }
 
 export async function approveLoopMemory(
