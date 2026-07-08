@@ -1,5 +1,14 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Quality Dashboard Useful Prompts Contract Error
+
+- [x] CHECK: web API `getQualityDashboard`가 `/api/v1/quality` 성공 응답의
+  `useful_prompts[]` item 계약을 검증하지 않아 raw prompt body나 깨진 reusable prompt summary가 dashboard UI 데이터로 넘어갈 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed useful prompt `prompt_body`
+  body를 `Quality dashboard failed: Invalid response.`로 reject하도록 요구하게 해 현재 unsafe useful prompt resolve 실패를 확인한다.
+- [x] GREEN: useful prompt id/tool/cwd/received_at/copy/bookmark/tags/gaps 계약을 확인하고 raw body/path-like extra fields는 raw-free quality dashboard contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Quality Dashboard Instruction Suggestions Contract Error
 
 - [x] CHECK: web API `getQualityDashboard`가 `/api/v1/quality` 성공 응답의

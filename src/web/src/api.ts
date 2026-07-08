@@ -3785,6 +3785,38 @@ function isQualityDashboardInstructionSuggestion(
   );
 }
 
+function isQualityDashboardUsefulPrompt(
+  value: unknown,
+): value is QualityDashboard["useful_prompts"][number] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const prompt = value as QualityDashboard["useful_prompts"][number] & {
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    typeof prompt.id === "string" &&
+    typeof prompt.tool === "string" &&
+    typeof prompt.cwd === "string" &&
+    typeof prompt.received_at === "string" &&
+    typeof prompt.copied_count === "number" &&
+    (prompt.last_copied_at === undefined ||
+      typeof prompt.last_copied_at === "string") &&
+    typeof prompt.bookmarked === "boolean" &&
+    (prompt.bookmarked_at === undefined ||
+      typeof prompt.bookmarked_at === "string") &&
+    Array.isArray(prompt.tags) &&
+    prompt.tags.every((tag) => typeof tag === "string") &&
+    Array.isArray(prompt.quality_gaps) &&
+    prompt.quality_gaps.every((gap) => typeof gap === "string") &&
+    prompt.markdown === undefined &&
+    prompt.prompt_body === undefined &&
+    prompt.raw_path === undefined
+  );
+}
+
 function isArchiveScoreSummary(
   value: unknown,
 ): value is ArchiveScoreReport["archive_score"] {
@@ -4473,6 +4505,7 @@ export async function getQualityDashboard(
       missing_items?: unknown;
       patterns?: unknown;
       instruction_suggestions?: unknown;
+      useful_prompts?: unknown;
       privacy?: unknown;
     };
   };
@@ -4488,6 +4521,8 @@ export async function getQualityDashboard(
     !body.data.instruction_suggestions.every(
       isQualityDashboardInstructionSuggestion,
     ) ||
+    !Array.isArray(body.data.useful_prompts) ||
+    !body.data.useful_prompts.every(isQualityDashboardUsefulPrompt) ||
     !isQualityDashboardPrivacy(body.data.privacy)
   ) {
     throw new Error("Quality dashboard failed: Invalid response.");
