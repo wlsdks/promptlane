@@ -100,6 +100,7 @@ function parseRealFixtures(parsed) {
         `real fixture ${index} adapter must be claude-code or codex.`,
       );
     }
+    assertRedactedText(normalized.query, `real fixture ${index} query`);
     assertRedactedText(normalized.prompt, `real fixture ${index} prompt`);
     return normalized;
   });

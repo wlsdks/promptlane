@@ -43,17 +43,16 @@ The JSON report includes `fixture_set` and `soft_signal` fields so consumers can
       "prompt": "Review the redacted release readiness notes and return the next verification step."
     }
   ],
-  "coach_cases": [
-    "Improve this redacted prompt with verification criteria."
-  ]
+  "coach_cases": ["Improve this redacted prompt with verification criteria."]
 }
 ```
 
 Each fixture needs `label`, `adapter`, `query`, and `prompt`. `adapter` must be
 `codex` or `claude-code`. Real fixtures are consent-bearing soft signals only:
-redact secrets, tokens, and absolute local paths before writing the file. The
-loader rejects obvious `sk-...`, `npm_...`, `/Users/...`, and `/home/...`
-values so the benchmark does not ingest private raw text by accident.
+redact secrets, tokens, and absolute local paths from fixture queries, prompts,
+and coach cases before writing the file. The loader rejects obvious `sk-...`,
+`npm_...`, `/Users/...`, and `/home/...` values so the benchmark does not ingest
+private raw text by accident.
 
 ## Principles
 

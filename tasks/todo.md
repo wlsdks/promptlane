@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Benchmark Real Fixture Query Redaction
+
+- [x] CHECK: real benchmark fixtures reject raw secrets/paths in prompts and
+  coach cases, but `query` is also emitted in benchmark reports and was not
+  covered by the same raw-free guard.
+- [x] RED: focused benchmark fixture loader test requires real fixture queries
+  with raw local paths to be rejected.
+- [x] GREEN: benchmark real fixture loader now validates fixture queries with
+  the same raw-free guard used for prompts and coach cases, and the benchmark
+  spec documents that queries must be redacted too.
+- [x] VERIFY: focused fixture/package tests, real no-fixtures soft exit,
+  formatting, typecheck, preflight JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane Benchmark Real Fixture Loader
 
 - [x] CHECK: `docs/BENCHMARK_V1.md` says `--fixture-set real` reads
