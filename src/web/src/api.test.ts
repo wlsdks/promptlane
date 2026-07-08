@@ -2944,6 +2944,17 @@ describe("web api export client", () => {
     });
   });
 
+  it("reports malformed import dry-run responses without returning incomplete import summary data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { previewImportDryRun } = await import("./api.js");
+
+    await expect(
+      previewImportDryRun({ sourceType: "manual-jsonl", content: "line1\n" }),
+    ).rejects.toThrow("Import dry-run failed: Invalid response.");
+  });
+
   it("includes the HTTP status and detail in error messages", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
