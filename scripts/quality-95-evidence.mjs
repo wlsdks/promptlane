@@ -185,8 +185,6 @@ function readScorecardAxes() {
   return plan
     .split("\n")
     .filter((line) => line.startsWith("| ") && line.includes(" | "))
-    .filter((line) => !line.includes("Axis | Current level"))
-    .filter((line) => !line.includes("---"))
     .map(parseScorecardRow)
     .filter(Boolean);
 }
@@ -551,6 +549,13 @@ function parseScorecardRow(line) {
     .map((cell) => cell.trim());
   if (cells.length < 4) return undefined;
   const [axis, currentLevel, bar, evidence] = cells;
+  if (
+    axis === "Axis" ||
+    currentLevel.startsWith("Current level") ||
+    cells.every((cell) => /^:?-{3,}:?$/.test(cell))
+  ) {
+    return undefined;
+  }
   const currentScore = Number(
     currentLevel.match(/(?<score>\d+(?:\.\d+)?)\/10/)?.groups?.score,
   );

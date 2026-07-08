@@ -60,6 +60,13 @@ describe("quality-evidence CLI command", () => {
     expect(parsed.status).toBe("complete");
     expect(parsed).not.toHaveProperty("next_recheck_utc");
     expect(parsed.scorecard_axes).toHaveLength(7);
+    expect(parsed.scorecard_axes).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "axis",
+        }),
+      ]),
+    );
     expect(parsed.scorecard_axes).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

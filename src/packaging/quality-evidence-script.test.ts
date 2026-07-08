@@ -62,6 +62,13 @@ describe("quality 9.5 evidence script", () => {
     expect(parsed.check).toBe("promptlane_95_quality");
     expect(parsed.status).toBe("complete");
     expect(parsed.scorecard_axes).toHaveLength(7);
+    expect(parsed.scorecard_axes).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "axis",
+        }),
+      ]),
+    );
     expect(parsed.scorecard_axes).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -263,5 +270,12 @@ describe("quality 9.5 evidence script", () => {
     };
     expect(parsed.check).toBe("promptlane_95_quality");
     expect(parsed.scorecard_axes).toHaveLength(7);
+    expect(parsed.scorecard_axes).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "axis",
+        }),
+      ]),
+    );
   });
 });

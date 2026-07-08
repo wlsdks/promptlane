@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Quality Evidence Header Row Guard
+
+- [x] CHECK: 1.0.0 release smoke failed because the 9.5 scorecard Markdown
+  header row was parsed as a real `axis` scorecard row after table formatting
+  changed whitespace.
+- [x] RED: focused quality evidence script and CLI tests reproduced
+  `status: pending`, 8 parsed scorecard axes, and `--require-complete` failure.
+- [x] GREEN: scorecard parsing now rejects header/separator rows after cell
+  normalization, and tests guard against a synthetic `id: "axis"` row.
+- [x] VERIFY: focused quality evidence tests, release smoke, pack dry-run,
+  evidence quality require-complete, typecheck, code/test formatting, and diff
+  hygiene.
+
 ## 2026-07-08 PromptLane README Release Smoke Corepack Commands
 
 - [x] CHECK: README/README.ko release smoke examples still used bare
