@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Server Problem Title Redaction
+
+- [x] CHECK: server `problem()` factory가 `detail`, `instance`, `errors[]`는
+  redaction하지만 top-level `title`과 title-derived `type` URL은 원문 title에서
+  만들어 future route/server problem title이 raw local path/token을 response payload에
+  남길 수 있다.
+- [x] RED: `src/server/errors.test.ts`가 problem `title`과 `type` URL 안의
+  `/Users/...`, `sk-proj-...` raw token이 남지 않도록 요구하게 해 현재 raw title/type
+  passthrough 실패를 확인한다.
+- [x] GREEN: server problem factory가 `title`에도 기존 problem text sanitizer를 적용하고
+  `type` slug도 sanitized title에서 파생해 top-level problem metadata를 raw-free로 만든다.
+- [x] VERIFY: focused server problem/validation tests, implementation format
+  check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Server Problem Detail Redaction
 
 - [x] CHECK: server `problem()` factory가 `errors[]`와 `instance`는 redaction하지만

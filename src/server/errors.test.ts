@@ -80,4 +80,23 @@ describe("server problem details", () => {
     expect(error.problem.detail).not.toContain("sk-proj-1234567890abcdef");
     expect(error.message).toBe(error.problem.detail);
   });
+
+  it("redacts raw local paths and tokens from problem titles and types", () => {
+    const error = problem(
+      500,
+      "Failure in /Users/example/private-project/raw.md with sk-proj-1234567890abcdef",
+      "The request failed.",
+    );
+
+    expect(error.problem.title).toContain("[REDACTED:path]");
+    expect(error.problem.title).toContain("[REDACTED:api_key]");
+    expect(error.problem.title).not.toContain(
+      "/Users/example/private-project/raw.md",
+    );
+    expect(error.problem.title).not.toContain("sk-proj-1234567890abcdef");
+    expect(error.problem.type).toContain("redacted-path");
+    expect(error.problem.type).toContain("redacted-api-key");
+    expect(error.problem.type).not.toContain("users-example-private-project");
+    expect(error.problem.type).not.toContain("sk-proj-1234567890abcdef");
+  });
 });
