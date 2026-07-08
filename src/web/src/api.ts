@@ -3758,6 +3758,64 @@ function isArchiveScoreDistribution(
   );
 }
 
+function isArchiveEffectivenessSummary(
+  value: unknown,
+): value is ArchiveScoreReport["effectiveness_summary"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const summary = value as ArchiveScoreReport["effectiveness_summary"] & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    typeof summary.measured_prompts === "number" &&
+    typeof summary.unmeasured_prompts === "number" &&
+    typeof summary.next_action === "string" &&
+    Array.isArray(summary.top_evidence_refs) &&
+    summary.top_evidence_refs.every((ref) => typeof ref === "string") &&
+    isArchiveEffectivenessVerdicts(summary.verdicts) &&
+    isArchiveEffectivenessCalibration(summary.calibration) &&
+    summary.cwd === undefined &&
+    summary.markdown === undefined &&
+    summary.prompt_body === undefined &&
+    summary.raw_path === undefined
+  );
+}
+
+function isArchiveEffectivenessVerdicts(
+  value: unknown,
+): value is ArchiveScoreReport["effectiveness_summary"]["verdicts"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const verdicts =
+    value as ArchiveScoreReport["effectiveness_summary"]["verdicts"];
+  return (
+    typeof verdicts.proven === "number" &&
+    typeof verdicts.mixed === "number" &&
+    typeof verdicts.unproven === "number"
+  );
+}
+
+function isArchiveEffectivenessCalibration(
+  value: unknown,
+): value is ArchiveScoreReport["effectiveness_summary"]["calibration"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const calibration =
+    value as ArchiveScoreReport["effectiveness_summary"]["calibration"];
+  return (
+    typeof calibration.linked_outcomes === "number" &&
+    typeof calibration.passing_outcomes === "number" &&
+    typeof calibration.failing_outcomes === "number" &&
+    typeof calibration.total_tests_run === "number"
+  );
+}
+
 export type ProjectPolicy = {
   capture_disabled: boolean;
   analysis_disabled: boolean;
@@ -4249,6 +4307,7 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
       top_gaps?: unknown;
       practice_plan?: unknown;
       low_score_prompts?: unknown;
+      effectiveness_summary?: unknown;
       privacy?: unknown;
     };
   };
@@ -4261,6 +4320,7 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
     !body.data.practice_plan.every(isArchivePracticePlanItem) ||
     !Array.isArray(body.data.low_score_prompts) ||
     !body.data.low_score_prompts.every(isArchivePromptScoreSummary) ||
+    !isArchiveEffectivenessSummary(body.data.effectiveness_summary) ||
     !isArchiveScorePrivacy(body.data.privacy)
   ) {
     throw new Error("Archive score report failed: Invalid response.");

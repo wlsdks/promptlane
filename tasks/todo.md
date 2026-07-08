@@ -1,5 +1,14 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Archive Score Effectiveness Summary Contract Error
+
+- [x] CHECK: web API `getArchiveScoreReport`가 `/api/v1/score` 성공 응답의
+  `effectiveness_summary` 계약을 검증하지 않아 raw prompt/path-like field나 깨진 outcome evidence summary가 archive score UI 데이터로 넘어갈 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed effectiveness-summary `prompt_body`
+  body를 `Archive score report failed: Invalid response.`로 reject하도록 요구하게 해 현재 unsafe effectiveness summary resolve 실패를 확인한다.
+- [x] GREEN: effectiveness-summary measured/unmeasured/verdicts/calibration/evidence refs/next_action 계약을 확인하고 raw body/path-like fields는 raw-free archive score contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Archive Score Distribution Contract Error
 
 - [x] CHECK: web API `getArchiveScoreReport`가 `/api/v1/score` 성공 응답의
