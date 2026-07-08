@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web JSON String Error Detail
+
+- [x] CHECK: `failApi`가 failed response JSON body를 object shape로만 해석해
+  valid JSON string body의 settings/session recovery detail이 사라질 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 failed response JSON string의 recovery sentence를
+  사용자-visible error suffix로 보존하도록 요구하게 해 현재 suffix 누락 실패를 확인한다.
+- [x] GREEN: web API failed response detail assembly가 parsed body 자체도 기존
+  `apiErrorText` sanitizer fallback으로 먼저 확인해 string JSON body를 raw-free detail로 표시한다.
+- [x] VERIFY: focused web API failed response detail/redaction tests, implementation
+  format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Real Text Response Error Detail
 
 - [x] CHECK: `failApi`가 JSON parse 실패 후 같은 `Response`에서 `text()`를 읽어
