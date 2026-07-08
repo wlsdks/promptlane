@@ -5907,20 +5907,33 @@ function apiErrorIssueText(value: unknown): string {
   return visibleIssues.join(" ");
 }
 
+const RAW_DETAIL_ERROR_KEY_PATTERN =
+  "compact_summary|markdown|prompt_body|raw_path|transcript|transcript_body";
+
 function sanitizeApiErrorText(value: string): string {
+  const rawDetailKey = RAW_DETAIL_ERROR_KEY_PATTERN;
   return value
     .replace(
-      /\b(markdown|prompt_body|raw_path)\s*([:=])\s*(["'`])[^"'`\r\n]*\3/gi,
+      new RegExp(
+        `\\b(${rawDetailKey})\\s*([:=])\\s*(["'\`])[^"'\`\\r\\n]*\\3`,
+        "gi",
+      ),
       (_match, key: string, separator: string, quote: string) =>
         `${key}${separator}${quote}[REDACTED:${key.toLowerCase()}]${quote}`,
     )
     .replace(
-      /\b(markdown|prompt_body|raw_path)\s*:\s*(?!["'`])([^.;)}\]\r\n]+)([.;)}\]]?)/gi,
+      new RegExp(
+        `\\b(${rawDetailKey})\\s*:\\s*(?!["'\`])([^.;)}\\]\\r\\n]+)([.;)}\\]]?)`,
+        "gi",
+      ),
       (_match, key: string, _value: string, terminator: string) =>
         `${key}:[REDACTED:${key.toLowerCase()}]${terminator}`,
     )
     .replace(
-      /\b(markdown|prompt_body|raw_path)\s*([:=])\s*(?!["'`]|\[REDACTED:)([^\s,;)}\]]+)/gi,
+      new RegExp(
+        `\\b(${rawDetailKey})\\s*([:=])\\s*(?!["'\`]|\\[REDACTED:)([^\\s,;)}\\]]+)`,
+        "gi",
+      ),
       (_match, key: string, separator: string) =>
         `${key}${separator}[REDACTED:${key.toLowerCase()}]`,
     )

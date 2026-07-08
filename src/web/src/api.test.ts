@@ -7898,6 +7898,22 @@ describe("web api export client", () => {
     );
   });
 
+  it("redacts compact summary details from failed response messages", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(500, {
+          detail:
+            "Unexpected setup failure compact_summary: private loop context and transcript notes. Retry setup.",
+        }),
+      );
+    const { getSettings } = await import("./api.js");
+
+    await expect(getSettings()).rejects.toThrow(
+      "Settings failed (500): Unexpected setup failure compact_summary:[REDACTED:compact_summary]. Retry setup.",
+    );
+  });
+
   it("reports malformed settings responses without returning incomplete setup data", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
