@@ -140,7 +140,8 @@ describe("plugin packaging files", () => {
     );
 
     for (const scriptPath of packageJson.files.filter(
-      (filePath) => filePath.startsWith("scripts/") && filePath.endsWith(".mjs"),
+      (filePath) =>
+        filePath.startsWith("scripts/") && filePath.endsWith(".mjs"),
     )) {
       expect(releaseChecklist).toContain(`\`${scriptPath}\``);
     }
@@ -389,9 +390,7 @@ describe("plugin packaging files", () => {
     );
     expect(setup).toContain("command -v promptlane || command -v promptlane");
     expect(setup).toContain("promptlane setup --profile coach --register-mcp");
-    expect(setup).toContain(
-      "promptlane setup --profile coach --register-mcp",
-    );
+    expect(setup).toContain("promptlane setup --profile coach --register-mcp");
     expect(setup).toContain("promptlane statusline claude-code");
     expect(status).toContain("promptlane doctor claude-code");
     expect(status).toContain("promptlane doctor claude-code");
@@ -685,7 +684,9 @@ describe("plugin packaging files", () => {
     expect(claude).toContain("promptlane");
     expect(claude).toContain("docs/INSTRUCTION-FILES.md");
 
-    expect(harness).toContain("PromptLane's Codex and Claude Code integration contract");
+    expect(harness).toContain(
+      "PromptLane's Codex and Claude Code integration contract",
+    );
     expect(harness).toContain("loop-aware continuation");
     expect(harness).toContain("hidden external LLM calls");
     expect(harness).toContain("corepack pnpm pack:dry-run");
@@ -738,9 +739,10 @@ describe("plugin packaging files", () => {
 
       expect(content, surfacePath).toContain("PromptLane");
       for (const pattern of forbiddenProductNamePatterns) {
-        expect(content, `${surfacePath} should not match ${pattern}`).not.toMatch(
-          pattern,
-        );
+        expect(
+          content,
+          `${surfacePath} should not match ${pattern}`,
+        ).not.toMatch(pattern);
       }
     }
 
@@ -871,9 +873,7 @@ describe("plugin packaging files", () => {
     expect(backlog).not.toContain(
       "Update MCP instructions/docs so agents call `apply_clarifications`",
     );
-    expect(backlog).not.toContain(
-      "Immediate follow-up from the stdio audit",
-    );
+    expect(backlog).not.toContain("Immediate follow-up from the stdio audit");
   });
 
   it("keeps GitHub Actions removed while preserving local ui-patrol evidence", () => {
@@ -898,7 +898,10 @@ describe("plugin packaging files", () => {
     );
     const todo = readFileSync(join(process.cwd(), "tasks/todo.md"), "utf8");
     const workflowPath = join(process.cwd(), ".github/workflows/ui-patrol.yml");
-    const evidenceScriptPath = join(process.cwd(), "scripts/ui-patrol-evidence.mjs");
+    const evidenceScriptPath = join(
+      process.cwd(),
+      "scripts/ui-patrol-evidence.mjs",
+    );
 
     expect(existsSync(workflowPath)).toBe(false);
     expect(existsSync(evidenceScriptPath)).toBe(false);
@@ -916,9 +919,14 @@ describe("plugin packaging files", () => {
     expect(latestTodo).toContain("GitHub Actions");
     expect(latestTodo).toContain("corepack pnpm ui-patrol");
     expect(latestTodo).toContain("dogfood:web-user-flow");
-    expect(latestTodo).not.toContain("scheduled `ui-patrol` evidence remains pending");
+    expect(latestTodo).not.toContain(
+      "scheduled `ui-patrol` evidence remains pending",
+    );
     expect(latestTodo).not.toContain("corepack pnpm evidence:ui-patrol");
-    const remainingPlan = sectionBetween(plan, "## 9.5 Evidence Completion State");
+    const remainingPlan = sectionBetween(
+      plan,
+      "## 9.5 Evidence Completion State",
+    );
     expect(remainingPlan).toContain("local browser evidence");
     expect(remainingPlan).not.toContain("scheduled patrol cron");
     expect(remainingPlan).not.toContain("next expected UTC");
@@ -928,7 +936,9 @@ describe("plugin packaging files", () => {
     expect(goalAudit).toContain("PR #420");
     expect(goalAudit).toContain("local browser evidence");
     expect(goalAudit).toContain("quality-evidence");
-    expect(goalAudit).not.toContain("scheduled `ui-patrol` evidence remains pending");
+    expect(goalAudit).not.toContain(
+      "scheduled `ui-patrol` evidence remains pending",
+    );
     expect(goalAudit).not.toContain("first scheduled `ui-patrol` artifact");
     expect(goalAudit).not.toContain("corepack pnpm evidence:ui-patrol");
     expect(backlog).toContain("PR #419");
@@ -956,9 +966,7 @@ describe("plugin packaging files", () => {
       "docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md",
     );
     expect(qualityScript).toContain("local_ui_patrol_evidence");
-    expect(qualityScript).toContain(
-      "UI_PATROL_SCHEDULE_READINESS_2026-07-06",
-    );
+    expect(qualityScript).toContain("UI_PATROL_SCHEDULE_READINESS_2026-07-06");
     expect(readiness).toContain("GitHub Actions workflows");
     expect(readiness).toContain("Local `ui-patrol` evidence");
     expect(readiness).not.toContain("scheduled_ui_patrol_preflight");
@@ -1004,7 +1012,9 @@ describe("plugin packaging files", () => {
       "utf8",
     );
     expect(goalAudit).toContain("native_dialog_approved_dogfood");
-    expect(goalAudit).not.toContain("real answered OS-dialog run still needs operator approval");
+    expect(goalAudit).not.toContain(
+      "real answered OS-dialog run still needs operator approval",
+    );
     expect(goalAudit).not.toContain("Pending explicit operator approval");
     expect(backlog).toContain("native_dialog_preflight");
     expect(backlog).toContain("approved native-dialog evidence");
@@ -1046,9 +1056,7 @@ describe("plugin packaging files", () => {
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
 
     expect(packageJson.files).toContain("scripts/quality-95-evidence.mjs");
-    expect(packageJson.files).toContain(
-      "docs/LOCAL_95_EVIDENCE_2026-07-06.md",
-    );
+    expect(packageJson.files).toContain("docs/LOCAL_95_EVIDENCE_2026-07-06.md");
     expect(packageJson.files).toContain(
       "docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md",
     );
@@ -1061,14 +1069,14 @@ describe("plugin packaging files", () => {
     expect(packageJson.scripts["evidence:quality"]).toBe(
       "node scripts/quality-95-evidence.mjs",
     );
-    expect(readFileSync(join(process.cwd(), "src/cli/index.ts"), "utf8")).toContain(
-      "registerQualityEvidenceCommand",
-    );
+    expect(
+      readFileSync(join(process.cwd(), "src/cli/index.ts"), "utf8"),
+    ).toContain("registerQualityEvidenceCommand");
     expect(releaseChecklist).toContain(
       "corepack pnpm evidence:quality -- --require-complete",
     );
     expect(releaseChecklist).toContain(
-      "pnpm promptlane quality-evidence --require-complete",
+      "corepack pnpm promptlane quality-evidence --require-complete",
     );
     expect(releaseChecklist).toContain(
       "corepack pnpm --silent evidence:quality",
@@ -1104,7 +1112,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("corepack pnpm e2e:browser");
       expect(content).toContain("corepack pnpm smoke:release");
       expect(content).toContain(
-        "pnpm promptlane quality-evidence --require-complete",
+        "corepack pnpm promptlane quality-evidence --require-complete",
       );
       expect(content).toContain("blocked_by_external_event");
       expect(content).toContain("product_positioning_metadata_alignment");
@@ -1154,7 +1162,9 @@ describe("plugin packaging files", () => {
     for (const content of [readme, readmeKo]) {
       expect(content).toContain("promptlane quality-evidence");
       expect(content).toContain("promptlane quality-evidence --json");
-      expect(content).toContain("promptlane quality-evidence --require-complete");
+      expect(content).toContain(
+        "promptlane quality-evidence --require-complete",
+      );
       expect(content).toContain("recommended next slices");
     }
     expect(evidenceScript).toContain("promptlane_95_quality");
@@ -1164,7 +1174,9 @@ describe("plugin packaging files", () => {
     expect(evidenceScript).toContain("scorecardReviewCandidates");
     expect(evidenceScript).toContain("scorecard_review_candidates");
     expect(evidenceScript).toContain("scorecard_review");
-    expect(evidenceScript).toContain("Review axes whose local evidence is present");
+    expect(evidenceScript).toContain(
+      "Review axes whose local evidence is present",
+    );
     expect(evidenceScript).toContain("scorecard_level_below_9_5");
     expect(evidenceScript).toContain("blocked_external");
     expect(evidenceScript).toContain("recommendedNextSlices");
@@ -1420,7 +1432,7 @@ describe("plugin packaging files", () => {
       "corepack pnpm e2e:browser",
       "corepack pnpm smoke:release",
       "corepack pnpm evidence:quality -- --require-complete",
-      "pnpm promptlane quality-evidence --require-complete",
+      "corepack pnpm promptlane quality-evidence --require-complete",
       "git diff --check",
       "local browser evidence",
       "approved native-dialog evidence",
@@ -1985,7 +1997,7 @@ describe("plugin packaging files", () => {
     expect(inventory.schema_version).toBe(1);
     expect(inventory.package.name).toBe(packageJson.name);
     expect(inventory.package.bins).toMatchObject({
-      "promptlane": packageJson.bin["promptlane"],
+      promptlane: packageJson.bin["promptlane"],
       promptlane: packageJson.bin.promptlane,
       "pl-claude": packageJson.bin["pl-claude"],
       "pl-codex": packageJson.bin["pl-codex"],
@@ -1999,9 +2011,7 @@ describe("plugin packaging files", () => {
     expect(inventory.claude_code_plugin.command_files.slice().sort()).toEqual(
       commandFiles,
     );
-    expect(inventory.claude_code_plugin.slash_namespace).toBe(
-      "/promptlane:*",
-    );
+    expect(inventory.claude_code_plugin.slash_namespace).toBe("/promptlane:*");
     expect(inventory.codex_plugin.manifest_name).toBe(codexManifest.name);
     expect(inventory.codex_plugin.display_name).toBe(
       codexManifest.interface.displayName,
@@ -2224,9 +2234,7 @@ describe("plugin packaging files", () => {
       "utf8",
     );
 
-    expect(packageJson.files).toContain(
-      "scripts/first-coach-loop-dogfood.mjs",
-    );
+    expect(packageJson.files).toContain("scripts/first-coach-loop-dogfood.mjs");
     expect(packageJson.scripts["dogfood:first-coach-loop"]).toBe(
       "pnpm build && node scripts/first-coach-loop-dogfood.mjs",
     );
@@ -2293,9 +2301,9 @@ describe("plugin packaging files", () => {
       scripts: Record<string, string>;
     }>("package.json");
 
-    expect(existsSync(join(process.cwd(), ".github/workflows/ui-patrol.yml"))).toBe(
-      false,
-    );
+    expect(
+      existsSync(join(process.cwd(), ".github/workflows/ui-patrol.yml")),
+    ).toBe(false);
     expect(packageJson.files).toContain("scripts/ui-patrol.mjs");
     expect(packageJson.files).not.toContain("scripts/ui-patrol-evidence.mjs");
     expect(packageJson.scripts["ui-patrol"]).toBe("node scripts/ui-patrol.mjs");
@@ -2324,7 +2332,7 @@ describe("plugin packaging files", () => {
     }>("package.json");
 
     expect(packageJson.bin).toMatchObject({
-      "promptlane": "./dist/cli/index.js",
+      promptlane: "./dist/cli/index.js",
       "pl-claude": "./dist/cli/pl-claude.js",
       "pl-codex": "./dist/cli/pl-codex.js",
     });
@@ -2371,7 +2379,9 @@ describe("plugin packaging files", () => {
     expect(allowlist).toContain("# PromptLane Runtime Surfaces");
     expect(allowlist).toContain("Product name: PromptLane");
     expect(allowlist).toContain("Primary CLI command: `promptlane`");
-    expect(allowlist).toContain("MCP compatibility tool: `get_promptlane_status`");
+    expect(allowlist).toContain(
+      "MCP compatibility tool: `get_promptlane_status`",
+    );
     expect(allowlist).toContain("Historical planning docs");
     expect(allowlist).toContain("Active slash namespace: `/promptlane:*`");
     expect(allowlist).toContain("Product-facing copy should use PromptLane");
@@ -2396,7 +2406,9 @@ describe("plugin packaging files", () => {
       expect(plan, planPath).toContain("Current product name: PromptLane");
       expect(plan, planPath).toContain("Current runtime id: `promptlane`");
       expect(plan, planPath).toContain("See `docs/PROMPTLANE.md`");
-      expect(plan, planPath).toContain("See `docs/PROMPTLANE-LEGACY-SURFACES.md`");
+      expect(plan, planPath).toContain(
+        "See `docs/PROMPTLANE-LEGACY-SURFACES.md`",
+      );
       expect(plan, planPath).not.toContain("TODO");
       expect(plan, planPath).not.toContain("TBD");
       expect(plan, planPath).not.toContain("sk-proj");

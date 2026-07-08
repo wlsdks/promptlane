@@ -222,7 +222,8 @@ Decision:
   `corepack pnpm pack:dry-run`, `corepack pnpm benchmark -- --json`,
   `corepack pnpm e2e:browser`, `corepack pnpm smoke:release`,
   `corepack pnpm evidence:quality -- --require-complete`,
-  `pnpm promptlane quality-evidence --require-complete`, and `git diff --check`.
+  `corepack pnpm promptlane quality-evidence --require-complete`, and
+  `git diff --check`.
   That local scorecard review is now applied for the five non-external
   candidates: local-first privacy boundary, setup/doctor/MCP smoke, loop memory
   and continuation, web UI and operational evidence, and release stability are

@@ -193,7 +193,7 @@ describe("quality-evidence CLI command", () => {
           "Fail closed unless all 9.5 quality evidence remains complete.",
       },
       {
-        command: "pnpm promptlane quality-evidence --require-complete",
+        command: "corepack pnpm promptlane quality-evidence --require-complete",
         purpose:
           "Verify the built product CLI exposes the same complete quality evidence.",
       },
@@ -283,7 +283,7 @@ describe("quality-evidence CLI command", () => {
       "- corepack pnpm evidence:quality -- --require-complete - Fail closed unless all 9.5 quality evidence remains complete.",
     );
     expect(text).toContain(
-      "- pnpm promptlane quality-evidence --require-complete - Verify the built product CLI exposes the same complete quality evidence.",
+      "- corepack pnpm promptlane quality-evidence --require-complete - Verify the built product CLI exposes the same complete quality evidence.",
     );
     expect(text).toContain(
       "- git diff --check - Reject whitespace and patch hygiene regressions.",

@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Quality Evidence Corepack CLI Gate
+
+- [x] CHECK: 9.5 quality release gate 대부분은 `corepack pnpm ...`을 쓰지만
+  installed CLI parity 항목만 bare `pnpm promptlane quality-evidence --require-complete`를
+  가리켜 package-manager PATH 의존성을 다시 만들 수 있다.
+- [x] RED: quality evidence CLI/script/packaging tests가 release gate와 release checklist에
+  `corepack pnpm promptlane quality-evidence --require-complete`를 요구하게 해 현재
+  bare `pnpm promptlane...` drift 실패를 확인한다.
+- [x] GREEN: `scripts/quality-95-evidence.mjs`와 release/backlog/quality-plan 문서의
+  installed CLI parity gate를 `corepack pnpm promptlane ...`로 정렬한다.
+- [x] VERIFY: focused quality-evidence CLI/packaging tests, quality evidence JSON smoke,
+  implementation format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Server Problem Quoted Detail Redaction
 
 - [x] CHECK: server problem sanitizer가 raw-detail key phrase를 redaction하지만

@@ -233,7 +233,8 @@
   `corepack pnpm pack:dry-run`, `corepack pnpm benchmark -- --json`,
   `corepack pnpm e2e:browser`, `corepack pnpm smoke:release`,
   `corepack pnpm evidence:quality -- --require-complete`,
-  `pnpm promptlane quality-evidence --require-complete`, and `git diff --check`.
+  `corepack pnpm promptlane quality-evidence --require-complete`, and
+  `git diff --check`.
 - The human `promptlane quality-evidence` output renders the complete evidence
   status directly. `promptlane quality-evidence --operator-brief` renders the
   current approval status, refusal preflight command, completion evidence, and

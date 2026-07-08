@@ -89,7 +89,7 @@ const releaseGate = [
     purpose: "Fail closed unless all 9.5 quality evidence remains complete.",
   },
   {
-    command: "pnpm promptlane quality-evidence --require-complete",
+    command: "corepack pnpm promptlane quality-evidence --require-complete",
     purpose:
       "Verify the built product CLI exposes the same complete quality evidence.",
   },
@@ -207,7 +207,10 @@ function readCompletedEvidence() {
   let nativeDialogAudit = "";
   try {
     plan = readFileSync(planPath, "utf8");
-    localEvidence = readFileSync("docs/LOCAL_95_EVIDENCE_2026-07-06.md", "utf8");
+    localEvidence = readFileSync(
+      "docs/LOCAL_95_EVIDENCE_2026-07-06.md",
+      "utf8",
+    );
     productEvidence = readFileSync(
       "docs/PRODUCT_POSITIONING_EVIDENCE_2026-07-06.md",
       "utf8",
@@ -252,7 +255,9 @@ function readCompletedEvidence() {
     product_positioning_metadata_alignment:
       productEvidence.includes("wlsdks/promptlane") &&
       productEvidence.includes("Prompt improvement is the first value") &&
-      productEvidence.includes("PromptLane is historical or compatibility-only") &&
+      productEvidence.includes(
+        "PromptLane is historical or compatibility-only",
+      ) &&
       productEvidence.includes("GitHub repository metadata") &&
       promptlane.includes("Product name: PromptLane.") &&
       promptlane.includes("PromptLane starts with prompt improvement") &&
@@ -264,8 +269,12 @@ function readCompletedEvidence() {
       ) &&
       codexPlugin.includes('"displayName": "PromptLane"') &&
       codexPlugin.includes("loop-aware continuation") &&
-      claudePlugin.includes("PromptLane is a local-first prompt improvement workspace") &&
-      claudeMarketplace.includes("PromptLane is a local-first prompt improvement workspace"),
+      claudePlugin.includes(
+        "PromptLane is a local-first prompt improvement workspace",
+      ) &&
+      claudeMarketplace.includes(
+        "PromptLane is a local-first prompt improvement workspace",
+      ),
     manual_ui_patrol_artifact_evidence:
       uiPatrolEvidence.includes("workflow_dispatch run `28717406758`") &&
       uiPatrolEvidence.includes("ui-patrol-screenshots") &&
@@ -283,7 +292,9 @@ function readCompletedEvidence() {
       codexClaudeEvidence.includes("corepack pnpm smoke:mcp-elicitation") &&
       codexClaudeEvidence.includes("corepack pnpm smoke:mcp-native-dialog") &&
       codexClaudeEvidence.includes("corepack pnpm dogfood:first-coach-loop") &&
-      codexClaudeEvidence.includes("corepack pnpm dogfood:loop-memory-approval") &&
+      codexClaudeEvidence.includes(
+        "corepack pnpm dogfood:loop-memory-approval",
+      ) &&
       codexClaudeEvidence.includes("native_dialog_approved_dogfood") &&
       codexClaudeEvidence.includes("codex_claude_local_integration_evidence"),
     native_dialog_preflight:
@@ -460,7 +471,8 @@ function recommendedNextSlices({
   }
 
   if (
-    axesById.get("web_ui_and_operational_evidence")?.status !== "meets_target" &&
+    axesById.get("web_ui_and_operational_evidence")?.status !==
+      "meets_target" &&
     !completedEvidence.web_user_flow_current_main_evidence
   ) {
     slices.push({
@@ -490,7 +502,8 @@ function recommendedNextSlices({
   }
 
   if (
-    axesById.get("codex_and_claude_code_integration")?.status !== "meets_target" &&
+    axesById.get("codex_and_claude_code_integration")?.status !==
+      "meets_target" &&
     !completedEvidence.codex_claude_setup_smoke_refresh
   ) {
     slices.push({
@@ -538,7 +551,9 @@ function parseScorecardRow(line) {
     .map((cell) => cell.trim());
   if (cells.length < 4) return undefined;
   const [axis, currentLevel, bar, evidence] = cells;
-  const currentScore = Number(currentLevel.match(/(?<score>\d+(?:\.\d+)?)\/10/)?.groups?.score);
+  const currentScore = Number(
+    currentLevel.match(/(?<score>\d+(?:\.\d+)?)\/10/)?.groups?.score,
+  );
   const targetLevel = bar.includes("9.5 bar") ? "9.5/10" : "unknown";
   return {
     id: axis

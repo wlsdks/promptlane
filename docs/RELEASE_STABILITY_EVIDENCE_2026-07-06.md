@@ -23,7 +23,8 @@ making automated tests open OS dialogs.
   `corepack pnpm pack:dry-run`, `corepack pnpm benchmark -- --json`,
   `corepack pnpm e2e:browser`, `corepack pnpm smoke:release`,
   `corepack pnpm evidence:quality -- --require-complete`,
-  `pnpm promptlane quality-evidence --require-complete`, and `git diff --check`.
+  `corepack pnpm promptlane quality-evidence --require-complete`, and
+  `git diff --check`.
 - General PR/main test CI and scheduled UI patrol workflows are not release
   requirements. Web operations are verified with local browser evidence:
   `corepack pnpm ui-patrol` and `corepack pnpm dogfood:web-user-flow`.
