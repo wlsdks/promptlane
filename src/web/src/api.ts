@@ -3629,6 +3629,37 @@ function isArchiveScorePrivacy(
   );
 }
 
+function isArchivePromptScoreSummary(
+  value: unknown,
+): value is ArchivePromptScoreSummary {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const prompt = value as ArchivePromptScoreSummary & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    typeof prompt.id === "string" &&
+    typeof prompt.tool === "string" &&
+    typeof prompt.project === "string" &&
+    typeof prompt.received_at === "string" &&
+    typeof prompt.quality_score === "number" &&
+    typeof prompt.quality_score_band === "string" &&
+    Array.isArray(prompt.quality_gaps) &&
+    prompt.quality_gaps.every((gap) => typeof gap === "string") &&
+    Array.isArray(prompt.tags) &&
+    prompt.tags.every((tag) => typeof tag === "string") &&
+    typeof prompt.is_sensitive === "boolean" &&
+    prompt.cwd === undefined &&
+    prompt.markdown === undefined &&
+    prompt.prompt_body === undefined &&
+    prompt.raw_path === undefined
+  );
+}
+
 export type ProjectPolicy = {
   capture_disabled: boolean;
   analysis_disabled: boolean;
@@ -4126,6 +4157,7 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
     body.data.archive_score === null ||
     !Array.isArray(body.data.practice_plan) ||
     !Array.isArray(body.data.low_score_prompts) ||
+    !body.data.low_score_prompts.every(isArchivePromptScoreSummary) ||
     !isArchiveScorePrivacy(body.data.privacy)
   ) {
     throw new Error("Archive score report failed: Invalid response.");

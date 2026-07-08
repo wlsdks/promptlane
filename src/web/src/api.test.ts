@@ -6437,6 +6437,50 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports unsafe archive score low prompt items without returning prompt bodies", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            archive_score: {
+              average: 42,
+              max: 100,
+              band: "fair",
+              scored_prompts: 1,
+              total_prompts: 1,
+            },
+            practice_plan: [],
+            low_score_prompts: [
+              {
+                id: "prmt_web_low",
+                tool: "codex",
+                project: "private-project",
+                received_at: "2026-07-04T01:00:00.000Z",
+                quality_score: 42,
+                quality_score_band: "fair",
+                quality_gaps: ["Goal clarity"],
+                tags: ["review"],
+                is_sensitive: false,
+                prompt_body: "secret prompt body",
+              },
+            ],
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+            },
+          },
+        }),
+      );
+    const { getArchiveScoreReport } = await import("./api.js");
+
+    await expect(getArchiveScoreReport()).rejects.toThrow(
+      "Archive score report failed: Invalid response.",
+    );
+  });
+
   it("preserves quality dashboard recovery detail on failed responses", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
