@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Smoke Dogfood Corepack Build
+
+- [x] CHECK: most benchmark/e2e/smoke/dogfood package scripts still invoked
+  bare `pnpm build`, and their missing-build hints said `pnpm build`, while
+  release gates now use packageManager-pinned `corepack pnpm`.
+- [x] RED: packaging guard now requires all build-backed benchmark/e2e/smoke
+  and dogfood scripts to start with `corepack pnpm build &&`.
+- [x] GREEN: build-backed benchmark/e2e/smoke/dogfood scripts and missing-build
+  hints now use `corepack pnpm build`.
+- [x] VERIFY: focused build-backed script guard, packaging tests, typecheck,
+  touched-file formatting, quality lint, and diff whitespace check.
+
 ## 2026-07-08 PromptLane Agent Setup Smoke Corepack Build
 
 - [x] CHECK: `smoke:agent-setup` still invoked bare `pnpm build`, and the

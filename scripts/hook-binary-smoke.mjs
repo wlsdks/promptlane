@@ -28,7 +28,10 @@ const payload = JSON.stringify({
 });
 
 try {
-  assertFileExists(cliPath, "Run `pnpm build` before hook binary smoke.");
+  assertFileExists(
+    cliPath,
+    "Run `corepack pnpm build` before hook binary smoke.",
+  );
   writeFileSync(settingsPath, JSON.stringify({ hooks: {} }));
   writeFileSync(hooksPath, JSON.stringify({ hooks: {} }));
   symlinkCli("promptlane");

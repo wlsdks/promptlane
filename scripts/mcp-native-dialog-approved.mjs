@@ -19,7 +19,7 @@ if (process.env[approvalEnv] !== "1") {
 
 assertFileExists(
   cliPath,
-  "Run `pnpm build` before the approved MCP native dialog dogfood.",
+  "Run `corepack pnpm build` before the approved MCP native dialog dogfood.",
 );
 
 const child = spawn(process.execPath, [cliPath, "mcp"], {

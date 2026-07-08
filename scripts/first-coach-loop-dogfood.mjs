@@ -32,7 +32,7 @@ let serverProcess;
 try {
   assertFileExists(
     cliPath,
-    "Run `pnpm build` before first coach loop dogfood.",
+    "Run `corepack pnpm build` before first coach loop dogfood.",
   );
   mkdirSync(projectDir, { recursive: true });
 

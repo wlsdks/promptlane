@@ -40,7 +40,7 @@ const mcpWaiters = new Map();
 try {
   assertFileExists(
     cliPath,
-    "Run `pnpm build` before loop memory approval dogfood.",
+    "Run `corepack pnpm build` before loop memory approval dogfood.",
   );
   mkdirSync(projectDir, { recursive: true });
   writeFileSync(instructionFile, "# Dogfood Instructions\n", { mode: 0o600 });

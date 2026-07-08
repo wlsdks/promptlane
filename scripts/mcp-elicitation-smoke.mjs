@@ -8,7 +8,10 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cliPath = join(repoRoot, "dist", "cli", "index.js");
 const timeoutMs = 10_000;
 
-assertFileExists(cliPath, "Run `pnpm build` before MCP elicitation smoke.");
+assertFileExists(
+  cliPath,
+  "Run `corepack pnpm build` before MCP elicitation smoke.",
+);
 
 const child = spawn(process.execPath, [cliPath, "mcp"], {
   cwd: repoRoot,

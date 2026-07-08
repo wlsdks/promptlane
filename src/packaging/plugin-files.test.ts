@@ -67,6 +67,35 @@ describe("plugin packaging files", () => {
     );
   });
 
+  it("uses packageManager-pinned pnpm for build-backed smoke and dogfood scripts", () => {
+    const packageJson = readJson<{
+      scripts: Record<string, string>;
+    }>("package.json");
+
+    for (const scriptName of [
+      "benchmark",
+      "e2e:browser",
+      "smoke:agent-setup",
+      "smoke:hooks",
+      "smoke:mcp-coach-loop",
+      "smoke:mcp-elicitation",
+      "smoke:mcp-native-dialog",
+      "dogfood:mcp-native-dialog-approved",
+      "dogfood:mcp-native-dialog-refusal",
+      "dogfood:first-coach-loop",
+      "dogfood:loop-memory-approval",
+      "smoke:release",
+    ]) {
+      expect(packageJson.scripts[scriptName]).toMatch(
+        /^corepack pnpm build && /,
+      );
+      expect(packageJson.scripts[scriptName]).not.toMatch(/^pnpm build && /);
+    }
+    expect(packageJson.scripts["dogfood:web-user-flow"]).toBe(
+      "corepack pnpm e2e:browser",
+    );
+  });
+
   it("keeps shell command quoting centralized in the shared helper", () => {
     const commandSources = [
       "src/cli/commands/install-hook.ts",
@@ -1004,7 +1033,7 @@ describe("plugin packaging files", () => {
     );
 
     expect(packageJson.scripts["smoke:mcp-coach-loop"]).toBe(
-      "pnpm build && node scripts/mcp-coach-loop-smoke.mjs",
+      "corepack pnpm build && node scripts/mcp-coach-loop-smoke.mjs",
     );
     expect(mcpAudit).toContain("No immediate MCP coach-loop slice remains");
     expect(mcpAudit).toContain("apply_clarifications");
@@ -1834,7 +1863,7 @@ describe("plugin packaging files", () => {
     );
 
     expect(packageJson.scripts["dogfood:web-user-flow"]).toBe(
-      "pnpm e2e:browser",
+      "corepack pnpm e2e:browser",
     );
     expect(packageJson.files).toContain(evidencePath);
     expect(harness).toContain(evidencePath);
@@ -2298,7 +2327,7 @@ describe("plugin packaging files", () => {
     ]);
     expect(packageJson.files).toContain("scripts/hook-binary-smoke.mjs");
     expect(packageJson.scripts["smoke:hooks"]).toBe(
-      "pnpm build && node scripts/hook-binary-smoke.mjs",
+      "corepack pnpm build && node scripts/hook-binary-smoke.mjs",
     );
     expect(smoke).toContain("promptlane");
     expect(smoke).toContain("hook claude-code");
@@ -2359,7 +2388,7 @@ describe("plugin packaging files", () => {
       "scripts/mcp-native-dialog-preflight.mjs",
     );
     expect(packageJson.scripts["smoke:mcp-native-dialog"]).toBe(
-      "pnpm build && node scripts/mcp-native-dialog-preflight.mjs",
+      "corepack pnpm build && node scripts/mcp-native-dialog-preflight.mjs",
     );
     expect(smoke).toContain("allow_native_dialog");
     expect(smoke).toContain("interaction_status");
@@ -2383,10 +2412,10 @@ describe("plugin packaging files", () => {
       "scripts/mcp-native-dialog-approved.mjs",
     );
     expect(packageJson.scripts["dogfood:mcp-native-dialog-approved"]).toBe(
-      "pnpm build && node scripts/mcp-native-dialog-approved.mjs",
+      "corepack pnpm build && node scripts/mcp-native-dialog-approved.mjs",
     );
     expect(packageJson.scripts["dogfood:mcp-native-dialog-refusal"]).toBe(
-      "pnpm build && node scripts/mcp-native-dialog-approved.mjs",
+      "corepack pnpm build && node scripts/mcp-native-dialog-approved.mjs",
     );
     expect(smoke).toContain("PROMPTLANE_NATIVE_DIALOG_APPROVED");
     expect(smoke).toContain("Refusing to open a native OS dialog");
@@ -2408,7 +2437,7 @@ describe("plugin packaging files", () => {
 
     expect(packageJson.files).toContain("scripts/mcp-coach-loop-smoke.mjs");
     expect(packageJson.scripts["smoke:mcp-coach-loop"]).toBe(
-      "pnpm build && node scripts/mcp-coach-loop-smoke.mjs",
+      "corepack pnpm build && node scripts/mcp-coach-loop-smoke.mjs",
     );
     expect(smoke).toContain("score_prompt");
     expect(smoke).toContain("coach_prompt");
@@ -2442,7 +2471,7 @@ describe("plugin packaging files", () => {
 
     expect(packageJson.files).toContain("scripts/first-coach-loop-dogfood.mjs");
     expect(packageJson.scripts["dogfood:first-coach-loop"]).toBe(
-      "pnpm build && node scripts/first-coach-loop-dogfood.mjs",
+      "corepack pnpm build && node scripts/first-coach-loop-dogfood.mjs",
     );
     expect(smoke).toContain("hook codex");
     expect(smoke).toContain("coach --json");
@@ -2482,7 +2511,7 @@ describe("plugin packaging files", () => {
       "scripts/loop-memory-approval-dogfood.mjs",
     );
     expect(packageJson.scripts["dogfood:loop-memory-approval"]).toBe(
-      "pnpm build && node scripts/loop-memory-approval-dogfood.mjs",
+      "corepack pnpm build && node scripts/loop-memory-approval-dogfood.mjs",
     );
     expect(smoke).toContain("record_loop_outcome");
     expect(smoke).toContain("propose_loop_memory_candidate");

@@ -10,7 +10,7 @@ const timeoutMs = 10_000;
 
 assertFileExists(
   cliPath,
-  "Run `pnpm build` before MCP native dialog preflight.",
+  "Run `corepack pnpm build` before MCP native dialog preflight.",
 );
 
 const child = spawn(process.execPath, [cliPath, "mcp"], {
