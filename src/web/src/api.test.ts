@@ -6336,6 +6336,9 @@ describe("web api export client", () => {
               last_7_days: 0,
               last_30_days: 0,
             },
+            trend: {
+              daily: [],
+            },
             quality_score: {
               average: 0,
               max: 100,
@@ -7358,6 +7361,64 @@ describe("web api export client", () => {
               last_7_days: 1,
               last_30_days: 1,
               raw_path: "/Users/jinan/private-project",
+            },
+            quality_score: {
+              average: 42,
+              max: 100,
+              band: "needs_work",
+              scored_prompts: 1,
+            },
+            distribution: {
+              by_tool: [],
+              by_project: [],
+            },
+            patterns: [],
+            instruction_suggestions: [],
+            useful_prompts: [],
+            duplicate_prompt_groups: [],
+            project_profiles: [],
+            missing_items: [],
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+            },
+          },
+        }),
+      );
+    const { getQualityDashboard } = await import("./api.js");
+
+    await expect(getQualityDashboard()).rejects.toThrow(
+      "Quality dashboard failed: Invalid response.",
+    );
+  });
+
+  it("reports unsafe quality dashboard trend items without returning prompt bodies", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            total_prompts: 1,
+            sensitive_prompts: 0,
+            sensitive_ratio: 0,
+            recent: {
+              last_7_days: 1,
+              last_30_days: 1,
+            },
+            trend: {
+              daily: [
+                {
+                  date: "2026-07-04",
+                  prompt_count: 1,
+                  quality_gap_count: 1,
+                  quality_gap_rate: 1,
+                  average_quality_score: 42,
+                  sensitive_count: 0,
+                  prompt_body: "secret prompt body",
+                },
+              ],
             },
             quality_score: {
               average: 42,

@@ -3690,6 +3690,54 @@ function isQualityDashboardRecent(
   );
 }
 
+function isQualityDashboardTrend(
+  value: unknown,
+): value is QualityDashboard["trend"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const trend = value as QualityDashboard["trend"] & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    Array.isArray(trend.daily) &&
+    trend.daily.every(isQualityDashboardTrendDay) &&
+    trend.cwd === undefined &&
+    trend.markdown === undefined &&
+    trend.prompt_body === undefined &&
+    trend.raw_path === undefined
+  );
+}
+
+function isQualityDashboardTrendDay(
+  value: unknown,
+): value is QualityDashboard["trend"]["daily"][number] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const day = value as QualityDashboard["trend"]["daily"][number] & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    typeof day.date === "string" &&
+    typeof day.prompt_count === "number" &&
+    typeof day.quality_gap_count === "number" &&
+    typeof day.quality_gap_rate === "number" &&
+    typeof day.average_quality_score === "number" &&
+    typeof day.sensitive_count === "number" &&
+    day.cwd === undefined &&
+    day.markdown === undefined &&
+    day.prompt_body === undefined &&
+    day.raw_path === undefined
+  );
+}
+
 function isQualityDashboardDistribution(
   value: unknown,
 ): value is QualityDashboard["distribution"] {
@@ -4636,6 +4684,7 @@ export async function getQualityDashboard(
       sensitive_prompts?: unknown;
       sensitive_ratio?: unknown;
       recent?: unknown;
+      trend?: unknown;
       quality_score?: unknown;
       distribution?: unknown;
       missing_items?: unknown;
@@ -4652,6 +4701,7 @@ export async function getQualityDashboard(
     typeof body.data.sensitive_prompts !== "number" ||
     typeof body.data.sensitive_ratio !== "number" ||
     !isQualityDashboardRecent(body.data.recent) ||
+    !isQualityDashboardTrend(body.data.trend) ||
     !isQualityDashboardScore(body.data.quality_score) ||
     !isQualityDashboardDistribution(body.data.distribution) ||
     !Array.isArray(body.data.missing_items) ||
