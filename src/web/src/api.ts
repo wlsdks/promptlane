@@ -445,6 +445,22 @@ function isLoopSummary(value: unknown): value is LoopSummary {
   );
 }
 
+function isLoopStatusPrivacy(
+  value: unknown,
+): value is LoopListResponse["status"]["privacy"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const privacy = value as LoopListResponse["status"]["privacy"];
+  return (
+    privacy.local_only === true &&
+    privacy.external_calls === false &&
+    privacy.returns_prompt_bodies === false &&
+    privacy.returns_raw_paths === false &&
+    privacy.returns_compact_content === false
+  );
+}
+
 export type LoopWorktreeResponse = {
   worktree: string;
   session_id?: string;
@@ -2176,7 +2192,11 @@ export async function listLoops(): Promise<LoopListResponse> {
     data?: { status?: unknown; items?: unknown };
   };
   const status = body.data?.status as
-    | { latest_snapshot?: unknown; latest_compact_boundary?: unknown }
+    | {
+        latest_snapshot?: unknown;
+        latest_compact_boundary?: unknown;
+        privacy?: unknown;
+      }
     | undefined;
   if (
     typeof body.data?.status !== "object" ||
@@ -2186,7 +2206,8 @@ export async function listLoops(): Promise<LoopListResponse> {
     (status?.latest_snapshot !== undefined &&
       !isLoopSummary(status.latest_snapshot)) ||
     (status?.latest_compact_boundary !== undefined &&
-      !isLoopCompactBoundary(status.latest_compact_boundary))
+      !isLoopCompactBoundary(status.latest_compact_boundary)) ||
+    !isLoopStatusPrivacy(status?.privacy)
   ) {
     throw new Error("Loop list failed: Invalid response.");
   }

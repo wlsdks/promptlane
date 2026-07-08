@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Loop Status Privacy Contract Error
+
+- [x] CHECK: web API `listLoops`가 `/api/v1/loops` 성공 응답의 `status.privacy`
+  raw-free contract를 검증하지 않아 malformed privacy flags를 agent-loop status UI에 넘길
+  수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 `returns_raw_paths: true`인
+  `status.privacy` body를 `Loop list failed: Invalid response.`로 reject하도록 요구하게 해
+  현재 unsafe privacy flag resolve 실패를 확인한다.
+- [x] GREEN: loop status privacy가 local-only, no external calls, no prompt bodies, no raw
+  paths, no compact content 계약을 만족하는지 확인하고 깨진 privacy block은 raw-free loop
+  list contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Loop Status Compact Boundary Contract Error
 
 - [x] CHECK: web API `listLoops`가 `/api/v1/loops` 성공 응답의

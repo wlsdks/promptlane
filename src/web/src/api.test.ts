@@ -2838,6 +2838,44 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports unsafe loop status privacy flags without returning raw-path status data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            status: {
+              status: "ready",
+              snapshot_count: 1,
+              activity: {
+                active_worktrees: 1,
+                active_sessions: 1,
+                needs_review: false,
+                next_action: "continue current worktree loop",
+                worktrees: [],
+              },
+              project_memory: { approved_count: 0, included_in_brief: false },
+              next_action: "promptlane loop collect",
+              next_actions: [],
+              privacy: {
+                local_only: true,
+                external_calls: false,
+                returns_prompt_bodies: false,
+                returns_raw_paths: true,
+                returns_compact_content: false,
+              },
+            },
+            items: [],
+          },
+        }),
+      );
+    const { listLoops } = await import("./api.js");
+
+    await expect(listLoops()).rejects.toThrow(
+      "Loop list failed: Invalid response.",
+    );
+  });
+
   it("preserves loop brief recovery detail on failed responses", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
