@@ -1475,13 +1475,17 @@ function parseLoopInstructionPatchProposalResponse(
     data?: {
       target_file?: unknown;
       patch_kind?: unknown;
+      title?: unknown;
       diff?: unknown;
       writes_files?: unknown;
       requires_user_approval?: unknown;
+      source_memory_id?: unknown;
+      next_action?: unknown;
       apply_gate?: {
         web_apply_available?: unknown;
         confirm_command?: unknown;
         mcp_tool?: unknown;
+        reason?: unknown;
       };
       privacy?: {
         local_only?: unknown;
@@ -1498,12 +1502,16 @@ function parseLoopInstructionPatchProposalResponse(
     (body.data?.target_file !== "AGENTS.md" &&
       body.data?.target_file !== "CLAUDE.md") ||
     body.data.patch_kind !== "append_section" ||
+    typeof body.data.title !== "string" ||
     typeof body.data.diff !== "string" ||
     body.data.writes_files !== false ||
     body.data.requires_user_approval !== true ||
+    typeof body.data.source_memory_id !== "string" ||
+    typeof body.data.next_action !== "string" ||
     body.data.apply_gate?.web_apply_available !== false ||
     typeof body.data.apply_gate.confirm_command !== "string" ||
     body.data.apply_gate.mcp_tool !== "apply_instruction_patch" ||
+    typeof body.data.apply_gate.reason !== "string" ||
     body.data.privacy?.local_only !== true ||
     body.data.privacy.external_calls !== false ||
     body.data.privacy.returns_prompt_bodies !== false ||

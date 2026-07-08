@@ -2493,6 +2493,45 @@ describe("web api export client", () => {
     ).rejects.toThrow("Loop instruction patch proposal failed: Invalid response.");
   });
 
+  it("reports malformed instruction patch apply gates without returning incomplete approval data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            target_file: "AGENTS.md",
+            patch_kind: "append_section",
+            title: "Append approved PromptLane memory to AGENTS.md",
+            diff: "--- a/AGENTS.md\n+++ b/AGENTS.md\n@@\n+## PromptLane Memories\n+  source_memory: mem_web\n",
+            writes_files: false,
+            requires_user_approval: true,
+            source_memory_id: "mem_web",
+            apply_gate: {
+              web_apply_available: false,
+              confirm_command:
+                "promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply",
+              mcp_tool: "apply_instruction_patch",
+              reason: 7,
+            },
+            next_action:
+              "review this patch proposal, then apply it manually only if the instruction belongs in the project",
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+              writes_instruction_files: false,
+            },
+          },
+        }),
+      );
+    const { getLoopInstructionPatch } = await import("./api.js");
+
+    await expect(
+      getLoopInstructionPatch({ targetFile: "AGENTS.md" }),
+    ).rejects.toThrow("Loop instruction patch proposal failed: Invalid response.");
+  });
+
   it("shares an in-flight csrf session request across parallel API calls", async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url === "/api/v1/session") {

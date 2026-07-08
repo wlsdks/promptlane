@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Loop Instruction Patch Contract Error
+
+- [x] CHECK: web API `getLoopInstructionPatch`가 `/api/v1/loops/instruction-patch` 성공
+  응답의 apply gate와 instruction patch metadata 일부를 검증하지 않아 malformed source
+  memory, next action, apply reason을 review UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed instruction patch apply gate body를
+  `Loop instruction patch proposal failed: Invalid response.`로 reject하도록 요구하게 해 현재
+  incomplete apply-gate resolve 실패를 확인한다.
+- [x] GREEN: title, source_memory_id, next_action, apply_gate.reason 계약을 확인하고 깨진
+  proposal은 raw-free instruction patch contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Loop Memory Approval Contract Error
 
 - [x] CHECK: web API `approveLoopMemory`가 `/api/v1/loops/memory/approve` 성공 응답의
