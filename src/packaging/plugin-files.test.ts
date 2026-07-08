@@ -219,6 +219,10 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "docs/RELEASE_CHECKLIST.md"),
       "utf8",
     );
+    const architecture = readFileSync(
+      join(process.cwd(), "docs/ARCHITECTURE.md"),
+      "utf8",
+    );
     const releaseSmoke = readFileSync(
       join(process.cwd(), "scripts/release-smoke.mjs"),
       "utf8",
@@ -235,6 +239,22 @@ describe("plugin packaging files", () => {
     ]) {
       expect(releaseChecklist).toContain(`\`${command}\``);
     }
+    for (const command of [
+      "corepack pnpm format",
+      "corepack pnpm test",
+      "corepack pnpm lint",
+      "corepack pnpm build",
+      "corepack pnpm pack:dry-run",
+      "corepack pnpm benchmark -- --json",
+      "corepack pnpm e2e:browser",
+      "corepack pnpm smoke:release",
+      "corepack pnpm evidence:quality -- --require-complete",
+      "corepack pnpm promptlane quality-evidence --require-complete",
+      "git diff --check",
+    ]) {
+      expect(architecture).toContain(command);
+    }
+    expect(architecture).not.toContain("\npnpm test");
 
     expect(packageJson.scripts["pack:dry-run"]).toBe(
       "node scripts/pack-dry-run.mjs",

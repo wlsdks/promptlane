@@ -225,15 +225,20 @@ Use risk-based coverage:
 - MCP changes: tool list, schemas, `structuredContent`, and privacy-safe
   result tests.
 - Web changes: model unit tests plus browser E2E/screenshots when UI changes.
-- Packaging changes: `pnpm pack:dry-run` and plugin package tests.
+- Packaging changes: `corepack pnpm pack:dry-run` and plugin package tests.
 
 The normal release gate is:
 
 ```sh
-pnpm test
-pnpm lint
-pnpm format
-pnpm build
-pnpm pack:dry-run
+corepack pnpm format
+corepack pnpm test
+corepack pnpm lint
+corepack pnpm build
+corepack pnpm pack:dry-run
+corepack pnpm benchmark -- --json
+corepack pnpm e2e:browser
+corepack pnpm smoke:release
+corepack pnpm evidence:quality -- --require-complete
+corepack pnpm promptlane quality-evidence --require-complete
 git diff --check
 ```

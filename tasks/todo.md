@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Architecture Release Gate Corepack Alignment
+
+- [x] CHECK: `docs/ARCHITECTURE.md` still documented the normal release gate
+  with bare `pnpm` and omitted benchmark, browser E2E, release smoke, and 9.5
+  quality evidence checks now required by release checklist and publish runbook.
+- [x] RED: packaging guard now requires Architecture to include the current
+  `corepack pnpm` release gate and reject the stale bare `pnpm test` gate.
+- [x] GREEN: Architecture testing expectations now use
+  `corepack pnpm pack:dry-run` and list the current local-first release gate.
+- [x] VERIFY: focused release-checklist packaging guard, packaging tests,
+  typecheck, touched-file formatting, quality lint, and diff whitespace check.
+
 ## 2026-07-08 PromptLane README Quality Evidence Corepack Commands
 
 - [x] CHECK: README and README.ko documented the release/goal-completion
