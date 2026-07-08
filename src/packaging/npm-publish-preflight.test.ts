@@ -190,6 +190,41 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "plugin artifact exists .claude-plugin/plugin.json",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "plugin artifact exists .claude-plugin/marketplace.json",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "plugin artifact exists commands/coach.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "plugin artifact exists commands/setup.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "plugin artifact exists plugins/promptlane/.codex-plugin/plugin.json",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "plugin artifact exists plugins/promptlane/skills/promptlane/SKILL.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "plugin artifact exists integrations/claude-code/README.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "plugin artifact exists integrations/claude-code/settings.example.json",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files include docs/PROMPTLANE.md",
           ok: true,
         }),

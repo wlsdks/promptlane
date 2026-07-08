@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Plugin Artifact Preflight Guard
+
+- [x] CHECK: npm publish preflight checks integration directories, but an empty
+  Claude/Codex plugin directory could still pass without the concrete manifests,
+  command files, skill file, and Claude settings example that installed users
+  need.
+- [x] RED: focused npm publish preflight test requires machine-readable
+  concrete plugin artifact existence checks.
+- [x] GREEN: npm publish preflight checks the Claude plugin manifests, slash
+  command docs, Codex plugin manifest/skill, and Claude Code integration files.
+- [x] VERIFY: focused preflight test, skip-npm preflight JSON, formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Built Asset Preflight Guard
 
 - [x] CHECK: release checklist requires built package assets under `dist/cli`,

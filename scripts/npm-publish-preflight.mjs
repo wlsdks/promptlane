@@ -243,6 +243,29 @@ for (const filePath of [
     );
   }
 }
+for (const filePath of [
+  ".claude-plugin/plugin.json",
+  ".claude-plugin/marketplace.json",
+  "commands/buddy.md",
+  "commands/coach.md",
+  "commands/guard.md",
+  "commands/habits.md",
+  "commands/improve-last.md",
+  "commands/judge.md",
+  "commands/open.md",
+  "commands/score.md",
+  "commands/setup.md",
+  "commands/status.md",
+  "plugins/promptlane/.codex-plugin/plugin.json",
+  "plugins/promptlane/skills/promptlane/SKILL.md",
+  "integrations/claude-code/README.md",
+  "integrations/claude-code/settings.example.json",
+]) {
+  check(
+    `plugin artifact exists ${filePath}`,
+    existsSync(join(repoRoot, filePath)),
+  );
+}
 for (const [label, filePath] of [
   ["built CLI assets exist", "dist/cli"],
   ["built server assets exist", "dist/server"],
