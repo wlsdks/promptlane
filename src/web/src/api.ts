@@ -2111,7 +2111,9 @@ export async function listProjects(): Promise<ProjectSummary[]> {
   if (!Array.isArray(body.data?.items)) {
     throw new Error("Project list failed: Invalid response.");
   }
-  return body.data.items;
+  return body.data.items.map((item) =>
+    parseProjectSummaryResponse({ data: item }, "Project list failed"),
+  );
 }
 
 export async function listLoops(): Promise<LoopListResponse> {

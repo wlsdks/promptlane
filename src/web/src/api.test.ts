@@ -2623,6 +2623,17 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports malformed project list items without returning incomplete project state", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: { items: [{}] } }));
+    const { listProjects } = await import("./api.js");
+
+    await expect(listProjects()).rejects.toThrow(
+      "Project list failed: Invalid response.",
+    );
+  });
+
   it("reports malformed project policy update responses without returning incomplete project state", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
