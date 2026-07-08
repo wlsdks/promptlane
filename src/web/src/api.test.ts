@@ -7951,6 +7951,22 @@ describe("web api export client", () => {
     );
   });
 
+  it("redacts camelCase raw-like details from failed response messages", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(500, {
+          detail:
+            "Unexpected setup failure providerCredential: private local provider token. Retry setup.",
+        }),
+      );
+    const { getSettings } = await import("./api.js");
+
+    await expect(getSettings()).rejects.toThrow(
+      "Settings failed (500): Unexpected setup failure providerCredential:[REDACTED:providercredential]. Retry setup.",
+    );
+  });
+
   it("reports malformed settings responses without returning incomplete setup data", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

@@ -5910,7 +5910,7 @@ function apiErrorIssueText(value: unknown): string {
 }
 
 const RAW_DETAIL_ERROR_KEY_PATTERN =
-  "api_key|compact_summary|credential|markdown|prompt_body|provider_credential|raw_path|token|transcript|transcript_body";
+  "apiKey|api_key|compactSummary|compact_summary|credential|markdown|promptBody|prompt_body|providerCredential|provider_credential|rawPath|raw_path|token|transcript|transcriptBody|transcript_body";
 
 function isRawDetailErrorKey(value: string): boolean {
   return new RegExp(`^(?:${RAW_DETAIL_ERROR_KEY_PATTERN})$`, "i").test(value);

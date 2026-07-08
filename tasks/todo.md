@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Detail CamelCase Raw Redaction
+
+- [x] CHECK: `sanitizeApiErrorText` raw detail key pattern이 snake_case 중심이라
+  `providerCredential`/`promptBody`/`rawPath`/`compactSummary` 같은 JS/web camelCase keyed
+  detail은 failed response detail에 그대로 남길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 settings failed response detail의
+  `providerCredential: private local provider token.` phrase 전체를
+  `[REDACTED:providercredential]`로 redaction하도록 요구하게 해 현재 unsafe camelCase
+  credential detail 노출 실패를 확인한다.
+- [x] GREEN: web API error sanitizer raw detail key pattern을 camelCase aliases까지
+  확장해 provider credential, prompt body, raw path, compact/transcript keys의 casing drift를 막는다.
+- [x] VERIFY: focused web API recovery-detail/error redaction tests, implementation
+  format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Detail Provider Credential Redaction
 
 - [x] CHECK: `sanitizeApiErrorText`가 prompt/loop raw keys는 redaction하지만
