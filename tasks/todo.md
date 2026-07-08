@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Pre-Publish Privacy Audit Detector Guard
+
+- [x] CHECK: pre-publish privacy audit says its grep pattern should mirror
+  runtime detectors, but npm publish preflight did not guard that drift.
+- [x] RED: focused npm publish preflight test requires a machine-readable
+  privacy-audit detector mirror check.
+- [x] GREEN: npm publish preflight now checks the audit document includes the
+  core runtime token detector families before publish.
+- [x] VERIFY: focused preflight/package tests, skip-npm preflight JSON,
+  formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Origin Tag Sync Preflight Guard
 
 - [x] CHECK: npm publish preflight verified the local annotated `v1.0.0` tag,

@@ -398,6 +398,11 @@ check(
   Array.isArray(packageJson.files) &&
     packageJson.files.includes("!dist/**/*.map"),
 );
+check(
+  "pre-publish privacy audit mirrors runtime token detectors",
+  privacyAuditMirrorsRuntimeTokenDetectors(),
+  "docs/PRE_PUBLISH_PRIVACY_AUDIT.md should include the token families guarded by src/redaction/detectors.ts",
+);
 
 if (!options.skipGitClean) {
   const status = run("git", ["status", "--porcelain"]);
@@ -585,6 +590,32 @@ function normalizeWhitespace(value) {
 function readSharedVersion() {
   const source = readFileSync(join(repoRoot, "src/shared/version.ts"), "utf8");
   return source.match(/VERSION\s*=\s*"([^"]+)"/)?.[1];
+}
+
+function privacyAuditMirrorsRuntimeTokenDetectors() {
+  const detectorSource = readText("src/redaction/detectors.ts");
+  const privacyAudit = readText("docs/PRE_PUBLISH_PRIVACY_AUDIT.md");
+  const requiredMirrors = [
+    ["bearer_token", "bearer\\s+"],
+    ["eyJ[a-zA-Z0-9_-]+", "eyJ[A-Za-z0-9_-]+"],
+    ["AIza[0-9A-Za-z_-]{20,}", "AIza[0-9A-Za-z_-]{20,}"],
+    ["npm_[A-Za-z0-9]{30,}", "npm_[A-Za-z0-9]{30,}"],
+    [
+      "(?:sk|pk|ghp|github_pat|xoxb|AKIA)",
+      "(?:sk|pk|ghp|github_pat|xoxb|AKIA)",
+    ],
+    [
+      "postgres|postgresql|mysql|mongodb|redis",
+      "(?:postgres|postgresql|mysql|mongodb|redis)://",
+    ],
+    ["hooks\\.", "https://hooks\\."],
+  ];
+
+  return requiredMirrors.every(
+    ([sourceSnippet, auditSnippet]) =>
+      detectorSource.includes(sourceSnippet) &&
+      privacyAudit.includes(auditSnippet),
+  );
 }
 
 function run(command, args) {

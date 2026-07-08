@@ -572,6 +572,10 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "pre-publish privacy audit mirrors runtime token detectors",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package manager is pinned",
           ok: true,
         }),

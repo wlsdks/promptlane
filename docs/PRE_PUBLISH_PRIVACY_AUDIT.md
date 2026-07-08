@@ -20,7 +20,7 @@ Run:
 
 ```sh
 npm pack --dry-run --json
-rg -n "maintainer-local-path|gho_|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9_-]|sk-proj-[A-Za-z0-9_-]|sk-ant-[A-Za-z0-9_-]|npm_[A-Za-z0-9]{30,}|AIza[0-9A-Za-z_-]{20,}|xoxb-[A-Za-z0-9_-]+|AKIA[A-Z0-9]{12,}|eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+|PRIVATE KEY|BEGIN .* KEY|password|secret" dist README.md README.ko.md SECURITY.md CHANGELOG.md docs commands plugins integrations package.json .claude-plugin scripts --glob '!node_modules'
+rg -n "maintainer-local-path|bearer\s+|(?:sk|pk|ghp|github_pat|xoxb|AKIA)[A-Za-z0-9_-]{8,}|sk-proj-[A-Za-z0-9_-]|sk-ant-[A-Za-z0-9_-]|npm_[A-Za-z0-9]{30,}|AIza[0-9A-Za-z_-]{20,}|eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+|(?:postgres|postgresql|mysql|mongodb|redis)://|https://hooks\.|PRIVATE KEY|BEGIN .* KEY|password|secret" dist README.md README.ko.md SECURITY.md CHANGELOG.md docs commands plugins integrations package.json .claude-plugin scripts --glob '!node_modules'
 ```
 
 The token patterns in this grep should mirror the live detectors in
