@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Detail Unquoted Raw Redaction
+
+- [x] CHECK: `sanitizeApiErrorText`가 quoted raw-like keyed value는 redaction하지만
+  `prompt_body=private-incident-summary` 같은 unquoted 단일 토큰 value는 failed response
+  detail에 그대로 남길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 settings failed response detail의 unquoted
+  `prompt_body=...` 값을 `[REDACTED:prompt_body]`로 redaction하도록 요구하게 해 현재
+  unsafe error detail 노출 실패를 확인한다.
+- [x] GREEN: web API error sanitizer가 quoted raw-like value redaction을 유지하면서
+  unquoted 단일 토큰 `prompt_body`/`raw_path`/`markdown` values도 key별 redaction한다.
+- [x] VERIFY: focused web API recovery-detail/error redaction tests, implementation
+  format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Detail Raw Redaction
 
 - [x] CHECK: `failApi`/`sanitizeApiErrorText`가 failed response detail/title/message/errors의

@@ -5915,6 +5915,11 @@ function sanitizeApiErrorText(value: string): string {
         `${key}${separator}${quote}[REDACTED:${key.toLowerCase()}]${quote}`,
     )
     .replace(
+      /\b(markdown|prompt_body|raw_path)\s*([:=])\s*(?!["'`])([^\s,;)}\]]+)/gi,
+      (_match, key: string, separator: string) =>
+        `${key}${separator}[REDACTED:${key.toLowerCase()}]`,
+    )
+    .replace(
       /\/(?:Users|home|private|tmp|var|opt|workspace|Volumes)\/[^\s)'"`]+/gi,
       "[REDACTED:path]",
     )
