@@ -155,7 +155,7 @@ codex plugin marketplace add wlsdks/promptlane
 그 다음 로컬 coach setup을 실행합니다.
 
 ```sh
-promptlane setup --profile coach --register-mcp
+promptlane setup --profile coach --register-mcp --open-web
 ```
 
 Codex는 marketplace 관리를 `codex plugin marketplace add/upgrade/remove`로 제공합니다. 프롬프트 capture hook은 `promptlane setup`이 Codex hook config를 쓰고 Codex hooks를 활성화하면서 설치합니다.
@@ -167,6 +167,7 @@ promptlane doctor claude-code
 promptlane doctor codex
 promptlane statusline claude-code
 promptlane buddy --once
+promptlane coach
 ```
 
 로컬 archive 열기:

@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Korean README First Capture Parity
+
+- [x] CHECK: Korean README Codex quick start omitted `--open-web`, and Capture
+  check omitted `promptlane coach`, while English README included both in the
+  first-success path.
+- [x] RED: section-scoped README guard now requires the Korean Codex quick start
+  and capture check sections to match the English first capture path.
+- [x] GREEN: README.ko Codex setup now uses `--open-web`, and Capture check
+  includes `promptlane coach`.
+- [x] VERIFY: focused README guards, pack dry-run, test formatting, and diff
+  hygiene.
+
 ## 2026-07-08 PromptLane Korean README Dev Setup Parity
 
 - [x] CHECK: English README local development quick start uses `pnpm install`

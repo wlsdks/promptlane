@@ -479,6 +479,40 @@ describe("plugin packaging files", () => {
     expect(readmeKo).not.toContain("pnpm build\n```");
   });
 
+  it("keeps Korean README first capture checks aligned with the English quick start", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+    const englishCodexSection = sectionBetween(
+      readme,
+      "### 3. Add The Codex Marketplace",
+    );
+    const koreanCodexSection = sectionBetween(
+      readmeKo,
+      "### 3. Codex Marketplace 추가",
+    );
+    const englishCaptureSection = sectionBetween(
+      readme,
+      "### 4. Check Capture",
+    );
+    const koreanCaptureSection = sectionBetween(
+      readmeKo,
+      "### 4. Capture 확인",
+    );
+
+    for (const content of [englishCodexSection, koreanCodexSection]) {
+      expect(content).toContain(
+        "promptlane setup --profile coach --register-mcp --open-web",
+      );
+    }
+    for (const content of [englishCaptureSection, koreanCaptureSection]) {
+      expect(content).toContain("promptlane doctor claude-code");
+      expect(content).toContain("promptlane doctor codex");
+      expect(content).toContain("promptlane statusline claude-code");
+      expect(content).toContain("promptlane buddy --once");
+      expect(content).toContain("promptlane coach");
+    }
+  });
+
   it("keeps README release smoke commands on packageManager-pinned pnpm", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
