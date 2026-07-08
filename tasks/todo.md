@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Release Smoke Quality Evidence CLI Gate
+
+- [x] CHECK: release gate는 product CLI `quality-evidence --require-complete`를 요구하지만
+  `scripts/release-smoke.mjs`는 built CLI의 quality evidence command를 직접 실행하지 않아
+  release smoke만으로 installed CLI parity 회귀를 잡기 어렵다.
+- [x] RED: packaging guard가 release smoke script 안의 `quality-evidence`와
+  `--require-complete` 실행을 요구하게 해 현재 누락 실패를 확인한다.
+- [x] GREEN: release smoke 마지막 단계가 built `dist/cli/index.js quality-evidence
+  --require-complete`를 실행하고 complete status, corepack product CLI gate 문구,
+  raw home path 부재를 확인한다.
+- [x] VERIFY: focused release checklist packaging guard, quality evidence JSON smoke,
+  implementation format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Quality Evidence Corepack CLI Gate
 
 - [x] CHECK: 9.5 quality release gate 대부분은 `corepack pnpm ...`을 쓰지만

@@ -269,6 +269,24 @@ try {
     "Remaining Codex prompt should still appear in search.",
   );
 
+  step("Verify built product quality evidence CLI gate");
+  const qualityEvidence = runCli(["quality-evidence", "--require-complete"]);
+  assertIncludes(
+    qualityEvidence,
+    "Status: complete",
+    "Quality evidence CLI gate should be complete.",
+  );
+  assertIncludes(
+    qualityEvidence,
+    "corepack pnpm promptlane quality-evidence --require-complete",
+    "Quality evidence release gate should include the product CLI parity command.",
+  );
+  assertNotIncludes(
+    qualityEvidence,
+    homeDir,
+    "Quality evidence output must not contain raw home directory paths.",
+  );
+
   console.log("release smoke passed");
 } finally {
   if (serverProcess) {
