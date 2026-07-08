@@ -1230,10 +1230,19 @@ describe("plugin packaging files", () => {
     expect(readme).not.toContain("use the promptlane CLI alias");
     expect(readme).not.toContain("Use the promptlane CLI alias");
     expect(readme).not.toContain("when preferred");
+    expect(readme).not.toContain("planned alias-only slash namespace");
+    expect(readme).not.toContain("does not ship `/promptlane:*` command files");
     expect(plugins).toContain(
       "Claude Code slash commands remain under `/promptlane:*`",
     );
-    expect(plugins).toContain("legacy `promptlane` CLI alias");
+    expect(plugins).toContain(
+      "The npm package installs the canonical `promptlane` CLI",
+    );
+    expect(plugins).not.toContain("legacy `promptlane` CLI alias");
+    expect(plugins).not.toContain("planned alias-only slash namespace");
+    expect(plugins).not.toContain(
+      "does not include `/promptlane:*` command files",
+    );
     expect(plugins).not.toContain("use the promptlane CLI alias");
     expect(plugins).not.toContain("when preferred");
   });
@@ -2414,6 +2423,13 @@ describe("plugin packaging files", () => {
 
     for (const content of [readme, readmeKo, plugins]) {
       expect(content).toContain("/promptlane:*");
+      expect(content).not.toContain("planned alias-only");
+      expect(content).not.toContain(
+        "does not ship `/promptlane:*` command files",
+      );
+      expect(content).not.toContain(
+        "does not include `/promptlane:*` command files",
+      );
     }
     expect(harness).toContain(
       "`/promptlane:*` remains the supported slash namespace",

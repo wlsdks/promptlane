@@ -481,10 +481,9 @@ Claude Code plugin slash commands:
 ```
 
 PromptLane compatibility window 중 Claude Code slash command는 `/promptlane:*`에
-남아 있습니다. `/promptlane:*`는 다음 compatibility slice에서 검토할
-planned alias-only namespace이며, 현재 package는 `/promptlane:*` command
-file을 ship하지 않습니다. 기존 `/promptlane:*` command는 계속 유지해야
-합니다.
+남아 있습니다. 기존 plugin 사용자는 이 command를 계속 사용하면 됩니다.
+canonical CLI는 `promptlane`이며, dedicated migration plan 없이 alternate CLI
+alias나 alternate slash namespace를 추가하지 않습니다.
 
 `/promptlane:guard`는 `off / context / ask / block-and-copy` 네 가지
 `UserPromptSubmit` rewrite-guard 모드를 인터랙티브 picker로 전환합니다.

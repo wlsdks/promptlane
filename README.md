@@ -538,10 +538,8 @@ The Claude Code plugin provides slash commands:
 
 Claude Code slash commands remain under `/promptlane:*` during the PromptLane
 compatibility window. Existing plugin users should keep those commands. The
-`promptlane` CLI alias remains only for earlier manual terminal fallbacks.
-`/promptlane:*` is a planned alias-only slash namespace for a later compatibility
-slice; this package does not ship `/promptlane:*` command files yet, and
-`/promptlane:*` must remain available.
+canonical CLI remains `promptlane`; do not introduce alternate CLI aliases or
+alternate slash namespaces without a dedicated migration plan.
 
 `/promptlane:guard` opens an interactive picker (off / context / ask /
 block-and-copy) that flips the `UserPromptSubmit` rewrite-guard mode without

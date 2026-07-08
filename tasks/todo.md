@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Active Slash Namespace Docs
+
+- [x] CHECK: active README/PLUGINS text described `/promptlane:*` as
+  supported while also calling it a planned alias-only namespace.
+- [x] RED: packaging docs guard rejects planned alias-only slash namespace
+  copy, missing command-file claims, and legacy `promptlane` CLI alias wording
+  on active surfaces.
+- [x] GREEN: README, Korean README, and PLUGINS now describe `/promptlane:*`
+  as the active Claude Code slash namespace and `promptlane` as the canonical
+  CLI.
+- [x] VERIFY: focused namespace packaging tests, touched-file formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane Command Docs Canonical CLI
 
 - [x] CHECK: Claude command docs checked `command -v promptlane` twice and

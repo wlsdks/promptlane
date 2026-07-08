@@ -107,13 +107,11 @@ The plugin exposes:
 - `/promptlane:open` to open the local archive
 
 Claude Code slash commands remain under `/promptlane:*` during the PromptLane
-compatibility window. The npm package also installs a legacy `promptlane` CLI alias for manual
-terminal fallbacks, but plugin command ids stay stable until a dedicated plugin
-rename plan is implemented. That gate is documented in
+compatibility window. The npm package installs the canonical `promptlane` CLI
+for terminal workflows, and plugin command ids stay stable until a dedicated
+plugin rename plan is implemented. That gate is documented in
 `docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md`.
-`/promptlane:*` is a planned alias-only slash namespace for a later compatibility
-slice. Do not ship it as the only namespace; this package does not include
-`/promptlane:*` command files yet, and `/promptlane:*` remains required.
+Do not introduce alternate slash namespaces without a dedicated migration plan.
 
 Prompt capture still uses Claude Code hook configuration in settings files. The
 supported install paths are:
