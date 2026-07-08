@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Detail Quoted Key Redaction
+
+- [x] CHECK: `sanitizeApiErrorText`가 raw detail value quote는 처리하지만
+  JSON-ish detail string의 `"prompt_body": "..."`처럼 key 자체가 quoted인 경우 key 뒤의
+  quote 때문에 raw key pattern을 매칭하지 못해 failed response detail에 prompt body가 남을 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 settings failed response detail의
+  `"prompt_body": "private setup prompt"` 값을 `"prompt_body":[REDACTED:prompt_body]`로
+  redaction하도록 요구하게 해 현재 unsafe quoted-key detail 노출 실패를 확인한다.
+- [x] GREEN: web API error sanitizer가 quoted raw-detail keys의 colon-delimited
+  phrase를 먼저 redaction해 JSON-ish failed response detail도 raw-free로 유지한다.
+- [x] VERIFY: focused web API recovery-detail/error redaction tests, implementation
+  format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Detail CamelCase Raw Redaction
 
 - [x] CHECK: `sanitizeApiErrorText` raw detail key pattern이 snake_case 중심이라
