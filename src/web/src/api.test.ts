@@ -6353,6 +6353,12 @@ describe("web api export client", () => {
             },
             practice_plan: [],
             low_score_prompts: [],
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+            },
           },
         });
       }
@@ -6393,6 +6399,37 @@ describe("web api export client", () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
       .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getArchiveScoreReport } = await import("./api.js");
+
+    await expect(getArchiveScoreReport()).rejects.toThrow(
+      "Archive score report failed: Invalid response.",
+    );
+  });
+
+  it("reports unsafe archive score privacy flags without returning prompt-body score data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            archive_score: {
+              average: 0,
+              max: 100,
+              band: "poor",
+              scored_prompts: 0,
+              total_prompts: 0,
+            },
+            practice_plan: [],
+            low_score_prompts: [],
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: true,
+              returns_raw_paths: false,
+            },
+          },
+        }),
+      );
     const { getArchiveScoreReport } = await import("./api.js");
 
     await expect(getArchiveScoreReport()).rejects.toThrow(

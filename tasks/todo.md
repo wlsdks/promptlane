@@ -1,5 +1,14 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Archive Score Privacy Contract Error
+
+- [x] CHECK: web API `getArchiveScoreReport`가 `/api/v1/score` 성공 응답의
+  `privacy` local-first/raw-free 계약을 검증하지 않아 prompt bodies 또는 raw paths 반환 가능 상태를 web UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed archive score `privacy.returns_prompt_bodies`
+  body를 `Archive score report failed: Invalid response.`로 reject하도록 요구하게 해 현재 unsafe archive score resolve 실패를 확인한다.
+- [x] GREEN: archive score privacy가 local-only, no external calls, no prompt bodies, no raw paths 계약을 만족하는지 확인하고 깨진 privacy block은 raw-free archive score contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Loop List Recent Decisions Contract Error
 
 - [x] CHECK: web API `listLoops`가 `/api/v1/loops` 성공 응답의 optional

@@ -3614,6 +3614,21 @@ export type SettingsResponse = {
   };
 };
 
+function isArchiveScorePrivacy(
+  value: unknown,
+): value is ArchiveScoreReport["privacy"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const privacy = value as ArchiveScoreReport["privacy"];
+  return (
+    privacy.local_only === true &&
+    privacy.external_calls === false &&
+    privacy.returns_prompt_bodies === false &&
+    privacy.returns_raw_paths === false
+  );
+}
+
 export type ProjectPolicy = {
   capture_disabled: boolean;
   analysis_disabled: boolean;
@@ -4103,13 +4118,15 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
       archive_score?: unknown;
       practice_plan?: unknown;
       low_score_prompts?: unknown;
+      privacy?: unknown;
     };
   };
   if (
     typeof body.data?.archive_score !== "object" ||
     body.data.archive_score === null ||
     !Array.isArray(body.data.practice_plan) ||
-    !Array.isArray(body.data.low_score_prompts)
+    !Array.isArray(body.data.low_score_prompts) ||
+    !isArchiveScorePrivacy(body.data.privacy)
   ) {
     throw new Error("Archive score report failed: Invalid response.");
   }
