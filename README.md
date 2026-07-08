@@ -817,7 +817,7 @@ review-only instruction patch from the latest approved memory. Use
 `promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply`
 only after reviewing the proposal and intending to write the instruction file;
 the web review panel intentionally has no apply button.
-`get_promptlane_status`, `/api/v1/loops`, and `promptlane loop status` also
+`get_promptlane_loop_status`, `/api/v1/loops`, and `promptlane loop status` also
 include a raw-free worktree/session activity summary with per-worktree safe
 labels, session counts, snapshot counts, and latest outcome status so agents can
 notice when recent snapshots span multiple worktrees or sessions before merging

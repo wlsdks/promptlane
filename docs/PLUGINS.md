@@ -259,7 +259,7 @@ has a newer snapshot. Use
 review-only instruction patch. Use
 `promptlane loop instruction-apply --target-file AGENTS.md --confirm-apply`
 only after reviewing the proposal and intending to write the file; the web
-review panel intentionally has no apply button. `get_promptlane_status`,
+review panel intentionally has no apply button. `get_promptlane_loop_status`,
 `/api/v1/loops`, and `promptlane loop status` include raw-free worktree and
 session activity counts plus per-worktree safe labels, snapshot counts, and
 latest outcome status so active agents can notice parallel work before merging

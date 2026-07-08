@@ -180,6 +180,23 @@ describe("plugin packaging files", () => {
     }
   });
 
+  it("keeps current loop status docs on the loop MCP tool name", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const plugins = readFileSync(
+      join(process.cwd(), "docs/PLUGINS.md"),
+      "utf8",
+    );
+
+    for (const content of [readme, plugins]) {
+      expect(content).toMatch(
+        /`get_promptlane_loop_status`,\s+`\/api\/v1\/loops`/,
+      );
+      expect(content).not.toMatch(
+        /`get_promptlane_status`,\s+`\/api\/v1\/loops`/,
+      );
+    }
+  });
+
   it("keeps the release checklist aligned with package lifecycle and shipped scripts", () => {
     const packageJson = readJson<{
       files: string[];
