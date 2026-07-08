@@ -45,6 +45,14 @@ describe("npm publish preflight", () => {
           label: "promptlane bin entry is registered",
           ok: true,
         }),
+        expect.objectContaining({
+          label: "pl-claude bin entry is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "pl-codex bin entry is registered",
+          ok: true,
+        }),
       ]),
     );
   });

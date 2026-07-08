@@ -176,7 +176,13 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain(
       'packageJson.repository?.url === "https://github.com/wlsdks/promptlane.git"',
     );
-    expect(preflightScript).toContain("promptlane bin entry is registered");
+    expect(preflightScript).toContain('promptlane: "./dist/cli/index.js"');
+    expect(preflightScript).toContain('"pl-claude": "./dist/cli/pl-claude.js"');
+    expect(preflightScript).toContain('"pl-codex": "./dist/cli/pl-codex.js"');
+    expect(preflightScript).toContain("`${binName} bin entry is registered`");
+    expect(preflightScript).toContain(
+      "packageJson.bin?.[binName] === expectedPath",
+    );
     expect(publishing).toContain("corepack pnpm npm-publish:preflight");
     expect(publishing).toContain("package is not marked private");
     expect(publishing).toContain("license, repository, and bin metadata");

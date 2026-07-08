@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM All Bins Preflight Guard
+
+- [x] CHECK: npm publish preflight checked only `bin.promptlane`, while
+  `package.json` publishes three CLI entries: `promptlane`, `pl-claude`, and
+  `pl-codex`.
+- [x] RED: focused preflight and packaging guards required `pl-claude` and
+  `pl-codex` bin checks in addition to `promptlane`.
+- [x] GREEN: npm publish preflight now iterates the expected bin map and emits a
+  check for every shipped CLI bin entry.
+- [x] VERIFY: focused preflight/packaging tests, touched-file formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Metadata Preflight Guard
 
 - [x] CHECK: `package.json` has stable release metadata for license,

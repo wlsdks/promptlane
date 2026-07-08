@@ -20,11 +20,17 @@ check(
   packageJson.repository?.url === "https://github.com/wlsdks/promptlane.git",
   packageJson.repository?.url,
 );
-check(
-  "promptlane bin entry is registered",
-  packageJson.bin?.promptlane === "./dist/cli/index.js",
-  packageJson.bin?.promptlane,
-);
+for (const [binName, expectedPath] of Object.entries({
+  promptlane: "./dist/cli/index.js",
+  "pl-claude": "./dist/cli/pl-claude.js",
+  "pl-codex": "./dist/cli/pl-codex.js",
+})) {
+  check(
+    `${binName} bin entry is registered`,
+    packageJson.bin?.[binName] === expectedPath,
+    packageJson.bin?.[binName],
+  );
+}
 check(
   "shared VERSION matches package.json",
   readSharedVersion() === version,
