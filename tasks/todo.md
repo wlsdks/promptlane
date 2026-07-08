@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Issue Source Pointer Redaction
+
+- [x] CHECK: `apiErrorIssueText`가 validation `errors[]`의 direct 위치 키와 AJV
+  params는 처리하지만 JSON:API-style `source.pointer: "/data/attributes/prompt_body"`는
+  무시해 raw issue message를 failed response detail에 남길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 settings failed response `errors[]`의
+  `source.pointer`를 `data.attributes.prompt_body` field로 표시하면서 message body를
+  `[REDACTED:prompt_body]`로 치환하도록 요구하게 해 현재 unsafe source pointer issue
+  detail 노출 실패를 확인한다.
+- [x] GREEN: web API error issue sanitizer가 `source.pointer`/`source.parameter`를
+  path normalizer fallback으로 보내 raw-detail key segment별 issue message redaction을 적용한다.
+- [x] VERIFY: focused web API issue/error redaction tests, implementation format
+  check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Issue File URL Path Redaction
 
 - [x] CHECK: `apiErrorIssuePathText`가 local filesystem path는 redaction 경로로 보내지만
