@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Useful Commands Tag Refresh
+
+- [x] CHECK: `docs/NPM_PUBLISHING.md`의 Useful NPM Commands 섹션이 여전히
+  `git tag -a v1.0.0`와 non-force push를 안내해, unpublished 1.0.0 release
+  candidate polish 동안의 current tag-refresh policy와 충돌했다.
+- [x] RED: public release surface guard now requires the NPM runbook to show
+  `git tag -fa v1.0.0` and `git push origin v1.0.0 --force`, and rejects the
+  stale `git tag -a v1.0.0` command.
+- [x] GREEN: Useful NPM Commands now matches the same tag refresh command used
+  by the preflight and release checklist before first publish.
+- [x] VERIFY: focused public release surface guard, touched-file formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane Implementation Plan Tag Order
 
 - [x] CHECK: `docs/IMPLEMENTATION_PLAN.md` still described creating the

@@ -177,6 +177,6 @@ npm access list packages "$(npm whoami)" --json
 npm publish --tag latest
 npm dist-tag ls promptlane
 npm view promptlane versions --json
-git tag -a v1.0.0 -m "promptlane 1.0.0"
-git push origin v1.0.0
+git tag -fa v1.0.0 -m "promptlane 1.0.0"
+git push origin v1.0.0 --force
 ```

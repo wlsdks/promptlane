@@ -448,8 +448,9 @@ describe("plugin packaging files", () => {
     expect(changelog).not.toContain("currently pre-release");
     expect(publishing).toContain("npm publish --tag latest");
     expect(publishing).toContain("npm install -g promptlane");
-    expect(publishing).toContain('git tag -a v1.0.0 -m "promptlane 1.0.0"');
-    expect(publishing).toContain("git push origin v1.0.0");
+    expect(publishing).toContain('git tag -fa v1.0.0 -m "promptlane 1.0.0"');
+    expect(publishing).toContain("git push origin v1.0.0 --force");
+    expect(publishing).not.toContain('git tag -a v1.0.0 -m "promptlane 1.0.0"');
     expect(publishing).not.toContain("promptlane@beta");
     expect(releaseChecklist).toContain("stable public release");
     expect(releaseChecklist).toContain("annotated tag `v1.0.0`");
