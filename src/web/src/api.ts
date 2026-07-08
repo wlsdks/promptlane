@@ -4698,7 +4698,33 @@ function parseImportDryRunResponse(body: {
     typeof body.data.skipped_records.empty_prompt !== "number" ||
     typeof body.data.skipped_records.unsupported_record !== "number" ||
     typeof body.data.skipped_records.too_large !== "number" ||
-    !Array.isArray(body.data.samples)
+    !Array.isArray(body.data.samples) ||
+    !body.data.samples.every(
+      (sample) =>
+        typeof sample === "object" &&
+        sample !== null &&
+        typeof (sample as ImportDryRunResult["samples"][number])
+          .record_offset === "number" &&
+        ((sample as ImportDryRunResult["samples"][number]).session_id ===
+          undefined ||
+          typeof (sample as ImportDryRunResult["samples"][number])
+            .session_id === "string") &&
+        ((sample as ImportDryRunResult["samples"][number]).turn_id ===
+          undefined ||
+          typeof (sample as ImportDryRunResult["samples"][number]).turn_id ===
+            "string") &&
+        ((sample as ImportDryRunResult["samples"][number]).cwd_label ===
+          undefined ||
+          typeof (sample as ImportDryRunResult["samples"][number]).cwd_label ===
+            "string") &&
+        typeof (sample as ImportDryRunResult["samples"][number])
+          .prompt_preview === "string" &&
+        typeof (sample as ImportDryRunResult["samples"][number])
+          .is_sensitive === "boolean" &&
+        (sample as { markdown?: unknown }).markdown === undefined &&
+        (sample as { prompt_body?: unknown }).prompt_body === undefined &&
+        (sample as { raw_path?: unknown }).raw_path === undefined,
+    )
   ) {
     throw new Error("Import dry-run failed: Invalid response.");
   }

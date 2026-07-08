@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Import Dry-Run Sample Raw Contract Error
+
+- [x] CHECK: `parseImportDryRunResponse`가 import dry-run `samples[]`를 배열인지까지만
+  검증하고 sample shape나 raw-like `prompt_body`/`raw_path`/`markdown` extra field를
+  차단하지 않아 import preview UI state로 raw local path data가 넘어갈 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 import dry-run sample의 `raw_path` body를
+  `Import dry-run failed: Invalid response.`로 reject하도록 요구하게 해 현재 unsafe
+  import preview resolve 실패를 확인한다.
+- [x] GREEN: import dry-run sample parser가 record_offset/session_id/turn_id/
+  cwd_label/prompt_preview/is_sensitive 계약을 확인하고 raw `prompt_body`/`raw_path`/
+  `markdown` fields를 차단한다.
+- [x] VERIFY: focused web API import/export client test, implementation format check,
+  typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Export Payload Item Raw Contract Error
 
 - [x] CHECK: `parseAnonymizedExportPayloadResponse`가 export payload item 필수
