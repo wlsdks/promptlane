@@ -28,7 +28,7 @@ const cliEnv = {
 let serverProcess;
 
 try {
-  assertFileExists(cliPath, "Run `pnpm build` before release smoke.");
+  assertFileExists(cliPath, "Run `corepack pnpm build` before release smoke.");
   mkdirSync(homeDir, { recursive: true });
 
   step("Initialize isolated data directory");

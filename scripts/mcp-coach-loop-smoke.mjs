@@ -14,7 +14,10 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cliPath = join(repoRoot, "dist", "cli", "index.js");
 const timeoutMs = 10_000;
 
-assertFileExists(cliPath, "Run `pnpm build` before MCP coach loop smoke.");
+assertFileExists(
+  cliPath,
+  "Run `corepack pnpm build` before MCP coach loop smoke.",
+);
 
 const dataDir = mkdtempSync(join(tmpdir(), "promptlane-mcp-loop-"));
 let child;
