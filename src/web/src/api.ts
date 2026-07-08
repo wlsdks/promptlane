@@ -524,6 +524,28 @@ function isSelectedBriefAction(
   );
 }
 
+function isCommandDistinction(
+  value: unknown,
+): value is NonNullable<LoopWorktreeResponse["command_distinction"]> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const distinction = value as NonNullable<
+    LoopWorktreeResponse["command_distinction"]
+  >;
+  return (
+    distinction.label === "Command distinction" &&
+    distinction.selected_command_role ===
+      "continue the selected worktree/session/branch filters" &&
+    distinction.review_command_role ===
+      "copy the review packet command-center hint for merge review" &&
+    distinction.reason ===
+      "selected continuation and review packet commands can differ when session or branch filters are active" &&
+    distinction.writes_files === false &&
+    distinction.external_calls === false
+  );
+}
+
 function isLoopActivityWorktree(
   value: unknown,
 ): value is LoopListResponse["status"]["activity"]["worktrees"][number] {
@@ -2465,6 +2487,7 @@ export async function getLoopWorktree(
       worktree?: unknown;
       selection_scope?: unknown;
       selected_brief_action?: unknown;
+      command_distinction?: unknown;
       items?: unknown;
       privacy?: unknown;
     };
@@ -2474,6 +2497,8 @@ export async function getLoopWorktree(
     !isLoopWorktreeSelectionScope(body.data.selection_scope) ||
     (body.data.selected_brief_action !== undefined &&
       !isSelectedBriefAction(body.data.selected_brief_action)) ||
+    (body.data.command_distinction !== undefined &&
+      !isCommandDistinction(body.data.command_distinction)) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
     !isLoopListPrivacy(body.data.privacy)
