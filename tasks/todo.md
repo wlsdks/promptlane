@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Export Payload Contract Error
+
+- [x] CHECK: web API `executeExportJob`가 `/api/v1/exports` 성공 응답의 anonymized export
+  payload 계약을 검증하지 않아 malformed 응답을 `{}` 상태로 export UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed export execution body를
+  `Export job execution failed: Invalid response.`로 reject하도록 요구하게 해 현재 `{}` resolve
+  실패를 확인한다.
+- [x] GREEN: export payload 응답의 job id, preset, redaction/generated metadata, count,
+  items 배열 계약을 확인하고 깨진 성공 응답은 raw-free export payload contract 오류로
+  중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Similar Prompts Contract Error
 
 - [x] CHECK: web API `getSimilarPrompts`가 `/api/v1/prompts/:id/similar` 성공 응답의

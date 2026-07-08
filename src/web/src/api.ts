@@ -1860,6 +1860,50 @@ function parseExportJobResponse(
   return body.data as ExportJob;
 }
 
+function parseAnonymizedExportPayloadResponse(body: {
+  data?: {
+    job_id?: unknown;
+    preset?: unknown;
+    redaction_version?: unknown;
+    generated_at?: unknown;
+    count?: unknown;
+    items?: unknown;
+  };
+}): AnonymizedExportPayload {
+  if (
+    typeof body.data?.job_id !== "string" ||
+    typeof body.data.preset !== "string" ||
+    typeof body.data.redaction_version !== "string" ||
+    typeof body.data.generated_at !== "string" ||
+    typeof body.data.count !== "number" ||
+    !Array.isArray(body.data.items) ||
+    !body.data.items.every(
+      (item) =>
+        typeof item === "object" &&
+        item !== null &&
+        typeof (item as AnonymizedExportPayload["items"][number])
+          .anonymous_id === "string" &&
+        typeof (item as AnonymizedExportPayload["items"][number]).tool ===
+          "string" &&
+        typeof (item as AnonymizedExportPayload["items"][number])
+          .coarse_date === "string" &&
+        typeof (item as AnonymizedExportPayload["items"][number])
+          .project_alias === "string" &&
+        typeof (item as AnonymizedExportPayload["items"][number]).prompt ===
+          "string" &&
+        Array.isArray(
+          (item as AnonymizedExportPayload["items"][number]).tags,
+        ) &&
+        Array.isArray(
+          (item as AnonymizedExportPayload["items"][number]).quality_gaps,
+        ),
+    )
+  ) {
+    throw new Error("Export job execution failed: Invalid response.");
+  }
+  return body.data as AnonymizedExportPayload;
+}
+
 export type AnonymizedExportPayload = {
   job_id: string;
   preset: ExportPreset;
@@ -2514,8 +2558,10 @@ export async function executeExportJob(
     await failApi(response, "Export job execution failed");
   }
 
-  const body = (await response.json()) as { data: AnonymizedExportPayload };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parseAnonymizedExportPayloadResponse
+  >[0];
+  return parseAnonymizedExportPayloadResponse(body);
 }
 
 export async function getPrompt(id: string): Promise<PromptDetail> {

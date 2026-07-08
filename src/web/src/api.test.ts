@@ -2817,6 +2817,17 @@ describe("web api export client", () => {
     });
   });
 
+  it("reports malformed export execution responses without returning incomplete payload data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { executeExportJob } = await import("./api.js");
+
+    await expect(executeExportJob("exp_abcdef123456")).rejects.toThrow(
+      "Export job execution failed: Invalid response.",
+    );
+  });
+
   it("fetches the coach feedback summary without CSRF and parses ratios", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
