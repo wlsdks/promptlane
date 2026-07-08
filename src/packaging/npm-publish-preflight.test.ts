@@ -702,6 +702,68 @@ exit 1
     expect(parsed.next_action).toContain("git tag -fa v1.0.0");
   });
 
+  it("requires the origin release tag to match the local release tag", () => {
+    const binDir = mkdtempSync(join(tmpdir(), "promptlane-fake-git-"));
+    const fakeGit = join(binDir, "git");
+    writeFileSync(
+      fakeGit,
+      `#!/usr/bin/env sh
+if [ "$1" = "status" ]; then
+  exit 0
+fi
+if [ "$1" = "rev-parse" ]; then
+  echo "ffffffffffff0000000000000000000000000000"
+  exit 0
+fi
+if [ "$1" = "rev-list" ]; then
+  echo "ffffffffffff0000000000000000000000000000"
+  exit 0
+fi
+if [ "$1" = "cat-file" ] && [ "$2" = "-t" ]; then
+  echo "tag"
+  exit 0
+fi
+if [ "$1" = "ls-remote" ]; then
+  echo "aaaaaaaaaaaa0000000000000000000000000000	refs/tags/v1.0.0^{}"
+  exit 0
+fi
+echo "unexpected git command: $*" >&2
+exit 1
+`,
+      { mode: 0o755 },
+    );
+
+    const result = spawnSync(
+      process.execPath,
+      ["scripts/npm-publish-preflight.mjs", "--json", "--skip-npm"],
+      {
+        cwd: process.cwd(),
+        env: {
+          ...process.env,
+          PATH: `${binDir}:${process.env.PATH ?? ""}`,
+        },
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+
+    expect(result.status).toBe(1);
+    const parsed = JSON.parse(result.stdout) as {
+      next_action: string;
+      checks: Array<{ label: string; ok: boolean; detail?: string }>;
+    };
+    const originTagCheck = parsed.checks.find((check) =>
+      check.label.endsWith("origin tag matches local release tag"),
+    );
+    expect(originTagCheck).toMatchObject({ ok: false });
+    expect(originTagCheck?.detail).toContain("git push origin v1.0.0");
+    expect(originTagCheck?.detail).toContain("origin/v1.0.0");
+    expect(parsed.next_action).toContain(
+      "origin v1.0.0 tag does not match local v1.0.0",
+    );
+    expect(parsed.next_action).toContain("git push origin v1.0.0 --force");
+  });
+
   it("points the operator to npm login when npm auth is the remaining blocker", () => {
     const binDir = mkdtempSync(join(tmpdir(), "promptlane-fake-npm-"));
     const fakeNpm = join(binDir, "npm");

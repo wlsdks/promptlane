@@ -12,7 +12,7 @@ npm whoami
 npm view promptlane versions --json
 ```
 
-Latest local observation on 2026-07-08:
+Latest local observation on 2026-07-09:
 
 - `npm whoami` returned `E401 Unauthorized`, so this machine was not ready to
   publish without npm login.
@@ -29,6 +29,10 @@ the expected release tag does not point at the current commit:
 ```sh
 corepack pnpm npm-publish:preflight
 ```
+
+`corepack pnpm npm-publish:preflight` verifies the local tag and `origin` tag
+point at the same release commit after the local tag points at HEAD and is
+annotated.
 
 ## Recommended First Stable Publish
 
@@ -126,6 +130,7 @@ corepack pnpm smoke:package-install
 corepack pnpm evidence:quality -- --require-complete
 corepack pnpm promptlane quality-evidence --require-complete
 git tag -fa v1.0.0 -m "promptlane 1.0.0"
+git push origin v1.0.0 --force
 corepack pnpm npm-publish:preflight
 git diff --check
 ```
@@ -163,6 +168,7 @@ corepack pnpm smoke:package-install
 - [ ] npm account is authenticated
 - [ ] 2FA/OTP requirement is available if npm asks for it
 - [ ] annotated git tag `v1.0.0` is created or refreshed before `corepack pnpm npm-publish:preflight`
+- [ ] `origin/v1.0.0` points at the same release commit as local `v1.0.0`
 - [ ] `corepack pnpm npm-publish:preflight` passes
 - [ ] publish uses `--tag latest` for the first stable release
 

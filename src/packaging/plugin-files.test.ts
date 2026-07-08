@@ -358,6 +358,10 @@ describe("plugin packaging files", () => {
     expect(publishing).toContain(
       "annotated git tag `v1.0.0` is created or refreshed before `corepack pnpm npm-publish:preflight`",
     );
+    expect(publishing).toContain(
+      "`corepack pnpm npm-publish:preflight` verifies the local tag and `origin` tag",
+    );
+    expect(publishing).toContain("point at the same release commit");
     expect(publishing).not.toContain(
       "annotated git tag `v1.0.0` is created only after the local release gate passes",
     );
@@ -382,6 +386,10 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain(
       "git tag -fa ${expectedTag}; if already published",
     );
+    expect(preflightScript).toContain(
+      "${expectedTag} origin tag matches local release tag",
+    );
+    expect(preflightScript).toContain("git push origin ${expectedTag} --force");
     expect(preflightScript).not.toContain("manual npm checks");
     expect(preflightScript).not.toContain("predates this preflight");
 

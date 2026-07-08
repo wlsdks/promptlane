@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Origin Tag Sync Preflight Guard
+
+- [x] CHECK: npm publish preflight verified the local annotated `v1.0.0` tag,
+  but did not prove that `origin` had the same release tag before publish.
+- [x] RED: focused npm publish preflight test requires a mismatched
+  `origin/v1.0.0` tag to fail with push recovery guidance.
+- [x] GREEN: npm publish preflight now checks the remote dereferenced
+  `origin` tag after the local tag points at HEAD and is annotated.
+- [x] VERIFY: focused preflight test, skip-npm preflight JSON, formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Annotated Tag Preflight Guard
 
 - [x] CHECK: release checklist requires an annotated `v1.0.0` tag, but npm

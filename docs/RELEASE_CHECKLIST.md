@@ -33,6 +33,7 @@ Use this checklist before publishing a stable public release or npm package.
 - [ ] `corepack pnpm evidence:quality -- --require-complete`
 - [ ] `corepack pnpm promptlane quality-evidence --require-complete`
 - [ ] Create or refresh annotated tag `v1.0.0` before `corepack pnpm npm-publish:preflight`.
+- [ ] Push the annotated tag with `git push origin v1.0.0 --force` before `corepack pnpm npm-publish:preflight`.
 - [ ] `corepack pnpm npm-publish:preflight`
 - [ ] `git diff --check`
 
@@ -79,6 +80,7 @@ Confirm `corepack pnpm pack:dry-run` includes:
 - [ ] `.claude-plugin/` and `commands/` directories
 - [ ] `plugins/` and `integrations/` directories
 - [ ] `scripts/benchmark.mjs`
+- [ ] `scripts/benchmark-fixtures.mjs`
 - [ ] `scripts/agent-setup-smoke.mjs`
 - [ ] `scripts/browser-e2e.mjs`
 - [ ] `scripts/first-coach-loop-dogfood.mjs`
