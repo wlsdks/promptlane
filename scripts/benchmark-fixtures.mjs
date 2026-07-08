@@ -71,6 +71,7 @@ export function loadBenchmarkFixtures({
   }
 
   const parsed = JSON.parse(readFileSync(realFixturesPath, "utf8"));
+  parseConsentNote(parsed);
   const fixtures = parseRealFixtures(parsed);
   const coachCases = parseRealCoachCases(parsed);
 
@@ -91,6 +92,17 @@ export function buildNoFixturesReport({ dataset, fixtureSet, detail }) {
     next_action:
       "Add consent-bearing redacted real fixtures before using real benchmark trends.",
   };
+}
+
+function parseConsentNote(parsed) {
+  const consentNote = parsed?.consent_note;
+  if (typeof consentNote !== "string" || consentNote.trim().length === 0) {
+    throw new Error(
+      "docs/benchmark-fixtures/real.json must include consent_note for local benchmark use.",
+    );
+  }
+  assertRedactedText(consentNote, "real fixture consent_note");
+  return consentNote;
 }
 
 function parseRealFixtures(parsed) {

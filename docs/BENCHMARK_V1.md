@@ -38,6 +38,7 @@ real-world effectiveness; real fixture runs stay soft trend signals.
 
 ```json
 {
+  "consent_note": "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
   "fixtures": [
     {
       "label": "real_release_review",
@@ -50,16 +51,17 @@ real-world effectiveness; real fixture runs stay soft trend signals.
 }
 ```
 
-Each fixture needs a unique safe `label`, plus `adapter`, `query`, and
-`prompt`. Labels must start with a lowercase letter or digit and then use only
-lowercase letters, digits, `_`, or `-` with a maximum length of 64 characters.
-`adapter` must be `codex` or `claude-code`. Real fixtures are consent-bearing
-soft signals only:
+The top-level `consent_note` is required and must record that the prompts were
+approved for local benchmark use after redaction. Each fixture needs a unique
+safe `label`, plus `adapter`, `query`, and `prompt`. Labels must start with a
+lowercase letter or digit and then use only lowercase letters, digits, `_`, or
+`-` with a maximum length of 64 characters. `adapter` must be `codex` or
+`claude-code`. Real fixtures are consent-bearing soft signals only:
 redact secrets, tokens, and absolute local paths from fixture labels, queries,
-prompts, and coach cases before writing the file. The loader rejects obvious
-`sk-...`, `npm_...`, `/Users/...`, `/home/...`, `/Volumes/...`, and
-`C:\Users\...` values so the benchmark does not ingest private raw text by
-accident.
+prompts, coach cases, and `consent_note` before writing the file. The loader
+rejects obvious `sk-...`, `npm_...`, `/Users/...`, `/home/...`,
+`/Volumes/...`, and `C:\Users\...` values so the benchmark does not ingest
+private raw text by accident.
 
 ## Principles
 

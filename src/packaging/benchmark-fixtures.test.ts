@@ -45,6 +45,8 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          consent_note:
+            "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
             {
               label: "real_release_review",
@@ -90,6 +92,83 @@ describe("benchmark fixture loading", () => {
     ]);
   });
 
+  it("rejects real fixtures without local benchmark consent metadata", async () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
+    const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
+    mkdirSync(fixtureDir, { recursive: true });
+    writeFileSync(
+      join(fixtureDir, "real.json"),
+      `${JSON.stringify(
+        {
+          fixtures: [
+            {
+              label: "real_release_review",
+              adapter: "codex",
+              query: "release readiness",
+              prompt:
+                "Review the redacted release readiness notes and return the next verification step.",
+            },
+          ],
+          coach_cases: [
+            "Improve this redacted prompt with verification criteria.",
+          ],
+        },
+        null,
+        2,
+      )}\n`,
+    );
+
+    const { loadBenchmarkFixtures } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+
+    expect(() =>
+      loadBenchmarkFixtures({
+        fixtureSet: "real",
+        repoRoot: tempRoot,
+      }),
+    ).toThrow("docs/benchmark-fixtures/real.json must include consent_note");
+  });
+
+  it("rejects real fixture consent metadata with raw local paths", async () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
+    const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
+    mkdirSync(fixtureDir, { recursive: true });
+    writeFileSync(
+      join(fixtureDir, "real.json"),
+      `${JSON.stringify(
+        {
+          consent_note: "Approved from /Users/example/private-notes.md.",
+          fixtures: [
+            {
+              label: "real_release_review",
+              adapter: "codex",
+              query: "release readiness",
+              prompt:
+                "Review the redacted release readiness notes and return the next verification step.",
+            },
+          ],
+          coach_cases: [
+            "Improve this redacted prompt with verification criteria.",
+          ],
+        },
+        null,
+        2,
+      )}\n`,
+    );
+
+    const { loadBenchmarkFixtures } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+
+    expect(() =>
+      loadBenchmarkFixtures({
+        fixtureSet: "real",
+        repoRoot: tempRoot,
+      }),
+    ).toThrow("real fixture consent_note must be redacted");
+  });
+
   it("rejects real fixture queries with raw local paths", async () => {
     tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
     const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
@@ -98,6 +177,8 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          consent_note:
+            "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
             {
               label: "real_release_review",
@@ -136,6 +217,8 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          consent_note:
+            "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
             {
               label: "/Users/example/private-release-review",
@@ -174,6 +257,8 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          consent_note:
+            "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
             {
               label: "real_release_review",
@@ -219,6 +304,8 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          consent_note:
+            "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
             {
               label: "Release Review",
@@ -257,6 +344,8 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          consent_note:
+            "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
             {
               label: "real_release_review",

@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Real Benchmark Consent Metadata Guard
+
+- [x] CHECK: real benchmark fixture ingestion required redacted labels,
+  queries, prompts, and coach cases, but a present `real.json` did not require
+  explicit consent metadata proving the prompts were approved for local
+  benchmark use after redaction.
+- [x] RED: focused benchmark fixture loader tests require `consent_note` and
+  reject raw local paths inside that consent metadata; packaging guard requires
+  the loader and benchmark spec to keep the field documented.
+- [x] GREEN: real fixture loading now requires a raw-free top-level
+  `consent_note`, while missing real fixtures remain a soft no-fixtures signal.
+- [x] VERIFY: focused fixture/package tests, real no-fixtures JSON, formatting,
+  typecheck, preflight JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane Benchmark Next Action JSON Signal
 
 - [x] CHECK: benchmark scores and pass/fail existed, but machine-readable

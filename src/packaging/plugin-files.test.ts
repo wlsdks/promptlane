@@ -579,6 +579,7 @@ describe("plugin packaging files", () => {
     }
     for (const content of [benchmarkFixtures, benchmarkSpec]) {
       expect(content).toContain("docs/benchmark-fixtures/real.json");
+      expect(content).toContain("consent_note");
     }
     expect(benchmark).toContain("loadBenchmarkFixtures");
     expect(benchmarkRunner).toContain("corepack");
@@ -591,6 +592,9 @@ describe("plugin packaging files", () => {
     expect(benchmarkSpec).toContain("adapter");
     expect(benchmarkSpec).toContain("label");
     expect(benchmarkSpec).toContain("query");
+    expect(benchmarkSpec).toContain(
+      "Operator-confirmed redacted prompts approved for local benchmark use",
+    );
     expect(benchmarkSpec).toContain("Prompt Effectiveness Evidence");
     expect(benchmarkSpec).toContain("Pass threshold");
     expect(benchmarkSpec.toLowerCase().replace(/\s+/g, " ")).toContain(
