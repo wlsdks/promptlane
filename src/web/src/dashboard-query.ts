@@ -41,6 +41,23 @@ export function shouldLoadCoachFeedback(
   return viewName === "dashboard" && !hasCoachFeedback;
 }
 
+export async function refreshDashboardSummaries({
+  getArchiveScoreReport,
+  getQualityDashboard,
+  setArchiveScore,
+  setDashboard,
+}: {
+  getArchiveScoreReport(): Promise<ArchiveScoreReport>;
+  getQualityDashboard(): Promise<QualityDashboard>;
+  setArchiveScore(archiveScore: ArchiveScoreReport | undefined): void;
+  setDashboard(dashboard: QualityDashboard | undefined): void;
+}): Promise<void> {
+  await Promise.allSettled([
+    getQualityDashboard().then(setDashboard),
+    getArchiveScoreReport().then(setArchiveScore),
+  ]);
+}
+
 export function useDashboardQuery({
   getArchiveScoreReport,
   getCoachFeedbackSummary,
@@ -61,6 +78,7 @@ export function useDashboardQuery({
   archiveScore: ArchiveScoreReport | undefined;
   coachFeedback: CoachFeedbackSummary | undefined;
   dashboard: QualityDashboard | undefined;
+  refreshSummaries(): Promise<void>;
   setArchiveScore: (archiveScore: ArchiveScoreReport | undefined) => void;
   setDashboard: (dashboard: QualityDashboard | undefined) => void;
 } {
@@ -106,6 +124,13 @@ export function useDashboardQuery({
     archiveScore,
     coachFeedback,
     dashboard,
+    refreshSummaries: () =>
+      refreshDashboardSummaries({
+        getArchiveScoreReport,
+        getQualityDashboard: () => getQualityDashboard({ trendDays }),
+        setArchiveScore,
+        setDashboard,
+      }),
     setArchiveScore,
     setDashboard,
   };
