@@ -3668,6 +3668,45 @@ function isQualityDashboardScore(
   );
 }
 
+function isQualityDashboardDistribution(
+  value: unknown,
+): value is QualityDashboard["distribution"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const distribution = value as QualityDashboard["distribution"];
+  return (
+    Array.isArray(distribution.by_tool) &&
+    distribution.by_tool.every(isQualityDashboardDistributionBucket) &&
+    Array.isArray(distribution.by_project) &&
+    distribution.by_project.every(isQualityDashboardDistributionBucket)
+  );
+}
+
+function isQualityDashboardDistributionBucket(
+  value: unknown,
+): value is DistributionBucket {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const bucket = value as DistributionBucket & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    typeof bucket.key === "string" &&
+    typeof bucket.label === "string" &&
+    typeof bucket.count === "number" &&
+    typeof bucket.ratio === "number" &&
+    bucket.cwd === undefined &&
+    bucket.markdown === undefined &&
+    bucket.prompt_body === undefined &&
+    bucket.raw_path === undefined
+  );
+}
+
 function isQualityDashboardMissingItem(
   value: unknown,
 ): value is QualityDashboard["missing_items"][number] {
@@ -4378,6 +4417,7 @@ export async function getQualityDashboard(
     data?: {
       total_prompts?: unknown;
       quality_score?: unknown;
+      distribution?: unknown;
       missing_items?: unknown;
       privacy?: unknown;
     };
@@ -4385,6 +4425,7 @@ export async function getQualityDashboard(
   if (
     typeof body.data?.total_prompts !== "number" ||
     !isQualityDashboardScore(body.data.quality_score) ||
+    !isQualityDashboardDistribution(body.data.distribution) ||
     !Array.isArray(body.data.missing_items) ||
     !body.data.missing_items.every(isQualityDashboardMissingItem) ||
     !isQualityDashboardPrivacy(body.data.privacy)

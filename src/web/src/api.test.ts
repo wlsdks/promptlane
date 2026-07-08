@@ -6336,6 +6336,10 @@ describe("web api export client", () => {
               band: "poor",
               scored_prompts: 0,
             },
+            distribution: {
+              by_tool: [],
+              by_project: [],
+            },
             missing_items: [],
             privacy: {
               local_only: true,
@@ -7020,6 +7024,48 @@ describe("web api export client", () => {
                 prompt_body: "secret prompt body",
               },
             ],
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+            },
+          },
+        }),
+      );
+    const { getQualityDashboard } = await import("./api.js");
+
+    await expect(getQualityDashboard()).rejects.toThrow(
+      "Quality dashboard failed: Invalid response.",
+    );
+  });
+
+  it("reports unsafe quality dashboard distribution buckets without returning raw paths", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            total_prompts: 1,
+            quality_score: {
+              average: 42,
+              max: 100,
+              band: "needs_work",
+              scored_prompts: 1,
+            },
+            distribution: {
+              by_tool: [],
+              by_project: [
+                {
+                  key: "proj_private",
+                  label: "private-project",
+                  count: 1,
+                  ratio: 1,
+                  raw_path: "/Users/jinan/private-project",
+                },
+              ],
+            },
+            missing_items: [],
             privacy: {
               local_only: true,
               external_calls: false,
