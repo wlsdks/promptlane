@@ -759,6 +759,30 @@ function isContinuationSafetyCopyFeedbackAccessibilityNote(
   );
 }
 
+function isContinuationSafetyCopyFeedbackTimeoutNote(
+  value: unknown,
+): value is NonNullable<
+  LoopWorktreeResponse["continuation_safety_copy_feedback_timeout_note"]
+> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const note = value as NonNullable<
+    LoopWorktreeResponse["continuation_safety_copy_feedback_timeout_note"]
+  >;
+  return (
+    note.label === "Copy feedback timeout" &&
+    note.timeout_scope ===
+      "copied feedback clears after a short local timeout" &&
+    note.not_state ===
+      "timeout does not record review completion or submission state" &&
+    note.reason ===
+      "keeps copied feedback temporary while preserving the manual safety review boundary" &&
+    note.writes_files === false &&
+    note.external_calls === false
+  );
+}
+
 function isLoopActivityWorktree(
   value: unknown,
 ): value is LoopListResponse["status"]["activity"]["worktrees"][number] {
@@ -2710,6 +2734,7 @@ export async function getLoopWorktree(
       continuation_safety_recheck_cue?: unknown;
       continuation_safety_copy_feedback_reminder?: unknown;
       continuation_safety_copy_feedback_accessibility_note?: unknown;
+      continuation_safety_copy_feedback_timeout_note?: unknown;
       items?: unknown;
       privacy?: unknown;
     };
@@ -2749,6 +2774,10 @@ export async function getLoopWorktree(
       undefined &&
       !isContinuationSafetyCopyFeedbackAccessibilityNote(
         body.data.continuation_safety_copy_feedback_accessibility_note,
+      )) ||
+    (body.data.continuation_safety_copy_feedback_timeout_note !== undefined &&
+      !isContinuationSafetyCopyFeedbackTimeoutNote(
+        body.data.continuation_safety_copy_feedback_timeout_note,
       )) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
