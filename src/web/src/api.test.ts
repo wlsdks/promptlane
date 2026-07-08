@@ -3105,6 +3105,17 @@ describe("web api export client", () => {
       },
     );
   });
+
+  it("reports malformed project instruction analysis responses without returning incomplete privacy data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { analyzeProjectInstructions } = await import("./api.js");
+
+    await expect(
+      analyzeProjectInstructions("proj_abcdef123456"),
+    ).rejects.toThrow("Project instruction analysis failed: Invalid response.");
+  });
 });
 
 function jsonResponse(body: unknown): Response {

@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Project Instruction Review Contract Error
+
+- [x] CHECK: web API `analyzeProjectInstructions`가
+  `/api/v1/projects/:id/instructions/analyze` 성공 응답의 instruction review/privacy 계약을
+  검증하지 않아 malformed 응답을 `{}` 상태로 instruction review UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed project instruction analysis body를
+  `Project instruction analysis failed: Invalid response.`로 reject하도록 요구하게 해 현재
+  `{}` resolve 실패를 확인했다.
+- [x] GREEN: instruction review 응답의 `score`, `files`, `checklist`, `suggestions`,
+  `privacy` 계약을 확인하고 깨진 성공 응답은 raw-free instruction review contract 오류로
+  중단하도록 고쳤다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Project Policy Contract Error
 
 - [x] CHECK: web API `updateProjectPolicy`가 `/api/v1/projects/:id/policy` 성공 응답의

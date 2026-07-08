@@ -1482,6 +1482,45 @@ export type ProjectInstructionReview = {
   };
 };
 
+function parseProjectInstructionReviewResponse(body: {
+  data?: {
+    score?: {
+      value?: unknown;
+      max?: unknown;
+      band?: unknown;
+    };
+    files_found?: unknown;
+    files?: unknown;
+    checklist?: unknown;
+    suggestions?: unknown;
+    privacy?: {
+      local_only?: unknown;
+      external_calls?: unknown;
+      stores_file_bodies?: unknown;
+      returns_file_bodies?: unknown;
+      returns_raw_paths?: unknown;
+    };
+  };
+}): ProjectInstructionReview {
+  if (
+    typeof body.data?.score?.value !== "number" ||
+    body.data.score.max !== 100 ||
+    typeof body.data.score.band !== "string" ||
+    typeof body.data.files_found !== "number" ||
+    !Array.isArray(body.data.files) ||
+    !Array.isArray(body.data.checklist) ||
+    !Array.isArray(body.data.suggestions) ||
+    body.data.privacy?.local_only !== true ||
+    body.data.privacy.external_calls !== false ||
+    body.data.privacy.stores_file_bodies !== false ||
+    body.data.privacy.returns_file_bodies !== false ||
+    body.data.privacy.returns_raw_paths !== false
+  ) {
+    throw new Error("Project instruction analysis failed: Invalid response.");
+  }
+  return body.data as ProjectInstructionReview;
+}
+
 export type ProjectSummary = {
   project_id: string;
   label: string;
@@ -2085,8 +2124,10 @@ export async function analyzeProjectInstructions(
     await failApi(response, "Project instruction analysis failed");
   }
 
-  const body = (await response.json()) as { data: ProjectInstructionReview };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parseProjectInstructionReviewResponse
+  >[0];
+  return parseProjectInstructionReviewResponse(body);
 }
 
 export type CoachFeedbackRating = "helpful" | "not_helpful" | "wrong";
