@@ -633,6 +633,12 @@ describe("plugin packaging files", () => {
       expect(releaseChecklist).toContain(`\`${docPath}\``);
     }
 
+    for (const shippedPlanningDoc of packageJson.files.filter((filePath) =>
+      filePath.startsWith("docs/superpowers/"),
+    )) {
+      expect(releaseChecklist).toContain(`\`${shippedPlanningDoc}\``);
+    }
+
     expect(releaseChecklist).not.toContain("Confirm `pnpm pack:dry-run`");
     expect(releaseSmoke).toContain('"quality-evidence"');
     expect(releaseSmoke).toContain('"--require-complete"');

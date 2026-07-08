@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Release Checklist Planning Docs
+
+- [x] CHECK: `package.json#files` ships PromptLane compatibility plans, 9.5
+  quality plan, runtime inventory, and repositioning spec under
+  `docs/superpowers/`, but `docs/RELEASE_CHECKLIST.md` package contents did not
+  list them for manual tarball review.
+- [x] RED: packaging guard now requires every shipped `docs/superpowers/...`
+  entry to appear in the release checklist.
+- [x] GREEN: release checklist package contents lists the shipped historical
+  planning, runtime inventory, 9.5 quality plan, and repositioning spec docs.
+- [x] VERIFY: focused release checklist guard, formatting, live preflight/quality
+  smoke, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Release Gate Order
 
 - [x] CHECK: `quality-evidence` and `docs/RELEASE_CHECKLIST.md` list

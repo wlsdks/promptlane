@@ -93,6 +93,15 @@ Confirm `corepack pnpm pack:dry-run` includes:
 - [ ] `docs/UI_PATROL_EVIDENCE_2026-07-06.md`
 - [ ] `docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md`
 - [ ] `docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md`
+- [ ] `docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md`
+- [ ] `docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-issue-slices.md`
+- [ ] `docs/superpowers/plans/2026-07-04-promptlane-claude-dual-namespace-decision.md`
+- [ ] `docs/superpowers/plans/2026-07-04-promptlane-mcp-server-name-decision.md`
+- [ ] `docs/superpowers/plans/2026-07-04-promptlane-deprecation-readiness.md`
+- [ ] `docs/superpowers/plans/2026-07-04-promptlane-next-runtime-value-slice.md`
+- [ ] `docs/superpowers/plans/2026-07-04-promptlane-runtime-id-inventory.json`
+- [ ] `docs/superpowers/plans/2026-07-05-promptlane-95-quality-plan.md`
+- [ ] `docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md`
 - [ ] `.claude-plugin/` and `commands/` directories
 - [ ] `plugins/` and `integrations/` directories
 - [ ] `scripts/benchmark.mjs`
