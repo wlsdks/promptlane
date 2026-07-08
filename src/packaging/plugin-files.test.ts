@@ -2381,6 +2381,10 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "docs/PLUGINS.md"),
       "utf8",
     );
+    const harness = readFileSync(
+      join(process.cwd(), "docs/AGENT-HARNESS.md"),
+      "utf8",
+    );
     const packageJson = readJson<{ name: string }>("package.json");
     const claudeManifest = readJson<{ name: string; commands: string[] }>(
       ".claude-plugin/plugin.json",
@@ -2395,6 +2399,12 @@ describe("plugin packaging files", () => {
     for (const content of [readme, readmeKo, plugins]) {
       expect(content).toContain("/promptlane:*");
     }
+    expect(harness).toContain(
+      "`/promptlane:*` remains the supported slash namespace",
+    );
+    expect(harness).not.toContain(
+      "`/promptlane:*` is not added until a dedicated namespace migration plan",
+    );
     expect(commandFiles).toEqual(
       expect.arrayContaining(["setup.md", "status.md", "coach.md"]),
     );

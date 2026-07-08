@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Harness Slash Namespace Contract
+
+- [x] CHECK: `docs/AGENT-HARNESS.md` said `/promptlane:*` remains supported
+  while also saying the same namespace is not added until a migration plan.
+- [x] RED: packaging guard requires the harness to preserve `/promptlane:*` as
+  the active namespace and reject the contradictory not-added wording.
+- [x] GREEN: harness docs now forbid alternate Claude Code slash namespaces
+  without a migration plan instead of contradicting the active namespace.
+- [x] VERIFY: focused packaging test, touched-file formatting, typecheck, and
+  diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Preflight Inspection Warnings
 
 - [x] CHECK: inspection runs now reported `publish_ready: false`, but

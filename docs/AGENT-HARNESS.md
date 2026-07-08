@@ -93,8 +93,8 @@ corepack pnpm smoke:hooks
 Acceptance criteria:
 
 - `/promptlane:*` remains the supported slash namespace during the migration.
-- `/promptlane:*` is not added until a dedicated namespace migration plan is
-  implemented.
+- No alternate Claude Code slash namespace is added until a dedicated namespace
+  migration plan is implemented.
 - MCP write flows return metadata-only responses.
 - User-visible or model-visible hook output does not include raw prompt bodies,
   compact summaries, transcripts, tokens, or raw local paths.
@@ -160,16 +160,16 @@ Disallowed hook behavior:
 
 Use the narrowest relevant gate first, then broaden before PR.
 
-| Change type           | Minimum verification                                        |
-| --------------------- | ----------------------------------------------------------- |
-| MCP tool/schema       | `corepack pnpm test -- src/mcp`, relevant smoke script      |
-| Hook behavior         | `corepack pnpm smoke:hooks`, focused hook tests             |
-| Loop CLI/status/brief | `corepack pnpm test -- src/loop src/cli`                    |
-| Web Loops UI          | `corepack pnpm ui-patrol` plus focused web tests            |
+| Change type           | Minimum verification                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------ |
+| MCP tool/schema       | `corepack pnpm test -- src/mcp`, relevant smoke script                               |
+| Hook behavior         | `corepack pnpm smoke:hooks`, focused hook tests                                      |
+| Loop CLI/status/brief | `corepack pnpm test -- src/loop src/cli`                                             |
+| Web Loops UI          | `corepack pnpm ui-patrol` plus focused web tests                                     |
 | Web user-flow dogfood | `corepack pnpm dogfood:web-user-flow` and `docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md` |
-| Plugin/packaging      | `corepack pnpm pack:dry-run`, package contents tests        |
-| Instruction docs      | `git diff --check`, packaging docs tests if shipped         |
-| Dependency update     | local test/lint/build/pack gate, engine compatibility review |
+| Plugin/packaging      | `corepack pnpm pack:dry-run`, package contents tests                                 |
+| Instruction docs      | `git diff --check`, packaging docs tests if shipped                                  |
+| Dependency update     | local test/lint/build/pack gate, engine compatibility review                         |
 
 Full gate before merge unless the change is docs-only and the risk is clearly
 bounded:
