@@ -4018,6 +4018,26 @@ function isQualityDashboardProjectTopGap(
   );
 }
 
+function isRawFreeArchiveScoreRoot(
+  value: unknown,
+): value is Partial<ArchiveScoreReport> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const report = value as Partial<ArchiveScoreReport> & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    report.cwd === undefined &&
+    report.markdown === undefined &&
+    report.prompt_body === undefined &&
+    report.raw_path === undefined
+  );
+}
+
 function isArchiveScoreSummary(
   value: unknown,
 ): value is ArchiveScoreReport["archive_score"] {
@@ -4775,6 +4795,7 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
   };
   if (
     typeof body.data?.generated_at !== "string" ||
+    !isRawFreeArchiveScoreRoot(body.data) ||
     !isArchiveScoreSummary(body.data?.archive_score) ||
     !isArchiveScoreDistribution(body.data.distribution) ||
     !Array.isArray(body.data.top_gaps) ||
