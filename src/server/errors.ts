@@ -30,11 +30,11 @@ export function problem(
     title,
     status,
     detail,
-    instance,
+    instance: instance ? sanitizeProblemText(instance) : undefined,
     errors: errors?.map((error) => ({
       ...error,
-      field: sanitizeProblemErrorMessage(error.field),
-      message: sanitizeProblemErrorMessage(error.message),
+      field: sanitizeProblemText(error.field),
+      message: sanitizeProblemText(error.message),
     })),
   });
 }
@@ -42,7 +42,7 @@ export function problem(
 const RAW_DETAIL_ERROR_KEY_PATTERN =
   "compactSummary|compact_summary|markdown|promptBody|prompt_body|rawPath|raw_path|transcript|transcriptBody|transcript_body";
 
-function sanitizeProblemErrorMessage(value: string): string {
+function sanitizeProblemText(value: string): string {
   let sanitized = value.replace(
     new RegExp(
       `\\b(${RAW_DETAIL_ERROR_KEY_PATTERN})\\s*([:=])\\s*([^\\s,;)}\\]]+)`,

@@ -47,4 +47,18 @@ describe("server problem details", () => {
     expect(field).not.toContain("/Users/example/private-project/raw.md");
     expect(field).not.toContain("sk-proj-1234567890abcdef");
   });
+
+  it("redacts raw local paths and tokens from problem instances", () => {
+    const error = problem(
+      404,
+      "Not Found",
+      "Missing route.",
+      "/api/v1/test?path=/Users/example/private-project/raw.md&token=sk-proj-1234567890abcdef",
+    );
+
+    const instance = error.problem.instance ?? "";
+    expect(instance).toContain("[REDACTED:path]");
+    expect(instance).not.toContain("/Users/example/private-project/raw.md");
+    expect(instance).not.toContain("sk-proj-1234567890abcdef");
+  });
 });
