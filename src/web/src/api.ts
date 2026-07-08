@@ -1012,6 +1012,34 @@ export type LoopBrief = {
   };
 };
 
+function parseLoopBriefResponse(
+  body: {
+    data?: {
+      title?: unknown;
+      prompt?: unknown;
+      source_snapshot_id?: unknown;
+      privacy?: {
+        local_only?: unknown;
+        returns_prompt_bodies?: unknown;
+        returns_raw_paths?: unknown;
+      };
+    };
+  },
+  message: string,
+): LoopBrief {
+  if (
+    typeof body.data?.title !== "string" ||
+    typeof body.data.prompt !== "string" ||
+    typeof body.data.source_snapshot_id !== "string" ||
+    body.data.privacy?.local_only !== true ||
+    body.data.privacy.returns_prompt_bodies !== false ||
+    body.data.privacy.returns_raw_paths !== false
+  ) {
+    throw new Error(`${message}: Invalid response.`);
+  }
+  return body.data as LoopBrief;
+}
+
 export type LoopMemoryApprovalResult = {
   recorded: true;
   memory: {
@@ -1665,8 +1693,10 @@ export async function getLoopBrief(id: string): Promise<LoopBrief> {
     await failApi(response, "Loop brief failed");
   }
 
-  const body = (await response.json()) as { data: LoopBrief };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parseLoopBriefResponse
+  >[0];
+  return parseLoopBriefResponse(body, "Loop brief failed");
 }
 
 export async function getSelectedLoopBrief(options: {
@@ -1686,8 +1716,10 @@ export async function getSelectedLoopBrief(options: {
     await failApi(response, "Selected loop brief failed");
   }
 
-  const body = (await response.json()) as { data: LoopBrief };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parseLoopBriefResponse
+  >[0];
+  return parseLoopBriefResponse(body, "Selected loop brief failed");
 }
 
 export async function getLoopWorktree(

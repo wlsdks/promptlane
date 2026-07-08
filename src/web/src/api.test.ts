@@ -227,6 +227,17 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports malformed selected loop brief responses without returning incomplete continuation data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getSelectedLoopBrief } = await import("./api.js");
+
+    await expect(
+      getSelectedLoopBrief({ worktree: "agent-loop-worktree" }),
+    ).rejects.toThrow("Selected loop brief failed: Invalid response.");
+  });
+
   it("gets a worktree drilldown without raw prompt or compact content", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
