@@ -1,5 +1,14 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Archive Score Top Gaps Contract Error
+
+- [x] CHECK: web API `getArchiveScoreReport`가 `/api/v1/score` 성공 응답의
+  `top_gaps[]` item 계약을 검증하지 않아 raw prompt/path-like field가 archive score UI 데이터로 넘어갈 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed top-gap `prompt_body`
+  body를 `Archive score report failed: Invalid response.`로 reject하도록 요구하게 해 현재 unsafe top-gap resolve 실패를 확인한다.
+- [x] GREEN: top-gap label/count/rate 계약을 확인하고 raw body/path-like fields는 raw-free archive score contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Archive Score Practice Plan Contract Error
 
 - [x] CHECK: web API `getArchiveScoreReport`가 `/api/v1/score` 성공 응답의

@@ -3686,6 +3686,29 @@ function isArchivePracticePlanItem(
   );
 }
 
+function isArchiveTopGapItem(
+  value: unknown,
+): value is ArchiveScoreReport["top_gaps"][number] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const item = value as ArchiveScoreReport["top_gaps"][number] & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    typeof item.label === "string" &&
+    typeof item.count === "number" &&
+    typeof item.rate === "number" &&
+    item.cwd === undefined &&
+    item.markdown === undefined &&
+    item.prompt_body === undefined &&
+    item.raw_path === undefined
+  );
+}
+
 export type ProjectPolicy = {
   capture_disabled: boolean;
   analysis_disabled: boolean;
@@ -4173,6 +4196,7 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
   const body = (await response.json()) as {
     data?: {
       archive_score?: unknown;
+      top_gaps?: unknown;
       practice_plan?: unknown;
       low_score_prompts?: unknown;
       privacy?: unknown;
@@ -4181,6 +4205,8 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
   if (
     typeof body.data?.archive_score !== "object" ||
     body.data.archive_score === null ||
+    !Array.isArray(body.data.top_gaps) ||
+    !body.data.top_gaps.every(isArchiveTopGapItem) ||
     !Array.isArray(body.data.practice_plan) ||
     !body.data.practice_plan.every(isArchivePracticePlanItem) ||
     !Array.isArray(body.data.low_score_prompts) ||

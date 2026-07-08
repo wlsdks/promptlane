@@ -6351,6 +6351,7 @@ describe("web api export client", () => {
               scored_prompts: 0,
               total_prompts: 0,
             },
+            top_gaps: [],
             practice_plan: [],
             low_score_prompts: [],
             privacy: {
@@ -6461,6 +6462,45 @@ describe("web api export client", () => {
                 prompt_body: "secret prompt body",
               },
             ],
+            low_score_prompts: [],
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+            },
+          },
+        }),
+      );
+    const { getArchiveScoreReport } = await import("./api.js");
+
+    await expect(getArchiveScoreReport()).rejects.toThrow(
+      "Archive score report failed: Invalid response.",
+    );
+  });
+
+  it("reports unsafe archive score top gap items without returning prompt bodies", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            archive_score: {
+              average: 42,
+              max: 100,
+              band: "fair",
+              scored_prompts: 1,
+              total_prompts: 1,
+            },
+            top_gaps: [
+              {
+                label: "Goal clarity",
+                count: 1,
+                rate: 1,
+                prompt_body: "secret prompt body",
+              },
+            ],
+            practice_plan: [],
             low_score_prompts: [],
             privacy: {
               local_only: true,
