@@ -316,11 +316,15 @@ describe("plugin packaging files", () => {
 
     for (const content of [benchmark, benchmarkSpec]) {
       expect(content).toContain("archive_effectiveness_score");
+      expect(content).toContain("archive_effectiveness_coverage");
       expect(content).toContain("effectiveness_summary");
       expect(content).toContain("linked_outcomes");
     }
     expect(benchmarkSpec).toContain("Prompt Effectiveness Evidence");
     expect(benchmarkSpec).toContain("Pass threshold");
+    expect(benchmarkSpec.toLowerCase().replace(/\s+/g, " ")).toContain(
+      "coverage is a measurement-depth signal, not a claim of archive-wide proof",
+    );
   });
 
   it("keeps the public release surface on 1.0.0", () => {

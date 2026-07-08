@@ -17,9 +17,9 @@ This benchmark is intentionally local-only. It does not call an external LLM jud
 ## Command
 
 ```sh
-pnpm benchmark
-pnpm benchmark -- --json
-pnpm benchmark -- --fixture-set real      # opt-in, soft signal only
+corepack pnpm benchmark
+corepack pnpm benchmark -- --json
+corepack pnpm benchmark -- --fixture-set real      # opt-in, soft signal only
 ```
 
 The command builds the production app first, creates an isolated temporary data directory, starts the local server on a temporary loopback port, ingests synthetic fixture prompts, and measures API/UI-adjacent behavior through the built app.
@@ -153,10 +153,19 @@ Checks:
 Metric:
 
 - `archive_effectiveness_score`
+- `archive_effectiveness_coverage`
 
 Pass threshold:
 
 - `>= 0.8`
+- coverage `>= 0.2` for the synthetic smoke corpus
+
+`archive_effectiveness_score` checks whether linked loop-outcome evidence is
+safe and usable once present. `archive_effectiveness_coverage` reports the
+share of benchmark prompts with linked outcome evidence. Benchmark coverage is
+a measurement-depth signal, not a claim of archive-wide proof; low coverage
+means the benchmark can prove the mechanism works without proving most prompts
+have outcome-backed effectiveness yet.
 
 ### 8. Experimental Rules A/B Lift
 
@@ -212,6 +221,7 @@ Pass thresholds:
     "coach_prompt_actionability": 1,
     "prompt_quality_score_calibration": 1,
     "archive_effectiveness_score": 1,
+    "archive_effectiveness_coverage": 0.2,
     "analytics_score": 1,
     "ingest_p95_ms": 21,
     "search_p95_ms": 8,
@@ -232,8 +242,11 @@ Pass thresholds:
         "passing_outcomes": 1,
         "total_tests_run": 3
       },
-      "top_evidence_refs": ["benchmark:effectiveness"],
-      "next_action": "Keep linking prompt improvements to loop outcomes."
+      "top_evidence_refs": [
+        "benchmark:effectiveness",
+        "corepack pnpm benchmark"
+      ],
+      "next_action": "Link recent prompts to loop outcomes before claiming archive-wide effectiveness."
     },
     "experimental_rules_ab": {
       "verification_v2": {
@@ -254,6 +267,7 @@ Pass thresholds:
     "coach_prompt_actionability": 0.8,
     "prompt_quality_score_calibration": 0.8,
     "archive_effectiveness_score": 0.8,
+    "archive_effectiveness_coverage": 0.2,
     "analytics_score": 0.75,
     "ingest_p95_ms": 500,
     "search_p95_ms": 250,

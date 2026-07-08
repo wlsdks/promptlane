@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Benchmark Archive Effectiveness Coverage
+
+- [x] CHECK: `corepack pnpm benchmark -- --json` passed but reported
+  `archive_effectiveness_score: 1` while only 1 of 5 synthetic prompts had
+  linked outcome evidence, making benchmark usefulness too easy to overstate.
+- [x] RED: benchmark contract packaging guard now requires
+  `archive_effectiveness_coverage` in the benchmark runner and spec, plus a
+  docs statement that coverage is measurement depth rather than archive-wide
+  proof.
+- [x] GREEN: benchmark JSON now reports
+  `archive_effectiveness_coverage`, gates the synthetic corpus at 0.2, and the
+  benchmark spec documents the metric and current 0.2 sample value.
+- [x] VERIFY: focused benchmark contract test, current benchmark JSON, touched
+  file formatting, typecheck, and diff hygiene.
+
 ## 2026-07-08 PromptLane Quality Evidence Header Row Guard
 
 - [x] CHECK: 1.0.0 release smoke failed because the 9.5 scorecard Markdown

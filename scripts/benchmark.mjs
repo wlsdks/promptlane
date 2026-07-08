@@ -46,6 +46,7 @@ const thresholds = {
   coach_prompt_actionability: 0.8,
   prompt_quality_score_calibration: 0.8,
   archive_effectiveness_score: 0.8,
+  archive_effectiveness_coverage: 0.2,
   analytics_score: 0.75,
   ingest_p95_ms: 500,
   search_p95_ms: 250,
@@ -202,6 +203,9 @@ try {
   const archiveEffectivenessScore = scoreArchiveEffectiveness(
     archiveScore.data,
   );
+  const archiveEffectivenessCoverage = scoreArchiveEffectivenessCoverage(
+    archiveScore.data,
+  );
   const analyticsScore = scoreAnalytics(dashboard.data);
   const privacyLeakCount = countPrivacyLeaks({
     list,
@@ -219,6 +223,7 @@ try {
     coach_prompt_actionability: coachPromptActionability,
     prompt_quality_score_calibration: scoreCalibration,
     archive_effectiveness_score: archiveEffectivenessScore,
+    archive_effectiveness_coverage: archiveEffectivenessCoverage,
     analytics_score: analyticsScore,
     ingest_p95_ms: Math.round(p95(ingestDurations)),
     search_p95_ms: Math.round(p95(searchDurations)),
@@ -406,6 +411,11 @@ function scoreArchiveEffectiveness(report) {
   return roundScore(checks.filter(Boolean).length / checks.length);
 }
 
+function scoreArchiveEffectivenessCoverage(report) {
+  const summary = report.effectiveness_summary;
+  return roundScore(summary.measured_prompts / fixtures.length);
+}
+
 function scorePromptQualityCalibration({ list, details }) {
   const listItems = list.data.items;
   const detailItems = details.map((detail) => detail.data);
@@ -486,7 +496,7 @@ function seedArchiveEffectivenessOutcome(promptId) {
         summary: "benchmark effectiveness outcome passed",
         evidence_refs: [
           "benchmark:effectiveness",
-          "pnpm benchmark",
+          "corepack pnpm benchmark",
           `${rawPathPrefix}/benchmark-project/private.txt`,
           rawSecret,
         ],
@@ -701,6 +711,8 @@ function passes(scores) {
       thresholds.prompt_quality_score_calibration &&
     scores.archive_effectiveness_score >=
       thresholds.archive_effectiveness_score &&
+    scores.archive_effectiveness_coverage >=
+      thresholds.archive_effectiveness_coverage &&
     scores.analytics_score >= thresholds.analytics_score &&
     scores.ingest_p95_ms <= thresholds.ingest_p95_ms &&
     scores.search_p95_ms <= thresholds.search_p95_ms &&
