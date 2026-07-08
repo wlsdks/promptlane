@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Preflight Real Fixture Warning
+
+- [x] CHECK: npm publish preflight warned that synthetic benchmark evidence is
+  not real-world proof, but did not say whether the real benchmark fixture file
+  exists.
+- [x] RED: focused preflight tests require a `real benchmark fixtures are
+  missing` release warning in JSON and human output when
+  `docs/benchmark-fixtures/real.json` is absent.
+- [x] GREEN: preflight now inspects the real fixture path and emits a
+  non-blocking warning that publish may proceed after gates pass, but
+  real-user effectiveness trends must not be claimed until consent-bearing
+  redacted real fixtures are collected and run.
+- [x] VERIFY: focused preflight/packaging tests, real preflight JSON/human
+  smoke, formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane Preflight Effectiveness Warning
 
 - [x] CHECK: current benchmark JSON passes the synthetic release regression

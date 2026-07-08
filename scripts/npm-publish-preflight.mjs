@@ -1012,6 +1012,21 @@ function releaseWarnings() {
       detail:
         "corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof; collect docs/benchmark-fixtures/real.json before claiming real-user prompt quality trends.",
     },
+    ...realBenchmarkFixtureWarnings(),
+  ];
+}
+
+function realBenchmarkFixtureWarnings() {
+  if (existsSync(join(repoRoot, "docs/benchmark-fixtures/real.json"))) {
+    return [];
+  }
+
+  return [
+    {
+      label: "real benchmark fixtures are missing",
+      detail:
+        "docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends until consent-bearing redacted real fixtures are collected and run with corepack pnpm benchmark -- --fixture-set real.",
+    },
   ];
 }
 

@@ -47,6 +47,11 @@ describe("npm publish preflight", () => {
         detail:
           "corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof; collect docs/benchmark-fixtures/real.json before claiming real-user prompt quality trends.",
       },
+      {
+        label: "real benchmark fixtures are missing",
+        detail:
+          "docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends until consent-bearing redacted real fixtures are collected and run with corepack pnpm benchmark -- --fixture-set real.",
+      },
     ]);
     expect(parsed.next_action).toContain(
       "Rerun corepack pnpm npm-publish:preflight without --skip-npm",
@@ -948,6 +953,10 @@ exit 1
     );
     expect(result.stdout).toContain(
       "a synthetic pass is not real-world effectiveness proof",
+    );
+    expect(result.stdout).toContain("- real benchmark fixtures are missing");
+    expect(result.stdout).toContain(
+      "do not claim real-user effectiveness trends",
     );
     expect(result.stdout).toContain(
       "Recovery commands\n- npm login\n- corepack pnpm npm-publish:preflight",

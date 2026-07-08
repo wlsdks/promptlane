@@ -369,6 +369,11 @@ describe("plugin packaging files", () => {
       "synthetic pass is not real-world effectiveness proof",
     );
     expect(publishing).toContain("docs/benchmark-fixtures/real.json");
+    expect(publishing).toContain("real benchmark fixtures are");
+    expect(publishing).toContain("missing` warning");
+    expect(publishing).toContain(
+      "blocks overclaiming real-user effectiveness trends",
+    );
     expect(publishing).toContain(
       "promptlane setup --profile coach --register-mcp --open-web",
     );
@@ -427,6 +432,11 @@ describe("plugin packaging files", () => {
     );
     expect(preflightScript).toContain(
       "a synthetic pass is not real-world effectiveness proof",
+    );
+    expect(preflightScript).toContain("realBenchmarkFixtureWarnings");
+    expect(preflightScript).toContain("real benchmark fixtures are missing");
+    expect(preflightScript).toContain(
+      "do not claim real-user effectiveness trends",
     );
     expect(preflightScript).not.toContain("manual npm checks");
     expect(preflightScript).not.toContain("predates this preflight");
