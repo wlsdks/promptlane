@@ -2417,6 +2417,7 @@ export async function getLoopWorktree(
       worktree?: unknown;
       selection_scope?: unknown;
       items?: unknown;
+      privacy?: unknown;
     };
   };
   if (
@@ -2424,7 +2425,8 @@ export async function getLoopWorktree(
     typeof body.data.selection_scope !== "object" ||
     body.data.selection_scope === null ||
     !Array.isArray(body.data.items) ||
-    !body.data.items.every(isLoopSummary)
+    !body.data.items.every(isLoopSummary) ||
+    !isLoopListPrivacy(body.data.privacy)
   ) {
     throw new Error("Loop worktree drilldown failed: Invalid response.");
   }
