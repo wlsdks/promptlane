@@ -456,6 +456,12 @@ describe("plugin packaging files", () => {
     expect(security).toContain("PromptLane 1.0.0");
     expect(benchmarkSpec).toContain('"version": "1.0.0"');
     expect(implementationPlan).toContain("npm publish --tag latest");
+    expect(implementationPlan).toContain(
+      "create or refresh the annotated git tag before npm publish preflight",
+    );
+    expect(implementationPlan).not.toContain(
+      "create the annotated git tag only after the full local release gate passes",
+    );
     for (const content of [implementationPlan, prd, techSpec]) {
       for (const command of [
         "corepack pnpm test",

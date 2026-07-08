@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Implementation Plan Tag Order
+
+- [x] CHECK: `docs/IMPLEMENTATION_PLAN.md` still described creating the
+  annotated `v1.0.0` tag only after the full local release gate, while current
+  npm preflight requires the tag to exist and point at HEAD before
+  `corepack pnpm npm-publish:preflight`.
+- [x] RED: public release surface guard now requires the implementation plan to
+  say create or refresh the annotated tag before npm publish preflight and
+  rejects the old after-gate-only wording.
+- [x] GREEN: implementation plan release-readiness steps now place the tag before
+  npm preflight and publish after the preflight.
+- [x] VERIFY: focused public release surface guard, touched-file formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Runbook Tag Order
 
 - [x] CHECK: `docs/RELEASE_CHECKLIST.md` now requires creating or refreshing

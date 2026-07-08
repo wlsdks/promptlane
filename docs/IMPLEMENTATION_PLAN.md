@@ -35,22 +35,22 @@ The implementation goal is to help Claude Code and Codex users safely record pro
 
 ## 3. Phase Overview
 
-| Phase | Goal                                       | Status      |
-| ----- | ------------------------------------------ | ----------- |
-| P0    | Project skeleton and package smoke         | Complete    |
-| P1    | Normalized event contract and adapters     | Complete    |
-| P2    | Local server, auth, validation, redaction  | Complete    |
-| P3    | Markdown, SQLite, FTS, delete, rebuild     | Complete    |
-| P4    | Claude Code hook install/doctor            | Complete    |
-| P5    | CLI list/search/show/delete/open           | Complete    |
-| P6    | Web archive/detail/dashboard               | Complete    |
-| P7    | Codex beta adapter                         | Complete    |
-| P8    | Release smoke and package readiness        | Complete    |
-| P9    | Project Control Plane                      | Complete    |
-| P10   | Transcript import                          | Complete    |
-| P11   | Prompt Improvement Workspace               | Complete    |
-| P12   | Anonymized export                          | Complete    |
-| P13   | Benchmark and browser E2E                  | Complete    |
+| Phase | Goal                                         | Status   |
+| ----- | -------------------------------------------- | -------- |
+| P0    | Project skeleton and package smoke           | Complete |
+| P1    | Normalized event contract and adapters       | Complete |
+| P2    | Local server, auth, validation, redaction    | Complete |
+| P3    | Markdown, SQLite, FTS, delete, rebuild       | Complete |
+| P4    | Claude Code hook install/doctor              | Complete |
+| P5    | CLI list/search/show/delete/open             | Complete |
+| P6    | Web archive/detail/dashboard                 | Complete |
+| P7    | Codex beta adapter                           | Complete |
+| P8    | Release smoke and package readiness          | Complete |
+| P9    | Project Control Plane                        | Complete |
+| P10   | Transcript import                            | Complete |
+| P11   | Prompt Improvement Workspace                 | Complete |
+| P12   | Anonymized export                            | Complete |
+| P13   | Benchmark and browser E2E                    | Complete |
 | P14   | English/Korean docs and npm stable readiness | Complete |
 
 ## 4. Public Beta Completion Criteria
@@ -155,9 +155,10 @@ Before the first stable npm publish:
 - check that `dist/cli/index.js` is executable
 - verify `npm whoami`
 - verify package name availability or ownership
+- create or refresh the annotated git tag before npm publish preflight:
+  `git tag -fa v1.0.0 -m "promptlane 1.0.0"`
+- run `corepack pnpm npm-publish:preflight`
 - publish with `npm publish --tag latest`
-- create the annotated git tag only after the full local release gate passes:
-  `git tag -a v1.0.0 -m "promptlane 1.0.0"`
 
 ## 8. Deferred Work
 
