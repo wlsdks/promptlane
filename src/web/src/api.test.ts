@@ -6377,6 +6377,9 @@ describe("web api export client", () => {
               top_evidence_refs: [],
               next_action: "Record local outcome evidence.",
             },
+            filters: {
+              max_prompts: 200,
+            },
             privacy: {
               local_only: true,
               external_calls: false,
@@ -6572,6 +6575,66 @@ describe("web api export client", () => {
               top_evidence_refs: ["test:web-api"],
               next_action: "Keep recording local outcome evidence.",
               prompt_body: "secret prompt body",
+            },
+            privacy: {
+              local_only: true,
+              external_calls: false,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+            },
+          },
+        }),
+      );
+    const { getArchiveScoreReport } = await import("./api.js");
+
+    await expect(getArchiveScoreReport()).rejects.toThrow(
+      "Archive score report failed: Invalid response.",
+    );
+  });
+
+  it("reports unsafe archive score filters without returning raw paths", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            archive_score: {
+              average: 42,
+              max: 100,
+              band: "needs_work",
+              scored_prompts: 1,
+              total_prompts: 1,
+            },
+            distribution: {
+              excellent: 0,
+              good: 0,
+              needs_work: 1,
+              weak: 0,
+            },
+            top_gaps: [],
+            practice_plan: [],
+            low_score_prompts: [],
+            effectiveness_summary: {
+              measured_prompts: 1,
+              unmeasured_prompts: 0,
+              verdicts: {
+                proven: 1,
+                mixed: 0,
+                unproven: 0,
+              },
+              calibration: {
+                linked_outcomes: 1,
+                passing_outcomes: 1,
+                failing_outcomes: 0,
+                total_tests_run: 2,
+              },
+              top_evidence_refs: ["test:web-api"],
+              next_action: "Keep recording local outcome evidence.",
+            },
+            filters: {
+              project: "private-project",
+              max_prompts: 200,
+              raw_path: "/Users/jinan/private-project",
             },
             privacy: {
               local_only: true,
