@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Core Gate Script Preflight Guard
+
+- [x] CHECK: release checklist requires `format`, `test`, `lint`, and `build`
+  before publish, but npm publish preflight did not fail closed if those core
+  package script wrappers drifted before release.
+- [x] RED: focused npm publish preflight test required machine-readable core
+  release gate package script registration checks.
+- [x] GREEN: npm publish preflight now checks `format`, `test`, `lint`, and
+  `build` package script wrappers before publish.
+- [x] VERIFY: focused preflight test, skip-npm preflight JSON, formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Benchmark Script Preflight Guard
 
 - [x] CHECK: release checklist requires Benchmark v1 and browser E2E before

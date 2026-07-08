@@ -101,6 +101,22 @@ check(
 );
 for (const [label, scriptName, expectedCommand] of [
   [
+    "format package script is registered",
+    "format",
+    'prettier --check package.json tsconfig.json tsconfig.web.json vite.web.config.ts vitest.config.ts "scripts/**/*.mjs" "src/**/*.{ts,tsx,css}"',
+  ],
+  ["test package script is registered", "test", "vitest run"],
+  [
+    "lint package script is registered",
+    "lint",
+    "pnpm lint:types && pnpm lint:quality",
+  ],
+  [
+    "build package script is registered",
+    "build",
+    "pnpm clean && pnpm build:server && pnpm build:web",
+  ],
+  [
     "pack dry-run package script is registered",
     "pack:dry-run",
     "node scripts/pack-dry-run.mjs",
