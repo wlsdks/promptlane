@@ -5867,6 +5867,7 @@ async function failApi(response: Response, label: string): Promise<never> {
     const issueDetail =
       apiErrorIssueText(body.errors) || apiErrorIssueText(body.issues);
     detail =
+      apiErrorText(body) ||
       apiErrorText(body.detail) ||
       apiErrorText(body.title) ||
       apiErrorText(body.message) ||
