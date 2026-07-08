@@ -5894,6 +5894,7 @@ function apiErrorIssueText(value: unknown): string {
         field?: unknown;
         instancePath?: unknown;
         message?: unknown;
+        param?: unknown;
         path?: unknown;
         property?: unknown;
       };
@@ -5902,7 +5903,8 @@ function apiErrorIssueText(value: unknown): string {
         apiErrorIssuePathText(record.field) ||
         apiErrorIssuePathText(record.path) ||
         apiErrorIssuePathText(record.instancePath) ||
-        apiErrorIssuePathText(record.property);
+        apiErrorIssuePathText(record.property) ||
+        apiErrorIssuePathText(record.param);
       const rawFieldKey = rawDetailErrorFieldKey(field);
       const message = rawFieldKey
         ? `[REDACTED:${rawFieldKey.toLowerCase()}]`
