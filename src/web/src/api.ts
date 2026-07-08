@@ -2175,11 +2175,14 @@ export async function listLoops(): Promise<LoopListResponse> {
   const body = (await response.json()) as {
     data?: { status?: unknown; items?: unknown };
   };
+  const status = body.data?.status as { latest_snapshot?: unknown } | undefined;
   if (
     typeof body.data?.status !== "object" ||
     body.data.status === null ||
     !Array.isArray(body.data.items) ||
-    !body.data.items.every(isLoopSummary)
+    !body.data.items.every(isLoopSummary) ||
+    (status?.latest_snapshot !== undefined &&
+      !isLoopSummary(status.latest_snapshot))
   ) {
     throw new Error("Loop list failed: Invalid response.");
   }
