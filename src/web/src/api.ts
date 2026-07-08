@@ -806,6 +806,30 @@ function isContinuationSafetyCopyFeedbackFailureNote(
   );
 }
 
+function isContinuationSafetyCopyRetryNote(
+  value: unknown,
+): value is NonNullable<
+  LoopWorktreeResponse["continuation_safety_copy_retry_note"]
+> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const note = value as NonNullable<
+    LoopWorktreeResponse["continuation_safety_copy_retry_note"]
+  >;
+  return (
+    note.label === "Copy retry" &&
+    note.retry_scope ===
+      "operator manually retries the selected brief copy action" &&
+    note.not_automatic ===
+      "PromptLane does not automatically retry clipboard writes or submit prompts" &&
+    note.reason ===
+      "keeps retry control with the operator before any Codex or Claude Code paste" &&
+    note.writes_files === false &&
+    note.external_calls === false
+  );
+}
+
 function isLoopActivityWorktree(
   value: unknown,
 ): value is LoopListResponse["status"]["activity"]["worktrees"][number] {
@@ -2759,6 +2783,7 @@ export async function getLoopWorktree(
       continuation_safety_copy_feedback_accessibility_note?: unknown;
       continuation_safety_copy_feedback_timeout_note?: unknown;
       continuation_safety_copy_feedback_failure_note?: unknown;
+      continuation_safety_copy_retry_note?: unknown;
       items?: unknown;
       privacy?: unknown;
     };
@@ -2806,6 +2831,10 @@ export async function getLoopWorktree(
     (body.data.continuation_safety_copy_feedback_failure_note !== undefined &&
       !isContinuationSafetyCopyFeedbackFailureNote(
         body.data.continuation_safety_copy_feedback_failure_note,
+      )) ||
+    (body.data.continuation_safety_copy_retry_note !== undefined &&
+      !isContinuationSafetyCopyRetryNote(
+        body.data.continuation_safety_copy_retry_note,
       )) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
