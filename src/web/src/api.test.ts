@@ -8886,6 +8886,57 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports malformed prompt detail loop outcomes without returning raw evidence fields", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            id: "prmt_detail",
+            tool: "codex",
+            source_event: "UserPromptSubmit",
+            session_id: "session-1",
+            cwd: "private-project",
+            created_at: "2026-07-04T01:00:00.000Z",
+            received_at: "2026-07-04T01:00:00.000Z",
+            snippet: "redacted prompt summary",
+            prompt_length: 20,
+            is_sensitive: false,
+            excluded_from_analysis: false,
+            redaction_policy: "mask",
+            adapter_version: "test",
+            index_status: "indexed",
+            tags: ["review"],
+            quality_gaps: [],
+            quality_score: 42,
+            quality_score_band: "needs_work",
+            usefulness: {
+              copied_count: 0,
+              bookmarked: false,
+            },
+            duplicate_count: 0,
+            markdown: "# Prompt\n\nRedacted prompt archive.",
+            improvement_drafts: [],
+            loop_outcomes: [
+              {
+                snapshot_id: "loop_1",
+                status: "passed",
+                summary: "Focused tests passed.",
+                evidence_refs: ["test:web-api"],
+                tests_run: 1,
+                raw_path: "/Users/jinan/private-project",
+              },
+            ],
+          },
+        }),
+      );
+    const { getPrompt } = await import("./api.js");
+
+    await expect(getPrompt("prmt_detail")).rejects.toThrow(
+      "Prompt not found: Invalid response.",
+    );
+  });
+
   it("reports malformed improvement draft save responses without returning incomplete draft data", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

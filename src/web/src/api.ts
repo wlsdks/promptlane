@@ -183,7 +183,8 @@ function parsePromptDetailResponse(body: { data?: unknown }): PromptDetail {
     (promptDetail.judge_score !== undefined &&
       !isPromptJudgeScore(promptDetail.judge_score)) ||
     (promptDetail.loop_outcomes !== undefined &&
-      !Array.isArray(promptDetail.loop_outcomes)) ||
+      (!Array.isArray(promptDetail.loop_outcomes) ||
+        !promptDetail.loop_outcomes.every(isPromptLoopOutcomeEvidence))) ||
     (promptDetail.effectiveness !== undefined &&
       (typeof promptDetail.effectiveness !== "object" ||
         promptDetail.effectiveness === null))
@@ -277,6 +278,27 @@ function isPromptJudgeScore(value: unknown): value is PromptJudgeScore {
     score.markdown === undefined &&
     score.prompt_body === undefined &&
     score.raw_path === undefined
+  );
+}
+
+function isPromptLoopOutcomeEvidence(
+  value: unknown,
+): value is PromptLoopOutcomeEvidence {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const outcome = value as PromptLoopOutcomeEvidence & PromptSummaryRawFields;
+  return (
+    typeof outcome.snapshot_id === "string" &&
+    typeof outcome.status === "string" &&
+    typeof outcome.summary === "string" &&
+    Array.isArray(outcome.evidence_refs) &&
+    outcome.evidence_refs.every((ref) => typeof ref === "string") &&
+    (outcome.tests_run === undefined ||
+      typeof outcome.tests_run === "number") &&
+    outcome.markdown === undefined &&
+    outcome.prompt_body === undefined &&
+    outcome.raw_path === undefined
   );
 }
 
