@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Runtime Evidence Docs Preflight Guard
+
+- [x] CHECK: `package.json#files` and package contents docs ship PromptLane
+  runtime history, legacy-surface, dogfood evidence, rename/deprecation
+  decision, native-dialog, and UI patrol readiness docs, but npm publish
+  preflight did not check those compatibility/evidence package entries.
+- [x] RED: focused preflight and packaging guards required machine-readable
+  checks for those runtime and evidence doc package-file entries.
+- [x] GREEN: npm publish preflight now checks the runtime, compatibility, and
+  evidence docs before publish.
+- [x] VERIFY: focused preflight/packaging tests, skip-npm preflight JSON,
+  touched-file formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Product Docs Preflight Guard
 
 - [x] CHECK: release checklist requires product, architecture, technical,

@@ -195,6 +195,41 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain('"docs/PLUGINS.md"');
     expect(preflightScript).toContain('"docs/ADAPTERS.md"');
     expect(preflightScript).toContain('"docs/LOOP-SNAPSHOT-SCHEMA.md"');
+    expect(preflightScript).toContain('"docs/PROMPTLANE-RUNTIME-HISTORY.md"');
+    expect(preflightScript).toContain('"docs/PROMPTLANE-LEGACY-SURFACES.md"');
+    expect(preflightScript).toContain(
+      '"docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-issue-slices.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/superpowers/plans/2026-07-04-promptlane-runtime-id-inventory.json"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/superpowers/plans/2026-07-04-promptlane-claude-dual-namespace-decision.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/superpowers/plans/2026-07-04-promptlane-mcp-server-name-decision.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/superpowers/plans/2026-07-04-promptlane-deprecation-readiness.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/superpowers/plans/2026-07-04-promptlane-next-runtime-value-slice.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/superpowers/plans/2026-07-05-promptlane-95-quality-plan.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md"',
+    );
     expect(preflightScript).toContain('"docs/PRD.md"');
     expect(preflightScript).toContain('"docs/PRD_PHASE2.md"');
     expect(preflightScript).toContain('"docs/ARCHITECTURE.md"');
@@ -221,6 +256,12 @@ describe("plugin packaging files", () => {
     );
     expect(preflightScript).toContain(
       '"docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md"',
+    );
+    expect(preflightScript).toContain(
+      '"docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md"',
     );
     expect(preflightScript).toContain('"README.ko.md"');
     expect(preflightScript).toContain('"CHANGELOG.md"');

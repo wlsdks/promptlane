@@ -98,6 +98,69 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "package files include docs/PROMPTLANE-RUNTIME-HISTORY.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include docs/PROMPTLANE-LEGACY-SURFACES.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/DOGFOOD_CODEX_CLAUDE_2026-07-05.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/DOGFOOD_WEB_USER_FLOW_2026-07-05.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-plan.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/superpowers/plans/2026-07-04-promptlane-plugin-rename-issue-slices.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/superpowers/plans/2026-07-04-promptlane-runtime-id-inventory.json",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/superpowers/plans/2026-07-04-promptlane-claude-dual-namespace-decision.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/superpowers/plans/2026-07-04-promptlane-mcp-server-name-decision.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/superpowers/plans/2026-07-04-promptlane-deprecation-readiness.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/superpowers/plans/2026-07-04-promptlane-next-runtime-value-slice.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/superpowers/plans/2026-07-05-promptlane-95-quality-plan.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/superpowers/specs/2026-07-05-promptlane-repositioning-design.md",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files include docs/PRD.md",
           ok: true,
         }),
@@ -174,6 +237,16 @@ describe("npm publish preflight", () => {
         expect.objectContaining({
           label:
             "package files include docs/CODEX_CLAUDE_LOCAL_INTEGRATION_EVIDENCE_2026-07-06.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "package files include docs/UI_PATROL_SCHEDULE_READINESS_2026-07-06.md",
           ok: true,
         }),
         expect.objectContaining({
