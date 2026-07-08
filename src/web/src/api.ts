@@ -1710,6 +1710,31 @@ function isContinuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPostSub
   );
 }
 
+function isContinuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPostSubmitRetryPreMemoryApprovalFreshnessAdvisory(
+  value: unknown,
+): value is NonNullable<
+  LoopWorktreeResponse["continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_pre_memory_approval_freshness_advisory"]
+> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const note = value as NonNullable<
+    LoopWorktreeResponse["continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_pre_memory_approval_freshness_advisory"]
+  >;
+  return (
+    note.label ===
+      "Post-memory-approval retry renewed-memory-approval post-submit retry pre-memory-approval freshness advisory" &&
+    note.advisory ===
+      "review post-submit retry freshness uncertainty before approving loop memory again" &&
+    note.not_decision ===
+      "PromptLane does not approve memory or verify post-submit retry freshness from this advisory" &&
+    note.reason ===
+      "keeps renewed memory approval separate from post-submit retry freshness uncertainty review" &&
+    note.writes_files === false &&
+    note.external_calls === false
+  );
+}
+
 function isLoopActivityWorktree(
   value: unknown,
 ): value is LoopListResponse["status"]["activity"]["worktrees"][number] {
@@ -3700,6 +3725,7 @@ export async function getLoopWorktree(
       continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_evidence_freshness_boundary_note?: unknown;
       continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_freshness_result_non_persistence_note?: unknown;
       continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_freshness_uncertainty_collection_reminder?: unknown;
+      continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_pre_memory_approval_freshness_advisory?: unknown;
       items?: unknown;
       privacy?: unknown;
     };
@@ -3972,6 +3998,13 @@ export async function getLoopWorktree(
       !isContinuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPostSubmitRetryFreshnessUncertaintyCollectionReminder(
         body.data
           .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_freshness_uncertainty_collection_reminder,
+      )) ||
+    (body.data
+      .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_pre_memory_approval_freshness_advisory !==
+      undefined &&
+      !isContinuationSafetyPostMemoryApprovalRetryRenewedMemoryApprovalPostSubmitRetryPreMemoryApprovalFreshnessAdvisory(
+        body.data
+          .continuation_safety_post_memory_approval_retry_renewed_memory_approval_post_submit_retry_pre_memory_approval_freshness_advisory,
       )) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
