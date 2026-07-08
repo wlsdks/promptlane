@@ -1707,6 +1707,7 @@ describe("plugin packaging files", () => {
       "corepack pnpm smoke:package-install",
       "corepack pnpm evidence:quality -- --require-complete",
       "corepack pnpm promptlane quality-evidence --require-complete",
+      "expected shipped files",
       "quality evidence CLI gate",
       "git diff --check",
       "local browser evidence",
@@ -1722,6 +1723,8 @@ describe("plugin packaging files", () => {
       "Scheduled `ui-patrol` artifact evidence is still pending",
       "dogfood:mcp-native-dialog-approved` still requires explicit operator",
       "scheduled `ui-patrol.yml` workflow remains separate operational evidence",
+      "with 359 files",
+      "with 369 files",
     ]) {
       expect(releaseEvidence).not.toContain(staleReleaseEvidence);
     }

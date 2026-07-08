@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Release Evidence Pack Count Drift
+
+- [x] CHECK: current `corepack pnpm pack:dry-run` reports 369 files, but
+  `docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md` still hardcoded
+  `359 files`.
+- [x] RED: packaging guard now rejects exact tarball file-count phrases in
+  release stability evidence and requires `expected shipped files` wording.
+- [x] GREEN: release stability evidence now points to pack dry-run validating
+  expected shipped files instead of a stale exact file count.
+- [x] VERIFY: focused packaging guard, current pack dry-run, and diff hygiene.
+
 ## 2026-07-08 PromptLane Quality Evidence Package Install Gate
 
 - [x] CHECK: `docs/NPM_PUBLISHING.md`와 release checklist에는
