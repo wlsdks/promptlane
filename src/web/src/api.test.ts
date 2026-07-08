@@ -2238,7 +2238,15 @@ describe("web api export client", () => {
       items: [
         {
           id: "loop_web",
+          created_at: "2026-07-04T01:00:00.000Z",
+          tool: "codex",
+          source: "cli",
+          project: "private-project",
           worktree: "agent-loop-worktree",
+          branch: "codex/agent-loop-memory-design",
+          prompt_count: 2,
+          average_prompt_score: 58,
+          top_gaps: ["Goal clarity"],
           outcome_status: "passed",
         },
       ],
@@ -2258,6 +2266,42 @@ describe("web api export client", () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
       .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getLoopWorktree } = await import("./api.js");
+
+    await expect(getLoopWorktree("agent-loop-worktree")).rejects.toThrow(
+      "Loop worktree drilldown failed: Invalid response.",
+    );
+  });
+
+  it("reports malformed loop worktree items without returning incomplete snapshots", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            worktree: "agent-loop-worktree",
+            selection_scope: {
+              label: "Selection scope",
+              filters: ["worktree"],
+              reason: "showing latest snapshots for selected worktree",
+              next_action: "copy selected worktree brief",
+            },
+            items: [
+              {
+                id: "loop_web",
+                worktree: "agent-loop-worktree",
+                outcome_status: "passed",
+              },
+            ],
+            privacy: {
+              local_only: true,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+              returns_compact_content: false,
+            },
+          },
+        }),
+      );
     const { getLoopWorktree } = await import("./api.js");
 
     await expect(getLoopWorktree("agent-loop-worktree")).rejects.toThrow(

@@ -2402,7 +2402,8 @@ export async function getLoopWorktree(
     typeof body.data?.worktree !== "string" ||
     typeof body.data.selection_scope !== "object" ||
     body.data.selection_scope === null ||
-    !Array.isArray(body.data.items)
+    !Array.isArray(body.data.items) ||
+    !body.data.items.every(isLoopSummary)
   ) {
     throw new Error("Loop worktree drilldown failed: Invalid response.");
   }
