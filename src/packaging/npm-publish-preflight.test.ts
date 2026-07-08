@@ -70,6 +70,22 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "package files include scripts/pack-dry-run.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/package-install-smoke.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/quality-gate.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include scripts/release-smoke.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files exclude dist/**/*.map",
           ok: true,
         }),

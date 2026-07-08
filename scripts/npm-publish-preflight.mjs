@@ -57,6 +57,10 @@ for (const filePath of [
   "README.md",
   "LICENSE",
   "scripts/npm-publish-preflight.mjs",
+  "scripts/pack-dry-run.mjs",
+  "scripts/package-install-smoke.mjs",
+  "scripts/quality-gate.mjs",
+  "scripts/release-smoke.mjs",
 ]) {
   check(
     `package files include ${filePath}`,

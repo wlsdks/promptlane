@@ -143,7 +143,7 @@ corepack pnpm smoke:package-install
 - [ ] package is not marked private in `package.json`
 - [ ] package manager is pinned to `pnpm@10.18.0`, and Node engine remains `>=22.12 <25`
 - [ ] license, repository, and bin metadata are present in `package.json`
-- [ ] package files include `dist`, `README.md`, `LICENSE`, and the npm publish preflight script
+- [ ] package files include `dist`, `README.md`, `LICENSE`, the npm publish preflight script, and core release verification scripts
 - [ ] package files exclude `dist/**/*.map`
 - [ ] version in `package.json` is bumped and has never been published
 - [ ] `src/shared/version.ts` `VERSION` matches `package.json#version` (the

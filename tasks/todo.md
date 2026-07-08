@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Release Scripts Preflight Guard
+
+- [x] CHECK: release checklist and package contents require core release
+  verification scripts to ship, but npm publish preflight only checked the
+  preflight script itself.
+- [x] RED: focused preflight and packaging guards required machine-readable
+  checks for `scripts/pack-dry-run.mjs`, `scripts/package-install-smoke.mjs`,
+  `scripts/quality-gate.mjs`, and `scripts/release-smoke.mjs`.
+- [x] GREEN: npm publish preflight now checks those core release verification
+  script entries, and the NPM runbook checklist documents the broader package
+  file prerequisite.
+- [x] VERIFY: focused preflight/packaging tests, skip-npm preflight JSON,
+  touched-file formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Engine Manager Preflight Guard
 
 - [x] CHECK: `package.json` pins `packageManager` and Node engine for release

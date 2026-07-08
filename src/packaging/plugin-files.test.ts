@@ -185,6 +185,10 @@ describe("plugin packaging files", () => {
     );
     expect(preflightScript).toContain("package files include ${filePath}");
     expect(preflightScript).toContain('"dist"');
+    expect(preflightScript).toContain('"scripts/pack-dry-run.mjs"');
+    expect(preflightScript).toContain('"scripts/package-install-smoke.mjs"');
+    expect(preflightScript).toContain('"scripts/quality-gate.mjs"');
+    expect(preflightScript).toContain('"scripts/release-smoke.mjs"');
     expect(preflightScript).toContain('"!dist/**/*.map"');
     expect(preflightScript).toContain("package files exclude dist/**/*.map");
     expect(preflightScript).toContain("package manager is pinned");
