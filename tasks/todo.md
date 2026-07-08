@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Issue Home Path Redaction
+
+- [x] CHECK: `apiErrorIssuePathText`가 `/Users/...` absolute path는 redaction 경로로
+  보내지만 `~/prompt-memory/...` home-relative path는 JSON Pointer처럼 dot path로 바꿔
+  failed response issue field에 남길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 settings failed response `errors[]`의
+  `path: "~/prompt-memory/prompts/raw.md"`를 `[REDACTED:path]` field로 표시하도록 요구하게 해
+  현재 unsafe home path issue detail 노출 실패를 확인한다.
+- [x] GREEN: web API error issue path sanitizer와 공통 API error sanitizer가 `~/...`
+  home-relative local path를 raw path로 redaction한다.
+- [x] VERIFY: focused web API issue/error redaction tests, implementation format
+  check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Issue Additional Property Redaction
 
 - [x] CHECK: `apiErrorIssueParamsText`가 AJV-style `missingProperty`/`propertyName`은

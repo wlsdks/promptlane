@@ -5928,7 +5928,9 @@ function apiErrorIssueText(value: unknown): string {
 function apiErrorIssuePathText(value: unknown): string {
   if (typeof value === "string") {
     if (
-      /^\/(?:Users|home|private|tmp|var|opt|workspace|Volumes)\//i.test(value)
+      /^(?:~|\/(?:Users|home|private|tmp|var|opt|workspace|Volumes))\//i.test(
+        value,
+      )
     ) {
       return apiErrorText(value);
     }
@@ -6031,7 +6033,7 @@ function sanitizeApiErrorText(value: string): string {
         `${key}${separator}[REDACTED:${key.toLowerCase()}]`,
     )
     .replace(
-      /\/(?:Users|home|private|tmp|var|opt|workspace|Volumes)\/[^\s)'"`]+/gi,
+      /(?:~|\/(?:Users|home|private|tmp|var|opt|workspace|Volumes))\/[^\s)'"`]+/gi,
       "[REDACTED:path]",
     )
     .replace(
