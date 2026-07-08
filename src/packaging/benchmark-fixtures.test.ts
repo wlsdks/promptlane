@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -14,6 +15,29 @@ afterEach(() => {
 });
 
 describe("benchmark fixture loading", () => {
+  it("marks missing real fixtures as a soft signal in JSON output", () => {
+    const result = spawnSync(
+      process.execPath,
+      ["scripts/benchmark.mjs", "--fixture-set", "real", "--json"],
+      {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+
+    expect(result.status).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(JSON.parse(result.stdout)).toEqual(
+      expect.objectContaining({
+        dataset: "benchmark-v1-real",
+        fixture_set: "real",
+        soft_signal: true,
+        status: "no_fixtures",
+      }),
+    );
+  });
+
   it("loads consent-bearing redacted real fixtures instead of synthetic fixtures", async () => {
     tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
     const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");

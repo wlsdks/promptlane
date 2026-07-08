@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Benchmark No-Fixtures Soft Signal
+
+- [x] CHECK: `docs/BENCHMARK_V1.md` says benchmark JSON includes
+  `fixture_set` and `soft_signal`, but the real no-fixtures JSON returned
+  `fixture_set` without `soft_signal`.
+- [x] RED: focused benchmark fixture test requires `--fixture-set real --json`
+  with no real fixtures to include `soft_signal: true`.
+- [x] GREEN: benchmark no-fixtures JSON now includes `soft_signal: true` so
+  consumers can filter the real soft-signal result consistently.
+- [x] VERIFY: focused fixture/package tests, real no-fixtures soft exit,
+  formatting, typecheck, preflight JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane Benchmark Absolute Path Redaction
 
 - [x] CHECK: real benchmark fixtures rejected `/Users/...` and `/home/...`,

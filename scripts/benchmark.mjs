@@ -67,6 +67,7 @@ if (loadedFixtures.status === "no_fixtures") {
   const message = {
     dataset,
     fixture_set: fixtureSet,
+    soft_signal: true,
     status: "no_fixtures",
     detail: loadedFixtures.detail,
   };
