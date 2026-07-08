@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Loop Worktree Command Filters Contract Error
+
+- [x] CHECK: web API `getLoopWorktree`가 `/api/v1/loops/worktrees/:worktree` 성공 응답의
+  optional `command_filters` 안전 계약을 검증하지 않아 selected/review command scope나
+  side-effect flag가 깨진 drilldown guidance를 UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed `command_filters.review_command_filters` body를
+  `Loop worktree drilldown failed: Invalid response.`로 reject하도록 요구하게 해 현재
+  incomplete command filters resolve 실패를 확인한다.
+- [x] GREEN: command filters label, selected/review filter tuple, reason, writes_files,
+  external_calls 계약을 확인하고 깨진 guidance는 raw-free drilldown contract 오류로 중단하도록
+  고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Loop Worktree Command Distinction Contract Error
 
 - [x] CHECK: web API `getLoopWorktree`가 `/api/v1/loops/worktrees/:worktree` 성공 응답의

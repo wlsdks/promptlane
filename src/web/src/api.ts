@@ -483,13 +483,9 @@ function isLoopWorktreeSelectionScope(
     return false;
   }
   const scope = value as LoopWorktreeResponse["selection_scope"];
-  const filters = JSON.stringify(scope.filters);
   return (
     scope.label === "Selection scope" &&
-    (filters === JSON.stringify(["worktree"]) ||
-      filters === JSON.stringify(["worktree", "session"]) ||
-      filters === JSON.stringify(["worktree", "branch"]) ||
-      filters === JSON.stringify(["worktree", "session", "branch"])) &&
+    isSelectedCommandFilterTuple(scope.filters) &&
     (scope.reason === "showing latest snapshots for selected worktree" ||
       scope.reason ===
         "showing snapshots filtered by selected worktree and session" ||
@@ -501,6 +497,24 @@ function isLoopWorktreeSelectionScope(
       scope.next_action === "copy selected session brief" ||
       scope.next_action === "copy selected branch brief" ||
       scope.next_action === "copy selected session and branch brief")
+  );
+}
+
+function isSelectedCommandFilterTuple(value: unknown): boolean {
+  const filters = JSON.stringify(value);
+  return (
+    filters === JSON.stringify(["worktree"]) ||
+    filters === JSON.stringify(["worktree", "session"]) ||
+    filters === JSON.stringify(["worktree", "branch"]) ||
+    filters === JSON.stringify(["worktree", "session", "branch"])
+  );
+}
+
+function isReviewCommandFilterTuple(value: unknown): boolean {
+  const filters = JSON.stringify(value);
+  return (
+    filters === JSON.stringify(["worktree"]) ||
+    filters === JSON.stringify(["worktree", "branch"])
   );
 }
 
@@ -543,6 +557,24 @@ function isCommandDistinction(
       "selected continuation and review packet commands can differ when session or branch filters are active" &&
     distinction.writes_files === false &&
     distinction.external_calls === false
+  );
+}
+
+function isCommandFilters(
+  value: unknown,
+): value is NonNullable<LoopWorktreeResponse["command_filters"]> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const filters = value as NonNullable<LoopWorktreeResponse["command_filters"]>;
+  return (
+    filters.label === "Command filters" &&
+    isSelectedCommandFilterTuple(filters.selected_command_filters) &&
+    isReviewCommandFilterTuple(filters.review_command_filters) &&
+    filters.reason ===
+      "selected command reflects the current selection while review command reflects command-center review scope" &&
+    filters.writes_files === false &&
+    filters.external_calls === false
   );
 }
 
@@ -2488,6 +2520,7 @@ export async function getLoopWorktree(
       selection_scope?: unknown;
       selected_brief_action?: unknown;
       command_distinction?: unknown;
+      command_filters?: unknown;
       items?: unknown;
       privacy?: unknown;
     };
@@ -2499,6 +2532,8 @@ export async function getLoopWorktree(
       !isSelectedBriefAction(body.data.selected_brief_action)) ||
     (body.data.command_distinction !== undefined &&
       !isCommandDistinction(body.data.command_distinction)) ||
+    (body.data.command_filters !== undefined &&
+      !isCommandFilters(body.data.command_filters)) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
     !isLoopListPrivacy(body.data.privacy)
