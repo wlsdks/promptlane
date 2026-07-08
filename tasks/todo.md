@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Benchmark Real Fixture Label Redaction
+
+- [x] CHECK: real benchmark fixtures reject raw secrets/paths in queries,
+  prompts, and coach cases, but `label` is also emitted in retrieval reports
+  and was not covered by the same raw-free guard.
+- [x] RED: focused benchmark fixture loader test requires real fixture labels
+  with raw local paths to be rejected.
+- [x] GREEN: benchmark real fixture loader now validates fixture labels with
+  the same raw-free guard and the benchmark spec documents labels as redaction
+  targets.
+- [x] VERIFY: focused fixture/package tests, real no-fixtures soft exit,
+  formatting, typecheck, preflight JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane Benchmark Real Fixture Query Redaction
 
 - [x] CHECK: real benchmark fixtures reject raw secrets/paths in prompts and
