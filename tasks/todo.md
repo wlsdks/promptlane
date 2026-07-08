@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Integration Docs Preflight Guard
+
+- [x] CHECK: `package.json#files` ships core PromptLane integration docs, but
+  npm publish preflight did not check the docs that installed Codex/Claude
+  users and agents rely on.
+- [x] RED: focused preflight and packaging guards required machine-readable
+  checks for `docs/PROMPTLANE.md`, `docs/AGENT-HARNESS.md`,
+  `docs/INSTRUCTION-FILES.md`, `docs/PLUGINS.md`, `docs/ADAPTERS.md`, and
+  `docs/LOOP-SNAPSHOT-SCHEMA.md`.
+- [x] GREEN: npm publish preflight now checks those core integration docs, and
+  the NPM runbook checklist names the same publish package surface.
+- [x] VERIFY: focused preflight/packaging tests, skip-npm preflight JSON,
+  touched-file formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Integration Files Preflight Guard
 
 - [x] CHECK: `package.json#files` ships Claude/Codex integration surfaces, but

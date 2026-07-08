@@ -143,7 +143,7 @@ corepack pnpm smoke:package-install
 - [ ] package is not marked private in `package.json`
 - [ ] package manager is pinned to `pnpm@10.18.0`, and Node engine remains `>=22.12 <25`
 - [ ] license, repository, and bin metadata are present in `package.json`
-- [ ] package files include `dist`, Claude/Codex integration surfaces (`.claude-plugin`, `commands`, `plugins`, `integrations`), public docs (`README.md`, `README.ko.md`, `CHANGELOG.md`, `LICENSE`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `SUPPORT.md`), the npm publish preflight script, and core release verification scripts
+- [ ] package files include `dist`, Claude/Codex integration surfaces (`.claude-plugin`, `commands`, `plugins`, `integrations`), core integration docs (`docs/PROMPTLANE.md`, `docs/AGENT-HARNESS.md`, `docs/INSTRUCTION-FILES.md`, `docs/PLUGINS.md`, `docs/ADAPTERS.md`, `docs/LOOP-SNAPSHOT-SCHEMA.md`), public docs (`README.md`, `README.ko.md`, `CHANGELOG.md`, `LICENSE`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `SUPPORT.md`), the npm publish preflight script, and core release verification scripts
 - [ ] package files exclude `dist/**/*.map`
 - [ ] version in `package.json` is bumped and has never been published
 - [ ] `src/shared/version.ts` `VERSION` matches `package.json#version` (the

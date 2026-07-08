@@ -74,6 +74,30 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "package files include docs/PROMPTLANE.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include docs/AGENT-HARNESS.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include docs/INSTRUCTION-FILES.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include docs/PLUGINS.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include docs/ADAPTERS.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include docs/LOOP-SNAPSHOT-SCHEMA.md",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files include README.md",
           ok: true,
         }),

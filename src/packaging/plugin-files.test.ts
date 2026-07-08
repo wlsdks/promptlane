@@ -189,6 +189,12 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain('"commands"');
     expect(preflightScript).toContain('"plugins"');
     expect(preflightScript).toContain('"integrations"');
+    expect(preflightScript).toContain('"docs/PROMPTLANE.md"');
+    expect(preflightScript).toContain('"docs/AGENT-HARNESS.md"');
+    expect(preflightScript).toContain('"docs/INSTRUCTION-FILES.md"');
+    expect(preflightScript).toContain('"docs/PLUGINS.md"');
+    expect(preflightScript).toContain('"docs/ADAPTERS.md"');
+    expect(preflightScript).toContain('"docs/LOOP-SNAPSHOT-SCHEMA.md"');
     expect(preflightScript).toContain('"README.ko.md"');
     expect(preflightScript).toContain('"CHANGELOG.md"');
     expect(preflightScript).toContain('"SECURITY.md"');
