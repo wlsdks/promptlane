@@ -7851,6 +7851,22 @@ describe("web api export client", () => {
     );
   });
 
+  it("redacts raw-like prompt details from failed response messages", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(500, {
+          detail:
+            "Unexpected setup failure prompt_body=\"summarize my private incident report\"",
+        }),
+      );
+    const { getSettings } = await import("./api.js");
+
+    await expect(getSettings()).rejects.toThrow(
+      'Settings failed (500): Unexpected setup failure prompt_body="[REDACTED:prompt_body]"',
+    );
+  });
+
   it("reports malformed settings responses without returning incomplete setup data", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

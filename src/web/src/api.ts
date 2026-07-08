@@ -5910,6 +5910,11 @@ function apiErrorIssueText(value: unknown): string {
 function sanitizeApiErrorText(value: string): string {
   return value
     .replace(
+      /\b(markdown|prompt_body|raw_path)\s*([:=])\s*(["'`])[^"'`\r\n]*\3/gi,
+      (_match, key: string, separator: string, quote: string) =>
+        `${key}${separator}${quote}[REDACTED:${key.toLowerCase()}]${quote}`,
+    )
+    .replace(
       /\/(?:Users|home|private|tmp|var|opt|workspace|Volumes)\/[^\s)'"`]+/gi,
       "[REDACTED:path]",
     )

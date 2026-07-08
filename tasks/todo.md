@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Detail Raw Redaction
+
+- [x] CHECK: `failApi`/`sanitizeApiErrorText`가 failed response detail/title/message/errors의
+  path/secret은 redaction하지만 `prompt_body`/`raw_path`/`markdown` keyed value는 그대로
+  보존할 수 있어 server error path로 raw prompt detail이 노출될 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 settings failed response detail의
+  `prompt_body="..."` 값을 `[REDACTED:prompt_body]`로 redaction하도록 요구하게 해 현재
+  unsafe error detail 노출 실패를 확인한다.
+- [x] GREEN: web API error sanitizer가 quoted raw-like keyed values를 key별
+  `[REDACTED:<key>]`로 치환하면서 기존 recovery detail과 path/secret redaction을 유지한다.
+- [x] VERIFY: focused web API recovery-detail/error redaction tests, implementation
+  format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Health Raw Contract Error
 
 - [x] CHECK: `getHealth`가 health root 응답의 `ok`/`version`만 검증하고 raw-like
