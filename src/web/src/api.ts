@@ -3816,6 +3816,35 @@ function isArchiveEffectivenessCalibration(
   );
 }
 
+function isArchiveScoreFilters(
+  value: unknown,
+): value is ArchiveScoreReport["filters"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const filters = value as ArchiveScoreReport["filters"] & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    typeof filters.max_prompts === "number" &&
+    isOptionalString(filters.tool) &&
+    isOptionalString(filters.project) &&
+    isOptionalString(filters.received_from) &&
+    isOptionalString(filters.received_to) &&
+    filters.cwd === undefined &&
+    filters.markdown === undefined &&
+    filters.prompt_body === undefined &&
+    filters.raw_path === undefined
+  );
+}
+
+function isOptionalString(value: unknown): value is string | undefined {
+  return value === undefined || typeof value === "string";
+}
+
 export type ProjectPolicy = {
   capture_disabled: boolean;
   analysis_disabled: boolean;
@@ -4308,6 +4337,7 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
       practice_plan?: unknown;
       low_score_prompts?: unknown;
       effectiveness_summary?: unknown;
+      filters?: unknown;
       privacy?: unknown;
     };
   };
@@ -4321,6 +4351,7 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
     !Array.isArray(body.data.low_score_prompts) ||
     !body.data.low_score_prompts.every(isArchivePromptScoreSummary) ||
     !isArchiveEffectivenessSummary(body.data.effectiveness_summary) ||
+    !isArchiveScoreFilters(body.data.filters) ||
     !isArchiveScorePrivacy(body.data.privacy)
   ) {
     throw new Error("Archive score report failed: Invalid response.");
