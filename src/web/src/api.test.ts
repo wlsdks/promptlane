@@ -8061,6 +8061,27 @@ describe("web api export client", () => {
     );
   });
 
+  it("preserves source-pointer issue details from failed response errors", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(422, {
+          detail: "The request payload is invalid.",
+          errors: [
+            {
+              source: { pointer: "/data/attributes/title" },
+              detail: "Expected a non-empty title.",
+            },
+          ],
+        }),
+      );
+    const { getSettings } = await import("./api.js");
+
+    await expect(getSettings()).rejects.toThrow(
+      "Settings failed (422): The request payload is invalid. data.attributes.title: Expected a non-empty title.",
+    );
+  });
+
   it("redacts raw property issue messages from failed response errors", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Issue Detail Redaction
+
+- [x] CHECK: `apiErrorIssueText`가 failed response issue item의 `message`는 처리하지만
+  JSON:API-style `detail`은 무시해 `source.pointer`가 있어도 field-level recovery detail이
+  사라질 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 `source.pointer: "/data/attributes/title"`과
+  `detail: "Expected a non-empty title."`를 `data.attributes.title: Expected a non-empty title.`
+  로 표시하도록 요구하게 해 현재 detail 누락 실패를 확인한다.
+- [x] GREEN: web API issue sanitizer가 raw-detail key가 아닌 issue field에서는
+  `message` fallback으로 `detail`도 raw-free sanitizer를 거쳐 표시한다.
+- [x] VERIFY: focused web API issue/error redaction tests, implementation format
+  check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Issues Array Redaction
 
 - [x] CHECK: `failApi`가 failed response의 `errors[]`만 issue detail로 읽고

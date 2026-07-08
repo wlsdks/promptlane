@@ -5893,6 +5893,7 @@ function apiErrorIssueText(value: unknown): string {
         return "";
       }
       const record = item as {
+        detail?: unknown;
         field?: unknown;
         instancePath?: unknown;
         message?: unknown;
@@ -5914,7 +5915,7 @@ function apiErrorIssueText(value: unknown): string {
       const rawFieldKey = rawDetailErrorFieldKey(field);
       const message = rawFieldKey
         ? `[REDACTED:${rawFieldKey.toLowerCase()}]`
-        : apiErrorText(record.message);
+        : apiErrorText(record.message) || apiErrorText(record.detail);
       if (!message) {
         return "";
       }
