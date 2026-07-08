@@ -369,6 +369,11 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "docs/IMPLEMENTATION_PLAN.md"),
       "utf8",
     );
+    const prd = readFileSync(join(process.cwd(), "docs/PRD.md"), "utf8");
+    const techSpec = readFileSync(
+      join(process.cwd(), "docs/TECH_SPEC.md"),
+      "utf8",
+    );
     const releaseStability = readFileSync(
       join(process.cwd(), "docs/RELEASE_STABILITY_EVIDENCE_2026-07-06.md"),
       "utf8",
@@ -393,6 +398,34 @@ describe("plugin packaging files", () => {
     expect(security).toContain("PromptLane 1.0.0");
     expect(benchmarkSpec).toContain('"version": "1.0.0"');
     expect(implementationPlan).toContain("npm publish --tag latest");
+    for (const content of [implementationPlan, prd, techSpec]) {
+      for (const command of [
+        "corepack pnpm test",
+        "corepack pnpm lint",
+        "corepack pnpm build",
+        "corepack pnpm benchmark -- --json",
+        "corepack pnpm e2e:browser",
+        "corepack pnpm smoke:release",
+        "corepack pnpm smoke:package-install",
+        "corepack pnpm pack:dry-run",
+        "corepack pnpm evidence:quality -- --require-complete",
+        "corepack pnpm promptlane quality-evidence --require-complete",
+        "git diff --check",
+      ]) {
+        expect(content).toContain(command);
+      }
+      for (const staleCommand of [
+        "\npnpm test\n",
+        "\npnpm lint\n",
+        "\npnpm build\n",
+        "\npnpm benchmark -- --json\n",
+        "\npnpm e2e:browser\n",
+        "\npnpm smoke:release\n",
+        "\npnpm pack:dry-run\n",
+      ]) {
+        expect(content).not.toContain(staleCommand);
+      }
+    }
     expect(releaseStability).toContain("promptlane-1.0.0.tgz");
     expect(readme).toContain("PromptLane 1.0.0");
     expect(readme).not.toContain("pre-release software");

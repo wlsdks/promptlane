@@ -2,7 +2,7 @@
 
 Date: 2026-05-01
 
-Status: Public beta candidate
+Status: 1.0.0 stable release candidate
 
 Related docs:
 
@@ -51,7 +51,7 @@ The implementation goal is to help Claude Code and Codex users safely record pro
 | P11   | Prompt Improvement Workspace               | Complete    |
 | P12   | Anonymized export                          | Complete    |
 | P13   | Benchmark and browser E2E                  | Complete    |
-| P14   | English/Korean docs and npm beta readiness | In progress |
+| P14   | English/Korean docs and npm stable readiness | Complete |
 
 ## 4. Public Beta Completion Criteria
 
@@ -77,30 +77,26 @@ The beta is implementation-complete when:
 
 ## 5. Verification Gates
 
-Default gate:
+Default local release gate:
 
 ```sh
-pnpm test
-pnpm lint
-pnpm build
-pnpm pack:dry-run
+corepack pnpm test
+corepack pnpm lint
+corepack pnpm build
+corepack pnpm benchmark -- --json
+corepack pnpm e2e:browser
+corepack pnpm smoke:release
+corepack pnpm smoke:package-install
+corepack pnpm pack:dry-run
+corepack pnpm evidence:quality -- --require-complete
+corepack pnpm promptlane quality-evidence --require-complete
 git diff --check
-```
-
-Release gate:
-
-```sh
-pnpm benchmark -- --json
-pnpm e2e:browser
-pnpm smoke:release
 ```
 
 Package smoke:
 
 ```sh
-npm pack
-npm install -g ./promptlane-<version>.tgz
-promptlane --help
+corepack pnpm smoke:package-install
 ```
 
 ## 6. Current Implemented Surface
@@ -155,7 +151,7 @@ Before the first stable npm publish:
 
 - keep package version aligned at `1.0.0`
 - run the full release gate on Node 22
-- ensure `npm pack --dry-run` includes built CLI/server/web files
+- ensure `corepack pnpm pack:dry-run` includes built CLI/server/web files
 - check that `dist/cli/index.js` is executable
 - verify `npm whoami`
 - verify package name availability or ownership
@@ -178,12 +174,12 @@ Deferred from the 1.0.0 stable release:
 - team/cloud sync
 - full cross-platform release matrix
 
-## 9. Next Steps After Beta
+## 9. Next Steps After 1.0.0
 
-1. Add CI release gates for Node 22 and Node 24.
-2. Expand smoke coverage across macOS, Linux, and Windows.
-3. Collect beta feedback on PromptLane improvement usefulness.
-4. Decide whether to add web import upload.
-5. Decide whether semantic search can remain local-first.
-6. Revisit external/tool-assisted analysis only with explicit opt-in, preview,
+1. Expand smoke coverage across macOS, Linux, and Windows when product support
+   requires it.
+2. Collect real-user feedback on PromptLane improvement usefulness.
+3. Decide whether to add web import upload.
+4. Decide whether semantic search can remain local-first.
+5. Revisit external/tool-assisted analysis only with explicit opt-in, preview,
    redaction, user-session mediation, and audit.

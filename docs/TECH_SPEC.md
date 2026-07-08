@@ -432,13 +432,16 @@ Required test layers:
 Core commands:
 
 ```sh
-pnpm test
-pnpm lint
-pnpm build
-pnpm benchmark -- --json
-pnpm e2e:browser
-pnpm smoke:release
-pnpm pack:dry-run
+corepack pnpm test
+corepack pnpm lint
+corepack pnpm build
+corepack pnpm benchmark -- --json
+corepack pnpm e2e:browser
+corepack pnpm smoke:release
+corepack pnpm smoke:package-install
+corepack pnpm pack:dry-run
+corepack pnpm evidence:quality -- --require-complete
+corepack pnpm promptlane quality-evidence --require-complete
 git diff --check
 ```
 

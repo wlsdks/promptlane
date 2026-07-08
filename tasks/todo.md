@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Public Release Gate Docs
+
+- [x] CHECK: `docs/IMPLEMENTATION_PLAN.md`, `docs/TECH_SPEC.md`, `docs/PRD.md`
+  still showed bare `pnpm` release gates and omitted package install / quality
+  evidence gates.
+- [x] RED: public release surface packaging guard now requires the current
+  `corepack pnpm` release gate in all three docs and rejects stale bare `pnpm`
+  gate commands.
+- [x] GREEN: implementation plan, tech spec, and PRD release gate sections now
+  match the current local-first release gate.
+- [x] VERIFY: focused packaging doc guards, built quality evidence CLI gate,
+  and diff hygiene.
+
 ## 2026-07-08 PromptLane Release Evidence Pack Count Drift
 
 - [x] CHECK: current `corepack pnpm pack:dry-run` reports 369 files, but
