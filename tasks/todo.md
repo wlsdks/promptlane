@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Integration Files Preflight Guard
+
+- [x] CHECK: `package.json#files` ships Claude/Codex integration surfaces, but
+  npm publish preflight did not check `.claude-plugin`, `commands`, `plugins`,
+  or `integrations` before publish.
+- [x] RED: focused preflight and packaging guards required machine-readable
+  checks for those integration package-file entries.
+- [x] GREEN: npm publish preflight now checks the integration surfaces, and the
+  NPM runbook checklist names the same publish package surface.
+- [x] VERIFY: focused preflight/packaging tests, skip-npm preflight JSON,
+  touched-file formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Community Docs Preflight Guard
 
 - [x] CHECK: `package.json#files` ships community support documents, but npm

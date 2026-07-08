@@ -185,6 +185,10 @@ describe("plugin packaging files", () => {
     );
     expect(preflightScript).toContain("package files include ${filePath}");
     expect(preflightScript).toContain('"dist"');
+    expect(preflightScript).toContain('".claude-plugin"');
+    expect(preflightScript).toContain('"commands"');
+    expect(preflightScript).toContain('"plugins"');
+    expect(preflightScript).toContain('"integrations"');
     expect(preflightScript).toContain('"README.ko.md"');
     expect(preflightScript).toContain('"CHANGELOG.md"');
     expect(preflightScript).toContain('"SECURITY.md"');

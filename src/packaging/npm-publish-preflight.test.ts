@@ -58,6 +58,22 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "package files include .claude-plugin",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include commands",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include plugins",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files include integrations",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files include README.md",
           ok: true,
         }),

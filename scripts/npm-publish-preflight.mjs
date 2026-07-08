@@ -54,6 +54,10 @@ check(
 );
 for (const filePath of [
   "dist",
+  ".claude-plugin",
+  "commands",
+  "plugins",
+  "integrations",
   "README.md",
   "README.ko.md",
   "CHANGELOG.md",
