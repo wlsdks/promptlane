@@ -2395,6 +2395,17 @@ describe("web api export client", () => {
     expect(JSON.stringify(proposal)).not.toContain("sk-proj-secret");
   });
 
+  it("reports malformed instruction patch proposal responses without returning incomplete apply-gate data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getLoopInstructionPatch } = await import("./api.js");
+
+    await expect(
+      getLoopInstructionPatch({ targetFile: "AGENTS.md" }),
+    ).rejects.toThrow("Loop instruction patch proposal failed: Invalid response.");
+  });
+
   it("shares an in-flight csrf session request across parallel API calls", async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url === "/api/v1/session") {

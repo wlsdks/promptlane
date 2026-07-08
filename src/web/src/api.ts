@@ -1142,6 +1142,51 @@ export type LoopInstructionPatchProposal = {
   };
 };
 
+function parseLoopInstructionPatchProposalResponse(
+  body: {
+    data?: {
+      target_file?: unknown;
+      patch_kind?: unknown;
+      diff?: unknown;
+      writes_files?: unknown;
+      requires_user_approval?: unknown;
+      apply_gate?: {
+        web_apply_available?: unknown;
+        confirm_command?: unknown;
+        mcp_tool?: unknown;
+      };
+      privacy?: {
+        local_only?: unknown;
+        external_calls?: unknown;
+        returns_prompt_bodies?: unknown;
+        returns_raw_paths?: unknown;
+        writes_instruction_files?: unknown;
+      };
+    };
+  },
+  message: string,
+): LoopInstructionPatchProposal {
+  if (
+    (body.data?.target_file !== "AGENTS.md" &&
+      body.data?.target_file !== "CLAUDE.md") ||
+    body.data.patch_kind !== "append_section" ||
+    typeof body.data.diff !== "string" ||
+    body.data.writes_files !== false ||
+    body.data.requires_user_approval !== true ||
+    body.data.apply_gate?.web_apply_available !== false ||
+    typeof body.data.apply_gate.confirm_command !== "string" ||
+    body.data.apply_gate.mcp_tool !== "apply_instruction_patch" ||
+    body.data.privacy?.local_only !== true ||
+    body.data.privacy.external_calls !== false ||
+    body.data.privacy.returns_prompt_bodies !== false ||
+    body.data.privacy.returns_raw_paths !== false ||
+    body.data.privacy.writes_instruction_files !== false
+  ) {
+    throw new Error(`${message}: Invalid response.`);
+  }
+  return body.data as LoopInstructionPatchProposal;
+}
+
 export type PromptFilters = {
   query?: string;
   tool?: string;
@@ -1856,10 +1901,13 @@ export async function getLoopInstructionPatch(
     await failApi(response, "Loop instruction patch proposal failed");
   }
 
-  const body = (await response.json()) as {
-    data: LoopInstructionPatchProposal;
-  };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parseLoopInstructionPatchProposalResponse
+  >[0];
+  return parseLoopInstructionPatchProposalResponse(
+    body,
+    "Loop instruction patch proposal failed",
+  );
 }
 
 async function failApi(response: Response, label: string): Promise<never> {
