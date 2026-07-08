@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Loop Worktree Selected Action Contract Error
+
+- [x] CHECK: web API `getLoopWorktree`가 `/api/v1/loops/worktrees/:worktree` 성공 응답의
+  optional `selected_brief_action` 안전 계약을 검증하지 않아 writes_files/external_calls가
+  깨진 continuation action을 selected worktree drilldown UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed `selected_brief_action.writes_files` body를
+  `Loop worktree drilldown failed: Invalid response.`로 reject하도록 요구하게 해 현재 unsafe
+  selected action resolve 실패를 확인한다.
+- [x] GREEN: selected brief action label/action/reason/command/writes_files/external_calls 계약을
+  확인하고 깨진 action은 raw-free drilldown contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Loop Worktree Selection Scope Contract Error
 
 - [x] CHECK: web API `getLoopWorktree`가 `/api/v1/loops/worktrees/:worktree` 성공 응답의

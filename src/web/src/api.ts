@@ -504,6 +504,26 @@ function isLoopWorktreeSelectionScope(
   );
 }
 
+function isSelectedBriefAction(
+  value: unknown,
+): value is NonNullable<LoopWorktreeResponse["selected_brief_action"]> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const action = value as NonNullable<
+    LoopWorktreeResponse["selected_brief_action"]
+  >;
+  return (
+    action.label === "Selected brief action" &&
+    action.action === "copy selected continuation brief" &&
+    action.reason ===
+      "uses the selected worktree/session/branch filters without auto-submitting" &&
+    typeof action.command === "string" &&
+    action.writes_files === false &&
+    action.external_calls === false
+  );
+}
+
 function isLoopActivityWorktree(
   value: unknown,
 ): value is LoopListResponse["status"]["activity"]["worktrees"][number] {
@@ -2444,6 +2464,7 @@ export async function getLoopWorktree(
     data?: {
       worktree?: unknown;
       selection_scope?: unknown;
+      selected_brief_action?: unknown;
       items?: unknown;
       privacy?: unknown;
     };
@@ -2451,6 +2472,8 @@ export async function getLoopWorktree(
   if (
     typeof body.data?.worktree !== "string" ||
     !isLoopWorktreeSelectionScope(body.data.selection_scope) ||
+    (body.data.selected_brief_action !== undefined &&
+      !isSelectedBriefAction(body.data.selected_brief_action)) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
     !isLoopListPrivacy(body.data.privacy)
