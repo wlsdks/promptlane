@@ -33,6 +33,11 @@ The JSON report includes `fixture_set` and `soft_signal` fields so consumers can
 It also includes a top-level `next_action`: synthetic passes say the local
 regression gate is green while still requiring real fixtures before claiming
 real-world effectiveness; real fixture runs stay soft trend signals.
+Full JSON reports include `evidence_state` so automation can distinguish a
+synthetic regression pass from real-world effectiveness evidence. Synthetic
+passes report `regression_gate_passed_not_real_world_proof`; real fixture
+passes report `trend_healthy`; real fixture threshold misses report
+`trend_needs_review`.
 When `--fixture-set real` has no local `real.json`, JSON output also includes
 `evidence_state.effectiveness: "unproven"` and `requires_real_fixtures: true`
 so release automation cannot confuse a missing real corpus with proof of
@@ -260,6 +265,12 @@ Pass thresholds:
   "version": "1.0.0",
   "dataset": "benchmark-v1",
   "pass": true,
+  "evidence_state": {
+    "effectiveness": "regression_gate_passed_not_real_world_proof",
+    "requires_real_fixtures": true,
+    "release_gate": "synthetic",
+    "trend_signal": "real"
+  },
   "next_action": "Synthetic pass means the local regression gate is green; collect real fixtures before claiming real-world effectiveness.",
   "scores": {
     "privacy_leak_count": 0,

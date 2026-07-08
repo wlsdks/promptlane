@@ -49,6 +49,49 @@ describe("benchmark fixture loading", () => {
     );
   });
 
+  it("describes benchmark evidence state for synthetic and real fixture reports", async () => {
+    const { buildBenchmarkEvidenceState } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+
+    expect(
+      buildBenchmarkEvidenceState({
+        fixtureSet: "synthetic",
+        status: "ready",
+        pass: true,
+      }),
+    ).toEqual({
+      effectiveness: "regression_gate_passed_not_real_world_proof",
+      requires_real_fixtures: true,
+      release_gate: "synthetic",
+      trend_signal: "real",
+    });
+    expect(
+      buildBenchmarkEvidenceState({
+        fixtureSet: "real",
+        status: "ready",
+        pass: true,
+      }),
+    ).toEqual({
+      effectiveness: "trend_healthy",
+      requires_real_fixtures: false,
+      release_gate: "synthetic",
+      trend_signal: "real",
+    });
+    expect(
+      buildBenchmarkEvidenceState({
+        fixtureSet: "real",
+        status: "ready",
+        pass: false,
+      }),
+    ).toEqual({
+      effectiveness: "trend_needs_review",
+      requires_real_fixtures: false,
+      release_gate: "synthetic",
+      trend_signal: "real",
+    });
+  });
+
   it("loads consent-bearing redacted real fixtures instead of synthetic fixtures", async () => {
     tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
     const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");

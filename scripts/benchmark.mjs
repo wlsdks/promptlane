@@ -15,6 +15,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
 import {
+  buildBenchmarkEvidenceState,
   buildNoFixturesReport,
   loadBenchmarkFixtures,
 } from "./benchmark-fixtures.mjs";
@@ -207,6 +208,11 @@ try {
     soft_signal: fixtureSet === "real",
     generated_at: new Date().toISOString(),
     pass,
+    evidence_state: buildBenchmarkEvidenceState({
+      fixtureSet,
+      status: "ready",
+      pass,
+    }),
     next_action: benchmarkNextAction({ fixtureSet, pass }),
     scores,
     thresholds,
