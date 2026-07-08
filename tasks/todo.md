@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane README Quality Evidence Corepack Commands
+
+- [x] CHECK: README and README.ko documented the release/goal-completion
+  `quality-evidence --require-complete` gate with bare `pnpm`, while release
+  checklist, NPM publishing runbook, and quality evidence JSON use
+  `corepack pnpm` to avoid package-manager drift.
+- [x] RED: packaging guard now requires both READMEs to show
+  `corepack pnpm promptlane quality-evidence --require-complete` and reject the
+  bare `pnpm promptlane quality-evidence --require-complete` line.
+- [x] GREEN: README quality-evidence command blocks now use `corepack pnpm`
+  for text, JSON, operator brief, and require-complete examples.
+- [x] VERIFY: focused quality-evidence packaging guard, packaging tests,
+  typecheck, touched-file formatting, quality lint, and diff whitespace check.
+
 ## 2026-07-08 PromptLane NPM Publish Quality Gate Alignment
 
 - [x] CHECK: `docs/RELEASE_CHECKLIST.md` and quality evidence JSON require

@@ -1249,6 +1249,14 @@ describe("plugin packaging files", () => {
     expect(releaseChecklist).toContain(
       "corepack pnpm promptlane quality-evidence --require-complete",
     );
+    for (const content of [readme, readmeKo]) {
+      expect(content).toContain(
+        "corepack pnpm promptlane quality-evidence --require-complete",
+      );
+      expect(content).not.toContain(
+        "\npnpm promptlane quality-evidence --require-complete",
+      );
+    }
     expect(releaseChecklist).toContain(
       "corepack pnpm --silent evidence:quality",
     );

@@ -684,10 +684,10 @@ pnpm promptlane score --tool codex --json
 Inspect the PromptLane 9.5 quality evidence gate:
 
 ```sh
-pnpm promptlane quality-evidence
-pnpm promptlane quality-evidence --json
-pnpm promptlane quality-evidence --operator-brief
-pnpm promptlane quality-evidence --require-complete
+corepack pnpm promptlane quality-evidence
+corepack pnpm promptlane quality-evidence --json
+corepack pnpm promptlane quality-evidence --operator-brief
+corepack pnpm promptlane quality-evidence --require-complete
 ```
 
 `--require-complete` fails while scorecard axes or direct evidence blockers are
