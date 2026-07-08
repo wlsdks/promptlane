@@ -33,6 +33,7 @@ export function problem(
     instance,
     errors: errors?.map((error) => ({
       ...error,
+      field: sanitizeProblemErrorMessage(error.field),
       message: sanitizeProblemErrorMessage(error.message),
     })),
   });

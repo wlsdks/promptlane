@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Server Problem Field Redaction
+
+- [x] CHECK: server `problem()` factory가 validation `errors[].message`는 redaction하지만
+  `errors[].field`는 그대로 전달해 future custom validation field가 raw local path/token을
+  problem response에 남길 수 있다.
+- [x] RED: `src/server/errors.test.ts`가 problem error field 안의 `/Users/...`와
+  `sk-proj-...`를 shared detector redaction token으로 치환하도록 요구하게 해 현재 raw field
+  passthrough 실패를 확인한다.
+- [x] GREEN: server problem factory가 `errors[].field`에도 기존 problem error sanitizer를 적용해
+  정상 field name은 유지하면서 raw path/token field만 중앙에서 raw-free로 만든다.
+- [x] VERIFY: focused server problem/validation tests, implementation format
+  check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Server Problem Error Redaction
 
 - [x] CHECK: `problem()` factory가 validation `errors[].message`를 그대로 전달해
