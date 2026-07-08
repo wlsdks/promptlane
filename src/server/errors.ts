@@ -1,3 +1,5 @@
+import { detectSensitiveValues } from "../redaction/detectors.js";
+
 export type ProblemDetails = {
   type: string;
   title: string;
@@ -29,8 +31,36 @@ export function problem(
     status,
     detail,
     instance,
-    errors,
+    errors: errors?.map((error) => ({
+      ...error,
+      message: sanitizeProblemErrorMessage(error.message),
+    })),
   });
+}
+
+const RAW_DETAIL_ERROR_KEY_PATTERN =
+  "compactSummary|compact_summary|markdown|promptBody|prompt_body|rawPath|raw_path|transcript|transcriptBody|transcript_body";
+
+function sanitizeProblemErrorMessage(value: string): string {
+  let sanitized = value.replace(
+    new RegExp(
+      `\\b(${RAW_DETAIL_ERROR_KEY_PATTERN})\\s*([:=])\\s*([^\\s,;)}\\]]+)`,
+      "gi",
+    ),
+    (_match, key: string, separator: string) =>
+      `${key}${separator}[REDACTED:${key.toLowerCase()}]`,
+  );
+
+  for (const finding of detectSensitiveValues(sanitized).sort(
+    (a, b) => b.range_start - a.range_start,
+  )) {
+    sanitized =
+      sanitized.slice(0, finding.range_start) +
+      finding.replacement +
+      sanitized.slice(finding.range_end);
+  }
+
+  return sanitized;
 }
 
 function toKebabCase(value: string): string {
