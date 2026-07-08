@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Annotated Tag Preflight Guard
+
+- [x] CHECK: release checklist requires an annotated `v1.0.0` tag, but npm
+  publish preflight only checked that the tag target matched HEAD.
+- [x] RED: focused npm publish preflight test requires a lightweight release
+  tag to fail with annotated-tag recovery guidance.
+- [x] GREEN: npm publish preflight now checks `git cat-file -t v1.0.0` after
+  the tag points at HEAD and fails closed unless the release tag is annotated.
+- [x] VERIFY: focused preflight test, skip-npm preflight JSON, formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane Benchmark Safe Real Fixture Labels
 
 - [x] CHECK: real benchmark labels are unique and raw-free, but labels also

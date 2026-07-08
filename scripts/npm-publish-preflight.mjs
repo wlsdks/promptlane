@@ -423,6 +423,18 @@ if (!options.skipGitTag) {
           tagError: tagTarget.stderr.trim(),
         }),
   );
+  if (tagMatchesHead) {
+    const tagType = run("git", ["cat-file", "-t", expectedTag]);
+    const tagIsAnnotated =
+      tagType.status === 0 && tagType.stdout.trim() === "tag";
+    check(
+      `${expectedTag} tag is annotated`,
+      tagIsAnnotated,
+      tagIsAnnotated
+        ? "release tag is annotated"
+        : `${expectedTag} is not an annotated tag. Rerun the full release gate, then create or refresh the annotated tag with git tag -fa ${expectedTag} -m "promptlane ${version}".`,
+    );
+  }
 }
 
 if (!options.skipNpm) {
@@ -633,6 +645,13 @@ function nextAction({ passed, checks }) {
   );
   if (tagMismatch) {
     return `${expectedTag} tag does not point at HEAD. Run git checkout ${expectedTag} to publish the tagged commit, or if promptlane@${version} is unpublished and HEAD is the intended release, rerun the full release gate and git tag -fa ${expectedTag}; if already published, bump version and create a new tag.`;
+  }
+
+  const unannotatedTag = failedLabels.find((label) =>
+    label.endsWith("tag is annotated"),
+  );
+  if (unannotatedTag) {
+    return `${expectedTag} tag is not annotated. Rerun the full release gate, then git tag -fa ${expectedTag} -m "promptlane ${version}" and rerun corepack pnpm npm-publish:preflight.`;
   }
 
   return "Fix blocked checks before publishing.";

@@ -646,6 +646,62 @@ exit 1
     expect(tagCheck?.detail).not.toContain("predates this preflight");
   });
 
+  it("requires the release tag to be annotated", () => {
+    const binDir = mkdtempSync(join(tmpdir(), "promptlane-fake-git-"));
+    const fakeGit = join(binDir, "git");
+    writeFileSync(
+      fakeGit,
+      `#!/usr/bin/env sh
+if [ "$1" = "status" ]; then
+  exit 0
+fi
+if [ "$1" = "rev-parse" ]; then
+  echo "ffffffffffff0000000000000000000000000000"
+  exit 0
+fi
+if [ "$1" = "rev-list" ]; then
+  echo "ffffffffffff0000000000000000000000000000"
+  exit 0
+fi
+if [ "$1" = "cat-file" ] && [ "$2" = "-t" ]; then
+  echo "commit"
+  exit 0
+fi
+echo "unexpected git command: $*" >&2
+exit 1
+`,
+      { mode: 0o755 },
+    );
+
+    const result = spawnSync(
+      process.execPath,
+      ["scripts/npm-publish-preflight.mjs", "--json", "--skip-npm"],
+      {
+        cwd: process.cwd(),
+        env: {
+          ...process.env,
+          PATH: `${binDir}:${process.env.PATH ?? ""}`,
+        },
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+
+    expect(result.status).toBe(1);
+    const parsed = JSON.parse(result.stdout) as {
+      next_action: string;
+      checks: Array<{ label: string; ok: boolean; detail?: string }>;
+    };
+    const annotatedTagCheck = parsed.checks.find((check) =>
+      check.label.endsWith("tag is annotated"),
+    );
+    expect(annotatedTagCheck).toMatchObject({ ok: false });
+    expect(annotatedTagCheck?.detail).toContain("git tag -fa v1.0.0");
+    expect(annotatedTagCheck?.detail).toContain("annotated tag");
+    expect(parsed.next_action).toContain("v1.0.0 tag is not annotated");
+    expect(parsed.next_action).toContain("git tag -fa v1.0.0");
+  });
+
   it("points the operator to npm login when npm auth is the remaining blocker", () => {
     const binDir = mkdtempSync(join(tmpdir(), "promptlane-fake-npm-"));
     const fakeNpm = join(binDir, "npm");
