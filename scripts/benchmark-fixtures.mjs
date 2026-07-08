@@ -98,6 +98,7 @@ function parseRealFixtures(parsed) {
     );
   }
 
+  const seenLabels = new Set();
   return parsed.fixtures.map((fixture, index) => {
     const normalized = {
       label: readRequiredString(fixture, "label", index),
@@ -113,6 +114,10 @@ function parseRealFixtures(parsed) {
     assertRedactedText(normalized.label, `real fixture ${index} label`);
     assertRedactedText(normalized.query, `real fixture ${index} query`);
     assertRedactedText(normalized.prompt, `real fixture ${index} prompt`);
+    if (seenLabels.has(normalized.label)) {
+      throw new Error(`real fixture label must be unique: ${normalized.label}`);
+    }
+    seenLabels.add(normalized.label);
     return normalized;
   });
 }

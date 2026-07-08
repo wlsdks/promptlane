@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Benchmark Unique Real Fixture Labels
+
+- [x] CHECK: real benchmark fixture labels feed `fixtureIds` and retrieval
+  reports, but duplicate labels could overwrite fixture ids and mis-link
+  benchmark outcome evidence.
+- [x] RED: focused benchmark fixture loader test requires duplicate real
+  fixture labels to be rejected.
+- [x] GREEN: real fixture parsing now requires unique labels and the benchmark
+  spec documents the uniqueness requirement.
+- [x] VERIFY: focused fixture/package tests, real no-fixtures soft exit,
+  formatting, typecheck, preflight JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane Benchmark No-Fixtures Contract Helper
 
 - [x] CHECK: no-fixtures JSON contract coverage spawned `benchmark.mjs` against
