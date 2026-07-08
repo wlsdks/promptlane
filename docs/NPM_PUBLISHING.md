@@ -125,6 +125,7 @@ corepack pnpm pack:dry-run
 corepack pnpm smoke:package-install
 corepack pnpm evidence:quality -- --require-complete
 corepack pnpm promptlane quality-evidence --require-complete
+git tag -fa v1.0.0 -m "promptlane 1.0.0"
 corepack pnpm npm-publish:preflight
 git diff --check
 ```
@@ -155,9 +156,9 @@ corepack pnpm smoke:package-install
 - [ ] pre-publish privacy audit (`docs/PRE_PUBLISH_PRIVACY_AUDIT.md`) passes
 - [ ] npm account is authenticated
 - [ ] 2FA/OTP requirement is available if npm asks for it
+- [ ] annotated git tag `v1.0.0` is created or refreshed before `corepack pnpm npm-publish:preflight`
 - [ ] `corepack pnpm npm-publish:preflight` passes
 - [ ] publish uses `--tag latest` for the first stable release
-- [ ] annotated git tag `v1.0.0` is created only after the local release gate passes
 
 ## Do Not Publish Yet If
 

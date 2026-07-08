@@ -200,6 +200,12 @@ describe("plugin packaging files", () => {
     expect(publishing).toContain("git tag -fa v1.0.0");
     expect(publishing).toContain("After `promptlane@1.0.0` is published");
     expect(publishing).toMatch(/bump the\s+package version/);
+    expect(publishing).toContain(
+      "annotated git tag `v1.0.0` is created or refreshed before `corepack pnpm npm-publish:preflight`",
+    );
+    expect(publishing).not.toContain(
+      "annotated git tag `v1.0.0` is created only after the local release gate passes",
+    );
     expect(publishing).not.toContain(
       "If the newer main commit must be published instead, bump the package version",
     );

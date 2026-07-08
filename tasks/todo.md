@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Runbook Tag Order
+
+- [x] CHECK: `docs/RELEASE_CHECKLIST.md` now requires creating or refreshing
+  `v1.0.0` before `corepack pnpm npm-publish:preflight`, but
+  `docs/NPM_PUBLISHING.md` still had a publish-checklist line saying the tag is
+  created only after the local release gate passes.
+- [x] RED: packaging guard now requires the NPM publishing runbook to state that
+  `v1.0.0` is created or refreshed before npm preflight, and rejects the stale
+  after-gate-only wording.
+- [x] GREEN: NPM publishing runbook local gate and publish checklist now place
+  the annotated tag before `corepack pnpm npm-publish:preflight`.
+- [x] VERIFY: focused packaging guard, touched-file formatting, typecheck, and
+  diff hygiene.
+
 ## 2026-07-08 PromptLane Package Contents Script List
 
 - [x] CHECK: `docs/PACKAGE_CONTENTS.md` shipped script 목록에서 일부 release
