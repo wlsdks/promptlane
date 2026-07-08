@@ -81,6 +81,24 @@ describe("server problem details", () => {
     expect(error.message).toBe(error.problem.detail);
   });
 
+  it("redacts quoted raw detail values with spaces from problem details", () => {
+    const error = problem(
+      400,
+      "Bad Request",
+      "Invalid prompt_body=\"private draft with customer context\" while compactSummary:'sensitive summary text'.",
+    );
+
+    expect(error.problem.detail).toContain(
+      "prompt_body=[REDACTED:prompt_body]",
+    );
+    expect(error.problem.detail).toContain(
+      "compactSummary:[REDACTED:compactsummary]",
+    );
+    expect(error.problem.detail).not.toContain("private draft");
+    expect(error.problem.detail).not.toContain("customer context");
+    expect(error.problem.detail).not.toContain("sensitive summary text");
+  });
+
   it("redacts raw local paths and tokens from problem titles and types", () => {
     const error = problem(
       500,

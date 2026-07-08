@@ -48,7 +48,7 @@ const RAW_DETAIL_ERROR_KEY_PATTERN =
 function sanitizeProblemText(value: string): string {
   let sanitized = value.replace(
     new RegExp(
-      `\\b(${RAW_DETAIL_ERROR_KEY_PATTERN})\\s*([:=])\\s*([^\\s,;)}\\]]+)`,
+      `\\b(${RAW_DETAIL_ERROR_KEY_PATTERN})\\s*([:=])\\s*(?:"[^"]*"|'[^']*'|[^\\s,;)}\\]]+)`,
       "gi",
     ),
     (_match, key: string, separator: string) =>
