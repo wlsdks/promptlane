@@ -431,6 +431,11 @@ check(
   realBenchmarkMissingFixturesEvidenceStateIsDocumented(),
   "scripts/benchmark-fixtures.mjs and docs/BENCHMARK_V1.md must preserve missing real fixture evidence_state",
 );
+check(
+  "benchmark evidence state report contract is documented",
+  benchmarkEvidenceStateReportContractIsDocumented(),
+  "scripts/benchmark.mjs, scripts/benchmark-fixtures.mjs, and docs/BENCHMARK_V1.md must preserve benchmark evidence_state semantics",
+);
 
 if (!options.skipGitClean) {
   const status = run("git", ["status", "--porcelain"]);
@@ -757,6 +762,35 @@ function realBenchmarkMissingFixturesEvidenceStateIsDocumented() {
 
   return [benchmarkFixtures, benchmarkSpec].every((content) =>
     requiredSnippets.every((snippet) => content.includes(snippet)),
+  );
+}
+
+function benchmarkEvidenceStateReportContractIsDocumented() {
+  const benchmark = readText("scripts/benchmark.mjs");
+  const benchmarkFixtures = readText("scripts/benchmark-fixtures.mjs");
+  const benchmarkSpec = readText("docs/BENCHMARK_V1.md");
+  const implementationSnippets = [
+    "buildBenchmarkEvidenceState",
+    "evidence_state",
+  ];
+  const semanticSnippets = [
+    "regression_gate_passed_not_real_world_proof",
+    "trend_healthy",
+    "trend_needs_review",
+    "requires_real_fixtures",
+    "release_gate",
+    "synthetic",
+    "trend_signal",
+    "real",
+  ];
+
+  return (
+    [benchmark, benchmarkFixtures].every((content) =>
+      implementationSnippets.every((snippet) => content.includes(snippet)),
+    ) &&
+    [benchmarkFixtures, benchmarkSpec].every((content) =>
+      semanticSnippets.every((snippet) => content.includes(snippet)),
+    )
   );
 }
 

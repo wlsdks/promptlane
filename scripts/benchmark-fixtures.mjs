@@ -88,15 +88,40 @@ export function buildNoFixturesReport({ dataset, fixtureSet, detail }) {
     fixture_set: fixtureSet,
     soft_signal: true,
     status: "no_fixtures",
-    evidence_state: {
-      effectiveness: "unproven",
-      requires_real_fixtures: true,
-      release_gate: "synthetic",
-      trend_signal: "real",
-    },
+    evidence_state: buildBenchmarkEvidenceState({
+      fixtureSet,
+      status: "no_fixtures",
+    }),
     detail,
     next_action:
       "Add consent-bearing redacted real fixtures before using real benchmark trends.",
+  };
+}
+
+export function buildBenchmarkEvidenceState({ fixtureSet, status, pass }) {
+  if (fixtureSet === "real" && status === "ready") {
+    return {
+      effectiveness: pass ? "trend_healthy" : "trend_needs_review",
+      requires_real_fixtures: false,
+      release_gate: "synthetic",
+      trend_signal: "real",
+    };
+  }
+
+  if (fixtureSet === "synthetic" && pass) {
+    return {
+      effectiveness: "regression_gate_passed_not_real_world_proof",
+      requires_real_fixtures: true,
+      release_gate: "synthetic",
+      trend_signal: "real",
+    };
+  }
+
+  return {
+    effectiveness: "unproven",
+    requires_real_fixtures: true,
+    release_gate: "synthetic",
+    trend_signal: "real",
   };
 }
 

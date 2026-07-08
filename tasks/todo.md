@@ -1,5 +1,21 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Benchmark Ready Evidence State
+
+- [x] CHECK: missing real fixtures exposed `evidence_state`, but ready
+  synthetic and ready real benchmark reports still lacked the same structured
+  evidence-state field for automation to distinguish release regression gates
+  from real-world effectiveness trend signals.
+- [x] RED: focused benchmark fixture test requires
+  `buildBenchmarkEvidenceState` to describe synthetic pass, real pass, and
+  real threshold-miss states; focused npm preflight test requires the report
+  contract to be guarded before publish.
+- [x] GREEN: benchmark reports now include shared `evidence_state` for
+  synthetic and real ready runs, benchmark docs describe the values, and npm
+  publish preflight guards the script/spec contract.
+- [x] VERIFY: focused benchmark/preflight tests, real no-fixtures JSON,
+  formatting, typecheck, preflight JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane Benchmark Evidence State Preflight Guard
 
 - [x] CHECK: missing real benchmark fixtures now report structured
