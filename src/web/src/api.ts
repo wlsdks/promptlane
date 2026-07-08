@@ -665,6 +665,30 @@ function isContinuationSafetyOrderingNote(
   );
 }
 
+function isContinuationSafetyNonPersistenceNote(
+  value: unknown,
+): value is NonNullable<
+  LoopWorktreeResponse["continuation_safety_non_persistence_note"]
+> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const note = value as NonNullable<
+    LoopWorktreeResponse["continuation_safety_non_persistence_note"]
+  >;
+  return (
+    note.label === "Safety review state" &&
+    note.state ===
+      "reviewed guidance state is not stored or synchronized by PromptLane" &&
+    note.reminder ===
+      "operator re-checks safety guidance each time before manual agent submission" &&
+    note.reason ===
+      "keeps continuation review local to the current operator session" &&
+    note.stores_state === false &&
+    note.external_calls === false
+  );
+}
+
 function isLoopActivityWorktree(
   value: unknown,
 ): value is LoopListResponse["status"]["activity"]["worktrees"][number] {
@@ -2612,6 +2636,7 @@ export async function getLoopWorktree(
       copy_side_effects?: unknown;
       continuation_safety_group?: unknown;
       continuation_safety_ordering_note?: unknown;
+      continuation_safety_non_persistence_note?: unknown;
       items?: unknown;
       privacy?: unknown;
     };
@@ -2634,6 +2659,10 @@ export async function getLoopWorktree(
     (body.data.continuation_safety_ordering_note !== undefined &&
       !isContinuationSafetyOrderingNote(
         body.data.continuation_safety_ordering_note,
+      )) ||
+    (body.data.continuation_safety_non_persistence_note !== undefined &&
+      !isContinuationSafetyNonPersistenceNote(
+        body.data.continuation_safety_non_persistence_note,
       )) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
