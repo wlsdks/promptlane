@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Plugin Manifest Preflight Guard
+
+- [x] CHECK: npm publish preflight now checks concrete plugin files exist, but
+  invalid JSON or drifted Claude/Codex plugin manifest identity could still
+  ship.
+- [x] RED: focused npm publish preflight test requires machine-readable plugin
+  manifest content checks for Claude plugin, Claude marketplace, and Codex
+  plugin manifests.
+- [x] GREEN: npm publish preflight parses the manifests and checks stable
+  runtime identity, Claude plugin version alignment, marketplace source, and
+  Codex skill path/display metadata.
+- [x] VERIFY: focused preflight test, skip-npm preflight JSON, formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Plugin Artifact Preflight Guard
 
 - [x] CHECK: npm publish preflight checks integration directories, but an empty

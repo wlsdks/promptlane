@@ -225,6 +225,38 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "Claude plugin manifest identity is stable",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Claude plugin manifest version matches package.json",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Claude plugin manifest command list is complete",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Claude marketplace manifest points at local plugin",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Claude marketplace manifest version matches package.json",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Codex plugin manifest identity is stable",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Codex plugin manifest skill path is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Codex plugin manifest display metadata is PromptLane",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files include docs/PROMPTLANE.md",
           ok: true,
         }),
