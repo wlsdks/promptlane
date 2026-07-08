@@ -2883,6 +2883,17 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports malformed coach feedback responses without returning incomplete feedback state", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { sendCoachFeedback } = await import("./api.js");
+
+    await expect(
+      sendCoachFeedback({ promptId: "prmt_xyz", rating: "helpful" }),
+    ).rejects.toThrow("Coach feedback failed: Invalid response.");
+  });
+
   it("posts the import dry-run upload with CSRF and returns the raw-free summary", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
