@@ -5892,11 +5892,14 @@ function apiErrorIssueText(value: unknown): string {
       }
       const record = item as {
         field?: unknown;
+        instancePath?: unknown;
         message?: unknown;
         path?: unknown;
       };
       const field =
-        apiErrorText(record.field) || apiErrorIssuePathText(record.path);
+        apiErrorText(record.field) ||
+        apiErrorIssuePathText(record.path) ||
+        apiErrorIssuePathText(record.instancePath);
       const rawFieldKey = rawDetailErrorFieldKey(field);
       const message = rawFieldKey
         ? `[REDACTED:${rawFieldKey.toLowerCase()}]`
@@ -5917,7 +5920,13 @@ function apiErrorIssueText(value: unknown): string {
 
 function apiErrorIssuePathText(value: unknown): string {
   if (typeof value === "string") {
-    return apiErrorText(value);
+    return apiErrorText(
+      value
+        .split("/")
+        .filter(Boolean)
+        .map((segment) => segment.replace(/~1/g, "/").replace(/~0/g, "~"))
+        .join(".") || value,
+    );
   }
   if (!Array.isArray(value)) {
     return "";

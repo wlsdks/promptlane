@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Error Issue Instance Path Redaction
+
+- [x] CHECK: `apiErrorIssueText`가 validation `errors[]`의 `field`와 `path`는
+  표시하지만 AJV-style `instancePath: "/body/prompt_body"`는 무시해 raw issue message를
+  failed response detail에 남길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 settings failed response `errors[]`의
+  `instancePath` JSON Pointer를 `body.prompt_body` field로 표시하면서 message body를
+  `[REDACTED:prompt_body]`로 치환하도록 요구하게 해 현재 unsafe instancePath issue
+  detail 노출 실패를 확인한다.
+- [x] GREEN: web API error issue sanitizer가 `field`/`path` fallback 뒤에
+  `instancePath`를 raw-free field text로 정규화하고 raw-detail key segment별 issue
+  message redaction을 적용한다.
+- [x] VERIFY: focused web API issue/error redaction tests, implementation format
+  check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Error Issue Path Array Redaction
 
 - [x] CHECK: `apiErrorIssueText`가 validation `errors[]`의 `field`는 표시하지만
