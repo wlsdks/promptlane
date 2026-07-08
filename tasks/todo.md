@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane README Local Platform Validation
+
+- [x] CHECK: README/README.ko Supported Platforms and Requirements still named
+  GitHub Actions or CI targets as the release validation basis, while 1.0.0
+  release readiness now uses local gates, local browser smoke, and npm preflight.
+- [x] RED: packaging guard now rejects README platform validation text that
+  depends on GitHub Actions/CI and requires local-first validation wording.
+- [x] GREEN: English and Korean README platform sections now describe Node
+  22/24 plus local gate/browser/release/package smoke as the validation basis.
+- [x] VERIFY: focused README platform guard, formatting, live preflight/quality
+  smoke, and diff hygiene.
+
 ## 2026-07-09 PromptLane README Full Release Gate
 
 - [x] CHECK: README/README.ko Development sections said "full local gate" but

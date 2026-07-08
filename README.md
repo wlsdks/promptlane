@@ -98,7 +98,7 @@ Claude Code and Codex prompt memory workflows.
 - pnpm `10.x`
 - A platform supported by `better-sqlite3`
 
-The CI target is Node 22 and Node 24.
+The local release gate is validated on Node 22 and Node 24.
 
 ## Quick Start
 
@@ -191,12 +191,13 @@ http://127.0.0.1:17373
 
 ## Supported Platforms
 
-Release validation currently targets:
+Release validation is local-first and currently targets:
 
-- Linux x64 through GitHub Actions
 - Node.js 22 and 24
+- the local release gate documented below
+- local browser, release, and package smoke on the maintainer machine
 
-macOS, Linux arm64, and Windows support are intended, but they still require release smoke validation for `better-sqlite3`, filesystem permissions, and hook command behavior before a stable release claim.
+Linux x64 is the primary development environment currently exercised by the local gate. macOS, Linux arm64, and Windows support are intended, but they still require explicit maintainer/operator smoke for `better-sqlite3`, filesystem permissions, and hook command behavior before making broad platform claims.
 
 ## Install (Development Checkout) And Setup Options
 

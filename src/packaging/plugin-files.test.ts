@@ -865,6 +865,23 @@ describe("plugin packaging files", () => {
     }
   });
 
+  it("keeps README platform validation local-first instead of GitHub Actions based", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+
+    expect(readme).toContain("Release validation is local-first");
+    expect(readme).toContain("Node.js 22 and 24");
+    expect(readme).toContain("local release gate documented below");
+    expect(readme).not.toContain("Linux x64 through GitHub Actions");
+    expect(readme).not.toContain("CI target");
+
+    expect(readmeKo).toContain("release validation은 local-first");
+    expect(readmeKo).toContain("Node.js 22와 24");
+    expect(readmeKo).toContain("아래에 문서화된 local release gate");
+    expect(readmeKo).not.toContain("GitHub Actions의 Linux x64");
+    expect(readmeKo).not.toContain("CI 대상");
+  });
+
   it("keeps Korean README local development setup aligned with the English quick start", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
