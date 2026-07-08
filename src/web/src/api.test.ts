@@ -2768,6 +2768,17 @@ describe("web api export client", () => {
     expect(JSON.stringify(preview)).not.toContain("sk-proj");
   });
 
+  it("reports malformed export preview responses without returning incomplete job data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { createExportPreview } = await import("./api.js");
+
+    await expect(createExportPreview("anonymized_review")).rejects.toThrow(
+      "Export preview failed: Invalid response.",
+    );
+  });
+
   it("executes anonymized export jobs by job id", async () => {
     const payload: AnonymizedExportPayload = {
       job_id: "exp_abcdef123456",

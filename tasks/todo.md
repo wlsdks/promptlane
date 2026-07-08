@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Export Preview Contract Error
+
+- [x] CHECK: web API `createExportPreview`가 `/api/v1/exports/preview` 성공 응답의
+  raw-free export job 계약을 검증하지 않아 malformed 응답을 `{}` 상태로 export UI에 넘길 수
+  있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed export preview body를
+  `Export preview failed: Invalid response.`로 reject하도록 요구하게 해 현재 `{}` resolve
+  실패를 확인했다.
+- [x] GREEN: export job 응답의 `id`, `preset`, `status`, hash/count/redaction fields
+  계약을 확인하고 깨진 성공 응답은 raw-free export preview contract 오류로 중단하도록
+  고쳤다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Import Dry-Run Contract Error
 
 - [x] CHECK: web API `previewImportDryRun`가 `/api/v1/import/dry-run` 성공 응답의

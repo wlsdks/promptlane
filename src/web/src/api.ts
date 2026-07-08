@@ -1678,6 +1678,54 @@ export type ExportJob = {
   created_at: string;
 };
 
+function parseExportJobResponse(
+  body: {
+    data?: {
+      id?: unknown;
+      preset?: unknown;
+      status?: unknown;
+      prompt_id_hashes?: unknown;
+      project_policy_versions?: unknown;
+      redaction_version?: unknown;
+      counts?: {
+        prompt_count?: unknown;
+        sensitive_count?: unknown;
+        included_fields?: unknown;
+        excluded_fields?: unknown;
+        residual_identifier_counts?: unknown;
+        small_set_warning?: unknown;
+      };
+      expires_at?: unknown;
+      created_at?: unknown;
+    };
+  },
+  message: string,
+): ExportJob {
+  if (
+    typeof body.data?.id !== "string" ||
+    typeof body.data.preset !== "string" ||
+    (body.data.status !== "previewed" &&
+      body.data.status !== "completed" &&
+      body.data.status !== "invalid") ||
+    !Array.isArray(body.data.prompt_id_hashes) ||
+    typeof body.data.project_policy_versions !== "object" ||
+    body.data.project_policy_versions === null ||
+    typeof body.data.redaction_version !== "string" ||
+    typeof body.data.counts?.prompt_count !== "number" ||
+    typeof body.data.counts.sensitive_count !== "number" ||
+    !Array.isArray(body.data.counts.included_fields) ||
+    !Array.isArray(body.data.counts.excluded_fields) ||
+    typeof body.data.counts.residual_identifier_counts !== "object" ||
+    body.data.counts.residual_identifier_counts === null ||
+    typeof body.data.counts.small_set_warning !== "boolean" ||
+    typeof body.data.expires_at !== "string" ||
+    typeof body.data.created_at !== "string"
+  ) {
+    throw new Error(`${message}: Invalid response.`);
+  }
+  return body.data as ExportJob;
+}
+
 export type AnonymizedExportPayload = {
   job_id: string;
   preset: ExportPreset;
@@ -2308,8 +2356,10 @@ export async function createExportPreview(
     await failApi(response, "Export preview failed");
   }
 
-  const body = (await response.json()) as { data: ExportJob };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parseExportJobResponse
+  >[0];
+  return parseExportJobResponse(body, "Export preview failed");
 }
 
 export async function executeExportJob(
