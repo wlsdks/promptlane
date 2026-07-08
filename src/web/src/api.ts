@@ -3734,6 +3734,30 @@ function isArchiveTopGapItem(
   );
 }
 
+function isArchiveScoreDistribution(
+  value: unknown,
+): value is ArchiveScoreReport["distribution"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const distribution = value as ArchiveScoreReport["distribution"] & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    typeof distribution.excellent === "number" &&
+    typeof distribution.good === "number" &&
+    typeof distribution.needs_work === "number" &&
+    typeof distribution.weak === "number" &&
+    distribution.cwd === undefined &&
+    distribution.markdown === undefined &&
+    distribution.prompt_body === undefined &&
+    distribution.raw_path === undefined
+  );
+}
+
 export type ProjectPolicy = {
   capture_disabled: boolean;
   analysis_disabled: boolean;
@@ -4221,6 +4245,7 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
   const body = (await response.json()) as {
     data?: {
       archive_score?: unknown;
+      distribution?: unknown;
       top_gaps?: unknown;
       practice_plan?: unknown;
       low_score_prompts?: unknown;
@@ -4229,6 +4254,7 @@ export async function getArchiveScoreReport(): Promise<ArchiveScoreReport> {
   };
   if (
     !isArchiveScoreSummary(body.data?.archive_score) ||
+    !isArchiveScoreDistribution(body.data.distribution) ||
     !Array.isArray(body.data.top_gaps) ||
     !body.data.top_gaps.every(isArchiveTopGapItem) ||
     !Array.isArray(body.data.practice_plan) ||
