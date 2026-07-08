@@ -1151,6 +1151,7 @@ describe("plugin packaging files", () => {
     expect(plan).toContain("| Codex and Claude Code integration | 9.5/10 |");
     expect(plan).toContain("| Web UI and operational evidence | 9.5/10 |");
     for (const content of [localEvidence, backlog, plan]) {
+      const normalizedContent = content.replace(/\s+/g, " ");
       expect(content).toContain("corepack pnpm smoke:hooks");
       expect(content).toContain("hook binary smoke passed");
       expect(content).toContain("corepack pnpm smoke:mcp-coach-loop");
@@ -1161,6 +1162,7 @@ describe("plugin packaging files", () => {
       expect(content).toContain("loop memory approval dogfood passed");
       expect(content).toContain("corepack pnpm smoke:release");
       expect(content).toContain("release smoke passed");
+      expect(normalizedContent).toContain("quality evidence CLI gate");
       expect(content).toContain("corepack pnpm benchmark -- --json");
       expect(content).toContain("privacy_leak_count: 0");
       expect(content).toContain("archive_effectiveness_score: 1");
@@ -1439,6 +1441,7 @@ describe("plugin packaging files", () => {
       "corepack pnpm smoke:release",
       "corepack pnpm evidence:quality -- --require-complete",
       "corepack pnpm promptlane quality-evidence --require-complete",
+      "quality evidence CLI gate",
       "git diff --check",
       "local browser evidence",
       "approved native-dialog evidence",

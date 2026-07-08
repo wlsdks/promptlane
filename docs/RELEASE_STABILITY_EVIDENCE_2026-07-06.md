@@ -10,7 +10,7 @@ making automated tests open OS dialogs.
 
 | Command | Result | Evidence |
 | --- | --- | --- |
-| `corepack pnpm smoke:release` | PASS | Built the package, initialized an isolated data directory and HOME, previewed Claude Code and Codex hook installers without touching real user config, started the local server, ingested Claude Code and Codex prompt fixtures, verified CLI list/search/show/rebuild-index, executed transcript import, verified imported-only filtering, previewed and executed anonymized export, then verified SQLite, Markdown, FTS, and delete cleanup. |
+| `corepack pnpm smoke:release` | PASS | Built the package, initialized an isolated data directory and HOME, previewed Claude Code and Codex hook installers without touching real user config, started the local server, ingested Claude Code and Codex prompt fixtures, verified CLI list/search/show/rebuild-index, executed transcript import, verified imported-only filtering, previewed and executed anonymized export, then verified SQLite, Markdown, FTS, delete cleanup, and the built product quality evidence CLI gate. |
 | `corepack pnpm pack:dry-run` | PASS | Built server and web assets, ran the package dry-run wrapper, and produced `promptlane-0.1.0-beta.0.tgz` with 344 files including this release evidence document. |
 
 ## Local Release Gate
@@ -37,7 +37,8 @@ making automated tests open OS dialogs.
 
 - `smoke:release` uses an isolated temporary data directory and HOME.
 - The smoke fixture includes secret-looking prompt text and local path-shaped
-  input, then asserts redacted outputs and cleanup behavior.
+  input, then asserts redacted outputs, cleanup behavior, and quality evidence
+  CLI gate output without raw home paths.
 - Raw prompt bodies, raw local paths, and token-like secrets were not emitted by
   the verified CLI, server, import, export, SQLite, Markdown, FTS, or delete
   paths.

@@ -19,7 +19,7 @@ It does not complete the remaining externally gated evidence:
 | `corepack pnpm smoke:mcp-coach-loop` | PASS | Built server/web assets, started the stdio MCP smoke path, and exercised score, coach, improve, clarification, record, and effectiveness evidence flows. Ended with `mcp coach loop smoke passed`. |
 | `corepack pnpm dogfood:first-coach-loop` | PASS | Built server/web assets, initialized an isolated PromptLane archive, started a local server, captured a Codex prompt through the hook, ran `coach --json`, `loop collect --json`, and `loop brief --json`. Ended with `first coach loop dogfood passed`. |
 | `corepack pnpm dogfood:loop-memory-approval` | PASS | Built server/web assets, captured a Codex prompt through the local server, collected a loop snapshot, started MCP, recorded a loop outcome, proposed a memory candidate, recorded approved memory, and proposed an instruction patch. Ended with `loop memory approval dogfood passed`. |
-| `corepack pnpm smoke:release` | PASS | Built server/web assets, initialized isolated data/HOME, previewed hook installers, started the local server, captured Claude Code and Codex prompt payloads, verified CLI list/search/show/rebuild-index, import, imported-only filter, anonymized export, SQLite, Markdown, FTS, and delete cleanup. Ended with `release smoke passed`. |
+| `corepack pnpm smoke:release` | PASS | Built server/web assets, initialized isolated data/HOME, previewed hook installers, started the local server, captured Claude Code and Codex prompt payloads, verified CLI list/search/show/rebuild-index, import, imported-only filter, anonymized export, SQLite, Markdown, FTS, delete cleanup, and the built product quality evidence CLI gate. Ended with `release smoke passed`. |
 | `corepack pnpm benchmark -- --json` | PASS | Built server/web assets and returned `pass: true`, `privacy_leak_count: 0`, `archive_effectiveness_score: 1`, `coach_prompt_actionability: 1`, `retrieval_top3: 1`, and `analytics_score: 1`. |
 
 ## Quality Interpretation
@@ -32,9 +32,10 @@ It does not complete the remaining externally gated evidence:
 - Loop memory and continuation evidence is current for capture, collect, brief,
   outcome, approved memory, and instruction patch proposal. Instruction file
   writes remain explicit and user-gated.
-- Release-stability local evidence is current for release smoke, benchmark, and
-  package lifecycle gates, but release completion still depends on the normal
-  full gate and external blockers.
+- Release-stability local evidence is current for release smoke, the built
+  product quality evidence CLI gate, benchmark, and package lifecycle gates, but
+  release completion still depends on the normal full gate and external
+  blockers.
 
 ## Remaining Evidence Boundary
 

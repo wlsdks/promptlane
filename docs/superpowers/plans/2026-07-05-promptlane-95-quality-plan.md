@@ -188,8 +188,9 @@
   with `first coach loop dogfood passed`,
   `corepack pnpm dogfood:loop-memory-approval` ended with
   `loop memory approval dogfood passed`, `corepack pnpm smoke:release` ended
-  with `release smoke passed`, and `corepack pnpm benchmark -- --json`
-  returned `privacy_leak_count: 0` plus `archive_effectiveness_score: 1`.
+  with `release smoke passed` after checking the built product quality evidence CLI gate,
+  and `corepack pnpm benchmark -- --json` returned
+  `privacy_leak_count: 0` plus `archive_effectiveness_score: 1`.
   This strengthens the local proof for privacy, Codex/Claude integration,
   setup/MCP smoke, loop memory, and release stability while native-dialog
   approval evidence is tracked through the approved audit.

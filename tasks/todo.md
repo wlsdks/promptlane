@@ -9044,3 +9044,10 @@
   setup-needed responses.
 - [x] VERIFY: Focused loop MCP tests, MCP server tests, typecheck,
   touched-file formatting, and diff hygiene passed.
+
+## 2026-07-08 PromptLane Release Evidence Quality CLI Ledger
+
+- [x] CHECK: release smoke now verifies the built product `quality-evidence --require-complete`, but local/release evidence ledgers still described release smoke as ending at import/export/delete cleanup.
+- [x] RED: packaging guard requires `quality evidence CLI gate` in the local 9.5 evidence, backlog, 9.5 plan, and release stability evidence, exposing stale ledger text.
+- [x] GREEN: update local 9.5 evidence, release stability evidence, next backlog, and 9.5 quality plan to record the built product quality evidence CLI gate inside release smoke evidence.
+- [x] VERIFY: focused packaging guard, quality evidence JSON smoke, touched-file formatting/type/diff hygiene checks.
