@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Package Entry Existence Preflight Guard
+
+- [x] CHECK: npm publish preflight checked that source-controlled package
+  entries were listed in `package.json#files`, but did not fail closed if a
+  listed docs/script/integration entry was missing from the repo.
+- [x] RED: focused preflight JSON test required representative package entry
+  existence checks for a directory, doc, and script.
+- [x] GREEN: npm publish preflight now checks existence for source-controlled
+  package entries while leaving build artifact `dist` to the build/package
+  gates.
+- [x] VERIFY: focused preflight/packaging tests, skip-npm preflight JSON,
+  touched-file formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Runtime Evidence Docs Preflight Guard
 
 - [x] CHECK: `package.json#files` and package contents docs ship PromptLane

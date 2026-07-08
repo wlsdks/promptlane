@@ -74,7 +74,15 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "package files entry exists integrations",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files include docs/PROMPTLANE.md",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files entry exists docs/PROMPTLANE.md",
           ok: true,
         }),
         expect.objectContaining({
@@ -283,6 +291,10 @@ describe("npm publish preflight", () => {
         }),
         expect.objectContaining({
           label: "package files include scripts/npm-publish-preflight.mjs",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package files entry exists scripts/npm-publish-preflight.mjs",
           ok: true,
         }),
         expect.objectContaining({

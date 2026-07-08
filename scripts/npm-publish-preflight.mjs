@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 const repoRoot = resolve(new URL("..", import.meta.url).pathname);
@@ -128,6 +128,12 @@ for (const filePath of [
     `package files include ${filePath}`,
     Array.isArray(packageJson.files) && packageJson.files.includes(filePath),
   );
+  if (requiresSourceControlledEntry(filePath)) {
+    check(
+      `package files entry exists ${filePath}`,
+      existsSync(join(repoRoot, filePath)),
+    );
+  }
 }
 check(
   "package files exclude dist/**/*.map",
@@ -214,6 +220,10 @@ function parseArgs(args) {
 
 function readJson(path) {
   return JSON.parse(readFileSync(join(repoRoot, path), "utf8"));
+}
+
+function requiresSourceControlledEntry(filePath) {
+  return filePath !== "dist" && !filePath.startsWith("!");
 }
 
 function readSharedVersion() {
