@@ -969,7 +969,7 @@ that real user prompt quality is fully solved.
 Run the local release smoke before publishing or tagging a release:
 
 ```sh
-pnpm smoke:release
+corepack pnpm smoke:release
 ```
 
 The smoke script builds the package, creates an isolated temporary data directory and HOME, starts the local server, captures fixture-like Claude Code and Codex prompts, verifies CLI list/search/show/delete/rebuild-index, checks SQLite WAL/FTS5, and confirms deleted prompt metadata is removed.
@@ -977,7 +977,7 @@ The smoke script builds the package, creates an isolated temporary data director
 Browser regression smoke is also available:
 
 ```sh
-pnpm e2e:browser
+corepack pnpm e2e:browser
 ```
 
 It checks the archive, prompt detail, improvement draft copy/save flow, projects,

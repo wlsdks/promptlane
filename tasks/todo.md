@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane README Release Smoke Corepack Commands
+
+- [x] CHECK: README/README.ko release smoke examples still used bare
+  `pnpm smoke:release` and `pnpm e2e:browser`, and the 9.5 quality plan still
+  showed a stale `pnpm build && node scripts/loop-memory-approval-dogfood.mjs`
+  test expectation.
+- [x] RED: packaging guard now requires README release smoke commands and the
+  quality-plan dogfood script snippet to use packageManager-pinned `corepack
+  pnpm`.
+- [x] GREEN: README release smoke commands and the 9.5 plan snippet now use
+  `corepack pnpm` consistently.
+- [x] VERIFY: focused README release-smoke guard, packaging tests, typecheck,
+  touched-file formatting, quality lint, and diff whitespace check.
+
 ## 2026-07-08 PromptLane Smoke Dogfood Corepack Build
 
 - [x] CHECK: most benchmark/e2e/smoke/dogfood package scripts still invoked

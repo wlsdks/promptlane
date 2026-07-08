@@ -419,6 +419,31 @@ describe("plugin packaging files", () => {
     }
   });
 
+  it("keeps README release smoke commands on packageManager-pinned pnpm", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+    const plan = readFileSync(
+      join(
+        process.cwd(),
+        "docs/superpowers/plans/2026-07-05-promptlane-95-quality-plan.md",
+      ),
+      "utf8",
+    );
+
+    for (const content of [readme, readmeKo]) {
+      expect(content).toContain("corepack pnpm smoke:release");
+      expect(content).toContain("corepack pnpm e2e:browser");
+      expect(content).not.toContain("\npnpm smoke:release\n");
+      expect(content).not.toContain("\npnpm e2e:browser\n");
+    }
+    expect(plan).toContain(
+      '"corepack pnpm build && node scripts/loop-memory-approval-dogfood.mjs"',
+    );
+    expect(plan).not.toContain(
+      '"pnpm build && node scripts/loop-memory-approval-dogfood.mjs"',
+    );
+  });
+
   it("brands package, bins, and plugin metadata as PromptLane runtime surfaces", () => {
     const packageJson = readJson<{
       name: string;
@@ -1365,13 +1390,18 @@ describe("plugin packaging files", () => {
       expect(content).toContain("native_dialog_approved_dogfood");
       expect(content).toContain("native_dialog_approved_dogfood");
     }
-    expect(plan).toContain("| Product planning and positioning | 9.5/10 |");
-    expect(plan).toContain("| Local-first privacy boundary | 9.5/10 |");
-    expect(plan).toContain("| Setup, doctor, and MCP smoke | 9.5/10 |");
-    expect(plan).toContain("| Loop memory and continuation | 9.5/10 |");
-    expect(plan).toContain("| Release stability | 9.5/10 |");
-    expect(plan).toContain("| Codex and Claude Code integration | 9.5/10 |");
-    expect(plan).toContain("| Web UI and operational evidence | 9.5/10 |");
+    const normalizedPlan = plan.replace(/\s+/g, " ");
+    for (const scorecardAxis of [
+      "Product planning and positioning",
+      "Local-first privacy boundary",
+      "Setup, doctor, and MCP smoke",
+      "Loop memory and continuation",
+      "Release stability",
+      "Codex and Claude Code integration",
+      "Web UI and operational evidence",
+    ]) {
+      expect(normalizedPlan).toContain(`| ${scorecardAxis} | 9.5/10`);
+    }
     for (const content of [localEvidence, backlog, plan]) {
       const normalizedContent = content.replace(/\s+/g, " ");
       expect(content).toContain("corepack pnpm smoke:hooks");
@@ -1703,6 +1733,7 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "docs/NEXT_BACKLOG.md"),
       "utf8",
     );
+    const normalizedPlan = plan.replace(/\s+/g, " ");
 
     expect(packageJson.files).toContain(planPath);
     expect(backlog).toContain(planPath);
@@ -1780,7 +1811,7 @@ describe("plugin packaging files", () => {
       "no `schedule` event",
       "9.5 Evidence Completion State",
     ]) {
-      expect(plan).toContain(currentEvidence);
+      expect(normalizedPlan).toContain(currentEvidence.replace(/\s+/g, " "));
     }
     for (const currentBacklogEvidence of [
       "prompt-linked outcome evidence",
