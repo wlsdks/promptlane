@@ -7983,6 +7983,22 @@ describe("web api export client", () => {
     );
   });
 
+  it("redacts quoted equals-delimited raw-like keys from failed response messages", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(500, {
+          detail:
+            'Unexpected setup failure "OPENAI_API_KEY" = private local provider token. Retry setup.',
+        }),
+      );
+    const { getSettings } = await import("./api.js");
+
+    await expect(getSettings()).rejects.toThrow(
+      'Settings failed (500): Unexpected setup failure "OPENAI_API_KEY"=[REDACTED:openai_api_key]. Retry setup.',
+    );
+  });
+
   it("redacts env-style provider credential details from failed response messages", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

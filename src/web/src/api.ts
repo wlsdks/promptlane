@@ -5921,17 +5921,18 @@ function sanitizeApiErrorText(value: string): string {
   return value
     .replace(
       new RegExp(
-        `(["'\`])(${rawDetailKey})\\1\\s*:\\s*(?!["'\`])([^.;)}\\]\\r\\n]+)([.;)}\\]]?)`,
+        `(["'\`])(${rawDetailKey})\\1\\s*([:=])\\s*(?!["'\`])([^.;)}\\]\\r\\n]+)([.;)}\\]]?)`,
         "gi",
       ),
       (
         _match,
         quote: string,
         key: string,
+        separator: string,
         _value: string,
         terminator: string,
       ) =>
-        `${quote}${key}${quote}:[REDACTED:${key.toLowerCase()}]${terminator}`,
+        `${quote}${key}${quote}${separator}[REDACTED:${key.toLowerCase()}]${terminator}`,
     )
     .replace(
       new RegExp(
