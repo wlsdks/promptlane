@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Published Version Detail Guard
+
+- [x] CHECK: npm publish preflight blocks when `promptlane@1.0.0` already
+  exists, but the failed check detail only said the registry returned versions
+  instead of preserving the runbook rule to avoid retargeting `v1.0.0`.
+- [x] RED: focused npm publish preflight test requires an already-published
+  `1.0.0` registry response to tell the operator not to retarget `v1.0.0` and
+  to bump `package.json` plus `src/shared/version.ts`.
+- [x] GREEN: npm publish preflight now emits a machine-readable published
+  version detail with the bump-version/new-tag recovery path.
+- [x] VERIFY: focused preflight/package tests, current preflight JSON,
+  formatting, typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Package Install Smoke Runbook Guard
 
 - [x] CHECK: `smoke:package-install` verifies shipped bin help, installed

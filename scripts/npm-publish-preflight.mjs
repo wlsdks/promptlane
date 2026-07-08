@@ -495,7 +495,7 @@ if (!options.skipNpm) {
   check(
     `${packageName}@${version} has not already been published`,
     versions.ok && !versions.versions.includes(version),
-    versions.detail,
+    npmVersionAvailabilityDetail({ versions }),
   );
 }
 
@@ -773,6 +773,18 @@ function parseNpmVersions(result) {
       detail: "npm registry response was not valid JSON",
     };
   }
+}
+
+function npmVersionAvailabilityDetail({ versions }) {
+  if (!versions.ok) {
+    return versions.detail;
+  }
+
+  if (versions.versions.includes(version)) {
+    return `${packageName}@${version} is already published; do not retarget ${expectedTag}. To publish again, bump package.json and src/shared/version.ts, rerun the full release gate, and create a new release tag.`;
+  }
+
+  return versions.detail;
 }
 
 function npmAuthDetail({ result, ok }) {

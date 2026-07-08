@@ -848,4 +848,62 @@ exit 1
     expect(parsed.next_action).toContain("corepack pnpm npm-publish:preflight");
     expect(parsed.next_action).toContain("npm publish --tag latest");
   });
+
+  it("tells the operator to bump version instead of retargeting v1.0.0 after publish", () => {
+    const binDir = mkdtempSync(join(tmpdir(), "promptlane-fake-npm-"));
+    const fakeNpm = join(binDir, "npm");
+    writeFileSync(
+      fakeNpm,
+      `#!/usr/bin/env sh
+if [ "$1" = "whoami" ]; then
+  echo "wlsdks"
+  exit 0
+fi
+if [ "$1" = "view" ]; then
+  printf '%s\n' '["0.9.0","1.0.0"]'
+  exit 0
+fi
+echo "unexpected npm command: $*" >&2
+exit 1
+`,
+      { mode: 0o755 },
+    );
+
+    const result = spawnSync(
+      process.execPath,
+      [
+        "scripts/npm-publish-preflight.mjs",
+        "--json",
+        "--skip-git-clean",
+        "--skip-git-tag",
+      ],
+      {
+        cwd: process.cwd(),
+        env: {
+          ...process.env,
+          PATH: `${binDir}:${process.env.PATH ?? ""}`,
+        },
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+
+    expect(result.status).toBe(1);
+    const parsed = JSON.parse(result.stdout) as {
+      next_action: string;
+      checks: Array<{ label: string; ok: boolean; detail?: string }>;
+    };
+    const versionCheck = parsed.checks.find((check) =>
+      check.label.endsWith("has not already been published"),
+    );
+    expect(versionCheck).toMatchObject({ ok: false });
+    expect(versionCheck?.detail).toContain(
+      "promptlane@1.0.0 is already published",
+    );
+    expect(versionCheck?.detail).toContain("do not retarget v1.0.0");
+    expect(versionCheck?.detail).toContain("bump package.json");
+    expect(versionCheck?.detail).toContain("src/shared/version.ts");
+    expect(parsed.next_action).toContain("Bump package.json");
+    expect(parsed.next_action).toContain("create a new release tag");
+  });
 });
