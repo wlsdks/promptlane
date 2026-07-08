@@ -37,6 +37,10 @@ When blocked, human output prints a `Blocking checks` section near the top
 before the full check list, followed by a copy-ready `Next action`.
 JSON output includes the same failed checks as top-level `blocking_checks`
 before the full `checks` array so automation does not need to re-filter it.
+When the only blocker is npm authentication, JSON output also includes
+`recovery_commands` with `npm login` and the preflight recheck command; it does
+not include `npm publish --tag latest` because publish still requires a fresh
+passing preflight.
 
 ## Recommended First Stable Publish
 

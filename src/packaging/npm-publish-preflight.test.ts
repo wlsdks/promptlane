@@ -840,6 +840,7 @@ exit 1
       status: string;
       next_action: string;
       blocking_checks: Array<{ label: string; detail?: string }>;
+      recovery_commands: string[];
       checks: Array<{ label: string; ok: boolean; detail?: string }>;
     };
     expect(parsed.status).toBe("blocked");
@@ -863,6 +864,11 @@ exit 1
         detail: expect.stringContaining("npm login"),
       }),
     ]);
+    expect(parsed.recovery_commands).toEqual([
+      "npm login",
+      "corepack pnpm npm-publish:preflight",
+    ]);
+    expect(parsed.recovery_commands).not.toContain("npm publish --tag latest");
     expect(parsed.next_action).toContain("npm login");
     expect(parsed.next_action).toContain("corepack pnpm npm-publish:preflight");
     expect(parsed.next_action).toContain("npm publish --tag latest");
@@ -910,9 +916,16 @@ exit 1
     expect(result.stdout).toContain(
       "Blocking checks\n- npm authentication is available",
     );
+    expect(result.stdout).toContain(
+      "Recovery commands\n- npm login\n- corepack pnpm npm-publish:preflight",
+    );
     expect(result.stdout.indexOf("Blocking checks")).toBeLessThan(
       result.stdout.indexOf("Checks"),
     );
+    expect(result.stdout.indexOf("Recovery commands")).toBeLessThan(
+      result.stdout.indexOf("Checks"),
+    );
+    expect(result.stdout).not.toContain("- npm publish --tag latest");
     expect(result.stdout).toContain(
       "Next action: Run npm login, rerun corepack pnpm npm-publish:preflight",
     );

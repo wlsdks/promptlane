@@ -537,6 +537,7 @@ const summary = {
   },
   blocking_checks: blockingChecks,
   checks,
+  recovery_commands: recoveryCommands({ passed, checks }),
   next_action: nextAction({ passed, checks }),
 };
 
@@ -1024,6 +1025,24 @@ function nextAction({ passed, checks }) {
   return "Fix blocked checks before publishing.";
 }
 
+function recoveryCommands({ passed, checks }) {
+  if (passed) {
+    return [];
+  }
+
+  const failedLabels = checks
+    .filter((item) => !item.ok)
+    .map((item) => item.label);
+  if (
+    failedLabels.length === 1 &&
+    failedLabels[0] === "npm authentication is available"
+  ) {
+    return ["npm login", "corepack pnpm npm-publish:preflight"];
+  }
+
+  return [];
+}
+
 function sanitizeNpmDetail(value) {
   return value
     .replace(/npm_[A-Za-z0-9]{36,}/g, "[REDACTED:npm_token]")
@@ -1082,6 +1101,13 @@ function formatSummary(summary) {
     `Expected tag: ${summary.expected_tag}`,
     ...(blockingChecks.length
       ? ["", "Blocking checks", ...blockingChecks]
+      : []),
+    ...(summary.recovery_commands.length
+      ? [
+          "",
+          "Recovery commands",
+          ...summary.recovery_commands.map((command) => `- ${command}`),
+        ]
       : []),
     "",
     "Checks",

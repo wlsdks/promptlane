@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Preflight Recovery Commands
+
+- [x] CHECK: npm publish preflight JSON exposed `blocking_checks`, but safe
+  recovery commands were still embedded only in the prose `next_action`.
+- [x] RED: focused npm auth blocker test requires `recovery_commands` with
+  `npm login` and preflight recheck, while excluding `npm publish --tag latest`.
+- [x] GREEN: npm publish preflight now emits safe recovery commands in JSON
+  and human output for the auth-only blocker.
+- [x] VERIFY: focused preflight tests, human/JSON preflight output,
+  formatting, typecheck, preflight JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Preflight JSON Blocking Checks
 
 - [x] CHECK: human npm publish preflight output now summarized failed checks,
