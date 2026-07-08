@@ -9051,3 +9051,16 @@
 - [x] RED: packaging guard requires `quality evidence CLI gate` in the local 9.5 evidence, backlog, 9.5 plan, and release stability evidence, exposing stale ledger text.
 - [x] GREEN: update local 9.5 evidence, release stability evidence, next backlog, and 9.5 quality plan to record the built product quality evidence CLI gate inside release smoke evidence.
 - [x] VERIFY: focused packaging guard, quality evidence JSON smoke, touched-file formatting/type/diff hygiene checks.
+
+## 2026-07-08 Dashboard Summary Refresh Hook Boundary
+
+- [x] CHECK: bulk delete refreshed the prompt list through the list query but
+      still refreshed dashboard/archive summaries by directly wiring dashboard API
+      calls and setters inside `App.tsx`.
+- [x] RED: add focused dashboard-query tests requiring a shared mutation refresh
+      helper to update dashboard/archive summaries and preserve the existing
+      independent refresh behavior when one summary request fails.
+- [x] GREEN: expose `refreshSummaries()` from `useDashboardQuery` and route bulk
+      delete through that hook-owned refresh boundary.
+- [x] VERIFY: focused dashboard-query/App-adjacent tests, touched TypeScript
+      formatting, typecheck, and diff hygiene checks.

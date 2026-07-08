@@ -222,6 +222,7 @@ export function App() {
     archiveScore,
     coachFeedback,
     dashboard,
+    refreshSummaries,
     setArchiveScore,
     setDashboard,
   } = useDashboardQuery({
@@ -323,12 +324,7 @@ export function App() {
       setPendingBulkDelete(false);
       setSelectedIds(new Set());
       await refreshList(filters, { replace: true });
-      void getQualityDashboard()
-        .then(setDashboard)
-        .catch(() => undefined);
-      void getArchiveScoreReport()
-        .then(setArchiveScore)
-        .catch(() => undefined);
+      void refreshSummaries();
     } catch (error) {
       setError(bulkDeleteErrorMessage(error));
     } finally {

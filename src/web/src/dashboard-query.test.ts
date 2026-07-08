@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { QualityDashboard } from "./api.js";
 import {
+  refreshDashboardSummaries,
   shouldLoadArchiveScore,
   shouldLoadCoachFeedback,
   shouldLoadDashboard,
@@ -40,5 +41,54 @@ describe("dashboard query", () => {
     expect(shouldLoadCoachFeedback("coach", false)).toBe(false);
     expect(shouldLoadCoachFeedback("dashboard", false)).toBe(true);
     expect(shouldLoadCoachFeedback("dashboard", true)).toBe(false);
+  });
+
+  it("refreshes dashboard and archive score summaries after prompt mutations", async () => {
+    const dashboard = dashboardWith7Days;
+    const archiveScore = { status: "ok" } as never;
+    const calls: string[] = [];
+
+    await refreshDashboardSummaries({
+      getArchiveScoreReport: async () => {
+        calls.push("archive");
+        return archiveScore;
+      },
+      getQualityDashboard: async () => {
+        calls.push("dashboard");
+        return dashboard;
+      },
+      setArchiveScore: (value) => {
+        expect(value).toBe(archiveScore);
+      },
+      setDashboard: (value) => {
+        expect(value).toBe(dashboard);
+      },
+    });
+
+    expect(calls).toEqual(["dashboard", "archive"]);
+  });
+
+  it("still refreshes archive score when dashboard refresh fails", async () => {
+    const archiveScore = { status: "ok" } as never;
+    const calls: string[] = [];
+
+    await refreshDashboardSummaries({
+      getArchiveScoreReport: async () => {
+        calls.push("archive");
+        return archiveScore;
+      },
+      getQualityDashboard: async () => {
+        calls.push("dashboard");
+        throw new Error("dashboard unavailable");
+      },
+      setArchiveScore: (value) => {
+        expect(value).toBe(archiveScore);
+      },
+      setDashboard: () => {
+        throw new Error("dashboard setter should not run");
+      },
+    });
+
+    expect(calls).toEqual(["dashboard", "archive"]);
   });
 });
