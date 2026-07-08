@@ -177,6 +177,7 @@ function parsePromptDetailResponse(body: { data?: unknown }): PromptDetail {
     promptDetail === undefined ||
     typeof promptDetail.markdown !== "string" ||
     !Array.isArray(promptDetail.improvement_drafts) ||
+    !promptDetail.improvement_drafts.every(isPromptImprovementDraft) ||
     (promptDetail.analysis !== undefined &&
       (typeof promptDetail.analysis !== "object" ||
         promptDetail.analysis === null)) ||
@@ -194,28 +195,41 @@ function parsePromptDetailResponse(body: { data?: unknown }): PromptDetail {
   return promptDetail;
 }
 
+function isPromptImprovementDraft(
+  value: unknown,
+): value is PromptImprovementDraft {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const draft = value as PromptImprovementDraft & PromptSummaryRawFields;
+  return (
+    typeof draft.id === "string" &&
+    typeof draft.prompt_id === "string" &&
+    typeof draft.draft_text === "string" &&
+    typeof draft.analyzer === "string" &&
+    Array.isArray(draft.changed_sections) &&
+    draft.changed_sections.every((section) => typeof section === "string") &&
+    Array.isArray(draft.safety_notes) &&
+    draft.safety_notes.every((note) => typeof note === "string") &&
+    typeof draft.is_sensitive === "boolean" &&
+    draft.redaction_policy === "mask" &&
+    typeof draft.created_at === "string" &&
+    (draft.copied_at === undefined || typeof draft.copied_at === "string") &&
+    (draft.accepted_at === undefined ||
+      typeof draft.accepted_at === "string") &&
+    draft.markdown === undefined &&
+    draft.prompt_body === undefined &&
+    draft.raw_path === undefined
+  );
+}
+
 function parsePromptImprovementDraftResponse(body: {
   data?: unknown;
 }): PromptImprovementDraft {
-  const draft = body.data as PromptImprovementDraft | undefined;
-  if (
-    typeof draft !== "object" ||
-    draft === null ||
-    typeof draft.id !== "string" ||
-    typeof draft.prompt_id !== "string" ||
-    typeof draft.draft_text !== "string" ||
-    typeof draft.analyzer !== "string" ||
-    !Array.isArray(draft.changed_sections) ||
-    !Array.isArray(draft.safety_notes) ||
-    typeof draft.is_sensitive !== "boolean" ||
-    draft.redaction_policy !== "mask" ||
-    typeof draft.created_at !== "string" ||
-    (draft.copied_at !== undefined && typeof draft.copied_at !== "string") ||
-    (draft.accepted_at !== undefined && typeof draft.accepted_at !== "string")
-  ) {
+  if (!isPromptImprovementDraft(body.data)) {
     throw new Error("Improvement draft save failed: Invalid response.");
   }
-  return draft;
+  return body.data;
 }
 
 function parsePromptUsefulnessResponse(
