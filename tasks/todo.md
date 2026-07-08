@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Import Dry-Run Contract Error
+
+- [x] CHECK: web API `previewImportDryRun`가 `/api/v1/import/dry-run` 성공 응답의
+  raw-free import summary 계약을 검증하지 않아 malformed 응답을 `{}` 상태로 import UI에
+  넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed import dry-run body를
+  `Import dry-run failed: Invalid response.`로 reject하도록 요구하게 해 현재 `{}` resolve
+  실패를 확인했다.
+- [x] GREEN: import dry-run 응답의 `dry_run`, `source_type`, count fields,
+  `skipped_records`, `samples` 계약을 확인하고 깨진 성공 응답은 raw-free import dry-run
+  contract 오류로 중단하도록 고쳤다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Coach Feedback Entry Contract Error
 
 - [x] CHECK: web API `sendCoachFeedback`가 `/api/v1/prompts/:id/coach-feedback` 성공

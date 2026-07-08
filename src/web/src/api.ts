@@ -1622,6 +1622,43 @@ export type ImportDryRunResult = {
   }>;
 };
 
+function parseImportDryRunResponse(body: {
+  data?: {
+    dry_run?: unknown;
+    source_type?: unknown;
+    source_path_hash?: unknown;
+    records_read?: unknown;
+    prompt_candidates?: unknown;
+    sensitive_prompt_count?: unknown;
+    parse_errors?: unknown;
+    skipped_records?: {
+      assistant_or_tool?: unknown;
+      empty_prompt?: unknown;
+      unsupported_record?: unknown;
+      too_large?: unknown;
+    };
+    samples?: unknown;
+  };
+}): ImportDryRunResult {
+  if (
+    body.data?.dry_run !== true ||
+    typeof body.data.source_type !== "string" ||
+    typeof body.data.source_path_hash !== "string" ||
+    typeof body.data.records_read !== "number" ||
+    typeof body.data.prompt_candidates !== "number" ||
+    typeof body.data.sensitive_prompt_count !== "number" ||
+    typeof body.data.parse_errors !== "number" ||
+    typeof body.data.skipped_records?.assistant_or_tool !== "number" ||
+    typeof body.data.skipped_records.empty_prompt !== "number" ||
+    typeof body.data.skipped_records.unsupported_record !== "number" ||
+    typeof body.data.skipped_records.too_large !== "number" ||
+    !Array.isArray(body.data.samples)
+  ) {
+    throw new Error("Import dry-run failed: Invalid response.");
+  }
+  return body.data as ImportDryRunResult;
+}
+
 export type ExportJob = {
   id: string;
   preset: ExportPreset;
@@ -2247,8 +2284,10 @@ export async function previewImportDryRun(input: {
     await failApi(response, "Import dry-run failed");
   }
 
-  const body = (await response.json()) as { data: ImportDryRunResult };
-  return body.data;
+  const body = (await response.json()) as Parameters<
+    typeof parseImportDryRunResponse
+  >[0];
+  return parseImportDryRunResponse(body);
 }
 
 export async function createExportPreview(
