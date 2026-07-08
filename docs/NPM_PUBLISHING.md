@@ -110,6 +110,8 @@ corepack pnpm benchmark -- --json
 corepack pnpm e2e:browser
 corepack pnpm smoke:release
 corepack pnpm pack:dry-run
+corepack pnpm evidence:quality -- --require-complete
+corepack pnpm promptlane quality-evidence --require-complete
 corepack pnpm npm-publish:preflight
 git diff --check
 ```

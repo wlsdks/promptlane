@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane NPM Publish Quality Gate Alignment
+
+- [x] CHECK: `docs/RELEASE_CHECKLIST.md` and quality evidence JSON require
+  both `corepack pnpm evidence:quality -- --require-complete` and built product
+  CLI `corepack pnpm promptlane quality-evidence --require-complete`, but
+  `docs/NPM_PUBLISHING.md` omitted both from the publish-local gate.
+- [x] RED: packaging guard now requires the NPM publishing runbook to include
+  both quality evidence commands before npm preflight.
+- [x] GREEN: NPM publishing runbook's required local gate now includes repo
+  evidence quality and built CLI quality-evidence parity checks before publish
+  preflight.
+- [x] VERIFY: focused packaging guard, packaging tests, typecheck,
+  touched-file formatting, quality lint, and diff whitespace check.
+
 ## 2026-07-08 PromptLane NPM Publishing Live Readiness
 
 - [x] CHECK: `docs/NPM_PUBLISHING.md` still presented a 2026-05-02

@@ -123,6 +123,12 @@ describe("plugin packaging files", () => {
     expect(publishing).toContain("corepack pnpm npm-publish:preflight");
     expect(publishing).toContain("does not publish");
     expect(publishing).toContain("--skip-npm");
+    for (const command of [
+      "corepack pnpm evidence:quality -- --require-complete",
+      "corepack pnpm promptlane quality-evidence --require-complete",
+    ]) {
+      expect(publishing).toContain(command);
+    }
     expect(publishing).toContain("## Live Readiness Checks");
     expect(publishing).toContain("Do not treat older `npm whoami`");
     expect(publishing).toContain("npm whoami");
