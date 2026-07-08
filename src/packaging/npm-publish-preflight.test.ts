@@ -257,6 +257,27 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "Codex plugin skill frontmatter is PromptLane",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Codex plugin skill documents local-first privacy boundary",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Claude setup command documents npm install and setup path",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label:
+            "Claude coach command documents MCP fallback and no auto-submit",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "Claude command docs preserve raw-free safety guidance",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files include docs/PROMPTLANE.md",
           ok: true,
         }),

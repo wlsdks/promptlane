@@ -338,6 +338,53 @@ check(
       "https://github.com/wlsdks/promptlane",
   codexPluginManifest?.interface?.displayName,
 );
+const codexSkillDoc = readText("plugins/promptlane/skills/promptlane/SKILL.md");
+const claudeSetupCommandDoc = readText("commands/setup.md");
+const claudeCoachCommandDoc = readText("commands/coach.md");
+const claudeScoreCommandDoc = readText("commands/score.md");
+check(
+  "Codex plugin skill frontmatter is PromptLane",
+  codexSkillDoc.includes("---\nname: promptlane\n") &&
+    codexSkillDoc.includes(
+      "description: Use when the user wants to install, verify, search, or troubleshoot PromptLane",
+    ),
+);
+check(
+  "Codex plugin skill documents local-first privacy boundary",
+  includesAll(codexSkillDoc, [
+    "stores coding-agent prompts and loop metadata locally",
+    "redacts sensitive values before writing Markdown files",
+    "does not install active hooks by itself",
+    "Archive-backed tools do not return prompt bodies or raw paths",
+  ]),
+);
+check(
+  "Claude setup command documents npm install and setup path",
+  includesAll(claudeSetupCommandDoc, [
+    "npm install -g promptlane",
+    "pnpm setup",
+    "promptlane setup --profile coach --register-mcp",
+    "--open-web",
+  ]),
+);
+check(
+  "Claude coach command documents MCP fallback and no auto-submit",
+  includesAll(claudeCoachCommandDoc, [
+    "promptlane:coach_prompt",
+    "promptlane coach --json",
+    "Do not auto-submit rewritten prompts",
+  ]),
+);
+check(
+  "Claude command docs preserve raw-free safety guidance",
+  includesAll([claudeCoachCommandDoc, claudeScoreCommandDoc].join("\n"), [
+    "Do not print raw prompt bodies",
+    "raw hook payloads",
+    "raw absolute paths",
+    "tokens",
+    "secrets",
+  ]),
+);
 for (const [label, filePath] of [
   ["built CLI assets exist", "dist/cli"],
   ["built server assets exist", "dist/server"],
@@ -440,6 +487,14 @@ function readOptionalJson(path) {
   }
 }
 
+function readText(path) {
+  try {
+    return readFileSync(join(repoRoot, path), "utf8");
+  } catch {
+    return "";
+  }
+}
+
 function packagePath(path) {
   return join(repoRoot, path.startsWith("./") ? path.slice(2) : path);
 }
@@ -477,6 +532,17 @@ function hasExactItems(actualItems, expectedItems) {
     actualItems.length === expectedItems.length &&
     expectedItems.every((item) => actualItems.includes(item))
   );
+}
+
+function includesAll(value, expectedSnippets) {
+  const normalizedValue = normalizeWhitespace(value);
+  return expectedSnippets.every((snippet) =>
+    normalizedValue.includes(normalizeWhitespace(snippet)),
+  );
+}
+
+function normalizeWhitespace(value) {
+  return String(value).replace(/\s+/g, " ").trim();
 }
 
 function readSharedVersion() {

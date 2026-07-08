@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Plugin Docs Preflight Guard
+
+- [x] CHECK: npm publish preflight checks plugin manifests and files, but
+  shipped Codex skill/Claude command docs could lose frontmatter or privacy
+  safety guidance while still existing.
+- [x] RED: focused npm publish preflight test requires machine-readable checks
+  for Codex skill frontmatter and Claude command privacy/setup content.
+- [x] GREEN: npm publish preflight validates the Codex skill frontmatter,
+  setup command install path, coach command MCP fallback, and command safety
+  guidance before publish.
+- [x] VERIFY: focused preflight test, skip-npm preflight JSON, formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Plugin Manifest Preflight Guard
 
 - [x] CHECK: npm publish preflight now checks concrete plugin files exist, but
