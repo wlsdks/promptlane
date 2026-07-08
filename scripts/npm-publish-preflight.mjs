@@ -266,6 +266,78 @@ for (const filePath of [
     existsSync(join(repoRoot, filePath)),
   );
 }
+const claudePluginManifest = readOptionalJson(".claude-plugin/plugin.json");
+const claudeMarketplaceManifest = readOptionalJson(
+  ".claude-plugin/marketplace.json",
+);
+const codexPluginManifest = readOptionalJson(
+  "plugins/promptlane/.codex-plugin/plugin.json",
+);
+check(
+  "Claude plugin manifest identity is stable",
+  claudePluginManifest?.name === "promptlane" &&
+    claudePluginManifest?.description ===
+      "PromptLane is a local-first prompt improvement workspace for Claude Code, Codex, and long-running coding-agent work.",
+  claudePluginManifest?.name,
+);
+check(
+  "Claude plugin manifest version matches package.json",
+  claudePluginManifest?.version === version,
+  claudePluginManifest?.version,
+);
+check(
+  "Claude plugin manifest command list is complete",
+  hasExactItems(claudePluginManifest?.commands, [
+    "./commands/setup.md",
+    "./commands/status.md",
+    "./commands/guard.md",
+    "./commands/buddy.md",
+    "./commands/coach.md",
+    "./commands/score.md",
+    "./commands/judge.md",
+    "./commands/improve-last.md",
+    "./commands/habits.md",
+    "./commands/open.md",
+  ]),
+  Array.isArray(claudePluginManifest?.commands)
+    ? claudePluginManifest.commands.join(", ")
+    : claudePluginManifest?.commands,
+);
+check(
+  "Claude marketplace manifest points at local plugin",
+  claudeMarketplaceManifest?.name === "promptlane" &&
+    Array.isArray(claudeMarketplaceManifest?.plugins) &&
+    claudeMarketplaceManifest.plugins.length === 1 &&
+    claudeMarketplaceManifest.plugins[0]?.name === "promptlane" &&
+    claudeMarketplaceManifest.plugins[0]?.source === "./",
+  claudeMarketplaceManifest?.plugins?.[0]?.source,
+);
+check(
+  "Claude marketplace manifest version matches package.json",
+  claudeMarketplaceManifest?.metadata?.version === version,
+  claudeMarketplaceManifest?.metadata?.version,
+);
+check(
+  "Codex plugin manifest identity is stable",
+  codexPluginManifest?.name === "promptlane" &&
+    codexPluginManifest?.description ===
+      "PromptLane is a local-first prompt improvement workspace for Codex, Claude Code, and long-running coding-agent work.",
+  codexPluginManifest?.name,
+);
+check(
+  "Codex plugin manifest skill path is registered",
+  codexPluginManifest?.skills === "./skills/",
+  codexPluginManifest?.skills,
+);
+check(
+  "Codex plugin manifest display metadata is PromptLane",
+  codexPluginManifest?.interface?.displayName === "PromptLane" &&
+    codexPluginManifest?.interface?.shortDescription ===
+      "PromptLane local-first prompt improvement workspace for coding-agent workflows" &&
+    codexPluginManifest?.interface?.websiteURL ===
+      "https://github.com/wlsdks/promptlane",
+  codexPluginManifest?.interface?.displayName,
+);
 for (const [label, filePath] of [
   ["built CLI assets exist", "dist/cli"],
   ["built server assets exist", "dist/server"],
@@ -360,6 +432,14 @@ function readJson(path) {
   return JSON.parse(readFileSync(join(repoRoot, path), "utf8"));
 }
 
+function readOptionalJson(path) {
+  try {
+    return readJson(path);
+  } catch {
+    return undefined;
+  }
+}
+
 function packagePath(path) {
   return join(repoRoot, path.startsWith("./") ? path.slice(2) : path);
 }
@@ -388,6 +468,14 @@ function hasKeywords(expectedKeywords) {
   return (
     Array.isArray(packageJson.keywords) &&
     expectedKeywords.every((keyword) => packageJson.keywords.includes(keyword))
+  );
+}
+
+function hasExactItems(actualItems, expectedItems) {
+  return (
+    Array.isArray(actualItems) &&
+    actualItems.length === expectedItems.length &&
+    expectedItems.every((item) => actualItems.includes(item))
   );
 }
 
