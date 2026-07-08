@@ -2242,6 +2242,17 @@ describe("web api export client", () => {
     expect(JSON.stringify(detail)).not.toContain("/Users/example");
   });
 
+  it("reports malformed loop worktree responses without returning incomplete selection data", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(jsonResponse({ data: {} }));
+    const { getLoopWorktree } = await import("./api.js");
+
+    await expect(getLoopWorktree("agent-loop-worktree")).rejects.toThrow(
+      "Loop worktree drilldown failed: Invalid response.",
+    );
+  });
+
   it("approves the latest eligible loop memory candidate with csrf", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Loop Worktree Contract Error
+
+- [x] CHECK: web API `getLoopWorktree`가 `/api/v1/loops/worktrees/:worktree` 성공 응답의
+  selected continuation 계약을 검증하지 않아 malformed 응답을 `{}` 상태로 worktree
+  drilldown UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 malformed loop worktree body를
+  `Loop worktree drilldown failed: Invalid response.`로 reject하도록 요구하게 해 현재 `{}`
+  resolve 실패를 확인했다.
+- [x] GREEN: `getLoopWorktree`가 `worktree`, `selection_scope`, `items` 계약을 확인하고
+  깨진 성공 응답은 raw-free loop worktree contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Coach Feedback Contract Error
 
 - [x] CHECK: web API `getCoachFeedbackSummary`가 `/api/v1/coach-feedback/summary` 성공
