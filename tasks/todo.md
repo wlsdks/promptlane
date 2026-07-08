@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Description Preflight Guard
+
+- [x] CHECK: `package.json#description` is the product positioning source for
+  public npm metadata, but npm publish preflight did not fail closed if it
+  drifted before publish.
+- [x] RED: focused preflight JSON test required a machine-readable package
+  description positioning check.
+- [x] GREEN: npm publish preflight now checks the PromptLane package
+  description before publish.
+- [x] VERIFY: focused preflight test, skip-npm preflight JSON, formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Public Metadata Docs Guard
 
 - [x] CHECK: `package.json` and npm publish preflight now guard public npm

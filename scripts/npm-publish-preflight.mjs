@@ -15,6 +15,12 @@ check("package version exists", Boolean(version));
 check("package name is promptlane", packageName === "promptlane", packageName);
 check("package is publishable", packageJson.private !== true);
 check(
+  "package description uses PromptLane positioning",
+  packageJson.description ===
+    "PromptLane local-first prompt improvement workspace for Codex, Claude Code, and long-running coding-agent work.",
+  packageJson.description,
+);
+check(
   "package manager is pinned",
   packageJson.packageManager === "pnpm@10.18.0",
   packageJson.packageManager,

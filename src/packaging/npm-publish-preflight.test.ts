@@ -34,6 +34,10 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "package description uses PromptLane positioning",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package license is set",
           ok: true,
         }),
