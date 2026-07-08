@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Loop Status Core Contract Error
+
+- [x] CHECK: web API `listLoops`가 `/api/v1/loops` 성공 응답의 core
+  `status.status`, `snapshot_count`, `next_action`, `next_actions` contract를 검증하지 않아
+  malformed loop status state를 web UI에 넘길 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 `snapshot_count: "1"` body를
+  `Loop list failed: Invalid response.`로 reject하도록 요구하게 해 현재 malformed core
+  status resolve 실패를 확인한다.
+- [x] GREEN: loop status core fields가 ready/empty status, numeric snapshot count, string
+  next action, string-array next actions 계약을 만족하는지 확인하고 깨진 block은 raw-free
+  loop list contract 오류로 중단하도록 고친다.
+- [x] VERIFY: focused web API test, implementation format check, typecheck, diff whitespace
+  check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Loop Memory Candidate Contract Error
 
 - [x] CHECK: web API `listLoops`가 `/api/v1/loops` 성공 응답의 optional

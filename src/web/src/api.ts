@@ -553,6 +553,20 @@ function isLoopMemoryCandidate(
   );
 }
 
+function isLoopStatusCore(value: unknown): value is LoopListResponse["status"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const status = value as LoopListResponse["status"];
+  return (
+    (status.status === "ready" || status.status === "empty") &&
+    typeof status.snapshot_count === "number" &&
+    typeof status.next_action === "string" &&
+    Array.isArray(status.next_actions) &&
+    status.next_actions.every((action) => typeof action === "string")
+  );
+}
+
 export type LoopWorktreeResponse = {
   worktree: string;
   session_id?: string;
@@ -2296,6 +2310,7 @@ export async function listLoops(): Promise<LoopListResponse> {
   if (
     typeof body.data?.status !== "object" ||
     body.data.status === null ||
+    !isLoopStatusCore(body.data.status) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
     (status?.latest_snapshot !== undefined &&
