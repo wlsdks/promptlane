@@ -181,8 +181,7 @@ function parsePromptDetailResponse(body: { data?: unknown }): PromptDetail {
     (promptDetail.analysis !== undefined &&
       !isPromptDetailAnalysis(promptDetail.analysis)) ||
     (promptDetail.judge_score !== undefined &&
-      (typeof promptDetail.judge_score !== "object" ||
-        promptDetail.judge_score === null)) ||
+      !isPromptJudgeScore(promptDetail.judge_score)) ||
     (promptDetail.loop_outcomes !== undefined &&
       !Array.isArray(promptDetail.loop_outcomes)) ||
     (promptDetail.effectiveness !== undefined &&
@@ -257,6 +256,24 @@ function isPromptQualityScore(value: unknown): value is PromptQualityScore {
         typeof item.weight === "number" &&
         typeof item.earned === "number",
     ) &&
+    score.markdown === undefined &&
+    score.prompt_body === undefined &&
+    score.raw_path === undefined
+  );
+}
+
+function isPromptJudgeScore(value: unknown): value is PromptJudgeScore {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const score = value as PromptJudgeScore & PromptSummaryRawFields;
+  return (
+    typeof score.id === "string" &&
+    typeof score.prompt_id === "string" &&
+    (score.judge_tool === "claude" || score.judge_tool === "codex") &&
+    typeof score.score === "number" &&
+    typeof score.reason === "string" &&
+    typeof score.created_at === "string" &&
     score.markdown === undefined &&
     score.prompt_body === undefined &&
     score.raw_path === undefined
