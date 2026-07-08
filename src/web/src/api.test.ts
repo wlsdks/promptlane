@@ -8757,6 +8757,37 @@ describe("web api export client", () => {
     ).rejects.toThrow("Import dry-run failed: Invalid response.");
   });
 
+  it("rejects import dry-run root responses that include raw-like fields", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            dry_run: true,
+            source_type: "manual-jsonl",
+            source_path_hash: "path_aabbccdd",
+            records_read: 1,
+            prompt_candidates: 1,
+            sensitive_prompt_count: 1,
+            parse_errors: 0,
+            skipped_records: {
+              assistant_or_tool: 0,
+              empty_prompt: 0,
+              unsupported_record: 0,
+              too_large: 0,
+            },
+            samples: [],
+            prompt_body: "secret prompt body",
+          },
+        }),
+      );
+    const { previewImportDryRun } = await import("./api.js");
+
+    await expect(
+      previewImportDryRun({ sourceType: "manual-jsonl", content: "line1\n" }),
+    ).rejects.toThrow("Import dry-run failed: Invalid response.");
+  });
+
   it("rejects import dry-run samples that include raw-like fields", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

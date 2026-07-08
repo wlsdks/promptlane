@@ -4684,6 +4684,9 @@ function parseImportDryRunResponse(body: {
       too_large?: unknown;
     };
     samples?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
   };
 }): ImportDryRunResult {
   if (
@@ -4699,6 +4702,9 @@ function parseImportDryRunResponse(body: {
     typeof body.data.skipped_records.unsupported_record !== "number" ||
     typeof body.data.skipped_records.too_large !== "number" ||
     !Array.isArray(body.data.samples) ||
+    body.data.markdown !== undefined ||
+    body.data.prompt_body !== undefined ||
+    body.data.raw_path !== undefined ||
     !body.data.samples.every(
       (sample) =>
         typeof sample === "object" &&
