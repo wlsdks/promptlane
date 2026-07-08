@@ -31,6 +31,7 @@ describe("doctorClaudeCode", () => {
       checkServer: async () => false,
     });
 
+    expect(result.status).toBe("needs_attention");
     expect(result.server.ok).toBe(false);
     expect(result.token.ok).toBe(false);
     expect(result.settings.hookInstalled).toBe(false);
@@ -123,6 +124,7 @@ describe("doctorClaudeCode", () => {
 
     const output = formatDoctorResult("claude-code", result);
 
+    expect(result.status).toBe("ready");
     expect(output).toContain("Status: ready");
     expect(output).toContain(
       "Send one Codex or Claude Code prompt, then run promptlane coach.",
@@ -334,6 +336,7 @@ describe("doctorCodex", () => {
       checkServer: async () => true,
     });
 
+    expect(result.status).toBe("ready");
     expect(result.settings.ok).toBe(true);
     expect(result.settings.hookInstalled).toBe(true);
     expect(result.settings.codexHooksEnabled).toBe(true);
@@ -359,6 +362,7 @@ describe("doctorCodex", () => {
     });
 
     expect(result.server.ok).toBe(true);
+    expect(result.status).toBe("needs_attention");
     expect(result.token.ok).toBe(true);
     expect(result.ingest.ok).toBe(true);
     expect(result.settings.ok).toBe(true);

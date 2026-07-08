@@ -57,6 +57,7 @@ export type DoctorCodexOptions = {
 };
 
 export type DoctorClaudeCodeResult = {
+  status: DoctorStatus;
   server: { ok: boolean };
   token: { ok: boolean };
   ingest: { ok: boolean };
@@ -71,6 +72,7 @@ export type DoctorClaudeCodeResult = {
 };
 
 export type DoctorCodexResult = {
+  status: DoctorStatus;
   server: { ok: boolean };
   token: { ok: boolean };
   ingest: { ok: boolean };
@@ -89,8 +91,14 @@ export type DoctorCodexResult = {
 };
 
 type DoctorResultWithoutNextActions =
-  | Omit<DoctorClaudeCodeResult, "next_actions">
-  | Omit<DoctorCodexResult, "next_actions">;
+  | Omit<DoctorClaudeCodeResult, "next_actions" | "status">
+  | Omit<DoctorCodexResult, "next_actions" | "status">;
+
+type DoctorStatus = "ready" | "needs_attention";
+type DoctorReadinessInput = Pick<
+  DoctorClaudeCodeResult | DoctorCodexResult,
+  "server" | "token" | "ingest" | "settings" | "mcp"
+>;
 
 export function registerDoctorCommand(program: Command): void {
   program
@@ -170,15 +178,10 @@ export function formatDoctorResult(
     tool === "codex"
       ? formatCodexSettings(result as DoctorCodexResult)
       : formatClaudeSettings(result as DoctorClaudeCodeResult);
-  const ok =
-    result.server.ok &&
-    result.token.ok &&
-    result.ingest.ok &&
-    result.settings.ok &&
-    result.mcp.registered;
+  const status = doctorStatus(result);
   const lines = [
     `promptlane doctor: ${tool}`,
-    `Status: ${ok ? "ready" : "needs attention"}`,
+    `Status: ${status === "ready" ? "ready" : "needs attention"}`,
     "",
     "Checks:",
     `- Local server: ${result.server.ok ? "ok" : "not reachable"}`,
@@ -223,6 +226,16 @@ function formatCodexSettings(result: DoctorCodexResult): string {
     ? `; duplicate hooks found (${result.settings.hookCount} handlers)`
     : "";
   return `- Codex hook: ${result.settings.hookInstalled ? `installed${source}` : "missing"}; hooks ${result.settings.codexHooksEnabled ? "enabled" : "disabled"}${duplicate}`;
+}
+
+function doctorStatus(result: DoctorReadinessInput): DoctorStatus {
+  return result.server.ok &&
+    result.token.ok &&
+    result.ingest.ok &&
+    result.settings.ok &&
+    result.mcp.registered
+    ? "ready"
+    : "needs_attention";
 }
 
 function doctorNextSteps(
@@ -329,6 +342,7 @@ export async function doctorClaudeCode(
   };
   return {
     ...result,
+    status: doctorStatus(result),
     next_actions: doctorNextSteps("claude-code", result, options),
   };
 }
@@ -357,6 +371,7 @@ export async function doctorCodex(
   };
   return {
     ...result,
+    status: doctorStatus(result),
     next_actions: doctorNextSteps("codex", result, options),
   };
 }

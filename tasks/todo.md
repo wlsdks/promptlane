@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Doctor JSON Status
+
+- [x] CHECK: human doctor output printed `Status: ready/needs attention`, but
+  JSON automation had to recompute readiness from nested booleans.
+- [x] RED: focused doctor tests require top-level `status` to be `ready` or
+  `needs_attention` for Claude Code and Codex results.
+- [x] GREEN: doctor result objects now expose the same fail-closed status used
+  by the human formatter.
+- [x] VERIFY: focused doctor tests, typecheck, server build/runtime JSON smoke,
+  formatting, and diff hygiene.
+
 ## 2026-07-09 PromptLane Harness Slash Namespace Contract
 
 - [x] CHECK: `docs/AGENT-HARNESS.md` said `/promptlane:*` remains supported
