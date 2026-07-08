@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane NPM Publish Preflight
+
+- [x] CHECK: 1.0.0 tag 이후 npm publish는 수동 runbook에 의존해 npm auth,
+  이미 게시된 버전, clean/tag 상태를 publish 직전에 fail-closed로 확인하기 어렵다.
+- [x] RED: packaging guard가 `scripts/npm-publish-preflight.mjs`,
+  `npm-publish:preflight` package script, NPM publishing runbook의
+  `corepack pnpm npm-publish:preflight` 문구를 요구하게 해 현재 누락 실패를 확인한다.
+- [x] GREEN: publish를 실행하지 않는 npm publish preflight script를 추가하고
+  package files, runbook, release checklist와 정렬한다.
+- [x] VERIFY: focused packaging guard, preflight offline/json smoke,
+  implementation format check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Release Smoke Quality Evidence CLI Gate
 
 - [x] CHECK: release gate는 product CLI `quality-evidence --require-complete`를 요구하지만

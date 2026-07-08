@@ -31,6 +31,7 @@ Use this checklist before publishing a stable public release or npm package.
 - [ ] `corepack pnpm smoke:release`
 - [ ] `corepack pnpm evidence:quality -- --require-complete`
 - [ ] `corepack pnpm promptlane quality-evidence --require-complete`
+- [ ] `corepack pnpm npm-publish:preflight`
 - [ ] `git diff --check`
 - [ ] After every gate above passes, create and push annotated tag `v1.0.0`.
 
@@ -77,6 +78,7 @@ Confirm `corepack pnpm pack:dry-run` includes:
 - [ ] `scripts/mcp-native-dialog-approved.mjs`
 - [ ] `scripts/mcp-native-dialog-preflight.mjs`
 - [ ] `scripts/quality-95-evidence.mjs`
+- [ ] `scripts/npm-publish-preflight.mjs`
 - [ ] `scripts/pack-dry-run.mjs`
 - [ ] `scripts/quality-gate.mjs`
 - [ ] `scripts/release-smoke.mjs`

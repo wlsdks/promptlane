@@ -29,6 +29,20 @@ gate passes:
 npm publish --tag latest
 ```
 
+Before publishing, run the local preflight. It checks the local version
+surfaces, clean/tag state, npm auth, and whether the current package version is
+already published. It does not publish:
+
+```sh
+corepack pnpm npm-publish:preflight
+```
+
+For offline or test-only inspection, skip npm registry/auth checks:
+
+```sh
+corepack pnpm npm-publish:preflight -- --skip-npm
+```
+
 Recommended version:
 
 ```json
@@ -66,6 +80,7 @@ corepack pnpm benchmark -- --json
 corepack pnpm e2e:browser
 corepack pnpm smoke:release
 corepack pnpm pack:dry-run
+corepack pnpm npm-publish:preflight
 git diff --check
 ```
 
@@ -105,6 +120,7 @@ HOME="$TMP_HOME" npm install -g --prefix "$TMP_PREFIX" "./$TARBALL"
 - [ ] pre-publish privacy audit (`docs/PRE_PUBLISH_PRIVACY_AUDIT.md`) passes
 - [ ] npm account is authenticated
 - [ ] 2FA/OTP requirement is available if npm asks for it
+- [ ] `corepack pnpm npm-publish:preflight` passes
 - [ ] publish uses `--tag latest` for the first stable release
 - [ ] annotated git tag `v1.0.0` is created only after the local release gate passes
 

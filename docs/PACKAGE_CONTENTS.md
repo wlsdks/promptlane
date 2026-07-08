@@ -69,8 +69,8 @@ The npm package intentionally includes:
   `scripts/mcp-elicitation-smoke.mjs`,
   `scripts/mcp-native-dialog-approved.mjs`,
   `scripts/mcp-native-dialog-preflight.mjs`,
-  `scripts/quality-95-evidence.mjs`, `scripts/pack-dry-run.mjs`,
-  `scripts/quality-gate.mjs`, `scripts/release-smoke.mjs`,
+  `scripts/quality-95-evidence.mjs`, `scripts/npm-publish-preflight.mjs`,
+  `scripts/pack-dry-run.mjs`, `scripts/quality-gate.mjs`, `scripts/release-smoke.mjs`,
   and `scripts/ui-patrol.mjs`
 
 ## Excluded

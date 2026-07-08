@@ -82,6 +82,7 @@ describe("plugin packaging files", () => {
     const packageJson = readJson<{
       bin: Record<string, string>;
       files: string[];
+      scripts: Record<string, string>;
     }>("package.json");
     const packageContents = readFileSync(
       join(process.cwd(), "docs/PACKAGE_CONTENTS.md"),
@@ -94,6 +95,7 @@ describe("plugin packaging files", () => {
 
     for (const scriptPath of [
       "scripts/pack-dry-run.mjs",
+      "scripts/npm-publish-preflight.mjs",
       "scripts/mcp-native-dialog-approved.mjs",
       "scripts/ui-patrol.mjs",
       "scripts/quality-95-evidence.mjs",
@@ -101,6 +103,13 @@ describe("plugin packaging files", () => {
       expect(packageJson.files).toContain(scriptPath);
       expect(packageContents).toContain(scriptPath);
     }
+
+    expect(packageJson.scripts["npm-publish:preflight"]).toBe(
+      "node scripts/npm-publish-preflight.mjs",
+    );
+    expect(publishing).toContain("corepack pnpm npm-publish:preflight");
+    expect(publishing).toContain("does not publish");
+    expect(publishing).toContain("--skip-npm");
 
     expect(packageJson.bin.promptlane).toBe("./dist/cli/index.js");
     expect(publishing).toContain("all three bin entries exist after build");
