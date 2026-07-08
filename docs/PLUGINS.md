@@ -195,7 +195,7 @@ uses the exact CLI path from the current installation.
 promptlane mcp
 ```
 
-This server exposes twenty model-controlled tools:
+This server exposes 20 model-controlled tools:
 
 - `get_promptlane_status`
 - `coach_prompt`
@@ -204,17 +204,17 @@ This server exposes twenty model-controlled tools:
 - `apply_clarifications`
 - `ask_clarifying_questions`
 - `record_clarifications`
-- `get_promptlane_status`
+- `get_promptlane_loop_status`
 - `prepare_loop_brief`
 - `record_loop_outcome`
 - `propose_loop_memory_candidate`
 - `record_loop_memory`
 - `propose_instruction_patch`
 - `apply_instruction_patch`
-- `prepare_agent_rewrite`
-- `record_agent_rewrite`
 - `score_prompt_archive`
 - `review_project_instructions`
+- `prepare_agent_rewrite`
+- `record_agent_rewrite`
 - `prepare_agent_judge_batch`
 - `record_agent_judgments`
 
@@ -223,12 +223,12 @@ status, latest prompt score, approval-required rewrite, recent habit review,
 project instruction review, and next request guidance in one read-only call.
 `get_promptlane_status` checks local archive readiness and returns safe
 counts, latest prompt metadata, available tool names, and next actions.
-`get_promptlane_status` checks whether local loop snapshots exist and returns
-safe latest-loop metadata. It also reports safe compact-boundary metadata when
-a compact happened after the latest snapshot. `prepare_loop_brief` returns a
-copy-ready continuation prompt from the latest PromptLane snapshot, or from the
-newest snapshot matching optional `worktree`, `session_id`, and `branch`
-filters, without prompt bodies, raw paths, or auto-submission; when the
+`get_promptlane_loop_status` checks whether local loop snapshots exist and
+returns safe latest-loop metadata. It also reports safe compact-boundary
+metadata when a compact happened after the latest snapshot. `prepare_loop_brief`
+returns a copy-ready continuation prompt from the latest PromptLane snapshot, or
+from the newest snapshot matching optional `worktree`, `session_id`, and
+`branch` filters, without prompt bodies, raw paths, or auto-submission; when the
 selected snapshot is pre-compact, it asks the user to refresh the snapshot
 instead of replaying compact summaries or custom compact instructions.
 `record_loop_outcome` writes only user-approved status, summary, and evidence

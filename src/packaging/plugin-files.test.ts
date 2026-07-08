@@ -3,6 +3,8 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse as parseYaml } from "yaml";
 
+import { listPromptLaneMcpToolNames } from "../mcp/score-tool-definitions.js";
+
 function readJson<T>(path: string): T {
   return JSON.parse(readFileSync(join(process.cwd(), path), "utf8")) as T;
 }
@@ -14,6 +16,13 @@ function sectionBetween(content: string, heading: string): string {
   }
   const nextHeading = content.indexOf("\n## ", start + heading.length);
   return content.slice(start, nextHeading === -1 ? undefined : nextHeading);
+}
+
+function markdownListItems(section: string): string[] {
+  return section
+    .split("\n")
+    .map((line) => line.match(/^- `([^`]+)`$/)?.[1])
+    .filter((item): item is string => Boolean(item));
 }
 
 describe("plugin packaging files", () => {
@@ -132,6 +141,24 @@ describe("plugin packaging files", () => {
     expect(publishing).toContain("chmods all three");
     expect(publishing).not.toContain("all four bin entries");
     expect(publishing).not.toContain("chmods all four");
+  });
+
+  it("keeps PLUGINS MCP tool list aligned with shipped tool definitions", () => {
+    const plugins = readFileSync(
+      join(process.cwd(), "docs/PLUGINS.md"),
+      "utf8",
+    );
+    const mcpSection = sectionBetween(plugins, "## MCP Prompt Scoring");
+    const documentedTools = markdownListItems(mcpSection).filter((item) =>
+      item.includes("_"),
+    );
+    const actualTools = listPromptLaneMcpToolNames();
+
+    expect(new Set(documentedTools).size).toBe(documentedTools.length);
+    expect(documentedTools).toEqual(actualTools);
+    expect(mcpSection).toContain(
+      `This server exposes ${actualTools.length} model-controlled tools:`,
+    );
   });
 
   it("keeps the release checklist aligned with package lifecycle and shipped scripts", () => {
