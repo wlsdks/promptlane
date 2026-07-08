@@ -2330,8 +2330,12 @@ describe("plugin packaging files", () => {
 
     expect(packageJson.files).toContain("scripts/agent-setup-smoke.mjs");
     expect(packageJson.scripts["smoke:agent-setup"]).toBe(
-      "pnpm build && node scripts/agent-setup-smoke.mjs",
+      "corepack pnpm build && node scripts/agent-setup-smoke.mjs",
     );
+    expect(smoke).toContain(
+      "Run `corepack pnpm build` before agent setup smoke.",
+    );
+    expect(smoke).not.toContain("Run `pnpm build` before agent setup smoke.");
     expect(smoke).toContain("setup --profile coach --register-mcp");
     expect(smoke).toContain("doctor claude-code");
     expect(smoke).toContain("doctor codex");

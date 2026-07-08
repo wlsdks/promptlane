@@ -36,7 +36,10 @@ const env = {
 let serverProcess;
 
 try {
-  assertFileExists(cliPath, "Run `pnpm build` before agent setup smoke.");
+  assertFileExists(
+    cliPath,
+    "Run `corepack pnpm build` before agent setup smoke.",
+  );
   mkdirSync(homeDir, { recursive: true });
   mkdirSync(binDir, { recursive: true });
   writeExecutable(join(binDir, "claude"));

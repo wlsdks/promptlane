@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Agent Setup Smoke Corepack Build
+
+- [x] CHECK: `smoke:agent-setup` still invoked bare `pnpm build`, and the
+  smoke script missing-build recovery hint also said `pnpm build`, while release
+  gates and docs now use packageManager-pinned `corepack pnpm`.
+- [x] RED: packaging guard now requires `smoke:agent-setup` and the smoke
+  script prerequisite message to use `corepack pnpm build`.
+- [x] GREEN: `smoke:agent-setup` now runs `corepack pnpm build` before the
+  isolated setup/doctor smoke, and the missing-build hint matches.
+- [x] VERIFY: focused setup smoke packaging guard, packaging tests, typecheck,
+  touched-file formatting, quality lint, and diff whitespace check.
+
 ## 2026-07-08 PromptLane Architecture Release Gate Corepack Alignment
 
 - [x] CHECK: `docs/ARCHITECTURE.md` still documented the normal release gate

@@ -107,7 +107,7 @@
     "prepare": "corepack pnpm build",
     "promptlane": "node dist/cli/index.js",
     "setup": "pnpm promptlane setup --profile coach --register-mcp --open-web",
-    "smoke:agent-setup": "pnpm build && node scripts/agent-setup-smoke.mjs",
+    "smoke:agent-setup": "corepack pnpm build && node scripts/agent-setup-smoke.mjs",
     "smoke:hooks": "pnpm build && node scripts/hook-binary-smoke.mjs",
     "smoke:mcp-coach-loop": "pnpm build && node scripts/mcp-coach-loop-smoke.mjs",
     "smoke:mcp-elicitation": "pnpm build && node scripts/mcp-elicitation-smoke.mjs",
