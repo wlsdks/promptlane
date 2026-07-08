@@ -641,6 +641,30 @@ function isContinuationSafetyGroup(
   );
 }
 
+function isContinuationSafetyOrderingNote(
+  value: unknown,
+): value is NonNullable<
+  LoopWorktreeResponse["continuation_safety_ordering_note"]
+> {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const note = value as NonNullable<
+    LoopWorktreeResponse["continuation_safety_ordering_note"]
+  >;
+  return (
+    note.label === "Safety guidance order" &&
+    note.first ===
+      "review the continuation safety guidance before copying or pasting briefs" &&
+    note.then ===
+      "follow copy, paste, review, collect, privacy, and merge gating notes in order" &&
+    note.reason ===
+      "keeps continuation handoff reviewable before any manual agent submission" &&
+    note.writes_files === false &&
+    note.external_calls === false
+  );
+}
+
 function isLoopActivityWorktree(
   value: unknown,
 ): value is LoopListResponse["status"]["activity"]["worktrees"][number] {
@@ -2587,6 +2611,7 @@ export async function getLoopWorktree(
       command_filters?: unknown;
       copy_side_effects?: unknown;
       continuation_safety_group?: unknown;
+      continuation_safety_ordering_note?: unknown;
       items?: unknown;
       privacy?: unknown;
     };
@@ -2606,6 +2631,10 @@ export async function getLoopWorktree(
       !isCopySideEffects(body.data.copy_side_effects)) ||
     (body.data.continuation_safety_group !== undefined &&
       !isContinuationSafetyGroup(body.data.continuation_safety_group)) ||
+    (body.data.continuation_safety_ordering_note !== undefined &&
+      !isContinuationSafetyOrderingNote(
+        body.data.continuation_safety_ordering_note,
+      )) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
     !isLoopListPrivacy(body.data.privacy)
