@@ -5876,7 +5876,11 @@ async function failApi(response: Response, label: string): Promise<never> {
       detail ||= issueDetail;
     }
   } catch {
-    // body may not be JSON, that is fine.
+    try {
+      detail = apiErrorText(await response.text());
+    } catch {
+      // body may not be readable, that is fine.
+    }
   }
   const suffix = detail ? `: ${detail}` : "";
   throw new Error(`${label} (${response.status})${suffix}`);
