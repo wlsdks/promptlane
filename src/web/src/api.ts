@@ -4576,6 +4576,40 @@ function parseProjectInstructionReviewResponse(body: {
         (file as { raw_path?: unknown }).raw_path === undefined,
     ) ||
     !Array.isArray(body.data.checklist) ||
+    !body.data.checklist.every(
+      (item) =>
+        typeof item === "object" &&
+        item !== null &&
+        ((item as ProjectInstructionReview["checklist"][number]).key ===
+          "project_context" ||
+          (item as ProjectInstructionReview["checklist"][number]).key ===
+            "agent_workflow" ||
+          (item as ProjectInstructionReview["checklist"][number]).key ===
+            "verification" ||
+          (item as ProjectInstructionReview["checklist"][number]).key ===
+            "privacy_safety" ||
+          (item as ProjectInstructionReview["checklist"][number]).key ===
+            "collaboration_output") &&
+        typeof (item as ProjectInstructionReview["checklist"][number]).label ===
+          "string" &&
+        ((item as ProjectInstructionReview["checklist"][number]).status ===
+          "good" ||
+          (item as ProjectInstructionReview["checklist"][number]).status ===
+            "weak" ||
+          (item as ProjectInstructionReview["checklist"][number]).status ===
+            "missing") &&
+        typeof (item as ProjectInstructionReview["checklist"][number])
+          .weight === "number" &&
+        typeof (item as ProjectInstructionReview["checklist"][number])
+          .earned === "number" &&
+        ((item as ProjectInstructionReview["checklist"][number]).suggestion ===
+          undefined ||
+          typeof (item as ProjectInstructionReview["checklist"][number])
+            .suggestion === "string") &&
+        (item as { markdown?: unknown }).markdown === undefined &&
+        (item as { prompt_body?: unknown }).prompt_body === undefined &&
+        (item as { raw_path?: unknown }).raw_path === undefined,
+    ) ||
     !Array.isArray(body.data.suggestions) ||
     body.data.markdown !== undefined ||
     body.data.prompt_body !== undefined ||
