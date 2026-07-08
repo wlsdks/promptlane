@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Release Script Preflight Guard
+
+- [x] CHECK: npm publish preflight checked its own script registration, but did
+  not fail closed if release-critical package scripts such as `pack:dry-run`,
+  `smoke:release`, `smoke:package-install`, `evidence:quality`, or
+  `promptlane` drifted before publish.
+- [x] RED: focused preflight JSON test required machine-readable registration
+  checks for the release script wrappers used by the publish runbook.
+- [x] GREEN: npm publish preflight now checks those package scripts before
+  publish.
+- [x] VERIFY: focused preflight tests, skip-npm preflight JSON, code formatting,
+  typecheck, and diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Bin Target Preflight Guard
 
 - [x] CHECK: npm publish preflight checked bin metadata registration, but did

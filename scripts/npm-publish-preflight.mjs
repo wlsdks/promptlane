@@ -63,6 +63,39 @@ check(
     "node scripts/npm-publish-preflight.mjs",
   packageJson.scripts?.["npm-publish:preflight"],
 );
+for (const [label, scriptName, expectedCommand] of [
+  [
+    "pack dry-run package script is registered",
+    "pack:dry-run",
+    "node scripts/pack-dry-run.mjs",
+  ],
+  [
+    "release smoke package script is registered",
+    "smoke:release",
+    "corepack pnpm build && node scripts/release-smoke.mjs",
+  ],
+  [
+    "package install smoke package script is registered",
+    "smoke:package-install",
+    "node scripts/package-install-smoke.mjs",
+  ],
+  [
+    "quality evidence package script is registered",
+    "evidence:quality",
+    "node scripts/quality-95-evidence.mjs",
+  ],
+  [
+    "installed CLI package script is registered",
+    "promptlane",
+    "node dist/cli/index.js",
+  ],
+]) {
+  check(
+    label,
+    packageJson.scripts?.[scriptName] === expectedCommand,
+    packageJson.scripts?.[scriptName],
+  );
+}
 for (const filePath of [
   "dist",
   ".claude-plugin",

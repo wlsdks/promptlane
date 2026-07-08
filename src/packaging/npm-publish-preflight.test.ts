@@ -78,6 +78,30 @@ describe("npm publish preflight", () => {
           ok: true,
         }),
         expect.objectContaining({
+          label: "publish preflight package script is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "pack dry-run package script is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "release smoke package script is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "package install smoke package script is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "quality evidence package script is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
+          label: "installed CLI package script is registered",
+          ok: true,
+        }),
+        expect.objectContaining({
           label: "package files include dist",
           ok: true,
         }),
