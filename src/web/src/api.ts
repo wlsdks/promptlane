@@ -5895,6 +5895,7 @@ function apiErrorIssueText(value: unknown): string {
         instancePath?: unknown;
         message?: unknown;
         param?: unknown;
+        params?: unknown;
         path?: unknown;
         property?: unknown;
       };
@@ -5904,7 +5905,8 @@ function apiErrorIssueText(value: unknown): string {
         apiErrorIssuePathText(record.path) ||
         apiErrorIssuePathText(record.instancePath) ||
         apiErrorIssuePathText(record.property) ||
-        apiErrorIssuePathText(record.param);
+        apiErrorIssuePathText(record.param) ||
+        apiErrorIssueParamsText(record.params);
       const rawFieldKey = rawDetailErrorFieldKey(field);
       const message = rawFieldKey
         ? `[REDACTED:${rawFieldKey.toLowerCase()}]`
@@ -5949,6 +5951,20 @@ function apiErrorIssuePathText(value: unknown): string {
     )
     .filter(Boolean);
   return apiErrorText(segments.join("."));
+}
+
+function apiErrorIssueParamsText(value: unknown): string {
+  if (!value || typeof value !== "object") {
+    return "";
+  }
+  const record = value as {
+    missingProperty?: unknown;
+    propertyName?: unknown;
+  };
+  return (
+    apiErrorIssuePathText(record.missingProperty) ||
+    apiErrorIssuePathText(record.propertyName)
+  );
 }
 
 const RAW_DETAIL_ERROR_KEY_PATTERN =
