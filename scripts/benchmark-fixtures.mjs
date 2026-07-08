@@ -114,6 +114,7 @@ function parseRealFixtures(parsed) {
     assertRedactedText(normalized.label, `real fixture ${index} label`);
     assertRedactedText(normalized.query, `real fixture ${index} query`);
     assertRedactedText(normalized.prompt, `real fixture ${index} prompt`);
+    assertSafeLabel(normalized.label, `real fixture ${index} label`);
     if (seenLabels.has(normalized.label)) {
       throw new Error(`real fixture label must be unique: ${normalized.label}`);
     }
@@ -146,6 +147,14 @@ function readRequiredString(fixture, field, index) {
     );
   }
   return value;
+}
+
+function assertSafeLabel(value, label) {
+  if (!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(value)) {
+    throw new Error(
+      `${label} must be a safe label: lowercase letters, numbers, underscores, or hyphens.`,
+    );
+  }
 }
 
 function assertRedactedText(value, label) {

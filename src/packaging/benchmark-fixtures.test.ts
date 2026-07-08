@@ -209,6 +209,44 @@ describe("benchmark fixture loading", () => {
     ).toThrow("real fixture label must be unique: real_release_review");
   });
 
+  it("rejects real fixture labels that are not safe identifiers", async () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
+    const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
+    mkdirSync(fixtureDir, { recursive: true });
+    writeFileSync(
+      join(fixtureDir, "real.json"),
+      `${JSON.stringify(
+        {
+          fixtures: [
+            {
+              label: "Release Review",
+              adapter: "codex",
+              query: "release readiness",
+              prompt:
+                "Review the redacted release readiness notes and return the next verification step.",
+            },
+          ],
+          coach_cases: [
+            "Improve this redacted prompt with verification criteria.",
+          ],
+        },
+        null,
+        2,
+      )}\n`,
+    );
+
+    const { loadBenchmarkFixtures } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+
+    expect(() =>
+      loadBenchmarkFixtures({
+        fixtureSet: "real",
+        repoRoot: tempRoot,
+      }),
+    ).toThrow("real fixture 0 label must be a safe label");
+  });
+
   it("rejects real fixtures with macOS volume and Windows user paths", async () => {
     tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
     const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");

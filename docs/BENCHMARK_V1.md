@@ -47,7 +47,9 @@ The JSON report includes `fixture_set` and `soft_signal` fields so consumers can
 }
 ```
 
-Each fixture needs a unique `label`, plus `adapter`, `query`, and `prompt`.
+Each fixture needs a unique safe `label`, plus `adapter`, `query`, and
+`prompt`. Labels must start with a lowercase letter or digit and then use only
+lowercase letters, digits, `_`, or `-` with a maximum length of 64 characters.
 `adapter` must be `codex` or `claude-code`. Real fixtures are consent-bearing
 soft signals only:
 redact secrets, tokens, and absolute local paths from fixture labels, queries,

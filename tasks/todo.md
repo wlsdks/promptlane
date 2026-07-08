@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Benchmark Safe Real Fixture Labels
+
+- [x] CHECK: real benchmark labels are unique and raw-free, but labels also
+  feed benchmark session ids and report keys, so spaces/case/punctuation can
+  make fixture operation less stable.
+- [x] RED: focused benchmark fixture loader test requires non-safe labels such
+  as `Release Review` to be rejected.
+- [x] GREEN: real fixture labels now must match a lowercase safe-label format,
+  and the benchmark spec documents the allowed shape.
+- [x] VERIFY: focused fixture/package tests, real no-fixtures soft exit,
+  formatting, typecheck, preflight JSON, and diff hygiene.
+
 ## 2026-07-09 PromptLane Benchmark Unique Real Fixture Labels
 
 - [x] CHECK: real benchmark fixture labels feed `fixtureIds` and retrieval
