@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Server Problem Quoted Detail Redaction
+
+- [x] CHECK: server problem sanitizer가 raw-detail key phrase를 redaction하지만
+  quoted 값 안에 공백이 있으면 첫 단어까지만 치환해 prompt/session summary fragment를
+  problem response에 남길 수 있다.
+- [x] RED: `src/server/errors.test.ts`가 `prompt_body="..."`와
+  `compactSummary:'...'` quoted values 전체가 redaction되고 내부 문구가 남지 않도록
+  요구하게 해 현재 partial redaction 실패를 확인한다.
+- [x] GREEN: raw-detail key sanitizer regex가 double/single quoted value를 우선 통째로
+  매칭한 뒤 unquoted fallback을 처리해 quoted prompt/session detail을 raw-free로 만든다.
+- [x] VERIFY: focused server problem/validation tests, implementation format
+  check, typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Server Problem Title Redaction
 
 - [x] CHECK: server `problem()` factory가 `detail`, `instance`, `errors[]`는
