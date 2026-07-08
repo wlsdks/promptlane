@@ -4557,6 +4557,24 @@ function parseProjectInstructionReviewResponse(body: {
     typeof body.data.score.band !== "string" ||
     typeof body.data.files_found !== "number" ||
     !Array.isArray(body.data.files) ||
+    !body.data.files.every(
+      (file) =>
+        typeof file === "object" &&
+        file !== null &&
+        typeof (file as ProjectInstructionReview["files"][number]).file_name ===
+          "string" &&
+        typeof (file as ProjectInstructionReview["files"][number]).bytes ===
+          "number" &&
+        typeof (file as ProjectInstructionReview["files"][number])
+          .modified_at === "string" &&
+        typeof (file as ProjectInstructionReview["files"][number])
+          .content_hash === "string" &&
+        typeof (file as ProjectInstructionReview["files"][number]).truncated ===
+          "boolean" &&
+        (file as { markdown?: unknown }).markdown === undefined &&
+        (file as { prompt_body?: unknown }).prompt_body === undefined &&
+        (file as { raw_path?: unknown }).raw_path === undefined,
+    ) ||
     !Array.isArray(body.data.checklist) ||
     !Array.isArray(body.data.suggestions) ||
     body.data.markdown !== undefined ||

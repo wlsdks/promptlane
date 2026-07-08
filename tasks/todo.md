@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-08 PromptLane Web Project Instruction File Summary Raw Contract Error
+
+- [x] CHECK: `parseProjectInstructionReviewResponse`가 `files[]`를 배열인지까지만
+  검증하고 file summary shape나 raw-like `prompt_body`/`raw_path`/`markdown` extra
+  field를 차단하지 않아 instruction file raw path data가 UI state로 넘어갈 수 있다.
+- [x] RED: `src/web/src/api.test.ts`가 project instruction analysis
+  `files[].raw_path` body를 `Project instruction analysis failed: Invalid response.`로
+  reject하도록 요구하게 해 현재 unsafe file summary resolve 실패를 확인한다.
+- [x] GREEN: project instruction file parser가 file_name/bytes/modified_at/
+  content_hash/truncated 계약을 확인하고 raw `prompt_body`/`raw_path`/`markdown`
+  fields를 차단한다.
+- [x] VERIFY: focused web API project instruction test, implementation format check,
+  typecheck, diff whitespace check를 실행한다.
+
 ## 2026-07-08 PromptLane Web Project Instruction Review Raw Contract Error
 
 - [x] CHECK: `parseProjectInstructionReviewResponse`가 privacy flags를 확인하면서도
