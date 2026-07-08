@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane NPM Runbook Node Range Guard
+
+- [x] CHECK: `package.json#engines.node` supports `>=22.12 <25` and current
+  release verification is running on Node 24, but the npm publishing runbook
+  still told operators to run only on Node 22.
+- [x] RED: focused packaging guard requires the npm publishing runbook to cite
+  the authoritative `package.json#engines.node` range and reject the stale
+  `Run on Node 22:` wording.
+- [x] GREEN: npm publishing runbook now tells operators to run on any Node.js
+  version satisfying `>=22.12 <25`.
+- [x] VERIFY: focused packaging/preflight tests, formatting, typecheck, and
+  diff hygiene.
+
 ## 2026-07-09 PromptLane NPM Auth Detail Preflight Guard
 
 - [x] CHECK: final npm publish preflight can be blocked only by npm auth, but

@@ -308,6 +308,10 @@ describe("plugin packaging files", () => {
     expect(preflightScript).toContain(
       'packageJson.engines?.node === ">=22.12 <25"',
     );
+    expect(publishing).toContain(
+      "Run on a Node.js version that satisfies `package.json#engines.node` (`>=22.12 <25`)",
+    );
+    expect(publishing).not.toContain("Run on Node 22:");
     expect(preflightScript).toContain('"README.md"');
     expect(preflightScript).toContain('"LICENSE"');
     expect(publishing).toContain("corepack pnpm npm-publish:preflight");
