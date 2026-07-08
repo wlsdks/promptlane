@@ -3644,6 +3644,30 @@ function isQualityDashboardPrivacy(
   );
 }
 
+function isQualityDashboardScore(
+  value: unknown,
+): value is QualityDashboard["quality_score"] {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const score = value as QualityDashboard["quality_score"] & {
+    cwd?: unknown;
+    markdown?: unknown;
+    prompt_body?: unknown;
+    raw_path?: unknown;
+  };
+  return (
+    typeof score.average === "number" &&
+    score.max === 100 &&
+    typeof score.band === "string" &&
+    typeof score.scored_prompts === "number" &&
+    score.cwd === undefined &&
+    score.markdown === undefined &&
+    score.prompt_body === undefined &&
+    score.raw_path === undefined
+  );
+}
+
 function isArchiveScoreSummary(
   value: unknown,
 ): value is ArchiveScoreReport["archive_score"] {
@@ -4334,8 +4358,7 @@ export async function getQualityDashboard(
   };
   if (
     typeof body.data?.total_prompts !== "number" ||
-    typeof body.data.quality_score !== "object" ||
-    body.data.quality_score === null ||
+    !isQualityDashboardScore(body.data.quality_score) ||
     !Array.isArray(body.data.missing_items) ||
     !isQualityDashboardPrivacy(body.data.privacy)
   ) {
