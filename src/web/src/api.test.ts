@@ -9059,6 +9059,27 @@ describe("web api export client", () => {
     );
   });
 
+  it("reports unsafe prompt copy event responses without returning raw usefulness fields", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            usefulness: {
+              copied_count: 1,
+              bookmarked: false,
+              raw_path: "/Users/jinan/private-project",
+            },
+          },
+        }),
+      );
+    const { recordPromptCopied } = await import("./api.js");
+
+    await expect(recordPromptCopied("prmt_x")).rejects.toThrow(
+      "Prompt event failed: Invalid response.",
+    );
+  });
+
   it("reports malformed bookmark responses without returning incomplete reuse state", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

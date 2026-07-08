@@ -99,15 +99,19 @@ export type PromptListResponse = {
 };
 
 function isPromptUsefulness(value: unknown): value is PromptUsefulness {
+  const usefulness = value as PromptUsefulness & PromptSummaryRawFields;
   return (
     typeof value === "object" &&
     value !== null &&
-    typeof (value as PromptUsefulness).copied_count === "number" &&
-    typeof (value as PromptUsefulness).bookmarked === "boolean" &&
-    ((value as PromptUsefulness).last_copied_at === undefined ||
-      typeof (value as PromptUsefulness).last_copied_at === "string") &&
-    ((value as PromptUsefulness).bookmarked_at === undefined ||
-      typeof (value as PromptUsefulness).bookmarked_at === "string")
+    typeof usefulness.copied_count === "number" &&
+    typeof usefulness.bookmarked === "boolean" &&
+    (usefulness.last_copied_at === undefined ||
+      typeof usefulness.last_copied_at === "string") &&
+    (usefulness.bookmarked_at === undefined ||
+      typeof usefulness.bookmarked_at === "string") &&
+    usefulness.markdown === undefined &&
+    usefulness.prompt_body === undefined &&
+    usefulness.raw_path === undefined
   );
 }
 
