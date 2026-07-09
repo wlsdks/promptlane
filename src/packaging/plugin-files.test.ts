@@ -716,11 +716,13 @@ describe("plugin packaging files", () => {
     for (const content of [benchmarkFixtures, benchmarkSpec]) {
       expect(content).toContain("docs/benchmark-fixtures/real.json");
       expect(content).toContain("consent_note");
+      expect(content).toContain("template_only");
     }
     expect(benchmarkSpec).toContain(
       "docs/benchmark-fixtures/real.example.json",
     );
     expect(realFixtureExample).toContain("consent_note");
+    expect(realFixtureExample).toContain('"template_only": true');
     expect(realFixtureExample).toContain("real_release_review");
     expect(benchmark).toContain("loadBenchmarkFixtures");
     expect(benchmarkRunner).toContain("corepack");
@@ -733,9 +735,7 @@ describe("plugin packaging files", () => {
     expect(benchmarkSpec).toContain("adapter");
     expect(benchmarkSpec).toContain("label");
     expect(benchmarkSpec).toContain("query");
-    expect(benchmarkSpec).toContain(
-      "Operator-confirmed redacted prompts approved for local benchmark use",
-    );
+    expect(benchmarkSpec).toContain("set `template_only` to `false`");
     expect(benchmarkSpec).toContain("Prompt Effectiveness Evidence");
     expect(benchmarkSpec).toContain("Pass threshold");
     expect(benchmarkSpec.toLowerCase().replace(/\s+/g, " ")).toContain(
@@ -800,12 +800,14 @@ describe("plugin packaging files", () => {
       expect(content).toContain(
         'promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"',
       );
+      expect(content).toContain("template_only");
     }
     expect(packageInstallSmoke).toContain(
       '["benchmark", "--fixture-set", "real", "--json"]',
     );
     expect(packageInstallSmoke).toContain('"init-fixture"');
     expect(packageInstallSmoke).toContain("validateBenchmarkFixtureTemplate");
+    expect(packageInstallSmoke).toContain("parsed?.template_only !== true");
     expect(packageInstallSmoke).toContain('status !== "no_fixtures"');
     expect(packageInstallSmoke).toContain('effectiveness !== "unproven"');
   });

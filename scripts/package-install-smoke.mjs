@@ -202,6 +202,11 @@ function validateBenchmarkFixtureTemplate(stdout, fixtureFile) {
     throw new Error("installed fixture init exposed the operator-owned path");
   }
   const parsed = JSON.parse(readFileSync(fixtureFile, "utf8"));
+  if (parsed?.template_only !== true) {
+    throw new Error(
+      "installed fixture init omitted the non-runnable template marker",
+    );
+  }
   if (typeof parsed?.consent_note !== "string") {
     throw new Error("installed fixture init omitted consent metadata");
   }

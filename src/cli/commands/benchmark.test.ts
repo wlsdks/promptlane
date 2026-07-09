@@ -26,17 +26,19 @@ describe("benchmark CLI command", () => {
     try {
       const output = initializeBenchmarkFixtureForCli({ fixtureFile });
       const parsed = JSON.parse(readFileSync(fixtureFile, "utf8")) as {
+        template_only: boolean;
         consent_note: string;
         fixtures: unknown[];
         coach_cases: unknown[];
       };
 
       expect(output).toBe(
-        "Created PromptLane real benchmark fixture template. Review consent_note and replace every example before running the real soft signal.",
+        "Created PromptLane real benchmark fixture template. Replace every example, update consent_note, and set template_only to false before running the real soft signal.",
       );
       expect(output).not.toContain(fixtureFile);
+      expect(parsed.template_only).toBe(true);
       expect(parsed.consent_note).toContain(
-        "Operator-confirmed redacted prompts",
+        "Replace with operator-confirmed redaction",
       );
       expect(parsed.fixtures.length).toBeGreaterThan(0);
       expect(parsed.coach_cases.length).toBeGreaterThan(0);

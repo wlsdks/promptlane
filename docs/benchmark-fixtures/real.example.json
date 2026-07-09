@@ -1,5 +1,6 @@
 {
-  "consent_note": "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
+  "template_only": true,
+  "consent_note": "Replace with operator-confirmed redaction and local benchmark consent metadata.",
   "fixtures": [
     {
       "label": "real_release_review",

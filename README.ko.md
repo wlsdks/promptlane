@@ -720,6 +720,7 @@ Benchmark v1은 privacy, retrieval, rule-based prompt improvement, `coach_prompt
 promptlane benchmark --json
 promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # 모든 example을 동의·비식별 fixture로 교체합니다.
+# fixture 확인 후 template_only를 false로 설정합니다.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
 
 corepack pnpm benchmark
@@ -730,7 +731,7 @@ corepack pnpm --silent benchmark -- --json
 set은 operator가 관리하는 로컬 파일의 동의·비식별 prompt를 사용하는 opt-in
 soft trend signal입니다. 어느 결과도 단독으로 실제 사용자 prompt 품질을
 완전히 해결했다는 주장은 아닙니다. fixture contract는
-`docs/BENCHMARK_V1.md`를 참고하세요.
+`docs/BENCHMARK_V1.md`의 `template_only` 확인 절차를 참고하세요.
 
 ## Release Smoke
 

@@ -80,6 +80,7 @@ export function loadBenchmarkFixtures({
   } catch {
     throw new Error("Real benchmark fixture file must contain valid JSON.");
   }
+  assertRealFixtureConfirmed(parsed);
   parseConsentNote(parsed);
   const fixtures = parseRealFixtures(parsed);
   const coachCases = parseRealCoachCases(parsed);
@@ -89,6 +90,14 @@ export function loadBenchmarkFixtures({
     fixtures,
     coachCases,
   };
+}
+
+function assertRealFixtureConfirmed(parsed) {
+  if (parsed?.template_only !== false) {
+    throw new Error(
+      "Real benchmark fixtures are still an unconfirmed template. Replace every example and set template_only to false before running real evidence.",
+    );
+  }
 }
 
 export function buildNoFixturesReport({ dataset, fixtureSet, detail }) {

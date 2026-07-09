@@ -2,6 +2,7 @@ import {
   copyFileSync,
   mkdtempSync,
   mkdirSync,
+  readFileSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -164,6 +165,7 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          template_only: false,
           consent_note:
             "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
@@ -211,6 +213,47 @@ describe("benchmark fixture loading", () => {
     ]);
   });
 
+  it("rejects a real corpus without explicit template confirmation", async () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
+    const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
+    const realFixturesPath = join(fixtureDir, "real.json");
+    mkdirSync(fixtureDir, { recursive: true });
+    writeFileSync(
+      realFixturesPath,
+      `${JSON.stringify({
+        consent_note: "Operator-confirmed redacted benchmark corpus.",
+        fixtures: [
+          {
+            label: "private_example",
+            adapter: "codex",
+            query: "private query must not be echoed",
+            prompt: "Private redacted prompt must not be echoed.",
+          },
+        ],
+        coach_cases: ["Private redacted coach case must not be echoed."],
+      })}\n`,
+    );
+
+    const { loadBenchmarkFixtures } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+
+    expect(() =>
+      loadBenchmarkFixtures({ fixtureSet: "real", repoRoot: tempRoot }),
+    ).toThrow(
+      "Real benchmark fixtures are still an unconfirmed template. Replace every example and set template_only to false before running real evidence.",
+    );
+
+    try {
+      loadBenchmarkFixtures({ fixtureSet: "real", repoRoot: tempRoot });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      expect(message).not.toContain(realFixturesPath);
+      expect(message).not.toContain("private query");
+      expect(message).not.toContain("Private redacted prompt");
+    }
+  });
+
   it("loads an operator-owned real fixture file outside the package root", async () => {
     tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
     const realFixturesPath = join(tempRoot, "private", "promptlane-real.json");
@@ -219,6 +262,9 @@ describe("benchmark fixture loading", () => {
       join(process.cwd(), "docs", "benchmark-fixtures", "real.example.json"),
       realFixturesPath,
     );
+    const confirmed = JSON.parse(readFileSync(realFixturesPath, "utf8"));
+    confirmed.template_only = false;
+    writeFileSync(realFixturesPath, `${JSON.stringify(confirmed, null, 2)}\n`);
 
     const { loadBenchmarkFixtures } = await import(
       pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
@@ -265,7 +311,7 @@ describe("benchmark fixture loading", () => {
     }
   });
 
-  it("keeps the shipped real fixture example loadable as the real fixture file", async () => {
+  it("refuses to run the shipped fixture template as real evidence", async () => {
     tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
     const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
     mkdirSync(fixtureDir, { recursive: true });
@@ -278,14 +324,14 @@ describe("benchmark fixture loading", () => {
       pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
     );
 
-    const loaded = loadBenchmarkFixtures({
-      fixtureSet: "real",
-      repoRoot: tempRoot,
-    });
-
-    expect(loaded.status).toBe("ready");
-    expect(loaded.fixtures).toHaveLength(2);
-    expect(loaded.coachCases).toHaveLength(2);
+    expect(() =>
+      loadBenchmarkFixtures({
+        fixtureSet: "real",
+        repoRoot: tempRoot,
+      }),
+    ).toThrow(
+      "Real benchmark fixtures are still an unconfirmed template. Replace every example and set template_only to false before running real evidence.",
+    );
   });
 
   it("rejects real fixtures without local benchmark consent metadata", async () => {
@@ -296,6 +342,7 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          template_only: false,
           fixtures: [
             {
               label: "real_release_review",
@@ -334,6 +381,7 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          template_only: false,
           consent_note: "Approved from /Users/example/private-notes.md.",
           fixtures: [
             {
@@ -373,6 +421,7 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          template_only: false,
           consent_note:
             "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
@@ -413,6 +462,7 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          template_only: false,
           consent_note:
             "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
@@ -453,6 +503,7 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          template_only: false,
           consent_note:
             "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
@@ -500,6 +551,7 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          template_only: false,
           consent_note:
             "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [
@@ -540,6 +592,7 @@ describe("benchmark fixture loading", () => {
       join(fixtureDir, "real.json"),
       `${JSON.stringify(
         {
+          template_only: false,
           consent_note:
             "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
           fixtures: [

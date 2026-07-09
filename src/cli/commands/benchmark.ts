@@ -100,7 +100,7 @@ export function initializeBenchmarkFixtureForCli(
     );
   }
 
-  return "Created PromptLane real benchmark fixture template. Review consent_note and replace every example before running the real soft signal.";
+  return "Created PromptLane real benchmark fixture template. Replace every example, update consent_note, and set template_only to false before running the real soft signal.";
 }
 
 export function benchmarkForCli(

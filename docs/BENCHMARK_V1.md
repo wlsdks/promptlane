@@ -20,6 +20,7 @@ This benchmark is intentionally local-only. It does not call an external LLM jud
 promptlane benchmark --json
 promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # Replace every example with consent-bearing redacted fixtures.
+# Set template_only to false after confirming the fixture is ready.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
 
 corepack pnpm benchmark
@@ -43,7 +44,9 @@ create the starter shape with
 `promptlane benchmark init-fixture --output "$FIXTURE_FILE"`. The command
 creates parent directories, writes the shipped template with private file
 permissions, refuses to overwrite an existing file, and never prints the local
-path. Replace every example before passing the file to `--fixture-set real`;
+path. The generated file starts with `template_only: true` and cannot run as
+real evidence. Replace every example, update `consent_note`, and set
+`template_only` to `false` before passing the file to `--fixture-set real`;
 the synthetic release gate remains deterministic.
 
 The JSON report includes `fixture_set` and `soft_signal` fields so consumers can filter.
@@ -71,6 +74,7 @@ real-world usefulness.
 
 ```json
 {
+  "template_only": false,
   "consent_note": "Operator-confirmed redacted prompts approved for local benchmark use on 2026-07-09.",
   "fixtures": [
     {
@@ -96,8 +100,10 @@ mkdir -p docs/benchmark-fixtures
 cp docs/benchmark-fixtures/real.example.json docs/benchmark-fixtures/real.json
 ```
 
-Then replace the example prompts with consent-bearing redacted prompts before
-using `--fixture-set real` as a trend signal.
+Then replace the example prompts with consent-bearing redacted prompts, update
+`consent_note`, and set `template_only` to `false` before using
+`--fixture-set real` as a trend signal. The loader rejects a missing or true
+`template_only` value before it reads any fixture prompt.
 
 The top-level `consent_note` is required and must record that the prompts were
 approved for local benchmark use after redaction. Each fixture needs a unique

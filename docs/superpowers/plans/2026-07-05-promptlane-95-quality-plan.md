@@ -171,7 +171,8 @@ dogfood:web-user-flow` passed after main CI run `28750766036`, proving the
   Important: do not claim real-user effectiveness trends until consent-bearing
   redacted real fixtures are collected in an operator-owned local file and run
   after
-  `promptlane benchmark init-fixture --output "$FIXTURE_FILE"` and with
+  `promptlane benchmark init-fixture --output "$FIXTURE_FILE"`, replacing all
+  examples, updating `consent_note`, setting `template_only` to `false`, and with
   `promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"`.
 - `web_user_flow_current_main_evidence` was dogfooded after becoming the first
   recommendation: `corepack pnpm dogfood:web-user-flow` completed with

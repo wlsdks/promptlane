@@ -31,7 +31,7 @@ describe("npm publish preflight", () => {
       next_action: string;
       inspection_warnings: Array<{ label: string; detail: string }>;
       release_warnings: Array<{ label: string; detail: string }>;
-      checks: Array<{ label: string; ok: boolean }>;
+      checks: Array<{ label: string; ok: boolean; detail?: string }>;
     };
     expect(parsed.status).toBe("inspection");
     expect(parsed.publish_ready).toBe(false);
@@ -47,12 +47,12 @@ describe("npm publish preflight", () => {
       {
         label: "benchmark is synthetic regression evidence",
         detail:
-          'corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" before claiming real-user prompt quality trends.',
+          'corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, update consent_note, set template_only to false, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" before claiming real-user prompt quality trends.',
       },
       {
         label: "real benchmark fixtures are missing",
         detail:
-          'docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
+          'docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, update consent_note, set template_only to false, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
       },
     ]);
     expect(parsed.next_action).toContain(
@@ -625,6 +625,8 @@ describe("npm publish preflight", () => {
         expect.objectContaining({
           label: "real benchmark fixture example is loadable",
           ok: true,
+          detail:
+            "docs/benchmark-fixtures/real.example.json is a raw-free non-runnable real fixture template",
         }),
         expect.objectContaining({
           label: "real benchmark missing-fixtures evidence state is documented",

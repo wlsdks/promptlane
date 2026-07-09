@@ -831,11 +831,14 @@ function validateRealBenchmarkFixtureExample() {
     : {
         ok: true,
         detail:
-          "docs/benchmark-fixtures/real.example.json is a raw-free loadable real fixture template",
+          "docs/benchmark-fixtures/real.example.json is a raw-free non-runnable real fixture template",
       };
 }
 
 function realFixtureExampleInvalidReason(parsed) {
+  if (parsed?.template_only !== true) {
+    return "real fixture example must set template_only to true";
+  }
   if (
     typeof parsed?.consent_note !== "string" ||
     parsed.consent_note.trim().length === 0
@@ -1011,7 +1014,7 @@ function releaseWarnings() {
     {
       label: "benchmark is synthetic regression evidence",
       detail:
-        'corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" before claiming real-user prompt quality trends.',
+        'corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, update consent_note, set template_only to false, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" before claiming real-user prompt quality trends.',
     },
     ...realBenchmarkFixtureWarnings(),
   ];
@@ -1026,7 +1029,7 @@ function realBenchmarkFixtureWarnings() {
     {
       label: "real benchmark fixtures are missing",
       detail:
-        'docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
+        'docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, update consent_note, set template_only to false, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
     },
   ];
 }
