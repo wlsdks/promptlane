@@ -171,7 +171,7 @@ function releaseWarningsForLocalEvidence() {
     {
       label: "real benchmark fixtures are missing",
       detail:
-        'docs/benchmark-fixtures/real.json is absent; quality evidence is complete for the local release gate, but do not claim real-user effectiveness trends until consent-bearing redacted fixtures are collected in an operator-owned local file and run with promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
+        'docs/benchmark-fixtures/real.json is absent; quality evidence is complete for the local release gate, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
     },
   ];
 }

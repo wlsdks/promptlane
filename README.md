@@ -973,6 +973,8 @@ score calibration, analytics, and latency:
 
 ```sh
 promptlane benchmark --json
+promptlane benchmark init-fixture --output "$FIXTURE_FILE"
+# Replace every example with consent-bearing redacted fixtures.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
 
 corepack pnpm benchmark

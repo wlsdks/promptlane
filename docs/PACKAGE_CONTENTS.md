@@ -62,7 +62,8 @@ The npm package intentionally includes:
     template for consent-bearing real benchmark fixtures; local
     `docs/benchmark-fixtures/real.json` or a file passed to
     `promptlane benchmark --fixture-set real --fixture-file` remains
-    operator-owned and is not shipped
+    operator-owned and is not shipped; installed users can create the starter
+    shape with `promptlane benchmark init-fixture --output`
 - Claude Code plugin artifacts under `.claude-plugin`, `commands`, and
   `integrations/claude-code`
 - Codex plugin artifacts under `plugins/promptlane`

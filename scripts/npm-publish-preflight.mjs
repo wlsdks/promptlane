@@ -1011,7 +1011,7 @@ function releaseWarnings() {
     {
       label: "benchmark is synthetic regression evidence",
       detail:
-        'corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof; collect consent-bearing redacted fixtures in an operator-owned local file and run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" before claiming real-user prompt quality trends.',
+        'corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" before claiming real-user prompt quality trends.',
     },
     ...realBenchmarkFixtureWarnings(),
   ];
@@ -1026,7 +1026,7 @@ function realBenchmarkFixtureWarnings() {
     {
       label: "real benchmark fixtures are missing",
       detail:
-        'docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends until consent-bearing redacted fixtures are collected in an operator-owned local file and run with promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
+        'docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
     },
   ];
 }

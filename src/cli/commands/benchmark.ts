@@ -1,4 +1,6 @@
 import { spawnSync } from "node:child_process";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { Command } from "commander";
@@ -11,6 +13,14 @@ type BenchmarkCliOptions = {
   json?: boolean;
 };
 
+type BenchmarkFixtureInitOptions = {
+  fixtureFile: string;
+};
+
+type BenchmarkFixtureInitCommandOptions = {
+  output: string;
+};
+
 type BenchmarkRunResult = {
   status: number;
   stdout: string;
@@ -20,11 +30,27 @@ type BenchmarkRunResult = {
 type BenchmarkRunner = (args: string[]) => BenchmarkRunResult;
 
 export function registerBenchmarkCommand(program: Command): void {
-  program
+  const benchmarkCommand = program
     .command("benchmark")
     .description(
       "Measure local PromptLane regression and effectiveness evidence.",
+    );
+  benchmarkCommand
+    .command("init-fixture")
+    .description(
+      "Create an operator-owned real benchmark fixture template locally.",
     )
+    .requiredOption(
+      "--output <path>",
+      "Write the real benchmark fixture template to this local file.",
+    )
+    .action((options: BenchmarkFixtureInitCommandOptions) => {
+      console.log(
+        initializeBenchmarkFixtureForCli({ fixtureFile: options.output }),
+      );
+    });
+
+  benchmarkCommand
     .option(
       "--fixture-set <set>",
       "Use synthetic regression fixtures or real effectiveness fixtures.",
@@ -38,6 +64,43 @@ export function registerBenchmarkCommand(program: Command): void {
     .action((options: BenchmarkCliOptions) => {
       console.log(benchmarkForCli(options));
     });
+}
+
+export function initializeBenchmarkFixtureForCli(
+  options: BenchmarkFixtureInitOptions,
+): string {
+  if (!options.fixtureFile?.trim()) {
+    throw new UserError("benchmark init-fixture requires an output file.");
+  }
+
+  let template: string;
+  try {
+    template = readFileSync(benchmarkFixtureTemplatePath(), "utf8");
+  } catch {
+    throw new UserError(
+      "Unable to read the shipped PromptLane benchmark fixture template.",
+    );
+  }
+
+  try {
+    mkdirSync(dirname(options.fixtureFile), { recursive: true });
+    writeFileSync(options.fixtureFile, template, {
+      encoding: "utf8",
+      flag: "wx",
+      mode: 0o600,
+    });
+  } catch (error) {
+    if (hasErrorCode(error, "EEXIST")) {
+      throw new UserError(
+        "Real benchmark fixture file already exists. Edit it in place or choose a different --output.",
+      );
+    }
+    throw new UserError(
+      "Unable to create the PromptLane benchmark fixture template.",
+    );
+  }
+
+  return "Created PromptLane real benchmark fixture template. Review consent_note and replace every example before running the real soft signal.";
 }
 
 export function benchmarkForCli(
@@ -95,5 +158,23 @@ function runBenchmarkScript(args: string[]): BenchmarkRunResult {
 function benchmarkScriptPath(): string {
   return fileURLToPath(
     new URL("../../../scripts/benchmark.mjs", import.meta.url),
+  );
+}
+
+function benchmarkFixtureTemplatePath(): string {
+  return fileURLToPath(
+    new URL(
+      "../../../docs/benchmark-fixtures/real.example.json",
+      import.meta.url,
+    ),
+  );
+}
+
+function hasErrorCode(error: unknown, code: string): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === code
   );
 }

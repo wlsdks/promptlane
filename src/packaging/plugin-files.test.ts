@@ -795,12 +795,17 @@ describe("plugin packaging files", () => {
       qualityPlan,
     ]) {
       expect(content).toContain(
+        'promptlane benchmark init-fixture --output "$FIXTURE_FILE"',
+      );
+      expect(content).toContain(
         'promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"',
       );
     }
     expect(packageInstallSmoke).toContain(
       '["benchmark", "--fixture-set", "real", "--json"]',
     );
+    expect(packageInstallSmoke).toContain('"init-fixture"');
+    expect(packageInstallSmoke).toContain("validateBenchmarkFixtureTemplate");
     expect(packageInstallSmoke).toContain('status !== "no_fixtures"');
     expect(packageInstallSmoke).toContain('effectiveness !== "unproven"');
   });

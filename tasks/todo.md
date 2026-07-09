@@ -1,5 +1,21 @@
 # 작업 계획
 
+## 2026-07-10 PromptLane Real Benchmark Fixture Init
+
+- [x] CHECK: installed benchmark users can run an operator-owned fixture file,
+  but must still locate and manually copy the shipped JSON template.
+- [x] RED: a focused CLI test requires
+  `promptlane benchmark init-fixture --output "$FIXTURE_FILE"` to create
+  the shipped valid template with private file permissions and raw-free output.
+- [x] GREEN: the benchmark command exposes explicit fixture initialization and
+  writes the shipped template without printing the destination path.
+- [x] RED: a focused CLI test requires fixture initialization to refuse an
+  existing destination without changing its contents or exposing its path.
+- [x] GREEN: fixture initialization uses an atomic no-overwrite write and a
+  raw-free actionable `UserError`.
+- [x] VERIFY: focused CLI/fixture/packaging tests, docs, formatting, typecheck,
+  built and installed CLI smoke, package dry-run, and diff hygiene.
+
 ## 2026-07-10 PromptLane Installed Benchmark Warning Handoff
 
 - [x] CHECK: live quality evidence and npm publish preflight still tell users

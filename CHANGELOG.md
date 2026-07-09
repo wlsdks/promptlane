@@ -94,7 +94,8 @@ tools, benchmark/release validation, and an English/Korean web UI.
 
 - Installed `promptlane benchmark` command with synthetic/real fixture
   selection and an explicit operator-owned `--fixture-file` path for local,
-  consent-bearing redacted effectiveness signals.
+  consent-bearing redacted effectiveness signals, plus no-overwrite
+  `benchmark init-fixture` setup for the shipped private-permission template.
 - Local benchmark v1 with privacy, retrieval, coach, analytics, and latency
   thresholds (`pnpm benchmark`, `pnpm benchmark -- --json`).
 - Browser E2E smoke covering archive, detail, coach, projects, export, and

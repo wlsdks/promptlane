@@ -18,6 +18,8 @@ This benchmark is intentionally local-only. It does not call an external LLM jud
 
 ```sh
 promptlane benchmark --json
+promptlane benchmark init-fixture --output "$FIXTURE_FILE"
+# Replace every example with consent-bearing redacted fixtures.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
 
 corepack pnpm benchmark
@@ -37,9 +39,12 @@ app.
 - `--fixture-set real` — soft signal. Reads consent-bearing redacted prompts from `docs/benchmark-fixtures/real.json`. If the file is absent the script exits 0 with a `status: no_fixtures` notice. If it exists, threshold misses are reported but the script still exits 0 — so a regression on a noisy real corpus does not break CI but is visible in trend.
 
 Installed users should keep real fixtures in an operator-owned local file and
-pass it with `--fixture-file "$FIXTURE_FILE"`. This option is accepted only
-with `--fixture-set real`; the synthetic release gate remains deterministic.
-Missing-file output never prints the supplied local path.
+create the starter shape with
+`promptlane benchmark init-fixture --output "$FIXTURE_FILE"`. The command
+creates parent directories, writes the shipped template with private file
+permissions, refuses to overwrite an existing file, and never prints the local
+path. Replace every example before passing the file to `--fixture-set real`;
+the synthetic release gate remains deterministic.
 
 The JSON report includes `fixture_set` and `soft_signal` fields so consumers can filter.
 It also includes a top-level `next_action`: synthetic passes say the local
@@ -84,6 +89,9 @@ Start from the shipped example if you need a local template. Set
 command:
 
 ```sh
+promptlane benchmark init-fixture --output "$FIXTURE_FILE"
+
+# Repository-maintainer alternative:
 mkdir -p docs/benchmark-fixtures
 cp docs/benchmark-fixtures/real.example.json docs/benchmark-fixtures/real.json
 ```

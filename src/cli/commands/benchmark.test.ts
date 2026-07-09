@@ -1,12 +1,107 @@
 import { randomUUID } from "node:crypto";
+import {
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { Writable } from "node:stream";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { benchmarkForCli } from "./benchmark.js";
+import {
+  benchmarkForCli,
+  initializeBenchmarkFixtureForCli,
+} from "./benchmark.js";
+import { runCli } from "../index.js";
 
 describe("benchmark CLI command", () => {
+  it("creates the shipped real fixture template with private permissions", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-fixture-init-"));
+    const fixtureFile = join(tempRoot, "private", "real.json");
+
+    try {
+      const output = initializeBenchmarkFixtureForCli({ fixtureFile });
+      const parsed = JSON.parse(readFileSync(fixtureFile, "utf8")) as {
+        consent_note: string;
+        fixtures: unknown[];
+        coach_cases: unknown[];
+      };
+
+      expect(output).toBe(
+        "Created PromptLane real benchmark fixture template. Review consent_note and replace every example before running the real soft signal.",
+      );
+      expect(output).not.toContain(fixtureFile);
+      expect(parsed.consent_note).toContain(
+        "Operator-confirmed redacted prompts",
+      );
+      expect(parsed.fixtures.length).toBeGreaterThan(0);
+      expect(parsed.coach_cases.length).toBeGreaterThan(0);
+      expect(statSync(fixtureFile).mode & 0o777).toBe(0o600);
+    } finally {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
+  it("creates a fixture through the public nested CLI command", async () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-fixture-cli-"));
+    const fixtureFile = join(tempRoot, "real.json");
+    const consoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
+    const stderr = new Writable({
+      write(_chunk, _encoding, callback) {
+        callback();
+      },
+    });
+
+    try {
+      const exitCode = await runCli(
+        [
+          "node",
+          "promptlane",
+          "benchmark",
+          "init-fixture",
+          "--output",
+          fixtureFile,
+        ],
+        { stderr },
+      );
+
+      expect(exitCode).toBe(0);
+      expect(JSON.parse(readFileSync(fixtureFile, "utf8"))).toHaveProperty(
+        "consent_note",
+      );
+    } finally {
+      consoleLog.mockRestore();
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
+  it("refuses to overwrite an existing real fixture file without exposing its path", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-fixture-init-"));
+    const fixtureFile = join(tempRoot, "operator-owned-real.json");
+    const existingContent = '{"keep":"operator-owned"}\n';
+    writeFileSync(fixtureFile, existingContent);
+
+    try {
+      expect(() => initializeBenchmarkFixtureForCli({ fixtureFile })).toThrow(
+        "Real benchmark fixture file already exists. Edit it in place or choose a different --output.",
+      );
+      expect(readFileSync(fixtureFile, "utf8")).toBe(existingContent);
+
+      try {
+        initializeBenchmarkFixtureForCli({ fixtureFile });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        expect(message).not.toContain(fixtureFile);
+      }
+    } finally {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
   it("runs the shipped real benchmark and preserves no-fixtures evidence", () => {
     const runBenchmark = vi.fn(() => ({
       status: 0,

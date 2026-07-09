@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -55,6 +55,18 @@ try {
     },
   );
   validateQualityEvidence(qualityEvidence.stdout);
+  const fixtureFile = join(tempHome, "operator-owned-real-fixtures.json");
+  const fixtureInit = run(
+    join(tempPrefix, "bin", "promptlane"),
+    ["benchmark", "init-fixture", "--output", fixtureFile],
+    {
+      cwd: tempHome,
+      env: { ...process.env, HOME: tempHome },
+      encoding: "utf8",
+    },
+  );
+  validateBenchmarkFixtureTemplate(fixtureInit.stdout, fixtureFile);
+  rmSync(fixtureFile, { force: true });
   const benchmarkEvidence = run(
     join(tempPrefix, "bin", "promptlane"),
     ["benchmark", "--fixture-set", "real", "--json"],
@@ -75,6 +87,8 @@ try {
         bins: ["promptlane", "pl-claude", "pl-codex"],
         first_success: "promptlane start --open-web --json",
         release_gate: "promptlane quality-evidence --require-complete",
+        fixture_init:
+          "promptlane benchmark init-fixture --output <operator-owned>",
         effectiveness_signal: "promptlane benchmark --fixture-set real --json",
       },
       null,
@@ -180,5 +194,21 @@ function validateBenchmarkEvidence(stdout) {
   }
   if (parsed?.evidence_state?.requires_real_fixtures !== true) {
     throw new Error("installed benchmark did not require real fixtures");
+  }
+}
+
+function validateBenchmarkFixtureTemplate(stdout, fixtureFile) {
+  if (stdout.includes(fixtureFile)) {
+    throw new Error("installed fixture init exposed the operator-owned path");
+  }
+  const parsed = JSON.parse(readFileSync(fixtureFile, "utf8"));
+  if (typeof parsed?.consent_note !== "string") {
+    throw new Error("installed fixture init omitted consent metadata");
+  }
+  if (!Array.isArray(parsed?.fixtures) || parsed.fixtures.length === 0) {
+    throw new Error("installed fixture init omitted benchmark fixtures");
+  }
+  if (!Array.isArray(parsed?.coach_cases) || parsed.coach_cases.length === 0) {
+    throw new Error("installed fixture init omitted coach cases");
   }
 }

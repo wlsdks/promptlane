@@ -718,6 +718,8 @@ Benchmark v1은 privacy, retrieval, rule-based prompt improvement, `coach_prompt
 
 ```sh
 promptlane benchmark --json
+promptlane benchmark init-fixture --output "$FIXTURE_FILE"
+# 모든 example을 동의·비식별 fixture로 교체합니다.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
 
 corepack pnpm benchmark
