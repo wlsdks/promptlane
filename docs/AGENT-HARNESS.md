@@ -171,16 +171,27 @@ Use the narrowest relevant gate first, then broaden before PR.
 | Instruction docs      | `git diff --check`, packaging docs tests if shipped                                  |
 | Dependency update     | local test/lint/build/pack gate, engine compatibility review                         |
 
-Full gate before merge unless the change is docs-only and the risk is clearly
-bounded:
+Full local release gate before publish, release-readiness claims, or broad
+harness changes:
 
 ```bash
+corepack pnpm format
 corepack pnpm test
 corepack pnpm lint
 corepack pnpm build
 corepack pnpm pack:dry-run
+corepack pnpm --silent benchmark -- --json
+corepack pnpm e2e:browser
+corepack pnpm smoke:release
+corepack pnpm smoke:package-install
+corepack pnpm evidence:quality -- --require-complete
+corepack pnpm promptlane quality-evidence --require-complete
 git diff --check
 ```
+
+For smaller PRs, start with the narrow gate above and broaden only to the
+relevant release-gate commands. Do not use this shorter PR strategy to claim the
+package, harness, or 1.0.0 release is ready.
 
 ## External Design References Reviewed
 

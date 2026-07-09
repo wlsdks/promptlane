@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Harness Release Gate Docs
+
+- [x] CHECK: `docs/AGENT-HARNESS.md` still documented a shorter full gate for
+  merge/release-adjacent work than the current local release gate used by
+  architecture and publishing docs.
+- [x] RED: packaging guard requires the shipped harness doc to include the full
+  local release gate commands, including format, benchmark, browser/package
+  smoke, quality evidence, and diff hygiene.
+- [x] GREEN: `docs/AGENT-HARNESS.md` verification matrix matches the current
+  local release gate without suggesting stale short gates.
+- [x] VERIFY: focused packaging guard, formatting, live preflight/quality smoke,
+  npm registry status, and diff hygiene.
+
 ## 2026-07-09 PromptLane Plugin Docs Publish-Pending Install
 
 - [x] CHECK: `docs/PLUGINS.md` setup section still told active coaching users

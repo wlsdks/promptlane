@@ -568,6 +568,10 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "docs/ARCHITECTURE.md"),
       "utf8",
     );
+    const agentHarness = readFileSync(
+      join(process.cwd(), "docs/AGENT-HARNESS.md"),
+      "utf8",
+    );
     const releaseSmoke = readFileSync(
       join(process.cwd(), "scripts/release-smoke.mjs"),
       "utf8",
@@ -602,7 +606,24 @@ describe("plugin packaging files", () => {
     ]) {
       expect(architecture).toContain(command);
     }
+    for (const command of [
+      "corepack pnpm format",
+      "corepack pnpm test",
+      "corepack pnpm lint",
+      "corepack pnpm build",
+      "corepack pnpm pack:dry-run",
+      "corepack pnpm --silent benchmark -- --json",
+      "corepack pnpm e2e:browser",
+      "corepack pnpm smoke:release",
+      "corepack pnpm smoke:package-install",
+      "corepack pnpm evidence:quality -- --require-complete",
+      "corepack pnpm promptlane quality-evidence --require-complete",
+      "git diff --check",
+    ]) {
+      expect(agentHarness).toContain(command);
+    }
     expect(architecture).not.toContain("\npnpm test");
+    expect(agentHarness).not.toContain("\npnpm test");
 
     expect(packageJson.scripts["pack:dry-run"]).toBe(
       "node scripts/pack-dry-run.mjs",
