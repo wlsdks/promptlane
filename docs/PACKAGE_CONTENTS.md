@@ -59,11 +59,13 @@ The npm package intentionally includes:
     so future rename work has release-note, support, rollback, and upgrade-smoke
     gates before any old id is deprecated
   - includes `docs/benchmark-fixtures/real.example.json` as a copyable raw-free
-    template for consent-bearing real benchmark fixtures; local
+    template for consent-bearing real benchmark fixtures; it is non-runnable
+    with `template_only: true`; local
     `docs/benchmark-fixtures/real.json` or a file passed to
     `promptlane benchmark --fixture-set real --fixture-file` remains
     operator-owned and is not shipped; installed users can create the starter
-    shape with `promptlane benchmark init-fixture --output`
+    shape with `promptlane benchmark init-fixture --output` and must replace
+    every example before setting `template_only` to `false`
 - Claude Code plugin artifacts under `.claude-plugin`, `commands`, and
   `integrations/claude-code`
 - Codex plugin artifacts under `plugins/promptlane`

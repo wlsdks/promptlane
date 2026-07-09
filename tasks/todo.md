@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-10 PromptLane Real Benchmark Template Confirmation
+
+- [x] CHECK: the shipped real fixture example is currently runnable unchanged,
+  so sample prompts can incorrectly produce `trend_healthy` real evidence.
+- [x] RED: fixture-loader tests require every real corpus to explicitly set
+  `template_only: false`; missing confirmation must fail with raw-free guidance.
+- [x] GREEN: the real fixture loader rejects unconfirmed template data before
+  parsing or ingesting prompts while confirmed operator data remains loadable.
+- [x] RED: packaging and CLI tests require the shipped/generated template to
+  start with `template_only: true` and remain non-runnable as real evidence.
+- [x] GREEN: template, init output, warnings, and docs explain the explicit
+  replace-examples then set-false confirmation step.
+- [x] VERIFY: focused fixture/CLI/preflight/packaging tests, formatting,
+  typecheck, built/installed smoke, package dry-run, and diff hygiene.
+
 ## 2026-07-10 PromptLane Real Benchmark Fixture Init
 
 - [x] CHECK: installed benchmark users can run an operator-owned fixture file,

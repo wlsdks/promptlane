@@ -169,7 +169,7 @@ describe("quality-evidence CLI command", () => {
       {
         label: "real benchmark fixtures are missing",
         detail:
-          'docs/benchmark-fixtures/real.json is absent; quality evidence is complete for the local release gate, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
+          'docs/benchmark-fixtures/real.json is absent; quality evidence is complete for the local release gate, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, update consent_note, set template_only to false, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
       },
     ]);
     expect(parsed.release_gate).toEqual([
