@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-10 PromptLane Benchmark Report File
+
+- [x] CHECK: real benchmark baselines currently rely on shell redirection, so
+  failed or non-JSON output can leave an unusable evidence file.
+- [x] RED: focused CLI tests require successful JSON-only persistence, private
+  permissions, no overwrite, and no file on benchmark failure.
+- [x] GREEN: `--report-file` writes one validated local report without changing
+  stdout or exposing operator paths in errors.
+- [x] DOCS: benchmark runbooks use the explicit report-file flow instead of
+  redirecting stdout into a baseline.
+- [x] VERIFY: focused CLI/packaging tests, live baseline comparison, package
+  smoke/dry-run, diff hygiene, PR merge, and v1.0.0 retag.
+
 ## 2026-07-10 PromptLane Selected Snapshot Memory Approval
 
 - [x] CHECK: outcome recording supports exact/selected snapshots while CLI,

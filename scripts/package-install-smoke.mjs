@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -79,6 +85,7 @@ try {
   );
   validateBenchmarkFixtureTemplate(fixtureInit.stdout, fixtureFile);
   confirmBenchmarkFixture(fixtureFile);
+  const baselineFile = join(tempHome, "promptlane-benchmark-baseline.json");
   const baselineEvidence = run(
     join(tempPrefix, "bin", "promptlane"),
     [
@@ -88,6 +95,8 @@ try {
       "--fixture-file",
       fixtureFile,
       "--json",
+      "--report-file",
+      baselineFile,
     ],
     {
       cwd: tempHome,
@@ -96,8 +105,7 @@ try {
     },
   );
   validateBenchmarkSnapshot(baselineEvidence.stdout, fixtureFile);
-  const baselineFile = join(tempHome, "promptlane-benchmark-baseline.json");
-  writeFileSync(baselineFile, baselineEvidence.stdout, { mode: 0o600 });
+  validateBenchmarkReportFile(baselineEvidence.stdout, baselineFile);
   const comparisonEvidence = run(
     join(tempPrefix, "bin", "promptlane"),
     [
@@ -379,6 +387,20 @@ function validateBenchmarkSnapshot(stdout, fixtureFile) {
   }
   if (parsed?.evidence_state?.effectiveness !== "snapshot_healthy") {
     throw new Error("installed benchmark snapshot overstated trend evidence");
+  }
+}
+
+function validateBenchmarkReportFile(stdout, reportFile) {
+  if (stdout.includes(reportFile)) {
+    throw new Error("installed benchmark report exposed the report path");
+  }
+  const stdoutReport = JSON.parse(stdout);
+  const savedReport = JSON.parse(readFileSync(reportFile, "utf8"));
+  if (savedReport?.corpus_fingerprint !== stdoutReport?.corpus_fingerprint) {
+    throw new Error("installed benchmark report did not preserve the snapshot");
+  }
+  if ((statSync(reportFile).mode & 0o777) !== 0o600) {
+    throw new Error("installed benchmark report permissions are not private");
   }
 }
 

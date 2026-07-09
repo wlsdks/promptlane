@@ -745,7 +745,7 @@ promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # passed/failed outcome과 안전한 evidence ref를 추가합니다.
 # fixture 확인 후 template_only를 false로 설정합니다.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
-promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json > "$BASELINE_REPORT"
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json --report-file "$BASELINE_REPORT"
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --baseline-file "$BASELINE_REPORT" --json
 
 corepack pnpm benchmark
@@ -763,6 +763,8 @@ real 실행은 synthetic 점수 calibration과 score delivery integrity를
 충족해야 합니다.
 `--baseline-file`이 없으면 real evidence는 trend가 아니라 snapshot입니다.
 raw-free corpus fingerprint가 변경된 prompt set 사이의 비교를 차단합니다.
+`--report-file`은 `--json`과 함께 사용하며, 성공한 JSON 실행 후에만 새
+private local file을 만들고 기존 evidence를 덮어쓰지 않습니다.
 
 ## Release Smoke
 

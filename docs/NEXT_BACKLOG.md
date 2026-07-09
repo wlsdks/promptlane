@@ -236,8 +236,9 @@ Decision:
   `promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"`.
   Real prompts without operator-confirmed `passed` or `failed` outcomes remain
   `unproven`; the benchmark must not synthesize those outcomes.
-  A single run is a snapshot; use `--baseline-file "$BASELINE_REPORT"` with the
-  same corpus fingerprint before calling the result a trend.
+  Save a successful snapshot with `--json --report-file "$BASELINE_REPORT"`;
+  then use `--baseline-file "$BASELINE_REPORT"` with the same corpus
+  fingerprint before calling the result a trend.
   That local scorecard review is now applied for the five non-external
   candidates: local-first privacy boundary, setup/doctor/MCP smoke, loop memory
   and continuation, web UI and operational evidence, and release stability are

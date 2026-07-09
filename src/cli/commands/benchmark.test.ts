@@ -197,6 +197,115 @@ describe("benchmark CLI command", () => {
     ]);
   });
 
+  it("saves a successful JSON report as a private local file", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-report-file-"));
+    const reportFile = join(tempRoot, "reports", "baseline.json");
+    const report = {
+      dataset: "benchmark-v1-real",
+      fixture_set: "real",
+      pass: true,
+    };
+    const runBenchmark = vi.fn(() => ({
+      status: 0,
+      stdout: JSON.stringify(report),
+      stderr: "",
+    }));
+
+    try {
+      const output = benchmarkForCli(
+        { fixtureSet: "real", json: true, reportFile },
+        runBenchmark,
+      );
+
+      expect(JSON.parse(output)).toEqual(report);
+      expect(JSON.parse(readFileSync(reportFile, "utf8"))).toEqual(report);
+      expect(statSync(reportFile).mode & 0o777).toBe(0o600);
+      expect(runBenchmark).toHaveBeenCalledWith([
+        "--fixture-set",
+        "real",
+        "--json",
+      ]);
+    } finally {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
+  it("requires JSON output before writing a benchmark report file", () => {
+    const runBenchmark = vi.fn();
+
+    expect(() =>
+      benchmarkForCli(
+        { fixtureSet: "real", reportFile: "/tmp/private-report.json" },
+        runBenchmark,
+      ),
+    ).toThrow("--report-file requires --json");
+    expect(runBenchmark).not.toHaveBeenCalled();
+  });
+
+  it("does not write failed or non-JSON benchmark output", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-report-failure-"));
+    const failedReport = join(tempRoot, "failed.json");
+    const malformedReport = join(tempRoot, "malformed.json");
+    const previousExitCode = process.exitCode;
+    process.exitCode = undefined;
+
+    try {
+      const failedOutput = benchmarkForCli(
+        { fixtureSet: "real", json: true, reportFile: failedReport },
+        () => ({
+          status: 1,
+          stdout: JSON.stringify({ status: "needs_review" }),
+          stderr: "private benchmark detail",
+        }),
+      );
+      expect(JSON.parse(failedOutput)).toEqual({ status: "needs_review" });
+      expect(() => statSync(failedReport)).toThrow();
+
+      expect(() =>
+        benchmarkForCli(
+          { fixtureSet: "real", json: true, reportFile: malformedReport },
+          () => ({ status: 0, stdout: "not-json", stderr: "" }),
+        ),
+      ).toThrow("PromptLane benchmark returned invalid JSON output.");
+      expect(() => statSync(malformedReport)).toThrow();
+    } finally {
+      process.exitCode = previousExitCode;
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
+  it("refuses to overwrite an existing benchmark report without exposing its path", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-report-existing-"));
+    const reportFile = join(tempRoot, "operator-baseline.json");
+    const existing = '{"keep":"existing evidence"}\n';
+    writeFileSync(reportFile, existing, { mode: 0o600 });
+
+    try {
+      expect(() =>
+        benchmarkForCli({ fixtureSet: "real", json: true, reportFile }, () => ({
+          status: 0,
+          stdout: '{"pass":true}',
+          stderr: "",
+        })),
+      ).toThrow(
+        "Benchmark report file already exists. Choose a new --report-file.",
+      );
+      expect(readFileSync(reportFile, "utf8")).toBe(existing);
+      try {
+        benchmarkForCli({ fixtureSet: "real", json: true, reportFile }, () => ({
+          status: 0,
+          stdout: '{"pass":true}',
+          stderr: "",
+        }));
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        expect(message).not.toContain(reportFile);
+      }
+    } finally {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
   it("returns a structured incompatible report while preserving failure exit status", () => {
     const previousExitCode = process.exitCode;
     process.exitCode = undefined;

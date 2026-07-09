@@ -55,8 +55,9 @@ every example with consent-bearing redacted fixtures, updating `consent_note`,
 adding operator-confirmed `passed` or `failed` outcome metadata with safe
 evidence refs, setting `template_only` to `false`, and then running
 `promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"`
-to save one JSON snapshot. A trend claim additionally requires rerunning the
-same corpus with `--baseline-file "$BASELINE_REPORT"`.
+with `--json --report-file "$BASELINE_REPORT"` to save one validated private
+JSON snapshot. A trend claim additionally requires rerunning the same corpus
+with `--baseline-file "$BASELINE_REPORT"`.
 If that file is absent, preflight adds a separate `real benchmark fixtures are
 missing` warning. This warning does not block publish after the release gates
 pass; it blocks overclaiming real-user effectiveness trends.

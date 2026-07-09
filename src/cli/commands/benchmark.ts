@@ -1,6 +1,13 @@
 import { spawnSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { randomUUID } from "node:crypto";
+import {
+  linkSync,
+  mkdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { Command } from "commander";
@@ -12,6 +19,7 @@ type BenchmarkCliOptions = {
   fixtureFile?: string;
   fixtureSet?: string;
   json?: boolean;
+  reportFile?: string;
 };
 
 type BenchmarkFixtureInitOptions = {
@@ -64,6 +72,10 @@ export function registerBenchmarkCommand(program: Command): void {
     .option(
       "--baseline-file <path>",
       "Compare with a prior PromptLane benchmark JSON report.",
+    )
+    .option(
+      "--report-file <path>",
+      "Write a successful JSON report to a new private local file.",
     )
     .option("--json", "Print JSON.")
     .action((options: BenchmarkCliOptions) => {
@@ -123,6 +135,9 @@ export function benchmarkForCli(
       "--fixture-file requires --fixture-set real so synthetic release evidence stays deterministic.",
     );
   }
+  if (options.reportFile && !options.json) {
+    throw new UserError("--report-file requires --json.");
+  }
 
   const args = ["--fixture-set", fixtureSet];
   if (options.fixtureFile) {
@@ -143,8 +158,50 @@ export function benchmarkForCli(
   }
   if (result.status !== 0) {
     process.exitCode = result.status;
+  } else if (options.reportFile) {
+    writeBenchmarkReport(options.reportFile, result.stdout);
   }
   return result.stdout.trim();
+}
+
+function writeBenchmarkReport(reportFile: string, output: string): void {
+  let report: unknown;
+  try {
+    report = JSON.parse(output);
+  } catch {
+    throw new UserError("PromptLane benchmark returned invalid JSON output.");
+  }
+  if (typeof report !== "object" || report === null || Array.isArray(report)) {
+    throw new UserError("PromptLane benchmark returned invalid JSON output.");
+  }
+
+  const reportDirectory = dirname(reportFile);
+  const temporaryFile = join(
+    reportDirectory,
+    `.${basename(reportFile)}.promptlane-${randomUUID()}.tmp`,
+  );
+  try {
+    mkdirSync(reportDirectory, { recursive: true });
+    writeFileSync(temporaryFile, `${JSON.stringify(report, null, 2)}\n`, {
+      encoding: "utf8",
+      flag: "wx",
+      mode: 0o600,
+    });
+    linkSync(temporaryFile, reportFile);
+  } catch (error) {
+    if (hasErrorCode(error, "EEXIST")) {
+      throw new UserError(
+        "Benchmark report file already exists. Choose a new --report-file.",
+      );
+    }
+    throw new UserError("Unable to create the PromptLane benchmark report.");
+  } finally {
+    try {
+      unlinkSync(temporaryFile);
+    } catch {
+      // The temp file is absent when setup fails before writing.
+    }
+  }
 }
 
 function runBenchmarkScript(args: string[]): BenchmarkRunResult {

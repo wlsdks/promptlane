@@ -806,8 +806,12 @@ describe("plugin packaging files", () => {
     expect(cliIndex).toContain("registerBenchmarkCommand(program)");
     expect(benchmarkCommand).toContain('.command("benchmark")');
     expect(benchmarkCommand).toContain('"--baseline-file <path>"');
+    expect(benchmarkCommand).toContain('"--report-file <path>"');
     for (const content of [benchmarkSpec, readme, readmeKo]) {
       expect(content).toContain("promptlane benchmark --json");
+      expect(content).toContain(
+        'promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json --report-file "$BASELINE_REPORT"',
+      );
     }
     for (const content of [
       benchmarkSpec,
@@ -833,6 +837,9 @@ describe("plugin packaging files", () => {
     expect(packageInstallSmoke).toContain("parsed?.template_only !== true");
     expect(packageInstallSmoke).toContain("outcome.evidence_refs");
     expect(packageInstallSmoke).toContain('"--baseline-file"');
+    expect(packageInstallSmoke).toContain('"--report-file"');
+    expect(packageInstallSmoke).toContain("validateBenchmarkReportFile");
+    expect(packageInstallSmoke).toContain("permissions are not private");
     expect(packageInstallSmoke).toContain("validateBenchmarkIncompatible");
     expect(benchmarkSpec).toContain("fixture_set_or_corpus_mismatch");
     expect(benchmarkSpec).toContain("unreadable_or_invalid_json");

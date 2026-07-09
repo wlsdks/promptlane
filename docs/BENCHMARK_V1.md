@@ -24,8 +24,8 @@ promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # Set template_only to false after confirming the fixture is ready.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
 
-# Save one snapshot, then compare the same redacted corpus on a later build.
-promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json > "$BASELINE_REPORT"
+# Save one successful JSON snapshot, then compare the same redacted corpus later.
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json --report-file "$BASELINE_REPORT"
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --baseline-file "$BASELINE_REPORT" --json
 
 corepack pnpm benchmark
@@ -54,6 +54,11 @@ real evidence. Replace every example, update `consent_note`, add any available
 operator-confirmed outcome metadata, and set `template_only` to `false` before
 passing the file to `--fixture-set real`;
 the synthetic release gate remains deterministic.
+
+Use `--report-file` with `--json` to save a successful report as a new private
+local file. PromptLane validates JSON before writing, uses `0600` permissions,
+and refuses to overwrite existing evidence. Failed benchmark runs do not create
+the report file. Stdout remains the same JSON report for scripts and review.
 
 The JSON report includes `fixture_set` and `soft_signal` fields so consumers can filter.
 It also includes a top-level `next_action`: synthetic passes say the local
