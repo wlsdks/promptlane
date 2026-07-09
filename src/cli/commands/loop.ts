@@ -19,11 +19,13 @@ import {
 } from "../../loop/memory-candidate.js";
 import { parseLoopOutcomeInput } from "../../loop/outcome.js";
 import {
+  hasAmbiguousLoopSnapshotTarget,
   hasLoopSnapshotSelection,
   loopBriefNoSnapshotCliMessage,
   loopInstructionPatchNoMemoryCliMessage,
   loopMemoryNoSnapshotCliMessage,
   selectLoopSnapshot,
+  selectLoopSnapshotTarget,
   selectedLoopSnapshotNotFoundMessage,
 } from "../../loop/snapshot-selection.js";
 import {
@@ -139,9 +141,11 @@ export function registerLoopCommand(program: Command): void {
 
   loop
     .command("memory-candidate")
-    .description(
-      "Decide whether the latest loop can become an approved memory.",
-    )
+    .description("Decide whether a local loop can become an approved memory.")
+    .option("--snapshot-id <id>", "Select a loop snapshot by id.")
+    .option("--worktree <name>", "Select the newest snapshot for a worktree.")
+    .option("--session <id>", "Select the newest snapshot for a session.")
+    .option("--branch <name>", "Select the newest snapshot for a branch.")
     .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--json", "Print JSON.")
     .action((options: LoopCliOptions) => {
@@ -150,9 +154,11 @@ export function registerLoopCommand(program: Command): void {
 
   loop
     .command("memory-approve")
-    .description(
-      "Record the latest eligible loop memory candidate after approval.",
-    )
+    .description("Record an eligible loop memory candidate after approval.")
+    .option("--snapshot-id <id>", "Select a loop snapshot by id.")
+    .option("--worktree <name>", "Select the newest snapshot for a worktree.")
+    .option("--session <id>", "Select the newest snapshot for a session.")
+    .option("--branch <name>", "Select the newest snapshot for a branch.")
     .option("--data-dir <path>", "Override the promptlane data directory.")
     .option("--approved-by <actor>", "Approval actor label.", "user")
     .option("--json", "Print JSON.")
@@ -324,28 +330,25 @@ export function loopOutcomeForCli(options: LoopCliOptions = {}): string {
   }
 
   return withStorage(options.dataDir, (storage) => {
-    const selection = {
+    const target = {
+      snapshotId: options.snapshotId,
       worktree: options.worktree,
       sessionId: options.session,
       branch: options.branch,
     };
-    const hasSelection = hasLoopSnapshotSelection(selection);
-    if (options.snapshotId && hasSelection) {
+    const hasSelection = hasLoopSnapshotSelection(target);
+    if (hasAmbiguousLoopSnapshotTarget(target)) {
       throw new UserError(
         "Use either --snapshot-id or worktree/session/branch filters, not both.",
       );
     }
 
     const snapshots = storage.listLoopSnapshots({ limit: 100 }).items;
-    const snapshot = options.snapshotId
-      ? snapshots.find((candidate) => candidate.id === options.snapshotId)
-      : hasSelection
-        ? selectLoopSnapshot(snapshots, selection)
-        : snapshots.at(0);
+    const snapshot = selectLoopSnapshotTarget(snapshots, target);
     if (!snapshot) {
       throw new UserError(
         hasSelection
-          ? selectedLoopSnapshotNotFoundMessage(selection)
+          ? selectedLoopSnapshotNotFoundMessage(target)
           : "No loop snapshot found. Run `promptlane loop collect` before recording an outcome.",
       );
     }
@@ -382,8 +385,12 @@ export function loopOutcomeForCli(options: LoopCliOptions = {}): string {
 export function loopMemoryCandidateForCli(
   options: LoopCliOptions = {},
 ): string {
+  const target = loopSnapshotTargetForCli(options);
   return withStorage(options.dataDir, (storage) => {
-    const snapshot = storage.getLatestLoopSnapshot();
+    const snapshot = selectLoopSnapshotTarget(
+      storage.listLoopSnapshots({ limit: 100 }).items,
+      target,
+    );
     if (!snapshot) {
       throw new UserError(
         loopMemoryNoSnapshotCliMessage("promptlane loop memory-candidate"),
@@ -398,8 +405,12 @@ export function loopMemoryCandidateForCli(
 }
 
 export function loopMemoryApproveForCli(options: LoopCliOptions = {}): string {
+  const target = loopSnapshotTargetForCli(options);
   return withStorage(options.dataDir, (storage) => {
-    const snapshot = storage.getLatestLoopSnapshot();
+    const snapshot = selectLoopSnapshotTarget(
+      storage.listLoopSnapshots({ limit: 100 }).items,
+      target,
+    );
     if (!snapshot) {
       throw new UserError(
         loopMemoryNoSnapshotCliMessage("promptlane loop memory-approve"),
@@ -409,7 +420,7 @@ export function loopMemoryApproveForCli(options: LoopCliOptions = {}): string {
     const decision = decideLoopMemoryCandidate(snapshot);
     if (!decision.eligible || !decision.candidate) {
       throw new UserError(
-        `Latest loop is not eligible for memory approval: ${decision.reason}.`,
+        `Selected loop is not eligible for memory approval: ${decision.reason}.`,
       );
     }
 
@@ -598,6 +609,21 @@ function parseLimit(value: string | number | undefined): number {
 
 function collectOptionValue(value: string, previous: string[]): string[] {
   return [...previous, value];
+}
+
+function loopSnapshotTargetForCli(options: LoopCliOptions) {
+  const target = {
+    snapshotId: options.snapshotId,
+    worktree: options.worktree,
+    sessionId: options.session,
+    branch: options.branch,
+  };
+  if (hasAmbiguousLoopSnapshotTarget(target)) {
+    throw new UserError(
+      "Use either --snapshot-id or worktree/session/branch filters, not both.",
+    );
+  }
+  return target;
 }
 
 function parseSource(value: string | undefined): LoopSnapshotSource {

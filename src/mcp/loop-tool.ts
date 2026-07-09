@@ -11,12 +11,14 @@ import {
 import { decideLoopMemoryCandidate } from "../loop/memory-candidate.js";
 import { parseLoopOutcomeInput } from "../loop/outcome.js";
 import {
+  hasAmbiguousLoopSnapshotTarget,
   hasLoopSnapshotSelection,
   loopBriefNoSnapshotMcpMessage,
   loopInstructionPatchNoMemoryMcpMessage,
   loopMemoryNoSnapshotMcpMessage,
   loopOutcomeNoSnapshotMcpMessage,
   selectLoopSnapshot,
+  selectLoopSnapshotTarget,
   selectedLoopSnapshotNotFoundMessage,
 } from "../loop/snapshot-selection.js";
 import {
@@ -275,7 +277,15 @@ export function proposeLoopMemoryCandidateTool(
   args: ProposeLoopMemoryCandidateToolArguments,
   options: ScorePromptToolOptions = {},
 ): ProposeLoopMemoryCandidateToolResult {
-  if (args.latest === false) {
+  const target = loopSnapshotTargetForMcp(args);
+  if (!target.ok) {
+    return loopToolError("invalid_input", target.message);
+  }
+  if (
+    args.latest === false &&
+    !hasLoopSnapshotSelection(target.value) &&
+    !target.value.snapshotId
+  ) {
     return loopToolError(
       "invalid_input",
       "`latest` is the only supported loop snapshot selection mode today.",
@@ -291,7 +301,10 @@ export function proposeLoopMemoryCandidateTool(
     });
 
     try {
-      const snapshot = storage.getLatestLoopSnapshot();
+      const snapshot = selectLoopSnapshotTarget(
+        storage.listLoopSnapshots({ limit: 100 }).items,
+        target.value,
+      );
       if (!snapshot) {
         return loopToolError(
           "not_found",
@@ -332,7 +345,15 @@ export function recordLoopMemoryTool(
   if (!approvedBy) {
     return loopToolError("invalid_input", "`approved_by` must not be empty.");
   }
-  if (args.latest === false) {
+  const target = loopSnapshotTargetForMcp(args);
+  if (!target.ok) {
+    return loopToolError("invalid_input", target.message);
+  }
+  if (
+    args.latest === false &&
+    !hasLoopSnapshotSelection(target.value) &&
+    !target.value.snapshotId
+  ) {
     return loopToolError(
       "invalid_input",
       "`latest` is the only supported loop snapshot selection mode today.",
@@ -348,7 +369,10 @@ export function recordLoopMemoryTool(
     });
 
     try {
-      const snapshot = storage.getLatestLoopSnapshot();
+      const snapshot = selectLoopSnapshotTarget(
+        storage.listLoopSnapshots({ limit: 100 }).items,
+        target.value,
+      );
       if (!snapshot) {
         return loopToolError(
           "not_found",
@@ -360,7 +384,7 @@ export function recordLoopMemoryTool(
       if (!decision.eligible || !decision.candidate) {
         return loopToolError(
           "invalid_input",
-          `Latest loop is not eligible for memory approval: ${decision.reason}.`,
+          `Selected loop is not eligible for memory approval: ${decision.reason}.`,
         );
       }
 
@@ -492,6 +516,38 @@ export function applyInstructionPatchTool(
   } catch (error) {
     return loopToolError("apply_failed", errorMessage(error));
   }
+}
+
+function loopSnapshotTargetForMcp(args: {
+  snapshot_id?: string;
+  worktree?: string;
+  session_id?: string;
+  branch?: string;
+}):
+  | {
+      ok: true;
+      value: {
+        snapshotId?: string;
+        worktree?: string;
+        sessionId?: string;
+        branch?: string;
+      };
+    }
+  | { ok: false; message: string } {
+  const value = {
+    snapshotId: args.snapshot_id,
+    worktree: args.worktree,
+    sessionId: args.session_id,
+    branch: args.branch,
+  };
+  if (hasAmbiguousLoopSnapshotTarget(value)) {
+    return {
+      ok: false,
+      message:
+        "Use either `snapshot_id` or worktree/session/branch filters, not both.",
+    };
+  }
+  return { ok: true, value };
 }
 
 function loopToolPrivacy() {

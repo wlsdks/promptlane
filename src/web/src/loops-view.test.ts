@@ -63,6 +63,7 @@ describe("LoopsView", () => {
         loading: false,
         loops: loopList(),
         worktreeDetail: loopWorktree(),
+        onApproveSelectedMemory: async () => undefined,
         onRecordOutcome: async () => undefined,
       }),
     );
@@ -73,6 +74,7 @@ describe("LoopsView", () => {
     expect(html).toContain('name="outcome-evidence"');
     expect(html).toContain("Safe labels separated by commas");
     expect(html).toContain("Save outcome");
+    expect(html).toContain("Approve selected memory");
     expect(html).toContain("No automatic memory approval");
     expect(html).not.toContain("/Users/example");
   });
@@ -1389,6 +1391,12 @@ function loopWorktree(): LoopWorktreeResponse {
     branch: "feature/branch-filter",
     worktree: "agent-loop-worktree",
     session_id: "session-web",
+    memory_approved: false,
+    memory_candidate: {
+      eligible: true,
+      reason: "passed_with_evidence",
+      next_action: "promptlane loop memory-approve",
+    },
     selection_scope: {
       label: "Selection scope",
       filters: ["worktree", "session", "branch"],

@@ -2519,7 +2519,7 @@ function isLoopMergeReadiness(value: unknown): value is LoopMergeReadiness {
       readiness.status === "missing_evidence") &&
     (readiness.evidence === "evidence present" ||
       readiness.evidence === "missing evidence") &&
-    isLoopReviewPacketNextAction(readiness.next_action)
+    isLoopReviewAction(readiness.next_action)
   );
 }
 
@@ -2646,6 +2646,8 @@ export type LoopWorktreeResponse = {
   worktree: string;
   session_id?: string;
   branch?: string;
+  memory_approved?: boolean;
+  memory_candidate?: LoopListResponse["status"]["memory_candidate"];
   selection_scope: {
     label: "Selection scope";
     filters:
@@ -5386,6 +5388,8 @@ export async function getLoopWorktree(
   const body = (await response.json()) as {
     data?: {
       worktree?: unknown;
+      memory_approved?: unknown;
+      memory_candidate?: unknown;
       selection_scope?: unknown;
       snapshot_age?: unknown;
       selected_brief_action?: unknown;
@@ -5461,6 +5465,10 @@ export async function getLoopWorktree(
   };
   if (
     typeof body.data?.worktree !== "string" ||
+    (body.data.memory_approved !== undefined &&
+      typeof body.data.memory_approved !== "boolean") ||
+    (body.data.memory_candidate !== undefined &&
+      !isLoopMemoryCandidate(body.data.memory_candidate)) ||
     !isLoopWorktreeSelectionScope(body.data.selection_scope) ||
     (body.data.snapshot_age !== undefined &&
       !isLoopWorktreeSnapshotAge(body.data.snapshot_age)) ||
@@ -5866,6 +5874,7 @@ export async function getLoopWorktree(
 export async function approveLoopMemory(
   options: {
     approvedBy?: string;
+    snapshotId?: string;
   } = {},
 ): Promise<LoopMemoryApprovalResult> {
   await ensureSession();
@@ -5876,7 +5885,10 @@ export async function approveLoopMemory(
       "content-type": "application/json",
       "x-csrf-token": csrfToken ?? "",
     },
-    body: JSON.stringify({ approved_by: options.approvedBy ?? "web" }),
+    body: JSON.stringify({
+      approved_by: options.approvedBy ?? "web",
+      ...(options.snapshotId ? { snapshot_id: options.snapshotId } : {}),
+    }),
   });
 
   if (!response.ok) {

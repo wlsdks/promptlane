@@ -28,6 +28,7 @@ export function LoopsView({
   loading,
   loops,
   onApproveMemoryCandidate,
+  onApproveSelectedMemory,
   onCopyCommandCenterBrief,
   onCopySelectedBrief,
   onRecordOutcome,
@@ -37,6 +38,7 @@ export function LoopsView({
   loading: boolean;
   loops?: LoopListResponse;
   onApproveMemoryCandidate?: () => Promise<void>;
+  onApproveSelectedMemory?: (snapshotId: string) => Promise<void>;
   onCopyCommandCenterBrief?: (
     selection: CommandCenterBriefSelection,
   ) => Promise<void>;
@@ -167,6 +169,12 @@ export function LoopsView({
             {onRecordOutcome && worktreeDetail.items[0] && (
               <LoopOutcomeForm
                 currentStatus={worktreeDetail.items[0].outcome_status}
+                initialApprovalAvailable={
+                  worktreeDetail.memory_candidate?.eligible === true
+                }
+                key={worktreeDetail.items[0].id}
+                memoryApproved={worktreeDetail.memory_approved === true}
+                onApprove={onApproveSelectedMemory}
                 onRecord={onRecordOutcome}
                 snapshotId={worktreeDetail.items[0].id}
               />

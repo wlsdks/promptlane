@@ -238,11 +238,13 @@ privacy contract.
 
 Memory candidates require:
 
-- a latest eligible snapshot
+- a latest or explicitly selected eligible snapshot
 - `outcome.status = "passed"`
 - at least one safe evidence ref
 - no unsafe statement content
 - explicit approval before persistence
+- one unambiguous selection mode: exact snapshot id or
+  worktree/session/branch filters
 
 Instruction patch proposals require:
 

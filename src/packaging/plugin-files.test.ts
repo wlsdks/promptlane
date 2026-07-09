@@ -3368,6 +3368,10 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "docs/PACKAGE_CONTENTS.md"),
       "utf8",
     );
+    const browserSmoke = readFileSync(
+      join(process.cwd(), "scripts/browser-e2e.mjs"),
+      "utf8",
+    );
 
     expect(packageJson.files).toContain("scripts/first-coach-loop-dogfood.mjs");
     expect(packageJson.scripts["dogfood:first-coach-loop"]).toBe(
@@ -3378,7 +3382,10 @@ describe("plugin packaging files", () => {
     expect(smoke).toContain("loop collect --json");
     expect(smoke).toContain("loop outcome --json");
     expect(smoke).toContain("loop memory-candidate --json");
+    expect(smoke).toContain('"--snapshot-id"');
     expect(smoke).toContain("loop brief --json");
+    expect(browserSmoke).toContain("Approve selected memory");
+    expect(browserSmoke).toContain("browser-newer-unrelated");
     expect(
       readFileSync(join(process.cwd(), "src/cli/commands/loop.ts"), "utf8"),
     ).toContain('.command("outcome")');
@@ -3427,6 +3434,7 @@ describe("plugin packaging files", () => {
     expect(smoke).toContain("record_loop_outcome");
     expect(smoke).toContain("propose_loop_memory_candidate");
     expect(smoke).toContain("record_loop_memory");
+    expect(smoke).toContain("snapshot_id: snapshot.id");
     expect(smoke).toContain("propose_instruction_patch");
     expect(smoke).toContain("PROMPTLANE_LOOP_MEMORY_SECRET");
     expect(smoke).toContain("assertNotIncludes");

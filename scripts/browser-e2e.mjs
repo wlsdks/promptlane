@@ -477,6 +477,52 @@ try {
   await assertBrowserSafe(page, "mcp");
   await captureScreenshot(page, "mcp-desktop");
 
+  step("Verify selected worktree memory approval without latest fallback");
+  const selectedMemorySnapshot = seedSelectedMemoryWorktrees();
+  await page.goto(
+    `${serverBaseUrl}/loops?worktree=browser-selected-memory&session=browser-selected-session&branch=codex%2Fbrowser-selected-memory`,
+  );
+  await page.getByRole("heading", { name: "Loops", level: 1 }).waitFor();
+  const selectedMemoryDetail = await page.evaluate(async () => {
+    const response = await fetch(
+      "/api/v1/loops/worktrees/browser-selected-memory?session_id=browser-selected-session&branch=codex%2Fbrowser-selected-memory",
+    );
+    return response.json();
+  });
+  assertEqual(
+    selectedMemoryDetail.data?.items?.[0]?.id,
+    selectedMemorySnapshot.id,
+    "Selected worktree detail should resolve the exact browser fixture.",
+  );
+  assertEqual(
+    selectedMemoryDetail.data?.memory_candidate?.eligible,
+    true,
+    "Selected worktree detail should expose an eligible memory candidate.",
+  );
+  const selectedMemoryApprovalButton = page.getByRole("button", {
+    name: /Approve selected memory|선택 메모리 승인/,
+  });
+  await selectedMemoryApprovalButton.waitFor();
+  await assertText(
+    page,
+    "browser-newer-unrelated",
+    "Loops should show that another worktree is globally newer.",
+  );
+  await selectedMemoryApprovalButton.click();
+  await page.getByText(/Memory approved|메모리 승인됨/).waitFor();
+  assertEqual(
+    await selectedMemoryApprovalButton.count(),
+    0,
+    "Selected approval button should disappear after exact snapshot approval.",
+  );
+  assertEqual(
+    selectedMemorySnapshot.worktree_label,
+    "browser-selected-memory",
+    "Selected memory fixture should preserve its worktree label.",
+  );
+  await assertBrowserSafe(page, "selected loop memory approval");
+  await captureScreenshot(page, "loops-selected-memory-desktop");
+
   // Export is now a sub-route of Settings (/exports); same reason as MCP.
   await page.goto(`${serverBaseUrl}/exports`);
   await page
@@ -659,6 +705,64 @@ function insertLoopOutcomeForClaudePrompt() {
   } finally {
     db.close();
   }
+}
+
+function seedSelectedMemoryWorktrees() {
+  const selected = JSON.parse(
+    runCli([
+      "loop",
+      "collect",
+      "--data-dir",
+      dataDir,
+      "--cwd-prefix",
+      privateProjectDir,
+      "--worktree",
+      "browser-selected-memory",
+      "--branch",
+      "codex/browser-selected-memory",
+      "--json",
+    ]),
+  );
+  runCli([
+    "loop",
+    "outcome",
+    "--data-dir",
+    dataDir,
+    "--snapshot-id",
+    selected.id,
+    "--status",
+    "passed",
+    "--summary",
+    "Selected browser worktree checks passed.",
+    "--evidence-ref",
+    "test:browser-selected-memory",
+    "--json",
+  ]);
+  runCli([
+    "loop",
+    "collect",
+    "--data-dir",
+    dataDir,
+    "--cwd-prefix",
+    privateProjectDir,
+    "--worktree",
+    "browser-newer-unrelated",
+    "--branch",
+    "codex/browser-newer-unrelated",
+    "--json",
+  ]);
+
+  const db = new Database(join(dataDir, "promptlane.sqlite"));
+  try {
+    db.prepare("UPDATE loop_snapshots SET session_id = ? WHERE id = ?").run(
+      "browser-selected-session",
+      selected.id,
+    );
+  } finally {
+    db.close();
+  }
+
+  return { ...selected, worktree_label: "browser-selected-memory" };
 }
 
 function runCli(args) {

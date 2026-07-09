@@ -28,10 +28,18 @@ export type RecordLoopOutcomeToolArguments = {
 
 export type ProposeLoopMemoryCandidateToolArguments = {
   latest?: boolean;
+  snapshot_id?: string;
+  worktree?: string;
+  session_id?: string;
+  branch?: string;
 };
 
 export type RecordLoopMemoryToolArguments = {
   latest?: boolean;
+  snapshot_id?: string;
+  worktree?: string;
+  session_id?: string;
+  branch?: string;
   approved_by: string;
 };
 

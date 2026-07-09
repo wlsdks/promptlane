@@ -80,6 +80,8 @@ tools, benchmark/release validation, and an English/Korean web UI.
   latest or selected snapshot before proposing or approving durable memory.
 - Selected-worktree outcome recording in the web Loops view, with CSRF,
   write-time privacy validation, and no automatic memory approval.
+- Exact snapshot and worktree/session/branch memory candidate and approval
+  selection across CLI, MCP, and web without global-latest fallback.
 - Agent prompt wrappers, agent-assisted rewrite workflow, and
   agent-mediated judge tools for explicit redacted-packet handoff.
 - Prompt rewrite guard that prevents silent prompt resubmission.

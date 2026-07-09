@@ -224,9 +224,25 @@ describe("MCP stdio server", () => {
           }),
           expect.objectContaining({
             name: "propose_loop_memory_candidate",
+            inputSchema: expect.objectContaining({
+              properties: expect.objectContaining({
+                snapshot_id: expect.objectContaining({ type: "string" }),
+                worktree: expect.objectContaining({ type: "string" }),
+                session_id: expect.objectContaining({ type: "string" }),
+                branch: expect.objectContaining({ type: "string" }),
+              }),
+            }),
           }),
           expect.objectContaining({
             name: "record_loop_memory",
+            inputSchema: expect.objectContaining({
+              properties: expect.objectContaining({
+                snapshot_id: expect.objectContaining({ type: "string" }),
+                worktree: expect.objectContaining({ type: "string" }),
+                session_id: expect.objectContaining({ type: "string" }),
+                branch: expect.objectContaining({ type: "string" }),
+              }),
+            }),
           }),
           expect.objectContaining({
             name: "propose_instruction_patch",

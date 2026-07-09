@@ -35,6 +35,30 @@ const LOOP_OUTCOME_STATUS_SCHEMA = {
   enum: ["unknown", "in_progress", "passed", "failed", "blocked", "abandoned"],
 } as const;
 
+const LOOP_MEMORY_SELECTION_PROPERTIES = {
+  latest: {
+    type: "boolean",
+    description:
+      "Use the latest local loop snapshot when no explicit selection is provided. Defaults to true.",
+  },
+  snapshot_id: {
+    type: "string",
+    description: "Select one exact local loop snapshot id.",
+  },
+  worktree: {
+    type: "string",
+    description: "Select the newest snapshot for this safe worktree label.",
+  },
+  session_id: {
+    type: "string",
+    description: "Select the newest snapshot for this agent session id.",
+  },
+  branch: {
+    type: "string",
+    description: "Select the newest snapshot for this branch label.",
+  },
+} as const;
+
 const TOOL_ERROR_OUTPUT_SCHEMA = {
   type: "object",
   required: ["is_error", "error_code", "message"],
@@ -540,20 +564,14 @@ export const PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION: PromptLaneMcpToolDef
   {
     name: "propose_loop_memory_candidate",
     description:
-      "Decide whether the latest local PromptLane outcome is safe and evidence-backed enough to propose as a memory candidate. This is read-only and approval-gated: it never writes AGENTS.md, CLAUDE.md, memory files, prompt bodies, raw paths, secrets, transcripts, compact summaries, or external LLM results.",
+      "Decide whether the latest or explicitly selected local PromptLane outcome is safe and evidence-backed enough to propose as a memory candidate. This is read-only and approval-gated: it never writes AGENTS.md, CLAUDE.md, memory files, prompt bodies, raw paths, secrets, transcripts, compact summaries, or external LLM results.",
     annotations: {
       ...LOCAL_LOOP_READ_ONLY_TOOL_ANNOTATIONS,
       title: "Propose PromptLane memory candidate",
     },
     inputSchema: {
       type: "object",
-      properties: {
-        latest: {
-          type: "boolean",
-          description:
-            "Use the latest local loop snapshot. Defaults to true; no other selection mode exists yet.",
-        },
-      },
+      properties: LOOP_MEMORY_SELECTION_PROPERTIES,
       additionalProperties: false,
     },
     outputSchema: {
@@ -609,7 +627,7 @@ export const PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION: PromptLaneMcpToolDef
 export const RECORD_LOOP_MEMORY_TOOL_DEFINITION: PromptLaneMcpToolDefinition = {
   name: "record_loop_memory",
   description:
-    "Record a user-approved PromptLane memory from the latest eligible loop outcome. This writes only the approved candidate statement and safe evidence refs into local PromptLane storage; it never writes AGENTS.md, CLAUDE.md, project docs, prompt bodies, raw paths, transcripts, compact summaries, or external LLM results.",
+    "Record a user-approved PromptLane memory from the latest or explicitly selected eligible loop outcome. This writes only the approved candidate statement and safe evidence refs into local PromptLane storage; it never writes AGENTS.md, CLAUDE.md, project docs, prompt bodies, raw paths, transcripts, compact summaries, or external LLM results.",
   annotations: {
     ...LOCAL_LOOP_WRITE_TOOL_ANNOTATIONS,
     title: "Record approved PromptLane memory",
@@ -618,11 +636,7 @@ export const RECORD_LOOP_MEMORY_TOOL_DEFINITION: PromptLaneMcpToolDefinition = {
     type: "object",
     required: ["approved_by"],
     properties: {
-      latest: {
-        type: "boolean",
-        description:
-          "Use the latest local loop snapshot. Defaults to true; no other selection mode exists yet.",
-      },
+      ...LOOP_MEMORY_SELECTION_PROPERTIES,
       approved_by: {
         type: "string",
         description:

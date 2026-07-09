@@ -1,4 +1,4 @@
-import { Save } from "lucide-react";
+import { Save, ShieldCheck } from "lucide-react";
 import { type FormEvent, useState } from "react";
 
 import type { LoopOutcomeStatus } from "./api.js";
@@ -11,10 +11,16 @@ export type LoopOutcomeInput = {
 
 export function LoopOutcomeForm({
   currentStatus,
+  initialApprovalAvailable = false,
+  memoryApproved = false,
+  onApprove,
   onRecord,
   snapshotId,
 }: {
   currentStatus: string;
+  initialApprovalAvailable?: boolean;
+  memoryApproved?: boolean;
+  onApprove?: (snapshotId: string) => Promise<void>;
   onRecord: (snapshotId: string, input: LoopOutcomeInput) => Promise<void>;
   snapshotId: string;
 }) {
@@ -25,6 +31,11 @@ export function LoopOutcomeForm({
   const [evidence, setEvidence] = useState("");
   const [busy, setBusy] = useState(false);
   const [recorded, setRecorded] = useState(false);
+  const [approvalAvailable, setApprovalAvailable] = useState(
+    initialApprovalAvailable,
+  );
+  const [approvalBusy, setApprovalBusy] = useState(false);
+  const [approved, setApproved] = useState(memoryApproved);
 
   async function submit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -40,10 +51,26 @@ export function LoopOutcomeForm({
           .filter(Boolean),
       });
       setRecorded(true);
+      setApprovalAvailable(status === "passed");
     } catch {
       setRecorded(false);
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function approve(): Promise<void> {
+    if (!onApprove) return;
+    setApprovalBusy(true);
+    setApproved(false);
+    try {
+      await onApprove(snapshotId);
+      setApproved(true);
+      setApprovalAvailable(false);
+    } catch {
+      setApproved(false);
+    } finally {
+      setApprovalBusy(false);
     }
   }
 
@@ -57,7 +84,12 @@ export function LoopOutcomeForm({
           <span className="panel-eyebrow">Selected snapshot</span>
           <h3>Record outcome</h3>
         </div>
-        {recorded && <span className="status-pill good">Recorded</span>}
+        <div className="loop-outcome-statuses">
+          {recorded && <span className="status-pill good">Recorded</span>}
+          {approved && (
+            <span className="status-pill good">Memory approved</span>
+          )}
+        </div>
       </div>
       <div className="loop-outcome-fields">
         <label>
@@ -103,6 +135,17 @@ export function LoopOutcomeForm({
           <Save aria-hidden="true" size={15} />
           {busy ? "Saving" : "Save outcome"}
         </button>
+        {approvalAvailable && onApprove && (
+          <button
+            className="loop-copy-button"
+            disabled={approvalBusy}
+            onClick={() => void approve()}
+            type="button"
+          >
+            <ShieldCheck aria-hidden="true" size={15} />
+            {approvalBusy ? "Approving" : "Approve selected memory"}
+          </button>
+        )}
         <span>Local only · No automatic memory approval</span>
       </div>
     </form>

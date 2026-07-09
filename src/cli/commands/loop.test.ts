@@ -757,6 +757,59 @@ describe("loop CLI command", () => {
     expect(text).not.toContain("/Users/example");
   });
 
+  it("proposes and approves memory for a selected worktree instead of global latest", async () => {
+    const dataDir = createTempDir();
+    await seedPrompts(dataDir);
+    const selected = JSON.parse(
+      loopCollectForCli({
+        dataDir,
+        json: true,
+        cwdPrefix: "/Users/example/private-project",
+        now: new Date("2026-07-04T01:00:00.000Z"),
+        cwd: "/Users/example/private-project",
+        worktree: "primary-worktree",
+      }),
+    ) as { id: string };
+    seedLoopOutcome(dataDir, selected.id);
+    seedNewerOtherWorktreeSnapshot(dataDir);
+
+    const candidate = JSON.parse(
+      loopMemoryCandidateForCli({
+        dataDir,
+        json: true,
+        worktree: "primary-worktree",
+      }),
+    ) as { snapshot_id: string; candidate: { statement: string } };
+    const approval = JSON.parse(
+      loopMemoryApproveForCli({
+        dataDir,
+        json: true,
+        approvedBy: "user",
+        worktree: "primary-worktree",
+      }),
+    ) as { memory: { snapshot_id: string; statement: string } };
+
+    expect(candidate.snapshot_id).toBe(selected.id);
+    expect(candidate.candidate.statement).toContain("Scheduler lifecycle");
+    expect(approval.memory.snapshot_id).toBe(selected.id);
+    expect(approval.memory.statement).toContain("Scheduler lifecycle");
+    expect(JSON.stringify({ candidate, approval })).not.toContain(
+      "Other worktree has a newer snapshot.",
+    );
+  });
+
+  it("rejects mixed snapshot-id and worktree memory selection", () => {
+    expect(() =>
+      loopMemoryCandidateForCli({
+        dataDir: createTempDir(),
+        snapshotId: "loop_selected",
+        worktree: "primary-worktree",
+      }),
+    ).toThrow(
+      "Use either --snapshot-id or worktree/session/branch filters, not both.",
+    );
+  });
+
   it("records and lists explicit local merge decisions without prompt bodies or raw paths", async () => {
     const dataDir = createTempDir();
     await seedPrompts(dataDir);

@@ -16,7 +16,7 @@ import {
   ShieldCheck,
   Target,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { PromptImprovement } from "../../analysis/improve.js";
 import { selectReviewPrompts } from "./archive-review-model.js";
@@ -202,6 +202,11 @@ export function App() {
       }
     | undefined
   >();
+  const navigate = useCallback((next: View): void => {
+    const path = pathForView(next);
+    window.history.pushState({}, "", path);
+    setView(next);
+  }, []);
   const { loading, nextCursor, prompts, refreshList, updatePrompt } =
     usePromptListQuery({
       listPrompts,
@@ -365,6 +370,30 @@ export function App() {
       ]);
     } catch (error) {
       setError(errorMessageOrDefault(error, "Could not record loop outcome."));
+      throw error;
+    }
+  }
+
+  async function approveSelectedLoopMemory(snapshotId: string): Promise<void> {
+    setError(undefined);
+    try {
+      await approveLoopMemory({ approvedBy: "web", snapshotId });
+      await Promise.all([
+        listLoops().then(setLoops),
+        loopWorktree
+          ? openLoopWorktree({
+              worktree: loopWorktree.worktree,
+              ...(loopWorktree.session_id
+                ? { session: loopWorktree.session_id }
+                : {}),
+              ...(loopWorktree.branch ? { branch: loopWorktree.branch } : {}),
+            })
+          : Promise.resolve(),
+      ]);
+    } catch (error) {
+      setError(
+        errorMessageOrDefault(error, "Could not approve selected loop memory."),
+      );
       throw error;
     }
   }
@@ -695,12 +724,6 @@ export function App() {
       current?.id === id ? { ...current, usefulness } : current,
     );
     updatePrompt(id, { usefulness });
-  }
-
-  function navigate(next: View): void {
-    const path = pathForView(next);
-    window.history.pushState({}, "", path);
-    setView(next);
   }
 
   const toggleSidebar = (): void => {
@@ -1059,6 +1082,9 @@ export function App() {
             loops={loops}
             loading={!loops}
             onApproveMemoryCandidate={() => approveLatestLoopMemory()}
+            onApproveSelectedMemory={(snapshotId) =>
+              approveSelectedLoopMemory(snapshotId)
+            }
             onCopyCommandCenterBrief={(selection) =>
               copyCommandCenterLoopBrief(selection)
             }

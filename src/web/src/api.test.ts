@@ -6152,6 +6152,63 @@ describe("web api export client", () => {
     expect(JSON.stringify(result)).not.toContain("sk-proj-secret");
   });
 
+  it("sends an exact snapshot id for selected loop memory approval", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: {
+            recorded: true,
+            memory: {
+              id: "mem_selected",
+              snapshot_id: "loop_selected",
+              title: "Remember selected outcome",
+              evidence_refs: ["test:selected"],
+              approved_by: "web",
+              created_at: "2026-07-04T02:10:00.000Z",
+              privacy: {
+                local_only: true,
+                stores_prompt_bodies: false,
+                stores_raw_paths: false,
+                writes_instruction_files: false,
+                external_calls: false,
+              },
+            },
+            next_action:
+              "use recorded memory as local context in future loop briefs",
+            next_actions: ["promptlane loop brief"],
+            privacy: {
+              local_only: true,
+              returns_prompt_bodies: false,
+              returns_raw_paths: false,
+              writes_instruction_files: false,
+              external_calls: false,
+            },
+          },
+        }),
+      );
+    const { approveLoopMemory } = await import("./api.js");
+
+    const result = await approveLoopMemory({
+      approvedBy: "web",
+      snapshotId: "loop_selected",
+    });
+
+    expect(result.memory.snapshot_id).toBe("loop_selected");
+    expect(fetchMock).toHaveBeenLastCalledWith("/api/v1/loops/memory/approve", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "content-type": "application/json",
+        "x-csrf-token": "csrf-1",
+      },
+      body: JSON.stringify({
+        approved_by: "web",
+        snapshot_id: "loop_selected",
+      }),
+    });
+  });
+
   it("reports malformed loop memory approval responses without returning incomplete durable memory data", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

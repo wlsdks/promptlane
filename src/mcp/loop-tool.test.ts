@@ -551,6 +551,59 @@ describe("PromptLane MCP tools", () => {
     expect(serialized).not.toContain("/Users/example");
   });
 
+  it("proposes and records memory for a selected worktree instead of global latest", () => {
+    const dataDir = seedLoopSnapshot({
+      outcome: {
+        status: "passed",
+        summary: "Selected worktree checks passed.",
+        evidence_refs: ["test:selected-worktree"],
+      },
+    });
+    seedNewerOtherWorktreeSnapshot(dataDir);
+
+    const candidate = proposeLoopMemoryCandidateTool(
+      { worktree: "worktree-mcp" },
+      { dataDir },
+    );
+    const approval = recordLoopMemoryTool(
+      {
+        snapshot_id: "loop_mcp",
+        approved_by: "user",
+      },
+      { dataDir },
+    );
+
+    expect(candidate).toMatchObject({
+      eligible: true,
+      snapshot_id: "loop_mcp",
+      candidate: { statement: "Selected worktree checks passed." },
+    });
+    expect(approval).toMatchObject({
+      recorded: true,
+      memory: {
+        snapshot_id: "loop_mcp",
+        statement: "Selected worktree checks passed.",
+      },
+    });
+    expect(JSON.stringify({ candidate, approval })).not.toContain(
+      "Other worktree has a newer snapshot.",
+    );
+  });
+
+  it("rejects mixed snapshot-id and worktree memory selection", () => {
+    const result = proposeLoopMemoryCandidateTool(
+      { snapshot_id: "loop_mcp", worktree: "worktree-mcp" },
+      { dataDir: createTempDir() },
+    );
+
+    expect(result).toEqual({
+      is_error: true,
+      error_code: "invalid_input",
+      message:
+        "Use either `snapshot_id` or worktree/session/branch filters, not both.",
+    });
+  });
+
   it("proposes an instruction patch from approved memory without writing files", () => {
     const dataDir = seedLoopSnapshot({
       outcome: {

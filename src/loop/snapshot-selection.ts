@@ -8,6 +8,10 @@ export type LoopSnapshotSelection = {
   branch?: string;
 };
 
+export type LoopSnapshotTarget = LoopSnapshotSelection & {
+  snapshotId?: string;
+};
+
 export function hasLoopSnapshotSelection(
   selection: LoopSnapshotSelection,
 ): boolean {
@@ -30,6 +34,25 @@ export function selectLoopSnapshot(
     }
     return true;
   });
+}
+
+export function hasAmbiguousLoopSnapshotTarget(
+  target: LoopSnapshotTarget,
+): boolean {
+  return Boolean(target.snapshotId && hasLoopSnapshotSelection(target));
+}
+
+export function selectLoopSnapshotTarget(
+  snapshots: readonly LoopSnapshot[],
+  target: LoopSnapshotTarget,
+): LoopSnapshot | undefined {
+  if (target.snapshotId) {
+    return snapshots.find((snapshot) => snapshot.id === target.snapshotId);
+  }
+  if (hasLoopSnapshotSelection(target)) {
+    return selectLoopSnapshot(snapshots, target);
+  }
+  return snapshots.at(0);
 }
 
 export function selectedLoopSnapshotNotFoundMessage(

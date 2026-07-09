@@ -820,6 +820,9 @@ const UI_TRANSLATIONS: Record<string, string> = {
   Recorded: "기록됨",
   Saving: "저장 중",
   "Save outcome": "결과 저장",
+  Approving: "승인 중",
+  "Approve selected memory": "선택 메모리 승인",
+  "Memory approved": "메모리 승인됨",
   "Focused checks passed": "집중 검증 통과",
   "Safe labels separated by commas": "쉼표로 구분한 안전한 라벨",
   "Local only · No automatic memory approval":

@@ -57,6 +57,8 @@ corepack pnpm promptlane loop collect
 corepack pnpm promptlane loop brief
 corepack pnpm promptlane loop outcome --status passed --summary "Focused checks passed." --evidence-ref "test:focused"
 corepack pnpm promptlane loop memory-candidate
+corepack pnpm promptlane loop memory-candidate --worktree <safe-worktree-label>
+corepack pnpm promptlane loop memory-approve --worktree <safe-worktree-label> --approved-by user
 ```
 
 Acceptance criteria:

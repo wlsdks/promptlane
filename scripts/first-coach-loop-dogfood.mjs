@@ -149,14 +149,49 @@ try {
     "Loop outcome output must not expose the raw project path.",
   );
 
+  step("collect a newer unrelated worktree snapshot");
+  const newerSnapshot = parseJson(
+    runCli([
+      "loop",
+      "collect",
+      "--data-dir",
+      dataDir,
+      "--cwd-prefix",
+      projectDir,
+      "--worktree",
+      "newer-unrelated-worktree",
+      "--branch",
+      "newer-unrelated-branch",
+      "--json",
+    ]),
+  );
+  assertEqual(
+    newerSnapshot.outcome.status,
+    "unknown",
+    "Newer unrelated worktree should not be memory-eligible.",
+  );
+
   step("loop memory-candidate --json");
   const memoryCandidate = parseJson(
-    runCli(["loop", "memory-candidate", "--data-dir", dataDir, "--json"]),
+    runCli([
+      "loop",
+      "memory-candidate",
+      "--data-dir",
+      dataDir,
+      "--snapshot-id",
+      snapshot.id,
+      "--json",
+    ]),
   );
   assertEqual(
     memoryCandidate.eligible,
     true,
     "Passed outcome with safe evidence should be memory-eligible.",
+  );
+  assertEqual(
+    memoryCandidate.snapshot_id,
+    snapshot.id,
+    "CLI memory candidate should preserve exact snapshot selection.",
   );
 
   step("loop brief --json");

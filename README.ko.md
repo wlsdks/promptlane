@@ -671,11 +671,18 @@ promptlane loop memory-candidate
 promptlane loop memory-approve --approved-by user
 ```
 
+병렬 worktree에서는 `memory-candidate`와 `memory-approve`에 동일한
+`--snapshot-id` 또는 `--worktree`/`--session`/`--branch` 선택자를 전달합니다.
+MCP도 `snapshot_id`, `worktree`, `session_id`, `branch`를 지원하며 exact id와
+filter를 섞으면 global latest로 fallback하지 않고 거부합니다.
+
 `loop outcome`은 기본적으로 최신 snapshot을 사용하며 `--snapshot-id` 또는
 `--worktree`, `--session`, `--branch` 선택자를 지원합니다. summary와 evidence
 ref에 secret 또는 raw local path가 있으면 SQLite에 쓰기 전에 거부합니다.
 웹 Loops의 worktree detail에서도 선택 snapshot의 outcome을 명시적으로 기록할
 수 있으며, 기록 후 local readiness만 갱신하고 memory는 자동 승인하지 않습니다.
+별도 선택 memory 승인 버튼은 exact snapshot만 승인하고 완료 후 다시 노출되지
+않습니다.
 
 읽기 tool은 local-only로 동작하고 구조화 JSON metadata에 대한 MCP
 `outputSchema`와 text JSON fallback을 함께 제공합니다.

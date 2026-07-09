@@ -2419,6 +2419,85 @@ describe("createServer P2 ingest boundary", () => {
     expect(serialized).not.toContain("sk-proj-secret");
   });
 
+  it("approves an exact selected snapshot instead of a newer worktree snapshot", async () => {
+    const storage = createMemoryStorage();
+    storage.loopSnapshots.push(
+      loopSnapshot({
+        id: "loop_newer_other",
+        created_at: "2026-07-04T02:00:00.000Z",
+        worktree_label: "other-worktree",
+        outcome: {
+          status: "passed",
+          summary: "Other worktree is newer.",
+          evidence_refs: ["test:other"],
+        },
+      }),
+      loopSnapshot({
+        id: "loop_selected",
+        worktree_label: "selected-worktree",
+        outcome: {
+          status: "passed",
+          summary: "Selected worktree checks passed.",
+          evidence_refs: ["test:selected"],
+        },
+      }),
+    );
+    const server = createTestServer({ storage });
+    const session = await server.inject({
+      method: "GET",
+      url: "/api/v1/session",
+      headers: { host: "127.0.0.1:17373" },
+    });
+    const cookie = String(session.headers["set-cookie"]);
+    const csrfToken = session.json<{ data: { csrf_token: string } }>().data
+      .csrf_token;
+
+    const response = await server.inject({
+      method: "POST",
+      url: "/api/v1/loops/memory/approve",
+      headers: {
+        host: "127.0.0.1:17373",
+        cookie,
+        "x-csrf-token": csrfToken,
+      },
+      payload: { approved_by: "web", snapshot_id: "loop_selected" },
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toMatchObject({
+      data: {
+        memory: {
+          snapshot_id: "loop_selected",
+          evidence_refs: ["test:selected"],
+        },
+      },
+    });
+    expect(storage.loopMemories).toHaveLength(1);
+    expect(storage.loopMemories[0]?.statement).toBe(
+      "Selected worktree checks passed.",
+    );
+    expect(response.body).not.toContain("Other worktree is newer.");
+
+    const detail = await server.inject({
+      method: "GET",
+      url: "/api/v1/loops/worktrees/selected-worktree",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+    });
+    expect(detail.json()).toMatchObject({
+      data: {
+        memory_approved: true,
+        items: [{ id: "loop_selected" }],
+      },
+    });
+    expect(
+      detail.json<{ data: { memory_candidate?: unknown } }>().data
+        .memory_candidate,
+    ).toBeUndefined();
+  });
+
   it("records a privacy-safe outcome for an exact loop snapshot behind csrf", async () => {
     const storage = createMemoryStorage();
     storage.loopSnapshots.push(loopSnapshot());

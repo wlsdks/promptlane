@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-10 PromptLane Selected Snapshot Memory Approval
+
+- [x] CHECK: outcome recording supports exact/selected snapshots while CLI,
+  MCP, and web memory candidate/approval still silently use global latest.
+- [x] RED: multi-worktree tests require selected candidate/approval to keep the
+  selected snapshot id even when another worktree is newer.
+- [x] GREEN: one shared target resolver supports snapshot id or
+  worktree/session/branch filters and rejects ambiguous mixed selection.
+- [x] GREEN: CLI and MCP schemas/handlers expose the same selected-memory
+  contract without changing latest-by-default compatibility.
+- [x] GREEN: web approval accepts an exact selected snapshot id and never
+  approves another worktree as a side effect.
+- [x] VERIFY: focused selector/CLI/MCP/server/web tests, live multi-worktree
+  flow, static/package gates, diff hygiene, PR merge, and v1.0.0 retag.
+
 ## 2026-07-10 PromptLane Web Loop Outcome Recording
 
 - [x] CHECK: the Loops web view can approve eligible memory but cannot record

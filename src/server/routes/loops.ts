@@ -63,7 +63,7 @@ type LoopMemoryReadRouteStorage = Pick<
 
 type LoopMemoryApprovalRouteStorage = Pick<
   LoopSnapshotStoragePort,
-  "getLatestLoopSnapshot"
+  "listLoopSnapshots"
 > &
   Pick<LoopMemoryStoragePort, "recordLoopMemory" | "listLoopMemories">;
 
@@ -79,6 +79,7 @@ type LoopReadRouteStorage = Pick<LoopSnapshotStoragePort, "listLoopSnapshots"> &
 
 const LoopMemoryApprovalBodySchema = z.object({
   approved_by: z.string().trim().min(1).max(80).optional(),
+  snapshot_id: z.string().trim().min(1).max(120).optional(),
 });
 
 const LoopOutcomeBodySchema = z.object({
@@ -168,6 +169,18 @@ export function registerLoopRoutes(
       ) ?? [];
     const boundaries = storage.listCompactBoundaries({ limit: 100 }).items;
     const latestSnapshot = snapshots.at(0);
+    const projectMemories = latestSnapshot
+      ? storage.listLoopMemories({
+          projectId: latestSnapshot.project_id,
+        }).items
+      : [];
+    const memoryApproved = latestSnapshot
+      ? hasApprovedMemoryForSnapshot(projectMemories, latestSnapshot.id)
+      : false;
+    const memoryCandidate =
+      latestSnapshot && !memoryApproved
+        ? decideLoopMemoryCandidate(latestSnapshot)
+        : undefined;
     const latestDecision = latestSnapshot
       ? storage
           .listLoopMergeDecisions({
@@ -187,7 +200,7 @@ export function registerLoopRoutes(
       ? createPromptLaneStatus({
           snapshots: allSnapshots,
           compactBoundaries: boundaries,
-          projectMemoryCount: 0,
+          projectMemoryCount: projectMemories.length,
           mergeDecisions,
         })
       : undefined;
@@ -215,6 +228,16 @@ export function registerLoopRoutes(
         }),
         ...(latestSnapshot
           ? {
+              memory_approved: memoryApproved,
+              ...(memoryCandidate
+                ? {
+                    memory_candidate: {
+                      eligible: memoryCandidate.eligible,
+                      reason: memoryCandidate.reason,
+                      next_action: "promptlane loop memory-approve" as const,
+                    },
+                  }
+                : {}),
               snapshot_age: snapshotAgeFor({
                 selectedSnapshot: latestSnapshot,
                 snapshots: allSnapshots,
@@ -581,9 +604,12 @@ export function registerLoopRoutes(
       request.url,
     );
     const body = LoopMemoryApprovalBodySchema.parse(request.body ?? {});
-    const latest = storage.getLatestLoopSnapshot();
+    const snapshots = storage.listLoopSnapshots({ limit: 100 }).items;
+    const selected = body.snapshot_id
+      ? snapshots.find((snapshot) => snapshot.id === body.snapshot_id)
+      : snapshots.at(0);
 
-    if (!latest) {
+    if (!selected) {
       throw problem(
         404,
         "Not Found",
@@ -592,29 +618,29 @@ export function registerLoopRoutes(
       );
     }
 
-    const decision = decideLoopMemoryCandidate(latest);
+    const decision = decideLoopMemoryCandidate(selected);
     if (!decision.eligible || !decision.candidate) {
       throw problem(
         409,
         "Conflict",
-        `Latest loop memory candidate is not eligible: ${decision.reason}.`,
+        `Selected loop memory candidate is not eligible: ${decision.reason}.`,
         request.url,
       );
     }
     const existingMemories = storage.listLoopMemories({
-      projectId: latest.project_id,
+      projectId: selected.project_id,
     }).items;
-    if (hasApprovedMemoryForSnapshot(existingMemories, latest.id)) {
+    if (hasApprovedMemoryForSnapshot(existingMemories, selected.id)) {
       throw problem(
         409,
         "Conflict",
-        "Latest loop memory candidate is already approved.",
+        "Selected loop memory candidate is already approved.",
         request.url,
       );
     }
 
     const memory = storage.recordLoopMemory({
-      snapshot_id: latest.id,
+      snapshot_id: selected.id,
       title: decision.candidate.title,
       statement: decision.candidate.statement,
       evidence_refs: decision.candidate.evidence_refs,
@@ -2268,7 +2294,7 @@ function requireLoopMemoryApprovalStorage(
 ): LoopMemoryApprovalRouteStorage {
   return requireStorageCapabilities(
     storage,
-    ["getLatestLoopSnapshot", "recordLoopMemory", "listLoopMemories"],
+    ["listLoopSnapshots", "recordLoopMemory", "listLoopMemories"],
     { label: "Loop memory approval storage", instance },
   );
 }

@@ -82,6 +82,13 @@
   justify-content: space-between;
 }
 
+.loop-outcome-statuses {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .loop-outcome-heading h3 {
   font-size: 14px;
   line-height: 20px;

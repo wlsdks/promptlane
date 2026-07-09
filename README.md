@@ -795,13 +795,13 @@ The MCP server exposes 20 tools:
   compact summaries or custom compact instructions.
 - `record_loop_outcome`: store user-approved loop outcome metadata for a
   PromptLane snapshot without storing prompt bodies or raw paths.
-- `propose_loop_memory_candidate`: decide whether the latest verified loop
-  outcome is safe and evidence-backed enough to become a user-approved memory
+- `propose_loop_memory_candidate`: decide whether the latest or explicitly
+  selected verified loop outcome is safe and evidence-backed enough to become a user-approved memory
   candidate. It is read-only and never writes AGENTS.md, CLAUDE.md, memory
   files, prompt bodies, raw paths, transcripts, compact summaries, or external
   LLM results.
 - `record_loop_memory`: record a user-approved PromptLane memory from the latest
-  eligible candidate into local PromptLane storage. It does not write
+  or explicitly selected eligible candidate into local PromptLane storage. It does not write
   AGENTS.md, CLAUDE.md, project docs, prompt bodies, raw paths, transcripts,
   compact summaries, or external LLM results. Its structured `next_actions`
   point agents to `prepare_loop_brief` and
@@ -833,6 +833,12 @@ promptlane loop memory-candidate
 promptlane loop memory-approve --approved-by user
 ```
 
+For parallel worktrees, pass the same `--snapshot-id` or
+`--worktree`/`--session`/`--branch` selection to `memory-candidate` and
+`memory-approve`. MCP callers can use the matching `snapshot_id`, `worktree`,
+`session_id`, and `branch` fields. Mixed exact-id and filter selection is
+rejected instead of falling back to global latest.
+
 Outcome summaries and evidence refs are trimmed, deduplicated, and rejected
 before persistence when they contain secrets or raw local paths. The outcome
 command defaults to the latest snapshot and accepts `--snapshot-id` or optional
@@ -847,7 +853,8 @@ only after reviewing the proposal and intending to write the instruction file;
 the web review panel intentionally has no apply button.
 The web Loops worktree detail provides the same explicit outcome recording step
 for a selected snapshot. It refreshes local readiness after the write but never
-approves memory automatically.
+approves memory automatically. A separate selected-memory approval action uses
+that exact snapshot and remains hidden after the memory is approved.
 `get_promptlane_loop_status`, `/api/v1/loops`, and `promptlane loop status` also
 include a raw-free worktree/session activity summary with per-worktree safe
 labels, session counts, snapshot counts, and latest outcome status so agents can

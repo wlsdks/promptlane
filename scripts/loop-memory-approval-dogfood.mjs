@@ -144,11 +144,33 @@ try {
     "Outcome recording must not store raw paths.",
   );
 
+  step("collect a newer unrelated worktree snapshot");
+  const newerSnapshot = parseJson(
+    runCli([
+      "loop",
+      "collect",
+      "--data-dir",
+      dataDir,
+      "--cwd-prefix",
+      projectDir,
+      "--worktree",
+      "newer-unrelated-worktree",
+      "--branch",
+      "newer-unrelated-branch",
+      "--json",
+    ]),
+  );
+  assertEqual(
+    newerSnapshot.outcome.status,
+    "unknown",
+    "Newer unrelated worktree should not be memory-eligible.",
+  );
+
   step("propose_loop_memory_candidate");
   const candidate = structured(
     await mcpRequest("tools/call", {
       name: "propose_loop_memory_candidate",
-      arguments: { latest: true },
+      arguments: { snapshot_id: snapshot.id },
     }),
   );
   assertEqual(
@@ -162,6 +184,11 @@ try {
     "Memory candidate should explain the evidence-backed eligibility.",
   );
   assertEqual(
+    candidate.snapshot_id,
+    snapshot.id,
+    "MCP memory candidate should preserve exact snapshot selection.",
+  );
+  assertEqual(
     candidate.privacy.auto_writes_memory,
     false,
     "Candidate proposal must not auto-write memory.",
@@ -172,12 +199,17 @@ try {
     await mcpRequest("tools/call", {
       name: "record_loop_memory",
       arguments: {
-        latest: true,
+        snapshot_id: snapshot.id,
         approved_by: "loop-memory-approval-dogfood",
       },
     }),
   );
   assertEqual(memory.recorded, true, "MCP should record approved memory.");
+  assertEqual(
+    memory.memory.snapshot_id,
+    snapshot.id,
+    "MCP memory approval should preserve exact snapshot selection.",
+  );
   assertEqual(
     memory.privacy.writes_instruction_files,
     false,
