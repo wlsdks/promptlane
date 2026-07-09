@@ -13,11 +13,23 @@
 - 🔁 Reuses approved lessons and loop snapshots when long-running agent work
   needs a better next request.
 
+After the npm package is published:
+
 ```sh
 npm install -g promptlane
 promptlane setup --profile coach --register-mcp --open-web
 # then send one Codex or Claude Code prompt and run:
 promptlane coach
+```
+
+Until then, run the same first coach loop from a local checkout:
+
+```sh
+git clone https://github.com/wlsdks/promptlane.git
+cd promptlane
+pnpm install
+pnpm setup
+pnpm promptlane coach
 ```
 
 PromptLane is a developer tool that safely records prompts and loop metadata from AI coding tools such as Claude Code and Codex, helps you find them again, analyzes weak prompting patterns, and helps you write better follow-up requests. The npm package, primary CLI, MCP server name, hook command, and plugin identity are `promptlane`.

@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane README Publish-Pending Install Path
+
+- [x] CHECK: README/README.ko first-screen install block still showed
+  `npm install -g promptlane` without the publish-pending local checkout path,
+  while live npm registry state still returns E404 for `promptlane@1.0.0`.
+- [x] RED: packaging guard now requires the first README install path to
+  separate the post-publish npm install command from the pre-publish local
+  checkout coach loop.
+- [x] GREEN: English and Korean README top sections now show both post-publish
+  npm install and publish-pending local checkout setup/coach commands.
+- [x] VERIFY: focused README install-path guard, formatting, live
+  preflight/quality smoke, npm registry status, and diff hygiene.
+
 ## 2026-07-09 PromptLane Release Checklist Platform Claims
 
 - [x] CHECK: `docs/RELEASE_CHECKLIST.md` still framed a cross-platform GitHub

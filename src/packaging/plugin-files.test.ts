@@ -882,6 +882,29 @@ describe("plugin packaging files", () => {
     expect(readmeKo).not.toContain("CI 대상");
   });
 
+  it("keeps the README first install path safe before npm publish", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+
+    expect(readme).toContain("After the npm package is published:");
+    expect(readme).toContain(
+      "Until then, run the same first coach loop from a local checkout:",
+    );
+    expect(readme).toContain(
+      "git clone https://github.com/wlsdks/promptlane.git",
+    );
+    expect(readme).toContain("pnpm setup");
+
+    expect(readmeKo).toContain("npm package가 publish된 뒤:");
+    expect(readmeKo).toContain(
+      "그 전에는 local checkout에서 같은 첫 coach loop를 실행합니다:",
+    );
+    expect(readmeKo).toContain(
+      "git clone https://github.com/wlsdks/promptlane.git",
+    );
+    expect(readmeKo).toContain("pnpm setup");
+  });
+
   it("keeps the release checklist focused on local-first platform claims", () => {
     const releaseChecklist = readFileSync(
       join(process.cwd(), "docs/RELEASE_CHECKLIST.md"),

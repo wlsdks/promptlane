@@ -13,11 +13,23 @@
 - 🔁 장기 agent 작업에서는 승인된 lesson과 loop snapshot을 다음 요청
   작성에 재사용합니다.
 
+npm package가 publish된 뒤:
+
 ```sh
 npm install -g promptlane
 promptlane setup --profile coach --register-mcp --open-web
 # Codex 또는 Claude Code에 prompt 한 번 보낸 뒤:
 promptlane coach
+```
+
+그 전에는 local checkout에서 같은 첫 coach loop를 실행합니다:
+
+```sh
+git clone https://github.com/wlsdks/promptlane.git
+cd promptlane
+pnpm install
+pnpm setup
+pnpm promptlane coach
 ```
 
 PromptLane은 Claude Code, Codex 같은 AI 코딩 도구에 입력한 프롬프트와 loop metadata를 안전하게 로컬에 기록하고, 나중에 다시 찾고, 반복되는 약한 프롬프트 패턴을 분석하고, 다음 요청을 더 잘 쓰도록 돕는 developer tool입니다. npm package, 기본 CLI, MCP server name, hook command, plugin identity는 `promptlane`입니다.
