@@ -7,6 +7,16 @@ settings files. The recommended install path is:
 promptlane setup
 ```
 
+If `promptlane` is not available yet because the npm package has not been
+published, use a local checkout first:
+
+```sh
+git clone https://github.com/wlsdks/promptlane.git
+cd promptlane
+pnpm install
+pnpm setup
+```
+
 or, for only Claude Code:
 
 ```sh

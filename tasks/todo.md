@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Plugin Publish-Pending Setup Docs
+
+- [x] CHECK: Codex plugin skill and Claude integration README could still be
+  read before npm publish while assuming a global `promptlane` binary was
+  available.
+- [x] RED: packaging guard now requires plugin/integration setup docs to include
+  the npm-not-yet-published local checkout fallback.
+- [x] GREEN: Codex plugin skill and Claude integration README now show
+  `git clone`, `pnpm install`, and `pnpm setup` before global CLI availability.
+- [x] VERIFY: focused plugin/integration guard, formatting, live
+  preflight/quality smoke, and diff hygiene.
+
 ## 2026-07-09 PromptLane README Publish-Pending Install Path
 
 - [x] CHECK: README/README.ko first-screen install block still showed
