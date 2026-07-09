@@ -5,11 +5,9 @@ quality bar. It covers repeatable local proof that can run without opening real
 provider CLIs, without external LLM calls, and without reading private app
 state.
 
-It does not complete the remaining externally gated evidence:
-
-- native dialog approved dogfood still requires explicit operator approval
-  before running `PROMPTLANE_NATIVE_DIALOG_APPROVED=1 corepack pnpm
-dogfood:mcp-native-dialog-approved`.
+The current quality evidence command reports complete. It includes the native
+dialog approved dogfood operator-approved answer recorded in
+`docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md`.
 
 ## Command Evidence
 
@@ -27,8 +25,8 @@ dogfood:mcp-native-dialog-approved`.
 - Local-first privacy evidence is current for the highest-risk local agent
   surfaces covered by hooks, MCP, release smoke, and benchmark privacy checks.
 - Codex and Claude Code local integration evidence is current for setup,
-  hooks, MCP, first-loop capture, and loop-memory approval flows that do not
-  require operator UI approval.
+  hooks, MCP, first-loop capture, approved native-dialog dogfood, and
+  loop-memory approval flows.
 - Loop memory and continuation evidence is current for capture, collect, brief,
   outcome, approved memory, and instruction patch proposal. Instruction file
   writes remain explicit and user-gated.
@@ -37,9 +35,11 @@ dogfood:mcp-native-dialog-approved`.
   release completion still depends on the normal full gate and external
   blockers.
 
-## Remaining Evidence Boundary
+## Current Completion Boundary
 
-`corepack pnpm evidence:quality` must remain `pending` while scheduled
-`ui-patrol`, native dialog approved dogfood, or any scorecard evidence bar is
-not proven. This ledger strengthens current local proof; it does not authorize a
-9.5 completion claim by itself.
+`corepack pnpm evidence:quality` is now `complete` for the local 9.5 evidence
+summary because every scorecard axis has current local evidence and the native
+dialog approved dogfood has an operator-approved answer recorded. This ledger
+strengthens current local proof; it does not authorize release completion by
+itself. Run the full release gate before claiming the long-running goal
+complete.

@@ -1,5 +1,19 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Local 9.5 Evidence Current State
+
+- [x] CHECK: `docs/LOCAL_95_EVIDENCE_2026-07-06.md` still said
+  `evidence:quality` must remain pending and native dialog approval was still
+  required, while the live quality evidence command now reports complete with
+  approved native-dialog evidence.
+- [x] RED: packaging guard requires the shipped local 9.5 evidence doc to
+  describe the current complete boundary and reject stale pending/operator
+  approval wording.
+- [x] GREEN: local 9.5 evidence doc matches the live quality evidence boundary
+  without authorizing release completion before the full release gate.
+- [x] VERIFY: focused evidence guard, formatting, live preflight/quality smoke,
+  npm registry status, and diff hygiene.
+
 ## 2026-07-09 PromptLane Harness Release Gate Docs
 
 - [x] CHECK: `docs/AGENT-HARNESS.md` still documented a shorter full gate for

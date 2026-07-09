@@ -2114,6 +2114,21 @@ describe("plugin packaging files", () => {
       expect(content).toContain("privacy_leak_count: 0");
       expect(content).toContain("archive_effectiveness_score: 1");
     }
+    const normalizedLocalEvidence = localEvidence.replace(/\s+/g, " ");
+    expect(localEvidence).toContain("## Current Completion Boundary");
+    expect(localEvidence).toContain("`corepack pnpm evidence:quality` is now");
+    expect(localEvidence).toContain("`complete`");
+    expect(normalizedLocalEvidence).toContain("native dialog approved dogfood");
+    expect(normalizedLocalEvidence).toContain(
+      "operator-approved answer recorded",
+    );
+    expect(normalizedLocalEvidence).toContain(
+      "Run the full release gate before claiming the long-running goal complete.",
+    );
+    expect(localEvidence).not.toContain("must remain `pending`");
+    expect(localEvidence).not.toContain(
+      "native dialog approved dogfood still requires explicit operator approval",
+    );
     for (const content of [readme, readmeKo]) {
       expect(content).toContain("promptlane quality-evidence");
       expect(content).toContain("promptlane quality-evidence --json");
