@@ -18,9 +18,11 @@ the npm package is published, the normal install path is:
 npm install -g promptlane
 ```
 
-For local development from a cloned repository, use the two-line bring-up:
+Before npm publish, or for local development, use a cloned repository:
 
 ```bash
+git clone https://github.com/wlsdks/promptlane.git
+cd promptlane
 pnpm install   # also runs `pnpm build` via the prepare lifecycle
 pnpm setup     # alias for promptlane setup --profile coach --register-mcp --open-web
 ```

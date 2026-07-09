@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Command Docs Publish-Pending CLI
+
+- [x] CHECK: Claude slash command docs for setup/status could tell users the
+  CLI was missing without a complete publish-pending local checkout path.
+- [x] RED: packaging guard now requires setup/status command docs to include
+  post-publish npm install and pre-publish `git clone`/`pnpm setup` fallback.
+- [x] GREEN: `/promptlane:setup` and `/promptlane:status` docs now separate
+  post-publish npm install from local checkout setup before global CLI exists.
+- [x] VERIFY: focused command-doc guard, formatting, live preflight/quality
+  smoke, npm registry status, and diff hygiene.
+
 ## 2026-07-09 PromptLane Plugin Publish-Pending Setup Docs
 
 - [x] CHECK: Codex plugin skill and Claude integration README could still be

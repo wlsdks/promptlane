@@ -1251,11 +1251,21 @@ describe("plugin packaging files", () => {
     expect(setup).not.toContain("product-name CLI alias");
     expect(setup).toContain("promptlane setup --profile coach --register-mcp");
     expect(setup).toContain("promptlane statusline claude-code");
+    expect(setup).toContain("npm package is published");
+    expect(setup).toContain(
+      "git clone https://github.com/wlsdks/promptlane.git",
+    );
+    expect(setup).toContain("pnpm setup");
     expect(status).toContain("promptlane doctor claude-code");
     expect(status).not.toContain(
       "promptlane doctor claude-code\npromptlane doctor claude-code",
     );
     expect(status).toContain("command -v promptlane");
+    expect(status).toContain("npm package is published");
+    expect(status).toContain(
+      "git clone https://github.com/wlsdks/promptlane.git",
+    );
+    expect(status).toContain("pnpm setup");
     expect(status).not.toContain(
       "command -v promptlane || command -v promptlane",
     );
