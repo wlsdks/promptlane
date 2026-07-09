@@ -1381,6 +1381,14 @@ describe("plugin packaging files", () => {
     );
     expect(skill).toContain("promptlane setup --profile coach");
     expect(skill).toContain("promptlane install-hook codex");
+    const normalizedSkill = skill.replace(/\s+/g, " ");
+    expect(normalizedSkill).toContain(
+      "If `promptlane` is not available yet because the npm package has not been published",
+    );
+    expect(skill).toContain(
+      "git clone https://github.com/wlsdks/promptlane.git",
+    );
+    expect(skill).toContain("pnpm setup");
   });
 
   it("documents plugin command namespace compatibility without promoting promptlane aliases", () => {
@@ -3254,6 +3262,10 @@ describe("plugin packaging files", () => {
   });
 
   it("documents Claude Code as a hook integration without embedding secrets", () => {
+    const readme = readFileSync(
+      join(process.cwd(), "integrations/claude-code/README.md"),
+      "utf8",
+    );
     const example = readJson<{
       hooks: {
         UserPromptSubmit: Array<{
@@ -3261,6 +3273,15 @@ describe("plugin packaging files", () => {
         }>;
       };
     }>("integrations/claude-code/settings.example.json");
+
+    const normalizedReadme = readme.replace(/\s+/g, " ");
+    expect(normalizedReadme).toContain(
+      "If `promptlane` is not available yet because the npm package has not been published",
+    );
+    expect(readme).toContain(
+      "git clone https://github.com/wlsdks/promptlane.git",
+    );
+    expect(readme).toContain("pnpm setup");
 
     const command = example.hooks.UserPromptSubmit[0]?.hooks[0]?.command ?? "";
     expect(command).toContain("promptlane hook claude-code");

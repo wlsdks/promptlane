@@ -24,6 +24,16 @@ promptlane start
 promptlane setup --profile coach --register-mcp --open-web
 ```
 
+If `promptlane` is not available yet because the npm package has not been
+published, use a local checkout first:
+
+```sh
+git clone https://github.com/wlsdks/promptlane.git
+cd promptlane
+pnpm install
+pnpm setup
+```
+
 The coach profile installs capture hooks, low-friction rewrite guidance, local
 server startup where supported, and the Claude Code status line when Claude Code
 is detected. `--register-mcp` also registers the MCP server with detected Claude
