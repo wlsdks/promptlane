@@ -110,6 +110,8 @@ tools, benchmark/release validation, and an English/Korean web UI.
   fixtures, and actual passed outcomes are measured as `outcome_pass_rate`.
   Real evidence now stays a snapshot until `--baseline-file` compares the same
   raw-free corpus fingerprint and reports material metric deltas.
+  `--json --report-file` saves a successful report as new private evidence
+  without shell redirection or overwriting an existing baseline.
 - Local benchmark v1 with privacy, retrieval, coach, analytics, and latency
   thresholds (`pnpm benchmark`, `pnpm benchmark -- --json`).
 - Browser E2E smoke covering archive, detail, coach, projects, export, and
