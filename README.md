@@ -972,12 +972,18 @@ rule-based prompt improvement, `coach_prompt` actionability, prompt quality
 score calibration, analytics, and latency:
 
 ```sh
-pnpm benchmark
-pnpm benchmark -- --json
+promptlane benchmark --json
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
+
+corepack pnpm benchmark
+corepack pnpm --silent benchmark -- --json
 ```
 
-The benchmark uses synthetic fixtures only. It is a local baseline, not a claim
-that real user prompt quality is fully solved.
+The default synthetic fixture set is the deterministic local regression gate.
+The real fixture set is an opt-in soft trend signal for consent-bearing,
+redacted prompts stored in an operator-owned local file. Neither signal alone
+is a claim that real user prompt quality is fully solved. See
+`docs/BENCHMARK_V1.md` for the fixture contract.
 
 ## Release Smoke
 

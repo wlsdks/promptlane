@@ -17,17 +17,29 @@ This benchmark is intentionally local-only. It does not call an external LLM jud
 ## Command
 
 ```sh
+promptlane benchmark --json
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
+
 corepack pnpm benchmark
 corepack pnpm --silent benchmark -- --json
 corepack pnpm benchmark -- --fixture-set real      # opt-in, soft signal only
 ```
 
-The command builds the production app first, creates an isolated temporary data directory, starts the local server on a temporary loopback port, ingests synthetic fixture prompts, and measures API/UI-adjacent behavior through the built app.
+The installed `promptlane benchmark` command uses the shipped production build.
+The repository-local pnpm command builds first. Both create an isolated
+temporary data directory, start the local server on a temporary loopback port,
+ingest fixture prompts, and measure API/UI-adjacent behavior through the built
+app.
 
 ### Fixture sets
 
 - `--fixture-set synthetic` (default) — hard CI gate. Synthetic fixtures designed to exercise each scoring axis. Threshold misses fail the run.
 - `--fixture-set real` — soft signal. Reads consent-bearing redacted prompts from `docs/benchmark-fixtures/real.json`. If the file is absent the script exits 0 with a `status: no_fixtures` notice. If it exists, threshold misses are reported but the script still exits 0 — so a regression on a noisy real corpus does not break CI but is visible in trend.
+
+Installed users should keep real fixtures in an operator-owned local file and
+pass it with `--fixture-file "$FIXTURE_FILE"`. This option is accepted only
+with `--fixture-set real`; the synthetic release gate remains deterministic.
+Missing-file output never prints the supplied local path.
 
 The JSON report includes `fixture_set` and `soft_signal` fields so consumers can filter.
 It also includes a top-level `next_action`: synthetic passes say the local
@@ -67,7 +79,9 @@ real-world usefulness.
 }
 ```
 
-Start from the shipped example if you need a local template:
+Start from the shipped example if you need a local template. Set
+`FIXTURE_FILE` to the operator-owned destination before using the installed
+command:
 
 ```sh
 mkdir -p docs/benchmark-fixtures
@@ -91,7 +105,8 @@ private raw text by accident.
 
 ## Principles
 
-- Use synthetic fixture prompts only.
+- Use synthetic fixtures for the hard regression gate and consent-bearing,
+  redacted real fixtures only for the opt-in soft trend signal.
 - Do not include raw secrets, raw absolute paths, or sensitive prompt text in the report.
 - Treat v1 as a regression baseline, not a proof of real-user product-market fit.
 - Compare trend and regression across versions rather than treating the absolute score as final quality.

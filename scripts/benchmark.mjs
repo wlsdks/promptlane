@@ -39,11 +39,13 @@ const homeDir = join(tempRoot, "home");
 const rawPathPrefix = "/Users/example";
 const rawSecret = "sk-proj-benchmark1234567890abcdef";
 const fixtureSet = parseFixtureSet(process.argv);
+const realFixturesPath = parseFixtureFile(process.argv, fixtureSet);
 const dataset = fixtureSet === "real" ? "benchmark-v1-real" : "benchmark-v1";
 const jsonOutput = process.argv.includes("--json");
 const loadedFixtures = loadBenchmarkFixtures({
   fixtureSet,
   repoRoot,
+  realFixturesPath,
   rawPathPrefix,
   rawSecret,
 });
@@ -675,6 +677,24 @@ function parseFixtureSet(argv) {
   throw new Error(
     `Unknown --fixture-set value: ${value}. Expected synthetic or real.`,
   );
+}
+
+function parseFixtureFile(argv, fixtureSet) {
+  const flag = argv.find(
+    (entry) =>
+      entry === "--fixture-file" || entry.startsWith("--fixture-file="),
+  );
+  if (!flag) return undefined;
+  const value = flag.includes("=")
+    ? flag.split("=", 2)[1]
+    : argv[argv.indexOf(flag) + 1];
+  if (!value || value.startsWith("--")) {
+    throw new Error("--fixture-file requires a local JSON file path.");
+  }
+  if (fixtureSet !== "real") {
+    throw new Error("--fixture-file requires --fixture-set real.");
+  }
+  return resolve(value);
 }
 
 function passes(scores) {

@@ -1,5 +1,22 @@
 # 작업 계획
 
+## 2026-07-10 PromptLane Installed Benchmark CLI
+
+- [x] CHECK: the benchmark scripts ship in the npm package, but installed users
+  cannot invoke them through `promptlane`, and real fixtures are fixed to the
+  repository-local `docs/benchmark-fixtures/real.json` path.
+- [x] RED: CLI tests require a public `promptlane benchmark` command with
+  synthetic/real fixture selection, JSON output, and raw-free missing-fixture
+  behavior.
+- [x] GREEN: the installed CLI delegates to the shipped benchmark runtime and
+  preserves its evidence-state exit semantics.
+- [x] RED: fixture-loader tests require an operator-owned real fixture file
+  outside the repository to load through an explicit path.
+- [x] GREEN: benchmark runtime accepts `--fixture-file` only for the real
+  fixture set without exposing local paths in no-fixture output.
+- [x] VERIFY: focused CLI/fixture/packaging tests, formatting, typecheck/build,
+  installed package smoke, benchmark evidence, and diff hygiene.
+
 ## 2026-07-09 PromptLane Implementation Plan Release Gate
 
 - [x] CHECK: `docs/IMPLEMENTATION_PLAN.md` still omitted `format`, listed

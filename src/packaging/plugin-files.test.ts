@@ -746,6 +746,41 @@ describe("plugin packaging files", () => {
     );
   });
 
+  it("ships the installed benchmark CLI and operator-owned real fixture path", () => {
+    const cliIndex = readFileSync(
+      join(process.cwd(), "src/cli/index.ts"),
+      "utf8",
+    );
+    const benchmarkCommand = readFileSync(
+      join(process.cwd(), "src/cli/commands/benchmark.ts"),
+      "utf8",
+    );
+    const benchmarkSpec = readFileSync(
+      join(process.cwd(), "docs/BENCHMARK_V1.md"),
+      "utf8",
+    );
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+    const packageInstallSmoke = readFileSync(
+      join(process.cwd(), "scripts/package-install-smoke.mjs"),
+      "utf8",
+    );
+
+    expect(cliIndex).toContain("registerBenchmarkCommand(program)");
+    expect(benchmarkCommand).toContain('.command("benchmark")');
+    for (const content of [benchmarkSpec, readme, readmeKo]) {
+      expect(content).toContain("promptlane benchmark --json");
+      expect(content).toContain(
+        'promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"',
+      );
+    }
+    expect(packageInstallSmoke).toContain(
+      '["benchmark", "--fixture-set", "real", "--json"]',
+    );
+    expect(packageInstallSmoke).toContain('status !== "no_fixtures"');
+    expect(packageInstallSmoke).toContain('effectiveness !== "unproven"');
+  });
+
   it("keeps the public release surface on 1.0.0", () => {
     const packageJson = JSON.parse(
       readFileSync(join(process.cwd(), "package.json"), "utf8"),

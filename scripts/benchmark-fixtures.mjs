@@ -6,6 +6,7 @@ const VALID_ADAPTERS = new Set(["claude-code", "codex"]);
 export function loadBenchmarkFixtures({
   fixtureSet,
   repoRoot,
+  realFixturesPath: configuredRealFixturesPath,
   rawPathPrefix = "/Users/example",
   rawSecret = "sk-proj-benchmark1234567890abcdef",
 }) {
@@ -59,18 +60,26 @@ export function loadBenchmarkFixtures({
     };
   }
 
-  const realFixturesPath = join(repoRoot, "docs/benchmark-fixtures/real.json");
+  const realFixturesPath =
+    configuredRealFixturesPath ??
+    join(repoRoot, "docs/benchmark-fixtures/real.json");
   if (!existsSync(realFixturesPath)) {
     return {
       status: "no_fixtures",
       fixtures: [],
       coachCases: [],
-      detail:
-        "No real fixtures registered yet. Add docs/benchmark-fixtures/real.json (consent-bearing redacted prompts) and re-run.",
+      detail: configuredRealFixturesPath
+        ? "No real fixtures found at the operator-provided local file. Add consent-bearing redacted prompts and re-run."
+        : "No real fixtures registered yet. Add docs/benchmark-fixtures/real.json (consent-bearing redacted prompts) and re-run.",
     };
   }
 
-  const parsed = JSON.parse(readFileSync(realFixturesPath, "utf8"));
+  let parsed;
+  try {
+    parsed = JSON.parse(readFileSync(realFixturesPath, "utf8"));
+  } catch {
+    throw new Error("Real benchmark fixture file must contain valid JSON.");
+  }
   parseConsentNote(parsed);
   const fixtures = parseRealFixtures(parsed);
   const coachCases = parseRealCoachCases(parsed);

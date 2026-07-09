@@ -211,6 +211,60 @@ describe("benchmark fixture loading", () => {
     ]);
   });
 
+  it("loads an operator-owned real fixture file outside the package root", async () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
+    const realFixturesPath = join(tempRoot, "private", "promptlane-real.json");
+    mkdirSync(join(tempRoot, "private"), { recursive: true });
+    copyFileSync(
+      join(process.cwd(), "docs", "benchmark-fixtures", "real.example.json"),
+      realFixturesPath,
+    );
+
+    const { loadBenchmarkFixtures } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+
+    const loaded = loadBenchmarkFixtures({
+      fixtureSet: "real",
+      repoRoot: join(tempRoot, "installed-package"),
+      realFixturesPath,
+    });
+
+    expect(loaded.status).toBe("ready");
+    expect(loaded.fixtures).toHaveLength(2);
+    expect(loaded.coachCases).toHaveLength(2);
+  });
+
+  it("rejects malformed real fixture JSON without echoing its path or content", async () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
+    const realFixturesPath = join(tempRoot, "private-fixtures.json");
+    writeFileSync(realFixturesPath, '{"private_prompt":"do not echo"');
+
+    const { loadBenchmarkFixtures } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+
+    expect(() =>
+      loadBenchmarkFixtures({
+        fixtureSet: "real",
+        repoRoot: tempRoot,
+        realFixturesPath,
+      }),
+    ).toThrow("Real benchmark fixture file must contain valid JSON.");
+
+    try {
+      loadBenchmarkFixtures({
+        fixtureSet: "real",
+        repoRoot: tempRoot,
+        realFixturesPath,
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      expect(message).not.toContain(realFixturesPath);
+      expect(message).not.toContain("do not echo");
+    }
+  });
+
   it("keeps the shipped real fixture example loadable as the real fixture file", async () => {
     tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
     const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");

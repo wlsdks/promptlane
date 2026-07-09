@@ -4,6 +4,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { Command, CommanderError } from "commander";
 
+import { registerBenchmarkCommand } from "./commands/benchmark.js";
 import { registerBuddyCommand } from "./commands/buddy.js";
 import { registerCoachCommand } from "./commands/coach.js";
 import { registerDoctorCommand } from "./commands/doctor.js";
@@ -39,6 +40,7 @@ export function createProgram(): Command {
     )
     .version(VERSION);
 
+  registerBenchmarkCommand(program);
   registerBuddyCommand(program);
   registerInitCommand(program);
   registerHookCommand(program);

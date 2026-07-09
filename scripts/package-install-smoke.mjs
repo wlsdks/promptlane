@@ -55,6 +55,16 @@ try {
     },
   );
   validateQualityEvidence(qualityEvidence.stdout);
+  const benchmarkEvidence = run(
+    join(tempPrefix, "bin", "promptlane"),
+    ["benchmark", "--fixture-set", "real", "--json"],
+    {
+      cwd: tempHome,
+      env: { ...process.env, HOME: tempHome },
+      encoding: "utf8",
+    },
+  );
+  validateBenchmarkEvidence(benchmarkEvidence.stdout);
 
   console.log(
     JSON.stringify(
@@ -65,6 +75,7 @@ try {
         bins: ["promptlane", "pl-claude", "pl-codex"],
         first_success: "promptlane start --open-web --json",
         release_gate: "promptlane quality-evidence --require-complete",
+        effectiveness_signal: "promptlane benchmark --fixture-set real --json",
       },
       null,
       2,
@@ -154,5 +165,20 @@ function validateQualityEvidence(stdout) {
         `quality evidence output did not include ${expectedText}`,
       );
     }
+  }
+}
+
+function validateBenchmarkEvidence(stdout) {
+  const parsed = JSON.parse(stdout);
+  const status = parsed?.status;
+  const effectiveness = parsed?.evidence_state?.effectiveness;
+  if (status !== "no_fixtures") {
+    throw new Error("installed benchmark did not report missing real fixtures");
+  }
+  if (effectiveness !== "unproven") {
+    throw new Error("installed benchmark overstated real-world effectiveness");
+  }
+  if (parsed?.evidence_state?.requires_real_fixtures !== true) {
+    throw new Error("installed benchmark did not require real fixtures");
   }
 }

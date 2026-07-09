@@ -717,11 +717,18 @@ promptlane mcp --data-dir /path/to/promptlane-data
 Benchmark v1은 privacy, retrieval, rule-based prompt improvement, `coach_prompt` actionability, prompt quality score calibration, analytics, latency에 대한 로컬 회귀 신호를 측정합니다.
 
 ```sh
-pnpm benchmark
-pnpm benchmark -- --json
+promptlane benchmark --json
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
+
+corepack pnpm benchmark
+corepack pnpm --silent benchmark -- --json
 ```
 
-benchmark는 synthetic fixture만 사용합니다. 실제 사용자 prompt 품질을 완전히 해결했다는 주장이 아니라 로컬 baseline입니다.
+기본 synthetic fixture set은 결정적인 로컬 회귀 gate입니다. real fixture
+set은 operator가 관리하는 로컬 파일의 동의·비식별 prompt를 사용하는 opt-in
+soft trend signal입니다. 어느 결과도 단독으로 실제 사용자 prompt 품질을
+완전히 해결했다는 주장은 아닙니다. fixture contract는
+`docs/BENCHMARK_V1.md`를 참고하세요.
 
 ## Release Smoke
 

@@ -60,8 +60,9 @@ The npm package intentionally includes:
     gates before any old id is deprecated
   - includes `docs/benchmark-fixtures/real.example.json` as a copyable raw-free
     template for consent-bearing real benchmark fixtures; local
-    `docs/benchmark-fixtures/real.json` remains operator-owned and is not
-    shipped
+    `docs/benchmark-fixtures/real.json` or a file passed to
+    `promptlane benchmark --fixture-set real --fixture-file` remains
+    operator-owned and is not shipped
 - Claude Code plugin artifacts under `.claude-plugin`, `commands`, and
   `integrations/claude-code`
 - Codex plugin artifacts under `plugins/promptlane`
