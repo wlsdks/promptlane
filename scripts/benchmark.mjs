@@ -23,6 +23,8 @@ import {
   loadBenchmarkFixtures,
 } from "./benchmark-fixtures.mjs";
 import {
+  benchmarkCorpusFingerprint,
+  compareBenchmarkReports,
   scoreArchiveEffectivenessEvidence,
   scoreOutcomePassRate,
   scorePromptQualityEvidence,
@@ -94,6 +96,13 @@ if (loadedFixtures.status === "no_fixtures") {
   rmSync(tempRoot, { recursive: true, force: true });
   process.exit(0);
 }
+
+const baselineReport = readBenchmarkBaseline(process.argv);
+const corpusFingerprint = benchmarkCorpusFingerprint({
+  fixtureSet,
+  fixtures,
+  coachCases,
+});
 
 let serverProcess;
 
@@ -231,11 +240,28 @@ try {
   };
   const experimentalComparison = scoreExperimentalRulesAB();
   const pass = passes(scores);
+  const comparison = baselineReport
+    ? compareBenchmarkReports({
+        current: {
+          fixture_set: fixtureSet,
+          corpus_fingerprint: corpusFingerprint,
+          scores,
+        },
+        baseline: baselineReport,
+      })
+    : {
+        status: "not_requested",
+        corpus_fingerprint: corpusFingerprint,
+        improvements: [],
+        regressions: [],
+        unchanged: [],
+      };
 
   const report = {
     version: packageJson.version,
     dataset,
     fixture_set: fixtureSet,
+    corpus_fingerprint: corpusFingerprint,
     soft_signal: fixtureSet === "real",
     generated_at: new Date().toISOString(),
     pass,
@@ -244,14 +270,18 @@ try {
       status: "ready",
       pass,
       outcomeCount: fixtureSet === "real" ? outcomeSeeds.length : 0,
+      comparisonStatus: comparison.status,
+      regressionCount: comparison.regressions.length,
     }),
     next_action: benchmarkNextAction({
       fixtureSet,
       pass,
       outcomeCount: fixtureSet === "real" ? outcomeSeeds.length : 0,
+      comparison,
     }),
     scores,
     thresholds,
+    comparison,
     counts: {
       prompts: fixtures.length,
       retrieval_cases: fixtures.length,
@@ -721,6 +751,15 @@ function printReport(report) {
     console.log(line);
   }
   console.log(`next_action: ${report.next_action}`);
+  console.log(`comparison_status: ${report.comparison.status}`);
+  if (report.comparison.status === "compared") {
+    console.log(
+      `comparison_regressions: ${report.comparison.regressions.join(", ") || "none"}`,
+    );
+    console.log(
+      `comparison_improvements: ${report.comparison.improvements.join(", ") || "none"}`,
+    );
+  }
   for (const [key, value] of Object.entries(report.scores)) {
     console.log(`${key}: ${value}`);
   }
@@ -741,10 +780,18 @@ function printReport(report) {
   }
 }
 
-function benchmarkNextAction({ fixtureSet, pass, outcomeCount }) {
+function benchmarkNextAction({ fixtureSet, pass, outcomeCount, comparison }) {
   if (fixtureSet === "real") {
     if (outcomeCount === 0) {
       return "Real prompts were benchmarked, but effectiveness is unproven; add operator-confirmed passed or failed outcome metadata before comparing usefulness trends.";
+    }
+    if (comparison.status !== "compared") {
+      return pass
+        ? "Real snapshot is healthy; save this JSON report, then rerun with --baseline-file <report.json> before calling it a trend."
+        : "Real snapshot missed thresholds; fix failed metrics, save a healthy JSON report, then use it with --baseline-file <report.json>.";
+    }
+    if (comparison.regressions.length > 0) {
+      return `Real trend has material regressions: ${comparison.regressions.join(", ")}. Review those metrics before claiming improvement.`;
     }
     return pass
       ? "Real fixture soft signal is healthy; compare trends, but keep synthetic benchmark as the release gate."
@@ -754,6 +801,32 @@ function benchmarkNextAction({ fixtureSet, pass, outcomeCount }) {
   return pass
     ? "Synthetic pass means the local regression gate is green; collect real fixtures before claiming real-world effectiveness."
     : "Fix failed synthetic benchmark metrics before release.";
+}
+
+function readBenchmarkBaseline(argv) {
+  const baselinePath = parseOptionalPath(argv, "--baseline-file");
+  if (!baselinePath) return undefined;
+  try {
+    return JSON.parse(readFileSync(baselinePath, "utf8"));
+  } catch {
+    throw new Error(
+      "Benchmark baseline file must contain valid PromptLane benchmark JSON.",
+    );
+  }
+}
+
+function parseOptionalPath(argv, option) {
+  const flag = argv.find(
+    (entry) => entry === option || entry.startsWith(`${option}=`),
+  );
+  if (!flag) return undefined;
+  const value = flag.includes("=")
+    ? flag.split("=", 2)[1]
+    : argv[argv.indexOf(flag) + 1];
+  if (!value || value.startsWith("--")) {
+    throw new Error(`${option} requires a local JSON file path.`);
+  }
+  return resolve(value);
 }
 
 async function timed(fn) {

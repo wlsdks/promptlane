@@ -169,6 +169,34 @@ describe("benchmark CLI command", () => {
     ]);
   });
 
+  it("forwards a prior benchmark report for raw-free trend comparison", () => {
+    const runBenchmark = vi.fn(() => ({
+      status: 0,
+      stdout: JSON.stringify({ fixture_set: "real", pass: true }),
+      stderr: "",
+    }));
+
+    benchmarkForCli(
+      {
+        fixtureSet: "real",
+        fixtureFile: "/tmp/operator-owned-fixtures.json",
+        baselineFile: "/tmp/prior-benchmark-report.json",
+        json: true,
+      },
+      runBenchmark,
+    );
+
+    expect(runBenchmark).toHaveBeenCalledWith([
+      "--fixture-set",
+      "real",
+      "--fixture-file",
+      "/tmp/operator-owned-fixtures.json",
+      "--baseline-file",
+      "/tmp/prior-benchmark-report.json",
+      "--json",
+    ]);
+  });
+
   it("reports a missing operator fixture without exposing its local path", () => {
     const fixtureFile = join(
       tmpdir(),

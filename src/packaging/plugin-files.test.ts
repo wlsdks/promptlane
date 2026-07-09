@@ -718,6 +718,8 @@ describe("plugin packaging files", () => {
       expect(content).toContain("outcome_pass_rate");
       expect(content).toContain("effectiveness_summary");
       expect(content).toContain("outcome_provenance");
+      expect(content).toContain("corpus_fingerprint");
+      expect(content).toContain("comparison");
     }
     for (const content of [benchmarkFixtures, benchmarkSpec]) {
       expect(content).toContain("docs/benchmark-fixtures/real.json");
@@ -735,12 +737,15 @@ describe("plugin packaging files", () => {
     expect(realFixtureExample).toContain('"evidence_refs"');
     expect(benchmark).toContain("loadBenchmarkFixtures");
     expect(benchmark).toContain("scorePromptQualityEvidence");
+    expect(benchmark).toContain("compareBenchmarkReports");
     expect(benchmarkScores).toContain("real_corpus_delivery_integrity");
     expect(benchmarkScores).toContain("synthetic_score_calibration");
     expect(benchmarkScores).toContain("linked_outcomes");
     expect(benchmarkSpec).toContain("linked_outcomes");
     expect(benchmarkSpec).toContain("real_corpus_delivery_integrity");
     expect(benchmarkSpec).toContain("synthetic_score_calibration");
+    expect(benchmarkSpec).toContain("snapshot_healthy");
+    expect(benchmarkSpec).toContain("--baseline-file");
     expect(benchmark).toContain("effectiveness remains unproven");
     expect(benchmarkRunner).toContain("corepack");
     expect(benchmarkRunner).toContain("pnpm");
@@ -800,6 +805,7 @@ describe("plugin packaging files", () => {
 
     expect(cliIndex).toContain("registerBenchmarkCommand(program)");
     expect(benchmarkCommand).toContain('.command("benchmark")');
+    expect(benchmarkCommand).toContain('"--baseline-file <path>"');
     for (const content of [benchmarkSpec, readme, readmeKo]) {
       expect(content).toContain("promptlane benchmark --json");
     }
@@ -826,6 +832,7 @@ describe("plugin packaging files", () => {
     expect(packageInstallSmoke).toContain("validateBenchmarkFixtureTemplate");
     expect(packageInstallSmoke).toContain("parsed?.template_only !== true");
     expect(packageInstallSmoke).toContain("outcome.evidence_refs");
+    expect(packageInstallSmoke).toContain('"--baseline-file"');
     expect(packageInstallSmoke).toContain('status !== "no_fixtures"');
     expect(packageInstallSmoke).toContain('effectiveness !== "unproven"');
     expect(packageInstallSmoke).toContain("requires_real_outcomes !== true");

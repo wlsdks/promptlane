@@ -723,6 +723,8 @@ promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # passed/failed outcome과 안전한 evidence ref를 추가합니다.
 # fixture 확인 후 template_only를 false로 설정합니다.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json > "$BASELINE_REPORT"
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --baseline-file "$BASELINE_REPORT" --json
 
 corepack pnpm benchmark
 corepack pnpm --silent benchmark -- --json
@@ -737,6 +739,8 @@ soft trend signal입니다. 어느 결과도 단독으로 실제 사용자 promp
 real 실행은 synthetic 점수 calibration과 score delivery integrity를
 분리하며, 효용 추세를 healthy로 판단하려면 `outcome_pass_rate`를
 충족해야 합니다.
+`--baseline-file`이 없으면 real evidence는 trend가 아니라 snapshot입니다.
+raw-free corpus fingerprint가 변경된 prompt set 사이의 비교를 차단합니다.
 
 ## Release Smoke
 

@@ -102,6 +102,8 @@ tools, benchmark/release validation, and an English/Korean web UI.
   outcome metadata; prompt-only corpora remain explicitly unproven.
   Real score delivery no longer depends on synthetic vague-prompt/spread
   fixtures, and actual passed outcomes are measured as `outcome_pass_rate`.
+  Real evidence now stays a snapshot until `--baseline-file` compares the same
+  raw-free corpus fingerprint and reports material metric deltas.
 - Local benchmark v1 with privacy, retrieval, coach, analytics, and latency
   thresholds (`pnpm benchmark`, `pnpm benchmark -- --json`).
 - Browser E2E smoke covering archive, detail, coach, projects, export, and

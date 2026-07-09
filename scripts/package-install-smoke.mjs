@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -66,7 +66,47 @@ try {
     },
   );
   validateBenchmarkFixtureTemplate(fixtureInit.stdout, fixtureFile);
+  confirmBenchmarkFixture(fixtureFile);
+  const baselineEvidence = run(
+    join(tempPrefix, "bin", "promptlane"),
+    [
+      "benchmark",
+      "--fixture-set",
+      "real",
+      "--fixture-file",
+      fixtureFile,
+      "--json",
+    ],
+    {
+      cwd: tempHome,
+      env: { ...process.env, HOME: tempHome },
+      encoding: "utf8",
+    },
+  );
+  validateBenchmarkSnapshot(baselineEvidence.stdout, fixtureFile);
+  const baselineFile = join(tempHome, "promptlane-benchmark-baseline.json");
+  writeFileSync(baselineFile, baselineEvidence.stdout, { mode: 0o600 });
+  const comparisonEvidence = run(
+    join(tempPrefix, "bin", "promptlane"),
+    [
+      "benchmark",
+      "--fixture-set",
+      "real",
+      "--fixture-file",
+      fixtureFile,
+      "--baseline-file",
+      baselineFile,
+      "--json",
+    ],
+    {
+      cwd: tempHome,
+      env: { ...process.env, HOME: tempHome },
+      encoding: "utf8",
+    },
+  );
+  validateBenchmarkComparison(comparisonEvidence.stdout, baselineFile);
   rmSync(fixtureFile, { force: true });
+  rmSync(baselineFile, { force: true });
   const benchmarkEvidence = run(
     join(tempPrefix, "bin", "promptlane"),
     ["benchmark", "--fixture-set", "real", "--json"],
@@ -90,6 +130,8 @@ try {
         fixture_init:
           "promptlane benchmark init-fixture --output <operator-owned>",
         effectiveness_signal: "promptlane benchmark --fixture-set real --json",
+        trend_comparison:
+          "promptlane benchmark --baseline-file <prior-report> --json",
       },
       null,
       2,
@@ -198,6 +240,9 @@ function validateBenchmarkEvidence(stdout) {
   if (parsed?.evidence_state?.requires_real_outcomes !== true) {
     throw new Error("installed benchmark did not require real outcomes");
   }
+  if (parsed?.evidence_state?.requires_baseline !== true) {
+    throw new Error("installed benchmark did not require a real baseline");
+  }
 }
 
 function validateBenchmarkFixtureTemplate(stdout, fixtureFile) {
@@ -230,5 +275,46 @@ function validateBenchmarkFixtureTemplate(stdout, fixtureFile) {
   }
   if (!Array.isArray(parsed?.coach_cases) || parsed.coach_cases.length === 0) {
     throw new Error("installed fixture init omitted coach cases");
+  }
+}
+
+function confirmBenchmarkFixture(fixtureFile) {
+  const parsed = JSON.parse(readFileSync(fixtureFile, "utf8"));
+  parsed.template_only = false;
+  parsed.consent_note = "Operator-confirmed redacted package smoke fixtures.";
+  writeFileSync(fixtureFile, `${JSON.stringify(parsed, null, 2)}\n`, {
+    mode: 0o600,
+  });
+}
+
+function validateBenchmarkSnapshot(stdout, fixtureFile) {
+  if (stdout.includes(fixtureFile)) {
+    throw new Error("installed benchmark snapshot exposed the fixture path");
+  }
+  const parsed = JSON.parse(stdout);
+  if (parsed?.comparison?.status !== "not_requested") {
+    throw new Error("installed benchmark snapshot claimed a comparison");
+  }
+  if (parsed?.evidence_state?.requires_baseline !== true) {
+    throw new Error("installed benchmark snapshot did not require a baseline");
+  }
+  if (parsed?.evidence_state?.effectiveness !== "snapshot_healthy") {
+    throw new Error("installed benchmark snapshot overstated trend evidence");
+  }
+}
+
+function validateBenchmarkComparison(stdout, baselineFile) {
+  if (stdout.includes(baselineFile)) {
+    throw new Error("installed benchmark comparison exposed the baseline path");
+  }
+  const parsed = JSON.parse(stdout);
+  if (parsed?.comparison?.status !== "compared") {
+    throw new Error("installed benchmark did not compare the baseline report");
+  }
+  if (parsed?.evidence_state?.requires_baseline !== false) {
+    throw new Error("installed benchmark comparison still required a baseline");
+  }
+  if (typeof parsed?.corpus_fingerprint !== "string") {
+    throw new Error("installed benchmark omitted the corpus fingerprint");
   }
 }

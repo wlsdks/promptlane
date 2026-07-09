@@ -163,13 +163,23 @@ export function buildBenchmarkEvidenceState({
   status,
   pass,
   outcomeCount = 0,
+  comparisonStatus = "not_requested",
+  regressionCount = 0,
 }) {
   if (fixtureSet === "real" && status === "ready" && outcomeCount > 0) {
+    const compared = comparisonStatus === "compared";
     return {
-      effectiveness: pass ? "trend_healthy" : "trend_needs_review",
+      effectiveness: compared
+        ? pass && regressionCount === 0
+          ? "trend_healthy"
+          : "trend_needs_review"
+        : pass
+          ? "snapshot_healthy"
+          : "snapshot_needs_review",
       release_blocking: false,
       requires_real_fixtures: false,
       requires_real_outcomes: false,
+      requires_baseline: !compared,
       release_gate: "synthetic",
       trend_signal: "real",
     };
@@ -181,6 +191,7 @@ export function buildBenchmarkEvidenceState({
       release_blocking: false,
       requires_real_fixtures: false,
       requires_real_outcomes: true,
+      requires_baseline: true,
       release_gate: "synthetic",
       trend_signal: "real",
     };
@@ -192,6 +203,7 @@ export function buildBenchmarkEvidenceState({
       release_blocking: false,
       requires_real_fixtures: true,
       requires_real_outcomes: true,
+      requires_baseline: false,
       release_gate: "synthetic",
       trend_signal: "real",
     };
@@ -203,6 +215,7 @@ export function buildBenchmarkEvidenceState({
       release_blocking: true,
       requires_real_fixtures: true,
       requires_real_outcomes: true,
+      requires_baseline: false,
       release_gate: "synthetic",
       trend_signal: "real",
     };
@@ -213,6 +226,7 @@ export function buildBenchmarkEvidenceState({
     release_blocking: false,
     requires_real_fixtures: true,
     requires_real_outcomes: true,
+    requires_baseline: fixtureSet === "real",
     release_gate: "synthetic",
     trend_signal: "real",
   };
@@ -227,6 +241,9 @@ export function formatBenchmarkEvidenceStateLines(evidenceState) {
     }`,
     `evidence_requires_real_outcomes: ${
       evidenceState.requires_real_outcomes ? "yes" : "no"
+    }`,
+    `evidence_requires_baseline: ${
+      evidenceState.requires_baseline ? "yes" : "no"
     }`,
     `evidence_release_gate: ${evidenceState.release_gate}`,
     `evidence_trend_signal: ${evidenceState.trend_signal}`,

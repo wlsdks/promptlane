@@ -43,6 +43,7 @@ describe("benchmark fixture loading", () => {
           release_blocking: false,
           requires_real_fixtures: true,
           requires_real_outcomes: true,
+          requires_baseline: true,
           release_gate: "synthetic",
           trend_signal: "real",
         },
@@ -68,6 +69,7 @@ describe("benchmark fixture loading", () => {
       release_blocking: false,
       requires_real_fixtures: true,
       requires_real_outcomes: true,
+      requires_baseline: false,
       release_gate: "synthetic",
       trend_signal: "real",
     });
@@ -79,10 +81,11 @@ describe("benchmark fixture loading", () => {
         outcomeCount: 1,
       }),
     ).toEqual({
-      effectiveness: "trend_healthy",
+      effectiveness: "snapshot_healthy",
       release_blocking: false,
       requires_real_fixtures: false,
       requires_real_outcomes: false,
+      requires_baseline: true,
       release_gate: "synthetic",
       trend_signal: "real",
     });
@@ -94,10 +97,11 @@ describe("benchmark fixture loading", () => {
         outcomeCount: 1,
       }),
     ).toEqual({
-      effectiveness: "trend_needs_review",
+      effectiveness: "snapshot_needs_review",
       release_blocking: false,
       requires_real_fixtures: false,
       requires_real_outcomes: false,
+      requires_baseline: true,
       release_gate: "synthetic",
       trend_signal: "real",
     });
@@ -112,6 +116,7 @@ describe("benchmark fixture loading", () => {
       release_blocking: true,
       requires_real_fixtures: true,
       requires_real_outcomes: true,
+      requires_baseline: false,
       release_gate: "synthetic",
       trend_signal: "real",
     });
@@ -128,6 +133,44 @@ describe("benchmark fixture loading", () => {
       release_blocking: false,
       requires_real_fixtures: false,
       requires_real_outcomes: true,
+      requires_baseline: true,
+      release_gate: "synthetic",
+      trend_signal: "real",
+    });
+
+    expect(
+      buildBenchmarkEvidenceState({
+        fixtureSet: "real",
+        status: "ready",
+        pass: true,
+        outcomeCount: 1,
+        comparisonStatus: "compared",
+        regressionCount: 0,
+      }),
+    ).toEqual({
+      effectiveness: "trend_healthy",
+      release_blocking: false,
+      requires_real_fixtures: false,
+      requires_real_outcomes: false,
+      requires_baseline: false,
+      release_gate: "synthetic",
+      trend_signal: "real",
+    });
+    expect(
+      buildBenchmarkEvidenceState({
+        fixtureSet: "real",
+        status: "ready",
+        pass: true,
+        outcomeCount: 1,
+        comparisonStatus: "compared",
+        regressionCount: 1,
+      }),
+    ).toEqual({
+      effectiveness: "trend_needs_review",
+      release_blocking: false,
+      requires_real_fixtures: false,
+      requires_real_outcomes: false,
+      requires_baseline: false,
       release_gate: "synthetic",
       trend_signal: "real",
     });
@@ -144,6 +187,7 @@ describe("benchmark fixture loading", () => {
         release_blocking: true,
         requires_real_fixtures: true,
         requires_real_outcomes: true,
+        requires_baseline: false,
         release_gate: "synthetic",
         trend_signal: "real",
       }),
@@ -152,6 +196,7 @@ describe("benchmark fixture loading", () => {
       "evidence_release_blocking: yes",
       "evidence_requires_real_fixtures: yes",
       "evidence_requires_real_outcomes: yes",
+      "evidence_requires_baseline: no",
       "evidence_release_gate: synthetic",
       "evidence_trend_signal: real",
     ]);
@@ -176,6 +221,7 @@ describe("benchmark fixture loading", () => {
       "evidence_release_blocking: no",
       "evidence_requires_real_fixtures: yes",
       "evidence_requires_real_outcomes: yes",
+      "evidence_requires_baseline: yes",
       "evidence_release_gate: synthetic",
       "evidence_trend_signal: real",
       "next_action: Add consent-bearing redacted real fixtures before using real benchmark trends.",

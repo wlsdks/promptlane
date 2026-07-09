@@ -24,6 +24,10 @@ promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # Set template_only to false after confirming the fixture is ready.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
 
+# Save one snapshot, then compare the same redacted corpus on a later build.
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json > "$BASELINE_REPORT"
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --baseline-file "$BASELINE_REPORT" --json
+
 corepack pnpm benchmark
 corepack pnpm --silent benchmark -- --json
 corepack pnpm benchmark -- --fixture-set real      # opt-in, soft signal only
@@ -60,8 +64,10 @@ synthetic regression pass from real-world effectiveness evidence. Synthetic
 passes report `regression_gate_passed_not_real_world_proof`; synthetic
 threshold misses report `regression_gate_failed` with `release_blocking: true`;
 real fixture passes with at least one operator-confirmed outcome report
-`trend_healthy`; threshold misses report `trend_needs_review` with
-`release_blocking: false`. A real prompt corpus without outcome metadata stays
+`snapshot_healthy` until a baseline is supplied; threshold misses report
+`snapshot_needs_review`. A comparable baseline changes those states to
+`trend_healthy` or `trend_needs_review` with `release_blocking: false`. A real
+prompt corpus without outcome metadata stays
 `unproven` with `requires_real_outcomes: true` even when runtime metrics pass.
 The report keeps prompt scoring honest by naming its active profile:
 `synthetic_score_calibration` uses labeled low/spread fixtures, while
@@ -140,6 +146,23 @@ private raw text by accident.
 `details.outcome_provenance` is `synthetic_regression_seed` for the hard
 synthetic gate, `operator_confirmed_fixture_metadata` when at least one real
 fixture supplies an outcome, and `none` for an outcome-free real corpus.
+
+### Baseline comparison
+
+`--baseline-file` reads a prior PromptLane benchmark JSON report locally. The
+report includes a `corpus_fingerprint` derived by hashing fixture set,
+label/adapter/query/prompt fields, and coach cases. Outcome metadata is excluded
+so a later result for the same prompts can be compared. Prompt text and local
+paths are never returned through the fingerprint or comparison result.
+
+The baseline must have the same fixture set and corpus fingerprint. Mismatches
+fail with a generic raw-free error. Score metrics use their natural direction:
+quality/coverage/pass-rate scores are higher-is-better, while privacy leaks and
+latencies are lower-is-better. Score changes up to `0.01`, and latency changes
+up to the greater of `5ms` or `10%`, are treated as noise and reported as
+unchanged. JSON reports expose `comparison.metrics`, `improvements`,
+`regressions`, and `unchanged`. Without a baseline, `requires_baseline` remains
+true and PromptLane does not call the snapshot a trend.
 
 ## Principles
 
@@ -338,16 +361,26 @@ Pass thresholds:
 {
   "version": "1.0.0",
   "dataset": "benchmark-v1",
+  "fixture_set": "synthetic",
+  "corpus_fingerprint": "corpus_1234567890abcdef",
   "pass": true,
   "evidence_state": {
     "effectiveness": "regression_gate_passed_not_real_world_proof",
     "release_blocking": false,
     "requires_real_fixtures": true,
     "requires_real_outcomes": true,
+    "requires_baseline": false,
     "release_gate": "synthetic",
     "trend_signal": "real"
   },
   "next_action": "Synthetic pass means the local regression gate is green; collect real fixtures before claiming real-world effectiveness.",
+  "comparison": {
+    "status": "not_requested",
+    "corpus_fingerprint": "corpus_1234567890abcdef",
+    "improvements": [],
+    "regressions": [],
+    "unchanged": []
+  },
   "scores": {
     "privacy_leak_count": 0,
     "retrieval_top3": 1,
@@ -439,6 +472,7 @@ about the missing evidence:
     "release_blocking": false,
     "requires_real_fixtures": true,
     "requires_real_outcomes": true,
+    "requires_baseline": true,
     "release_gate": "synthetic",
     "trend_signal": "real"
   },

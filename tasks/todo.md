@@ -1,5 +1,20 @@
 # 작업 계획
 
+## 2026-07-10 PromptLane Benchmark Baseline Comparison
+
+- [x] CHECK: a single real benchmark run currently reports `trend_healthy`
+  without comparing any prior run.
+- [x] RED: pure comparison tests require a stable raw-free corpus fingerprint
+  and direction-aware metric improvements/regressions.
+- [x] GREEN: only reports from the same fixture set and corpus fingerprint are
+  comparable; mismatch errors expose no paths or report contents.
+- [x] RED: CLI and evidence-state tests require `--baseline-file`, snapshot
+  semantics without a baseline, and trend semantics only after comparison.
+- [x] GREEN: benchmark JSON/human output reports comparison status, metric
+  deltas, regressions, improvements, and baseline next actions.
+- [x] VERIFY: focused comparison/CLI/fixture/packaging tests, static gates,
+  synthetic/real baseline live runs, package smoke, dry-run, and diff hygiene.
+
 ## 2026-07-10 PromptLane Real Benchmark Scoring Profile
 
 - [x] CHECK: real benchmark score calibration still requires the synthetic

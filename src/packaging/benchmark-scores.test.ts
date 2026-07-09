@@ -123,4 +123,122 @@ describe("benchmark scoring profiles", () => {
       }),
     ).toBe(0.889);
   });
+
+  it("builds a stable raw-free fingerprint from fixture set and safe labels", async () => {
+    const { benchmarkCorpusFingerprint } = await scoreModule();
+
+    const first = benchmarkCorpusFingerprint({
+      fixtureSet: "real",
+      fixtures: [
+        {
+          label: "release_review",
+          adapter: "codex",
+          query: "release query",
+          prompt: "Review the redacted release notes.",
+        },
+        {
+          label: "setup_check",
+          adapter: "claude-code",
+          query: "setup query",
+          prompt: "Review the redacted setup result.",
+        },
+      ],
+      coachCases: ["Improve the redacted release request."],
+    });
+    const reordered = benchmarkCorpusFingerprint({
+      fixtureSet: "real",
+      fixtures: [
+        {
+          label: "setup_check",
+          adapter: "claude-code",
+          query: "setup query",
+          prompt: "Review the redacted setup result.",
+        },
+        {
+          label: "release_review",
+          adapter: "codex",
+          query: "release query",
+          prompt: "Review the redacted release notes.",
+        },
+      ],
+      coachCases: ["Improve the redacted release request."],
+    });
+
+    expect(first).toMatch(/^corpus_[a-f0-9]{16}$/);
+    expect(reordered).toBe(first);
+    expect(first).not.toContain("release_review");
+    expect(
+      benchmarkCorpusFingerprint({
+        fixtureSet: "real",
+        fixtures: [
+          {
+            label: "release_review",
+            adapter: "codex",
+            query: "release query",
+            prompt: "A changed redacted prompt.",
+          },
+        ],
+        coachCases: ["Improve the redacted release request."],
+      }),
+    ).not.toBe(first);
+  });
+
+  it("compares only the same corpus and classifies metric direction", async () => {
+    const { compareBenchmarkReports } = await scoreModule();
+    const current = {
+      fixture_set: "real",
+      corpus_fingerprint: "corpus_1234567890abcdef",
+      scores: {
+        retrieval_top3: 0.9,
+        outcome_pass_rate: 0.8,
+        ingest_p95_ms: 20,
+      },
+    };
+    const baseline = {
+      fixture_set: "real",
+      corpus_fingerprint: "corpus_1234567890abcdef",
+      scores: {
+        retrieval_top3: 0.8,
+        outcome_pass_rate: 1,
+        ingest_p95_ms: 30,
+      },
+    };
+
+    expect(compareBenchmarkReports({ current, baseline })).toEqual({
+      status: "compared",
+      corpus_fingerprint: "corpus_1234567890abcdef",
+      metrics: {
+        retrieval_top3: {
+          baseline: 0.8,
+          current: 0.9,
+          delta: 0.1,
+          direction: "higher_is_better",
+          change: "improved",
+        },
+        outcome_pass_rate: {
+          baseline: 1,
+          current: 0.8,
+          delta: -0.2,
+          direction: "higher_is_better",
+          change: "regressed",
+        },
+        ingest_p95_ms: {
+          baseline: 30,
+          current: 20,
+          delta: -10,
+          direction: "lower_is_better",
+          change: "improved",
+        },
+      },
+      improvements: ["ingest_p95_ms", "retrieval_top3"],
+      regressions: ["outcome_pass_rate"],
+      unchanged: [],
+    });
+    expect(() =>
+      compareBenchmarkReports({
+        current,
+        baseline: { ...baseline, corpus_fingerprint: "corpus_other" },
+      }),
+    ).toThrow("Benchmark baseline must use the same fixture set and corpus.");
+  });
 });

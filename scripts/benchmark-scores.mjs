@@ -1,3 +1,96 @@
+import { createHash } from "node:crypto";
+
+export function benchmarkCorpusFingerprint({
+  fixtureSet,
+  fixtures,
+  coachCases,
+}) {
+  const canonical = JSON.stringify({
+    fixtureSet,
+    fixtures: fixtures
+      .map(({ label, adapter, query, prompt }) => ({
+        label,
+        adapter,
+        query,
+        prompt,
+      }))
+      .sort((left, right) => left.label.localeCompare(right.label)),
+    coachCases: [...coachCases].sort(),
+  });
+  const digest = createHash("sha256")
+    .update(canonical)
+    .digest("hex")
+    .slice(0, 16);
+  return `corpus_${digest}`;
+}
+
+export function compareBenchmarkReports({ current, baseline }) {
+  if (
+    baseline?.fixture_set !== current?.fixture_set ||
+    typeof baseline?.corpus_fingerprint !== "string" ||
+    baseline.corpus_fingerprint !== current?.corpus_fingerprint
+  ) {
+    throw new Error(
+      "Benchmark baseline must use the same fixture set and corpus.",
+    );
+  }
+  if (
+    typeof current?.scores !== "object" ||
+    current.scores === null ||
+    typeof baseline?.scores !== "object" ||
+    baseline.scores === null
+  ) {
+    throw new Error(
+      "Benchmark baseline must contain comparable numeric scores.",
+    );
+  }
+
+  const metrics = {};
+  const improvements = [];
+  const regressions = [];
+  const unchanged = [];
+  for (const [metric, currentValue] of Object.entries(current.scores)) {
+    const baselineValue = baseline.scores[metric];
+    if (!Number.isFinite(currentValue) || !Number.isFinite(baselineValue)) {
+      throw new Error(
+        "Benchmark baseline must contain comparable numeric scores.",
+      );
+    }
+    const direction = metricDirection(metric);
+    const delta = roundScore(currentValue - baselineValue);
+    const tolerance = metricTolerance(metric, baselineValue);
+    const change =
+      Math.abs(delta) <= tolerance
+        ? "unchanged"
+        : direction === "lower_is_better"
+          ? delta < 0
+            ? "improved"
+            : "regressed"
+          : delta > 0
+            ? "improved"
+            : "regressed";
+    metrics[metric] = {
+      baseline: baselineValue,
+      current: currentValue,
+      delta,
+      direction,
+      change,
+    };
+    if (change === "improved") improvements.push(metric);
+    if (change === "regressed") regressions.push(metric);
+    if (change === "unchanged") unchanged.push(metric);
+  }
+
+  return {
+    status: "compared",
+    corpus_fingerprint: current.corpus_fingerprint,
+    metrics,
+    improvements: improvements.sort(),
+    regressions: regressions.sort(),
+    unchanged: unchanged.sort(),
+  };
+}
+
 export function scorePromptQualityEvidence({
   fixtureSet,
   listItems,
@@ -83,6 +176,20 @@ export function scoreOutcomePassRate(effectivenessSummary) {
 function scoreChecks(checks) {
   const values = Object.values(checks);
   return roundScore(values.filter(Boolean).length / values.length);
+}
+
+function metricDirection(metric) {
+  return metric === "privacy_leak_count" || metric.endsWith("_ms")
+    ? "lower_is_better"
+    : "higher_is_better";
+}
+
+function metricTolerance(metric, baselineValue) {
+  if (metric === "privacy_leak_count") return 0;
+  if (metric.endsWith("_ms")) {
+    return Math.max(5, Math.abs(baselineValue) * 0.1);
+  }
+  return 0.01;
 }
 
 function roundScore(value) {

@@ -978,6 +978,8 @@ promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # Add passed or failed outcome metadata with safe evidence refs.
 # Set template_only to false after confirming the fixture is ready.
 promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE"
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json > "$BASELINE_REPORT"
+promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --baseline-file "$BASELINE_REPORT" --json
 
 corepack pnpm benchmark
 corepack pnpm --silent benchmark -- --json
@@ -992,6 +994,8 @@ operator-confirmed outcomes remain `unproven`. See
 Real runs report score delivery integrity separately from synthetic score
 calibration and require `outcome_pass_rate` before calling a usefulness trend
 healthy.
+Without `--baseline-file`, real evidence is a snapshot rather than a trend. A
+raw-free corpus fingerprint prevents comparisons across changed prompt sets.
 
 ## Release Smoke
 

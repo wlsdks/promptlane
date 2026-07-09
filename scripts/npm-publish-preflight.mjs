@@ -797,11 +797,14 @@ function benchmarkEvidenceStateReportContractIsDocumented() {
     "regression_gate_failed",
     "trend_healthy",
     "trend_needs_review",
+    "snapshot_healthy",
+    "snapshot_needs_review",
     "release_blocking",
     "evidence_release_blocking",
     "next_action",
     "requires_real_fixtures",
     "requires_real_outcomes",
+    "requires_baseline",
     "release_gate",
     "synthetic",
     "trend_signal",
@@ -821,7 +824,10 @@ function benchmarkEvidenceStateReportContractIsDocumented() {
     benchmarkSpec.includes("outcome_pass_rate") &&
     benchmarkScores.includes("scoreOutcomePassRate") &&
     benchmarkScores.includes("real_corpus_delivery_integrity") &&
-    benchmarkScores.includes("synthetic_score_calibration")
+    benchmarkScores.includes("synthetic_score_calibration") &&
+    benchmark.includes("corpus_fingerprint") &&
+    benchmark.includes("comparison") &&
+    benchmarkSpec.includes("--baseline-file")
   );
 }
 
@@ -1073,7 +1079,7 @@ function releaseWarnings() {
     {
       label: "benchmark is synthetic regression evidence",
       detail:
-        'corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, add operator-confirmed passed or failed outcome metadata with safe evidence refs, update consent_note, set template_only to false, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" before claiming real-user prompt quality trends.',
+        'corepack pnpm --silent benchmark -- --json must pass before publish, but a synthetic pass is not real-world effectiveness proof. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, add operator-confirmed passed or failed outcome metadata with safe evidence refs, update consent_note, set template_only to false, save one JSON snapshot as $BASELINE_REPORT, then rerun promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --baseline-file "$BASELINE_REPORT" before claiming real-user prompt quality trends.',
     },
     ...realBenchmarkFixtureWarnings(),
   ];
@@ -1088,7 +1094,7 @@ function realBenchmarkFixtureWarnings() {
     {
       label: "real benchmark fixtures are missing",
       detail:
-        'docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, add operator-confirmed passed or failed outcome metadata with safe evidence refs, update consent_note, set template_only to false, then run promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE".',
+        'docs/benchmark-fixtures/real.json is absent; publish can proceed after release gates pass, but do not claim real-user effectiveness trends. Create an operator-owned template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", replace every example with consent-bearing redacted fixtures, add operator-confirmed passed or failed outcome metadata with safe evidence refs, update consent_note, set template_only to false, save one JSON snapshot as $BASELINE_REPORT, then rerun promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --baseline-file "$BASELINE_REPORT".',
     },
   ];
 }

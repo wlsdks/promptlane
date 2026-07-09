@@ -8,6 +8,7 @@ import type { Command } from "commander";
 import { UserError } from "../user-error.js";
 
 type BenchmarkCliOptions = {
+  baselineFile?: string;
   fixtureFile?: string;
   fixtureSet?: string;
   json?: boolean;
@@ -59,6 +60,10 @@ export function registerBenchmarkCommand(program: Command): void {
     .option(
       "--fixture-file <path>",
       "Read consent-bearing redacted real fixtures from this local file.",
+    )
+    .option(
+      "--baseline-file <path>",
+      "Compare with a prior PromptLane benchmark JSON report.",
     )
     .option("--json", "Print JSON.")
     .action((options: BenchmarkCliOptions) => {
@@ -122,6 +127,9 @@ export function benchmarkForCli(
   const args = ["--fixture-set", fixtureSet];
   if (options.fixtureFile) {
     args.push("--fixture-file", options.fixtureFile);
+  }
+  if (options.baselineFile) {
+    args.push("--baseline-file", options.baselineFile);
   }
   if (options.json) args.push("--json");
   const result = runBenchmark(args);
