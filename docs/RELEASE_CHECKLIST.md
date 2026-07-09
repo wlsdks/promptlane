@@ -189,9 +189,9 @@ Confirm `corepack pnpm pack:dry-run` excludes:
 - [ ] Confirm Benchmark v1 passes.
 - [ ] Delete a prompt and confirm it disappears from CLI and web UI.
 
-## Deferred For Non-CI Local Beta
+## Deferred For Broader Platform Claims
 
-These items are recommended before a broader public release, but can be deferred for a local-only beta when explicitly documented in release notes:
+PromptLane 1.0.0 can publish from the local-first release gate above. Do not make broad platform claims before platform-specific smoke is complete:
 
-- [ ] Cross-platform GitHub Actions matrix for macOS, Linux, and Windows.
-- [ ] `better-sqlite3` install/open/WAL/FTS5 smoke on each supported release platform.
+- [ ] `better-sqlite3` install/open/WAL/FTS5 smoke on each claimed release platform.
+- [ ] Hook install, doctor, MCP registration, and browser smoke on each claimed release platform.

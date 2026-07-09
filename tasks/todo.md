@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-09 PromptLane Release Checklist Platform Claims
+
+- [x] CHECK: `docs/RELEASE_CHECKLIST.md` still framed a cross-platform GitHub
+  Actions matrix as recommended before broader public release, while the current
+  1.0.0 release policy is local-first and defers only broad platform claims
+  until platform-specific smoke exists.
+- [x] RED: packaging guard now rejects the stale non-CI local beta/GitHub
+  Actions matrix wording and requires broader-platform-claim smoke guidance.
+- [x] GREEN: release checklist now says 1.0.0 can publish from the local-first
+  gate while macOS/Linux arm64/Windows claims require platform-specific smoke.
+- [x] VERIFY: focused release checklist guard, formatting, live
+  preflight/quality smoke, and diff hygiene.
+
 ## 2026-07-09 PromptLane README Local Platform Validation
 
 - [x] CHECK: README/README.ko Supported Platforms and Requirements still named

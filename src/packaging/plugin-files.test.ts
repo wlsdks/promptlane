@@ -882,6 +882,27 @@ describe("plugin packaging files", () => {
     expect(readmeKo).not.toContain("CI 대상");
   });
 
+  it("keeps the release checklist focused on local-first platform claims", () => {
+    const releaseChecklist = readFileSync(
+      join(process.cwd(), "docs/RELEASE_CHECKLIST.md"),
+      "utf8",
+    );
+
+    expect(releaseChecklist).toContain(
+      "## Deferred For Broader Platform Claims",
+    );
+    expect(releaseChecklist).toContain(
+      "Do not make broad platform claims before platform-specific smoke is complete",
+    );
+    expect(releaseChecklist).toContain(
+      "`better-sqlite3` install/open/WAL/FTS5 smoke on each claimed release platform",
+    );
+    expect(releaseChecklist).not.toContain("Deferred For Non-CI Local Beta");
+    expect(releaseChecklist).not.toContain(
+      "Cross-platform GitHub Actions matrix",
+    );
+  });
+
   it("keeps Korean README local development setup aligned with the English quick start", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
