@@ -19,6 +19,7 @@ This benchmark is intentionally local-only. It does not call an external LLM jud
 ```sh
 promptlane benchmark --json
 promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE"
+promptlane benchmark prepare-pair --baseline-prompt-id "$BASELINE_PROMPT_ID" --promptlane-prompt-id "$PROMPTLANE_PROMPT_ID" --pair-id "$PAIR_ID" --query "$MATCH_QUERY" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$PAIR_FIXTURE_FILE"
 promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # Replace every example with consent-bearing redacted fixtures.
 # Add passed or failed outcome metadata with safe evidence refs.
@@ -56,6 +57,15 @@ promptlane benchmark prepare-fixture \
   --consent-note "$CONSENT_NOTE" \
   --confirm-consent \
   --output "$FIXTURE_FILE"
+
+promptlane benchmark prepare-pair \
+  --baseline-prompt-id "$BASELINE_PROMPT_ID" \
+  --promptlane-prompt-id "$PROMPTLANE_PROMPT_ID" \
+  --pair-id "$PAIR_ID" \
+  --query "$MATCH_QUERY" \
+  --consent-note "$CONSENT_NOTE" \
+  --confirm-consent \
+  --output "$PAIR_FIXTURE_FILE"
 ```
 
 `benchmark candidates` scans at most the latest 100 loop snapshots and returns
@@ -63,6 +73,20 @@ only prompt ids with explicitly attributed, completed, safe outcome evidence.
 It never returns prompt bodies, raw paths, outcome summaries, or evidence
 references. Review the body-free ids locally before selecting prompts and
 confirming consent with `prepare-fixture`.
+
+`prepare-pair` is the archive-backed path for before-versus-after evidence.
+The operator explicitly selects two distinct prompt ids after reviewing their
+local prompt and outcome records, supplies one safe pair id and shared redacted
+query, and confirms consent. Repeat all four selection options in matching
+order to create multiple pairs in one fixture; option counts must match and a
+prompt cannot be reused across pairs. PromptLane requires the same Codex or Claude Code
+tool, a completed baseline outcome without improvement attribution, and a
+completed treatment outcome with explicit PromptLane attribution. It rechecks
+both prompt bodies, summaries, and evidence refs for sensitive values, writes a
+new 0600 fixture, refuses overwrite, and prints no selected ids, bodies,
+evidence refs, or output path. Create at least three reviewed pairs in one
+operator-owned fixture before interpreting the
+directional report. The command does not infer task equivalence or causality.
 
 The report also exposes body-free stage counts for completed, attributed,
 evidence-complete, and safe snapshots. A non-ready status distinguishes

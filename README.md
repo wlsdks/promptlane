@@ -1028,6 +1028,7 @@ score calibration, analytics, and latency:
 ```sh
 promptlane benchmark --json
 promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE"
+promptlane benchmark prepare-pair --baseline-prompt-id "$BASELINE_PROMPT_ID" --promptlane-prompt-id "$PROMPTLANE_PROMPT_ID" --pair-id "$PAIR_ID" --query "$MATCH_QUERY" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$PAIR_FIXTURE_FILE"
 promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # Replace every example with consent-bearing redacted fixtures.
 # Add passed or failed outcome metadata with safe evidence refs.
@@ -1059,6 +1060,14 @@ reason.
 evidence for sensitive values, includes only explicitly attributed completed
 outcomes, writes a new 0600 file, and never prints its path or prompt contents.
 `init-fixture` remains the manual empty-template alternative.
+For matched before-versus-after evidence, `prepare-pair` reads two explicitly
+selected archive prompts, requires a completed unattributed baseline and an
+explicitly attributed PromptLane treatment from the same tool, rechecks all
+exported evidence for sensitive values, and writes a private no-overwrite
+fixture. Repeat the four pair-selection options in matching order to create
+multiple pairs together; prompt reuse and unequal option counts are rejected.
+Collect at least three pairs before interpreting direction. The result remains observational with
+`causal_claim: false`.
 Real runs report score delivery integrity separately from synthetic score
 calibration and require `outcome_pass_rate` before calling a usefulness trend
 healthy.

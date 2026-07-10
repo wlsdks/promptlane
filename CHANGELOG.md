@@ -120,6 +120,9 @@ tools, benchmark/release validation, and an English/Korean web UI.
   Optional matched `effect_pair` fixtures now report baseline-versus-PromptLane
   pass-rate direction and transitions while requiring complete attribution,
   at least three pairs for a directional status, and `causal_claim: false`.
+  `promptlane benchmark prepare-pair` can create one private fixture containing
+  repeated matched pairs from explicitly selected archive prompts after consent
+  and attribution checks.
   Real score delivery no longer depends on synthetic vague-prompt/spread
   fixtures, and actual passed outcomes are measured as `outcome_pass_rate`.
   Real evidence now stays a snapshot until `--baseline-file` compares the same

@@ -856,6 +856,9 @@ describe("plugin packaging files", () => {
       expect(content).toContain("promptlane benchmark --json");
       expect(content).toContain("promptlane benchmark candidates --json");
       expect(content).toContain("promptlane benchmark prepare-fixture");
+      expect(content).toContain("promptlane benchmark prepare-pair");
+      expect(content).toContain("--baseline-prompt-id");
+      expect(content).toContain("--promptlane-prompt-id");
       expect(content).toContain("body-free");
       expect(content).toContain(
         'promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json --report-file "$BASELINE_REPORT"',
@@ -887,6 +890,10 @@ describe("plugin packaging files", () => {
     );
     expect(packageInstallSmoke).toContain('"init-fixture"');
     expect(packageInstallSmoke).toContain('"prepare-fixture"');
+    expect(packageInstallSmoke).toContain('"prepare-pair"');
+    expect(packageInstallSmoke).toContain('"--baseline-prompt-id"');
+    expect(packageInstallSmoke).toContain('"--promptlane-prompt-id"');
+    expect(packageInstallSmoke).toContain("paired_fixture_prepare");
     expect(packageInstallSmoke).toContain('"candidates"');
     expect(packageInstallSmoke).toContain("fixture_candidates");
     expect(packageInstallSmoke).toContain("validateBenchmarkFixtureTemplate");

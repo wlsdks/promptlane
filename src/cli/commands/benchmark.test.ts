@@ -23,6 +23,7 @@ import {
   initializeBenchmarkFixtureForCli,
   prepareBenchmarkFixtureForCli,
 } from "./benchmark.js";
+import { preparePairedBenchmarkFixtureForCli } from "./benchmark-pair.js";
 import { runCli } from "../index.js";
 import type { PromptDetail } from "../../storage/ports.js";
 import type { LoopSnapshot } from "../../loop/types.js";
@@ -188,10 +189,148 @@ describe("benchmark CLI command", () => {
     }
   });
 
+  it("requires paired fixture consent before reading archive prompts", () => {
+    const readPrompts = vi.fn();
+
+    expect(() =>
+      preparePairedBenchmarkFixtureForCli(
+        {
+          baselinePromptIds: ["prmt_baseline"],
+          confirmConsent: false,
+          consentNote: "Operator approved this redacted matched pair.",
+          fixtureFile: "/tmp/private-pair.json",
+          pairIds: ["release_review"],
+          promptlanePromptIds: ["prmt_treatment"],
+          queries: ["release verification"],
+        },
+        readPrompts,
+      ),
+    ).toThrow(
+      "benchmark prepare-pair requires --confirm-consent after reviewing both prompts and outcomes.",
+    );
+    expect(readPrompts).not.toHaveBeenCalled();
+  });
+
+  it("requires aligned pair option counts before reading archive prompts", () => {
+    const readPrompts = vi.fn();
+
+    expect(() =>
+      preparePairedBenchmarkFixtureForCli(
+        {
+          baselinePromptIds: ["prmt_baseline_one", "prmt_baseline_two"],
+          confirmConsent: true,
+          consentNote: "Operator approved these redacted matched pairs.",
+          fixtureFile: "/tmp/private-pairs.json",
+          pairIds: ["release_one"],
+          promptlanePromptIds: ["prmt_treatment_one"],
+          queries: ["release one"],
+        },
+        readPrompts,
+      ),
+    ).toThrow(
+      "benchmark prepare-pair requires the same non-zero number of baseline ids, PromptLane ids, pair ids, and queries.",
+    );
+    expect(readPrompts).not.toHaveBeenCalled();
+  });
+
+  it("writes a selected archive pair to a private runnable fixture", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-pair-prepare-"));
+    const fixtureFile = join(tempRoot, "private", "paired.json");
+    const baseline = storedPromptDetail();
+    baseline.id = "prmt_baseline";
+    baseline.loop_outcomes![0]!.improvement_used = false;
+    baseline.loop_outcomes![0]!.status = "failed";
+    const treatment = storedPromptDetail();
+    treatment.id = "prmt_treatment";
+    const readPrompts = vi.fn(() => [baseline, treatment]);
+
+    try {
+      const output = preparePairedBenchmarkFixtureForCli(
+        {
+          baselinePromptIds: [baseline.id],
+          confirmConsent: true,
+          consentNote: "Operator approved this redacted matched pair.",
+          fixtureFile,
+          pairIds: ["release_review"],
+          promptlanePromptIds: [treatment.id],
+          queries: ["release verification"],
+        },
+        readPrompts,
+      );
+      const fixture = JSON.parse(readFileSync(fixtureFile, "utf8"));
+
+      expect(readPrompts).toHaveBeenCalledWith(
+        [baseline.id, treatment.id],
+        undefined,
+      );
+      expect(
+        fixture.fixtures.map(
+          (item: { effect_pair: unknown }) => item.effect_pair,
+        ),
+      ).toEqual([
+        { id: "release_review", variant: "baseline" },
+        { id: "release_review", variant: "promptlane" },
+      ]);
+      expect(statSync(fixtureFile).mode & 0o777).toBe(0o600);
+      expect(output).toBe(
+        "Created a consent-bearing paired effectiveness fixture with 1 matched pair. Collect at least 3 matched pairs before interpreting direction.",
+      );
+      expect(output).not.toContain(fixtureFile);
+      expect(output).not.toContain(baseline.id);
+      expect(output).not.toContain(baseline.markdown);
+    } finally {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
+  it("combines repeated matched options into one runnable fixture", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-pairs-prepare-"));
+    const fixtureFile = join(tempRoot, "paired.json");
+    const prompts = [
+      pairedStoredPrompt("prmt_base_one", false, "failed"),
+      pairedStoredPrompt("prmt_base_two", false, "passed"),
+      pairedStoredPrompt("prmt_lane_one", true, "passed"),
+      pairedStoredPrompt("prmt_lane_two", true, "passed"),
+    ];
+
+    try {
+      const output = preparePairedBenchmarkFixtureForCli(
+        {
+          baselinePromptIds: ["prmt_base_one", "prmt_base_two"],
+          confirmConsent: true,
+          consentNote: "Operator approved these redacted matched pairs.",
+          fixtureFile,
+          pairIds: ["release_one", "release_two"],
+          promptlanePromptIds: ["prmt_lane_one", "prmt_lane_two"],
+          queries: ["release one", "release two"],
+        },
+        () => prompts,
+      );
+      const fixture = JSON.parse(readFileSync(fixtureFile, "utf8"));
+
+      expect(fixture.fixtures).toHaveLength(4);
+      expect(
+        fixture.fixtures.map(
+          (item: { effect_pair: { id: string; variant: string } }) =>
+            `${item.effect_pair.id}:${item.effect_pair.variant}`,
+        ),
+      ).toEqual([
+        "release_one:baseline",
+        "release_one:promptlane",
+        "release_two:baseline",
+        "release_two:promptlane",
+      ]);
+      expect(output).toContain("with 2 matched pairs");
+    } finally {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
   it("prepares a fixture through the public nested CLI command", async () => {
     const tempRoot = mkdtempSync(join(tmpdir(), "promptlane-fixture-cli-"));
     const dataDir = join(tempRoot, "data");
     const fixtureFile = join(tempRoot, "real.json");
+    const pairFixtureFile = join(tempRoot, "paired.json");
     const init = initializePromptLane({ dataDir });
     const storage = createSqlitePromptStorage({
       dataDir,
@@ -211,6 +350,43 @@ describe("benchmark CLI command", () => {
     const stored = await storage.storePrompt({
       event,
       redaction: redactPrompt(event.prompt, "mask"),
+    });
+    const baselineEvent = normalizeClaudeCodePayload(
+      {
+        session_id: "session-benchmark-baseline",
+        transcript_path: "/Users/example/.claude/baseline.jsonl",
+        cwd: "/Users/example/project",
+        permission_mode: "default",
+        hook_event_name: "UserPromptSubmit",
+        prompt: "Review the redacted baseline release checks.",
+      },
+      new Date("2026-07-10T00:10:00.000Z"),
+    );
+    const baselineStored = await storage.storePrompt({
+      event: baselineEvent,
+      redaction: redactPrompt(baselineEvent.prompt, "mask"),
+    });
+    storage.createLoopSnapshot({
+      id: "loop_benchmark_baseline",
+      created_at: "2026-07-10T00:12:00.000Z",
+      tool: "claude-code",
+      source: "cli",
+      cwd_label: "project",
+      project_id: "proj_benchmark",
+      prompt_ids: [baselineStored.id],
+      event_counts: { prompts: 1, tests_run: 1 },
+      quality: { top_gaps: [], unresolved_questions: [] },
+      outcome: {
+        status: "failed",
+        summary: "Baseline release checks did not pass.",
+        evidence_refs: ["test:benchmark-baseline"],
+      },
+      next_brief: { generated: false, summary: "Improve the next request." },
+      privacy: {
+        stores_prompt_bodies: false,
+        stores_raw_paths: false,
+        local_only: true,
+      },
     });
     storage.createLoopSnapshot({
       id: "loop_benchmark_fixture",
@@ -293,6 +469,53 @@ describe("benchmark CLI command", () => {
         status: "ready",
         fixtures: [
           {
+            outcome: { improvement_used: true, status: "passed" },
+          },
+        ],
+      });
+
+      consoleLog.mockClear();
+      expect(
+        await runCli(
+          [
+            "node",
+            "promptlane",
+            "benchmark",
+            "prepare-pair",
+            "--data-dir",
+            dataDir,
+            "--baseline-prompt-id",
+            baselineStored.id,
+            "--promptlane-prompt-id",
+            stored.id,
+            "--pair-id",
+            "release_review",
+            "--query",
+            "release verification",
+            "--consent-note",
+            "Operator approved this redacted matched pair.",
+            "--confirm-consent",
+            "--output",
+            pairFixtureFile,
+          ],
+          { stderr },
+        ),
+      ).toBe(0);
+      expect(
+        loadBenchmarkFixtures({
+          fixtureSet: "real",
+          realFixturesPath: pairFixtureFile,
+          repoRoot: process.cwd(),
+        }),
+      ).toMatchObject({
+        status: "ready",
+        fixtures: [
+          {
+            effect_pair: { id: "release_review", variant: "baseline" },
+            outcome: { improvement_used: false, status: "failed" },
+          },
+          {
+            effect_pair: { id: "release_review", variant: "promptlane" },
             outcome: { improvement_used: true, status: "passed" },
           },
         ],
@@ -694,6 +917,19 @@ function storedPromptDetail(): PromptDetail {
       },
     ],
   };
+}
+
+function pairedStoredPrompt(
+  id: string,
+  improvementUsed: boolean,
+  status: "passed" | "failed",
+): PromptDetail {
+  const prompt = storedPromptDetail();
+  prompt.id = id;
+  prompt.markdown = `Review redacted ${id.replaceAll("_", " ")} checks.`;
+  prompt.loop_outcomes![0]!.improvement_used = improvementUsed;
+  prompt.loop_outcomes![0]!.status = status;
+  return prompt;
 }
 
 function candidateSnapshot(): LoopSnapshot {

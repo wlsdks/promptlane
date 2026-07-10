@@ -16,14 +16,99 @@ type RealBenchmarkFixtureCase = {
   adapter: "codex" | "claude-code";
   query: string;
   prompt: string;
+  effect_pair?: {
+    id: string;
+    variant: "baseline" | "promptlane";
+  };
   outcome?: {
     status: "passed" | "failed";
     summary: string;
-    improvement_used: true;
+    improvement_used: boolean;
     evidence_refs: string[];
     tests_run: number;
   };
 };
+
+export function createPairedRealBenchmarkFixture({
+  consentNote,
+  pairId,
+  query,
+  baselinePrompt,
+  promptlanePrompt,
+}: {
+  consentNote: string;
+  pairId: string;
+  query: string;
+  baselinePrompt: PromptDetail;
+  promptlanePrompt: PromptDetail;
+}): RealBenchmarkFixture {
+  const normalizedConsent = validateRealBenchmarkConsentNote(consentNote);
+  const normalizedPairId = pairId.trim();
+  if (!/^[a-z0-9][a-z0-9_-]{0,51}$/.test(normalizedPairId)) {
+    throw new BenchmarkFixtureInputError(
+      "Paired benchmark pair id must use lowercase safe-label characters.",
+    );
+  }
+  const normalizedQuery = query.trim();
+  if (!normalizedQuery || hasSensitiveValue(normalizedQuery)) {
+    throw new BenchmarkFixtureInputError(
+      "Paired benchmark query must be non-empty and redacted.",
+    );
+  }
+  if (baselinePrompt.id === promptlanePrompt.id) {
+    throw new BenchmarkFixtureInputError(
+      "Paired benchmark prompts must be distinct.",
+    );
+  }
+  if (
+    (baselinePrompt.tool !== "codex" &&
+      baselinePrompt.tool !== "claude-code") ||
+    baselinePrompt.tool !== promptlanePrompt.tool
+  ) {
+    throw new BenchmarkFixtureInputError(
+      "Paired benchmark prompts must use the same supported tool.",
+    );
+  }
+
+  const baselineText = pairedPromptText(baselinePrompt);
+  const promptlaneText = pairedPromptText(promptlanePrompt);
+  const baselineOutcome = requiredPairedOutcome({
+    outcomes: baselinePrompt.loop_outcomes ?? [],
+    improvementUsed: false,
+    missingMessage:
+      "Baseline prompt requires completed redacted outcome evidence without PromptLane improvement attribution.",
+  });
+  const promptlaneOutcome = requiredPairedOutcome({
+    outcomes: promptlanePrompt.loop_outcomes ?? [],
+    improvementUsed: true,
+    missingMessage:
+      "PromptLane prompt requires completed redacted outcome evidence with explicit improvement attribution.",
+  });
+
+  return {
+    template_only: false,
+    consent_note: normalizedConsent,
+    fixtures: [
+      {
+        label: `${normalizedPairId}_baseline`,
+        adapter: baselinePrompt.tool,
+        query: normalizedQuery,
+        prompt: baselineText,
+        effect_pair: { id: normalizedPairId, variant: "baseline" },
+        outcome: baselineOutcome,
+      },
+      {
+        label: `${normalizedPairId}_promptlane`,
+        adapter: promptlanePrompt.tool,
+        query: normalizedQuery,
+        prompt: promptlaneText,
+        effect_pair: { id: normalizedPairId, variant: "promptlane" },
+        outcome: promptlaneOutcome,
+      },
+    ],
+    coach_cases: [baselineText, promptlaneText],
+  };
+}
 
 export class BenchmarkFixtureInputError extends Error {
   constructor(message: string) {
@@ -124,6 +209,48 @@ function attributedOutcome(outcomes: PromptLoopOutcomeEvidence[]) {
     status: outcome.status as "passed" | "failed",
     summary: outcome.summary,
     improvement_used: true as const,
+    evidence_refs: outcome.evidence_refs,
+    tests_run: outcome.tests_run ?? 0,
+  };
+}
+
+function pairedPromptText(prompt: PromptDetail): string {
+  const promptText = prompt.markdown.trim();
+  if (!promptText || hasSensitiveValue(promptText)) {
+    throw new BenchmarkFixtureInputError(
+      "Paired benchmark prompts must be redacted before export.",
+    );
+  }
+  return promptText;
+}
+
+function requiredPairedOutcome({
+  outcomes,
+  improvementUsed,
+  missingMessage,
+}: {
+  outcomes: PromptLoopOutcomeEvidence[];
+  improvementUsed: boolean;
+  missingMessage: string;
+}) {
+  const outcome = outcomes.find(
+    (candidate) =>
+      candidate.improvement_used === improvementUsed &&
+      (candidate.status === "passed" || candidate.status === "failed") &&
+      candidate.evidence_refs.length > 0,
+  );
+  if (!outcome) {
+    throw new BenchmarkFixtureInputError(missingMessage);
+  }
+  if ([outcome.summary, ...outcome.evidence_refs].some(hasSensitiveValue)) {
+    throw new BenchmarkFixtureInputError(
+      "Paired benchmark outcome evidence must be redacted before export.",
+    );
+  }
+  return {
+    status: outcome.status as "passed" | "failed",
+    summary: outcome.summary,
+    improvement_used: improvementUsed,
     evidence_refs: outcome.evidence_refs,
     tests_run: outcome.tests_run ?? 0,
   };

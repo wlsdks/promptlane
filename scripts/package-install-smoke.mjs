@@ -108,6 +108,27 @@ try {
     },
   );
   validateQualityEvidence(qualityEvidence.stdout);
+  const pairedFixtureHelp = run(
+    join(tempPrefix, "bin", "promptlane"),
+    ["benchmark", "prepare-pair", "--help"],
+    {
+      cwd: tempHome,
+      env: { ...process.env, HOME: tempHome },
+      encoding: "utf8",
+    },
+  );
+  for (const option of [
+    "--baseline-prompt-id",
+    "--promptlane-prompt-id",
+    "--pair-id",
+    "--query",
+    "--confirm-consent",
+    "--output",
+  ]) {
+    if (!pairedFixtureHelp.stdout.includes(option)) {
+      throw new Error(`installed benchmark prepare-pair omitted ${option}`);
+    }
+  }
   const fixtureFile = join(tempHome, "operator-owned-real-fixtures.json");
   const fixtureInit = run(
     join(tempPrefix, "bin", "promptlane"),
@@ -252,6 +273,8 @@ try {
           "promptlane benchmark init-fixture --output <operator-owned>",
         fixture_prepare:
           "promptlane benchmark prepare-fixture --prompt-id <selected> --confirm-consent --output <operator-owned>",
+        paired_fixture_prepare:
+          "promptlane benchmark prepare-pair --baseline-prompt-id <baseline> --promptlane-prompt-id <treatment> --confirm-consent --output <operator-owned>",
         fixture_candidates: "promptlane benchmark candidates --json",
         effectiveness_signal: "promptlane benchmark --fixture-set real --json",
         trend_comparison:

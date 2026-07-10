@@ -27,6 +27,7 @@ import type { LoopSnapshot } from "../../loop/types.js";
 import type { PromptDetail } from "../../storage/ports.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
 import { UserError } from "../user-error.js";
+import { registerBenchmarkPairCommand } from "./benchmark-pair.js";
 
 type BenchmarkCliOptions = {
   baselineFile?: string;
@@ -135,6 +136,8 @@ export function registerBenchmarkCommand(program: Command): void {
         }),
       );
     });
+
+  registerBenchmarkPairCommand(benchmarkCommand);
 
   benchmarkCommand
     .command("candidates")

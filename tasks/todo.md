@@ -11017,3 +11017,19 @@
 - [x] VERIFY: Run focused fixture/scoring/packaging tests, synthetic and local
       paired real benchmark smoke, build, pack, and diff hygiene before
       retagging `v1.0.0`.
+
+## 2026-07-10 Archive-Backed Paired Fixture Preparation
+
+- [x] CHECK: `effect_pair` reports are runnable, but operators must still edit
+      JSON manually because `prepare-fixture` exports attributed treatments only.
+- [x] RED: Require a pure paired-fixture builder and public `benchmark
+      prepare-pair` command with explicit baseline/treatment ids, pair id,
+      shared query, consent, private permissions, and no overwrite.
+- [x] GREEN: Validate distinct prompts, matching Codex/Claude tool, completed
+      safe evidence, baseline `improvement_used: false`, and PromptLane
+      `improvement_used: true` before writing a runnable pair.
+- [x] ALIGN: Add installed help/package smoke and benchmark runbook guidance
+      without exposing prompt bodies, evidence refs, ids, or output paths.
+- [x] VERIFY: Run focused model/CLI/privacy/package tests, built CLI help and
+      paired fixture smoke, lint/build/pack, and diff hygiene before retagging
+      `v1.0.0`.

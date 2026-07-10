@@ -467,6 +467,13 @@ than three pairs remain `insufficient_pairs`, and every report keeps
 `causal_claim: false`. This creates the measurement contract, but current local
 state still has no consent-bearing real fixtures, so usefulness remains
 unproven until operator evidence is collected.
+The public `promptlane benchmark prepare-pair` command now removes the manual
+JSON step for matched pairs: it reads explicit archive prompt ids,
+requires baseline/treatment attribution semantics and the same agent tool,
+revalidates redacted evidence, and writes one private no-overwrite fixture from
+one or more ordered option groups. Task
+equivalence and consent remain operator decisions; PromptLane does not infer a
+pair or causal effect.
 
 Completed:
 
