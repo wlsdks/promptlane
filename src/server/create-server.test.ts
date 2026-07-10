@@ -66,10 +66,15 @@ describe("createServer P2 ingest boundary", () => {
     });
 
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toMatchObject({
+    const body = response.json() as Record<string, unknown>;
+    expect(body).toEqual({
       ok: true,
       version: "1.0.0",
+      instance_id: expect.stringMatching(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+      ),
     });
+    expect(Object.keys(body).sort()).toEqual(["instance_id", "ok", "version"]);
   });
 
   it("does not expose the local data directory through health", async () => {

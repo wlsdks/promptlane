@@ -141,7 +141,8 @@ Confirm `corepack pnpm pack:dry-run` excludes:
 - [ ] Raw detected secrets are absent from SQLite prompt rows and FTS search results under `mask` mode.
 - [ ] Raw prompt-body absolute paths are redacted from Markdown, SQLite, FTS, browser prompt APIs, export surfaces, import job summaries, and hook stdout/stderr.
 - [ ] npm publish tokens (`npm_<36+ char>`) are masked in the privacy regression fixture across the same surfaces.
-- [ ] `/api/v1/health` does not return `data_dir` or any raw filesystem path.
+- [ ] `/api/v1/health` returns only `ok`, `version`, and a per-boot UUID
+  `instance_id`; it does not return `data_dir` or any raw filesystem path.
 - [ ] Hook wrappers record `last_ingest_status` even when `postPayload` throws, so `doctor` can surface the failure.
 - [ ] Adapter idempotency keys normalize the upstream `session_id` before hashing (Claude Code parity with Codex).
 - [ ] Invalid payload values are not echoed in error responses.

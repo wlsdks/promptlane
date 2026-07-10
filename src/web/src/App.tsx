@@ -162,7 +162,7 @@ export function App() {
     filtersFromLocation(),
   );
   const [health, setHealth] = useState<
-    { ok: boolean; version: string } | undefined
+    { ok: boolean; version: string; instance_id: string } | undefined
   >();
   const [settings, setSettings] = useState<SettingsResponse | undefined>();
   const [trendDays, setTrendDays] = useState<7 | 30>(7);

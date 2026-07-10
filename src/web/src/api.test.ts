@@ -8671,6 +8671,38 @@ describe("web api export client", () => {
     );
   });
 
+  it("returns the safe boot instance from a valid health response", async () => {
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse({
+        ok: true,
+        version: "1.0.0",
+        instance_id: "019c6602-87f7-4e75-b535-2162f80d1250",
+      }),
+    );
+    const { getHealth } = await import("./api.js");
+
+    await expect(getHealth()).resolves.toEqual({
+      ok: true,
+      version: "1.0.0",
+      instance_id: "019c6602-87f7-4e75-b535-2162f80d1250",
+    });
+  });
+
+  it("rejects a non-UUID health instance without returning raw-like content", async () => {
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse({
+        ok: true,
+        version: "1.0.0",
+        instance_id: "/Users/private/.promptlane",
+      }),
+    );
+    const { getHealth } = await import("./api.js");
+
+    await expect(getHealth()).rejects.toThrow(
+      "Health check failed: Invalid response.",
+    );
+  });
+
   it("reports malformed health responses without returning incomplete server status", async () => {
     fetchMock.mockResolvedValueOnce(jsonResponse({}));
     const { getHealth } = await import("./api.js");

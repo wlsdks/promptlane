@@ -556,6 +556,32 @@ describe("plugin packaging files", () => {
     }
   });
 
+  it("keeps the health boot-instance contract aligned across runtime docs", () => {
+    const healthRoute = readFileSync(
+      join(process.cwd(), "src/server/routes/health.ts"),
+      "utf8",
+    );
+    const architecture = readFileSync(
+      join(process.cwd(), "docs/ARCHITECTURE.md"),
+      "utf8",
+    );
+    const releaseChecklist = readFileSync(
+      join(process.cwd(), "docs/RELEASE_CHECKLIST.md"),
+      "utf8",
+    );
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
+
+    expect(healthRoute).toContain("instance_id: INSTANCE_ID");
+    expect(architecture).toContain("{ ok, version, instance_id }");
+    expect(releaseChecklist).toContain("per-boot UUID");
+    expect(readme).toContain("once for each running local server instance");
+    expect(readmeKo).toContain("실행 중인 server boot마다");
+    for (const content of [architecture, releaseChecklist, readme, readmeKo]) {
+      expect(content).toContain("instance_id");
+    }
+  });
+
   it("keeps the release checklist aligned with package lifecycle and shipped scripts", () => {
     const packageJson = readJson<{
       files: string[];

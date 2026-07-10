@@ -6641,6 +6641,7 @@ export async function setPromptBookmark(
 export async function getHealth(): Promise<{
   ok: boolean;
   version: string;
+  instance_id: string;
 }> {
   const response = await fetch("/api/v1/health", {
     credentials: "same-origin",
@@ -6656,15 +6657,24 @@ export async function getHealth(): Promise<{
     prompt_body?: unknown;
     raw_path?: unknown;
     version?: unknown;
+    instance_id?: unknown;
   };
   if (
     typeof body.ok !== "boolean" ||
     typeof body.version !== "string" ||
+    typeof body.instance_id !== "string" ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      body.instance_id,
+    ) ||
     body.markdown !== undefined ||
     body.prompt_body !== undefined ||
     body.raw_path !== undefined
   ) {
     throw new Error("Health check failed: Invalid response.");
   }
-  return { ok: body.ok, version: body.version };
+  return {
+    ok: body.ok,
+    version: body.version,
+    instance_id: body.instance_id,
+  };
 }
