@@ -10933,3 +10933,14 @@
       the checkpoint workflow is discoverable outside JSON mode.
 - [x] VERIFY: Run focused loop status, CLI, MCP, API, privacy, build, and package
       checks before retagging `v1.0.0`.
+
+## 2026-07-10 Loop Attribution Prompt Id Discovery
+
+- [x] RED: Require latest status to expose only opaque `prmt_` ids from the
+      selected snapshot and reject malformed path/secret-like values.
+- [x] GREEN: Preserve the safe ids through CLI, MCP, and web API status while
+      keeping prompt bodies and raw paths absent.
+- [x] GREEN: Explain that `--used-improvement-prompt` is selected only when a
+      PromptLane improvement was actually used; otherwise attribution is omitted.
+- [x] VERIFY: Run focused status/CLI/MCP/API/privacy/package tests, lint, build,
+      pack, and live status checks before retagging `v1.0.0`.

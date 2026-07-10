@@ -57,6 +57,7 @@ describe("web api export client", () => {
                 source: "cli",
                 project: "private-project",
                 prompt_count: 2,
+                prompt_ids: ["prmt_one", "prmt_two"],
                 average_prompt_score: 58,
                 top_gaps: ["Goal clarity"],
                 outcome_status: "unknown",
@@ -130,6 +131,10 @@ describe("web api export client", () => {
       reason: "passed_with_evidence",
       next_action: "promptlane loop memory-approve",
     });
+    expect(loops.status.latest_snapshot?.prompt_ids).toEqual([
+      "prmt_one",
+      "prmt_two",
+    ]);
     expect(loops.items[0]).toMatchObject({
       id: "loop_web",
       project: "private-project",

@@ -69,6 +69,9 @@ Acceptance criteria:
 - Pending latest loop status points to exact-id outcome recording only after a
   verifiable checkpoint; intermediate hook snapshots are not a required
   outcome backlog.
+- Latest loop status exposes only opaque prompt ids for attribution, and agents
+  must omit `used_improvement_prompt_ids` unless a PromptLane improvement was
+  actually used.
 - Worktree awareness is derived from git-safe labels and existing snapshots.
 - No feature reads private Codex databases or raw transcript stores.
 - Any scheduled collection is opt-in and calls explicit `promptlane` commands.

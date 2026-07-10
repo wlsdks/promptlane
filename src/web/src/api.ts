@@ -477,6 +477,7 @@ export type LoopSummary = {
   branch?: string;
   worktree?: string;
   prompt_count: number;
+  prompt_ids?: string[];
   average_prompt_score?: number;
   top_gaps: string[];
   outcome_status: string;
@@ -655,6 +656,7 @@ function isLoopSummary(value: unknown): value is LoopSummary {
     (loop.branch === undefined || typeof loop.branch === "string") &&
     (loop.worktree === undefined || typeof loop.worktree === "string") &&
     typeof loop.prompt_count === "number" &&
+    isOptionalStringArray(loop.prompt_ids) &&
     (loop.average_prompt_score === undefined ||
       typeof loop.average_prompt_score === "number") &&
     Array.isArray(loop.top_gaps) &&

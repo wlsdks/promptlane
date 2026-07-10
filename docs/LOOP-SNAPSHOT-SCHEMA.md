@@ -176,6 +176,9 @@ CLI output must:
 - guide an `unknown` or `in_progress` latest snapshot to optional exact-id
   outcome recording after a verifiable checkpoint, without treating every
   intermediate hook snapshot as backlog
+- expose only opaque `prmt_...` ids from the latest snapshot for explicit
+  `--used-improvement-prompt` attribution, which must stay empty when no
+  PromptLane improvement was actually used
 
 ### MCP
 
@@ -187,6 +190,8 @@ MCP output must:
 - return explicit not-found/setup guidance instead of transport errors
 - avoid raw prompt bodies, raw paths, transcripts, compact summaries, and
   secret-looking tokens
+- expose latest snapshot prompt ids only as opaque `prmt_...` values for
+  explicit improvement-use attribution
 - require explicit confirmation for write paths that mutate local state
 
 ### Web API And UI

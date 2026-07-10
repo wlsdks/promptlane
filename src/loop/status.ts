@@ -23,6 +23,7 @@ export type PromptLaneStatusSnapshot = {
   branch?: string;
   worktree?: string;
   prompt_count: number;
+  prompt_ids?: string[];
   average_prompt_score?: number;
   top_gaps: string[];
   outcome_status: LoopSnapshot["outcome"]["status"];
@@ -187,7 +188,11 @@ export function createPromptLaneStatus(input: {
         }
       : {}),
     ...(latest && input.includeLatest !== false
-      ? { latest_snapshot: toPromptLaneStatusSnapshot(latest) }
+      ? {
+          latest_snapshot: toPromptLaneStatusSnapshot(latest, {
+            includePromptIds: true,
+          }),
+        }
       : {}),
     ...(compactBoundary ? { latest_compact_boundary: compactBoundary } : {}),
     next_action: nextAction,
@@ -483,6 +488,7 @@ export function toPromptLaneStatusMemoryCandidate(
 
 export function toPromptLaneStatusSnapshot(
   snapshot: LoopSnapshot,
+  options: { includePromptIds?: boolean } = {},
 ): PromptLaneStatusSnapshot {
   return {
     id: snapshot.id,
@@ -493,6 +499,9 @@ export function toPromptLaneStatusSnapshot(
     ...(snapshot.branch ? { branch: snapshot.branch } : {}),
     ...(snapshot.worktree_label ? { worktree: snapshot.worktree_label } : {}),
     prompt_count: snapshot.event_counts.prompts,
+    ...(options.includePromptIds
+      ? { prompt_ids: safeAttributionPromptIds(snapshot.prompt_ids) }
+      : {}),
     ...(snapshot.quality.average_prompt_score === undefined
       ? {}
       : { average_prompt_score: snapshot.quality.average_prompt_score }),
@@ -551,9 +560,24 @@ function pendingOutcomeActions(snapshot: LoopSnapshot | undefined): string[] {
   }
 
   const snapshotId = quoteForShell(snapshot.id);
+  const attributionAction =
+    safeAttributionPromptIds(snapshot.prompt_ids).length > 0
+      ? [
+          "If a PromptLane improvement was actually used, add --used-improvement-prompt with one of the latest snapshot prompt ids; otherwise omit attribution.",
+        ]
+      : [];
   return [
     `When this work reaches a verifiable checkpoint, review snapshot ${snapshotId} in the Loops view or record its outcome with promptlane loop outcome --snapshot-id ${snapshotId}.`,
+    ...attributionAction,
   ];
+}
+
+function safeAttributionPromptIds(promptIds: readonly string[]): string[] {
+  return Array.from(
+    new Set(
+      promptIds.filter((promptId) => /^prmt_[A-Za-z0-9_-]+$/.test(promptId)),
+    ),
+  );
 }
 
 function selectedContinuationActions(

@@ -674,6 +674,9 @@ CLI만 사용하는 경우에도 검증 결과를 기록한 뒤 승인형 memory
 `promptlane loop status`는 최신 snapshot이 `unknown` 또는 `in_progress`이면
 검증 가능한 checkpoint에 도달한 뒤 해당 snapshot id로 outcome을 기록하라고
 안내합니다. 중간 hook snapshot 전체를 outcome backlog로 표시하지 않습니다.
+latest status에는 해당 snapshot의 opaque `prmt_...` id만 포함됩니다. 실제로
+PromptLane 개선안을 사용한 경우에만 `--used-improvement-prompt`로 선택하고,
+사용하지 않았다면 attribution을 비워 둡니다.
 
 ```sh
 promptlane loop outcome --status passed --summary "Focused checks passed." \

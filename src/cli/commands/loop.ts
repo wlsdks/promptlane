@@ -742,6 +742,9 @@ function formatLoopStatus(status: PromptLaneStatus): string {
     status.latest_snapshot
       ? `prompts ${status.latest_snapshot.prompt_count}`
       : undefined,
+    status.latest_snapshot?.prompt_ids?.length
+      ? `prompt ids ${status.latest_snapshot.prompt_ids.join(", ")}`
+      : undefined,
     status.latest_snapshot?.average_prompt_score === undefined
       ? undefined
       : `average prompt score ${status.latest_snapshot.average_prompt_score}/100`,

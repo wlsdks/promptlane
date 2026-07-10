@@ -2370,6 +2370,10 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "docs/LOOP-SNAPSHOT-SCHEMA.md"),
       "utf8",
     );
+    const loopToolDefinitions = readFileSync(
+      join(process.cwd(), "src/mcp/loop-tool-definitions.ts"),
+      "utf8",
+    );
 
     expect(loopStatus).toContain(
       "When this work reaches a verifiable checkpoint",
@@ -2381,6 +2385,10 @@ describe("plugin packaging files", () => {
       expect(content).toContain("outcome backlog");
     }
     expect(snapshotSchema).toContain("intermediate hook snapshot as backlog");
+    expect(snapshotSchema).toContain("--used-improvement-prompt");
+    expect(loopStatus).toContain("^prmt_[A-Za-z0-9_-]+$");
+    expect(loopToolDefinitions).toContain('pattern: "^prmt_[A-Za-z0-9_-]+$"');
+    expect(loopToolDefinitions).toContain("only when it was actually used");
   });
 
   it("keeps the Codex duplicate-hook doctor log tied to merged evidence", () => {

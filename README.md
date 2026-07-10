@@ -887,7 +887,9 @@ compact instructions, or raw paths. When the latest snapshot is still
 `unknown` or `in_progress`, its structured and plain status output also points
 to that exact snapshot for optional outcome recording after the work reaches a
 verifiable checkpoint. Intermediate hook snapshots are not presented as an
-outcome backlog.
+outcome backlog. Latest status includes only opaque `prmt_...` ids from that
+snapshot so CLI and MCP users can pass `--used-improvement-prompt` when a
+PromptLane improvement was actually used. Omit attribution otherwise.
 The web UI also includes a Loops view for local snapshot readiness, recent loop
 metadata, compact refresh markers, and a copy action for the next loop brief.
 When the latest loop has an eligible memory candidate, the Loops summary can

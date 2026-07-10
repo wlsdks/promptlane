@@ -103,8 +103,35 @@ describe("createPromptLaneStatus", () => {
     expect(status.next_actions).toContain(
       "When this work reaches a verifiable checkpoint, review snapshot loop_pending_checkpoint in the Loops view or record its outcome with promptlane loop outcome --snapshot-id loop_pending_checkpoint.",
     );
+    expect(status.next_actions).toContain(
+      "If a PromptLane improvement was actually used, add --used-improvement-prompt with one of the latest snapshot prompt ids; otherwise omit attribution.",
+    );
     expect(serialized).not.toContain("Make this better");
     expect(serialized).not.toContain("/Users/example");
+  });
+
+  it("returns only opaque prompt ids for explicit improvement attribution", () => {
+    const status = createPromptLaneStatus({
+      snapshots: [
+        loopSnapshot({
+          prompt_ids: [
+            "prmt_safe_one",
+            "/Users/example/private-project",
+            "sk-proj-secret-value",
+            "prmt_safe_two",
+          ],
+        }),
+      ],
+      compactBoundaries: [],
+    });
+    const serialized = JSON.stringify(status);
+
+    expect(status.latest_snapshot?.prompt_ids).toEqual([
+      "prmt_safe_one",
+      "prmt_safe_two",
+    ]);
+    expect(serialized).not.toContain("/Users/example");
+    expect(serialized).not.toContain("sk-proj-secret-value");
   });
 
   it("does not request another checkpoint outcome for a completed latest snapshot", () => {

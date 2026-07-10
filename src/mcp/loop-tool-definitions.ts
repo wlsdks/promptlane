@@ -73,7 +73,7 @@ export const GET_PROMPTLANE_LOOP_STATUS_TOOL_DEFINITION: PromptLaneMcpToolDefini
   {
     name: "get_promptlane_loop_status",
     description:
-      "Check whether local PromptLane loop snapshots are available for the current PromptLane archive. Use this when Codex or Claude Code needs to know if a previous loop can be continued or whether the user should run `promptlane loop collect` first. Returns safe loop metadata, available loop tools, next actions, and privacy flags. It never returns prompt bodies, raw absolute paths, secrets, transcripts, or external LLM results.",
+      "Check whether local PromptLane loop snapshots are available for the current PromptLane archive. Use this when Codex or Claude Code needs to know if a previous loop can be continued or whether the user should run `promptlane loop collect` first. Latest metadata includes opaque prompt ids so an agent can explicitly attribute a PromptLane improvement only when it was actually used. Returns safe loop metadata, available loop tools, next actions, and privacy flags. It never returns prompt bodies, raw absolute paths, secrets, transcripts, or external LLM results.",
     annotations: {
       ...LOCAL_LOOP_READ_ONLY_TOOL_ANNOTATIONS,
       title: "PromptLane loop status",
@@ -385,6 +385,10 @@ export const GET_PROMPTLANE_LOOP_STATUS_TOOL_DEFINITION: PromptLaneMcpToolDefini
             branch: { type: "string" },
             worktree: { type: "string" },
             prompt_count: { type: "integer", minimum: 0 },
+            prompt_ids: {
+              type: "array",
+              items: { type: "string", pattern: "^prmt_[A-Za-z0-9_-]+$" },
+            },
             average_prompt_score: { type: "integer", minimum: 0, maximum: 100 },
             top_gaps: { type: "array", items: { type: "string" } },
           },

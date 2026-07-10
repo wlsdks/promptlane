@@ -138,6 +138,7 @@ describe("PromptLane MCP tools", () => {
         tool: "codex",
         project: "private-project",
         prompt_count: 2,
+        prompt_ids: ["prmt_one", "prmt_two"],
         average_prompt_score: 58,
         outcome_status: "passed",
       },

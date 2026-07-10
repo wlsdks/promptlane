@@ -667,6 +667,9 @@ describe("loop CLI command", () => {
       `promptlane loop outcome --snapshot-id ${snapshot.id}`,
     );
     expect(text).toContain("verifiable checkpoint");
+    expect(text).toContain("prompt ids prmt_");
+    expect(text).toContain("--used-improvement-prompt");
+    expect(text).toContain("otherwise omit attribution");
     expect(text).not.toContain("Make this better");
     expect(text).not.toContain("/Users/example");
   });
