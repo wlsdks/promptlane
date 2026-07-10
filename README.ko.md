@@ -748,6 +748,7 @@ Benchmark v1은 privacy, retrieval, rule-based prompt improvement, `coach_prompt
 
 ```sh
 promptlane benchmark --json
+promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE"
 promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # 모든 example을 동의·비식별 fixture로 교체합니다.
 # passed/failed outcome과 안전한 evidence ref를 추가합니다.
@@ -766,6 +767,11 @@ soft trend signal입니다. 어느 결과도 단독으로 실제 사용자 promp
 완전히 해결했다는 주장은 아닙니다. 실제 outcome이 없는 real prompt는
 `unproven`으로 남습니다. fixture contract는
 `docs/BENCHMARK_V1.md`의 `template_only` 확인 절차를 참고하세요.
+archive에서 준비할 때는 `prepare-fixture`가 기본 경로입니다. 반복 지정한
+`--prompt-id`만 명시적 `--confirm-consent` 후 읽고, prompt와 outcome
+evidence를 다시 검사하며, 실제 사용이 귀속된 완료 outcome만 포함합니다.
+결과는 경로나 prompt 내용을 출력하지 않고 새 0600 파일로 기록합니다.
+`init-fixture`는 수동 template 작성이 필요한 경우의 대안입니다.
 real 실행은 synthetic 점수 calibration과 score delivery integrity를
 분리하며, 효용 추세를 healthy로 판단하려면 `outcome_pass_rate`를
 충족해야 합니다.

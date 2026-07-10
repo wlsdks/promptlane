@@ -49,7 +49,14 @@ the required `corepack pnpm --silent benchmark -- --json` pass is synthetic
 regression evidence: a synthetic pass is not real-world effectiveness proof, and
 repository maintainers may collect consent-bearing redacted fixtures in
 `docs/benchmark-fixtures/real.json`. Installed users can keep the same fixture
-shape in an operator-owned local file by running
+shape in an operator-owned local file by running:
+
+```sh
+promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE"
+```
+
+This preferred path revalidates selected archive prompts and includes only
+explicitly attributed completed outcomes. For manual fixture authoring, run
 `promptlane benchmark init-fixture --output "$FIXTURE_FILE"`, replacing
 every example with consent-bearing redacted fixtures, updating `consent_note`,
 adding operator-confirmed `passed` or `failed` outcome metadata with safe

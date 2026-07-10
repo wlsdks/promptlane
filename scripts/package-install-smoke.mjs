@@ -53,6 +53,20 @@ try {
   if (!loopHelp.stdout.includes("outcome")) {
     throw new Error("installed loop CLI did not expose outcome recording");
   }
+  const benchmarkHelp = run(
+    join(tempPrefix, "bin", "promptlane"),
+    ["benchmark", "--help"],
+    {
+      cwd: tempHome,
+      env: { ...process.env, HOME: tempHome },
+      encoding: "utf8",
+    },
+  );
+  if (!benchmarkHelp.stdout.includes("prepare-fixture")) {
+    throw new Error(
+      "installed benchmark CLI did not expose fixture preparation",
+    );
+  }
   const startGuide = run(
     join(tempPrefix, "bin", "promptlane"),
     ["start", "--open-web", "--json"],
@@ -215,6 +229,8 @@ try {
         release_gate: "promptlane quality-evidence --require-complete",
         fixture_init:
           "promptlane benchmark init-fixture --output <operator-owned>",
+        fixture_prepare:
+          "promptlane benchmark prepare-fixture --prompt-id <selected> --confirm-consent --output <operator-owned>",
         effectiveness_signal: "promptlane benchmark --fixture-set real --json",
         trend_comparison:
           "promptlane benchmark --baseline-file <prior-report> --json",

@@ -449,6 +449,11 @@ contract. Effectiveness work must preserve explicit improvement-use attribution
 and should next collect consent-bearing real fixtures instead of adding
 prediction-only surfaces.
 
+The archive-backed `promptlane benchmark prepare-fixture` path is now the
+preferred collection workflow: it requires explicit prompt ids, a raw-free
+consent note, and `--confirm-consent`, then writes a new private fixture without
+echoing prompt bodies or paths. `init-fixture` remains the manual alternative.
+
 Completed:
 
 - storage capability negotiation: shared route capability guard and explicit MCP

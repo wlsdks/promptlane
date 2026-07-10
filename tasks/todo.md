@@ -10904,3 +10904,12 @@
       pass checked ids through the existing raw-free outcome endpoint.
 - [x] VERIFY: Run focused server/API/form tests, browser user-flow evidence,
       lint/build/pack, and diff hygiene before retagging `v1.0.0`.
+
+## 2026-07-10 Archive-Backed Real Benchmark Fixture
+
+- [x] RED: Require explicit prompt ids, a raw-free consent note, and an
+      explicit consent flag before preparing a runnable real fixture.
+- [x] GREEN: Revalidate selected redacted archive prompts, include only
+      explicitly attributed completed outcomes, and write a new 0600 JSON file.
+- [x] VERIFY: Run focused benchmark CLI/model/privacy/loader tests, package
+      smoke, lint/build/pack, and diff hygiene before retagging `v1.0.0`.

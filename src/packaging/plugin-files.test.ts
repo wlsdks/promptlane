@@ -833,8 +833,10 @@ describe("plugin packaging files", () => {
     expect(benchmarkCommand).toContain('.command("benchmark")');
     expect(benchmarkCommand).toContain('"--baseline-file <path>"');
     expect(benchmarkCommand).toContain('"--report-file <path>"');
+    expect(benchmarkCommand).toContain('.command("prepare-fixture")');
     for (const content of [benchmarkSpec, readme, readmeKo]) {
       expect(content).toContain("promptlane benchmark --json");
+      expect(content).toContain("promptlane benchmark prepare-fixture");
       expect(content).toContain(
         'promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json --report-file "$BASELINE_REPORT"',
       );
@@ -859,6 +861,7 @@ describe("plugin packaging files", () => {
       '["benchmark", "--fixture-set", "real", "--json"]',
     );
     expect(packageInstallSmoke).toContain('"init-fixture"');
+    expect(packageInstallSmoke).toContain('"prepare-fixture"');
     expect(packageInstallSmoke).toContain("validateBenchmarkFixtureTemplate");
     expect(packageInstallSmoke).toContain("parsed?.template_only !== true");
     expect(packageInstallSmoke).toContain("outcome.evidence_refs");

@@ -1005,6 +1005,7 @@ score calibration, analytics, and latency:
 
 ```sh
 promptlane benchmark --json
+promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE"
 promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # Replace every example with consent-bearing redacted fixtures.
 # Add passed or failed outcome metadata with safe evidence refs.
@@ -1024,6 +1025,11 @@ redacted prompts stored in an operator-owned local file. Neither signal alone
 is a claim that real user prompt quality is fully solved. Real prompts without
 operator-confirmed outcomes remain `unproven`. See
 `docs/BENCHMARK_V1.md` for the `template_only` confirmation contract.
+`prepare-fixture` is the preferred archive-backed path: it reads only repeated
+`--prompt-id` selections after `--confirm-consent`, rechecks prompt and outcome
+evidence for sensitive values, includes only explicitly attributed completed
+outcomes, writes a new 0600 file, and never prints its path or prompt contents.
+`init-fixture` remains the manual empty-template alternative.
 Real runs report score delivery integrity separately from synthetic score
 calibration and require `outcome_pass_rate` before calling a usefulness trend
 healthy.

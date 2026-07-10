@@ -18,6 +18,7 @@ This benchmark is intentionally local-only. It does not call an external LLM jud
 
 ```sh
 promptlane benchmark --json
+promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE"
 promptlane benchmark init-fixture --output "$FIXTURE_FILE"
 # Replace every example with consent-bearing redacted fixtures.
 # Add passed or failed outcome metadata with safe evidence refs.
@@ -45,7 +46,23 @@ app.
 - `--fixture-set real` — soft signal. Reads consent-bearing redacted prompts from `docs/benchmark-fixtures/real.json`. If the file is absent the script exits 0 with a `status: no_fixtures` notice. If it exists, threshold misses are reported but the script still exits 0 — so a regression on a noisy real corpus does not break CI but is visible in trend.
 
 Installed users should keep real fixtures in an operator-owned local file and
-create the starter shape with
+prefer the archive-backed command when selected prompts already exist:
+
+```sh
+promptlane benchmark prepare-fixture \
+  --prompt-id "$PROMPT_ID" \
+  --consent-note "$CONSENT_NOTE" \
+  --confirm-consent \
+  --output "$FIXTURE_FILE"
+```
+
+The command reads only explicitly selected prompt ids after consent
+confirmation, revalidates redacted prompt and attributed outcome text, includes
+only completed outcomes whose PromptLane improvement use was explicitly
+recorded, writes a new private 0600 file, refuses overwrite, and does not print
+the file path or prompt bodies. Multiple prompts use repeated `--prompt-id`.
+
+For manual fixture authoring, create the starter shape with
 `promptlane benchmark init-fixture --output "$FIXTURE_FILE"`. The command
 creates parent directories, writes the shipped template with private file
 permissions, refuses to overwrite an existing file, and never prints the local
