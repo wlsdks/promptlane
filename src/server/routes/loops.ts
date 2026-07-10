@@ -1,6 +1,8 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 
+import { createBenchmarkCandidateReport } from "../../analysis/benchmark-candidates.js";
+
 import {
   createLoopBrief,
   latestCompactBoundaryAfterSnapshot,
@@ -140,6 +142,7 @@ export function registerLoopRoutes(
     return {
       data: {
         status,
+        benchmark_readiness: createBenchmarkCandidateReport(snapshots, 5),
         items: snapshots.map((snapshot) => {
           const compactBoundary = latestCompactBoundaryAfterSnapshot(
             snapshot,

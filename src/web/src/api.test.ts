@@ -72,6 +72,29 @@ describe("web api export client", () => {
                 returns_compact_content: false,
               },
             },
+            benchmark_readiness: {
+              status: "no_completed_outcomes",
+              candidate_count: 0,
+              candidates: [],
+              excluded_unsafe_candidates: 0,
+              diagnostics: {
+                completed_snapshots: 0,
+                attributed_snapshots: 0,
+                evidence_complete_snapshots: 0,
+                safe_snapshots: 0,
+              },
+              has_more: false,
+              scope: { scanned_snapshots: 1, snapshot_limit: 100 },
+              next_action:
+                "Run promptlane loop status, then record the latest snapshot outcome after a verifiable checkpoint.",
+              privacy: {
+                local_only: true,
+                external_calls: false,
+                returns_prompt_bodies: false,
+                returns_raw_paths: false,
+                returns_evidence_refs: false,
+              },
+            },
             items: [
               {
                 id: "loop_web",
@@ -130,6 +153,15 @@ describe("web api export client", () => {
       eligible: true,
       reason: "passed_with_evidence",
       next_action: "promptlane loop memory-approve",
+    });
+    expect(loops.benchmark_readiness).toMatchObject({
+      status: "no_completed_outcomes",
+      diagnostics: {
+        completed_snapshots: 0,
+        attributed_snapshots: 0,
+        evidence_complete_snapshots: 0,
+        safe_snapshots: 0,
+      },
     });
     expect(loops.status.latest_snapshot?.prompt_ids).toEqual([
       "prmt_one",

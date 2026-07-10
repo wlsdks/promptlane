@@ -483,6 +483,14 @@ try {
     `${serverBaseUrl}/loops?worktree=browser-selected-memory&session=browser-selected-session&branch=codex%2Fbrowser-selected-memory`,
   );
   await page.getByRole("heading", { name: "Loops", level: 1 }).waitFor();
+  const benchmarkReadiness = page.getByRole("region", {
+    name: /Effectiveness evidence|효과성 증거/,
+  });
+  await benchmarkReadiness.waitFor();
+  assert(
+    /completed|완료/.test(await benchmarkReadiness.innerText()),
+    "Loops should expose body-free benchmark readiness diagnostics.",
+  );
   const selectedMemoryDetail = await page.evaluate(async () => {
     const response = await fetch(
       "/api/v1/loops/worktrees/browser-selected-memory?session_id=browser-selected-session&branch=codex%2Fbrowser-selected-memory",

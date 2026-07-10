@@ -70,6 +70,10 @@ evidence-complete, and safe snapshots. A non-ready status distinguishes
 `incomplete_outcome_evidence`, and `unsafe_outcome_evidence` so missing real
 effectiveness evidence is not mislabeled as an attribution failure.
 
+The web Loops view reads the same bounded candidate model through
+`/api/v1/loops` and displays only staged readiness counts, status, and the next
+action. It does not display candidate ids, outcome summaries, or evidence refs.
+
 The command reads only explicitly selected prompt ids after consent
 confirmation, revalidates redacted prompt and attributed outcome text, includes
 only completed outcomes whose PromptLane improvement use was explicitly

@@ -895,6 +895,8 @@ snapshot so CLI and MCP users can pass `--used-improvement-prompt` when a
 PromptLane improvement was actually used. Omit attribution otherwise.
 The web UI also includes a Loops view for local snapshot readiness, recent loop
 metadata, compact refresh markers, and a copy action for the next loop brief.
+Its Effectiveness evidence summary shows body-free benchmark readiness counts
+and the next evidence action without rendering candidate ids or evidence refs.
 When the latest loop has an eligible memory candidate, the Loops summary can
 record that approved memory through the local web session; this only writes the
 local PromptLane memory record and still leaves AGENTS.md/CLAUDE.md changes to
