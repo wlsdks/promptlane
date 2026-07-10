@@ -609,10 +609,15 @@ corepack pnpm promptlane quality-evidence
 corepack pnpm promptlane quality-evidence --json
 corepack pnpm promptlane quality-evidence --operator-brief
 corepack pnpm promptlane quality-evidence --require-complete
+corepack pnpm promptlane quality-evidence --runtime-tool codex
+corepack pnpm promptlane quality-evidence --runtime-tool codex --require-runtime-ready
 ```
 
 `--require-complete`는 scorecard axis나 직접 evidence blocker가 남아 있으면
-실패합니다. release/goal-completion gate로만 사용하세요.
+실패합니다. 이 gate는 반복 가능한 isolated local release evidence 범위이며
+설치된 agent runtime이 실제 실행됐다고 주장하지 않습니다. `--runtime-tool`은
+raw-free live doctor evidence를 붙이고, `--require-runtime-ready`는 해당 runtime이
+최근 `ready`로 검증되지 않으면 실패합니다.
 `--operator-brief`는 남은 native dialog dogfood를 실행하지 않고, 승인 전에
 확인해야 할 focused checklist만 출력합니다. 또한
 `PROMPTLANE_NATIVE_DIALOG_APPROVED=1`이 없으면 native dialog를 열기 전에
@@ -899,6 +904,12 @@ corepack pnpm smoke:package-install
 corepack pnpm evidence:quality -- --require-complete
 corepack pnpm promptlane quality-evidence --require-complete
 git diff --check
+```
+
+maintainer의 설치된 Codex 통합이 실제 동작한다고 주장하기 전에는 다음을 실행합니다.
+
+```sh
+corepack pnpm promptlane quality-evidence --runtime-tool codex --require-runtime-ready
 ```
 
 dry-run package는 `docs/PACKAGE_CONTENTS.md`에 기록된 local wrapper를 사용합니다.

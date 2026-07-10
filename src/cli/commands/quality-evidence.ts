@@ -3,16 +3,29 @@ import { fileURLToPath } from "node:url";
 import type { Command } from "commander";
 
 import { UserError } from "../user-error.js";
+import {
+  defaultDoctorRunner,
+  parseRuntimeTool,
+  readRuntimeEvidence,
+  type DoctorRunner,
+  type RuntimeEvidence,
+} from "./quality-evidence-runtime.js";
 
 type QualityEvidenceCliOptions = {
   json?: boolean;
   operatorBrief?: boolean;
   requireComplete?: boolean;
+  runtimeTool?: string;
+  requireRuntimeReady?: boolean;
+  doctorRunner?: DoctorRunner;
 };
 
 type QualityEvidenceSummary = {
   check: string;
   status: string;
+  evidence_scope: string;
+  live_runtime_evaluated: boolean;
+  runtime_evidence?: RuntimeEvidence;
   next_recheck_utc?: string;
   scorecard_axes: unknown[];
   axis_evidence_coverage?: Array<{
@@ -76,6 +89,14 @@ export function registerQualityEvidenceCommand(program: Command): void {
       "--require-complete",
       "Exit with an error while the 9.5 quality evidence is still pending.",
     )
+    .option(
+      "--runtime-tool <tool>",
+      "Include live doctor evidence for codex or claude-code.",
+    )
+    .option(
+      "--require-runtime-ready",
+      "Exit with an error unless the selected live runtime is ready.",
+    )
     .action((options: QualityEvidenceCliOptions) => {
       console.log(qualityEvidenceForCli(options));
     });
@@ -84,8 +105,37 @@ export function registerQualityEvidenceCommand(program: Command): void {
 export function qualityEvidenceForCli(
   options: QualityEvidenceCliOptions = {},
 ): string {
+  const runtimeTool = parseRuntimeTool(options.runtimeTool);
+  if (options.requireRuntimeReady && !runtimeTool) {
+    throw new UserError(
+      "--require-runtime-ready requires --runtime-tool codex or --runtime-tool claude-code.",
+    );
+  }
   const result = runQualityEvidenceScript(options);
   const summary = JSON.parse(result.stdout) as QualityEvidenceSummary;
+
+  if (runtimeTool) {
+    const runtimeEvidence = readRuntimeEvidence(
+      runtimeTool,
+      options.doctorRunner ?? defaultDoctorRunner,
+    );
+    summary.live_runtime_evaluated = true;
+    summary.runtime_evidence = runtimeEvidence;
+    summary.release_warnings = (summary.release_warnings ?? []).filter(
+      (warning) => warning.label !== "live agent runtime not evaluated",
+    );
+    if (runtimeEvidence.status !== "ready") {
+      summary.release_warnings.push({
+        label: `live ${runtimeTool} runtime ${runtimeEvidence.status}`,
+        detail: `The installed ${runtimeTool} runtime is ${runtimeEvidence.ingest_state}; do not claim live integration readiness until promptlane doctor ${runtimeTool} reports ready.`,
+      });
+    }
+    if (options.requireRuntimeReady && runtimeEvidence.status !== "ready") {
+      throw new UserError(
+        `live ${runtimeTool} runtime is ${runtimeEvidence.status}; send one new ${runtimeTool} prompt, rerun doctor, and require recent ready evidence.`,
+      );
+    }
+  }
 
   if (options.requireComplete && result.status !== 0) {
     throw new UserError(
@@ -200,6 +250,8 @@ function formatSummary(summary: QualityEvidenceSummary): string {
   return [
     "PromptLane 9.5 quality evidence",
     `Status: ${summary.status}`,
+    `Evidence scope: ${summary.evidence_scope}`,
+    `Live runtime evaluated: ${summary.live_runtime_evaluated ? "yes" : "no"}`,
     ...(summary.next_recheck_utc
       ? [`Next recheck UTC: ${summary.next_recheck_utc}`]
       : []),
@@ -218,6 +270,9 @@ function formatSummary(summary: QualityEvidenceSummary): string {
     "External evidence status",
     ...externalEvidenceRows,
     "",
+    "Live runtime evidence",
+    ...formatRuntimeEvidenceRows(summary.runtime_evidence),
+    "",
     "Recommended next slices",
     ...recommendedRows,
     "",
@@ -231,6 +286,19 @@ function formatSummary(summary: QualityEvidenceSummary): string {
     "",
     "Privacy: local-only, no external calls, no prompt bodies, no raw paths.",
   ].join("\n");
+}
+
+function formatRuntimeEvidenceRows(
+  runtime: RuntimeEvidence | undefined,
+): string[] {
+  if (!runtime) return ["- not evaluated"];
+  return [
+    `- ${runtime.tool}: ${runtime.status} ingest=${runtime.ingest_state} verified=${runtime.verified ? "yes" : "no"}`,
+    ...(runtime.age_seconds !== undefined
+      ? [`  age_seconds=${runtime.age_seconds}`]
+      : []),
+    ...(runtime.next_action ? [`  next_action=${runtime.next_action}`] : []),
+  ];
 }
 
 function formatExternalEvidenceRows(summary: QualityEvidenceSummary): string[] {

@@ -51,5 +51,7 @@ making automated tests open OS dialogs.
 - `docs/NATIVE_DIALOG_DOGFOOD_AUDIT_2026-07-05.md` records approved
   native-dialog evidence.
 - `corepack pnpm --silent evidence:quality` reports `promptlane_95_quality`
-  as `complete`; run the full local release gate before claiming release or
-  long-running-goal completion.
+  as `complete` for repeatable isolated evidence. Run
+  `promptlane quality-evidence --runtime-tool codex --require-runtime-ready`
+  before claiming the installed Codex integration is live, and run the full
+  local release gate before claiming release or long-running-goal completion.

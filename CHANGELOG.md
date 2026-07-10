@@ -23,6 +23,8 @@ tools, benchmark/release validation, and an English/Korean web UI.
   current macOS `Could not find service` wording as `not_loaded`.
 - Doctor distinguishes configured-but-unverified or stale hook runtime state
   from a recently verified delivery and from hard setup/delivery failures.
+- Quality evidence separates repeatable isolated release proof from optional
+  fail-closed live Codex or Claude Code runtime verification.
 - `setup --profile coach` to register a low-friction rewrite guidance profile
   through hook context, with a Claude Code status line installed when
   Claude Code is detected.

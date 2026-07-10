@@ -8,6 +8,8 @@ describe("quality-evidence CLI command", () => {
     const parsed = JSON.parse(json) as {
       check: string;
       status: string;
+      evidence_scope: string;
+      live_runtime_evaluated: boolean;
       scorecard_axes: Array<{
         id: string;
         current_level: string;
@@ -62,6 +64,8 @@ describe("quality-evidence CLI command", () => {
 
     expect(parsed.check).toBe("promptlane_95_quality");
     expect(parsed.status).toBe("complete");
+    expect(parsed.evidence_scope).toBe("repeatable_isolated_local_release");
+    expect(parsed.live_runtime_evaluated).toBe(false);
     expect(parsed).not.toHaveProperty("next_recheck_utc");
     expect(parsed.scorecard_axes).toHaveLength(7);
     expect(parsed.scorecard_axes).not.toEqual(
@@ -165,13 +169,18 @@ describe("quality-evidence CLI command", () => {
       preconditions: [],
     });
     expect(parsed.recommended_next_slices).toEqual([]);
-    expect(parsed.release_warnings).toEqual([
-      {
-        label: "real benchmark fixtures are missing",
-        detail:
-          'docs/benchmark-fixtures/real.json is absent; quality evidence is complete for the local release gate, but do not claim real-user effectiveness trends. Create an operator-owned fixture from selected archive prompts with promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE", or create a manual template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", then save one JSON snapshot with promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json --report-file "$BASELINE_REPORT" and rerun with --baseline-file "$BASELINE_REPORT" before claiming a trend.',
-      },
-    ]);
+    expect(parsed.release_warnings).toEqual(
+      expect.arrayContaining([
+        {
+          label: "real benchmark fixtures are missing",
+          detail:
+            'docs/benchmark-fixtures/real.json is absent; quality evidence is complete for the local release gate, but do not claim real-user effectiveness trends. Create an operator-owned fixture from selected archive prompts with promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE", or create a manual template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", then save one JSON snapshot with promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json --report-file "$BASELINE_REPORT" and rerun with --baseline-file "$BASELINE_REPORT" before claiming a trend.',
+        },
+        expect.objectContaining({
+          label: "live agent runtime not evaluated",
+        }),
+      ]),
+    );
     expect(parsed.release_gate).toEqual([
       {
         command: "corepack pnpm format",
@@ -251,6 +260,8 @@ describe("quality-evidence CLI command", () => {
 
     expect(text).toContain("PromptLane 9.5 quality evidence");
     expect(text).toContain("Status: complete");
+    expect(text).toContain("Evidence scope: repeatable_isolated_local_release");
+    expect(text).toContain("Live runtime evaluated: no");
     expect(text).not.toContain("Next recheck UTC:");
     expect(text).toContain("Scorecard axes: 7");
     expect(text).toContain("Blockers: 0");
@@ -296,6 +307,7 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain("- none");
     expect(text).toContain("Release warnings");
     expect(text).toContain("- real benchmark fixtures are missing");
+    expect(text).toContain("- live agent runtime not evaluated");
     expect(text).toContain("do not claim real-user effectiveness trends");
     expect(text).toContain(
       'promptlane benchmark init-fixture --output "$FIXTURE_FILE"',
@@ -329,6 +341,117 @@ describe("quality-evidence CLI command", () => {
     expect(text).not.toContain("blocked_reason=operator_approval_required");
     expect(text).toContain("Privacy: local-only");
     expect(text).not.toContain(process.cwd());
+  });
+
+  it("reports stale live runtime evidence without changing isolated completion", () => {
+    const json = qualityEvidenceForCli({
+      json: true,
+      runtimeTool: "codex",
+      doctorRunner: () => ({
+        status: 0,
+        stdout: JSON.stringify({
+          status: "unverified",
+          ingest: {
+            ok: true,
+            verified: false,
+            state: "stale",
+            age_seconds: 7200,
+          },
+          lastIngestStatus: {
+            ok: true,
+            status: 200,
+            checked_at: "2026-07-10T00:00:00.000Z",
+          },
+          next_actions: [
+            "Inspect /Users/private/runtime with sk-proj-secret123456.",
+          ],
+        }),
+        stderr: "",
+      }),
+    });
+    const parsed = JSON.parse(json) as {
+      status: string;
+      live_runtime_evaluated: boolean;
+      runtime_evidence: {
+        tool: string;
+        status: string;
+        ingest_state: string;
+        verified: boolean;
+        age_seconds: number;
+        checked_at: string;
+        next_action: string;
+      };
+    };
+
+    expect(parsed.status).toBe("complete");
+    expect(parsed.live_runtime_evaluated).toBe(true);
+    expect(parsed.runtime_evidence).toEqual({
+      tool: "codex",
+      status: "unverified",
+      ingest_state: "stale",
+      verified: false,
+      age_seconds: 7200,
+      checked_at: "2026-07-10T00:00:00.000Z",
+      next_action:
+        "Send one new codex prompt, then rerun promptlane quality-evidence --runtime-tool codex --require-runtime-ready.",
+      privacy: {
+        local_only: true,
+        returns_prompt_bodies: false,
+        returns_raw_paths: false,
+      },
+    });
+    expect(json).not.toContain(process.cwd());
+    expect(json).not.toContain("/Users/private");
+    expect(json).not.toContain("sk-proj-secret");
+  });
+
+  it("fails closed when required live runtime evidence is not ready", () => {
+    expect(() =>
+      qualityEvidenceForCli({
+        runtimeTool: "codex",
+        requireRuntimeReady: true,
+        doctorRunner: () => ({
+          status: 0,
+          stdout: JSON.stringify({
+            status: "unverified",
+            ingest: { verified: false, state: "stale" },
+            next_actions: ["Send one new Codex prompt."],
+          }),
+          stderr: "",
+        }),
+      }),
+    ).toThrow(/live codex runtime is unverified/);
+  });
+
+  it("requires one supported runtime tool for the live gate", () => {
+    expect(() => qualityEvidenceForCli({ requireRuntimeReady: true })).toThrow(
+      /requires --runtime-tool codex/,
+    );
+    expect(() => qualityEvidenceForCli({ runtimeTool: "gemini" })).toThrow(
+      /Unsupported runtime tool/,
+    );
+  });
+
+  it("passes the required live runtime gate only for ready doctor evidence", () => {
+    expect(() =>
+      qualityEvidenceForCli({
+        runtimeTool: "codex",
+        requireRuntimeReady: true,
+        doctorRunner: () => ({
+          status: 0,
+          stdout: JSON.stringify({
+            status: "ready",
+            ingest: {
+              verified: true,
+              state: "recent",
+              age_seconds: 30,
+            },
+            next_actions: [],
+          }),
+          stderr: "",
+        }),
+      }),
+    ).not.toThrow();
   });
 
   it("does not fail closed when requireComplete is set and evidence is complete", () => {

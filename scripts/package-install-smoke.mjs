@@ -82,6 +82,22 @@ try {
     },
   );
   validateStartGuide(startGuide.stdout);
+  const qualityEvidenceHelp = run(
+    join(tempPrefix, "bin", "promptlane"),
+    ["quality-evidence", "--help"],
+    {
+      cwd: tempHome,
+      env: { ...process.env, HOME: tempHome },
+      encoding: "utf8",
+    },
+  );
+  for (const option of ["--runtime-tool", "--require-runtime-ready"]) {
+    if (!qualityEvidenceHelp.stdout.includes(option)) {
+      throw new Error(
+        `installed quality evidence CLI did not expose ${option}`,
+      );
+    }
+  }
   const qualityEvidence = run(
     join(tempPrefix, "bin", "promptlane"),
     ["quality-evidence", "--require-complete"],
@@ -322,6 +338,8 @@ function validateQualityEvidence(stdout) {
   for (const expectedText of [
     "PromptLane 9.5 quality evidence",
     "Status: complete",
+    "Evidence scope: repeatable_isolated_local_release",
+    "live agent runtime not evaluated",
     "corepack pnpm smoke:package-install",
     "corepack pnpm promptlane quality-evidence --require-complete",
   ]) {

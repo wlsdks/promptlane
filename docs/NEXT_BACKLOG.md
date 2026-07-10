@@ -489,6 +489,9 @@ Completed:
   successful hook delivery in the last hour report `unverified`, recent
   delivery reports `ready`, and known delivery/setup failures remain
   `needs_attention`
+- quality evidence runtime scope: the default 9.5 ledger labels repeatable
+  isolated release evidence, while an explicit fail-closed live doctor gate is
+  required before claiming an installed Codex or Claude Code runtime is ready
 
 Next work should come from fresh user-flow evidence, a real MCP tool/schema
 change, or explicit operator-approved dogfood.

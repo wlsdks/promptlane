@@ -875,6 +875,11 @@ describe("plugin packaging files", () => {
     expect(packageInstallSmoke).toContain(
       '["benchmark", "--fixture-set", "real", "--json"]',
     );
+    expect(packageInstallSmoke).toContain('"--runtime-tool"');
+    expect(packageInstallSmoke).toContain('"--require-runtime-ready"');
+    expect(packageInstallSmoke).toContain(
+      "Evidence scope: repeatable_isolated_local_release",
+    );
     expect(packageInstallSmoke).toContain('"init-fixture"');
     expect(packageInstallSmoke).toContain('"prepare-fixture"');
     expect(packageInstallSmoke).toContain('"candidates"');
@@ -1188,6 +1193,11 @@ describe("plugin packaging files", () => {
       expect(content).toContain("promptlane statusline claude-code");
       expect(content).toContain("promptlane buddy --once");
       expect(content).toContain("promptlane coach");
+    }
+    for (const content of [readme, readmeKo]) {
+      expect(content).toContain(
+        "quality-evidence --runtime-tool codex --require-runtime-ready",
+      );
     }
   });
 
