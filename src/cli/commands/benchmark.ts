@@ -18,7 +18,12 @@ import {
   createRealBenchmarkFixture,
   validateRealBenchmarkConsentNote,
 } from "../../analysis/benchmark-fixture.js";
+import {
+  createBenchmarkCandidateReport,
+  type BenchmarkCandidateReport,
+} from "../../analysis/benchmark-candidates.js";
 import { loadHookAuth, loadPromptLaneConfig } from "../../config/config.js";
+import type { LoopSnapshot } from "../../loop/types.js";
 import type { PromptDetail } from "../../storage/ports.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
 import { UserError } from "../user-error.js";
@@ -55,6 +60,12 @@ type BenchmarkFixturePrepareCommandOptions = {
   promptId: string[];
 };
 
+type BenchmarkCandidateCommandOptions = {
+  dataDir?: string;
+  json?: boolean;
+  limit?: string;
+};
+
 type BenchmarkRunResult = {
   status: number;
   stdout: string;
@@ -66,6 +77,7 @@ type BenchmarkPromptReader = (
   promptIds: string[],
   dataDir?: string,
 ) => PromptDetail[];
+type BenchmarkSnapshotReader = (dataDir?: string) => LoopSnapshot[];
 
 export function registerBenchmarkCommand(program: Command): void {
   const benchmarkCommand = program
@@ -121,6 +133,22 @@ export function registerBenchmarkCommand(program: Command): void {
           fixtureFile: options.output,
           promptIds: options.promptId,
         }),
+      );
+    });
+
+  benchmarkCommand
+    .command("candidates")
+    .description(
+      "List body-free prompt ids with safe attributed outcome evidence.",
+    )
+    .option("--data-dir <path>", "Override the promptlane data directory.")
+    .option("--limit <count>", "Maximum candidate ids to return.", "20")
+    .option("--json", "Print JSON.")
+    .action((_options: BenchmarkCandidateCommandOptions, command: Command) => {
+      console.log(
+        benchmarkCandidatesForCli(
+          command.optsWithGlobals() as BenchmarkCandidateCommandOptions,
+        ),
       );
     });
 
@@ -266,6 +294,20 @@ export function prepareBenchmarkFixtureForCli(
   return `Created a consent-bearing PromptLane real benchmark fixture from ${promptCopy}. Run the real soft signal with --fixture-file pointing to the new local file.`;
 }
 
+export function benchmarkCandidatesForCli(
+  options: BenchmarkCandidateCommandOptions = {},
+  readSnapshots: BenchmarkSnapshotReader = readBenchmarkSnapshots,
+): string {
+  const limit = parseCandidateLimit(options.limit);
+  const report = createBenchmarkCandidateReport(
+    readSnapshots(options.dataDir),
+    limit,
+  );
+  return options.json
+    ? JSON.stringify(report, null, 2)
+    : formatBenchmarkCandidates(report);
+}
+
 export function benchmarkForCli(
   options: BenchmarkCliOptions = {},
   runBenchmark: BenchmarkRunner = runBenchmarkScript,
@@ -387,6 +429,50 @@ function readBenchmarkPrompts(
   } finally {
     storage.close();
   }
+}
+
+function readBenchmarkSnapshots(dataDir?: string): LoopSnapshot[] {
+  const config = loadPromptLaneConfig(dataDir);
+  const auth = loadHookAuth(dataDir);
+  const storage = createSqlitePromptStorage({
+    dataDir: config.data_dir,
+    hmacSecret: auth.web_session_secret,
+  });
+  try {
+    return storage.listLoopSnapshots({ limit: 100 }).items;
+  } finally {
+    storage.close();
+  }
+}
+
+function parseCandidateLimit(value: string | undefined): number {
+  const parsed = Number(value ?? 20);
+  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 100) {
+    throw new UserError("benchmark candidates --limit must be from 1 to 100.");
+  }
+  return parsed;
+}
+
+function formatBenchmarkCandidates(report: BenchmarkCandidateReport): string {
+  const lines = [
+    `benchmark candidates: ${report.status}`,
+    `candidates ${report.candidate_count}; showing ${report.candidates.length}; scanned snapshots ${report.scope.scanned_snapshots}/${report.scope.snapshot_limit}`,
+  ];
+  for (const candidate of report.candidates) {
+    lines.push(
+      `- ${candidate.prompt_id} ${candidate.outcome_status}; tests ${candidate.tests_run}; evidence refs ${candidate.evidence_ref_count}; snapshot ${candidate.snapshot_id}`,
+    );
+  }
+  if (report.excluded_unsafe_candidates > 0) {
+    lines.push(
+      `excluded unsafe candidates ${report.excluded_unsafe_candidates}`,
+    );
+  }
+  lines.push(`Next: ${report.next_action}`);
+  lines.push(
+    "Privacy: local-only; no prompt bodies, raw paths, or evidence refs",
+  );
+  return lines.join("\n");
 }
 
 function collectOptionValue(value: string, previous: string[]): string[] {

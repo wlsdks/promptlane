@@ -18,12 +18,14 @@ import { initializePromptLane } from "../../config/config.js";
 import { redactPrompt } from "../../redaction/redact.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
 import {
+  benchmarkCandidatesForCli,
   benchmarkForCli,
   initializeBenchmarkFixtureForCli,
   prepareBenchmarkFixtureForCli,
 } from "./benchmark.js";
 import { runCli } from "../index.js";
 import type { PromptDetail } from "../../storage/ports.js";
+import type { LoopSnapshot } from "../../loop/types.js";
 
 describe("benchmark CLI command", () => {
   it("creates the shipped real fixture template with private permissions", () => {
@@ -295,10 +297,78 @@ describe("benchmark CLI command", () => {
           },
         ],
       });
+
+      consoleLog.mockClear();
+      expect(
+        await runCli(
+          [
+            "node",
+            "promptlane",
+            "benchmark",
+            "candidates",
+            "--data-dir",
+            dataDir,
+            "--json",
+          ],
+          { stderr },
+        ),
+      ).toBe(0);
+      const candidateOutput = String(consoleLog.mock.calls.at(-1)?.[0]);
+      expect(JSON.parse(candidateOutput)).toMatchObject({
+        status: "ready",
+        candidates: [
+          {
+            prompt_id: stored.id,
+            outcome_status: "passed",
+            evidence_ref_count: 1,
+          },
+        ],
+        privacy: {
+          returns_prompt_bodies: false,
+          returns_raw_paths: false,
+          returns_evidence_refs: false,
+        },
+      });
     } finally {
       consoleLog.mockRestore();
       rmSync(tempRoot, { recursive: true, force: true });
     }
+  });
+
+  it("formats body-free benchmark candidates as JSON and text", () => {
+    const snapshots = [candidateSnapshot()];
+    const json = benchmarkCandidatesForCli(
+      { json: true, limit: "10" },
+      () => snapshots,
+    );
+    const text = benchmarkCandidatesForCli({}, () => snapshots);
+
+    expect(JSON.parse(json)).toMatchObject({
+      status: "ready",
+      candidates: [
+        {
+          prompt_id: "prmt_candidate",
+          outcome_status: "passed",
+          tests_run: 2,
+        },
+      ],
+    });
+    expect(json).not.toContain("private outcome summary");
+    expect(json).not.toContain("test:private-ref");
+    expect(text).toContain("benchmark candidates: ready");
+    expect(text).toContain("prmt_candidate passed; tests 2");
+    expect(text).toContain(
+      "Privacy: local-only; no prompt bodies, raw paths, or evidence refs",
+    );
+  });
+
+  it("validates candidate limits before reading snapshots", () => {
+    const readSnapshots = vi.fn();
+
+    expect(() =>
+      benchmarkCandidatesForCli({ limit: "101" }, readSnapshots),
+    ).toThrow("benchmark candidates --limit must be from 1 to 100.");
+    expect(readSnapshots).not.toHaveBeenCalled();
   });
 
   it("refuses to overwrite a prepared real fixture", () => {
@@ -620,5 +690,31 @@ function storedPromptDetail(): PromptDetail {
         improvement_used: true,
       },
     ],
+  };
+}
+
+function candidateSnapshot(): LoopSnapshot {
+  return {
+    id: "loop_candidate",
+    created_at: "2026-07-10T00:15:00.000Z",
+    tool: "codex",
+    source: "cli",
+    cwd_label: "private-project",
+    project_id: "proj_candidate",
+    prompt_ids: ["prmt_candidate"],
+    event_counts: { prompts: 1, tests_run: 2 },
+    quality: { top_gaps: [], unresolved_questions: [] },
+    outcome: {
+      status: "passed",
+      summary: "private outcome summary",
+      evidence_refs: ["test:private-ref"],
+      used_improvement_prompt_ids: ["prmt_candidate"],
+    },
+    next_brief: { generated: false, summary: "Continue local work." },
+    privacy: {
+      stores_prompt_bodies: false,
+      stores_raw_paths: false,
+      local_only: true,
+    },
   };
 }

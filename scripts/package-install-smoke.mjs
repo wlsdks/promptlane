@@ -67,6 +67,11 @@ try {
       "installed benchmark CLI did not expose fixture preparation",
     );
   }
+  if (!benchmarkHelp.stdout.includes("candidates")) {
+    throw new Error(
+      "installed benchmark CLI did not expose candidate discovery",
+    );
+  }
   const startGuide = run(
     join(tempPrefix, "bin", "promptlane"),
     ["start", "--open-web", "--json"],
@@ -231,6 +236,7 @@ try {
           "promptlane benchmark init-fixture --output <operator-owned>",
         fixture_prepare:
           "promptlane benchmark prepare-fixture --prompt-id <selected> --confirm-consent --output <operator-owned>",
+        fixture_candidates: "promptlane benchmark candidates --json",
         effectiveness_signal: "promptlane benchmark --fixture-set real --json",
         trend_comparison:
           "promptlane benchmark --baseline-file <prior-report> --json",

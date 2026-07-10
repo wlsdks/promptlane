@@ -767,6 +767,10 @@ soft trend signal입니다. 어느 결과도 단독으로 실제 사용자 promp
 완전히 해결했다는 주장은 아닙니다. 실제 outcome이 없는 real prompt는
 `unproven`으로 남습니다. fixture contract는
 `docs/BENCHMARK_V1.md`의 `template_only` 확인 절차를 참고하세요.
+먼저 `promptlane benchmark candidates --json`으로 실제 사용이 귀속된 완료
+outcome의 body-free prompt id를 확인할 수 있습니다. 후보 조회는 local-only로
+최신 loop snapshot 100개까지만 검사하며 prompt 본문, raw path, outcome 요약,
+evidence ref를 반환하지 않습니다.
 archive에서 준비할 때는 `prepare-fixture`가 기본 경로입니다. 반복 지정한
 `--prompt-id`만 명시적 `--confirm-consent` 후 읽고, prompt와 outcome
 evidence를 다시 검사하며, 실제 사용이 귀속된 완료 outcome만 포함합니다.

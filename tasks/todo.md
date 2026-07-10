@@ -10913,3 +10913,12 @@
       explicitly attributed completed outcomes, and write a new 0600 JSON file.
 - [x] VERIFY: Run focused benchmark CLI/model/privacy/loader tests, package
       smoke, lint/build/pack, and diff hygiene before retagging `v1.0.0`.
+
+## 2026-07-10 Privacy-Safe Benchmark Candidates
+
+- [x] RED: Define body-free ready, no-attribution, empty, unsafe-exclusion,
+      deduplication, and bounded-result candidate report behavior.
+- [x] GREEN: Add `benchmark candidates` using only recent loop snapshot ids,
+      status, counts, and safe attribution metadata.
+- [x] VERIFY: Run focused candidate/CLI/privacy/package tests, lint/build/pack,
+      and diff hygiene before retagging `v1.0.0`.

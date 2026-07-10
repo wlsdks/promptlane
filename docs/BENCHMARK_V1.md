@@ -49,12 +49,20 @@ Installed users should keep real fixtures in an operator-owned local file and
 prefer the archive-backed command when selected prompts already exist:
 
 ```sh
+promptlane benchmark candidates --json
+
 promptlane benchmark prepare-fixture \
   --prompt-id "$PROMPT_ID" \
   --consent-note "$CONSENT_NOTE" \
   --confirm-consent \
   --output "$FIXTURE_FILE"
 ```
+
+`benchmark candidates` scans at most the latest 100 loop snapshots and returns
+only prompt ids with explicitly attributed, completed, safe outcome evidence.
+It never returns prompt bodies, raw paths, outcome summaries, or evidence
+references. Review the body-free ids locally before selecting prompts and
+confirming consent with `prepare-fixture`.
 
 The command reads only explicitly selected prompt ids after consent
 confirmation, revalidates redacted prompt and attributed outcome text, includes

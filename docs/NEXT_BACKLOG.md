@@ -453,6 +453,10 @@ The archive-backed `promptlane benchmark prepare-fixture` path is now the
 preferred collection workflow: it requires explicit prompt ids, a raw-free
 consent note, and `--confirm-consent`, then writes a new private fixture without
 echoing prompt bodies or paths. `init-fixture` remains the manual alternative.
+`promptlane benchmark candidates --json` now discovers eligible prompt ids from
+at most the latest 100 loop snapshots without returning prompt bodies, paths,
+outcome summaries, or evidence references; operators still review and consent
+before fixture preparation.
 
 Completed:
 
