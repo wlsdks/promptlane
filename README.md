@@ -710,10 +710,15 @@ corepack pnpm promptlane quality-evidence
 corepack pnpm promptlane quality-evidence --json
 corepack pnpm promptlane quality-evidence --operator-brief
 corepack pnpm promptlane quality-evidence --require-complete
+corepack pnpm promptlane quality-evidence --runtime-tool codex
+corepack pnpm promptlane quality-evidence --runtime-tool codex --require-runtime-ready
 ```
 
 `--require-complete` fails while scorecard axes or direct evidence blockers are
-still pending. Use it only as a release/goal-completion gate.
+still pending. It covers repeatable isolated local release evidence and does
+not claim that an installed agent runtime was exercised. Use `--runtime-tool`
+to attach raw-free live doctor evidence and `--require-runtime-ready` to fail
+closed unless that runtime is recently verified as `ready`.
 `--operator-brief` prints the focused approval checklist for the remaining
 native dialog dogfood without opening the dialog. It also includes the refusal
 preflight command that should stop before opening a native dialog unless
@@ -1163,6 +1168,12 @@ corepack pnpm smoke:package-install
 corepack pnpm evidence:quality -- --require-complete
 corepack pnpm promptlane quality-evidence --require-complete
 git diff --check
+```
+
+Before claiming the maintainer's installed Codex integration is live, run:
+
+```sh
+corepack pnpm promptlane quality-evidence --runtime-tool codex --require-runtime-ready
 ```
 
 The dry-run package uses the local wrapper documented in

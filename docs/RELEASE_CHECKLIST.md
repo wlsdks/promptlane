@@ -32,6 +32,7 @@ Use this checklist before publishing a stable public release or npm package.
 - [ ] `corepack pnpm smoke:package-install`
 - [ ] `corepack pnpm evidence:quality -- --require-complete`
 - [ ] `corepack pnpm promptlane quality-evidence --require-complete`
+- [ ] `corepack pnpm promptlane quality-evidence --runtime-tool codex --require-runtime-ready`
 - [ ] Create or refresh annotated tag `v1.0.0` before `corepack pnpm npm-publish:preflight`.
 - [ ] Push the annotated tag with `git push origin v1.0.0 --force` before `corepack pnpm npm-publish:preflight`.
 - [ ] `corepack pnpm npm-publish:preflight`
@@ -46,6 +47,9 @@ For machine-readable inspection of the 9.5 quality summary, use
 `corepack pnpm --silent evidence:quality` or
 `node scripts/quality-95-evidence.mjs`; plain `corepack pnpm evidence:quality`
 may include package-manager execution banners around stdout.
+The default ledger is repeatable isolated release evidence. The runtime command
+above is the separate maintainer gate for claiming that the installed Codex
+hook path is currently live.
 
 For machine-readable npm publish preflight output, use
 `corepack pnpm --silent npm-publish:preflight -- --json`; plain

@@ -40,6 +40,8 @@ dialog approved dogfood operator-approved answer recorded in
 `corepack pnpm evidence:quality` is now `complete` for the local 9.5 evidence
 summary because every scorecard axis has current local evidence and the native
 dialog approved dogfood has an operator-approved answer recorded. This ledger
-strengthens current local proof; it does not authorize release completion by
-itself. Run the full release gate before claiming the long-running goal
-complete.
+is scoped to repeatable isolated local release proof. It does not prove that an
+installed Codex or Claude Code hook runtime was exercised recently. Run
+`promptlane quality-evidence --runtime-tool codex --require-runtime-ready` for
+that separate live gate. Run the full release gate before claiming the
+long-running goal complete.

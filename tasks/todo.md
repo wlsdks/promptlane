@@ -10991,3 +10991,12 @@
       successful hook delivery proves the configured runtime path.
 - [x] VERIFY: Run focused doctor/hook/privacy/package checks and live Codex
       doctor verification before retagging `v1.0.0`.
+
+## 2026-07-10 Quality Evidence Live Runtime Scope
+
+- [x] RED: Require the 9.5 ledger to label isolated evidence separately from
+      live Codex/Claude runtime verification.
+- [x] GREEN: Add an optional `--runtime-tool` report and
+      `--require-runtime-ready` fail-closed maintainer gate.
+- [x] VERIFY: Run focused quality/doctor/privacy/package checks and the live
+      Codex runtime gate before retagging `v1.0.0`.

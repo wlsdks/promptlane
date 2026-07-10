@@ -110,6 +110,8 @@ const releaseWarnings = releaseWarningsForLocalEvidence();
 const summary = {
   check: "promptlane_95_quality",
   status: blockers.length === 0 ? "complete" : "pending",
+  evidence_scope: "repeatable_isolated_local_release",
+  live_runtime_evaluated: false,
   proof_standard:
     "9.5 requires current evidence for every scorecard axis, not only passing tests.",
   plan: planPath,
@@ -163,8 +165,16 @@ function readPackageFile(relativePath) {
 }
 
 function releaseWarningsForLocalEvidence() {
+  const warnings = [
+    {
+      label: "live agent runtime not evaluated",
+      detail:
+        "The repeatable local release ledger does not inspect the maintainer's installed Codex or Claude Code hook runtime. Run promptlane quality-evidence --runtime-tool codex --require-runtime-ready before claiming live Codex integration readiness.",
+    },
+  ];
+
   if (existsSync(join(packageRoot, "docs/benchmark-fixtures/real.json"))) {
-    return [];
+    return warnings;
   }
 
   return [
@@ -173,6 +183,7 @@ function releaseWarningsForLocalEvidence() {
       detail:
         'docs/benchmark-fixtures/real.json is absent; quality evidence is complete for the local release gate, but do not claim real-user effectiveness trends. Create an operator-owned fixture from selected archive prompts with promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE", or create a manual template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", then save one JSON snapshot with promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json --report-file "$BASELINE_REPORT" and rerun with --baseline-file "$BASELINE_REPORT" before claiming a trend.',
     },
+    ...warnings,
   ];
 }
 
