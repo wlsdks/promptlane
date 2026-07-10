@@ -141,6 +141,43 @@ Observed friction and scope decisions:
 Therefore real-world usefulness remains unproven. No success-rate lift or
 causal claim is permitted yet.
 
+### 2026-07-11 Six-Pair Remediation Pilot
+
+After the stored-target, zero-delta, and SQLite permission remediations, six
+new read-only repository tasks were run as matched Codex pairs. The tasks
+covered packaging, stored-rewrite privacy, storage diagnostics, doctor status,
+MCP inventory, and release packaging. Every run used Codex CLI 0.142.5,
+`gpt-5.4`, a fresh ephemeral session, a read-only sandbox, the same structured
+output schema, and counterbalanced baseline/treatment order.
+
+Human end-state adjudication found both baseline and PromptLane correct on all
+six tasks. An initial literal matcher reported one improvement and one
+regression, but review showed both were false negatives caused by equivalent
+phrasing (`all local quality checks` and `databasePath`). This manual review was
+not condition-blind, so it is recorded as a limitation rather than stronger
+evidence.
+
+| Metric | Baseline | PromptLane | Observed change |
+| --- | ---: | ---: | ---: |
+| Tasks passed | 6/6 | 6/6 | no lift |
+| Elapsed time | 238.307s | 413.510s | +73.5% |
+| Command events | 63 | 90 | +42.9% |
+| Input tokens | 1,450,892 | 2,115,213 | +45.8% |
+| Output tokens | 8,979 | 16,103 | +79.3% |
+| Failed command events | 3 | 14 | +11 events |
+
+All six PromptLane inputs were rewrites with local score deltas from +20 to
++57, but none improved the adjudicated task outcome. Generic verification
+instructions also caused extra test attempts that could not write temporary
+files in the read-only sandbox. The first attempted parallel batch was invalid
+because concurrent Codex processes competed for local state; those incomplete
+runs were discarded and all valid pairs were rerun sequentially.
+
+This pilot is small, maintainer-run, repository-specific, and non-causal. It
+does not support a usefulness claim for direct-text rewrite. It supports
+narrowing the product toward no-op/refusal, clarification, and safety checks
+unless a larger task-changing study shows outcome lift without comparable cost.
+
 Required before closing validation:
 
 - preserve the 10-pair raw-free result and avoid causal claims;

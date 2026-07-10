@@ -11114,7 +11114,22 @@
 - [x] RED/GREEN: SQLite permission hardening skips `chmod` when database files
       are already owner-only, keeping read-only diagnostics usable.
 - [x] VERIFY: Focused analysis, MCP, CLI, statusline, and storage tests pass.
-- [ ] VALIDATE: Re-run the previously regressed or blocked matched-pair cases
-      against this candidate and record the non-causal result.
+- [x] VALIDATE: Run six new remediation-focused matched pairs. Human end-state
+      results were 6/6 versus 6/6 with no lift; PromptLane added 73.5% elapsed
+      time, 42.9% command events, and 45.8% input tokens.
 - [ ] RELEASE: Preserve the existing `v1.0.0` tag and choose a new candidate
       version only after remediation evidence is positive.
+
+## 2026-07-11 Six-Pair Usefulness Pilot
+
+- [x] FREEZE: Define six read-only repository tasks, deterministic ground truth,
+      one output schema, fixed Codex model, and equal execution budget.
+- [x] PREPARE: Generate PromptLane treatments locally and record whether each
+      treatment is a rewrite, no-op, or refusal before running agents.
+- [x] RUN: Execute twelve fresh ephemeral Codex sessions in counterbalanced
+      baseline/treatment order without allowing repository writes.
+- [x] SCORE: Judge end-state answers against ground truth and aggregate success,
+      failure transitions, adoption, elapsed time, and tool-event counts.
+- [x] DECIDE: Record only raw-free aggregate evidence. The pilot supports
+      narrowing direct-text rewrite behind no-op/refusal and clarification
+      behavior until outcome lift is observed without comparable cost.
