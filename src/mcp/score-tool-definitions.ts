@@ -20,6 +20,7 @@ import {
 } from "./loop-tool-definitions.js";
 import { PROMPT_EFFECTIVENESS_SCHEMA } from "./prompt-effectiveness-schema.js";
 import { RECORD_CLARIFICATIONS_TOOL_DEFINITION } from "./record-clarifications-tool.js";
+import { GET_BENCHMARK_CANDIDATES_TOOL_DEFINITION } from "./get-benchmark-candidates-tool.js";
 import type { PromptLaneMcpToolDefinition } from "./score-tool-definition-types.js";
 export type { PromptLaneMcpToolDefinition } from "./score-tool-definition-types.js";
 export {
@@ -852,6 +853,7 @@ export const PROMPTLANE_MCP_TOOL_DEFINITIONS: readonly PromptLaneMcpToolDefiniti
     ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION,
     RECORD_CLARIFICATIONS_TOOL_DEFINITION,
     GET_PROMPTLANE_LOOP_STATUS_TOOL_DEFINITION,
+    GET_BENCHMARK_CANDIDATES_TOOL_DEFINITION,
     PREPARE_LOOP_BRIEF_TOOL_DEFINITION,
     RECORD_LOOP_OUTCOME_TOOL_DEFINITION,
     PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION,

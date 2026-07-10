@@ -10953,3 +10953,14 @@
       to JSON and plain `benchmark candidates` output.
 - [x] VERIFY: Run focused benchmark CLI/model/privacy/package tests, lint,
       build, pack, and live diagnostics before retagging `v1.0.0`.
+
+## 2026-07-10 MCP Benchmark Candidates
+
+- [x] RED: Require a read-only `get_benchmark_candidates` definition, local
+      handler, tools/list registration, and structured tools/call response.
+- [x] GREEN: Reuse the bounded body-free benchmark candidate model from one
+      per-tool MCP module with raw-free invalid/setup errors.
+- [x] ALIGN: Update MCP instructions, tool counts, plugin docs, and packaging
+      guards for Codex/Claude Code discovery.
+- [x] VERIFY: Run focused MCP/model/privacy/package tests, stdio smoke, lint,
+      build, pack, and live doctor checks before retagging `v1.0.0`.

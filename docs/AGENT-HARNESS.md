@@ -66,6 +66,9 @@ Acceptance criteria:
 - Hook failures are fail-open.
 - Hook output is raw-free.
 - MCP status and brief tools return structured, local-only data.
+- `get_benchmark_candidates` returns bounded body-free readiness diagnostics
+  so Codex and Claude Code can guide real fixture preparation without reading
+  outcome summaries or evidence refs.
 - Pending latest loop status points to exact-id outcome recording only after a
   verifiable checkpoint; intermediate hook snapshots are not a required
   outcome backlog.

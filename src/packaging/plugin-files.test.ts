@@ -499,6 +499,8 @@ describe("plugin packaging files", () => {
     expect(mcpSection).toContain(
       `This server exposes ${actualTools.length} model-controlled tools:`,
     );
+    expect(mcpSection).toContain("`get_benchmark_candidates`");
+    expect(mcpSection).toContain("at most the latest 100 snapshots");
   });
 
   it("keeps PLUGINS setup path safe before npm publish", () => {
@@ -537,6 +539,7 @@ describe("plugin packaging files", () => {
     for (const toolName of actualTools) {
       expect(readmeKo).toContain(`- \`${toolName}\``);
     }
+    expect(englishSection).toContain("body-free real-benchmark readiness");
   });
 
   it("keeps current loop status docs on the loop MCP tool name", () => {
@@ -3430,6 +3433,8 @@ describe("plugin packaging files", () => {
     expect(smoke).toContain("Effectiveness evidence");
     expect(smoke).toContain("unmeasured prompt");
     expect(smoke).toContain("smoke:mcp-coach-loop");
+    expect(smoke).toContain("used_improvement_prompt_ids: [promptId]");
+    expect(smoke).toContain("createPromptImprovementDraft(promptId");
     expect(smoke).toContain("improve_prompt");
     expect(smoke).toContain("apply_clarifications");
     expect(smoke).toContain("record_clarifications");

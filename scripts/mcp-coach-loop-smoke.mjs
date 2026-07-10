@@ -160,6 +160,15 @@ function seedStoredPrompt(dataDir) {
     if (!promptId) {
       throw new Error("Smoke failed to seed a stored prompt.");
     }
+    storage.createPromptImprovementDraft(promptId, {
+      draft_text:
+        "Open the generated HTML in a browser, verify rendering and console output, run the focused browser smoke, and report visible issues.",
+      analyzer: "mcp-coach-loop-smoke",
+      changed_sections: ["goal_clarity", "verification_criteria"],
+      safety_notes: [],
+      copied: true,
+      accepted: true,
+    });
     const unmeasuredEvent = normalizeClaudeCodePayload(
       {
         session_id: "mcp-coach-loop-smoke-unmeasured-session",
@@ -197,6 +206,7 @@ function seedStoredPrompt(dataDir) {
         status: "passed",
         summary: "MCP score effectiveness evidence passed.",
         evidence_refs: ["smoke:mcp-coach-loop", "test:score_prompt"],
+        used_improvement_prompt_ids: [promptId],
       },
       next_brief: {
         generated: true,

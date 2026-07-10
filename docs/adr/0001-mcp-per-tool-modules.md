@@ -9,6 +9,10 @@
 `src/mcp` currently hosts twenty agent-facing tools that follow two different
 file layouts:
 
+> Historical count at ADR acceptance. The server exposes 21 tools after the
+> per-tool `get_benchmark_candidates` addition; the module-layout decision is
+> unchanged.
+
 - **Split layout** (the older one): `src/mcp/score-tool-definitions.ts` owns
   the JSON schema and tool name; `src/mcp/score-tool-types.ts` owns the
   TypeScript argument/result contract; `src/mcp/score-tool.ts` owns the

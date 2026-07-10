@@ -132,6 +132,10 @@ Use these workflows before sending the user to the web UI:
 - Habit review: call `promptlane:score_prompt_archive` with
   `max_prompts=200` and summarize recurring gaps, practice plan, and low-score
   ids.
+- Real benchmark readiness: call `promptlane:get_benchmark_candidates` before
+  asking the user to prepare a fixture. Explain the staged body-free status and
+  use `promptlane benchmark prepare-fixture` only after the user reviews the
+  returned ids and explicitly confirms local consent.
 - Project rules review: call `promptlane:review_project_instructions` with
   `latest=true` for AGENTS.md / CLAUDE.md quality checks.
 - Next request template: use `score_prompt_archive` and turn
@@ -167,6 +171,8 @@ The MCP tools are:
 - `score_prompt_archive` for accumulated prompt habit review across the local
   archive, including a practice plan and next prompt template
 - `review_project_instructions` for AGENTS.md / CLAUDE.md rule quality review
+- `get_benchmark_candidates` for body-free real-effectiveness readiness and
+  safe candidate ids before consent-bearing fixture preparation
 - `prepare_agent_judge_batch` for a bounded redacted packet the current agent
   session can judge
 - `record_agent_judgments` for saving advisory agent judgment metadata

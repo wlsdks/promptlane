@@ -749,7 +749,7 @@ Codex, or any MCP client through a stdio MCP server:
 promptlane mcp
 ```
 
-The MCP server exposes 20 tools:
+The MCP server exposes 21 tools:
 
 - `get_promptlane_status`: check whether the local archive is initialized,
   whether prompts have been captured, and which MCP tool to call next.
@@ -792,6 +792,9 @@ The MCP server exposes 20 tools:
 - `get_promptlane_loop_status`: check whether local PromptLane loop snapshots
   exist and return safe latest-loop metadata plus compact-boundary awareness
   when a compact happened after the latest snapshot.
+- `get_benchmark_candidates`: inspect body-free real-benchmark readiness from
+  recent loop snapshots and return staged counts, safe candidate ids, and the
+  next evidence action without outcome summaries or evidence refs.
 - `prepare_loop_brief`: prepare a copy-ready continuation prompt from the
   latest local PromptLane snapshot, or from the newest snapshot matching optional
   `worktree`, `session_id`, and `branch` filters, without returning prompt

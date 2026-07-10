@@ -41,6 +41,9 @@ describe("MCP stdio server", () => {
     expect(instructions).toContain(
       "call record_clarifications only if the user also wants to save that draft",
     );
+    expect(instructions).toContain(
+      "get_benchmark_candidates for body-free real-effectiveness readiness",
+    );
   });
 
   it("uses PromptLane archive copy in agent-facing tool descriptions while preserving promptlane commands", async () => {
@@ -217,6 +220,18 @@ describe("MCP stdio server", () => {
             }),
           }),
           expect.objectContaining({
+            name: "get_benchmark_candidates",
+            annotations: expect.objectContaining({
+              readOnlyHint: true,
+              openWorldHint: false,
+            }),
+            inputSchema: expect.objectContaining({
+              properties: expect.objectContaining({
+                limit: expect.objectContaining({ maximum: 100 }),
+              }),
+            }),
+          }),
+          expect.objectContaining({
             name: "prepare_loop_brief",
           }),
           expect.objectContaining({
@@ -282,7 +297,7 @@ describe("MCP stdio server", () => {
 
     const tools = (response?.result as { tools: Array<unknown> }).tools;
 
-    expect(tools).toHaveLength(20);
+    expect(tools).toHaveLength(21);
     for (const tool of tools.filter(
       (tool) =>
         ![
@@ -577,6 +592,44 @@ describe("MCP stdio server", () => {
             text: expect.stringContaining('"error_code"'),
           },
         ],
+        isError: true,
+      },
+    });
+  });
+
+  it("returns structured setup-safe benchmark readiness through tools/call", async () => {
+    const response = await handleMcpMessage(
+      {
+        jsonrpc: "2.0",
+        id: "benchmark-candidates-1",
+        method: "tools/call",
+        params: {
+          name: "get_benchmark_candidates",
+          arguments: { limit: 10 },
+        },
+      },
+      {
+        dataDir: join(tmpdir(), `promptlane-missing-${randomUUID()}`),
+      },
+    );
+
+    expect(response).toMatchObject({
+      jsonrpc: "2.0",
+      id: "benchmark-candidates-1",
+      result: {
+        content: [
+          {
+            type: "text",
+            text: expect.stringContaining(
+              '"error_code": "storage_unavailable"',
+            ),
+          },
+        ],
+        structuredContent: {
+          is_error: true,
+          error_code: "storage_unavailable",
+          message: expect.any(String),
+        },
         isError: true,
       },
     });

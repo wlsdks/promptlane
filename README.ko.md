@@ -647,7 +647,7 @@ privacy/safety, 보고 규칙을 보는 deterministic local rubric입니다.
 promptlane mcp
 ```
 
-MCP server는 20개의 tool을 제공합니다.
+MCP server는 21개의 tool을 제공합니다.
 
 - `get_promptlane_status`: 로컬 archive가 초기화되었는지, prompt가 캡처되었는지, 다음에 어떤 MCP tool을 호출하면 좋은지 확인합니다.
 - `coach_prompt`: Claude Code/Codex 안에서 로컬 readiness, 최신 prompt 점수, 승인형 rewrite, 누적 습관, 프로젝트 규칙, 다음 요청 가이드를 한 번에 받습니다.
@@ -657,6 +657,7 @@ MCP server는 20개의 tool을 제공합니다.
 - `ask_clarifying_questions`: promptlane가 ask-then-apply 흐름 자체를 주도합니다. 클라이언트가 elicitation capability를 광고하면(Claude Code 2.1.76+) MCP `elicitation/create`로 직접 사용자에게 묻고 final draft를 합성하며, 미지원 / 거부 / 타임아웃 시 clarifying_questions metadata로 fallback합니다. rewrite를 자동 제출하지 않습니다. 비대화형 Claude Code print 실행(`claude -p`)에서는 MCP tool routing이 성공해도 사용자가 답하지 않으면 `interaction_status: declined`가 반환될 수 있습니다. 이 경우 실패로 보지 말고 반환된 `clarifying_questions`를 agent의 native ask UI로 다시 물은 뒤, 먼저 `apply_clarifications`로 최종 승인용 draft를 채팅에 보여주고, 사용자가 저장도 원할 때만 `record_clarifications`를 호출합니다.
 - `record_clarifications`: 사용자가 답한 verbatim 답변과 합성된 최종 draft를 prompt id에 묶어 로컬 archive(`prompt_improvement_drafts`)에 영구 저장합니다. 응답에는 metadata(`draft_id`, `answers_count`, `changed_sections` 등)만 들어가고 prompt body나 draft 본문은 echo하지 않습니다.
 - `get_promptlane_loop_status`: 로컬 loop snapshot 존재 여부, 최신 loop metadata, compact-boundary 상태를 prompt body/raw path 없이 확인합니다.
+- `get_benchmark_candidates`: 최근 loop snapshot에서 body-free real benchmark readiness, 단계별 count, safe candidate id, 다음 evidence 행동을 확인합니다.
 - `prepare_loop_brief`: 최신 snapshot 또는 선택한 `worktree`, `session_id`, `branch`에 맞는 snapshot에서 copy-ready continuation prompt를 준비합니다.
 - `record_loop_outcome`: 사용자가 승인한 loop outcome metadata와 evidence ref만 저장하고 prompt body/raw path는 저장하지 않습니다.
 - `propose_loop_memory_candidate`: 검증된 loop outcome이 사용자 승인 memory 후보가 될 만큼 evidence-backed인지 판단합니다. 이 단계는 read-only입니다.
