@@ -167,6 +167,11 @@ function readPackageFile(relativePath) {
 function releaseWarningsForLocalEvidence() {
   const warnings = [
     {
+      label: "paired effectiveness not evaluated",
+      detail:
+        "A single attributed outcome or a same-corpus version trend does not prove PromptLane helped. Collect at least three matched baseline/promptlane effect_pair cases in a consent-bearing real fixture and inspect details.paired_effectiveness; the report remains observational and causal_claim stays false.",
+    },
+    {
       label: "live agent runtime not evaluated",
       detail:
         "The repeatable local release ledger does not inspect the maintainer's installed Codex or Claude Code hook runtime. Run promptlane quality-evidence --runtime-tool codex --require-runtime-ready before claiming live Codex integration readiness.",

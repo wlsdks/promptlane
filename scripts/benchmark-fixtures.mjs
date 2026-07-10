@@ -280,12 +280,15 @@ function parseRealFixtures(parsed) {
   }
 
   const seenLabels = new Set();
-  return parsed.fixtures.map((fixture, index) => {
+  const fixtures = parsed.fixtures.map((fixture, index) => {
     const normalized = {
       label: readRequiredString(fixture, "label", index),
       adapter: readRequiredString(fixture, "adapter", index),
       query: readRequiredString(fixture, "query", index),
       prompt: readRequiredString(fixture, "prompt", index),
+      ...(fixture?.effect_pair === undefined
+        ? {}
+        : { effect_pair: parseRealEffectPair(fixture.effect_pair, index) }),
       ...(fixture?.outcome === undefined
         ? {}
         : { outcome: parseRealOutcome(fixture.outcome, index) }),
@@ -305,6 +308,78 @@ function parseRealFixtures(parsed) {
     seenLabels.add(normalized.label);
     return normalized;
   });
+  validateRealEffectPairs(fixtures);
+  return fixtures;
+}
+
+function parseRealEffectPair(value, fixtureIndex) {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    throw new Error(
+      `real fixture ${fixtureIndex} effect_pair must be an object.`,
+    );
+  }
+  const id = readOutcomeString(value.id, "effect_pair id", fixtureIndex);
+  assertRedactedText(id, `real fixture ${fixtureIndex} effect_pair id`);
+  assertSafeLabel(id, `real fixture ${fixtureIndex} effect_pair id`);
+  if (value.variant !== "baseline" && value.variant !== "promptlane") {
+    throw new Error(
+      `real fixture ${fixtureIndex} effect_pair variant must be baseline or promptlane.`,
+    );
+  }
+  return { id, variant: value.variant };
+}
+
+function validateRealEffectPairs(fixtures) {
+  const pairs = new Map();
+  for (const fixture of fixtures) {
+    if (!fixture.effect_pair) continue;
+    const variants = pairs.get(fixture.effect_pair.id) ?? [];
+    variants.push(fixture);
+    pairs.set(fixture.effect_pair.id, variants);
+  }
+
+  for (const [pairId, pairFixtures] of pairs) {
+    const baseline = pairFixtures.filter(
+      (fixture) => fixture.effect_pair.variant === "baseline",
+    );
+    const promptlane = pairFixtures.filter(
+      (fixture) => fixture.effect_pair.variant === "promptlane",
+    );
+    if (
+      pairFixtures.length !== 2 ||
+      baseline.length !== 1 ||
+      promptlane.length !== 1
+    ) {
+      throw new Error(
+        `real effect_pair ${pairId} must contain one baseline and one promptlane fixture.`,
+      );
+    }
+    const baselineFixture = baseline[0];
+    const promptlaneFixture = promptlane[0];
+    if (
+      baselineFixture.adapter !== promptlaneFixture.adapter ||
+      baselineFixture.query !== promptlaneFixture.query
+    ) {
+      throw new Error(
+        `real effect_pair ${pairId} fixtures must use the same adapter and query.`,
+      );
+    }
+    if (!baselineFixture.outcome || !promptlaneFixture.outcome) {
+      throw new Error(
+        `real effect_pair ${pairId} fixtures must include completed outcomes.`,
+      );
+    }
+    if (baselineFixture.outcome.improvement_used) {
+      throw new Error(
+        `real effect_pair ${pairId} baseline outcome must set improvement_used to false.`,
+      );
+    }
+    if (!promptlaneFixture.outcome.improvement_used) {
+      throw new Error(
+        `real effect_pair ${pairId} promptlane outcome must set improvement_used to true.`,
+      );
+    }
+  }
 }
 
 function parseRealOutcome(value, fixtureIndex) {

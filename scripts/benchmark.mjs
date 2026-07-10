@@ -28,6 +28,7 @@ import {
   incompatibleBenchmarkComparison,
   scoreArchiveEffectivenessEvidence,
   scoreOutcomePassRate,
+  scorePairedEffectiveness,
   scorePromptQualityEvidence,
 } from "./benchmark-scores.mjs";
 import {
@@ -214,6 +215,7 @@ try {
   const outcomePassRate = scoreOutcomePassRate(
     archiveScore.data.effectiveness_summary,
   );
+  const pairedEffectiveness = scorePairedEffectiveness(fixtures);
   const analyticsScore = scoreAnalytics(dashboard.data);
   const privacyLeakCount = countPrivacyLeaks({
     list,
@@ -285,6 +287,7 @@ try {
       pass,
       outcomeCount: fixtureSet === "real" ? outcomeSeeds.length : 0,
       comparison,
+      pairedEffectiveness,
     }),
     scores,
     thresholds,
@@ -294,6 +297,7 @@ try {
       retrieval_cases: fixtures.length,
       coach_cases: coachCases.length,
       outcome_cases: outcomeSeeds.length,
+      effect_pairs: pairedEffectiveness.pair_count,
     },
     details: {
       retrieval_cases: retrievalCases,
@@ -305,6 +309,7 @@ try {
             ? "operator_confirmed_fixture_metadata"
             : "none"
           : "synthetic_regression_seed",
+      paired_effectiveness: pairedEffectiveness,
       experimental_rules_ab: experimentalComparison,
     },
   };
@@ -768,6 +773,15 @@ function printReport(report) {
   }
   console.log(`next_action: ${report.next_action}`);
   console.log(`comparison_status: ${report.comparison.status}`);
+  const paired = report.details.paired_effectiveness;
+  console.log(`paired_effectiveness_status: ${paired.status}`);
+  console.log(`paired_effectiveness_pairs: ${paired.pair_count}`);
+  console.log(`paired_effectiveness_causal_claim: no`);
+  if (paired.pass_rate_delta !== null) {
+    console.log(
+      `paired_effectiveness_pass_rate_delta: ${paired.pass_rate_delta}`,
+    );
+  }
   if (report.comparison.status === "compared") {
     console.log(
       `comparison_regressions: ${report.comparison.regressions.join(", ") || "none"}`,
@@ -799,13 +813,25 @@ function printReport(report) {
   }
 }
 
-function benchmarkNextAction({ fixtureSet, pass, outcomeCount, comparison }) {
+function benchmarkNextAction({
+  fixtureSet,
+  pass,
+  outcomeCount,
+  comparison,
+  pairedEffectiveness,
+}) {
   if (fixtureSet === "real") {
     if (comparison.status === "incompatible") {
       return `Baseline comparison is incompatible (${comparison.reason}); use a valid prior PromptLane report from the same fixture set and corpus fingerprint.`;
     }
     if (outcomeCount === 0) {
       return "Real prompts were benchmarked, but effectiveness is unproven; add operator-confirmed passed or failed outcome metadata before comparing usefulness trends.";
+    }
+    if (pairedEffectiveness.status === "not_collected") {
+      return "Attributed outcomes exist, but before-versus-after usefulness is unproven; add matched baseline and promptlane effect_pair fixtures.";
+    }
+    if (pairedEffectiveness.status === "insufficient_pairs") {
+      return `Paired effectiveness has ${pairedEffectiveness.pair_count} matched case(s); collect at least ${pairedEffectiveness.minimum_directional_pairs} before interpreting direction.`;
     }
     if (comparison.status !== "compared") {
       return pass

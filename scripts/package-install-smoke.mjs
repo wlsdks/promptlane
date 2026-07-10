@@ -339,6 +339,7 @@ function validateQualityEvidence(stdout) {
     "PromptLane 9.5 quality evidence",
     "Status: complete",
     "Evidence scope: repeatable_isolated_local_release",
+    "paired effectiveness not evaluated",
     "live agent runtime not evaluated",
     "corepack pnpm smoke:package-install",
     "corepack pnpm promptlane quality-evidence --require-complete",
@@ -403,6 +404,18 @@ function validateBenchmarkFixtureTemplate(stdout, fixtureFile) {
   if (!Array.isArray(parsed?.coach_cases) || parsed.coach_cases.length === 0) {
     throw new Error("installed fixture init omitted coach cases");
   }
+  const effectPairs = parsed.fixtures
+    .map((fixture) => fixture?.effect_pair)
+    .filter(Boolean);
+  if (
+    effectPairs.length !== 2 ||
+    !effectPairs.some((pair) => pair.variant === "baseline") ||
+    !effectPairs.some((pair) => pair.variant === "promptlane")
+  ) {
+    throw new Error(
+      "installed fixture init omitted paired effectiveness guidance",
+    );
+  }
 }
 
 function confirmBenchmarkFixture(fixtureFile) {
@@ -427,6 +440,14 @@ function validateBenchmarkSnapshot(stdout, fixtureFile) {
   }
   if (parsed?.evidence_state?.effectiveness !== "snapshot_healthy") {
     throw new Error("installed benchmark snapshot overstated trend evidence");
+  }
+  const paired = parsed?.details?.paired_effectiveness;
+  if (
+    paired?.status !== "insufficient_pairs" ||
+    paired?.pair_count !== 1 ||
+    paired?.causal_claim !== false
+  ) {
+    throw new Error("installed benchmark snapshot overstated paired evidence");
   }
 }
 

@@ -460,6 +460,13 @@ before fixture preparation.
 The web Loops view now exposes the same staged readiness diagnostics as a
 compact body-free Effectiveness evidence summary, so the next evidence action
 is visible before operators move to CLI or MCP fixture preparation.
+Real fixtures can now declare validated `effect_pair` baseline and PromptLane
+variants for equivalent operator-observed tasks. Reports aggregate pass-rate
+delta and outcome transitions only after complete attribution-safe pairs; fewer
+than three pairs remain `insufficient_pairs`, and every report keeps
+`causal_claim: false`. This creates the measurement contract, but current local
+state still has no consent-bearing real fixtures, so usefulness remains
+unproven until operator evidence is collected.
 
 Completed:
 
@@ -492,6 +499,9 @@ Completed:
 - quality evidence runtime scope: the default 9.5 ledger labels repeatable
   isolated release evidence, while an explicit fail-closed live doctor gate is
   required before claiming an installed Codex or Claude Code runtime is ready
+- paired observational effectiveness: real fixtures can compare matched
+  baseline and explicitly attributed PromptLane outcomes without turning a
+  small, non-randomized sample into a causal or release-readiness claim
 
 Next work should come from fresh user-flow evidence, a real MCP tool/schema
 change, or explicit operator-approved dogfood.

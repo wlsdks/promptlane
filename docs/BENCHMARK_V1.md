@@ -190,6 +190,34 @@ private raw text by accident.
 synthetic gate, `operator_confirmed_fixture_metadata` when at least one real
 fixture supplies an outcome, and `none` for an outcome-free real corpus.
 
+### Paired effectiveness study
+
+A real fixture may optionally match two equivalent operator-observed tasks with
+`effect_pair`. Use the same safe pair `id`, adapter, and query. The `baseline`
+variant must have a completed outcome with `improvement_used: false`; the
+`promptlane` variant must have a completed outcome with
+`improvement_used: true`. Every declared pair must contain exactly one of each
+variant. PromptLane rejects incomplete pairs, attribution mismatches, unsafe
+ids, and pairs whose adapter or query differs.
+
+The JSON report aggregates these fixtures under
+`details.paired_effectiveness`. It reports baseline and PromptLane pass rates,
+their delta, and improved/regressed/unchanged transitions without returning
+prompt bodies, summaries, evidence refs, or local paths. Zero pairs report
+`not_collected`; one or two pairs report `insufficient_pairs`; three or more
+report `positive_direction`, `negative_direction`, or `mixed_direction`.
+This is a directional observational signal, not a randomized experiment, so
+`design` is always `paired_observational` and `causal_claim` is always `false`.
+It remains outside the synthetic release gate. Do not claim PromptLane caused
+an improvement from a single attributed outcome or from a same-corpus version
+trend.
+
+The shipped example contains one structural pair only. Replace it and collect
+at least three genuinely matched, consent-bearing pairs before interpreting a
+direction. Prefer comparable task type, adapter, verification strength, and
+operating conditions; record uncertainty in operator notes outside the fixture
+rather than adding private context to benchmark data.
+
 ### Baseline comparison
 
 `--baseline-file` reads a prior PromptLane benchmark JSON report locally. The
@@ -219,6 +247,7 @@ true and PromptLane does not call the snapshot a trend.
 - Do not include raw secrets, raw absolute paths, or sensitive prompt text in the report.
 - Treat v1 as a regression baseline, not a proof of real-user product-market fit.
 - Never substitute a synthetic outcome for real-corpus effectiveness evidence.
+- Treat paired outcome direction as observational and never emit a causal claim.
 - Compare trend and regression across versions rather than treating the absolute score as final quality.
 
 ## Metrics

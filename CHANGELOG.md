@@ -117,6 +117,9 @@ tools, benchmark/release validation, and an English/Korean web UI.
   replaces every example and explicitly sets `template_only` to `false`.
   Real benchmark runs now derive effectiveness only from operator-confirmed
   outcome metadata; prompt-only corpora remain explicitly unproven.
+  Optional matched `effect_pair` fixtures now report baseline-versus-PromptLane
+  pass-rate direction and transitions while requiring complete attribution,
+  at least three pairs for a directional status, and `causal_claim: false`.
   Real score delivery no longer depends on synthetic vague-prompt/spread
   fixtures, and actual passed outcomes are measured as `outcome_pass_rate`.
   Real evidence now stays a snapshot until `--baseline-file` compares the same

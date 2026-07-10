@@ -11000,3 +11000,20 @@
       `--require-runtime-ready` fail-closed maintainer gate.
 - [x] VERIFY: Run focused quality/doctor/privacy/package checks and the live
       Codex runtime gate before retagging `v1.0.0`.
+
+## 2026-07-10 Paired Effectiveness Benchmark
+
+- [x] CHECK: Real fixtures can prove an attributed outcome and compare product
+      versions, but cannot compare an equivalent baseline loop with a loop that
+      explicitly used a PromptLane improvement.
+- [x] RED: Require optional raw-free `effect_pair` baseline/treatment fixtures,
+      complete pair validation, and a non-causal paired observational report.
+- [x] GREEN: Report baseline and PromptLane pass rates, pass-rate delta, outcome
+      transitions, minimum sample status, and `causal_claim: false` without
+      turning the soft real signal into a release gate.
+- [x] ALIGN: Update the fixture example, benchmark spec, backlog, release
+      warning, and packaging contract so real usefulness claims require paired
+      operator evidence rather than a single attributed success.
+- [x] VERIFY: Run focused fixture/scoring/packaging tests, synthetic and local
+      paired real benchmark smoke, build, pack, and diff hygiene before
+      retagging `v1.0.0`.

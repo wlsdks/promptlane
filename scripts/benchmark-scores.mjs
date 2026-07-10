@@ -192,6 +192,69 @@ export function scoreOutcomePassRate(effectivenessSummary) {
   return roundScore(passed / attributed);
 }
 
+export function scorePairedEffectiveness(fixtures) {
+  const grouped = new Map();
+  for (const fixture of fixtures) {
+    if (!fixture.effect_pair) continue;
+    const pair = grouped.get(fixture.effect_pair.id) ?? {};
+    pair[fixture.effect_pair.variant] = fixture;
+    grouped.set(fixture.effect_pair.id, pair);
+  }
+
+  const pairs = [...grouped.values()].filter(
+    (pair) => pair.baseline?.outcome && pair.promptlane?.outcome,
+  );
+  const transitions = {
+    improved: 0,
+    regressed: 0,
+    unchanged_passed: 0,
+    unchanged_failed: 0,
+  };
+  let baselinePassed = 0;
+  let promptlanePassed = 0;
+  for (const pair of pairs) {
+    const baselinePass = pair.baseline.outcome.status === "passed";
+    const promptlanePass = pair.promptlane.outcome.status === "passed";
+    if (baselinePass) baselinePassed += 1;
+    if (promptlanePass) promptlanePassed += 1;
+    if (!baselinePass && promptlanePass) transitions.improved += 1;
+    else if (baselinePass && !promptlanePass) transitions.regressed += 1;
+    else if (baselinePass) transitions.unchanged_passed += 1;
+    else transitions.unchanged_failed += 1;
+  }
+
+  const pairCount = pairs.length;
+  const minimumDirectionalPairs = 3;
+  let status = "not_collected";
+  if (pairCount > 0 && pairCount < minimumDirectionalPairs) {
+    status = "insufficient_pairs";
+  } else if (pairCount >= minimumDirectionalPairs) {
+    status =
+      transitions.improved > transitions.regressed
+        ? "positive_direction"
+        : transitions.regressed > transitions.improved
+          ? "negative_direction"
+          : "mixed_direction";
+  }
+
+  return {
+    design: "paired_observational",
+    causal_claim: false,
+    status,
+    pair_count: pairCount,
+    minimum_directional_pairs: minimumDirectionalPairs,
+    baseline_pass_rate:
+      pairCount === 0 ? null : roundScore(baselinePassed / pairCount),
+    promptlane_pass_rate:
+      pairCount === 0 ? null : roundScore(promptlanePassed / pairCount),
+    pass_rate_delta:
+      pairCount === 0
+        ? null
+        : roundScore((promptlanePassed - baselinePassed) / pairCount),
+    transitions,
+  };
+}
+
 function scoreChecks(checks) {
   const values = Object.values(checks);
   return roundScore(values.filter(Boolean).length / values.length);

@@ -3,15 +3,36 @@
   "consent_note": "Replace with operator-confirmed redaction and local benchmark consent metadata.",
   "fixtures": [
     {
-      "label": "real_release_review",
+      "label": "real_release_review_baseline",
       "adapter": "codex",
       "query": "release readiness review",
-      "prompt": "Review the redacted release readiness notes and return the next verification step.",
+      "prompt": "Review the redacted release readiness notes.",
+      "effect_pair": {
+        "id": "release_review",
+        "variant": "baseline"
+      },
+      "outcome": {
+        "status": "failed",
+        "summary": "Replace with the redacted baseline result for the matched task.",
+        "improvement_used": false,
+        "evidence_refs": ["test:replace-with-safe-baseline-evidence"],
+        "tests_run": 1
+      }
+    },
+    {
+      "label": "real_release_review_promptlane",
+      "adapter": "codex",
+      "query": "release readiness review",
+      "prompt": "Review the redacted release readiness notes and return the next verification step with explicit checks.",
+      "effect_pair": {
+        "id": "release_review",
+        "variant": "promptlane"
+      },
       "outcome": {
         "status": "passed",
-        "summary": "Replace with the redacted result of this agent loop.",
+        "summary": "Replace with the redacted result after explicitly using the PromptLane improvement.",
         "improvement_used": true,
-        "evidence_refs": ["test:replace-with-safe-evidence"],
+        "evidence_refs": ["test:replace-with-safe-promptlane-evidence"],
         "tests_run": 1
       }
     },
@@ -24,6 +45,6 @@
   ],
   "coach_cases": [
     "Improve this redacted prompt with verification criteria.",
-    "Turn this redacted setup request into an actionable next-agent handoff."
+    "Turn this redacted release request into an actionable next-agent handoff."
   ]
 }

@@ -336,6 +336,57 @@ describe("benchmark fixture loading", () => {
     });
   });
 
+  it("loads complete raw-free baseline and PromptLane effect pairs", async () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
+    const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
+    mkdirSync(fixtureDir, { recursive: true });
+    writeFileSync(
+      join(fixtureDir, "real.json"),
+      `${JSON.stringify(realEffectPairFixture(), null, 2)}\n`,
+    );
+
+    const { loadBenchmarkFixtures } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+    const loaded = loadBenchmarkFixtures({
+      fixtureSet: "real",
+      repoRoot: tempRoot,
+    });
+
+    expect(loaded.fixtures.map((fixture) => fixture.effect_pair)).toEqual([
+      { id: "release_review", variant: "baseline" },
+      { id: "release_review", variant: "promptlane" },
+    ]);
+  });
+
+  it("rejects incomplete or incorrectly attributed effect pairs", async () => {
+    const { loadBenchmarkFixtures } = await import(
+      pathToFileURL(join(process.cwd(), "scripts/benchmark-fixtures.mjs")).href
+    );
+    const fixture = realEffectPairFixture();
+    fixture.fixtures.pop();
+    writeRealFixture(fixture);
+
+    expect(() =>
+      loadBenchmarkFixtures({ fixtureSet: "real", repoRoot: tempRoot }),
+    ).toThrow(
+      "real effect_pair release_review must contain one baseline and one promptlane fixture.",
+    );
+
+    fixture.fixtures.push(
+      effectPairCase("release_treatment", "promptlane", false),
+    );
+    writeFileSync(
+      join(tempRoot, "docs", "benchmark-fixtures", "real.json"),
+      `${JSON.stringify(fixture, null, 2)}\n`,
+    );
+    expect(() =>
+      loadBenchmarkFixtures({ fixtureSet: "real", repoRoot: tempRoot }),
+    ).toThrow(
+      "real effect_pair release_review promptlane outcome must set improvement_used to true.",
+    );
+  });
+
   it("rejects unsafe real outcome evidence without echoing private content", async () => {
     tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
     const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
@@ -491,7 +542,7 @@ describe("benchmark fixture loading", () => {
     });
 
     expect(loaded.status).toBe("ready");
-    expect(loaded.fixtures).toHaveLength(2);
+    expect(loaded.fixtures).toHaveLength(3);
     expect(loaded.coachCases).toHaveLength(2);
   });
 
@@ -839,3 +890,46 @@ describe("benchmark fixture loading", () => {
     ).toThrow("real fixture 0 prompt must be redacted");
   });
 });
+
+function realEffectPairFixture() {
+  return {
+    template_only: false,
+    consent_note: "Operator-confirmed redacted paired benchmark corpus.",
+    fixtures: [
+      effectPairCase("release_baseline", "baseline", false),
+      effectPairCase("release_treatment", "promptlane", true),
+    ],
+    coach_cases: ["Improve this redacted release verification prompt."],
+  };
+}
+
+function effectPairCase(
+  label: string,
+  variant: "baseline" | "promptlane",
+  improvementUsed: boolean,
+) {
+  return {
+    label,
+    adapter: "codex",
+    query: "release verification",
+    prompt: `Run the redacted ${variant} release verification task.`,
+    effect_pair: { id: "release_review", variant },
+    outcome: {
+      status: variant === "baseline" ? "failed" : "passed",
+      summary: `The redacted ${variant} verification completed.`,
+      improvement_used: improvementUsed,
+      evidence_refs: [`test:release-${variant}`],
+      tests_run: 1,
+    },
+  };
+}
+
+function writeRealFixture(fixture: ReturnType<typeof realEffectPairFixture>) {
+  tempRoot = mkdtempSync(join(tmpdir(), "promptlane-real-fixtures-"));
+  const fixtureDir = join(tempRoot, "docs", "benchmark-fixtures");
+  mkdirSync(fixtureDir, { recursive: true });
+  writeFileSync(
+    join(fixtureDir, "real.json"),
+    `${JSON.stringify(fixture, null, 2)}\n`,
+  );
+}

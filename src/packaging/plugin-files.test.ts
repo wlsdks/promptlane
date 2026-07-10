@@ -749,6 +749,8 @@ describe("plugin packaging files", () => {
       expect(content).toContain("outcome_provenance");
       expect(content).toContain("corpus_fingerprint");
       expect(content).toContain("comparison");
+      expect(content).toContain("paired_effectiveness");
+      expect(content).toContain("causal_claim");
     }
     for (const content of [benchmarkFixtures, benchmarkSpec]) {
       expect(content).toContain("docs/benchmark-fixtures/real.json");
@@ -764,6 +766,9 @@ describe("plugin packaging files", () => {
     expect(realFixtureExample).toContain("real_release_review");
     expect(realFixtureExample).toContain('"outcome"');
     expect(realFixtureExample).toContain('"evidence_refs"');
+    expect(realFixtureExample).toContain('"effect_pair"');
+    expect(realFixtureExample).toContain('"variant": "baseline"');
+    expect(realFixtureExample).toContain('"variant": "promptlane"');
     expect(benchmark).toContain("loadBenchmarkFixtures");
     expect(benchmark).toContain("scorePromptQualityEvidence");
     expect(benchmark).toContain("compareBenchmarkReports");
@@ -887,6 +892,9 @@ describe("plugin packaging files", () => {
     expect(packageInstallSmoke).toContain("validateBenchmarkFixtureTemplate");
     expect(packageInstallSmoke).toContain("parsed?.template_only !== true");
     expect(packageInstallSmoke).toContain("outcome.evidence_refs");
+    expect(packageInstallSmoke).toContain("effect_pair");
+    expect(packageInstallSmoke).toContain("paired_effectiveness");
+    expect(packageInstallSmoke).toContain("causal_claim !== false");
     expect(packageInstallSmoke).toContain('"--baseline-file"');
     expect(packageInstallSmoke).toContain('"--report-file"');
     expect(packageInstallSmoke).toContain("validateBenchmarkReportFile");

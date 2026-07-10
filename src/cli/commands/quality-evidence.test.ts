@@ -177,6 +177,9 @@ describe("quality-evidence CLI command", () => {
             'docs/benchmark-fixtures/real.json is absent; quality evidence is complete for the local release gate, but do not claim real-user effectiveness trends. Create an operator-owned fixture from selected archive prompts with promptlane benchmark prepare-fixture --prompt-id "$PROMPT_ID" --consent-note "$CONSENT_NOTE" --confirm-consent --output "$FIXTURE_FILE", or create a manual template with promptlane benchmark init-fixture --output "$FIXTURE_FILE", then save one JSON snapshot with promptlane benchmark --fixture-set real --fixture-file "$FIXTURE_FILE" --json --report-file "$BASELINE_REPORT" and rerun with --baseline-file "$BASELINE_REPORT" before claiming a trend.',
         },
         expect.objectContaining({
+          label: "paired effectiveness not evaluated",
+        }),
+        expect.objectContaining({
           label: "live agent runtime not evaluated",
         }),
       ]),
@@ -307,7 +310,9 @@ describe("quality-evidence CLI command", () => {
     expect(text).toContain("- none");
     expect(text).toContain("Release warnings");
     expect(text).toContain("- real benchmark fixtures are missing");
+    expect(text).toContain("- paired effectiveness not evaluated");
     expect(text).toContain("- live agent runtime not evaluated");
+    expect(text).toContain("causal_claim stays false");
     expect(text).toContain("do not claim real-user effectiveness trends");
     expect(text).toContain(
       'promptlane benchmark init-fixture --output "$FIXTURE_FILE"',

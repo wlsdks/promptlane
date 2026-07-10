@@ -88,6 +88,62 @@ describe("benchmark scoring profiles", () => {
     ).toBe(0);
   });
 
+  it("reports paired observational effectiveness without claiming causality", async () => {
+    const { scorePairedEffectiveness } = await scoreModule();
+    const pairedFixtures = [
+      pairedFixture("release_one", "baseline", "failed"),
+      pairedFixture("release_one", "promptlane", "passed"),
+      pairedFixture("release_two", "baseline", "failed"),
+      pairedFixture("release_two", "promptlane", "failed"),
+      pairedFixture("release_three", "baseline", "passed"),
+      pairedFixture("release_three", "promptlane", "passed"),
+    ];
+
+    expect(scorePairedEffectiveness(pairedFixtures)).toEqual({
+      design: "paired_observational",
+      causal_claim: false,
+      status: "positive_direction",
+      pair_count: 3,
+      minimum_directional_pairs: 3,
+      baseline_pass_rate: 0.333,
+      promptlane_pass_rate: 0.667,
+      pass_rate_delta: 0.333,
+      transitions: {
+        improved: 1,
+        regressed: 0,
+        unchanged_passed: 1,
+        unchanged_failed: 1,
+      },
+    });
+  });
+
+  it("keeps missing and undersized paired evidence explicitly unproven", async () => {
+    const { scorePairedEffectiveness } = await scoreModule();
+
+    expect(scorePairedEffectiveness([])).toEqual({
+      design: "paired_observational",
+      causal_claim: false,
+      status: "not_collected",
+      pair_count: 0,
+      minimum_directional_pairs: 3,
+      baseline_pass_rate: null,
+      promptlane_pass_rate: null,
+      pass_rate_delta: null,
+      transitions: {
+        improved: 0,
+        regressed: 0,
+        unchanged_passed: 0,
+        unchanged_failed: 0,
+      },
+    });
+    expect(
+      scorePairedEffectiveness([
+        pairedFixture("release_one", "baseline", "failed"),
+        pairedFixture("release_one", "promptlane", "passed"),
+      ]).status,
+    ).toBe("insufficient_pairs");
+  });
+
   it("accepts operator evidence refs for real effectiveness shape checks", async () => {
     const { scoreArchiveEffectivenessEvidence } = await scoreModule();
     const report = {
@@ -265,3 +321,24 @@ describe("benchmark scoring profiles", () => {
     });
   });
 });
+
+function pairedFixture(
+  pairId: string,
+  variant: "baseline" | "promptlane",
+  status: "passed" | "failed",
+) {
+  return {
+    label: `${pairId}_${variant}`,
+    adapter: "codex",
+    query: pairId,
+    prompt: `Redacted ${variant} prompt for ${pairId}.`,
+    effect_pair: { id: pairId, variant },
+    outcome: {
+      status,
+      summary: `Redacted ${variant} outcome.`,
+      improvement_used: variant === "promptlane",
+      evidence_refs: [`test:${pairId}-${variant}`],
+      tests_run: 1,
+    },
+  };
+}
