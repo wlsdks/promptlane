@@ -193,8 +193,9 @@ pressure on them rather than expanding them casually. The line-budget gate in
   as context.
 - CLI, MCP, server errors, docs examples, and status lines must not print raw
   prompt bodies, raw absolute paths, tokens, hook payloads, or instruction file
-  bodies. `/api/v1/health` returns only `{ ok, version }` and never the local
-  data directory.
+  bodies. `/api/v1/health` returns only `{ ok, version, instance_id }` and never
+  the local data directory. `instance_id` is a random per-server-boot UUID used
+  only to deduplicate explicit `SessionStart --open-web` behavior.
 - Direct MCP prompt input is analyzed locally and is not stored.
 - Stored prompt scoring returns metadata, score, checklist (per-axis status,
   reason, suggestion, earned/weight), and an optional `redaction_notice`,

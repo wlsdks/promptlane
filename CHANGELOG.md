@@ -28,6 +28,9 @@ tools, benchmark/release validation, and an English/Korean web UI.
   Claude Code and/or Codex CLIs.
 - `promptlane start --open-web` to launch the local server and open the
   web workspace on a new agent session.
+- Health exposes a random per-server-boot UUID so explicit
+  `SessionStart --open-web` setup opens the workspace once per running server,
+  not once per agent session.
 - Claude Code hook wrapper, settings install, and doctor checks.
 - Codex beta hook adapter, install, and doctor checks.
 - `promptlane buddy` for hook diagnostics during a live session.

@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-10 PromptLane Health Instance Contract
+
+- [x] CHECK: live health returns a boot `instance_id` used by SessionStart web
+  open deduplication, while architecture and README still describe older scope.
+- [x] RED: server/web tests require exactly three safe health keys, a UUID boot
+  instance, browser validation, and rejection of raw-like instance values.
+- [x] GREEN: web health parsing preserves the validated boot id without
+  exposing or accepting arbitrary local values.
+- [x] DOCS: architecture, onboarding, and release checks describe server-boot
+  deduplication instead of per-agent-session behavior.
+- [x] VERIFY: focused server/web/hook/browser/package tests, live health,
+  privacy checks, PR merge, and v1.0.0 retag.
+
 ## 2026-07-10 PromptLane macOS Service Status Privacy
 
 - [x] CHECK: current macOS `launchctl print` returns `Could not find service`,

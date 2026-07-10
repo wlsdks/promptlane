@@ -238,7 +238,11 @@ agent를 시작할 때 웹 workspace도 같이 열고 싶으면 명시적으로 
 pnpm promptlane setup --profile coach --register-mcp --open-web
 ```
 
-이 옵션은 기본값이 아닙니다. `SessionStart` hook을 설치해 로컬 server를 확인/시작하고, 같은 agent session id에서는 브라우저를 한 번만 엽니다. hook은 fail-open이며 prompt 본문, raw path, token을 stdout/stderr에 출력하지 않습니다.
+이 옵션은 기본값이 아닙니다. `SessionStart` hook을 설치해 로컬 server를
+확인하고, 실행 중인 server boot마다 브라우저를 최대 한 번만 엽니다. health의
+무작위 boot UUID(`instance_id`)는 이 중복 방지에만 사용하며
+user/project/session 식별자가 아닙니다. hook은 fail-open이며 prompt 본문, raw
+path, token을 stdout/stderr에 출력하지 않습니다.
 
 프롬프트 coaching 없이 수동 capture만 원하면 기본 profile을 사용합니다.
 

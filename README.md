@@ -248,8 +248,8 @@ The setup command:
   restored on uninstall where possible.
 - with `--register-mcp`, registers the MCP server with detected Claude Code
   and/or Codex CLIs using the current CLI entrypoint
-- with `--open-web`, installs a `SessionStart` hook that ensures the local
-  server is running and opens `http://127.0.0.1:17373` once per agent session
+- with `--open-web`, installs a `SessionStart` hook that checks the local server
+  and opens `http://127.0.0.1:17373` once per running server boot
 - enables `[features].hooks` when Codex is detected
 - installs and starts a macOS LaunchAgent for the local server when supported
 - prints next steps and paths that were changed
@@ -268,8 +268,10 @@ pnpm promptlane setup --profile coach --register-mcp --open-web
 ```
 
 This is not enabled by default. It writes an explicit `SessionStart` hook, opens
-the browser at most once per agent session id, and keeps the hook fail-open with
-no prompt body, raw path, or token output.
+the browser at most once for each running local server instance, and keeps the
+hook fail-open with no prompt body, raw path, or token output. Health exposes a
+random boot UUID (`instance_id`) for this deduplication; it is not a user,
+project, or session identifier.
 
 Use passive capture only when you do not want coaching:
 
