@@ -71,6 +71,10 @@ Acceptance criteria:
 - `get_benchmark_candidates` returns bounded body-free readiness diagnostics
   so Codex and Claude Code can guide real fixture preparation without reading
   outcome summaries or evidence refs.
+- `get_paired_benchmark_candidates` returns separate body-free baseline and
+  attributed PromptLane candidate groups without snapshot ids or outcome
+  content; agents must ask the operator to review task equivalence before
+  preparing a pair.
 - Pending latest loop status points to exact-id outcome recording only after a
   verifiable checkpoint; intermediate hook snapshots are not a required
   outcome backlog.

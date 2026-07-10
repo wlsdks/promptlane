@@ -11049,3 +11049,20 @@
       the command in installed help and public benchmark docs.
 - [x] VERIFY: Run focused candidate/CLI/privacy/package tests, built CLI/live
       diagnostics, lint/build/pack, and diff hygiene before retagging `v1.0.0`.
+
+## 2026-07-10 Paired Benchmark MCP Registry
+
+- [x] CHECK: Codex/Claude MCP exposes treatment-only benchmark candidates, and
+      adding paired candidates would extend both the definition aggregate and
+      the separate server handler map, satisfying ADR 0001's registry gate.
+- [x] RED: Require a unique explicit registry that owns definition/handler
+      pairs and a read-only `get_paired_benchmark_candidates` schema, handler,
+      tools/list entry, and structured tools/call result.
+- [x] GREEN: Derive MCP catalogue and dispatch from the same registry while
+      preserving all 21 existing handlers and adding body-free baseline and
+      PromptLane candidate groups as tool 22.
+- [x] ALIGN: Update initialize instructions, plugin/README tool lists, ADR
+      migration state, package guards, and privacy wording.
+- [x] VERIFY: Run focused registry/tool/server/privacy/package tests, stdio
+      smoke, lint/build/pack, and live MCP registration checks before retagging
+      `v1.0.0`.

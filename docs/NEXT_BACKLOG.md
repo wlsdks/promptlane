@@ -164,8 +164,9 @@ Decision:
 
 1. Treat the PromptLane MVP reliability slices as landed for the current
    local-first runtime.
-2. Improve the MCP tool registry only when the next MCP tool or schema
-   change touches the registration surface.
+2. Keep the explicit MCP tool registry as the definition/handler source of
+   truth for future tool additions; the migration landed with paired benchmark
+   candidate discovery.
 3. Keep Codex native dialog fallback as dogfood/integration evidence, not a
    blocking core feature.
 4. Keep UI patrol as an operational follow-up after the next functional slice.
@@ -518,20 +519,20 @@ Completed:
 Next work should come from fresh user-flow evidence, a real MCP tool/schema
 change, or explicit operator-approved dogfood.
 
-### 3. MCP Registry Follow-Up (only when registration changes)
+### 3. MCP Registry Status
 
-Goal:
+Completed:
 
-- Remove the manual definition/handler sync risk identified by ADR 0001 without
-  migrating every legacy split-layout tool.
+- Removed the manual definition/handler sync risk identified by ADR 0001
+  without migrating every legacy split-layout tool.
 
-Scope:
+Current contract:
 
-- Introduce an explicit data registry only when a new MCP tool, schema change,
-  or capability-filtered catalogue work already touches `src/mcp/server.ts`.
-- Do not use import-time global mutation.
-- Derive `tools/list` and `tools/call` dispatch from the same registered tool
-  list.
+- `src/mcp/tool-registry.ts` contains explicit static definition/handler pairs.
+- There is no import-time global mutation.
+- `tools/list`, name discovery, and `tools/call` dispatch derive from the same
+  registry.
+- New tools remain per-tool modules with one explicit registry entry.
 
 ### 4. User-Flow Validation Passes
 

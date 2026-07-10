@@ -4,92 +4,10 @@ import type { Readable, Writable } from "node:stream";
 import { VERSION } from "../shared/version.js";
 import { createRpcChannel, type RpcChannel } from "./rpc-channel.js";
 import {
-  APPLY_CLARIFICATIONS_TOOL_DEFINITION,
-  applyClarificationsTool,
-  type ApplyClarificationsToolArguments,
-} from "./apply-clarifications-tool.js";
-import {
-  ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION,
-  askClarifyingQuestionsTool,
-  type AskClarifyingQuestionsToolArguments,
-} from "./ask-clarifying-questions-tool.js";
-import {
-  RECORD_CLARIFICATIONS_TOOL_DEFINITION,
-  recordClarificationsTool,
-  type RecordClarificationsToolArguments,
-} from "./record-clarifications-tool.js";
-import {
-  GET_BENCHMARK_CANDIDATES_TOOL_DEFINITION,
-  getBenchmarkCandidatesTool,
-  type GetBenchmarkCandidatesToolArguments,
-} from "./get-benchmark-candidates-tool.js";
-import {
-  COACH_PROMPT_TOOL_DEFINITION,
-  GET_PROMPTLANE_STATUS_TOOL_DEFINITION,
-  IMPROVE_PROMPT_TOOL_DEFINITION,
-  PREPARE_AGENT_REWRITE_TOOL_DEFINITION,
-  PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION,
   PROMPTLANE_MCP_TOOL_DEFINITIONS,
-  RECORD_AGENT_REWRITE_TOOL_DEFINITION,
-  RECORD_AGENT_JUDGMENTS_TOOL_DEFINITION,
-  REVIEW_PROJECT_INSTRUCTIONS_TOOL_DEFINITION,
-  SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION,
-  SCORE_PROMPT_TOOL_DEFINITION,
-} from "./score-tool-definitions.js";
-import {
-  APPLY_INSTRUCTION_PATCH_TOOL_DEFINITION,
-  GET_PROMPTLANE_LOOP_STATUS_TOOL_DEFINITION,
-  PREPARE_LOOP_BRIEF_TOOL_DEFINITION,
-  PROPOSE_INSTRUCTION_PATCH_TOOL_DEFINITION,
-  PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION,
-  RECORD_LOOP_MEMORY_TOOL_DEFINITION,
-  RECORD_LOOP_OUTCOME_TOOL_DEFINITION,
-} from "./loop-tool-definitions.js";
-import {
-  coachPromptTool,
-  getPromptLaneStatusTool,
-  improvePromptTool,
-  prepareAgentRewriteTool,
-  prepareAgentJudgeBatchTool,
-  recordAgentRewriteTool,
-  recordAgentJudgmentsTool,
-  reviewProjectInstructionsTool,
-  scorePromptArchiveTool,
-  scorePromptTool,
-} from "./score-tool.js";
-import {
-  applyInstructionPatchTool,
-  getPromptLaneLoopStatusTool,
-  prepareLoopBriefTool,
-  proposeInstructionPatchTool,
-  proposeLoopMemoryCandidateTool,
-  recordLoopMemoryTool,
-  recordLoopOutcomeTool,
-} from "./loop-tool.js";
-import type {
-  ApplyInstructionPatchToolArguments,
-  ProposeInstructionPatchToolArguments,
-  ProposeLoopMemoryCandidateToolArguments,
-  RecordLoopMemoryToolArguments,
-  RecordLoopOutcomeToolArguments,
-} from "./loop-tool-types.js";
-import type {
-  PrepareAgentJudgeBatchToolArguments,
-  RecordAgentJudgmentsToolArguments,
-} from "./agent-judge-tool-types.js";
-import type {
-  PrepareAgentRewriteToolArguments,
-  RecordAgentRewriteToolArguments,
-} from "./agent-rewrite-tool-types.js";
-import type {
-  CoachPromptToolArguments,
-  GetPromptLaneStatusToolArguments,
-  ImprovePromptToolArguments,
-  ReviewProjectInstructionsToolArguments,
-  ScorePromptArchiveToolArguments,
-  ScorePromptToolArguments,
-  ScorePromptToolOptions,
-} from "./score-tool-types.js";
+  getPromptLaneMcpToolHandler,
+} from "./tool-registry.js";
+import type { ScorePromptToolOptions } from "./score-tool-types.js";
 
 type JsonRpcId = string | number | null;
 
@@ -122,106 +40,6 @@ export type PromptLaneMcpServerContext = {
 
 export type PromptLaneMcpServerOptions = ScorePromptToolOptions & {
   ctx?: PromptLaneMcpServerContext;
-};
-
-type PromptLaneToolResult =
-  | ReturnType<typeof getPromptLaneStatusTool>
-  | ReturnType<typeof coachPromptTool>
-  | ReturnType<typeof scorePromptTool>
-  | ReturnType<typeof improvePromptTool>
-  | ReturnType<typeof applyClarificationsTool>
-  | Awaited<ReturnType<typeof askClarifyingQuestionsTool>>
-  | ReturnType<typeof recordClarificationsTool>
-  | ReturnType<typeof getPromptLaneLoopStatusTool>
-  | ReturnType<typeof getBenchmarkCandidatesTool>
-  | ReturnType<typeof prepareLoopBriefTool>
-  | ReturnType<typeof recordLoopOutcomeTool>
-  | ReturnType<typeof proposeLoopMemoryCandidateTool>
-  | ReturnType<typeof recordLoopMemoryTool>
-  | ReturnType<typeof proposeInstructionPatchTool>
-  | ReturnType<typeof applyInstructionPatchTool>
-  | ReturnType<typeof scorePromptArchiveTool>
-  | ReturnType<typeof reviewProjectInstructionsTool>
-  | ReturnType<typeof prepareAgentRewriteTool>
-  | ReturnType<typeof recordAgentRewriteTool>
-  | ReturnType<typeof prepareAgentJudgeBatchTool>
-  | ReturnType<typeof recordAgentJudgmentsTool>;
-
-type PromptLaneToolHandler = (
-  args: Record<string, unknown>,
-  options: PromptLaneMcpServerOptions,
-) => PromptLaneToolResult | Promise<PromptLaneToolResult>;
-
-const PROMPTLANE_MCP_TOOL_HANDLERS: Record<string, PromptLaneToolHandler> = {
-  [GET_PROMPTLANE_STATUS_TOOL_DEFINITION.name]: (args, options) =>
-    getPromptLaneStatusTool(args as GetPromptLaneStatusToolArguments, options),
-  [COACH_PROMPT_TOOL_DEFINITION.name]: (args, options) =>
-    coachPromptTool(args as CoachPromptToolArguments, options),
-  [SCORE_PROMPT_TOOL_DEFINITION.name]: (args, options) =>
-    scorePromptTool(args as ScorePromptToolArguments, options),
-  [IMPROVE_PROMPT_TOOL_DEFINITION.name]: (args, options) =>
-    improvePromptTool(args as ImprovePromptToolArguments, options),
-  [APPLY_CLARIFICATIONS_TOOL_DEFINITION.name]: (args, options) =>
-    applyClarificationsTool(args as ApplyClarificationsToolArguments, options),
-  [ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION.name]: (args, options) =>
-    askClarifyingQuestionsTool(
-      args as AskClarifyingQuestionsToolArguments,
-      options,
-    ),
-  [RECORD_CLARIFICATIONS_TOOL_DEFINITION.name]: (args, options) =>
-    recordClarificationsTool(
-      args as RecordClarificationsToolArguments,
-      options,
-    ),
-  [GET_PROMPTLANE_LOOP_STATUS_TOOL_DEFINITION.name]: (args, options) =>
-    getPromptLaneLoopStatusTool(args, options),
-  [GET_BENCHMARK_CANDIDATES_TOOL_DEFINITION.name]: (args, options) =>
-    getBenchmarkCandidatesTool(
-      args as GetBenchmarkCandidatesToolArguments,
-      options,
-    ),
-  [PREPARE_LOOP_BRIEF_TOOL_DEFINITION.name]: (args, options) =>
-    prepareLoopBriefTool(args, options),
-  [RECORD_LOOP_OUTCOME_TOOL_DEFINITION.name]: (args, options) =>
-    recordLoopOutcomeTool(args as RecordLoopOutcomeToolArguments, options),
-  [PROPOSE_LOOP_MEMORY_CANDIDATE_TOOL_DEFINITION.name]: (args, options) =>
-    proposeLoopMemoryCandidateTool(
-      args as ProposeLoopMemoryCandidateToolArguments,
-      options,
-    ),
-  [RECORD_LOOP_MEMORY_TOOL_DEFINITION.name]: (args, options) =>
-    recordLoopMemoryTool(args as RecordLoopMemoryToolArguments, options),
-  [PROPOSE_INSTRUCTION_PATCH_TOOL_DEFINITION.name]: (args, options) =>
-    proposeInstructionPatchTool(
-      args as ProposeInstructionPatchToolArguments,
-      options,
-    ),
-  [APPLY_INSTRUCTION_PATCH_TOOL_DEFINITION.name]: (args, options) =>
-    applyInstructionPatchTool(
-      args as ApplyInstructionPatchToolArguments,
-      options,
-    ),
-  [SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION.name]: (args, options) =>
-    scorePromptArchiveTool(args as ScorePromptArchiveToolArguments, options),
-  [REVIEW_PROJECT_INSTRUCTIONS_TOOL_DEFINITION.name]: (args, options) =>
-    reviewProjectInstructionsTool(
-      args as ReviewProjectInstructionsToolArguments,
-      options,
-    ),
-  [PREPARE_AGENT_REWRITE_TOOL_DEFINITION.name]: (args, options) =>
-    prepareAgentRewriteTool(args as PrepareAgentRewriteToolArguments, options),
-  [RECORD_AGENT_REWRITE_TOOL_DEFINITION.name]: (args, options) =>
-    recordAgentRewriteTool(args as RecordAgentRewriteToolArguments, options),
-  [PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION.name]: (args, options) =>
-    prepareAgentJudgeBatchTool(
-      args as PrepareAgentJudgeBatchToolArguments,
-      options,
-    ),
-  [RECORD_AGENT_JUDGMENTS_TOOL_DEFINITION.name]: (args, options) =>
-    recordAgentJudgmentsTool(
-      args as RecordAgentJudgmentsToolArguments,
-      options,
-    ),
 };
 
 export async function runPromptLaneMcpServer(
@@ -360,7 +178,7 @@ export async function handleMcpMessage(
           version: VERSION,
         },
         instructions:
-          "Use coach_prompt for the default one-call Claude Code/Codex coaching workflow: status, latest prompt score, approval-ready rewrite, habit review, project instruction review, and next request guidance. Use get_promptlane_status only for readiness checks, get_benchmark_candidates for body-free real-effectiveness readiness before fixture preparation, score_prompt for one prompt, improve_prompt for one local deterministic rewrite, ask_clarifying_questions when you want promptlane to drive the elicitation flow itself (it asks the user via MCP elicitation/create when the client supports it and composes the final draft, otherwise falls back to clarifying_questions metadata), apply_clarifications when the user has answered the clarifying_questions returned by improve_prompt or coach_prompt and you need to compose the final draft from the user's verbatim answers, record_clarifications when you also want to save the user's verbatim answers and the resulting draft against a stored prompt in the archive, prepare_agent_rewrite and record_agent_rewrite when the user explicitly wants the active agent session to semantically rewrite a stored prompt, score_prompt_archive for habit-only review, review_project_instructions for AGENTS.md/CLAUDE.md-only checks, and prepare_agent_judge_batch plus record_agent_judgments when the active agent should judge accumulated prompts. ASK-FIRST RULE: whenever any tool returns a non-empty clarifying_questions array, ask the user those questions through your native ask UI (Claude Code AskUserQuestion, Codex ask_user_question), then call apply_clarifications first to compose and show the final approval-ready draft in chat; call record_clarifications only if the user also wants to save that draft against a stored prompt. Do not guess answers, do not skip questions, and never auto-submit a rewrite. This server is local-only and does not call external LLMs.",
+          "Use coach_prompt for the default one-call Claude Code/Codex coaching workflow: status, latest prompt score, approval-ready rewrite, habit review, project instruction review, and next request guidance. Use get_promptlane_status only for readiness checks, get_benchmark_candidates for body-free real-effectiveness readiness before fixture preparation, get_paired_benchmark_candidates for body-free baseline and PromptLane candidate groups before an operator-reviewed paired study, score_prompt for one prompt, improve_prompt for one local deterministic rewrite, ask_clarifying_questions when you want promptlane to drive the elicitation flow itself (it asks the user via MCP elicitation/create when the client supports it and composes the final draft, otherwise falls back to clarifying_questions metadata), apply_clarifications when the user has answered the clarifying_questions returned by improve_prompt or coach_prompt and you need to compose the final draft from the user's verbatim answers, record_clarifications when you also want to save the user's verbatim answers and the resulting draft against a stored prompt in the archive, prepare_agent_rewrite and record_agent_rewrite when the user explicitly wants the active agent session to semantically rewrite a stored prompt, score_prompt_archive for habit-only review, review_project_instructions for AGENTS.md/CLAUDE.md-only checks, and prepare_agent_judge_batch plus record_agent_judgments when the active agent should judge accumulated prompts. ASK-FIRST RULE: whenever any tool returns a non-empty clarifying_questions array, ask the user those questions through your native ask UI (Claude Code AskUserQuestion, Codex ask_user_question), then call apply_clarifications first to compose and show the final approval-ready draft in chat; call record_clarifications only if the user also wants to save that draft against a stored prompt. Do not guess answers, do not skip questions, and never auto-submit a rewrite. This server is local-only and does not call external LLMs.",
       });
     case "ping":
       return jsonRpcResult(id, {});
@@ -388,7 +206,7 @@ async function handleToolCall(
     );
   }
 
-  const handler = PROMPTLANE_MCP_TOOL_HANDLERS[params.name];
+  const handler = getPromptLaneMcpToolHandler(params.name);
   const handlerResult = handler?.(params.arguments, options);
 
   if (!handlerResult) {
@@ -396,7 +214,8 @@ async function handleToolCall(
   }
 
   const result = await handlerResult;
-  const isError = "is_error" in result;
+  const isError =
+    typeof result === "object" && result !== null && "is_error" in result;
 
   return jsonRpcResult(id, {
     content: [

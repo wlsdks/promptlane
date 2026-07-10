@@ -30,7 +30,7 @@ export type {
   RecordAgentRewriteToolArguments,
   RecordAgentRewriteToolResult,
 } from "./agent-rewrite-tool-types.js";
-import { listPromptLaneMcpToolNames } from "./score-tool-definitions.js";
+import { listPromptLaneMcpToolNames } from "./tool-registry.js";
 import type {
   CoachPromptToolArguments,
   CoachPromptToolResult,
@@ -53,14 +53,16 @@ export {
   IMPROVE_PROMPT_TOOL_DEFINITION,
   PREPARE_AGENT_REWRITE_TOOL_DEFINITION,
   PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION,
-  PROMPTLANE_MCP_TOOL_DEFINITIONS,
   RECORD_AGENT_REWRITE_TOOL_DEFINITION,
   RECORD_AGENT_JUDGMENTS_TOOL_DEFINITION,
   REVIEW_PROJECT_INSTRUCTIONS_TOOL_DEFINITION,
   SCORE_PROMPT_ARCHIVE_TOOL_DEFINITION,
   SCORE_PROMPT_TOOL_DEFINITION,
-  listPromptLaneMcpToolNames,
 } from "./score-tool-definitions.js";
+export {
+  PROMPTLANE_MCP_TOOL_DEFINITIONS,
+  listPromptLaneMcpToolNames,
+} from "./tool-registry.js";
 
 export type {
   CoachPromptToolArguments,

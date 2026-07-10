@@ -44,6 +44,9 @@ describe("MCP stdio server", () => {
     expect(instructions).toContain(
       "get_benchmark_candidates for body-free real-effectiveness readiness",
     );
+    expect(instructions).toContain(
+      "get_paired_benchmark_candidates for body-free baseline and PromptLane candidate groups",
+    );
   });
 
   it("uses PromptLane archive copy in agent-facing tool descriptions while preserving promptlane commands", async () => {
@@ -232,6 +235,12 @@ describe("MCP stdio server", () => {
             }),
           }),
           expect.objectContaining({
+            name: "get_paired_benchmark_candidates",
+            annotations: expect.objectContaining({
+              readOnlyHint: true,
+            }),
+          }),
+          expect.objectContaining({
             name: "prepare_loop_brief",
           }),
           expect.objectContaining({
@@ -297,7 +306,7 @@ describe("MCP stdio server", () => {
 
     const tools = (response?.result as { tools: Array<unknown> }).tools;
 
-    expect(tools).toHaveLength(21);
+    expect(tools).toHaveLength(22);
     for (const tool of tools.filter(
       (tool) =>
         ![
@@ -616,6 +625,44 @@ describe("MCP stdio server", () => {
     expect(response).toMatchObject({
       jsonrpc: "2.0",
       id: "benchmark-candidates-1",
+      result: {
+        content: [
+          {
+            type: "text",
+            text: expect.stringContaining(
+              '"error_code": "storage_unavailable"',
+            ),
+          },
+        ],
+        structuredContent: {
+          is_error: true,
+          error_code: "storage_unavailable",
+          message: expect.any(String),
+        },
+        isError: true,
+      },
+    });
+  });
+
+  it("returns structured setup-safe paired benchmark readiness through tools/call", async () => {
+    const response = await handleMcpMessage(
+      {
+        jsonrpc: "2.0",
+        id: "paired-benchmark-candidates-1",
+        method: "tools/call",
+        params: {
+          name: "get_paired_benchmark_candidates",
+          arguments: { limit: 10 },
+        },
+      },
+      {
+        dataDir: join(tmpdir(), `promptlane-missing-${randomUUID()}`),
+      },
+    );
+
+    expect(response).toMatchObject({
+      jsonrpc: "2.0",
+      id: "paired-benchmark-candidates-1",
       result: {
         content: [
           {

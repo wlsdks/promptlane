@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse as parseYaml } from "yaml";
 
-import { listPromptLaneMcpToolNames } from "../mcp/score-tool-definitions.js";
+import { listPromptLaneMcpToolNames } from "../mcp/tool-registry.js";
 
 function readJson<T>(path: string): T {
   return JSON.parse(readFileSync(join(process.cwd(), path), "utf8")) as T;
@@ -500,6 +500,7 @@ describe("plugin packaging files", () => {
       `This server exposes ${actualTools.length} model-controlled tools:`,
     );
     expect(mcpSection).toContain("`get_benchmark_candidates`");
+    expect(mcpSection).toContain("`get_paired_benchmark_candidates`");
     expect(mcpSection).toContain("at most the latest 100 snapshots");
   });
 

@@ -136,6 +136,11 @@ Use these workflows before sending the user to the web UI:
   asking the user to prepare a fixture. Explain the staged body-free status and
   use `promptlane benchmark prepare-fixture` only after the user reviews the
   returned ids and explicitly confirms local consent.
+- Paired benchmark readiness: call
+  `promptlane:get_paired_benchmark_candidates`, show the body-free baseline and
+  PromptLane groups, and ask the user to select genuinely comparable tasks
+  before using `promptlane benchmark prepare-pair`. Never infer equivalence or
+  claim causality from the candidate report.
 - Project rules review: call `promptlane:review_project_instructions` with
   `latest=true` for AGENTS.md / CLAUDE.md quality checks.
 - Next request template: use `score_prompt_archive` and turn
@@ -173,6 +178,8 @@ The MCP tools are:
 - `review_project_instructions` for AGENTS.md / CLAUDE.md rule quality review
 - `get_benchmark_candidates` for body-free real-effectiveness readiness and
   safe candidate ids before consent-bearing fixture preparation
+- `get_paired_benchmark_candidates` for body-free baseline/treatment selection
+  before operator-reviewed paired fixture preparation
 - `prepare_agent_judge_batch` for a bounded redacted packet the current agent
   session can judge
 - `record_agent_judgments` for saving advisory agent judgment metadata

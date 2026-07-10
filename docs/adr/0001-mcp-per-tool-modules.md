@@ -9,9 +9,9 @@
 `src/mcp` currently hosts twenty agent-facing tools that follow two different
 file layouts:
 
-> Historical count at ADR acceptance. The server exposes 21 tools after the
-> per-tool `get_benchmark_candidates` addition; the module-layout decision is
-> unchanged.
+> Historical count at ADR acceptance. The server exposed 21 tools after the
+> per-tool `get_benchmark_candidates` addition. It exposes 22 after the
+> registry-backed `get_paired_benchmark_candidates` addition described below.
 
 - **Split layout** (the older one): `src/mcp/score-tool-definitions.ts` owns
   the JSON schema and tool name; `src/mcp/score-tool-types.ts` owns the
@@ -170,3 +170,16 @@ type RegisteredPromptLaneTool = {
 Each tool module should export one `RegisteredPromptLaneTool`, and the MCP
 server should derive both `tools/list` and `tools/call` dispatch from that
 same array.
+
+## Implementation Update — 2026-07-10
+
+The migration gate was met when paired benchmark candidate discovery required
+a new agent-facing tool. `src/mcp/tool-registry.ts` now owns an explicit array
+of definition/handler pairs for all legacy and per-tool modules. The registry
+exports the catalogue, name list, and handler lookup; `src/mcp/server.ts`
+derives both `tools/list` and `tools/call` from those exports.
+
+This implementation uses static data, not import-time registration side
+effects. Existing split-layout modules remain unchanged, while new tools still
+default to one per-tool module plus one registry entry. Registry tests require
+unique names and a handler for every listed definition.

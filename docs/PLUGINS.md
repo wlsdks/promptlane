@@ -209,7 +209,7 @@ uses the exact CLI path from the current installation.
 promptlane mcp
 ```
 
-This server exposes 21 model-controlled tools:
+This server exposes 22 model-controlled tools:
 
 - `get_promptlane_status`
 - `coach_prompt`
@@ -220,6 +220,7 @@ This server exposes 21 model-controlled tools:
 - `record_clarifications`
 - `get_promptlane_loop_status`
 - `get_benchmark_candidates`
+- `get_paired_benchmark_candidates`
 - `prepare_loop_brief`
 - `record_loop_outcome`
 - `propose_loop_memory_candidate`
@@ -244,6 +245,10 @@ metadata when a compact happened after the latest snapshot.
 `get_benchmark_candidates` reads at most the latest 100 snapshots and returns
 only staged readiness counts, opaque candidate ids, status, and next actions;
 it never returns outcome summaries, evidence refs, prompt bodies, or raw paths.
+`get_paired_benchmark_candidates` returns separate body-free baseline and
+explicitly attributed PromptLane candidate groups without snapshot ids or
+outcome content. It supports agent-native paired-fixture preparation but leaves
+task-equivalence and causal interpretation to the operator.
 `prepare_loop_brief`
 returns a copy-ready continuation prompt from the latest PromptLane snapshot, or
 from the newest snapshot matching optional `worktree`, `session_id`, and

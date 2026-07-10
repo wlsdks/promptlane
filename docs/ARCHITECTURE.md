@@ -141,6 +141,9 @@ Current known large modules:
   `docs/adr/0001-mcp-per-tool-modules.md`: new tools default to per-tool
   modules, while existing split-layout tools stay put until feature or
   risk-driven work touches them.
+- `src/mcp/tool-registry.ts`: explicit MCP definition/handler pairs. Both
+  `tools/list` and `tools/call` derive from this array; tool modules must not
+  register themselves through import-time mutation.
 - `src/mcp/server.ts`: JSON-RPC stdio transport and tool-call routing only.
 - `src/hooks/rewrite-guard.ts`: hook decision logic only (mode dispatch,
   language detection, clipboard side effect, ask-mode trigger gate +
