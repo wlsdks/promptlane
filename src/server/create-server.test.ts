@@ -629,6 +629,28 @@ describe("createServer P2 ingest boundary", () => {
             returns_compact_content: false,
           },
         },
+        benchmark_readiness: {
+          status: "no_completed_outcomes",
+          candidate_count: 0,
+          candidates: [],
+          diagnostics: {
+            completed_snapshots: 0,
+            attributed_snapshots: 0,
+            evidence_complete_snapshots: 0,
+            safe_snapshots: 0,
+          },
+          scope: {
+            scanned_snapshots: 2,
+            snapshot_limit: 100,
+          },
+          privacy: {
+            local_only: true,
+            external_calls: false,
+            returns_prompt_bodies: false,
+            returns_raw_paths: false,
+            returns_evidence_refs: false,
+          },
+        },
         privacy: {
           local_only: true,
           returns_prompt_bodies: false,

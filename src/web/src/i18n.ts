@@ -73,6 +73,12 @@ function translateText(value: string): string {
 }
 
 function translateDynamic(value: string): string | undefined {
+  if (/^\d+ benchmark candidates? ready$/.test(value)) {
+    return value.replace(
+      /^(\d+) benchmark candidates? ready$/,
+      "벤치마크 후보 $1개 준비됨",
+    );
+  }
   if (value.includes(", ")) {
     const parts = value.split(", ");
     const translatedParts = parts.map(translateKnown);
@@ -752,6 +758,27 @@ const UI_TRANSLATIONS: Record<string, string> = {
   "Average archive score": "평균 아카이브 점수",
   "Score distribution": "점수 분포",
   "Effectiveness evidence": "효과성 증거",
+  completed: "완료",
+  attributed: "귀속됨",
+  "evidence complete": "증거 완비",
+  safe: "안전",
+  "No loop snapshots": "loop snapshot 없음",
+  "No completed outcomes": "완료된 outcome 없음",
+  "Improvement use not attributed": "개선 사용이 귀속되지 않음",
+  "Outcome evidence incomplete": "outcome evidence 미완료",
+  "Outcome evidence needs redaction": "outcome evidence 수정 필요",
+  "Review candidate prompt ids, then run promptlane benchmark prepare-fixture with explicit consent.":
+    "후보 prompt id를 검토한 뒤 명시적 동의와 함께 promptlane benchmark prepare-fixture를 실행하세요.",
+  "Collect a loop snapshot after using PromptLane with Codex or Claude Code.":
+    "Codex 또는 Claude Code에서 PromptLane을 사용한 뒤 loop snapshot을 수집하세요.",
+  "Run promptlane loop status, then record the latest snapshot outcome after a verifiable checkpoint.":
+    "promptlane loop status를 실행한 뒤 검증 가능한 checkpoint에서 최신 snapshot outcome을 기록하세요.",
+  "Record improvement attribution only if a PromptLane improvement was actually used; otherwise collect another verified loop.":
+    "PromptLane 개선안을 실제로 사용한 경우에만 개선 사용을 귀속하세요. 아니라면 검증된 loop를 하나 더 수집하세요.",
+  "Record at least one privacy-safe evidence ref on an attributed passed or failed outcome.":
+    "귀속된 passed 또는 failed outcome에 privacy-safe evidence ref를 하나 이상 기록하세요.",
+  "Replace sensitive outcome evidence with privacy-safe labels before preparing a benchmark fixture.":
+    "벤치마크 fixture를 준비하기 전에 민감한 outcome evidence를 privacy-safe label로 교체하세요.",
   "prompt outcome coverage": "프롬프트 outcome 적용 범위",
   "actual loop verdicts": "실제 loop 판정",
   "linked outcomes": "연결된 outcome",

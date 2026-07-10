@@ -457,6 +457,9 @@ echoing prompt bodies or paths. `init-fixture` remains the manual alternative.
 at most the latest 100 loop snapshots without returning prompt bodies, paths,
 outcome summaries, or evidence references; operators still review and consent
 before fixture preparation.
+The web Loops view now exposes the same staged readiness diagnostics as a
+compact body-free Effectiveness evidence summary, so the next evidence action
+is visible before operators move to CLI or MCP fixture preparation.
 
 Completed:
 

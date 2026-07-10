@@ -611,6 +611,7 @@ export type LoopListResponse = {
       returns_compact_content: false;
     };
   };
+  benchmark_readiness: BenchmarkReadiness;
   items: LoopSummary[];
   privacy: {
     local_only: true;
@@ -619,6 +620,128 @@ export type LoopListResponse = {
     returns_compact_content: false;
   };
 };
+
+export type BenchmarkReadiness = {
+  status:
+    | "ready"
+    | "no_completed_outcomes"
+    | "no_attributed_outcomes"
+    | "incomplete_outcome_evidence"
+    | "unsafe_outcome_evidence"
+    | "empty_archive";
+  candidate_count: number;
+  candidates: Array<{
+    prompt_id: string;
+    snapshot_id: string;
+    outcome_status: "passed" | "failed";
+    tests_run: number;
+    evidence_ref_count: number;
+  }>;
+  excluded_unsafe_candidates: number;
+  diagnostics: {
+    completed_snapshots: number;
+    attributed_snapshots: number;
+    evidence_complete_snapshots: number;
+    safe_snapshots: number;
+  };
+  has_more: boolean;
+  scope: {
+    scanned_snapshots: number;
+    snapshot_limit: 100;
+  };
+  next_action: string;
+  privacy: {
+    local_only: true;
+    external_calls: false;
+    returns_prompt_bodies: false;
+    returns_raw_paths: false;
+    returns_evidence_refs: false;
+  };
+};
+
+function isBenchmarkReadiness(value: unknown): value is BenchmarkReadiness {
+  if (typeof value !== "object" || value === null) return false;
+  const report = value as BenchmarkReadiness;
+  const statuses: BenchmarkReadiness["status"][] = [
+    "ready",
+    "no_completed_outcomes",
+    "no_attributed_outcomes",
+    "incomplete_outcome_evidence",
+    "unsafe_outcome_evidence",
+    "empty_archive",
+  ];
+  return (
+    statuses.includes(report.status) &&
+    Number.isInteger(report.candidate_count) &&
+    report.candidate_count >= 0 &&
+    Array.isArray(report.candidates) &&
+    report.candidates.every(isBenchmarkCandidate) &&
+    Number.isInteger(report.excluded_unsafe_candidates) &&
+    report.excluded_unsafe_candidates >= 0 &&
+    isBenchmarkDiagnostics(report.diagnostics) &&
+    typeof report.has_more === "boolean" &&
+    isBenchmarkScope(report.scope) &&
+    typeof report.next_action === "string" &&
+    isBenchmarkPrivacy(report.privacy)
+  );
+}
+
+function isBenchmarkCandidate(
+  value: unknown,
+): value is BenchmarkReadiness["candidates"][number] {
+  if (typeof value !== "object" || value === null) return false;
+  const candidate = value as BenchmarkReadiness["candidates"][number];
+  return (
+    /^prmt_[A-Za-z0-9_-]+$/.test(candidate.prompt_id) &&
+    typeof candidate.snapshot_id === "string" &&
+    (candidate.outcome_status === "passed" ||
+      candidate.outcome_status === "failed") &&
+    Number.isInteger(candidate.tests_run) &&
+    candidate.tests_run >= 0 &&
+    Number.isInteger(candidate.evidence_ref_count) &&
+    candidate.evidence_ref_count >= 0
+  );
+}
+
+function isBenchmarkDiagnostics(
+  value: unknown,
+): value is BenchmarkReadiness["diagnostics"] {
+  if (typeof value !== "object" || value === null) return false;
+  const diagnostics = value as BenchmarkReadiness["diagnostics"];
+  return [
+    diagnostics.completed_snapshots,
+    diagnostics.attributed_snapshots,
+    diagnostics.evidence_complete_snapshots,
+    diagnostics.safe_snapshots,
+  ].every((count) => Number.isInteger(count) && count >= 0);
+}
+
+function isBenchmarkScope(
+  value: unknown,
+): value is BenchmarkReadiness["scope"] {
+  if (typeof value !== "object" || value === null) return false;
+  const scope = value as BenchmarkReadiness["scope"];
+  return (
+    Number.isInteger(scope.scanned_snapshots) &&
+    scope.scanned_snapshots >= 0 &&
+    scope.scanned_snapshots <= 100 &&
+    scope.snapshot_limit === 100
+  );
+}
+
+function isBenchmarkPrivacy(
+  value: unknown,
+): value is BenchmarkReadiness["privacy"] {
+  if (typeof value !== "object" || value === null) return false;
+  const privacy = value as BenchmarkReadiness["privacy"];
+  return (
+    privacy.local_only === true &&
+    privacy.external_calls === false &&
+    privacy.returns_prompt_bodies === false &&
+    privacy.returns_raw_paths === false &&
+    privacy.returns_evidence_refs === false
+  );
+}
 
 function isLoopCompactBoundary(
   value: unknown,
@@ -5329,7 +5452,12 @@ export async function listLoops(): Promise<LoopListResponse> {
   }
 
   const body = (await response.json()) as {
-    data?: { status?: unknown; items?: unknown; privacy?: unknown };
+    data?: {
+      status?: unknown;
+      benchmark_readiness?: unknown;
+      items?: unknown;
+      privacy?: unknown;
+    };
   };
   const status = body.data?.status as
     | {
@@ -5345,6 +5473,7 @@ export async function listLoops(): Promise<LoopListResponse> {
     typeof body.data?.status !== "object" ||
     body.data.status === null ||
     !isLoopStatusCore(body.data.status) ||
+    !isBenchmarkReadiness(body.data.benchmark_readiness) ||
     !Array.isArray(body.data.items) ||
     !body.data.items.every(isLoopSummary) ||
     (status?.latest_snapshot !== undefined &&

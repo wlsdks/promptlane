@@ -10964,3 +10964,12 @@
       guards for Codex/Claude Code discovery.
 - [x] VERIFY: Run focused MCP/model/privacy/package tests, stdio smoke, lint,
       build, pack, and live doctor checks before retagging `v1.0.0`.
+
+## 2026-07-10 Web Benchmark Readiness
+
+- [x] RED: Require `/api/v1/loops`, browser validation, and Loops rendering to
+      carry body-free benchmark readiness without candidate/evidence content.
+- [x] GREEN: Reuse the bounded candidate model in the existing loop response
+      and render one compact effectiveness-evidence summary.
+- [x] VERIFY: Run focused server/API/UI/privacy tests, lint/build, desktop and
+      mobile browser checks, pack, and diff hygiene before retagging `v1.0.0`.

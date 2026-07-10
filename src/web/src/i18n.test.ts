@@ -139,4 +139,40 @@ describe("localizeElement", () => {
       "쉼표로 구분한 안전한 라벨",
     );
   });
+
+  it("translates benchmark readiness status, metrics, and next action", () => {
+    const values = [
+      "1 benchmark candidate ready",
+      "completed",
+      "attributed",
+      "evidence complete",
+      "safe",
+      "No completed outcomes",
+      "Run promptlane loop status, then record the latest snapshot outcome after a verifiable checkpoint.",
+    ];
+    const nodes = values.map((nodeValue) => ({
+      nodeValue,
+      parentElement: { closest: () => undefined },
+    }));
+    const root = { querySelectorAll: () => [] } as unknown as HTMLElement;
+    vi.stubGlobal("NodeFilter", { SHOW_TEXT: 4 });
+    vi.stubGlobal("document", {
+      createTreeWalker: () => {
+        let index = 0;
+        return { nextNode: () => nodes[index++] ?? null };
+      },
+    });
+
+    localizeElement(root, "ko");
+
+    expect(nodes.map((node) => node.nodeValue)).toEqual([
+      "벤치마크 후보 1개 준비됨",
+      "완료",
+      "귀속됨",
+      "증거 완비",
+      "안전",
+      "완료된 outcome 없음",
+      "promptlane loop status를 실행한 뒤 검증 가능한 checkpoint에서 최신 snapshot outcome을 기록하세요.",
+    ]);
+  });
 });

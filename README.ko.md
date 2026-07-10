@@ -696,6 +696,8 @@ filter를 섞으면 global latest로 fallback하지 않고 거부합니다.
 ref에 secret 또는 raw local path가 있으면 SQLite에 쓰기 전에 거부합니다.
 웹 Loops의 worktree detail에서도 선택 snapshot의 outcome을 명시적으로 기록할
 수 있으며, 기록 후 local readiness만 갱신하고 memory는 자동 승인하지 않습니다.
+Loops의 효과성 증거 요약은 candidate id나 evidence ref를 렌더링하지 않고
+body-free 벤치마크 readiness count와 다음 evidence action을 보여줍니다.
 별도 선택 memory 승인 버튼은 exact snapshot만 승인하고 완료 후 다시 노출되지
 않습니다.
 

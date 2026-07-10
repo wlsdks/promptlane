@@ -12,6 +12,16 @@ describe("LoopsView", () => {
     );
 
     expect(html).toContain("PromptLane status ready");
+    expect(html).toContain("Effectiveness evidence");
+    expect(html).toContain("1 benchmark candidate ready");
+    expect(html).toContain("<strong>1</strong> completed");
+    expect(html).toContain("<strong>1</strong> attributed");
+    expect(html).toContain("<strong>1</strong> evidence complete");
+    expect(html).toContain("<strong>1</strong> safe");
+    expect(html).toContain(
+      "Review candidate prompt ids, then run promptlane benchmark prepare-fixture with explicit consent.",
+    );
+    expect(html).not.toContain("prmt_benchmark_candidate");
     expect(html).toContain("Next: promptlane loop brief");
     expect(html).toContain("Approved memories 1");
     expect(html).toContain("Active worktrees 2");
@@ -1360,6 +1370,37 @@ function loopList(): LoopListResponse {
         returns_prompt_bodies: false,
         returns_raw_paths: false,
         returns_compact_content: false,
+      },
+    },
+    benchmark_readiness: {
+      status: "ready",
+      candidate_count: 1,
+      candidates: [
+        {
+          prompt_id: "prmt_benchmark_candidate",
+          snapshot_id: "loop_web",
+          outcome_status: "passed",
+          tests_run: 3,
+          evidence_ref_count: 1,
+        },
+      ],
+      excluded_unsafe_candidates: 0,
+      diagnostics: {
+        completed_snapshots: 1,
+        attributed_snapshots: 1,
+        evidence_complete_snapshots: 1,
+        safe_snapshots: 1,
+      },
+      has_more: false,
+      scope: { scanned_snapshots: 1, snapshot_limit: 100 },
+      next_action:
+        "Review candidate prompt ids, then run promptlane benchmark prepare-fixture with explicit consent.",
+      privacy: {
+        local_only: true,
+        external_calls: false,
+        returns_prompt_bodies: false,
+        returns_raw_paths: false,
+        returns_evidence_refs: false,
       },
     },
     items: [loopSummary()],
