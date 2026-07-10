@@ -121,6 +121,7 @@ export type ListPromptsOptions = {
   limit?: number;
   cursor?: string;
   tool?: string;
+  sessionId?: string;
   cwdPrefix?: string;
   importJobId?: string;
   isSensitive?: boolean;

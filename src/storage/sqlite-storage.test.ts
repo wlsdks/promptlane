@@ -1633,6 +1633,11 @@ describe("SQLite prompt storage", () => {
         .items.map((item) => item.cwd),
     ).toEqual(["/Users/example/project-a", "/Users/example/project-a"]);
     expect(
+      storage
+        .listPrompts({ sessionId: "session-2026-05-01T10:01:00.000Z" })
+        .items.map((item) => item.id),
+    ).toEqual([sensitive.id]);
+    expect(
       storage.listPrompts({ isSensitive: true }).items.map((item) => item.id),
     ).toEqual([sensitive.id]);
     expect(

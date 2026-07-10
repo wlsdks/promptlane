@@ -763,6 +763,11 @@ function buildPromptFilters(
     values.push(options.tool);
   }
 
+  if (options.sessionId) {
+    clauses.push(`${prefix}session_id = ?`);
+    values.push(options.sessionId);
+  }
+
   if (options.cwdPrefix) {
     const normalizedPrefix = options.cwdPrefix.replace(/\/+$/, "");
     const escapedPrefix = escapeLike(normalizedPrefix);

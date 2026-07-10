@@ -83,6 +83,8 @@ tools, benchmark/release validation, and an English/Korean web UI.
 - Local stdio MCP server (`promptlane mcp`) with prompt scoring tools.
 - `promptlane loop outcome` for recording a privacy-validated result on the
   latest or selected snapshot before proposing or approving durable memory.
+- Stop-hook loop snapshots are scoped to the current hook session so stale
+  prompts from another session in the same project are not reused as evidence.
 - Selected-worktree outcome recording in the web Loops view, with CSRF,
   write-time privacy validation, and no automatic memory approval.
 - Exact snapshot and worktree/session/branch memory candidate and approval

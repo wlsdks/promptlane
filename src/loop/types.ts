@@ -56,6 +56,8 @@ export type LoopSnapshot = {
 export type CreateLoopSnapshotInput = {
   now: Date;
   source: LoopSnapshotSource;
+  tool?: LoopSnapshotTool;
+  sessionId?: string;
   prompts: Array<{
     id: string;
     tool: string;

@@ -838,6 +838,10 @@ and `promptlane loop memory-candidate`; approved memories are recorded with
 `promptlane loop memory-approve`. Record a verified result before proposing a
 memory:
 
+Configured Stop hooks build snapshots only from prompts captured for the
+current hook `session_id`. They do not reuse older prompts from another session
+in the same project and do not read the hook transcript path.
+
 ```sh
 promptlane loop outcome --status passed --summary "Focused checks passed." \
   --evidence-ref "test:focused" --evidence-ref "build:pnpm-build"

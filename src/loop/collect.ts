@@ -2,7 +2,11 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 
 import { createLoopSnapshotFromPrompts } from "./snapshot.js";
-import type { LoopSnapshot, LoopSnapshotSource } from "./types.js";
+import type {
+  LoopSnapshot,
+  LoopSnapshotSource,
+  LoopSnapshotTool,
+} from "./types.js";
 import { createProjectKey } from "../storage/project-id.js";
 import { projectLabel } from "../storage/project-label.js";
 import type {
@@ -17,8 +21,10 @@ export type CollectLoopSnapshotOptions = {
   hmacSecret: string;
   limit?: number;
   now?: Date;
+  sessionId?: string;
   source: LoopSnapshotSource;
   storage: PromptReadStoragePort & LoopSnapshotStoragePort;
+  tool?: LoopSnapshotTool;
   worktree?: string;
 };
 
@@ -30,10 +36,13 @@ export function collectLoopSnapshot(
   const prompts = options.storage.listPrompts({
     cwdPrefix,
     limit: options.limit ?? 20,
+    sessionId: options.sessionId,
   }).items;
   const snapshot = createLoopSnapshotFromPrompts({
     now: options.now ?? new Date(),
     source: options.source,
+    tool: options.tool,
+    sessionId: options.sessionId,
     prompts,
     project: {
       cwdLabel: projectLabel(cwdPrefix),

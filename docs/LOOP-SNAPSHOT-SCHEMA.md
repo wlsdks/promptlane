@@ -224,6 +224,11 @@ Hook/service collection must:
 
 - fail open
 - be bounded
+- scope Stop-hook prompt ids to the hook payload's current `session_id`
+- skip snapshot creation when a Stop payload has no valid session id instead of
+  falling back to unrelated prompts from the same cwd
+- preserve the known hook tool and session metadata when the scoped session has
+  no captured prompts
 - avoid hidden network calls
 - avoid raw output
 - avoid raw transcript or private app database reads

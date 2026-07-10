@@ -75,6 +75,8 @@ Acceptance criteria:
 - Latest loop status exposes only opaque prompt ids for attribution, and agents
   must omit `used_improvement_prompt_ids` unless a PromptLane improvement was
   actually used.
+- Stop snapshots include only prompts from the current hook `session_id`; stale
+  prompts from another session in the same cwd are not reused.
 - Worktree awareness is derived from git-safe labels and existing snapshots.
 - No feature reads private Codex databases or raw transcript stores.
 - Any scheduled collection is opt-in and calls explicit `promptlane` commands.
@@ -159,9 +161,13 @@ Required properties:
 Allowed hook events:
 
 - prompt submit capture where configured
-- stop/compact boundary collection
+- session-scoped stop and compact boundary collection
 - safe loop snapshot updates
 - status hints that do not block agent work
+
+Stop hooks use the documented common `session_id` field to select only prompt
+ids captured for the current agent session. A missing session id fails open
+without creating a cwd-wide snapshot, and no hook reads the transcript path.
 
 Disallowed hook behavior:
 

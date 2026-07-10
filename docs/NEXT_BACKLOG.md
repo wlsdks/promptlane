@@ -481,6 +481,10 @@ Completed:
   safe prompt ids, requires explicit per-prompt selection before recording
   PromptLane improvement use, and restores existing selections after reload so
   outcome edits do not silently erase attribution
+- session-scoped Stop snapshots: hook collection filters prompt ids by the
+  documented current session id, preserves known hook metadata for an empty
+  session, and skips malformed sessionless collection instead of reusing stale
+  prompts from the same cwd
 
 Next work should come from fresh user-flow evidence, a real MCP tool/schema
 change, or explicit operator-approved dogfood.

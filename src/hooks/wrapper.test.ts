@@ -190,6 +190,52 @@ describe("runClaudeCodeHook", () => {
     expect(serialized).not.toContain("/Users/example");
   });
 
+  it("does not reuse prompts from another session in a Stop snapshot", async () => {
+    const dataDir = createTempDir();
+    await seedPrompt(dataDir, "claude-code", "session-older");
+    await seedPrompt(dataDir, "claude-code", "session-current");
+
+    await runClaudeCodeHook({
+      stdin: JSON.stringify({
+        hook_event_name: "Stop",
+        session_id: "session-current",
+        cwd: "/Users/example/private-project",
+      }),
+      dataDir,
+    });
+
+    const storage = openStorage(dataDir);
+    const snapshot = storage.getLatestLoopSnapshot();
+    storage.close();
+
+    expect(snapshot).toMatchObject({
+      tool: "claude-code",
+      session_id: "session-current",
+      event_counts: { prompts: 1 },
+    });
+    expect(snapshot?.prompt_ids).toHaveLength(1);
+  });
+
+  it("skips Stop snapshot collection when the session id is missing", async () => {
+    const dataDir = createTempDir();
+    await seedPrompt(dataDir, "claude-code", "session-older");
+
+    const result = await runClaudeCodeHook({
+      stdin: JSON.stringify({
+        hook_event_name: "Stop",
+        cwd: "/Users/example/private-project",
+      }),
+      dataDir,
+    });
+
+    const storage = openStorage(dataDir);
+    const snapshot = storage.getLatestLoopSnapshot();
+    storage.close();
+
+    expect(result).toEqual({ exitCode: 0, stdout: "", stderr: "" });
+    expect(snapshot).toBeUndefined();
+  });
+
   it("records compact boundary metadata without storing compact content or posting to prompt ingest", async () => {
     const dataDir = createTempDir();
     initializePromptLane({ dataDir });
@@ -408,6 +454,7 @@ describe("runCodexHook", () => {
 async function seedPrompt(
   dataDir: string,
   tool: "claude-code" | "codex",
+  sessionId = "session-stop",
 ): Promise<void> {
   initializePromptLane({ dataDir });
   const storage = openStorage(dataDir);
@@ -416,7 +463,7 @@ async function seedPrompt(
       tool === "codex"
         ? normalizeCodexPayload(
             {
-              session_id: "session-stop",
+              session_id: sessionId,
               turn_id: "turn-stop",
               transcript_path: "/Users/example/.codex/session.jsonl",
               cwd: "/Users/example/private-project",
@@ -428,7 +475,7 @@ async function seedPrompt(
           )
         : normalizeClaudeCodePayload(
             {
-              session_id: "session-stop",
+              session_id: sessionId,
               transcript_path: "/Users/example/.claude/session.jsonl",
               cwd: "/Users/example/private-project",
               permission_mode: "default",

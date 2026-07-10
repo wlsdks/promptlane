@@ -71,7 +71,7 @@ async function runPromptLaneHook(
     }
 
     if (isStopHookPayload(payload)) {
-      collectStopLoopSnapshot(payload, {
+      collectStopLoopSnapshot(payload, tool, {
         dataDir: config.data_dir,
         hmacSecret: hookAuth.web_session_secret,
       });
@@ -192,9 +192,18 @@ function recordCompactBoundaryFromHook(
 }
 
 function collectStopLoopSnapshot(
-  payload: { cwd?: unknown },
+  payload: { cwd?: unknown; session_id?: unknown },
+  tool: "claude-code" | "codex",
   options: { dataDir: string; hmacSecret: string },
 ): void {
+  const sessionId =
+    typeof payload.session_id === "string" && payload.session_id.length > 0
+      ? payload.session_id
+      : undefined;
+  if (!sessionId) {
+    return;
+  }
+
   const storage = createSqlitePromptStorage({
     dataDir: options.dataDir,
     hmacSecret: options.hmacSecret,
@@ -206,6 +215,8 @@ function collectStopLoopSnapshot(
       storage,
       hmacSecret: options.hmacSecret,
       source: "hook",
+      tool,
+      sessionId,
       cwd,
       cwdPrefix: cwd,
     });
@@ -235,9 +246,11 @@ function isCompactHookPayload(payload: unknown): payload is CompactHookPayload {
   );
 }
 
-function isStopHookPayload(
-  payload: unknown,
-): payload is { hook_event_name: "Stop"; cwd?: unknown } {
+function isStopHookPayload(payload: unknown): payload is {
+  hook_event_name: "Stop";
+  cwd?: unknown;
+  session_id?: unknown;
+} {
   return (
     Boolean(payload) &&
     typeof payload === "object" &&

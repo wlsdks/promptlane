@@ -10973,3 +10973,12 @@
       and render one compact effectiveness-evidence summary.
 - [x] VERIFY: Run focused server/API/UI/privacy tests, lint/build, desktop and
       mobile browser checks, pack, and diff hygiene before retagging `v1.0.0`.
+
+## 2026-07-10 Hook Snapshot Session Scope
+
+- [x] RED: Reproduce a Stop hook snapshot reusing an older prompt from another
+      session in the same project.
+- [x] GREEN: Scope hook prompt selection to the payload session and preserve
+      explicit hook tool/session metadata for empty snapshots.
+- [x] VERIFY: Run focused storage/loop/hook/privacy tests, build, package smoke,
+      and live isolated hook checks before retagging `v1.0.0`.

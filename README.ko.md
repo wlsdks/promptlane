@@ -694,6 +694,9 @@ filter를 섞으면 global latest로 fallback하지 않고 거부합니다.
 `loop outcome`은 기본적으로 최신 snapshot을 사용하며 `--snapshot-id` 또는
 `--worktree`, `--session`, `--branch` 선택자를 지원합니다. summary와 evidence
 ref에 secret 또는 raw local path가 있으면 SQLite에 쓰기 전에 거부합니다.
+설정된 Stop hook은 현재 hook `session_id`에서 캡처한 prompt만 snapshot에
+포함합니다. 같은 project의 이전 session prompt를 재사용하거나 hook transcript
+path를 읽지 않습니다.
 웹 Loops의 worktree detail에서도 선택 snapshot의 outcome을 명시적으로 기록할
 수 있으며, 기록 후 local readiness만 갱신하고 memory는 자동 승인하지 않습니다.
 Loops의 효과성 증거 요약은 candidate id나 evidence ref를 렌더링하지 않고

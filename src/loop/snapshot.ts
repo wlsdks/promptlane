@@ -23,9 +23,11 @@ export function createLoopSnapshotFromPrompts(
       `${input.now.toISOString()}:${input.project.projectId}:${promptIds.join(",")}`,
     )}`,
     created_at: input.now.toISOString(),
-    tool: inferTool(input.prompts.map((prompt) => prompt.tool)),
+    tool: input.tool ?? inferTool(input.prompts.map((prompt) => prompt.tool)),
     source: input.source,
-    session_id: commonValue(input.prompts.map((prompt) => prompt.session_id)),
+    session_id:
+      input.sessionId ??
+      commonValue(input.prompts.map((prompt) => prompt.session_id)),
     cwd_label: input.project.cwdLabel,
     project_id: input.project.projectId,
     git_root_hash: input.project.gitRootHash,

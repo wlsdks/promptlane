@@ -94,6 +94,27 @@ describe("createLoopSnapshotFromPrompts", () => {
       "Loop snapshot collected from 0 prompts.",
     );
   });
+
+  it("preserves explicit hook metadata when the session has no prompts", () => {
+    const snapshot = createLoopSnapshotFromPrompts({
+      now: new Date("2026-07-04T01:00:00.000Z"),
+      source: "hook",
+      tool: "codex",
+      sessionId: "session-current",
+      prompts: [],
+      project: {
+        cwdLabel: "private-project",
+        projectId: "proj_current",
+      },
+    });
+
+    expect(snapshot).toMatchObject({
+      tool: "codex",
+      session_id: "session-current",
+      prompt_ids: [],
+      event_counts: { prompts: 0 },
+    });
+  });
 });
 
 function promptSummary(
