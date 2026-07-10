@@ -19,6 +19,8 @@ tools, benchmark/release validation, and an English/Korean web UI.
   `promptlane hook`, `promptlane install-hook`/`uninstall-hook`,
   `promptlane statusline`/`install-statusline`/`uninstall-statusline`,
   and `promptlane service` for guided local installation and diagnostics.
+  Service errors expose stable codes and raw-free recovery hints, including the
+  current macOS `Could not find service` wording as `not_loaded`.
 - `setup --profile coach` to register a low-friction rewrite guidance profile
   through hook context, with a Claude Code status line installed when
   Claude Code is detected.

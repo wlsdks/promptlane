@@ -34,6 +34,7 @@ export function classifyLaunchctlError(
   if (
     error.includes("Could not find specified service") ||
     error.includes("Bootout failed: 36") ||
+    lower.includes("could not find service") ||
     lower.includes("not loaded") ||
     lower.includes("not found")
   ) {
@@ -84,10 +85,6 @@ export function formatServiceCommandPlain(
   const hint = explainLaunchctlError(code);
   const failure = `failed to ${kind} service: ${hint}`;
 
-  if (code === "unknown" && result.error) {
-    return `${failure}\nlaunchctl reported: ${result.error}`;
-  }
-
   return failure;
 }
 
@@ -99,7 +96,7 @@ export function formatServiceCommandJson(result: ServiceCommandResult): string {
     {
       ok: result.ok,
       supported: result.supported,
-      error: result.ok ? undefined : result.error,
+      error: result.ok ? undefined : hint,
       error_code: code,
       error_hint: hint,
     },
@@ -141,9 +138,6 @@ export function formatServiceInstallPlain(
     const code = classifyLaunchctlError(result.startError);
     const hint = explainLaunchctlError(code);
     lines.push(`failed to start service: ${hint}`);
-    if (code === "unknown") {
-      lines.push(`launchctl reported: ${result.startError}`);
-    }
   } else {
     lines.push("service not started (use `promptlane service start`)");
   }
@@ -165,7 +159,7 @@ export function formatServiceInstallJson(result: ServiceInstallResult): string {
       plist_path: result.plistPath,
       backup_path: result.backupPath,
       started: result.started,
-      start_error: result.startError,
+      start_error: result.startError ? hint : undefined,
       start_error_code: code,
       start_error_hint: hint,
     },

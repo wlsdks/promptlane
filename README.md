@@ -330,6 +330,9 @@ pnpm promptlane service start
 pnpm promptlane service stop
 ```
 
+`service status --json` reports stable `error_code` and raw-free recovery hints;
+an uninstalled LaunchAgent is `not_loaded` and points to `service install`.
+
 ## Connect Claude Code
 
 Install the Claude Code hook:

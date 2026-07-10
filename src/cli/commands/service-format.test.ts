@@ -27,6 +27,11 @@ describe("classifyLaunchctlError", () => {
     ).toBe("not_loaded");
     expect(classifyLaunchctlError("service not loaded")).toBe("not_loaded");
     expect(
+      classifyLaunchctlError(
+        'Bad request.\nCould not find service "com.promptlane.server" in domain for user gui: 501',
+      ),
+    ).toBe("not_loaded");
+    expect(
       classifyLaunchctlError("Bootout failed: 36: Operation now in progress"),
     ).toBe("not_loaded");
   });
@@ -90,15 +95,17 @@ describe("formatServiceCommandPlain", () => {
     expect(text).not.toContain("Bootstrap failed: 5");
   });
 
-  it("appends raw launchctl stderr only when the error code is unknown", () => {
+  it("keeps unknown launchctl stderr out of plain output", () => {
     const text = formatServiceCommandPlain("status", {
       ok: false,
       supported: true,
-      error: "totally novel launchctl complaint",
+      error:
+        "totally novel launchctl complaint /Users/private/service.plist sk-private123456",
     });
-    expect(text).toMatch(
-      /launchctl reported: totally novel launchctl complaint/,
-    );
+    expect(text).toMatch(/unexpected error/);
+    expect(text).not.toContain("totally novel");
+    expect(text).not.toContain("/Users/private");
+    expect(text).not.toContain("sk-private");
   });
 
   it("renders unsupported_platform without leaking the sentinel", () => {
@@ -113,20 +120,39 @@ describe("formatServiceCommandPlain", () => {
 });
 
 describe("formatServiceCommandJson", () => {
-  it("preserves the existing JSON contract and adds error_code/error_hint", () => {
+  it("returns a safe error contract for a known launchctl failure", () => {
     const json = formatServiceCommandJson({
       ok: false,
       supported: true,
-      error: "Could not find specified service: gui/501/com.promptlane.server",
+      error:
+        'Bad request.\nCould not find service "com.promptlane.server" in domain for user gui: 501',
     });
     const parsed = JSON.parse(json);
     expect(parsed.ok).toBe(false);
     expect(parsed.supported).toBe(true);
     expect(parsed.error).toBe(
-      "Could not find specified service: gui/501/com.promptlane.server",
+      "Service is not loaded. Run `promptlane service install` first.",
     );
     expect(parsed.error_code).toBe("not_loaded");
     expect(parsed.error_hint).toMatch(/promptlane service install/);
+    expect(json).not.toContain("gui: 501");
+  });
+
+  it("keeps unknown launchctl stderr out of JSON output", () => {
+    const json = formatServiceCommandJson({
+      ok: false,
+      supported: true,
+      error:
+        "novel failure /Users/private/LaunchAgents/service.plist npm_private123456",
+    });
+
+    expect(json).not.toContain("novel failure");
+    expect(json).not.toContain("/Users/private");
+    expect(json).not.toContain("npm_private");
+    expect(JSON.parse(json)).toMatchObject({
+      error_code: "unknown",
+      error: "launchctl reported an unexpected error.",
+    });
   });
 
   it("omits error fields when ok is true", () => {
@@ -167,6 +193,30 @@ describe("formatServiceInstallPlain / Json", () => {
     });
     expect(text).toMatch(/Full Disk Access/);
     expect(text).not.toContain("Bootstrap failed: 1");
+  });
+
+  it("keeps unknown install stderr out of plain and JSON output", () => {
+    const result = {
+      supported: true,
+      changed: true,
+      dryRun: false,
+      plistPath: "/tmp/p.plist",
+      started: false,
+      startError:
+        "novel failure /Users/private/LaunchAgents/service.plist sk-private123456",
+    };
+    const plain = formatServiceInstallPlain(result);
+    const json = formatServiceInstallJson(result);
+
+    for (const output of [plain, json]) {
+      expect(output).not.toContain("novel failure");
+      expect(output).not.toContain("/Users/private");
+      expect(output).not.toContain("sk-private");
+    }
+    expect(JSON.parse(json)).toMatchObject({
+      start_error: "launchctl reported an unexpected error.",
+      start_error_code: "unknown",
+    });
   });
 
   it("json summary keeps the snake_case wire shape", () => {

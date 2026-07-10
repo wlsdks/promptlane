@@ -1,5 +1,16 @@
 # 작업 계획
 
+## 2026-07-10 PromptLane macOS Service Status Privacy
+
+- [x] CHECK: current macOS `launchctl print` returns `Could not find service`,
+  which is misclassified as unknown and echoed through service JSON.
+- [x] RED: formatter tests require the live not-installed wording to map to
+  `not_loaded` and keep known/unknown stderr, paths, and tokens out of output.
+- [x] GREEN: plain and JSON service/install output expose only stable error
+  codes and raw-free recovery hints.
+- [x] VERIFY: focused service/CLI/packaging tests, production build, live
+  service status and doctor recovery, package gates, PR merge, v1.0.0 retag.
+
 ## 2026-07-10 PromptLane Benchmark Report File
 
 - [x] CHECK: real benchmark baselines currently rely on shell redirection, so

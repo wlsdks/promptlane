@@ -291,6 +291,10 @@ pnpm promptlane service start
 pnpm promptlane service stop
 ```
 
+`service status --json`은 안정적인 `error_code`와 raw-free 복구 안내를
+반환합니다. LaunchAgent가 없으면 `not_loaded`로 분류하고 `service install`을
+안내합니다.
+
 ## Claude Code 연결
 
 Claude Code hook 설치:
