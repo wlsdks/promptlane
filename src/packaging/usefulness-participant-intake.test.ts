@@ -34,6 +34,7 @@ describe("independent-user usefulness intake", () => {
         friction_count: 1,
         privacy_blocker: false,
         data_loss_blocker: false,
+        install_blocker: false,
       }),
     ).toEqual({
       id: "participant-k7m2",
@@ -46,6 +47,7 @@ describe("independent-user usefulness intake", () => {
       friction_count: 1,
       privacy_blocker: false,
       data_loss_blocker: false,
+      install_blocker: false,
     });
   });
 
@@ -69,11 +71,13 @@ describe("independent-user usefulness intake", () => {
     input.install_success = false;
     input.first_value_success = false;
     input.privacy_blocker = true;
+    input.install_blocker = true;
 
     expect(normalizeParticipantResult(input)).toMatchObject({
       install_success: false,
       first_value_success: false,
       privacy_blocker: true,
+      install_blocker: true,
     });
   });
 
@@ -188,6 +192,7 @@ function valid() {
     friction_count: 1,
     privacy_blocker: false,
     data_loss_blocker: false,
+    install_blocker: false,
   };
 }
 

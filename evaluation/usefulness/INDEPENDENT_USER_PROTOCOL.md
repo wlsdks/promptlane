@@ -54,9 +54,11 @@ before sending it to the maintainer:
 pnpm --silent evidence:participant-intake -- participant-result.json
 ```
 
-The normalized JSON is the only evidence returned. A privacy or data-loss
-blocker must be marked `true`; it must not be explained with raw content in the
-result file. The maintainer follows up privately and blocks release.
+The normalized JSON is the only evidence returned. A privacy, data-loss, or
+installation blocker must be marked `true`; it must not be explained with raw
+content in the result file. A recoverable install failure can remain
+`install_blocker: false`, while a defect that prevents a supported clean
+installation is `true`. The maintainer follows up privately and blocks release.
 
 The maintainer appends every returned result, including failures, through the
 validated atomic path and then regenerates the report:
@@ -69,8 +71,8 @@ pnpm evidence:usefulness
 
 Duplicate participant labels fail without replacing the ledger. The generated
 summary keeps independent-human install success, first-value success, mean
-install/TTFV, recovery, friction, and blocker counts separate from matched-pair
-and agent-operator cohorts.
+install/TTFV, recovery, friction, and privacy/data-loss/install blocker counts
+separate from matched-pair and agent-operator cohorts.
 
 ## Independence and counting
 

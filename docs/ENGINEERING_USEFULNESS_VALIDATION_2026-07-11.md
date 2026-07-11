@@ -524,9 +524,13 @@ Returned raw-free results are appended with
 participant-result.json`. The operation validates the result, rejects duplicate
 labels, retains failed flows, and atomically replaces the ledger. Regenerated
 summaries report independent-human install and first-value success rates, mean
-install and TTFV, recovery and friction counts, and privacy/data-loss blockers
-without pooling them with matched pairs or agent operators. Any participant
-privacy or data-loss flag is also a critical release blocker.
+install and TTFV, recovery and friction counts, and
+privacy/data-loss/install blockers without pooling them with matched pairs or
+agent operators. Any participant
+privacy, data-loss, or install blocker flag is also a critical release blocker.
+`install_success` records the observed outcome; the separate `install_blocker`
+flag distinguishes recoverable friction from a defect that blocks a supported
+clean installation.
 
 Rendered desktop/mobile QA is also pending because the in-app browser runtime
 did not start in this session. Neither requirement may be replaced with

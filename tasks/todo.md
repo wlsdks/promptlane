@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-11 LoopRelay Independent Human Install Blocker
+
+- [x] CHECK: participant intake recorded install success but could not
+  distinguish recoverable failure from a release-blocking installation defect.
+- [x] RED: template, normalization, append, summary, and readiness tests require
+  an explicit boolean `install_blocker`.
+- [x] GREEN: preserve install blockers as raw-free evidence, exclude blocked
+  flows from success, and include them in critical release blockers.
+- [x] DOCS: align participant instructions and validation report with the new
+  install-blocker contract.
+- [x] VERIFY: regenerate all cohort summaries and run focused tests, lint,
+  artifact-drift, privacy, and diff gates without the full release gate.
+
 ## 2026-07-11 LoopRelay Independent Human Evidence Intake
 
 - [x] CHECK: the protocol promised validated append and duplicate rejection,

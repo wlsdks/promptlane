@@ -8,6 +8,7 @@ const BOOLEAN_FIELDS = [
   "first_value_success",
   "privacy_blocker",
   "data_loss_blocker",
+  "install_blocker",
 ];
 const METRIC_FIELDS = [
   "install_elapsed_ms",
@@ -54,6 +55,7 @@ export function normalizeParticipantResult(input) {
     friction_count: input.friction_count,
     privacy_blocker: input.privacy_blocker,
     data_loss_blocker: input.data_loss_blocker,
+    install_blocker: input.install_blocker,
   };
 }
 
@@ -69,6 +71,7 @@ export function participantTemplate() {
     friction_count: 0,
     privacy_blocker: false,
     data_loss_blocker: false,
+    install_blocker: false,
   };
 }
 

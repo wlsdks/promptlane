@@ -17,7 +17,8 @@
     "recovery_count": 0,
     "friction_count": 0,
     "privacy_blocker_count": 0,
-    "data_loss_blocker_count": 0
+    "data_loss_blocker_count": 0,
+    "install_blocker_count": 0
   },
   "independent_agent_operator_count": 0,
   "independent_agent_operator_success_rate": null,

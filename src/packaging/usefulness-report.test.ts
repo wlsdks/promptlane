@@ -20,7 +20,7 @@ afterEach(() => {
 });
 
 describe("usefulness report generator", () => {
-  it("treats a participant privacy blocker as a critical release blocker", () => {
+  it("treats a participant install blocker as a critical release blocker", () => {
     const input = ledger();
     input.independent_users = [
       {
@@ -32,8 +32,9 @@ describe("usefulness report generator", () => {
         time_to_first_value_ms: 20,
         recovery_count: 0,
         friction_count: 0,
-        privacy_blocker: true,
+        privacy_blocker: false,
         data_loss_blocker: false,
+        install_blocker: true,
       },
     ];
 
@@ -50,8 +51,9 @@ describe("usefulness report generator", () => {
       mean_time_to_first_value_ms: 20,
       recovery_count: 0,
       friction_count: 0,
-      privacy_blocker_count: 1,
+      privacy_blocker_count: 0,
       data_loss_blocker_count: 0,
+      install_blocker_count: 1,
     });
     expect(report.public_readiness).toEqual({
       ready: false,
@@ -262,6 +264,7 @@ describe("usefulness report generator", () => {
       friction_count: 0,
       privacy_blocker: false,
       data_loss_blocker: false,
+      install_blocker: false,
     }));
 
     expect(createUsefulnessReport(input).public_readiness).toEqual({
@@ -289,6 +292,7 @@ describe("usefulness report generator", () => {
       friction_count: 0,
       privacy_blocker: false,
       data_loss_blocker: false,
+      install_blocker: false,
     };
     input.independent_users = [participant, { ...participant }];
 

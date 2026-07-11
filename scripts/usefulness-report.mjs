@@ -26,7 +26,10 @@ export function createUsefulnessReport(input) {
   const independentAgentOperators = input.independent_agent_operators ?? [];
   const participantCriticalBlockers = independentUsers.reduce(
     (count, user) =>
-      count + Number(user.privacy_blocker) + Number(user.data_loss_blocker),
+      count +
+      Number(user.privacy_blocker) +
+      Number(user.data_loss_blocker) +
+      Number(user.install_blocker),
     0,
   );
   const criticalBlockers =
@@ -165,6 +168,7 @@ function aggregateIndependentUsers(users) {
       friction_count: 0,
       privacy_blocker_count: 0,
       data_loss_blocker_count: 0,
+      install_blocker_count: 0,
     };
   }
   return {
@@ -178,7 +182,8 @@ function aggregateIndependentUsers(users) {
         user.install_success &&
         user.first_value_success &&
         !user.privacy_blocker &&
-        !user.data_loss_blocker,
+        !user.data_loss_blocker &&
+        !user.install_blocker,
     ).length,
     install_success_rate: roundMetric(
       mean(users.map((user) => Number(user.install_success))),
@@ -203,6 +208,7 @@ function aggregateIndependentUsers(users) {
     privacy_blocker_count: users.filter((user) => user.privacy_blocker).length,
     data_loss_blocker_count: users.filter((user) => user.data_loss_blocker)
       .length,
+    install_blocker_count: users.filter((user) => user.install_blocker).length,
   };
 }
 
@@ -684,6 +690,7 @@ function validateIndependentUser(user) {
     "first_value_success",
     "privacy_blocker",
     "data_loss_blocker",
+    "install_blocker",
   ]) {
     if (typeof user[key] !== "boolean") {
       throw new Error(`independent user field is required: ${key}`);
@@ -715,7 +722,8 @@ function publicReadiness(users, requiredUsers, criticalBlockers) {
         !user.install_success ||
         !user.first_value_success ||
         user.privacy_blocker ||
-        user.data_loss_blocker,
+        user.data_loss_blocker ||
+        user.install_blocker,
     )
   ) {
     return { ready: false, reason: "independent_user_flow_failed" };
