@@ -103,8 +103,8 @@ blocked로 판단했지만 exact-fact rubric은 둘 다 실패했습니다. Loop
 거친 `Checkpoint Evidence` section에 포함됩니다. Follow-up은 모든 release
 fact를 복구하고 재탐색을 줄였지만 필요한 version 결정 전에 final gate를
 삽입해 여전히 fail/fail입니다. 이제 selected contract는 stated action 사이에
-fallback step을 삽입하지 못하게 명시합니다. 집계는 8쌍·5개 유형, 엄격
-성공률 baseline 0% 대 LoopRelay 37.5%이며 여전히 `INSUFFICIENT DATA`이고
+fallback step을 삽입하지 못하게 명시합니다. 집계는 9쌍·5개 유형, 엄격
+성공률 baseline 0% 대 LoopRelay 33.3%이며 여전히 `INSUFFICIENT DATA`이고
 release 승인으로 해석하지 않습니다.
 
 일곱 번째 pair는 이 evidence pipeline의 ordinary implementation
@@ -121,6 +121,15 @@ browser-sanitizer drift를 발견해 7/10 대 6~6.5/10으로 선호됐습니다.
 negative result는 재탐색이 짧아져도 유용한 adjacent risk를 놓칠 수 있음을
 보여줍니다. 실행 후 browser sanitizer와 report-ledger privacy regex drift를
 focused regression으로 정렬했습니다.
+
+아홉 번째 pair는 “다음 공개 버전”으로 올려달라는 모호한 요청을
+검사했습니다. 두 조건 모두 formal fail이었습니다. Baseline은 patch/minor
+후보를 추측하고 clarification 전에 release 단계를 제안했습니다. LoopRelay는
+더 많은 필수 결정을 질문하고 TTFV를 11.4초 줄였지만 explicit changelog
+content 질문을 빠뜨리고 8/10 real task를 사용자로 잘못 표시했습니다. Sol은
+LoopRelay를 선호하면서 점수 범위를 1~2/5 대 3~4/5로 유지했습니다. 현재
+5개 유형 중 4개가 유형별 2쌍을 충족하며 마지막 서로 다른 implementation
+pair 전까지 그래프는 `INSUFFICIENT DATA`입니다.
 
 30쌍 README 결과 block을 변경하지 않고 별도 real-task artifact만
 재생성합니다.

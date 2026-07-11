@@ -350,6 +350,29 @@ still rejecting real `sk-` values. These repeated drifts strengthen the case
 for eventually consolidating privacy detection, but no broad refactor was
 added during the human-validation feature freeze.
 
+## Second Real Ambiguity-Clarification Pair
+
+The second ambiguity task used the unresolved request “Update LoopRelay to the
+next public version” on clean commit `3164144c`. Five decisions were frozen
+before execution: exact SemVer plus rationale, edit-only versus later release
+authorization, owning commit or branch, whether evidence gates precede any
+version edit, and compatibility/change plus changelog-content scope.
+
+Both conditions withheld mutation but failed strict 5/5 coverage. Baseline
+inferred `1.0.1` and `1.1.0` candidates, proposed release steps before all
+answers, and scored 1/5 to 2/5 across judge positions. Treatment covered more
+decisions but omitted an explicit changelog-content question and mislabeled
+8/10 real tasks as users; it scored 3/5 to 4/5. Sol preferred treatment in both
+orders while preserving the calibration ranges. Treatment finished in 37.46s
+with two tools and 79,793 input tokens versus baseline at 48.86s, three tools,
+and 141,648 tokens. The result is formal fail/fail with lower treatment cost,
+not a successful clarification claim.
+
+The real-task cohort is now 9/10 across all five task types, with four types
+meeting the two-pair minimum. It remains `INSUFFICIENT DATA`; one distinct
+implementation-continuation pair is required before directional scope
+decisions are regenerated.
+
 ## Independent Codex Operator Holdout
 
 Three fresh Codex CLI 0.142.5 / GPT-5.4 sessions acted as first-time operators

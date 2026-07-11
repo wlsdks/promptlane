@@ -545,6 +545,79 @@
         "baseline-preferred-for-broader-risk-evidence",
         "formal-fail-fail-retained"
       ]
+    },
+    {
+      "id": "real-ambiguity-clarification-009",
+      "task_type": "ambiguity_clarification",
+      "order": "looprelay_first",
+      "execution": {
+        "agent": "codex",
+        "agent_version": "0.144.1",
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "sandbox": "read-only",
+        "fresh_session": true,
+        "repository_state": "commit:3164144c",
+        "ground_truth": "sol-preregistered-release-version-ambiguity"
+      },
+      "baseline": {
+        "passed": false,
+        "core_task_recovered": false,
+        "clarification_accuracy": 0.4,
+        "clarification_score": 1,
+        "clarification_score_max": 2,
+        "actionability": 0.2,
+        "elapsed_ms": 48860,
+        "time_to_first_value_ms": 48860,
+        "tool_calls": 3,
+        "failed_tool_calls": 0,
+        "input_tokens": 141648,
+        "cached_input_tokens": 92416,
+        "output_tokens": 1628,
+        "reasoning_output_tokens": 680,
+        "friction_count": 1,
+        "privacy_blocker": false,
+        "data_loss_blocker": false,
+        "install_blocker": false
+      },
+      "looprelay": {
+        "passed": false,
+        "core_task_recovered": false,
+        "clarification_accuracy": 0.8,
+        "clarification_score": 3,
+        "clarification_score_max": 4,
+        "actionability": 0.7,
+        "elapsed_ms": 37460,
+        "time_to_first_value_ms": 37460,
+        "tool_calls": 2,
+        "failed_tool_calls": 0,
+        "input_tokens": 79793,
+        "cached_input_tokens": 47616,
+        "output_tokens": 866,
+        "reasoning_output_tokens": 128,
+        "friction_count": 1,
+        "privacy_blocker": false,
+        "data_loss_blocker": false,
+        "install_blocker": false,
+        "adopted": true
+      },
+      "human_preference": "looprelay",
+      "judge": {
+        "position_consistent": true,
+        "score_consistent": false,
+        "preference": "looprelay",
+        "baseline_pass": false,
+        "looprelay_pass": false,
+        "baseline_score_range": [1, 2],
+        "looprelay_score_range": [3, 4]
+      },
+      "finding_labels": [
+        "baseline-inferred-semver-candidates",
+        "baseline-proposed-release-steps-before-clarification",
+        "treatment-omitted-changelog-content-question",
+        "treatment-mislabeled-real-task-evidence-as-users",
+        "formal-fail-fail-with-treatment-preference"
+      ]
     }
   ]
 }

@@ -106,8 +106,8 @@ rendered in the brief. They are now included under a privacy-filtered
 `Checkpoint Evidence` section. The follow-up recovered every release fact and
 reduced rediscovery, but still inserted a final gate before the required
 version decision, so it remains fail/fail. Selected contracts now explicitly
-forbid fallback steps between stated actions. The aggregate is eight pairs
-across five types, with 0% baseline and 37.5% LoopRelay strict success; it
+forbid fallback steps between stated actions. The aggregate is nine pairs
+across five types, with 0% baseline and 33.3% LoopRelay strict success; it
 remains `INSUFFICIENT DATA` and is not a release authorization.
 
 The seventh pair covered ordinary implementation continuation for this
@@ -124,6 +124,15 @@ additional browser-sanitizer drift and was preferred 7/10 versus 6–6.5/10.
 This negative result shows that shorter rediscovery can miss useful adjacent
 risk. The browser sanitizer and report-ledger privacy regexes were aligned by
 focused regressions after the run.
+
+The ninth pair tested the ambiguous request to move to “the next public
+version.” Both conditions formally failed. Baseline inferred patch/minor
+candidates and proposed release steps before clarification. LoopRelay asked
+more of the required decisions and cut TTFV by 11.4s, but omitted an explicit
+changelog-content question and mislabeled 8/10 real tasks as users. Sol
+preferred LoopRelay while retaining score ranges of 1–2/5 versus 3–4/5. Four
+of five task types now meet the two-pair minimum; the graph remains
+`INSUFFICIENT DATA` until the final distinct implementation pair is complete.
 
 Regenerate only the separate real-task artifacts without rewriting the 30-pair
 README result blocks:

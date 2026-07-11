@@ -3,7 +3,7 @@
   "design": "matched_observational",
   "status": "insufficient_data",
   "causal_claim": false,
-  "pair_count": 8,
+  "pair_count": 9,
   "task_type_count": 5,
   "independent_user_count": 0,
   "independent_agent_operator_count": 0,
@@ -21,29 +21,29 @@
   ],
   "coverage": {
     "required_pairs_per_task_type": 2,
-    "task_types_meeting_pair_minimum": 3,
+    "task_types_meeting_pair_minimum": 4,
     "all_task_types_meet_pair_minimum": false
   },
   "by_task_type": {
     "ambiguity_clarification": {
-      "pair_count": 1,
+      "pair_count": 2,
       "baseline_success_rate": 0,
-      "looprelay_success_rate": 1,
-      "success_rate_delta": 1,
-      "baseline_actionability": 0.5,
-      "looprelay_actionability": 1,
+      "looprelay_success_rate": 0.5,
+      "success_rate_delta": 0.5,
+      "baseline_actionability": 0.35,
+      "looprelay_actionability": 0.85,
       "transitions": {
         "improved": 1,
         "regressed": 0,
         "unchanged_passed": 0,
-        "unchanged_failed": 0
+        "unchanged_failed": 1
       },
       "delta": {
-        "mean_elapsed_ms": -20660,
-        "mean_tool_calls": -3,
-        "mean_input_tokens": -101548,
-        "mean_cached_input_tokens": -81152,
-        "mean_time_to_first_value_ms": -20660,
+        "mean_elapsed_ms": -16030,
+        "mean_tool_calls": -2,
+        "mean_input_tokens": -81701.5,
+        "mean_cached_input_tokens": -62976,
+        "mean_time_to_first_value_ms": -16030,
         "friction_free_rate": 0
       },
       "uncertainty": {
@@ -52,8 +52,8 @@
         "upper": 1
       },
       "decision": {
-        "action": "collect_more",
-        "evidence_status": "underpowered"
+        "action": "retain",
+        "evidence_status": "directional"
       }
     },
     "failure_prevention": {
@@ -189,28 +189,28 @@
   },
   "baseline": {
     "success_rate": 0,
-    "mean_actionability": 0.4875,
-    "mean_elapsed_ms": 68362.5,
-    "mean_tool_calls": 7.75,
-    "mean_input_tokens": 283780.875,
-    "mean_cached_input_tokens": 228352,
-    "mean_output_tokens": 1967.625,
-    "mean_time_to_first_value_ms": 68362.5,
-    "friction_free_rate": 0.25,
+    "mean_actionability": 0.455556,
+    "mean_elapsed_ms": 66195.555556,
+    "mean_tool_calls": 7.222222,
+    "mean_input_tokens": 267988.333333,
+    "mean_cached_input_tokens": 213248,
+    "mean_output_tokens": 1929.888889,
+    "mean_time_to_first_value_ms": 66195.555556,
+    "friction_free_rate": 0.222222,
     "privacy_blocker_count": 0,
     "data_loss_blocker_count": 0,
     "install_blocker_count": 0
   },
   "looprelay": {
-    "success_rate": 0.375,
-    "mean_actionability": 0.85,
-    "mean_elapsed_ms": 58843.75,
-    "mean_tool_calls": 3.625,
-    "mean_input_tokens": 160255,
-    "mean_cached_input_tokens": 109056,
-    "mean_output_tokens": 1542,
-    "mean_time_to_first_value_ms": 58843.75,
-    "friction_free_rate": 0.375,
+    "success_rate": 0.333333,
+    "mean_actionability": 0.833333,
+    "mean_elapsed_ms": 56467.777778,
+    "mean_tool_calls": 3.444444,
+    "mean_input_tokens": 151314.777778,
+    "mean_cached_input_tokens": 102229.333333,
+    "mean_output_tokens": 1466.888889,
+    "mean_time_to_first_value_ms": 56467.777778,
+    "friction_free_rate": 0.333333,
     "privacy_blocker_count": 0,
     "data_loss_blocker_count": 0,
     "install_blocker_count": 0
@@ -220,36 +220,36 @@
     "time_to_first_value_ms": 1,
     "continuation_accuracy": 0,
     "failure_prevention_accuracy": 0,
-    "clarification_accuracy": 0.125,
+    "clarification_accuracy": 0.222222,
     "blocker_flags": 1
   },
   "delta": {
-    "success_rate": 0.375,
-    "mean_actionability": 0.3625,
-    "mean_elapsed_ms": -9518.75,
-    "mean_tool_calls": -4.125,
-    "mean_input_tokens": -123525.875,
-    "mean_cached_input_tokens": -119296,
-    "mean_time_to_first_value_ms": -9518.75,
-    "friction_free_rate": 0.125
+    "success_rate": 0.333333,
+    "mean_actionability": 0.377777,
+    "mean_elapsed_ms": -9727.777778,
+    "mean_tool_calls": -3.777778,
+    "mean_input_tokens": -116673.555555,
+    "mean_cached_input_tokens": -111018.666667,
+    "mean_time_to_first_value_ms": -9727.777778,
+    "friction_free_rate": 0.111111
   },
   "transitions": {
     "improved": 3,
     "regressed": 0,
     "unchanged_passed": 0,
-    "unchanged_failed": 5
+    "unchanged_failed": 6
   },
   "preference": {
     "baseline": 1,
-    "looprelay": 7,
+    "looprelay": 8,
     "tie": 0
   },
   "adoption_rate": 1,
   "bias": {
     "baseline_first": 4,
-    "looprelay_first": 4,
+    "looprelay_first": 5,
     "position_consistency": 1,
-    "human_review_agreement": 0.75
+    "human_review_agreement": 0.777778
   },
   "critical_blockers": 0,
   "note": "Observational matched-pair evidence only. Null and negative results are retained."

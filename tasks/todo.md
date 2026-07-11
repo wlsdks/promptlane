@@ -11415,3 +11415,15 @@
       shared separator requirement without weakening credential masking.
 - [x] VERIFY: Run focused web/redaction tests, lint, real-task generation,
       privacy and artifact drift checks, and diff hygiene.
+
+## 2026-07-11 Second Real Ambiguity-Clarification Pair
+
+- [x] STATE: Confirm unresolved version, authorization, target, evidence-gate,
+      compatibility, and changelog decisions on clean commit `3164144c`.
+- [x] PREREGISTER: Freeze five focused release-version questions with Sol.
+- [x] RUN: Execute treatment-first and preserve baseline SemVer assumptions,
+      treatment evidence-label error, and lower treatment operating cost.
+- [x] SCORE: Retain strict fail/fail, baseline 1/5 to 2/5, treatment 3/5 to
+      4/5, score calibration variance, and treatment preference.
+- [x] VERIFY: Regenerate N=9 artifacts, update limitations, run focused tests,
+      and commit before the final implementation pair.

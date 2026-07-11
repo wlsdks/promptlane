@@ -436,7 +436,7 @@ describe("real-task usefulness ledger", () => {
     };
 
     expect(ledger.causal_claim).toBe(false);
-    expect(ledger.pairs).toHaveLength(8);
+    expect(ledger.pairs).toHaveLength(9);
     expect(ledger.pairs[0]).toMatchObject({
       baseline: { passed: false, core_task_recovered: false },
       looprelay: { passed: false, core_task_recovered: true },
@@ -506,19 +506,33 @@ describe("real-task usefulness ledger", () => {
       },
       human_preference: "baseline",
     });
+    expect(ledger.pairs[8]).toMatchObject({
+      baseline: {
+        passed: false,
+        clarification_accuracy: 0.4,
+        clarification_score: 1,
+        clarification_score_max: 2,
+      },
+      looprelay: {
+        passed: false,
+        clarification_accuracy: 0.8,
+        clarification_score: 3,
+        clarification_score_max: 4,
+      },
+    });
     expect(createUsefulnessReport(JSON.parse(source))).toMatchObject({
       status: "insufficient_data",
-      pair_count: 8,
+      pair_count: 9,
       task_type_count: 5,
       baseline: { success_rate: 0 },
-      looprelay: { success_rate: 0.375 },
-      transitions: { improved: 3, unchanged_failed: 5 },
+      looprelay: { success_rate: 0.333333 },
+      transitions: { improved: 3, unchanged_failed: 6 },
     });
     const svg = readFileSync(
       join(process.cwd(), "docs/assets/usefulness-real-task-results.svg"),
       "utf8",
     );
-    expect(svg).toContain("8 matched pairs · 5 task types");
+    expect(svg).toContain("9 matched pairs · 5 task types");
     expect(svg).toContain("INSUFFICIENT DATA");
     expect(source).not.toMatch(/\/Users\/|\/home\//);
     expect(source).not.toMatch(/"(?:prompt|response|transcript|output)"\s*:/i);
