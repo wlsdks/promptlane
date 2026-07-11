@@ -206,6 +206,27 @@ describe("usefulness report generator", () => {
     });
   });
 
+  it("rejects duplicate independent-user labels", () => {
+    const input = ledger();
+    const participant = {
+      id: "participant-ab12",
+      independence_confirmed: true,
+      install_success: true,
+      first_value_success: true,
+      install_elapsed_ms: 10_000,
+      time_to_first_value_ms: 20_000,
+      recovery_count: 0,
+      friction_count: 0,
+      privacy_blocker: false,
+      data_loss_blocker: false,
+    };
+    input.independent_users = [participant, { ...participant }];
+
+    expect(() => createUsefulnessReport(input)).toThrow(
+      "independent user ids must be unique",
+    );
+  });
+
   it("does not treat an unrun pairwise judge as human disagreement", () => {
     const input = ledger();
     input.pairs[0].judge = { position_consistent: null };

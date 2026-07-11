@@ -42,6 +42,9 @@ pnpm evidence:usefulness
 [생성된 summary](reports/usefulness-summary.json),
 [평가 프로토콜](docs/ENGINEERING_USEFULNESS_VALIDATION_2026-07-11.md)을 함께
 확인할 수 있습니다.
+독립 인간 사용자는
+[설치부터 첫 가치 프로토콜](evaluation/usefulness/INDEPENDENT_USER_PROTOCOL.md)을
+사용하며 agent operator는 이 gate를 충족하지 않습니다.
 
 npm package가 publish된 뒤:
 

@@ -144,6 +144,7 @@
     "evidence:quality": "node scripts/quality-95-evidence.mjs",
     "evidence:usefulness": "node scripts/usefulness-report.mjs",
     "evidence:codex-metrics": "node scripts/usefulness-codex-metrics.mjs",
+    "evidence:participant-intake": "node scripts/usefulness-participant-intake.mjs",
     "npm-publish:preflight": "node scripts/npm-publish-preflight.mjs",
     "smoke:package-install": "node scripts/package-install-smoke.mjs",
     "smoke:release": "corepack pnpm build && node scripts/release-smoke.mjs",

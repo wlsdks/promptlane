@@ -11298,3 +11298,7 @@
         types at 25 total pairs; narrow generic release and ambiguity context.
   - [x] Run one unseen holdout per task type. Reach 30 total pairs with 15/15
         execution-order balance and finalize evidence-based scope decisions.
+- [x] INTAKE: Add a strict raw-free independent-human result validator and a
+      reproducible candidate-tarball install-to-first-value protocol.
+- [ ] USERS: Collect three validated independent-human results; do not replace
+      them with maintainer or agent-operator runs.

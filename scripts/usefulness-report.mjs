@@ -524,7 +524,14 @@ function validateLedger(input) {
   if (!Array.isArray(input.independent_users)) {
     throw new Error("independent_users must be an array");
   }
-  for (const user of input.independent_users) validateIndependentUser(user);
+  const independentUserIds = new Set();
+  for (const user of input.independent_users) {
+    validateIndependentUser(user);
+    if (independentUserIds.has(user.id)) {
+      throw new Error("independent user ids must be unique");
+    }
+    independentUserIds.add(user.id);
+  }
   if (!Array.isArray(input.independent_agent_operators)) {
     throw new Error("independent_agent_operators must be an array");
   }

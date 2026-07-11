@@ -46,6 +46,9 @@ pnpm evidence:usefulness
 See the [raw-free pair ledger](reports/usefulness-pairs.json),
 [generated summary](reports/usefulness-summary.json), and
 [evaluation protocol](docs/ENGINEERING_USEFULNESS_VALIDATION_2026-07-11.md).
+Independent humans use the
+[install-to-first-value protocol](evaluation/usefulness/INDEPENDENT_USER_PROTOCOL.md);
+agent operators do not satisfy that gate.
 
 After the npm package is published:
 
