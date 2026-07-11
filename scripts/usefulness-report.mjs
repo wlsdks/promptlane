@@ -6,7 +6,7 @@ import { mkdirSync } from "node:fs";
 const FORBIDDEN_KEYS =
   /^(prompt|prompt_body|query|response|output|transcript)$/i;
 const SENSITIVE_VALUE =
-  /(?:\/Users\/[^\s]+|AKIA[0-9A-Z]{16}|sk-(?:proj-)?[A-Za-z0-9_-]{8,}|gh[opusr]_[A-Za-z0-9]{12,})/;
+  /(?:\/Users\/[^\s]+|\bAKIA[0-9A-Z]{16}\b|\bsk-(?:proj-)?[A-Za-z0-9_-]{8,}\b|\bgh[opusr]_[A-Za-z0-9]{12,}\b)/;
 const TASK_TYPES = new Set([
   "session_recovery",
   "implementation_continuation",

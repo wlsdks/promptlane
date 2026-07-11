@@ -106,8 +106,8 @@ rendered in the brief. They are now included under a privacy-filtered
 `Checkpoint Evidence` section. The follow-up recovered every release fact and
 reduced rediscovery, but still inserted a final gate before the required
 version decision, so it remains fail/fail. Selected contracts now explicitly
-forbid fallback steps between stated actions. The aggregate is seven pairs
-across five types, with 0% baseline and 42.9% LoopRelay strict success; it
+forbid fallback steps between stated actions. The aggregate is eight pairs
+across five types, with 0% baseline and 37.5% LoopRelay strict success; it
 remains `INSUFFICIENT DATA` and is not a release authorization.
 
 The seventh pair covered ordinary implementation continuation for this
@@ -115,6 +115,15 @@ evidence pipeline. Baseline chose plausible but different command and flag
 names and broadened verification; LoopRelay recovered the exact focused plan
 and passed, but took 7.52s longer and produced more output/reasoning tokens.
 This supports exact selected-contract recovery, not a general speed claim.
+
+The eighth pair was a distinct failure-prevention retrospective. Both
+conditions found the existing secret-detector fix but could not run Vitest in
+the read-only sandbox, so both formally failed. LoopRelay cut TTFV from 74.99s
+to 47.57s and input tokens from 597,654 to 127,648, but baseline found an
+additional browser-sanitizer drift and was preferred 7/10 versus 6–6.5/10.
+This negative result shows that shorter rediscovery can miss useful adjacent
+risk. The browser sanitizer and report-ledger privacy regexes were aligned by
+focused regressions after the run.
 
 Regenerate only the separate real-task artifacts without rewriting the 30-pair
 README result blocks:

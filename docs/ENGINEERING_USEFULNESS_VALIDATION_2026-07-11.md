@@ -324,6 +324,32 @@ README files byte-for-byte unchanged. Two live consecutive runs produced
 identical artifact hashes. The default `evidence:usefulness` README behavior
 remains covered by the subprocess regression.
 
+## Second Real Failure-Prevention Pair
+
+The second failure-prevention task revisited the already-fixed `skip-readme`
+checkpoint rejection rather than reusing command/format drift. Both conditions
+had repository access to the fix at commit `9547bc75` and were required to
+identify the overbroad `sk`/`pk` detector, reject disabling redaction, confirm
+the separator fix, and run focused safe-term plus credential tests.
+
+Both conditions found the root cause and fix, but both failed because Vitest
+could not start in the read-only sandbox. Baseline scored 7/10 and treatment
+6/10 to 6.5/10 in position-swapped Sol review; baseline was preferred in both
+orders. Treatment substantially reduced rediscovery—47.57s, three tools, and
+127,648 input tokens versus 74.99s, ten tools, and 597,654 tokens—but baseline
+alone found that the browser error sanitizer still duplicated the older broad
+pattern. This is a formal fail/fail and a negative quality result for
+LoopRelay despite its lower operating cost.
+
+The residual browser sanitizer now has the same separator boundary and a
+focused ordinary-word regression while existing credential redaction remains
+covered. Regenerating the ledger then exposed the same class of missing word
+boundary in the report-specific privacy regex (`risk-evidence` was mistaken
+for an `sk-` key). A separate regression now permits ordinary risk labels while
+still rejecting real `sk-` values. These repeated drifts strengthen the case
+for eventually consolidating privacy detection, but no broad refactor was
+added during the human-validation feature freeze.
+
 ## Independent Codex Operator Holdout
 
 Three fresh Codex CLI 0.142.5 / GPT-5.4 sessions acted as first-time operators

@@ -148,6 +148,12 @@ describe("usefulness report generator", () => {
     expect(() =>
       createUsefulnessReport({ ...ledger(), note: "/Users/example/private" }),
     ).toThrow("sensitive or raw-path content");
+    expect(() =>
+      createUsefulnessReport({
+        ...ledger(),
+        note: "baseline-preferred-for-broader-risk-evidence",
+      }),
+    ).not.toThrow();
   });
 
   it("accepts all long-horizon task types and requires per-type coverage", () => {
@@ -430,7 +436,7 @@ describe("real-task usefulness ledger", () => {
     };
 
     expect(ledger.causal_claim).toBe(false);
-    expect(ledger.pairs).toHaveLength(7);
+    expect(ledger.pairs).toHaveLength(8);
     expect(ledger.pairs[0]).toMatchObject({
       baseline: { passed: false, core_task_recovered: false },
       looprelay: { passed: false, core_task_recovered: true },
@@ -486,19 +492,33 @@ describe("real-task usefulness ledger", () => {
         implementation_plan_score_max: 14,
       },
     });
+    expect(ledger.pairs[7]).toMatchObject({
+      baseline: {
+        passed: false,
+        core_task_recovered: true,
+        failure_prevention_score: 7,
+      },
+      looprelay: {
+        passed: false,
+        core_task_recovered: true,
+        failure_prevention_score: 6,
+        failure_prevention_score_max: 6.5,
+      },
+      human_preference: "baseline",
+    });
     expect(createUsefulnessReport(JSON.parse(source))).toMatchObject({
       status: "insufficient_data",
-      pair_count: 7,
+      pair_count: 8,
       task_type_count: 5,
       baseline: { success_rate: 0 },
-      looprelay: { success_rate: 0.428571 },
-      transitions: { improved: 3, unchanged_failed: 4 },
+      looprelay: { success_rate: 0.375 },
+      transitions: { improved: 3, unchanged_failed: 5 },
     });
     const svg = readFileSync(
       join(process.cwd(), "docs/assets/usefulness-real-task-results.svg"),
       "utf8",
     );
-    expect(svg).toContain("7 matched pairs · 5 task types");
+    expect(svg).toContain("8 matched pairs · 5 task types");
     expect(svg).toContain("INSUFFICIENT DATA");
     expect(source).not.toMatch(/\/Users\/|\/home\//);
     expect(source).not.toMatch(/"(?:prompt|response|transcript|output)"\s*:/i);

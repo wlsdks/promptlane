@@ -11400,3 +11400,18 @@
       with subprocess tests for determinism, README preservation, and defaults.
 - [x] VERIFY: Run the package command twice, focused tests, lint, artifact
       drift, README diff, privacy scan, and diff hygiene without a release gate.
+
+## 2026-07-11 Second Real Failure-Prevention Pair
+
+- [x] CONTRACT: Use the already-fixed checkpoint secret false positive as a
+      repository-grounded retrospective, distinct from command-format drift.
+- [x] PREREGISTER: Freeze root cause, rejected recovery, approved separator
+      fix, focused verification, and privacy constraints with Sol.
+- [x] RUN: Execute baseline-first on `c4f52b71`; retain read-only test startup
+      failures in both conditions and large treatment rediscovery savings.
+- [x] SCORE: Preserve formal fail/fail, baseline 7/10 preference, treatment
+      6/10 to 6.5/10, and baseline-only browser sanitizer risk discovery.
+- [x] RED/GREEN: Align the browser error sanitizer API-key pattern with the
+      shared separator requirement without weakening credential masking.
+- [x] VERIFY: Run focused web/redaction tests, lint, real-task generation,
+      privacy and artifact drift checks, and diff hygiene.

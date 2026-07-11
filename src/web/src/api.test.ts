@@ -10392,6 +10392,27 @@ describe("web api export client", () => {
     );
   });
 
+  it("does not redact ordinary sk-prefixed words in problem details", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))
+      .mockResolvedValueOnce(
+        errorResponse(422, {
+          detail: "The request payload is invalid.",
+          errors: [
+            {
+              field: "command",
+              message: "The --skip-readme option is not available.",
+            },
+          ],
+        }),
+      );
+    const { deletePrompt } = await import("./api.js");
+
+    await expect(deletePrompt("prmt_x")).rejects.toThrow(
+      "Delete failed (422): The request payload is invalid. command: The --skip-readme option is not available.",
+    );
+  });
+
   it("still surfaces the status when the error body is not JSON", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ data: { csrf_token: "csrf-1" } }))

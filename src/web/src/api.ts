@@ -6361,7 +6361,7 @@ function sanitizeApiErrorText(value: string): string {
       "[REDACTED:path]",
     )
     .replace(
-      /\b(?:AIza[0-9A-Za-z_-]{20,}|npm_[A-Za-z0-9]{30,}|(?:sk|pk|ghp|github_pat|xoxb|AKIA)[a-zA-Z0-9_-]{8,})\b/g,
+      /\b(?:AIza[0-9A-Za-z_-]{20,}|npm_[A-Za-z0-9]{30,}|(?:sk|pk)[-_][A-Za-z0-9_-]{8,}|(?:ghp|github_pat|xoxb)[-_][A-Za-z0-9_-]{8,}|AKIA[A-Z0-9]{8,})\b/g,
       "[REDACTED:secret]",
     );
 }

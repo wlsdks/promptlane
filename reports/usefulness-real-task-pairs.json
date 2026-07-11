@@ -475,6 +475,76 @@
         "treatment-slower-with-more-output-reasoning",
         "checkpoint-secret-detector-friction-before-run"
       ]
+    },
+    {
+      "id": "real-failure-prevention-008",
+      "task_type": "failure_prevention",
+      "order": "baseline_first",
+      "execution": {
+        "agent": "codex",
+        "agent_version": "0.144.1",
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "sandbox": "read-only",
+        "fresh_session": true,
+        "repository_state": "commit:c4f52b71",
+        "ground_truth": "sol-preregistered-repository-retrospective"
+      },
+      "baseline": {
+        "passed": false,
+        "core_task_recovered": true,
+        "failure_prevention_score": 7,
+        "actionability": 0.7,
+        "elapsed_ms": 74990,
+        "time_to_first_value_ms": 74990,
+        "tool_calls": 10,
+        "failed_tool_calls": 2,
+        "input_tokens": 597654,
+        "cached_input_tokens": 531456,
+        "output_tokens": 2420,
+        "reasoning_output_tokens": 641,
+        "friction_count": 1,
+        "privacy_blocker": false,
+        "data_loss_blocker": false,
+        "install_blocker": false
+      },
+      "looprelay": {
+        "passed": false,
+        "core_task_recovered": true,
+        "failure_prevention_score": 6,
+        "failure_prevention_score_max": 6.5,
+        "actionability": 0.6,
+        "elapsed_ms": 47570,
+        "time_to_first_value_ms": 47570,
+        "tool_calls": 3,
+        "failed_tool_calls": 2,
+        "input_tokens": 127648,
+        "cached_input_tokens": 96768,
+        "output_tokens": 1675,
+        "reasoning_output_tokens": 661,
+        "friction_count": 1,
+        "privacy_blocker": false,
+        "data_loss_blocker": false,
+        "install_blocker": false,
+        "adopted": true
+      },
+      "human_preference": "baseline",
+      "judge": {
+        "position_consistent": true,
+        "score_consistent": false,
+        "preference": "baseline",
+        "baseline_pass": false,
+        "looprelay_pass": false,
+        "baseline_score_range": [7, 7],
+        "looprelay_score_range": [6, 6.5]
+      },
+      "finding_labels": [
+        "both-blocked-by-read-only-test-temp-write",
+        "treatment-reduced-rediscovery-cost",
+        "baseline-found-browser-sanitizer-drift",
+        "baseline-preferred-for-broader-risk-evidence",
+        "formal-fail-fail-retained"
+      ]
     }
   ]
 }
