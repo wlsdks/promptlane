@@ -186,6 +186,17 @@ checkpoints a top-level evidence authority and omits those project-wide
 diagnostics; the live brief shrank from 1,491 to 1,035 characters. A follow-up
 pair must test whether that sharper brief improves strict recovery.
 
+The immediate baseline-first follow-up on commit `609a177f` did improve strict
+recovery. Baseline found the general real-repository rerun but omitted the
+selected commit, Sol-before-output contract, exact treatment authority, and
+several required measurement boundaries. Treatment recovered every
+preregistered core concept. Independent Sol judgments in both A/B orders
+agreed on baseline fail, treatment pass, and LoopRelay preference. Treatment
+used 38.28s, three tools, and 140,520 input tokens versus baseline 64.13s,
+twenty tools, and 326,993 input tokens. This paired before/after remediation is
+still observational and shares one task family, but it is direct evidence that
+checkpoint prioritization reduced rediscovery without adding a new feature.
+
 ## Independent Codex Operator Holdout
 
 Three fresh Codex CLI 0.142.5 / GPT-5.4 sessions acted as first-time operators

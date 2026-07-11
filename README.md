@@ -67,6 +67,17 @@ into the 30-pair GPT-5.4 aggregate.
 See the [cross-model ledger](reports/usefulness-sol-terra-pairs.json) and
 [generated cross-model summary](reports/usefulness-sol-terra-summary.json).
 
+The first separate real-repository session-recovery pair was strict fail/fail:
+baseline selected a different valid backlog item, while treatment recovered
+the selected task but omitted secondary brief constraints. That failure led to
+a focused checkpoint brief that removed inherited project prompt diagnostics.
+On the baseline-first follow-up, position-swapped Sol review consistently
+scored baseline fail and LoopRelay pass. Treatment used 38.28s, 3 tools, and
+140,520 input tokens versus 64.13s, 20 tools, and 326,993 for baseline. These
+two observational pairs are retained in the
+[real-task ledger](reports/usefulness-real-task-pairs.json); they are not pooled
+with synthetic cohorts and are too small for a general productivity claim.
+
 After the npm package is published:
 
 ```sh

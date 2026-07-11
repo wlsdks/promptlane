@@ -381,10 +381,14 @@ describe("real-task usefulness ledger", () => {
     };
 
     expect(ledger.causal_claim).toBe(false);
-    expect(ledger.pairs).toHaveLength(1);
+    expect(ledger.pairs).toHaveLength(2);
     expect(ledger.pairs[0]).toMatchObject({
       baseline: { passed: false, core_task_recovered: false },
       looprelay: { passed: false, core_task_recovered: true },
+    });
+    expect(ledger.pairs[1]).toMatchObject({
+      baseline: { passed: false, core_task_recovered: false },
+      looprelay: { passed: true, core_task_recovered: true },
     });
     expect(source).not.toMatch(/\/Users\/|\/home\//);
     expect(source).not.toMatch(/"(?:prompt|response|transcript|output)"\s*:/i);

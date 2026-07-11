@@ -74,6 +74,69 @@
         "treatment-omitted-secondary-brief-constraints",
         "explicit-checkpoint-brief-mixed-project-diagnostics"
       ]
+    },
+    {
+      "id": "real-session-recovery-002",
+      "task_type": "session_recovery",
+      "order": "baseline_first",
+      "execution": {
+        "agent": "codex",
+        "agent_version": "0.144.1",
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "sandbox": "read-only",
+        "fresh_session": true,
+        "repository_state": "commit:609a177f",
+        "ground_truth": "sol-preregistered-focused-checkpoint"
+      },
+      "baseline": {
+        "passed": false,
+        "core_task_recovered": false,
+        "actionability": 0.6,
+        "elapsed_ms": 64130,
+        "time_to_first_value_ms": 64130,
+        "tool_calls": 20,
+        "failed_tool_calls": 0,
+        "input_tokens": 326993,
+        "cached_input_tokens": 269056,
+        "output_tokens": 2527,
+        "reasoning_output_tokens": 575,
+        "friction_count": 1,
+        "privacy_blocker": false,
+        "data_loss_blocker": false,
+        "install_blocker": false
+      },
+      "looprelay": {
+        "passed": true,
+        "core_task_recovered": true,
+        "actionability": 1,
+        "elapsed_ms": 38280,
+        "time_to_first_value_ms": 38280,
+        "tool_calls": 3,
+        "failed_tool_calls": 0,
+        "input_tokens": 140520,
+        "cached_input_tokens": 89344,
+        "output_tokens": 1055,
+        "reasoning_output_tokens": 357,
+        "friction_count": 0,
+        "privacy_blocker": false,
+        "data_loss_blocker": false,
+        "install_blocker": false,
+        "adopted": true
+      },
+      "human_preference": "looprelay",
+      "judge": {
+        "position_consistent": true,
+        "preference": "looprelay",
+        "baseline_pass": false,
+        "looprelay_pass": true
+      },
+      "finding_labels": [
+        "baseline-found-general-rerun-but-missed-exact-contract",
+        "treatment-recovered-all-preregistered-core-concepts",
+        "focused-brief-reduced-rediscovery",
+        "position-swapped-judge-consistent"
+      ]
     }
   ]
 }

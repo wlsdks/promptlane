@@ -11330,5 +11330,5 @@
       treatment core-task recovery, and position-consistent Sol tie.
 - [x] RED/GREEN: Prioritize explicit checkpoint authority and state while
       removing inherited project prompt diagnostics from its continuation brief.
-- [ ] RERUN: Repeat the pair on the focused brief and keep it separate from the
+- [x] RERUN: Repeat the pair on the focused brief and keep it separate from the
       first attempt and all synthetic cohorts.
