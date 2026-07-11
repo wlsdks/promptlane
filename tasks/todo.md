@@ -1,5 +1,22 @@
 # 작업 계획
 
+## 2026-07-11 Independent Human Candidate Refresh
+
+- [x] CHECK: the versioned human handoff still targeted `12c0bbcc`, predating
+  the N=11 evidence and concurrent-intake data-loss remediation.
+- [x] PACK: build and checksum a validation-only `looprelay@1.0.0` tarball from
+  clean commit `3922235b` without publishing or moving `v1.0.0`.
+- [x] RETAIN: exclude one harness attempt that disabled native dependency
+  scripts and another that assumed the wrong brief JSON wrapper.
+- [x] SMOKE: on the third clean run, use default npm install with fail-fast
+  shell, empty HOME, isolated prefix/cache, and a fresh Git repository.
+- [x] VERIFY: preserve the 8.975-second first-value result, zero raw-path hits,
+  and zero current privacy/data-loss/install blockers as maintainer-only proof.
+- [x] DOCS: replace the stale handoff and align README, report, backlog, and
+  candidate manifest while keeping the independent-human count at 0/3.
+- [x] GATE: run focused candidate/package/privacy checks only; do not run the
+  one-time full release gate.
+
 ## 2026-07-11 Eleventh Real Failure-Prevention Pair
 
 - [x] PREREGISTER: Sol selected the post-N=10 concurrent participant-intake

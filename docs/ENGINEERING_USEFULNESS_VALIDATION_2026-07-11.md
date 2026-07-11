@@ -528,15 +528,17 @@ schema are under `evaluation/usefulness/`; raw Codex events and answer bodies
 remain outside Git.
 
 Three independent human install-to-first-value sessions are still required.
-Candidate commit `12c0bbcc` has a validation-only tarball with the SHA-256
+Candidate commit `3922235b` has a validation-only tarball with the SHA-256
 recorded in `reports/independent-user-candidate.json` and a versioned handoff at
-`evaluation/usefulness/PARTICIPANT_HANDOFF_12c0bbcc.md`. Its isolated maintainer
+`evaluation/usefulness/PARTICIPANT_HANDOFF_3922235b.md`. Its isolated maintainer
 smoke used an empty HOME, isolated npm prefix, Node 22.22.0, and a fresh Git
-repository. Installation and first continuation value succeeded in 8.36
+repository. Installation and first continuation value succeeded in 8.975
 seconds with zero raw-path hits and no privacy, data-loss, or install blocker.
-It deliberately counts as zero independent humans. One earlier harness-only
-`jq` precedence failure is retained as excluded setup error because the product
-commands in that attempt succeeded.
+It deliberately counts as zero independent humans. Two excluded attempts are
+retained: the first incorrectly disabled dependency install scripts and lacked
+fail-fast shell behavior, while the second assumed a nonexistent JSON wrapper
+around a product output that otherwise succeeded. Neither is counted as a
+product pass.
 
 Returned raw-free results are appended with
 `pnpm evidence:participant-intake -- --append-to reports/usefulness-pairs.json

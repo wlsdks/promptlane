@@ -41,9 +41,9 @@ Primary value:
   across five task types with at least two pairs per type. It is directional only,
   remains separate from both synthetic cohorts, and does not satisfy the
   independent-human public-readiness gate.
-- Current independent-human candidate: commit `12c0bbcc`, checksum-pinned in
+- Current independent-human candidate: commit `3922235b`, checksum-pinned in
   `reports/independent-user-candidate.json`. Its isolated maintainer smoke
-  passed install-to-first-value in 8.36 seconds with zero raw-path hits, but it
+  passed install-to-first-value in 8.975 seconds with zero raw-path hits, but it
   remains validation-only and the independent-human count is 0/3.
 - Collect unseen real-task pairs and three independent human
   install-to-first-value flows; do not inflate confidence with additional
