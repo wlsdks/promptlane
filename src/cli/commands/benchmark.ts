@@ -312,10 +312,8 @@ export function benchmarkCandidatesForCli(
     new Set(snapshots.flatMap((snapshot) => snapshot.prompt_ids)),
   );
   const existingPromptIds = readPromptIds(promptIds, options.dataDir);
-  const report = createBenchmarkCandidateReport(
-    snapshots,
-    limit,
-    (promptId) => existingPromptIds.has(promptId),
+  const report = createBenchmarkCandidateReport(snapshots, limit, (promptId) =>
+    existingPromptIds.has(promptId),
   );
   return options.json
     ? JSON.stringify(report, null, 2)
@@ -503,7 +501,9 @@ function formatBenchmarkCandidates(report: BenchmarkCandidateReport): string {
     );
   }
   if (report.excluded_missing_candidates > 0) {
-    lines.push(`excluded missing candidates ${report.excluded_missing_candidates}`);
+    lines.push(
+      `excluded missing candidates ${report.excluded_missing_candidates}`,
+    );
   }
   lines.push(`Next: ${report.next_action}`);
   lines.push(

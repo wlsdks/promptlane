@@ -184,7 +184,9 @@ if (resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
   try {
     runCli();
   } catch {
-    process.stderr.write("participant intake failed; verify the raw-free input and retry\n");
+    process.stderr.write(
+      "participant intake failed; verify the raw-free input and retry\n",
+    );
     process.exitCode = 1;
   }
 }

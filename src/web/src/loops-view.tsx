@@ -13,15 +13,10 @@ import type { LoopOutcomeInput } from "./loop-outcome-form.js";
 import { LoopRows, LoopWorktreeDetailRows } from "./loop-rows.js";
 import { LoopSelectedBriefAction } from "./loop-selected-brief-action.js";
 import { LoopEmptyState, LoopLoadingState } from "./loop-shell-states.js";
-import { LoopWorktreeBoundaryReviewItems } from "./loop-worktree-boundary-review-items.js";
-import { LoopWorktreeCollectionFreshnessItems } from "./loop-worktree-collection-freshness-items.js";
 import { LoopWorktreeContinuationSafetyItems } from "./loop-worktree-continuation-safety-items.js";
 import { LoopWorktreeDetailHeader } from "./loop-worktree-detail-header.js";
-import { LoopWorktreeMemoryCollectionItems } from "./loop-worktree-memory-collection-items.js";
-import { LoopWorktreeMemoryApprovalRetryRenewedItems } from "./loop-worktree-memory-approval-retry-renewed-items.js";
 import { LoopWorktreeMergeReviewSummary } from "./loop-worktree-merge-review-summary.js";
 import { LoopWorktreeOutcomePanel } from "./loop-worktree-outcome-panel.js";
-import { LoopWorktreeRenewedMemoryApprovalItems } from "./loop-worktree-renewed-memory-approval-items.js";
 import { LoopWorktreeSelectedBriefGuidance } from "./loop-worktree-selected-brief-guidance.js";
 
 import "./loops-view.css";
@@ -176,21 +171,6 @@ export function LoopsView({
             />
             <LoopWorktreeSelectedBriefGuidance worktreeDetail={worktreeDetail}>
               <LoopWorktreeContinuationSafetyItems
-                worktreeDetail={worktreeDetail}
-              />
-              <LoopWorktreeCollectionFreshnessItems
-                worktreeDetail={worktreeDetail}
-              />
-              <LoopWorktreeMemoryCollectionItems
-                worktreeDetail={worktreeDetail}
-              />
-              <LoopWorktreeMemoryApprovalRetryRenewedItems
-                worktreeDetail={worktreeDetail}
-              />
-              <LoopWorktreeRenewedMemoryApprovalItems
-                worktreeDetail={worktreeDetail}
-              />
-              <LoopWorktreeBoundaryReviewItems
                 worktreeDetail={worktreeDetail}
               />
             </LoopWorktreeSelectedBriefGuidance>

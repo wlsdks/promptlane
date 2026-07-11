@@ -30,24 +30,31 @@
 - 구현은 TDD를 기본으로 한다. 실패 테스트를 먼저 만들고, 최소 구현으로 통과시킨 뒤 리팩터링한다.
 - 사용자가 정정하거나 반복 실수를 지적하면 `tasks/lessons.md`에 재발 방지 규칙을 추가한다.
 - 기존 패턴을 우선한다. 새 추상화는 실제 중복, drift, privacy risk, 테스트 불가능성을 줄일 때만 만든다.
+- Node와 web TypeScript는 `noUnusedLocals`와 `noUnusedParameters`를 강제한다. 미사용 선언은 억제 주석으로 숨기지 말고 제거하거나 실제 공용 interface로 승격한다. `pnpm lint`는 Prettier 검사, 두 TypeScript 컴파일, 구조 품질 게이트를 모두 실행한다.
 - 큰 파일인 `src/web/src/App.tsx`, `src/storage/sqlite.ts`, `src/mcp/score-tool.ts`는 가능한 한 작은 모델/formatter/helper로 분리하고 더 키우는 변경은 이유를 남긴다.
 
 ## 검증 명령
 
-기능 변경 후 기본 게이트:
+일상 변경은 focused-first로 검증한다. 변경한 seam의 직접 테스트와 아래 정적 검사를 먼저 실행하고, public runtime·패키징·브라우저 surface를 건드렸을 때만 해당 build, pack, UI 검사를 추가한다.
 
 ```bash
-corepack pnpm test
 corepack pnpm lint
-corepack pnpm build
-corepack pnpm pack:dry-run
 git diff --check
 ```
+
+전체 `corepack pnpm test`와 release gate는 release 직전, 넓은 공용 seam 변경, 또는 focused 증거가 부족할 때만 확장한다. release gate는 공개 직전에 한 번만 실행한다.
 
 웹 UI 또는 브라우저 동작 변경 후 추가 게이트:
 
 ```bash
 corepack pnpm ui-patrol
+```
+
+npm package 또는 public runtime entrypoint 변경 후 추가 게이트:
+
+```bash
+corepack pnpm build
+corepack pnpm pack:dry-run
 ```
 
 Node 지원 범위는 `package.json#engines.node`가 authoritative하다. dependency update가 더 좁은 Node engine을 요구하면 package engine, README, local gate 정책을 함께 검토하기 전에는 머지하지 않는다.

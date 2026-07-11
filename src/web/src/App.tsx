@@ -9,7 +9,6 @@ import {
   ListChecks,
   PanelLeftClose,
   PanelLeftOpen,
-  Plug,
   RefreshCw,
   Search,
   Settings,
@@ -50,14 +49,12 @@ import {
   type CoachFeedbackSummary,
   type ExportJob,
   type ExportPreset,
-  type LoopListResponse,
   type LoopWorktreeResponse,
   type ProjectSummary,
   type QualityDashboard,
   type PromptFilters,
   type PromptDetail,
   type PromptImprovementDraft,
-  type PromptQualityGap,
   type PromptSummary,
   type SettingsResponse,
 } from "./api.js";
@@ -119,7 +116,6 @@ import {
   PROMPT_TAGS,
   QUALITY_GAP_OPTIONS,
   exportFieldLabel,
-  isQualityGapKey,
   qualityGapKeyFromLabel,
 } from "./quality-options.js";
 import {
@@ -128,7 +124,6 @@ import {
   routeFromLocation,
   writeFiltersToLocation,
   type View,
-  type WorkspaceSection,
 } from "./routing.js";
 import {
   getPromptListCursor,

@@ -6,8 +6,8 @@ Claude Code는 먼저 `AGENTS.md`를 읽고 따른다. 이 파일은 Claude Code
 
 - LoopRelay의 package, CLI, hook command, slash namespace, MCP server name은 모두 `looprelay`이며 별도 compatibility alias를 두지 않는다.
 - Claude Code plugin/slash command 문서에서는 `/looprelay:*`를 canonical namespace로 유지한다.
-- `/looprelay:*`는 future alias-only namespace 계획이며, dedicated plugin rename plan 없이 command file이나 manifest를 추가하지 않는다.
-- `looprelay` CLI alias는 legacy manual terminal workflow용이다. 기존 setup, hook, plugin command 예시는 `looprelay`를 유지한다.
+- dedicated plugin rename plan 없이 command file, manifest, 또는 다른 slash alias를 추가하지 않는다.
+- 기존 setup, hook, plugin command 예시는 `looprelay` 단일 identity를 유지한다.
 
 ## Hook And Stdout Safety
 
@@ -32,9 +32,10 @@ corepack pnpm smoke:mcp-coach-loop
 corepack pnpm smoke:mcp-elicitation
 corepack pnpm smoke:mcp-native-dialog
 corepack pnpm smoke:hooks
-corepack pnpm test
 corepack pnpm lint
 ```
+
+관련 MCP/hook smoke와 focused Vitest를 먼저 실행한다. 전체 test suite는 넓은 공용 seam 변경 또는 release 직전에만 추가하며, 전체 release gate를 일상적인 Claude Code 변경에 사용하지 않는다.
 
 실제 Claude Code dogfood는 `claude mcp list` 같은 health check만으로 완료 처리하지 않는다. 가능한 경우 `claude -p --output-format stream-json`에서 `mcp__looprelay__...` tool_use가 성공했는지 확인한다.
 

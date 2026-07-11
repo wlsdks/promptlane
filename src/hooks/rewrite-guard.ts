@@ -1,10 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { platform } from "node:os";
 
-import {
-  decideCoachingAction,
-  isAcknowledgment,
-} from "../analysis/coaching-decision.js";
+import { decideCoachingAction } from "../analysis/coaching-decision.js";
 import { HOOK_COPY } from "./rewrite-guard-copy.js";
 
 export { isAcknowledgment } from "../analysis/coaching-decision.js";

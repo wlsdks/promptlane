@@ -22,6 +22,16 @@ Node.js package entrypoints should stay explicit. If library-style imports are
 added later, define them through package `exports` instead of exposing arbitrary
 internal files.
 
+Both TypeScript projects enforce `noUnusedLocals` and `noUnusedParameters`.
+This turns unused imports and abandoned local branches into a compile-time
+failure rather than review debt. Keep a declaration only when it contributes to
+an intentional exported interface or a tested runtime entrypoint.
+
+`pnpm lint` is the repository's complete fast hygiene check: it runs Prettier
+verification first, then both TypeScript compilers and the structural quality
+gate. Run a focused test before it; do not rely on a successful typecheck to
+hide formatting or source-hygiene drift.
+
 References:
 
 - Node.js package entry points and `exports`:
@@ -103,6 +113,10 @@ Use these extraction rules:
   group.
 - If a React component grows because it contains browser-only domain logic,
   move that logic into `src/web/src/<feature>.ts` and test it separately.
+- `src/web/src/api.ts` is a transport facade, not a home for feature UI logic.
+  When a domain's request/response contract becomes hard to change locally,
+  extract a domain API module and re-export its public interface deliberately;
+  do not force all callers to know private response validators.
 - If code touches prompt bodies, tokens, raw paths, or hook payloads, keep the
   privacy boundary explicit in the function name, type, or test.
 
@@ -111,12 +125,15 @@ Current known large modules:
 - `src/web/src/App.tsx`: UI composition hub. New browser models should live in
   separate files and be imported into the app.
 - `src/web/src/api.ts`: browser-side API client for every server route. Keep
-  request shaping here; render and copy logic stay in components.
+  request shaping here; render and copy logic stay in components. Its quality
+  budget is intentionally tight; extract a feature contract before a new
+  response parser materially expands it.
 - `src/web/src/i18n.ts`: web UI translation table. Korean strings stay grouped
   by screen so a single localization change touches one section.
 - `src/storage/sqlite.ts`: SQLite implementation boundary for queries,
   transactions, and storage-port assembly. Keep migrations, row contracts, and
-  JSON decoding out of this file.
+  JSON decoding out of this file. Its budget intentionally leaves little room
+  for new helpers; feature-specific SQL predicates belong in a focused module.
 - `src/storage/sqlite-migrations.ts`: schema/DDL and the `applyMigrations`
   orchestrator plus the in-file `apply*Migration` helpers. Per-domain
   migrations (`agent-judgments.ts`, `coach-feedback.ts`, `judge-score.ts`)
@@ -125,6 +142,9 @@ Current known large modules:
   queries or mappers here.
 - `src/storage/sqlite-json.ts`: defensive JSON decoding for SQLite JSON
   columns. Keep malformed data fail-safe and covered by unit tests.
+- `src/storage/sqlite-prompt-filters.ts`: the sole prompt list/search SQL
+  predicate builder. Keep alias handling, date bounds, and filter-value order
+  here; `sqlite.ts` only supplies the query-specific cursor and execution.
 - Storage capability decisions are governed by
   `docs/adr/0002-storage-capability-registry.md`: future storage-backed
   routes and MCP tools should declare required capabilities at registration,
@@ -150,6 +170,10 @@ Current known large modules:
 - `src/cli/agent-wrapper.ts`: lr-claude/lr-codex argv parsing, prompt
   rewriting, and child-process spawning. New domain logic should land in a
   helper module rather than expanding the wrapper.
+- `src/cli/commands/loop.ts`: Commander registration and loop-command
+  orchestration. Its user-visible terminal rendering lives in
+  `src/cli/commands/loop-formatters.ts`; keep new text-only formatting there
+  so storage selection and CLI wiring remain independently reviewable.
 
 ### Shared helpers
 

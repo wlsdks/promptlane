@@ -323,7 +323,9 @@ function formatPairCandidates(report: BenchmarkPairCandidateReport): string {
     );
   }
   if (report.excluded_missing_candidates > 0) {
-    lines.push(`excluded missing candidates ${report.excluded_missing_candidates}`);
+    lines.push(
+      `excluded missing candidates ${report.excluded_missing_candidates}`,
+    );
   }
   lines.push(`Next: ${report.next_action}`);
   lines.push(

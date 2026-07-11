@@ -60,9 +60,7 @@ export function parseCodexMetricArgs(input) {
 }
 
 function runCli() {
-  const { eventsPath, elapsedMs } = parseCodexMetricArgs(
-    process.argv.slice(2),
-  );
+  const { eventsPath, elapsedMs } = parseCodexMetricArgs(process.argv.slice(2));
   if (!eventsPath) {
     throw new Error(
       "usage: usefulness-codex-metrics <events.jsonl> <elapsed-ms>",

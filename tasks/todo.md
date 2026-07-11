@@ -1,5 +1,40 @@
 # 작업 계획
 
+## 2026-07-11 Whole-Codebase Architecture Hardening
+
+- [x] BASELINE: preserve the completed compact continuation-safety cleanup and
+  inventory ADRs, public entrypoints, large modules, current instruction files,
+  and active release/usefulness constraints.
+- [x] AUDIT: map production imports, strict TypeScript diagnostics, dependency
+  usage, and quality hotspots; distinguish proven dead code from intentional
+  entrypoints, dormant features, and historical evidence.
+- [x] REFACTOR: extract prompt SQL predicates into `sqlite-prompt-filters.ts`
+  and Loop CLI terminal rendering into `loop-formatters.ts`; preserve public
+  behavior with focused storage and CLI tests.
+- [x] HYGIENE: make `pnpm lint` include Prettier, tighten large-module quality
+  budgets, and repair the pre-publish privacy-audit detector mirror.
+- [x] DOCUMENT: make AGENTS.md the compact common contract, CLAUDE.md the
+  Claude-only delta, and architecture/instruction docs reflect enforced seams
+  and focused-versus-release validation policy.
+- [x] VERIFY: pass focused storage/CLI/package/privacy tests (177), full unit
+  suite (141 files, 1290 tests), lint, build, package dry-run, and diff hygiene.
+  The one-time public-release gate remains intentionally unrun.
+
+## 2026-07-11 Continuation Safety Contract Simplification
+
+- [x] CHECK: selected-worktree API repeats the same local-only handoff rules
+  across dozens of fields, validators, helpers, UI fragments, and fixtures.
+- [x] RED: require one compact, actionable continuation-safety contract from
+  the selected-worktree route and reject malformed entries in the web client.
+- [x] GREEN: replace the repeated server/UI/API contracts with the shared
+  compact boundary, retaining manual submission, explicit collection, privacy,
+  and merge-review safeguards.
+- [x] CLEAN: remove superseded helper modules, validators, fixtures, and
+  source-hygiene assertions; do not retain compatibility aliases for an
+  undocumented pre-release localhost response shape.
+- [x] VERIFY: run focused loop route/web/privacy tests plus lint, package
+  dry-run, and diff hygiene; do not run the one-time release gate.
+
 ## 2026-07-11 Path Alias Functional Audit Candidate
 
 - [x] CHECK: `/tmp` versus `/private/tmp` produced separate project HMAC ids,

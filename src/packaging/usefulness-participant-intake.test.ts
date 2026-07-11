@@ -236,7 +236,11 @@ function runIntake(...args: string[]) {
   );
 }
 
-function runIntakeAsync(ledgerPath: string, resultPath: string, holdMs: number) {
+function runIntakeAsync(
+  ledgerPath: string,
+  resultPath: string,
+  holdMs: number,
+) {
   const child = spawn(
     process.execPath,
     [

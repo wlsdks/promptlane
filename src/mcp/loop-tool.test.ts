@@ -42,7 +42,10 @@ describe("LoopRelay MCP tools", () => {
     seedLoopMergeDecision(dataDir);
     seedOtherProjectMemory(dataDir);
 
-    const result = getLoopRelayLoopStatusTool({ cwd: PRIVATE_CWD }, { dataDir });
+    const result = getLoopRelayLoopStatusTool(
+      { cwd: PRIVATE_CWD },
+      { dataDir },
+    );
     const serialized = JSON.stringify(result);
 
     expect(result).toMatchObject({
@@ -118,7 +121,10 @@ describe("LoopRelay MCP tools", () => {
 
   it("returns concrete setup guidance when loop storage is unavailable", () => {
     const dataDir = join(tmpdir(), `looprelay-missing-${randomUUID()}`);
-    const result = getLoopRelayLoopStatusTool({ cwd: PRIVATE_CWD }, { dataDir });
+    const result = getLoopRelayLoopStatusTool(
+      { cwd: PRIVATE_CWD },
+      { dataDir },
+    );
     const serialized = JSON.stringify(result);
 
     expect(result).toMatchObject({
@@ -152,7 +158,10 @@ describe("LoopRelay MCP tools", () => {
   it("reports compact boundaries newer than the latest loop snapshot", () => {
     const dataDir = seedLoopSnapshot({ withCompactBoundary: true });
 
-    const result = getLoopRelayLoopStatusTool({ cwd: PRIVATE_CWD }, { dataDir });
+    const result = getLoopRelayLoopStatusTool(
+      { cwd: PRIVATE_CWD },
+      { dataDir },
+    );
     const serialized = JSON.stringify(result);
 
     expect(result).toMatchObject({

@@ -5,7 +5,8 @@ const ROOT = process.cwd();
 const SOURCE_DIRS = ["scripts", "src"];
 const SOURCE_EXTENSIONS = new Set([".css", ".js", ".mjs", ".ts", ".tsx"]);
 const LINE_BUDGETS = new Map([
-  ["src/web/src/App.tsx", 3110],
+  ["src/web/src/App.tsx", 2580],
+  ["src/web/src/api.ts", 4350],
   ["src/web/src/habit-coach-panel.tsx", 300],
   ["src/web/src/habit-coach-panel.css", 450],
   ["src/web/src/practice-view.tsx", 520],
@@ -14,7 +15,8 @@ const LINE_BUDGETS = new Map([
   ["src/storage/sqlite-json.ts", 160],
   ["src/storage/sqlite-migrations.ts", 600],
   ["src/storage/sqlite-rows.ts", 180],
-  ["src/storage/sqlite.ts", 3125],
+  ["src/storage/sqlite.ts", 3000],
+  ["src/cli/commands/loop.ts", 810],
   ["src/hooks/rewrite-guard.ts", 340],
   ["src/mcp/score-tool-definitions.ts", 880],
   ["src/mcp/score-tool-types.ts", 220],

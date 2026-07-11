@@ -111,8 +111,9 @@ for (const [label, scriptName, expectedCommand] of [
   [
     "lint package script is registered",
     "lint",
-    "pnpm lint:types && pnpm lint:quality",
+    "pnpm lint:format && pnpm lint:types && pnpm lint:quality",
   ],
+  ["lint format package script is registered", "lint:format", "pnpm format"],
   [
     "build package script is registered",
     "build",
@@ -728,10 +729,9 @@ function privacyAuditMirrorsRuntimeTokenDetectors() {
     ["eyJ[a-zA-Z0-9_-]+", "eyJ[A-Za-z0-9_-]+"],
     ["AIza[0-9A-Za-z_-]{20,}", "AIza[0-9A-Za-z_-]{20,}"],
     ["npm_[A-Za-z0-9]{30,}", "npm_[A-Za-z0-9]{30,}"],
-    [
-      "(?:sk|pk|ghp|github_pat|xoxb|AKIA)",
-      "(?:sk|pk|ghp|github_pat|xoxb|AKIA)",
-    ],
+    ["(?:sk|pk)[-_]", "(?:sk|pk)[-_]"],
+    ["(?:ghp|github_pat|xoxb)[-_]", "(?:ghp|github_pat|xoxb)[-_]"],
+    ["AKIA[A-Z0-9]{8,}", "AKIA[A-Z0-9]{8,}"],
     [
       "postgres|postgresql|mysql|mongodb|redis",
       "(?:postgres|postgresql|mysql|mongodb|redis)://",

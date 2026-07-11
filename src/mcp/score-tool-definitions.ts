@@ -1,11 +1,3 @@
-import {
-  PREPARE_AGENT_REWRITE_TOOL_DEFINITION,
-  RECORD_AGENT_REWRITE_TOOL_DEFINITION,
-} from "./agent-rewrite-tool-definitions.js";
-import {
-  PREPARE_AGENT_JUDGE_BATCH_TOOL_DEFINITION,
-  RECORD_AGENT_JUDGMENTS_TOOL_DEFINITION,
-} from "./agent-judge-tool-definitions.js";
 import { ARCHIVE_EFFECTIVENESS_SUMMARY_SCHEMA } from "./archive-effectiveness-summary-schema.js";
 import { PROMPT_EFFECTIVENESS_SCHEMA } from "./prompt-effectiveness-schema.js";
 import type { LoopRelayMcpToolDefinition } from "./score-tool-definition-types.js";

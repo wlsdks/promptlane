@@ -20,7 +20,7 @@ Run:
 
 ```sh
 npm pack --dry-run --json
-rg -n "maintainer-local-path|/(?:Users|home|private|tmp|var|opt|workspace|Volumes)/[^\s)'\"`]+|bearer\s+|(?:sk|pk|ghp|github_pat|xoxb|AKIA)[A-Za-z0-9_-]{8,}|sk-proj-[A-Za-z0-9_-]|sk-ant-[A-Za-z0-9_-]|npm_[A-Za-z0-9]{30,}|AIza[0-9A-Za-z_-]{20,}|eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+|(?:postgres|postgresql|mysql|mongodb|redis)://|https://hooks\.|PRIVATE KEY|BEGIN .* KEY|password|secret" dist README.md README.ko.md SECURITY.md CHANGELOG.md docs commands plugins integrations package.json .claude-plugin scripts --glob '!node_modules'
+rg -n "maintainer-local-path|/(?:Users|home|private|tmp|var|opt|workspace|Volumes)/[^\s)'\"`]+|bearer\s+|(?:sk|pk)[-_][A-Za-z0-9_-]{8,}|(?:ghp|github_pat|xoxb)[-_][A-Za-z0-9_-]{8,}|AKIA[A-Z0-9]{8,}|sk-proj-[A-Za-z0-9_-]|sk-ant-[A-Za-z0-9_-]|npm_[A-Za-z0-9]{30,}|AIza[0-9A-Za-z_-]{20,}|eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+|(?:postgres|postgresql|mysql|mongodb|redis)://|https://hooks\.|PRIVATE KEY|BEGIN .* KEY|password|secret" dist README.md README.ko.md SECURITY.md CHANGELOG.md docs commands plugins integrations package.json .claude-plugin scripts --glob '!node_modules'
 ```
 
 The token patterns in this grep should mirror the live detectors in

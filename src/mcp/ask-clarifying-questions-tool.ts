@@ -222,7 +222,6 @@ export async function askClarifyingQuestionsTool(
     !!ctx && hasElicitationCapability(ctx.clientCapabilities);
 
   let collectedContent: Record<string, string> | undefined;
-  let fallbackStatus: AskClarifyingQuestionsInteractionStatus | undefined;
 
   if (elicitationSupported && ctx) {
     let elicitResult: ElicitationResult;

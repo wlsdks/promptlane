@@ -2382,6 +2382,10 @@ describe("plugin packaging files", () => {
       join(process.cwd(), "src/cli/commands/loop.ts"),
       "utf8",
     );
+    const loopFormatters = readFileSync(
+      join(process.cwd(), "src/cli/commands/loop-formatters.ts"),
+      "utf8",
+    );
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
     const snapshotSchema = readFileSync(
@@ -2397,7 +2401,8 @@ describe("plugin packaging files", () => {
       "When this work reaches a verifiable checkpoint",
     );
     expect(loopStatus).toContain("--snapshot-id");
-    expect(loopCommand).toContain('"Next actions:"');
+    expect(loopCommand).toContain('from "./loop-formatters.js"');
+    expect(loopFormatters).toContain('"Next actions:"');
     for (const content of [readme, readmeKo]) {
       expect(content).toContain("looprelay loop status");
       expect(content).toContain("outcome backlog");

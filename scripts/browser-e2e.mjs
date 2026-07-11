@@ -254,7 +254,7 @@ try {
   await page.getByRole("button", { name: "Copy draft" }).click();
   await page.getByRole("button", { name: "Copied" }).waitFor();
   await page.getByRole("button", { name: "Save draft" }).click();
-  await page.getByRole("button", { name: "Saved" }).waitFor();
+  await page.getByRole("button", { name: "Saved", exact: true }).waitFor();
   await page.getByRole("button", { name: "Copy saved draft" }).waitFor();
   await forceClipboardFailure(page);
   await page.getByRole("button", { name: "Copy saved draft" }).click();
@@ -276,7 +276,7 @@ try {
     const unsavedClarification = "Run only the browser regression path.";
     await clarifyInput.fill(savedClarification);
     await page.getByRole("button", { name: "Save draft" }).click();
-    await page.getByRole("button", { name: "Saved" }).waitFor();
+    await page.getByRole("button", { name: "Saved", exact: true }).waitFor();
     await page.locator(".saved-draft-source-clarifications").first().waitFor();
     await clarifyInput.fill(unsavedClarification);
     await assertText(

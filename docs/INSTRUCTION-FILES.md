@@ -1,6 +1,6 @@
 # Instruction Files
 
-Last updated: 2026-07-05
+Last updated: 2026-07-11
 
 This document defines how LoopRelay uses project instruction files for Codex,
 Claude Code, and other coding agents.
@@ -99,6 +99,22 @@ Practical rule:
 - Put detailed rationale and examples in `docs/*`.
 - Put active execution state in `tasks/todo.md`.
 - Put one-off evidence in audit/spec/plan documents.
+
+## Verification And Code Hygiene
+
+`AGENTS.md` owns the common verification policy: focused tests first, then
+`corepack pnpm lint` and `git diff --check`; package and browser checks are
+added only when their public surface changes. The complete release gate runs
+once immediately before public release, not after ordinary refactors.
+
+`pnpm lint` includes Prettier verification before TypeScript and structural
+checks. Use `pnpm format:write` only for intentional mechanical normalization,
+then review the resulting diff separately from behavioral changes.
+
+Both Node and web TypeScript configurations enforce unused-local and
+unused-parameter diagnostics. Instruction files should direct agents to remove
+proven unused declarations or make an intentional public interface explicit;
+they must not normalize suppression comments as a cleanup shortcut.
 
 ## Runtime Identity
 

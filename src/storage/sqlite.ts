@@ -37,6 +37,7 @@ import {
   createPromptImprovementDraftId,
 } from "./generated-ids.js";
 import { getLoopRelayPaths, supportsPosixMode } from "./paths.js";
+import { buildPromptFilters } from "./sqlite-prompt-filters.js";
 import {
   markPromptImprovementDraftCopied,
   readPromptImprovementDrafts,
@@ -58,11 +59,9 @@ import type {
   PromptDetail,
   ProjectListResult,
   ProjectInstructionReview,
-  ProjectInstructionStoragePort,
   ProjectPolicy,
   ProjectPolicyActor,
   ProjectPolicyPatch,
-  ProjectPolicyStoragePort,
   ProjectSummary,
   PromptImprovementDraft,
   PromptListResult,
@@ -92,7 +91,6 @@ import {
   readChecklist,
   readNumberRecord,
   readPromptTags,
-  readQualityCriteria,
   readStringArray,
 } from "./sqlite-json.js";
 import type {
@@ -118,16 +116,11 @@ import {
 import {
   getCoachFeedbackSummary,
   recordCoachFeedback,
-  type CoachFeedbackEntry,
-  type CoachFeedbackRating,
-  type CoachFeedbackSummary,
 } from "./coach-feedback.js";
 import {
   getLatestJudgeScore,
   listPromptIdsNeedingJudge,
   recordJudgeScore,
-  type JudgeScoreEntry,
-  type JudgeTool,
 } from "./judge-score.js";
 import { applyMigrations } from "./sqlite-migrations.js";
 import { createProjectKey } from "./project-id.js";
@@ -750,164 +743,6 @@ function toSimilarityFtsQuery(text: string): string {
   return keep.map((token) => `"${token}"`).join(" OR ");
 }
 
-function buildPromptFilters(
-  options: Omit<ListPromptsOptions, "cursor">,
-  tableAlias?: string,
-): { clauses: string[]; values: unknown[] } {
-  const prefix = tableAlias ? `${tableAlias}.` : "";
-  const clauses = [`${prefix}deleted_at IS NULL`];
-  const values: unknown[] = [];
-
-  if (options.tool) {
-    clauses.push(`${prefix}tool = ?`);
-    values.push(options.tool);
-  }
-
-  if (options.sessionId) {
-    clauses.push(`${prefix}session_id = ?`);
-    values.push(options.sessionId);
-  }
-
-  if (options.cwdPrefix) {
-    const normalizedPrefix = options.cwdPrefix.replace(/\/+$/, "");
-    const escapedPrefix = escapeLike(normalizedPrefix);
-    const pathMatches = [`${prefix}cwd = ?`, `${prefix}cwd LIKE ? ESCAPE '\\'`];
-    values.push(normalizedPrefix, `${escapedPrefix}/%`);
-
-    if (!normalizedPrefix.startsWith("/")) {
-      pathMatches.push(`${prefix}cwd LIKE ? ESCAPE '\\'`);
-      values.push(`%/${escapedPrefix}`);
-    }
-
-    clauses.push(`(${pathMatches.join(" OR ")})`);
-  }
-
-  if (options.importJobId) {
-    const idExpression = tableAlias ? `${prefix}id` : "prompts.id";
-    clauses.push(
-      `EXISTS (
-        SELECT 1
-        FROM import_records ir
-        WHERE ir.prompt_id = ${idExpression}
-          AND ir.job_id = ?
-          AND ir.status IN ('imported', 'duplicate')
-      )`,
-    );
-    values.push(options.importJobId);
-  }
-
-  if (options.isSensitive !== undefined) {
-    clauses.push(`${prefix}is_sensitive = ?`);
-    values.push(options.isSensitive ? 1 : 0);
-  }
-
-  if (options.receivedFrom) {
-    clauses.push(`${prefix}received_at >= ?`);
-    values.push(normalizeDateLowerBound(options.receivedFrom));
-  }
-
-  if (options.receivedTo) {
-    clauses.push(`${prefix}received_at <= ?`);
-    values.push(normalizeDateUpperBound(options.receivedTo));
-  }
-
-  if (options.tag) {
-    const idExpression = tableAlias ? `${prefix}id` : "prompts.id";
-    clauses.push(
-      `EXISTS (
-        SELECT 1
-        FROM prompt_tags pt
-        JOIN tags t ON t.id = pt.tag_id
-        WHERE pt.prompt_id = ${idExpression} AND t.name = ?
-      )`,
-    );
-    values.push(options.tag);
-  }
-
-  if (options.focus) {
-    const idExpression = tableAlias ? `${prefix}id` : "prompts.id";
-    const storedHashExpression = tableAlias
-      ? `${prefix}stored_content_hash`
-      : "prompts.stored_content_hash";
-
-    if (options.focus === "saved") {
-      clauses.push(
-        `EXISTS (
-          SELECT 1
-          FROM prompt_bookmarks pb
-          WHERE pb.prompt_id = ${idExpression}
-        )`,
-      );
-    } else if (options.focus === "reused") {
-      clauses.push(
-        `(
-          EXISTS (
-            SELECT 1
-            FROM prompt_bookmarks pb
-            WHERE pb.prompt_id = ${idExpression}
-          )
-          OR EXISTS (
-            SELECT 1
-            FROM prompt_usage_events pue
-            WHERE pue.prompt_id = ${idExpression}
-              AND pue.event_type = 'prompt_copied'
-          )
-        )`,
-      );
-    } else if (options.focus === "duplicated") {
-      clauses.push(
-        `${storedHashExpression} IN (
-          SELECT stored_content_hash
-          FROM prompts
-          WHERE deleted_at IS NULL
-          GROUP BY stored_content_hash
-          HAVING COUNT(*) > 1
-        )`,
-      );
-    } else if (options.focus === "quality-gap") {
-      clauses.push(
-        `EXISTS (
-          SELECT 1
-          FROM prompt_analyses pa
-          WHERE pa.prompt_id = ${idExpression}
-            AND (
-              pa.checklist_json LIKE '%"status":"missing"%'
-              OR pa.checklist_json LIKE '%"status":"weak"%'
-            )
-        )`,
-      );
-    }
-  }
-
-  if (options.qualityGap) {
-    const idExpression = tableAlias ? `${prefix}id` : "prompts.id";
-    clauses.push(
-      `EXISTS (
-        SELECT 1
-        FROM prompt_analyses pa, json_each(pa.checklist_json) je
-        WHERE pa.prompt_id = ${idExpression}
-          AND json_extract(je.value, '$.key') = ?
-          AND json_extract(je.value, '$.status') IN ('missing', 'weak')
-      )`,
-    );
-    values.push(options.qualityGap);
-  }
-
-  return { clauses, values };
-}
-
-function normalizeDateLowerBound(value: string): string {
-  return isDateOnly(value) ? `${value}T00:00:00.000Z` : value;
-}
-
-function normalizeDateUpperBound(value: string): string {
-  return isDateOnly(value) ? `${value}T23:59:59.999Z` : value;
-}
-
-function isDateOnly(value: string): boolean {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value);
-}
-
 export function restrictDatabaseFileMode(
   databasePath: string,
   changeMode: (path: string, mode: number) => void = chmodSync,
@@ -924,13 +759,6 @@ export function restrictDatabaseFileMode(
       changeMode(path, 0o600);
     }
   }
-}
-
-function escapeLike(value: string): string {
-  return value
-    .replaceAll("\\", "\\\\")
-    .replaceAll("%", "\\%")
-    .replaceAll("_", "\\_");
 }
 
 function getPrompt(
