@@ -1,4 +1,5 @@
 import type { LoopSnapshot } from "./types.js";
+import { recommendAgentStrategy } from "../agent-guide/recommendation.js";
 
 export type LoopBriefCompactBoundary = {
   id: string;
@@ -48,6 +49,13 @@ export function createLoopBrief(input: {
     snapshot.prompt_ids.length > 0
       ? snapshot.prompt_ids.join(", ")
       : "none captured yet";
+  const guide = recommendAgentStrategy({
+    taskType: "continuation",
+    failedAttempts: ["failed", "blocked"].includes(snapshot.outcome.status)
+      ? 2
+      : 0,
+    matchingRuns: [],
+  });
 
   return {
     title: `Continue agent loop ${snapshot.id}`,
@@ -95,6 +103,11 @@ export function createLoopBrief(input: {
           ]
         : []),
       ...approvedMemoryLines(input.approvedMemories ?? []),
+      "## Agent Strategy (advisory)",
+      `Recommended role: ${guide.role}. Preferred: ${guide.primary.tool} ${guide.primary.model}; alternative: ${guide.alternative.tool} ${guide.alternative.model}.`,
+      `Switch condition: ${guide.switch_condition}`,
+      "This is a local suggestion only. Do not switch models automatically.",
+      "",
       ...(!explicitCheckpoint ? ["## Prompt Habits To Improve", gaps, ""] : []),
       explicitCheckpoint ? "## Fallback Working Defaults" : "## Scope",
       ...(explicitCheckpoint

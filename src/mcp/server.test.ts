@@ -289,6 +289,12 @@ describe("MCP stdio server", () => {
           expect.objectContaining({
             name: "record_agent_judgments",
           }),
+          expect.objectContaining({
+            name: "recommend_agent_strategy",
+          }),
+          expect.objectContaining({
+            name: "record_agent_run",
+          }),
         ],
       },
     });
@@ -303,12 +309,13 @@ describe("MCP stdio server", () => {
 
     const tools = (response?.result as { tools: Array<unknown> }).tools;
 
-    expect(tools).toHaveLength(22);
+    expect(tools).toHaveLength(24);
     for (const tool of tools.filter(
       (tool) =>
         ![
           "record_agent_rewrite",
           "record_agent_judgments",
+          "record_agent_run",
           "record_clarifications",
           "record_loop_outcome",
           "record_loop_memory",

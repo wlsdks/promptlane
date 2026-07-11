@@ -1,5 +1,17 @@
 # 작업 계획
 
+## 2026-07-11 Adaptive Agent Guide
+
+- [x] SOL PLAN: define the local-only, non-autonomous model-profile policy,
+  data boundary, two-tool contract, confidence calibration, and matched-pair
+  retention criteria in `docs/superpowers/specs/2026-07-11-adaptive-agent-guide-design.md`.
+- [x] TERRA RED: add failing policy, storage, CLI/MCP, and browser contracts
+  before implementing the guide.
+- [x] TERRA GREEN: implement model-run ledger, deterministic recommendation,
+  CLI/MCP/web surfaces, and optional continuation brief guidance.
+- [x] VERIFY: pass lint, 143-file/1295-test unit suite, production build,
+  package dry-run, and diff hygiene; do not run the one-time public release gate.
+
 ## 2026-07-11 Whole-Codebase Architecture Hardening
 
 - [x] BASELINE: preserve the completed compact continuation-safety cleanup and

@@ -930,7 +930,7 @@ Codex, or any MCP client through a stdio MCP server:
 looprelay mcp
 ```
 
-The MCP server exposes 22 tools:
+The MCP server exposes 24 tools:
 
 - `get_looprelay_status`: check whether the local archive is initialized,
   whether prompts have been captured, and which MCP tool to call next.
@@ -1110,6 +1110,8 @@ instructions, transcript bodies, or raw paths.
   judge. `looprelay` does not call the provider for you.
 - `record_agent_judgments`: store advisory scores and notes produced by the
   active agent session, without storing prompt bodies or raw paths.
+- `recommend_agent_strategy`: return a local, non-binding model-role recommendation with switch conditions and evidence confidence.
+- `record_agent_run`: record operator-declared, raw-free model/task/outcome metadata for future guide calibration.
 
 All read tools are local-only and declare an MCP `outputSchema` for structured
 JSON metadata plus a text JSON fallback. `record_agent_rewrite` and

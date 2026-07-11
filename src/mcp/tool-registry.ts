@@ -4,6 +4,12 @@ import {
   type ApplyClarificationsToolArguments,
 } from "./apply-clarifications-tool.js";
 import {
+  RECORD_AGENT_RUN_TOOL_DEFINITION,
+  RECOMMEND_AGENT_STRATEGY_TOOL_DEFINITION,
+  recordAgentRunTool,
+  recommendAgentStrategyTool,
+} from "./agent-guide-tool.js";
+import {
   ASK_CLARIFYING_QUESTIONS_TOOL_DEFINITION,
   askClarifyingQuestionsTool,
   type AskClarifyingQuestionsToolArguments,
@@ -250,6 +256,22 @@ export const LOOPRELAY_MCP_TOOL_REGISTRY: readonly RegisteredLoopRelayTool[] = [
     handler: (args, options) =>
       recordAgentJudgmentsTool(
         args as RecordAgentJudgmentsToolArguments,
+        options,
+      ),
+  },
+  {
+    definition: RECOMMEND_AGENT_STRATEGY_TOOL_DEFINITION,
+    handler: (args, options) =>
+      recommendAgentStrategyTool(
+        args as Parameters<typeof recommendAgentStrategyTool>[0],
+        options,
+      ),
+  },
+  {
+    definition: RECORD_AGENT_RUN_TOOL_DEFINITION,
+    handler: (args, options) =>
+      recordAgentRunTool(
+        args as Parameters<typeof recordAgentRunTool>[0],
         options,
       ),
   },

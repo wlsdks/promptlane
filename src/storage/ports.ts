@@ -27,6 +27,7 @@ import type {
   CoachFeedbackSummary,
 } from "./coach-feedback.js";
 import type { JudgeScoreEntry, JudgeTool } from "./judge-score.js";
+import type { AgentRun, RecordAgentRunInput } from "./agent-runs.js";
 
 export type {
   CoachFeedbackEntry,
@@ -185,6 +186,15 @@ export type LoopMergeDecisionStoragePort = {
     projectId?: string;
     worktree?: string;
   }): LoopMergeDecisionListResult;
+};
+
+export type AgentRunStoragePort = {
+  recordAgentRun(input: RecordAgentRunInput): AgentRun;
+  listAgentRuns(options: {
+    projectId: string;
+    taskType?: import("../agent-guide/recommendation.js").AgentGuideTaskType;
+    limit?: number;
+  }): AgentRun[];
 };
 
 export type DeletePromptResult = {

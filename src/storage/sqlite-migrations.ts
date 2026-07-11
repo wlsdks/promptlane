@@ -1,6 +1,7 @@
 import type Database from "better-sqlite3";
 
 import { applyAgentPromptJudgmentMigration } from "./agent-judgments.js";
+import { applyAgentRunMigration } from "./agent-runs.js";
 import { applyCoachFeedbackMigration } from "./coach-feedback.js";
 import { applyCompactBoundaryMigration } from "./compact-boundaries.js";
 import { applyJudgeScoreMigration } from "./judge-score.js";
@@ -38,6 +39,7 @@ export function applyMigrations(db: Database.Database): void {
   applyCompactBoundaryMigration(db);
   applyLoopMemoryMigration(db);
   applyLoopMergeDecisionMigration(db);
+  applyAgentRunMigration(db);
 }
 
 function applyLoopSnapshotMigration(db: Database.Database): void {

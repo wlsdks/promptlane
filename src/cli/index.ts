@@ -10,6 +10,7 @@ import { registerCoachCommand } from "./commands/coach.js";
 import { registerDoctorCommand } from "./commands/doctor.js";
 import { registerExportCommand } from "./commands/export.js";
 import { registerHookCommand } from "./commands/hook.js";
+import { registerGuideCommand } from "./commands/guide.js";
 import { registerImproveCommand } from "./commands/improve.js";
 import { registerImportCommand } from "./commands/import.js";
 import { registerInstallCodexHudCommand } from "./commands/install-codex-hud.js";
@@ -44,6 +45,7 @@ export function createProgram(): Command {
   registerBuddyCommand(program);
   registerInitCommand(program);
   registerHookCommand(program);
+  registerGuideCommand(program);
   registerCoachCommand(program);
   registerExportCommand(program);
   registerImproveCommand(program);

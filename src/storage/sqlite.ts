@@ -38,6 +38,7 @@ import {
 } from "./generated-ids.js";
 import { getLoopRelayPaths, supportsPosixMode } from "./paths.js";
 import { buildPromptFilters } from "./sqlite-prompt-filters.js";
+import * as agentRuns from "./agent-runs.js";
 import {
   markPromptImprovementDraftCopied,
   readPromptImprovementDrafts,
@@ -198,6 +199,9 @@ export function createSqlitePromptStorage(
       ),
     listLoopMergeDecisions: (options = {}) =>
       loopDecisions.listLoopMergeDecisions(db, options),
+    recordAgentRun: (input) =>
+      agentRuns.recordAgentRun(db, input, options.now?.() ?? new Date()),
+    listAgentRuns: (input) => agentRuns.listAgentRuns(db, input),
     listPrompts(options) {
       return listPrompts(db, options);
     },

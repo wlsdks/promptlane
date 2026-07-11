@@ -11,8 +11,8 @@ describe("LoopRelay MCP tool registry", () => {
   it("owns one unique handler for every listed tool definition", () => {
     const names = listLoopRelayMcpToolNames();
 
-    expect(LOOPRELAY_MCP_TOOL_REGISTRY).toHaveLength(22);
-    expect(LOOPRELAY_MCP_TOOL_DEFINITIONS).toHaveLength(22);
+    expect(LOOPRELAY_MCP_TOOL_REGISTRY).toHaveLength(24);
+    expect(LOOPRELAY_MCP_TOOL_DEFINITIONS).toHaveLength(24);
     expect(new Set(names).size).toBe(names.length);
     expect(names).toContain("get_paired_benchmark_candidates");
     for (const definition of LOOPRELAY_MCP_TOOL_DEFINITIONS) {

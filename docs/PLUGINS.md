@@ -206,7 +206,7 @@ uses the exact CLI path from the current installation.
 looprelay mcp
 ```
 
-This server exposes 22 model-controlled tools:
+This server exposes 24 model-controlled tools:
 
 - `get_looprelay_status`
 - `coach_prompt`
@@ -230,6 +230,8 @@ This server exposes 22 model-controlled tools:
 - `record_agent_rewrite`
 - `prepare_agent_judge_batch`
 - `record_agent_judgments`
+- `recommend_agent_strategy`
+- `record_agent_run`
 
 `coach_prompt` is the default agent-facing workflow. It combines local archive
 status, latest prompt score, approval-required rewrite, recent habit review,

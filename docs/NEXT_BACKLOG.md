@@ -4,7 +4,9 @@ Last updated: 2026-07-11
 
 LoopRelay is in identity-consolidation and usefulness-validation mode. Large new
 features remain frozen until at least three independent users complete install
-and first-value continuity flows.
+and first-value continuity flows. The bounded local Adaptive Agent Guide is an
+explicit maintainer-approved exception on 2026-07-11; it remains subject to its
+own matched-pair retention decision and does not authorize provider automation.
 
 ## Current Product Contract
 

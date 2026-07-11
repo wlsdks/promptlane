@@ -818,7 +818,7 @@ privacy/safety, 보고 규칙을 보는 deterministic local rubric입니다.
 looprelay mcp
 ```
 
-MCP server는 22개의 tool을 제공합니다.
+MCP server는 24개의 tool을 제공합니다.
 
 - `get_looprelay_status`: 로컬 archive가 초기화되었는지, prompt가 캡처되었는지, 다음에 어떤 MCP tool을 호출하면 좋은지 확인합니다.
 - `coach_prompt`: Claude Code/Codex 안에서 로컬 readiness, 최신 prompt 점수, gap 진단과 확인 질문, 누적 습관, 프로젝트 규칙, 다음 요청 가이드를 한 번에 받습니다.
@@ -842,6 +842,8 @@ MCP server는 22개의 tool을 제공합니다.
 - `record_agent_rewrite`: 사용자가 승인한 agent rewrite를 redacted improvement draft로 저장하고, rewrite 본문은 반환하지 않습니다.
 - `prepare_agent_judge_batch`: 현재 Claude Code/Codex/Gemini CLI 세션이 직접 LLM judge로 평가할 수 있도록, bounded redacted prompt packet과 rubric을 준비합니다. `looprelay`가 provider를 대신 호출하지 않습니다.
 - `record_agent_judgments`: 현재 agent 세션이 만든 advisory score와 제안을 prompt body/raw path 없이 저장합니다.
+- `recommend_agent_strategy`: local evidence를 바탕으로 비강제 모델 역할 추천, 전환 조건, 신뢰도를 반환합니다.
+- `record_agent_run`: 이후 추천 보정을 위해 사용자가 선언한 raw-free 모델/작업/결과 metadata를 기록합니다.
 
 CLI만 사용하는 경우에도 검증 결과를 기록한 뒤 승인형 memory 흐름을 이어갈 수 있습니다.
 기본 `looprelay loop status`와 `looprelay loop brief`는 현재 프로젝트만

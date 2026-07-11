@@ -10,6 +10,7 @@ import {
 import type { RedactionPolicy } from "../shared/schema.js";
 import type {
   AskEventStoragePort,
+  AgentRunStoragePort,
   CoachFeedbackStoragePort,
   CompactBoundaryStoragePort,
   ExportJobStoragePort,
@@ -22,6 +23,7 @@ import type {
 import type { ServerAuthConfig } from "./auth.js";
 import { HttpProblem, problem } from "./errors.js";
 import { registerCoachFeedbackRoutes } from "./routes/coach-feedback.js";
+import { registerAgentGuideRoutes } from "./routes/agent-guide.js";
 import { registerExportRoutes } from "./routes/exports.js";
 import { registerImportRoutes } from "./routes/import.js";
 import { registerHealthRoutes } from "./routes/health.js";
@@ -43,6 +45,7 @@ export type CreateServerOptions = {
     Partial<ExportJobStoragePort> &
     Partial<AskEventStoragePort> &
     Partial<CoachFeedbackStoragePort> &
+    Partial<AgentRunStoragePort> &
     Partial<LoopSnapshotStoragePort> &
     Partial<CompactBoundaryStoragePort>;
   redactionMode: RedactionPolicy;
@@ -192,6 +195,10 @@ export function createServer(options: CreateServerOptions): FastifyInstance {
     storage: options.storage,
   });
   registerLoopRoutes(server, {
+    auth: options.auth,
+    storage: options.storage,
+  });
+  registerAgentGuideRoutes(server, {
     auth: options.auth,
     storage: options.storage,
   });

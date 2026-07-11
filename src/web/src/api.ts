@@ -3401,6 +3401,57 @@ export async function listLoops(): Promise<LoopListResponse> {
   return body.data as LoopListResponse;
 }
 
+export type AgentGuideResponse =
+  | {
+      role: "plan" | "implement" | "fast_path" | "review";
+      primary: { tool: "codex" | "claude-code"; model: string };
+      alternative: { tool: "codex" | "claude-code"; model: string };
+      reasons: string[];
+      switch_condition: string;
+      confidence: "low" | "medium" | "high";
+      evidence: {
+        completed_runs: number;
+        passing_runs: number;
+        non_passing_runs: number;
+      };
+      privacy: {
+        local_only: true;
+        external_calls: false;
+        auto_switches_model: false;
+      };
+    }
+  | {
+      status: "empty";
+      next_action: string;
+      privacy: {
+        local_only: true;
+        external_calls: false;
+        auto_switches_model: false;
+      };
+    };
+
+export async function getAgentGuide(
+  taskType:
+    | "ambiguous_request"
+    | "planning"
+    | "implementation"
+    | "debugging"
+    | "mechanical"
+    | "review"
+    | "continuation" = "continuation",
+): Promise<AgentGuideResponse> {
+  await ensureSession();
+  const response = await fetch(
+    `/api/v1/agent-guide?task_type=${encodeURIComponent(taskType)}`,
+    { credentials: "same-origin" },
+  );
+  if (!response.ok) await failApi(response, "Agent guide failed");
+  const body = (await response.json()) as { data?: unknown };
+  if (!body.data || typeof body.data !== "object")
+    throw new Error("Agent guide failed: Invalid response.");
+  return body.data as AgentGuideResponse;
+}
+
 export async function getLoopBrief(id: string): Promise<LoopBrief> {
   await ensureSession();
   const response = await fetch(

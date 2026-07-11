@@ -128,6 +128,8 @@ Current known large modules:
   request shaping here; render and copy logic stay in components. Its quality
   budget is intentionally tight; extract a feature contract before a new
   response parser materially expands it.
+  The Adaptive Agent Guide currently adds its small read contract here; extract
+  a dedicated guide API module before adding write flows or further validators.
 - `src/web/src/i18n.ts`: web UI translation table. Korean strings stay grouped
   by screen so a single localization change touches one section.
 - `src/storage/sqlite.ts`: SQLite implementation boundary for queries,
