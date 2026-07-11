@@ -5,6 +5,9 @@ import {
   AGENT_GUIDE_TASK_TYPES,
   AGENT_GUIDE_TOOLS,
   recommendAgentStrategy,
+  requireAgentGuideBoolean,
+  requireAgentGuideCwd,
+  requireAgentGuideInteger,
   requireAgentGuideModel,
   requireAgentGuideOutcomeStatus,
   requireAgentGuideRole,
@@ -114,7 +117,7 @@ export function recommendAgentStrategyTool(
   options: ScorePromptToolOptions = {},
 ) {
   try {
-    requireAgentGuideTaskType(args.task_type);
+    validateRecommendationArgs(args);
   } catch (error) {
     return invalidInput(error);
   }
@@ -134,12 +137,7 @@ export function recommendAgentStrategyTool(
       storage.close();
     }
   } catch {
-    return {
-      is_error: true as const,
-      error_code: "storage_unavailable",
-      message:
-        "Local agent guide storage is unavailable. Run looprelay setup and retry.",
-    };
+    return storageUnavailable();
   }
 }
 export function recordAgentRunTool(
@@ -164,18 +162,7 @@ export function recordAgentRunTool(
   options: ScorePromptToolOptions = {},
 ) {
   try {
-    requireAgentGuideTaskType(args.task_type);
-    requireAgentGuideTool(args.tool);
-    requireAgentGuideModel(args.model);
-    requireAgentGuideRole(args.role);
-    requireAgentGuideOutcomeStatus(args.outcome_status);
-    requireNonNegativeInteger(args.attempts, "attempts", 1);
-    requireNonNegativeInteger(
-      args.first_value_seconds,
-      "first value seconds",
-      0,
-    );
-    requireNonNegativeInteger(args.focused_test_count, "focused test count", 0);
+    validateRecordArgs(args);
   } catch (error) {
     return invalidInput(error);
   }
@@ -198,14 +185,68 @@ export function recordAgentRunTool(
       storage.close();
     }
   } catch {
-    return {
-      is_error: true as const,
-      error_code: "storage_unavailable",
-      message:
-        "Local agent guide storage is unavailable. Run looprelay setup and retry.",
-    };
+    return storageUnavailable();
   }
 }
+
+function validateRecommendationArgs(
+  args: Parameters<typeof recommendAgentStrategyTool>[0],
+): void {
+  requireAgentGuideCwd(args.cwd);
+  requireAgentGuideTaskType(args.task_type);
+  requireAgentGuideInteger(
+    args.failed_attempts,
+    "Agent guide failed attempts",
+    0,
+  );
+  requireAgentGuideInteger(
+    args.worktree_count,
+    "Agent guide worktree count",
+    0,
+  );
+  if (args.requires_independent_review !== undefined)
+    requireAgentGuideBoolean(
+      args.requires_independent_review,
+      "Agent guide independent review",
+    );
+}
+
+function validateRecordArgs(
+  args: Parameters<typeof recordAgentRunTool>[0],
+): void {
+  requireAgentGuideCwd(args.cwd);
+  requireAgentGuideTaskType(args.task_type);
+  requireAgentGuideTool(args.tool);
+  requireAgentGuideModel(args.model);
+  requireAgentGuideRole(args.role);
+  requireAgentGuideOutcomeStatus(args.outcome_status);
+  requireAgentGuideInteger(args.attempts, "Agent run attempts", 1);
+  requireAgentGuideInteger(
+    args.first_value_seconds,
+    "Agent run first value seconds",
+    0,
+  );
+  requireAgentGuideInteger(
+    args.focused_test_count,
+    "Agent run focused test count",
+    0,
+  );
+  if (args.accepted_recommendation !== undefined)
+    requireAgentGuideBoolean(
+      args.accepted_recommendation,
+      "Agent run accepted recommendation",
+    );
+}
+
+function storageUnavailable() {
+  return {
+    is_error: true as const,
+    error_code: "storage_unavailable",
+    message:
+      "Local agent guide storage is unavailable. Run looprelay setup and retry.",
+  };
+}
+
 function invalidInput(error: unknown) {
   return {
     is_error: true as const,
@@ -217,17 +258,6 @@ function invalidInput(error: unknown) {
   };
 }
 
-function requireNonNegativeInteger(
-  value: number | undefined,
-  label: string,
-  minimum: number,
-): void {
-  if (value === undefined) return;
-  if (!Number.isInteger(value) || value < minimum)
-    throw new Error(
-      `Agent run ${label} must be an integer of at least ${minimum}.`,
-    );
-}
 function open(options: ScorePromptToolOptions, cwd: string) {
   const config = loadLoopRelayConfig(options.dataDir);
   const auth = loadHookAuth(options.dataDir);

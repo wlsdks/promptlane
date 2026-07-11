@@ -9,6 +9,8 @@ import type {
 } from "../agent-guide/recommendation.js";
 import {
   requireAgentGuideModel,
+  requireAgentGuideBoolean,
+  requireAgentGuideInteger,
   requireAgentGuideOutcomeStatus,
   requireAgentGuideRole,
   requireAgentGuideTaskType,
@@ -56,23 +58,21 @@ export function recordAgentRun(
   requireAgentGuideRole(input.role);
   requireAgentGuideTaskType(input.task_type);
   requireAgentGuideOutcomeStatus(input.outcome_status);
-  if (!Number.isInteger(input.attempts) || input.attempts < 1)
-    throw new Error("Agent run attempts must be a positive integer.");
-  if (
-    !Number.isInteger(input.focused_test_count) ||
-    input.focused_test_count < 0
-  )
-    throw new Error(
-      "Agent run focused test count must be a non-negative integer.",
-    );
-  if (
-    input.first_value_seconds !== undefined &&
-    (!Number.isInteger(input.first_value_seconds) ||
-      input.first_value_seconds < 0)
-  )
-    throw new Error(
-      "Agent run first value seconds must be a non-negative integer.",
-    );
+  requireAgentGuideBoolean(
+    input.accepted_recommendation,
+    "Agent run accepted recommendation",
+  );
+  requireAgentGuideInteger(input.attempts, "Agent run attempts", 1);
+  requireAgentGuideInteger(
+    input.focused_test_count,
+    "Agent run focused test count",
+    0,
+  );
+  requireAgentGuideInteger(
+    input.first_value_seconds,
+    "Agent run first value seconds",
+    0,
+  );
   const run: AgentRun = {
     ...input,
     id: `arun_${randomUUID().replace(/-/g, "")}`,

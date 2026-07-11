@@ -34,4 +34,31 @@ describe("agent guide MCP tools", () => {
       error_code: "invalid_input",
     });
   });
+
+  it("rejects malformed raw-free metadata before it can reach local storage", () => {
+    const record = recordAgentRunTool({
+      cwd: "",
+      task_type: "implementation",
+      tool: "codex",
+      model: "gpt-5.6-terra",
+      role: "implement",
+      outcome_status: "passed",
+      attempts: 0,
+      accepted_recommendation: "yes" as never,
+    });
+    const recommend = recommendAgentStrategyTool({
+      cwd: "/safe/project",
+      task_type: "implementation",
+      failed_attempts: -1,
+    });
+
+    expect(record).toMatchObject({
+      is_error: true,
+      error_code: "invalid_input",
+    });
+    expect(recommend).toMatchObject({
+      is_error: true,
+      error_code: "invalid_input",
+    });
+  });
 });

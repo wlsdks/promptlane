@@ -80,6 +80,33 @@ export type AgentGuideRecommendation = {
   };
 };
 
+type RoleChoice = Omit<
+  AgentGuideRecommendation,
+  "confidence" | "evidence" | "privacy"
+>;
+
+const PROFILE_BY_ROLE: Record<
+  AgentGuideRole,
+  Pick<RoleChoice, "primary" | "alternative">
+> = {
+  plan: {
+    primary: { tool: "codex", model: "gpt-5.6-sol" },
+    alternative: { tool: "claude-code", model: "opus" },
+  },
+  implement: {
+    primary: { tool: "codex", model: "gpt-5.6-terra" },
+    alternative: { tool: "claude-code", model: "sonnet" },
+  },
+  fast_path: {
+    primary: { tool: "codex", model: "gpt-5.6-luna" },
+    alternative: { tool: "claude-code", model: "haiku" },
+  },
+  review: {
+    primary: { tool: "codex", model: "gpt-5.6-sol" },
+    alternative: { tool: "claude-code", model: "opus" },
+  },
+};
+
 export function recommendAgentStrategy(input: {
   taskType: AgentGuideTaskType;
   failedAttempts?: number;
@@ -124,6 +151,30 @@ export function requireAgentGuideOutcomeStatus(
   return requireEnum(value, AGENT_GUIDE_OUTCOME_STATUSES, "outcome status");
 }
 
+export function requireAgentGuideCwd(value: unknown): string {
+  if (typeof value === "string" && value.trim()) return value;
+  throw new Error("Agent guide cwd must be a non-empty path.");
+}
+
+export function requireAgentGuideInteger(
+  value: unknown,
+  label: string,
+  minimum: number,
+): number | undefined {
+  if (value === undefined) return undefined;
+  if (typeof value !== "number" || !Number.isInteger(value) || value < minimum)
+    throw new Error(`${label} must be an integer of at least ${minimum}.`);
+  return value;
+}
+
+export function requireAgentGuideBoolean(
+  value: unknown,
+  label: string,
+): boolean {
+  if (typeof value === "boolean") return value;
+  throw new Error(`${label} must be a boolean.`);
+}
+
 function requireEnum<T extends string>(
   value: unknown,
   values: readonly T[],
@@ -131,7 +182,9 @@ function requireEnum<T extends string>(
 ): T {
   if (typeof value === "string" && values.includes(value as T))
     return value as T;
-  throw new Error(`Agent run ${label} must be a supported profile.`);
+  throw new Error(
+    `Agent run ${label} must be a supported ${label === "model" ? "profile" : "value"}.`,
+  );
 }
 
 function chooseRole(input: {
@@ -139,7 +192,20 @@ function chooseRole(input: {
   failedAttempts?: number;
   worktreeCount?: number;
   requiresIndependentReview?: boolean;
-}): Omit<AgentGuideRecommendation, "confidence" | "evidence" | "privacy"> {
+}): RoleChoice {
+  return (
+    choiceForAmbiguousRequest(input) ??
+    choiceForFailedAttempts(input) ??
+    choiceForReview(input) ??
+    choiceForDeliberateTask(input) ??
+    choiceForMechanicalTask(input) ??
+    implementationChoice()
+  );
+}
+
+function choiceForAmbiguousRequest(input: {
+  taskType: AgentGuideTaskType;
+}): RoleChoice | undefined {
   if (input.taskType === "ambiguous_request") {
     return roleChoice(
       "plan",
@@ -147,6 +213,12 @@ function chooseRole(input: {
       "After the missing decision is explicit, switch to implementation.",
     );
   }
+  return undefined;
+}
+
+function choiceForFailedAttempts(input: {
+  failedAttempts?: number;
+}): RoleChoice | undefined {
   if ((input.failedAttempts ?? 0) >= 2) {
     return roleChoice(
       "plan",
@@ -154,6 +226,13 @@ function chooseRole(input: {
       "After the failure cause and focused verification are explicit, switch to implementation.",
     );
   }
+  return undefined;
+}
+
+function choiceForReview(input: {
+  worktreeCount?: number;
+  requiresIndependentReview?: boolean;
+}): RoleChoice | undefined {
   if ((input.worktreeCount ?? 0) > 1 || input.requiresIndependentReview) {
     return roleChoice(
       "review",
@@ -161,6 +240,12 @@ function chooseRole(input: {
       "After the review decision is recorded, switch to implementation or fast-path work.",
     );
   }
+  return undefined;
+}
+
+function choiceForDeliberateTask(input: {
+  taskType: AgentGuideTaskType;
+}): RoleChoice | undefined {
   if (input.taskType === "planning" || input.taskType === "review") {
     return roleChoice(
       input.taskType === "review" ? "review" : "plan",
@@ -168,6 +253,12 @@ function chooseRole(input: {
       "After the decision and acceptance checks are explicit, switch to implementation.",
     );
   }
+  return undefined;
+}
+
+function choiceForMechanicalTask(input: {
+  taskType: AgentGuideTaskType;
+}): RoleChoice | undefined {
   if (input.taskType === "mechanical") {
     return roleChoice(
       "fast_path",
@@ -175,6 +266,10 @@ function chooseRole(input: {
       "If the scope expands, a test fails, or a design decision appears, switch to implementation or planning.",
     );
   }
+  return undefined;
+}
+
+function implementationChoice(): RoleChoice {
   return roleChoice(
     "implement",
     "The task has an executable scope and should progress through focused implementation and verification.",
@@ -186,38 +281,10 @@ function roleChoice(
   role: AgentGuideRole,
   reason: string,
   switchCondition: string,
-): Omit<AgentGuideRecommendation, "confidence" | "evidence" | "privacy"> {
-  const profiles =
-    role === "fast_path"
-      ? {
-          primary: { tool: "codex" as const, model: "gpt-5.6-luna" as const },
-          alternative: {
-            tool: "claude-code" as const,
-            model: "haiku" as const,
-          },
-        }
-      : role === "implement"
-        ? {
-            primary: {
-              tool: "codex" as const,
-              model: "gpt-5.6-terra" as const,
-            },
-            alternative: {
-              tool: "claude-code" as const,
-              model: "sonnet" as const,
-            },
-          }
-        : {
-            primary: { tool: "codex" as const, model: "gpt-5.6-sol" as const },
-            alternative: {
-              tool: "claude-code" as const,
-              model: "opus" as const,
-            },
-          };
-
+): RoleChoice {
   return {
     role,
-    ...profiles,
+    ...PROFILE_BY_ROLE[role],
     reasons: [reason],
     switch_condition: switchCondition,
   };

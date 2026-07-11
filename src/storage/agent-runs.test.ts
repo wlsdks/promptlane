@@ -72,4 +72,40 @@ describe("agent run storage", () => {
     ).toThrow("Agent run model must be a supported profile.");
     storage.close();
   });
+
+  it("rejects malformed boolean and first-value metadata", () => {
+    const dataDir = join(tmpdir(), `looprelay-agent-runs-${randomUUID()}`);
+    dirs.push(dataDir);
+    const storage = createSqlitePromptStorage({
+      dataDir,
+      hmacSecret: "test-secret",
+    });
+    const input = {
+      project_id: "proj_test",
+      tool: "codex" as const,
+      model: "gpt-5.6-terra" as const,
+      role: "implement" as const,
+      task_type: "implementation" as const,
+      outcome_status: "passed" as const,
+      attempts: 1,
+      focused_test_count: 0,
+    };
+
+    expect(() =>
+      storage.recordAgentRun({
+        ...input,
+        accepted_recommendation: "true" as never,
+      }),
+    ).toThrow("Agent run accepted recommendation must be a boolean.");
+    expect(() =>
+      storage.recordAgentRun({
+        ...input,
+        accepted_recommendation: false,
+        first_value_seconds: -1,
+      }),
+    ).toThrow(
+      "Agent run first value seconds must be an integer of at least 0.",
+    );
+    storage.close();
+  });
 });

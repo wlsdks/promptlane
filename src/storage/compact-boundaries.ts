@@ -167,7 +167,7 @@ function compactBoundaryFromRow(row: CompactBoundaryRow): CompactBoundary {
     cwd_label: row.cwd_label,
     project_id: row.project_id,
     content_hash: row.content_hash ?? undefined,
-    privacy: JSON.parse(row.privacy_json) as CompactBoundary["privacy"],
+    privacy: compactBoundaryPrivacy(),
   };
 }
 

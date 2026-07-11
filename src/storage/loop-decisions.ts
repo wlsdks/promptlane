@@ -177,7 +177,7 @@ function loopMergeDecisionFromRow(
     reason: row.reason,
     decided_by: row.decided_by,
     created_at: row.created_at,
-    privacy: JSON.parse(row.privacy_json) as LoopMergeDecision["privacy"],
+    privacy: loopMergeDecisionPrivacy(),
   };
 }
 

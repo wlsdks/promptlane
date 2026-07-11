@@ -6,6 +6,11 @@ import {
 } from "../loop/outcome.js";
 import type { LoopSnapshot } from "../loop/types.js";
 import type { LoopOutcomeUpdate, LoopSnapshotListResult } from "./ports.js";
+import {
+  parseJsonValue,
+  readNumberRecord,
+  readStringArray,
+} from "./sqlite-json.js";
 
 export function createLoopSnapshot(
   db: Database.Database,
@@ -102,12 +107,7 @@ export function recordLoopOutcome(
     .get(snapshotId) as { prompt_ids_json: string } | undefined;
   if (!existing) return undefined;
 
-  const promptIds = JSON.parse(existing.prompt_ids_json) as unknown;
-  const allowedPromptIds = new Set(
-    Array.isArray(promptIds)
-      ? promptIds.filter((value): value is string => typeof value === "string")
-      : [],
-  );
+  const allowedPromptIds = new Set(readStringArray(existing.prompt_ids_json));
   if (
     parsed.outcome.used_improvement_prompt_ids?.some(
       (promptId) => !allowedPromptIds.has(promptId),
@@ -161,14 +161,102 @@ function loopSnapshotFromRow(row: LoopSnapshotRow): LoopSnapshot {
     git_root_hash: row.git_root_hash ?? undefined,
     branch: row.branch ?? undefined,
     worktree_label: row.worktree_label ?? undefined,
-    prompt_ids: JSON.parse(row.prompt_ids_json) as string[],
-    event_counts: JSON.parse(
-      row.event_counts_json,
-    ) as LoopSnapshot["event_counts"],
-    quality: JSON.parse(row.quality_json) as LoopSnapshot["quality"],
-    outcome: JSON.parse(row.outcome_json) as LoopSnapshot["outcome"],
-    next_brief: JSON.parse(row.next_brief_json) as LoopSnapshot["next_brief"],
-    privacy: JSON.parse(row.privacy_json) as LoopSnapshot["privacy"],
+    prompt_ids: readStringArray(row.prompt_ids_json),
+    event_counts: readEventCounts(row.event_counts_json),
+    quality: readQuality(row.quality_json),
+    outcome: readOutcome(row.outcome_json),
+    next_brief: readNextBrief(row.next_brief_json),
+    privacy: loopSnapshotPrivacy(),
+  };
+}
+
+function readEventCounts(value: string): LoopSnapshot["event_counts"] {
+  const counts = readNumberRecord(value);
+  return {
+    prompts: counts.prompts ?? 0,
+    ...(counts.tool_calls === undefined
+      ? {}
+      : { tool_calls: counts.tool_calls }),
+    ...(counts.files_changed === undefined
+      ? {}
+      : { files_changed: counts.files_changed }),
+    ...(counts.tests_run === undefined ? {} : { tests_run: counts.tests_run }),
+    ...(counts.errors === undefined ? {} : { errors: counts.errors }),
+  };
+}
+
+function readQuality(value: string): LoopSnapshot["quality"] {
+  const record = readRecord(value);
+  return {
+    ...(typeof record.average_prompt_score === "number"
+      ? { average_prompt_score: record.average_prompt_score }
+      : {}),
+    top_gaps: readStringArrayFromRecord(record.top_gaps),
+    unresolved_questions: readStringArrayFromRecord(
+      record.unresolved_questions,
+    ),
+  };
+}
+
+function readOutcome(value: string): LoopSnapshot["outcome"] {
+  const record = readRecord(value);
+  const status = isOutcomeStatus(record.status) ? record.status : "unknown";
+  return {
+    status,
+    summary: typeof record.summary === "string" ? record.summary : "",
+    evidence_refs: readStringArrayFromRecord(record.evidence_refs),
+    ...(Array.isArray(record.used_improvement_prompt_ids)
+      ? {
+          used_improvement_prompt_ids: readStringArrayFromRecord(
+            record.used_improvement_prompt_ids,
+          ),
+        }
+      : {}),
+  };
+}
+
+function readNextBrief(value: string): LoopSnapshot["next_brief"] {
+  const record = readRecord(value);
+  return {
+    generated: record.generated === true,
+    ...(typeof record.prompt_id === "string"
+      ? { prompt_id: record.prompt_id }
+      : {}),
+    summary: typeof record.summary === "string" ? record.summary : "",
+  };
+}
+
+function readRecord(value: string): Record<string, unknown> {
+  const parsed = parseJsonValue(value);
+  return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+    ? (parsed as Record<string, unknown>)
+    : {};
+}
+
+function readStringArrayFromRecord(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : [];
+}
+
+function isOutcomeStatus(
+  value: unknown,
+): value is LoopSnapshot["outcome"]["status"] {
+  return [
+    "unknown",
+    "in_progress",
+    "passed",
+    "failed",
+    "blocked",
+    "abandoned",
+  ].includes(value as string);
+}
+
+function loopSnapshotPrivacy(): LoopSnapshot["privacy"] {
+  return {
+    local_only: true,
+    stores_prompt_bodies: false,
+    stores_raw_paths: false,
   };
 }
 

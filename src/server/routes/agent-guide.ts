@@ -1,7 +1,10 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 
-import { recommendAgentStrategy } from "../../agent-guide/recommendation.js";
+import {
+  AGENT_GUIDE_TASK_TYPES,
+  recommendAgentStrategy,
+} from "../../agent-guide/recommendation.js";
 import type {
   AgentRunStoragePort,
   LoopSnapshotStoragePort,
@@ -11,15 +14,7 @@ import { requireStorageCapabilities } from "../storage-capabilities.js";
 
 const querySchema = z.object({
   snapshot_id: z.string().min(1).optional(),
-  task_type: z.enum([
-    "ambiguous_request",
-    "planning",
-    "implementation",
-    "debugging",
-    "mechanical",
-    "review",
-    "continuation",
-  ]),
+  task_type: z.enum(AGENT_GUIDE_TASK_TYPES),
   failed_attempts: z.coerce.number().int().min(0).optional(),
   worktree_count: z.coerce.number().int().min(0).optional(),
   requires_independent_review: z.coerce.boolean().optional(),

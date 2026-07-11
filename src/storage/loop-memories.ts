@@ -176,7 +176,7 @@ function loopMemoryFromRow(row: LoopMemoryRow): LoopMemory {
     evidence_refs: readStringArray(row.evidence_refs_json),
     approved_by: row.approved_by,
     created_at: row.created_at,
-    privacy: JSON.parse(row.privacy_json) as LoopMemory["privacy"],
+    privacy: loopMemoryPrivacy(),
   };
 }
 

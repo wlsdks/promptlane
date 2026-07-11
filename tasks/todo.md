@@ -13,6 +13,9 @@
   `recommend_agent_strategy` once from an isolated real Codex MCP session;
   restore the canonical `looprelay` registration and confirm `doctor codex`
   reports ready with recent ingest.
+- [x] TERRA AUDIT: review all TypeScript/TSX source with automated structural
+  analysis and privacy/SQL/dead-code scans; harden Guide runtime input
+  validation and corrupt loop-metadata recovery with regression coverage.
 - [x] TERRA GREEN: implement model-run ledger, deterministic recommendation,
   CLI/MCP/web surfaces, and optional continuation brief guidance.
 - [x] VERIFY: pass lint, 143-file/1295-test unit suite, production build,
