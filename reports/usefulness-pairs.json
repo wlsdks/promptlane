@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "design": "matched_observational",
+  "causal_claim": false,
+  "minimums": {
+    "pairs": 10,
+    "task_types": 3
+  },
+  "critical_blockers": 0,
+  "pairs": [
+    {
+      "id": "continuity-priority-001",
+      "task_type": "session_recovery",
+      "order": "baseline_first",
+      "baseline": {
+        "passed": true,
+        "actionability": 0.6,
+        "elapsed_ms": null,
+        "tool_calls": 3,
+        "input_tokens": 87213,
+        "output_tokens": 1136,
+        "friction_count": 1
+      },
+      "looprelay": {
+        "passed": true,
+        "actionability": 0.8,
+        "elapsed_ms": null,
+        "tool_calls": 4,
+        "input_tokens": 114242,
+        "output_tokens": 1263,
+        "friction_count": 1,
+        "adopted": true
+      },
+      "human_preference": "looprelay",
+      "judge": {
+        "position_consistent": null
+      }
+    },
+    {
+      "id": "implementation-continuation-002",
+      "task_type": "implementation_continuation",
+      "order": "looprelay_first",
+      "baseline": {
+        "passed": true,
+        "actionability": 0.8,
+        "elapsed_ms": 27500,
+        "tool_calls": 3,
+        "input_tokens": 51313,
+        "output_tokens": 974,
+        "friction_count": 1
+      },
+      "looprelay": {
+        "passed": false,
+        "actionability": 0.2,
+        "elapsed_ms": 45280,
+        "tool_calls": 3,
+        "input_tokens": 169018,
+        "output_tokens": 1905,
+        "friction_count": 1,
+        "adopted": true
+      },
+      "human_preference": "baseline",
+      "judge": {
+        "position_consistent": null
+      }
+    },
+    {
+      "id": "failure-prevention-003",
+      "task_type": "failure_prevention",
+      "order": "baseline_first",
+      "baseline": {
+        "passed": false,
+        "actionability": 0.2,
+        "elapsed_ms": 57800,
+        "tool_calls": 2,
+        "input_tokens": 159323,
+        "output_tokens": 1750,
+        "friction_count": 1
+      },
+      "looprelay": {
+        "passed": true,
+        "actionability": 1,
+        "elapsed_ms": 25100,
+        "tool_calls": 2,
+        "input_tokens": 82875,
+        "output_tokens": 503,
+        "friction_count": 0,
+        "adopted": true
+      },
+      "human_preference": "looprelay",
+      "judge": {
+        "position_consistent": null
+      }
+    }
+  ]
+}

@@ -11206,3 +11206,22 @@
       continuity task, preserving live prompt records and explicit consent.
 - [ ] QA: Verify the target interaction on desktop and mobile with no console,
       overflow, privacy, or compatibility regression.
+
+## 2026-07-11 Public Engineering Usefulness Proof
+
+- [x] CONTRACT: Define one raw-free matched-pair ledger with task type,
+      counterbalanced order, outcome, continuation accuracy, failure prevention,
+      elapsed time, tool calls, token cost, adoption, friction, and human review.
+- [x] RED/GREEN: Build a deterministic report and SVG generator that rejects
+      fewer than three task types, malformed pairs, prompt bodies, raw paths,
+      secrets, and causal claims.
+- [ ] COLLECT: Complete at least 10 reproducible pairs across session recovery,
+      implementation continuation, and repeated-failure prevention tasks.
+- [ ] BIAS: Counterbalance execution order, swap pairwise judge positions, and
+      record position consistency plus human-review agreement.
+- [x] README: Publish generated baseline-versus-LoopRelay graphs, sample size,
+      null/negative results, limitations, and exact reproduction commands.
+- [ ] USERS: Record three independent install-to-first-value flows before
+      interpreting public usefulness.
+- [ ] RELEASE: Run clean install and live compatibility checks, then the full
+      release gate exactly once on the final candidate commit.

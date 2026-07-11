@@ -15,6 +15,24 @@
 - 🧭 Detects recurring failure patterns across loops and asks focused questions
   instead of rewriting ambiguous requests by default.
 
+## Measured Engineering Usefulness
+
+![LoopRelay baseline versus assisted engineering results](docs/assets/usefulness-results.svg)
+
+This chart is generated from the committed raw-free matched-pair ledger, not
+hand-edited marketing data. It shows outcome quality and operating cost
+together, retains null and negative results, and displays `INSUFFICIENT DATA`
+until at least 10 pairs across 3 task types exist. The study is observational;
+`causal_claim` always remains false.
+
+```sh
+pnpm evidence:usefulness
+```
+
+See the [raw-free pair ledger](reports/usefulness-pairs.json),
+[generated summary](reports/usefulness-summary.json), and
+[evaluation protocol](docs/ENGINEERING_USEFULNESS_VALIDATION_2026-07-11.md).
+
 After the npm package is published:
 
 ```sh

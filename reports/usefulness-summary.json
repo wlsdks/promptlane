@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "design": "matched_observational",
+  "status": "insufficient_data",
+  "causal_claim": false,
+  "pair_count": 3,
+  "task_type_count": 3,
+  "task_types": [
+    "failure_prevention",
+    "implementation_continuation",
+    "session_recovery"
+  ],
+  "minimums": {
+    "pairs": 10,
+    "task_types": 3
+  },
+  "baseline": {
+    "success_rate": 0.666667,
+    "mean_actionability": 0.533333,
+    "mean_elapsed_ms": 42650,
+    "mean_tool_calls": 2.666667,
+    "mean_input_tokens": 99283,
+    "mean_output_tokens": 1286.666667,
+    "friction_free_rate": 0
+  },
+  "looprelay": {
+    "success_rate": 0.666667,
+    "mean_actionability": 0.666667,
+    "mean_elapsed_ms": 35190,
+    "mean_tool_calls": 3,
+    "mean_input_tokens": 122045,
+    "mean_output_tokens": 1223.666667,
+    "friction_free_rate": 0.333333
+  },
+  "delta": {
+    "success_rate": 0,
+    "mean_actionability": 0.133334,
+    "mean_elapsed_ms": -7460,
+    "mean_tool_calls": 0.333333,
+    "mean_input_tokens": 22762,
+    "friction_free_rate": 0.333333
+  },
+  "transitions": {
+    "improved": 1,
+    "regressed": 1,
+    "unchanged_passed": 1,
+    "unchanged_failed": 0
+  },
+  "preference": {
+    "baseline": 1,
+    "looprelay": 2,
+    "tie": 0
+  },
+  "adoption_rate": 1,
+  "bias": {
+    "baseline_first": 2,
+    "looprelay_first": 1,
+    "position_consistency": null
+  },
+  "critical_blockers": 0,
+  "note": "Observational matched-pair evidence only. Null and negative results are retained."
+}

@@ -10,6 +10,25 @@
 - 🧠 evidence가 있는 승인된 lesson만 memory 또는 AGENTS.md/CLAUDE.md 제안으로 승격합니다.
 - 🧭 여러 loop에서 반복되는 실패 패턴을 찾고, 불명확한 요청은 rewrite 대신 질문합니다.
 
+## 측정된 엔지니어링 효용
+
+![LoopRelay 미사용 대비 사용 조건 엔지니어링 결과](docs/assets/usefulness-results.svg)
+
+이 그래프는 수작업 마케팅 수치가 아니라 commit된 raw-free matched-pair
+ledger에서 생성됩니다. 결과 품질과 운영 비용을 함께 보여주고 null·negative
+결과도 유지하며, 최소 3개 작업 유형의 10쌍이 모이기 전에는
+`INSUFFICIENT DATA`를 표시합니다. 관찰 연구이므로 `causal_claim`은 항상
+false입니다.
+
+```sh
+pnpm evidence:usefulness
+```
+
+[raw-free pair ledger](reports/usefulness-pairs.json),
+[생성된 summary](reports/usefulness-summary.json),
+[평가 프로토콜](docs/ENGINEERING_USEFULNESS_VALIDATION_2026-07-11.md)을 함께
+확인할 수 있습니다.
+
 npm package가 publish된 뒤:
 
 ```sh
