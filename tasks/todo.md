@@ -11332,3 +11332,16 @@
       removing inherited project prompt diagnostics from its continuation brief.
 - [x] RERUN: Repeat the pair on the focused brief and keep it separate from the
       first attempt and all synthetic cohorts.
+
+## 2026-07-11 First Real Failure-Prevention Pair
+
+- [x] EVIDENCE: Reproduce unsupported validation scripts and the five-file
+      pre-existing repository formatting drift without modifying it.
+- [x] CHECKPOINT: Record the approved safe recovery through the live product.
+- [x] PREREGISTER: Freeze the failure-prevention rubric with Sol before Terra.
+- [x] RUN: Execute a treatment-first real-repository pair on `aad17822` and
+      retain the strict fail/fail, 0/5 versus 4/5 concept result.
+- [x] RED/GREEN: Remove the stale generic Node gate from explicit checkpoints
+      and reserve the full release gate for an explicit final candidate.
+- [ ] RERUN: Verify the focused gate contract on a different real failure; do
+      not reuse this command-formatting case as inflated evidence.

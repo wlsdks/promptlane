@@ -75,6 +75,13 @@ pair는 [real-task ledger](reports/usefulness-real-task-pairs.json)에 별도로
 보존하며 synthetic cohort와 합치지 않고 일반 생산성 주장에도 사용하지
 않습니다.
 
+세 번째 real-task pair는 unsupported validation command와 기존 repository
+formatting drift에서의 복구를 검사했습니다. 두 조건 모두 엄격한 전체 기준은
+통과하지 못했지만, position-swapped Sol review의 failure-prevention concept
+score는 baseline 0/5, LoopRelay 4/5였고 두 순서 모두 LoopRelay를
+선호했습니다. 이 결과는 formal fail/fail로 유지하며 explicit checkpoint
+brief의 stale generic Node gate를 제거하는 근거로 사용했습니다.
+
 npm package가 publish된 뒤:
 
 ```sh

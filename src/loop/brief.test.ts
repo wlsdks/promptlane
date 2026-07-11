@@ -35,6 +35,10 @@ describe("createLoopBrief", () => {
     expect(brief.prompt).toContain(
       "Apply these only when the selected continuation contract does not override them.",
     );
+    expect(brief.prompt).toContain(
+      "Do not run the full release gate unless the selected contract explicitly requires final-candidate validation.",
+    );
+    expect(brief.prompt).not.toContain("Node 22 pnpm gate");
     expect(brief.prompt).not.toContain("prompt ids:");
     expect(brief.prompt).not.toContain("average prompt score:");
     expect(brief.prompt).not.toContain("## Prompt Habits To Improve");

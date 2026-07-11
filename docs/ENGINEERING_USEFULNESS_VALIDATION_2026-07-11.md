@@ -197,6 +197,33 @@ twenty tools, and 326,993 input tokens. This paired before/after remediation is
 still observational and shares one task family, but it is direct evidence that
 checkpoint prioritization reduced rediscovery without adding a new feature.
 
+## First Real Failure-Prevention Pair
+
+The next real-task pair used an observed repository validation failure rather
+than a fixture. The unsupported `pnpm typecheck` and `pnpm format:check`
+commands had failed, while the authoritative `pnpm lint` path was green and
+the repository-wide Prettier check exposed five unrelated pre-existing drifted
+files. The selected recovery contract prohibited a global format write,
+required touched-file formatting checks, focused tests, authoritative lint,
+and `git diff --check`, and retained the existing drift as residual risk.
+
+Under the frozen Sol rubric both conditions failed the strict all-criteria
+threshold. Baseline scored 0/5 concepts and incorrectly attributed the failure
+to a sandbox cache, then proposed retrying the failed command without first
+confirming that the script exists. Treatment scored 4/5, preserved the clean
+worktree and unrelated drift, selected authoritative lint, and scoped Prettier
+to touched files. Both position orders preferred treatment. TTFV was 39.92s
+for treatment and 41.93s for baseline; treatment used 79,865 input tokens
+versus 68,055. The result supports failure-pattern recovery but not a binary
+success claim.
+
+This pair also exposed a stale generic brief rule that requested a Node 22 pnpm
+gate after any behavior change. Explicit checkpoints now run only focused
+checks named by the selected contract and reserve the full release gate for an
+explicit final-candidate contract. This aligns the product with the study's
+focused-test-first release policy; a later failure-prevention pair must verify
+the remediation on a different real failure.
+
 ## Independent Codex Operator Holdout
 
 Three fresh Codex CLI 0.142.5 / GPT-5.4 sessions acted as first-time operators

@@ -103,7 +103,9 @@ export function createLoopBrief(input: {
       "Keep the next change tied to this loop. Do not rename packages, change agent settings, or edit instruction files unless that is the explicit task.",
       "",
       ...(explicitCheckpoint ? [] : ["## Verification"]),
-      "Run the narrowest relevant test first, then the Node 22 pnpm gate when behavior changes. Report command output and remaining risk.",
+      explicitCheckpoint
+        ? "Run the narrowest relevant test first and only the additional checks named by the selected contract. Do not run the full release gate unless the selected contract explicitly requires final-candidate validation. Report command output and remaining risk."
+        : "Run the narrowest relevant test first, then the Node 22 pnpm gate when behavior changes. Report command output and remaining risk.",
       "",
       ...(explicitCheckpoint ? [] : ["## Output"]),
       "Return a short Markdown summary with changes, verification, and risks.",

@@ -137,6 +137,71 @@
         "focused-brief-reduced-rediscovery",
         "position-swapped-judge-consistent"
       ]
+    },
+    {
+      "id": "real-failure-prevention-003",
+      "task_type": "failure_prevention",
+      "order": "looprelay_first",
+      "execution": {
+        "agent": "codex",
+        "agent_version": "0.144.1",
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "sandbox": "read-only",
+        "fresh_session": true,
+        "repository_state": "commit:aad17822",
+        "ground_truth": "sol-preregistered-product-checkpoint"
+      },
+      "baseline": {
+        "passed": false,
+        "core_task_recovered": false,
+        "concept_score": 0,
+        "actionability": 0.2,
+        "elapsed_ms": 41930,
+        "time_to_first_value_ms": 41930,
+        "tool_calls": 2,
+        "failed_tool_calls": 0,
+        "input_tokens": 68055,
+        "cached_input_tokens": 58112,
+        "output_tokens": 1173,
+        "reasoning_output_tokens": 525,
+        "friction_count": 1,
+        "privacy_blocker": false,
+        "data_loss_blocker": false,
+        "install_blocker": false
+      },
+      "looprelay": {
+        "passed": false,
+        "core_task_recovered": true,
+        "concept_score": 4,
+        "actionability": 0.8,
+        "elapsed_ms": 39920,
+        "time_to_first_value_ms": 39920,
+        "tool_calls": 3,
+        "failed_tool_calls": 0,
+        "input_tokens": 79865,
+        "cached_input_tokens": 37888,
+        "output_tokens": 973,
+        "reasoning_output_tokens": 414,
+        "friction_count": 0,
+        "privacy_blocker": false,
+        "data_loss_blocker": false,
+        "install_blocker": false,
+        "adopted": true
+      },
+      "human_preference": "looprelay",
+      "judge": {
+        "position_consistent": true,
+        "preference": "looprelay",
+        "baseline_pass": false,
+        "looprelay_pass": false
+      },
+      "finding_labels": [
+        "baseline-misattributed-command-failure",
+        "baseline-proposed-retrying-unsupported-command",
+        "treatment-preserved-unrelated-format-drift",
+        "treatment-missed-stale-generic-node-gate"
+      ]
     }
   ]
 }

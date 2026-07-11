@@ -381,7 +381,7 @@ describe("real-task usefulness ledger", () => {
     };
 
     expect(ledger.causal_claim).toBe(false);
-    expect(ledger.pairs).toHaveLength(2);
+    expect(ledger.pairs).toHaveLength(3);
     expect(ledger.pairs[0]).toMatchObject({
       baseline: { passed: false, core_task_recovered: false },
       looprelay: { passed: false, core_task_recovered: true },
@@ -389,6 +389,18 @@ describe("real-task usefulness ledger", () => {
     expect(ledger.pairs[1]).toMatchObject({
       baseline: { passed: false, core_task_recovered: false },
       looprelay: { passed: true, core_task_recovered: true },
+    });
+    expect(ledger.pairs[2]).toMatchObject({
+      baseline: {
+        passed: false,
+        core_task_recovered: false,
+        concept_score: 0,
+      },
+      looprelay: {
+        passed: false,
+        core_task_recovered: true,
+        concept_score: 4,
+      },
     });
     expect(source).not.toMatch(/\/Users\/|\/home\//);
     expect(source).not.toMatch(/"(?:prompt|response|transcript|output)"\s*:/i);

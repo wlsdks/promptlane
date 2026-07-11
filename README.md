@@ -78,6 +78,13 @@ two observational pairs are retained in the
 [real-task ledger](reports/usefulness-real-task-pairs.json); they are not pooled
 with synthetic cohorts and are too small for a general productivity claim.
 
+A third real-task pair tested recovery from unsupported validation commands
+and pre-existing repository formatting drift. Both conditions missed the
+strict all-criteria threshold, but position-swapped Sol review scored the
+failure-prevention concepts 0/5 for baseline and 4/5 for LoopRelay, preferring
+LoopRelay in both orders. The result remains a formal fail/fail and motivated
+removal of a stale generic Node gate from explicit checkpoint briefs.
+
 After the npm package is published:
 
 ```sh
