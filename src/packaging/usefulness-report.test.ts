@@ -174,6 +174,9 @@ describe("usefulness report generator", () => {
       action: "retain",
       evidence_status: "directional",
     });
+    expect(renderReadmeResultBlock(report, "en")).toContain(
+      "All 5 target task types meet the per-type minimum",
+    );
   });
 
   it("keeps public readiness blocked until three successful independent flows", () => {

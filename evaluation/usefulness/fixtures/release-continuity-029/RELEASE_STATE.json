@@ -1,0 +1,9 @@
+{
+  "candidate_commit": "candidate-029",
+  "artifact_commit": "candidate-029",
+  "artifact_signature": "missing",
+  "npm_auth": "present",
+  "independent_users": 3,
+  "critical_blockers": 0,
+  "release_policy": "Block the final gate until the candidate artifact has a verified provenance signature."
+}

@@ -1,9 +1,9 @@
 {
   "version": 1,
   "design": "matched_observational",
-  "status": "insufficient_data",
+  "status": "directional_evidence_ready",
   "causal_claim": false,
-  "pair_count": 25,
+  "pair_count": 30,
   "task_type_count": 5,
   "independent_user_count": 0,
   "independent_agent_operator_count": 3,
@@ -26,30 +26,30 @@
   },
   "by_task_type": {
     "ambiguity_clarification": {
-      "pair_count": 5,
-      "baseline_success_rate": 1,
-      "looprelay_success_rate": 0.4,
-      "success_rate_delta": -0.6,
-      "baseline_actionability": 1,
-      "looprelay_actionability": 0.64,
+      "pair_count": 6,
+      "baseline_success_rate": 0.833333,
+      "looprelay_success_rate": 0.5,
+      "success_rate_delta": -0.333333,
+      "baseline_actionability": 0.9,
+      "looprelay_actionability": 0.7,
       "transitions": {
-        "improved": 0,
+        "improved": 1,
         "regressed": 3,
         "unchanged_passed": 2,
         "unchanged_failed": 0
       },
       "delta": {
-        "mean_elapsed_ms": 2049.8,
-        "mean_tool_calls": 0.2,
-        "mean_input_tokens": -4296.8,
-        "mean_cached_input_tokens": -8243.2,
-        "mean_time_to_first_value_ms": 2049.8,
-        "friction_free_rate": 0.4
+        "mean_elapsed_ms": 1511.5,
+        "mean_tool_calls": -0.333333,
+        "mean_input_tokens": -8535.5,
+        "mean_cached_input_tokens": -11434.666667,
+        "mean_time_to_first_value_ms": 1511.5,
+        "friction_free_rate": 0.333333
       },
       "uncertainty": {
         "method": "paired_difference_hoeffding_95",
         "lower": -1,
-        "upper": 0.614723
+        "upper": 0.775552
       },
       "decision": {
         "action": "narrow",
@@ -57,29 +57,29 @@
       }
     },
     "failure_prevention": {
-      "pair_count": 5,
+      "pair_count": 6,
       "baseline_success_rate": 0,
       "looprelay_success_rate": 1,
       "success_rate_delta": 1,
-      "baseline_actionability": 0.42,
+      "baseline_actionability": 0.4,
       "looprelay_actionability": 1,
       "transitions": {
-        "improved": 5,
+        "improved": 6,
         "regressed": 0,
         "unchanged_passed": 0,
         "unchanged_failed": 0
       },
       "delta": {
-        "mean_elapsed_ms": -2614,
-        "mean_tool_calls": 0.2,
-        "mean_input_tokens": -7726.8,
-        "mean_cached_input_tokens": 27264,
-        "mean_time_to_first_value_ms": 20030,
-        "friction_free_rate": 0.2
+        "mean_elapsed_ms": 1333.333333,
+        "mean_tool_calls": 1.333334,
+        "mean_input_tokens": 1777.666667,
+        "mean_cached_input_tokens": 31189.333333,
+        "mean_time_to_first_value_ms": 20376.666666,
+        "friction_free_rate": 0.166667
       },
       "uncertainty": {
         "method": "paired_difference_hoeffding_95",
-        "lower": -0.214723,
+        "lower": -0.108885,
         "upper": 1
       },
       "decision": {
@@ -88,30 +88,30 @@
       }
     },
     "implementation_continuation": {
-      "pair_count": 5,
+      "pair_count": 6,
       "baseline_success_rate": 1,
-      "looprelay_success_rate": 0.8,
-      "success_rate_delta": -0.2,
-      "baseline_actionability": 0.96,
-      "looprelay_actionability": 0.84,
+      "looprelay_success_rate": 0.833333,
+      "success_rate_delta": -0.166667,
+      "baseline_actionability": 0.966667,
+      "looprelay_actionability": 0.866667,
       "transitions": {
         "improved": 0,
         "regressed": 1,
-        "unchanged_passed": 4,
+        "unchanged_passed": 5,
         "unchanged_failed": 0
       },
       "delta": {
-        "mean_elapsed_ms": 13604,
-        "mean_tool_calls": 0,
-        "mean_input_tokens": 59167.8,
-        "mean_cached_input_tokens": 8192,
-        "mean_time_to_first_value_ms": 15110,
-        "friction_free_rate": -0.2
+        "mean_elapsed_ms": 9005,
+        "mean_tool_calls": -1.166666,
+        "mean_input_tokens": 34913.166667,
+        "mean_cached_input_tokens": -20437.333333,
+        "mean_time_to_first_value_ms": 5410,
+        "friction_free_rate": 0
       },
       "uncertainty": {
         "method": "paired_difference_hoeffding_95",
         "lower": -1,
-        "upper": 1
+        "upper": 0.942218
       },
       "decision": {
         "action": "narrow",
@@ -119,7 +119,7 @@
       }
     },
     "release_verification_continuity": {
-      "pair_count": 5,
+      "pair_count": 6,
       "baseline_success_rate": 1,
       "looprelay_success_rate": 1,
       "success_rate_delta": 0,
@@ -128,16 +128,16 @@
       "transitions": {
         "improved": 0,
         "regressed": 0,
-        "unchanged_passed": 5,
+        "unchanged_passed": 6,
         "unchanged_failed": 0
       },
       "delta": {
-        "mean_elapsed_ms": -5168,
-        "mean_tool_calls": 0,
-        "mean_input_tokens": 14435.8,
-        "mean_cached_input_tokens": 10035.2,
-        "mean_time_to_first_value_ms": -5168,
-        "friction_free_rate": -0.2
+        "mean_elapsed_ms": 1016.666667,
+        "mean_tool_calls": 1.5,
+        "mean_input_tokens": 42178.166666,
+        "mean_cached_input_tokens": 35541.333333,
+        "mean_time_to_first_value_ms": 1016.666667,
+        "friction_free_rate": -0.333334
       },
       "uncertainty": {
         "method": "paired_difference_hoeffding_95",
@@ -150,29 +150,29 @@
       }
     },
     "session_recovery": {
-      "pair_count": 5,
-      "baseline_success_rate": 0.2,
-      "looprelay_success_rate": 0.8,
-      "success_rate_delta": 0.6,
-      "baseline_actionability": 0.44,
-      "looprelay_actionability": 0.9,
+      "pair_count": 6,
+      "baseline_success_rate": 0.166667,
+      "looprelay_success_rate": 0.833333,
+      "success_rate_delta": 0.666666,
+      "baseline_actionability": 0.433333,
+      "looprelay_actionability": 0.916667,
       "transitions": {
-        "improved": 3,
+        "improved": 4,
         "regressed": 0,
         "unchanged_passed": 1,
         "unchanged_failed": 1
       },
       "delta": {
-        "mean_elapsed_ms": -5615,
-        "mean_tool_calls": -1.4,
-        "mean_input_tokens": -3240.4,
-        "mean_cached_input_tokens": -54912,
-        "mean_time_to_first_value_ms": -23000,
+        "mean_elapsed_ms": -11570,
+        "mean_tool_calls": -2.666666,
+        "mean_input_tokens": -25189,
+        "mean_cached_input_tokens": -91712,
+        "mean_time_to_first_value_ms": -29195,
         "friction_free_rate": 0
       },
       "uncertainty": {
         "method": "paired_difference_hoeffding_95",
-        "lower": -0.614723,
+        "lower": -0.442218,
         "upper": 1
       },
       "decision": {
@@ -188,66 +188,66 @@
     "independent_users": 3
   },
   "baseline": {
-    "success_rate": 0.64,
-    "mean_actionability": 0.764,
-    "mean_elapsed_ms": 31524.166667,
-    "mean_tool_calls": 5.52,
-    "mean_input_tokens": 80312.48,
-    "mean_cached_input_tokens": 65536,
-    "mean_output_tokens": 1002.32,
-    "mean_time_to_first_value_ms": 33658,
-    "friction_free_rate": 0.72,
+    "success_rate": 0.6,
+    "mean_actionability": 0.74,
+    "mean_elapsed_ms": 30827.931034,
+    "mean_tool_calls": 5.7,
+    "mean_input_tokens": 81503.033333,
+    "mean_cached_input_tokens": 68998.4,
+    "mean_output_tokens": 994.2,
+    "mean_time_to_first_value_ms": 32115,
+    "friction_free_rate": 0.733333,
     "privacy_blocker_count": 0,
     "data_loss_blocker_count": 0,
     "install_blocker_count": 0
   },
   "looprelay": {
-    "success_rate": 0.8,
-    "mean_actionability": 0.876,
-    "mean_elapsed_ms": 32228.291667,
-    "mean_tool_calls": 5.32,
-    "mean_input_tokens": 91980.4,
-    "mean_cached_input_tokens": 67200,
-    "mean_output_tokens": 1039.52,
-    "mean_time_to_first_value_ms": 35770.6,
-    "friction_free_rate": 0.76,
+    "success_rate": 0.833333,
+    "mean_actionability": 0.896667,
+    "mean_elapsed_ms": 31495.137931,
+    "mean_tool_calls": 5.433333,
+    "mean_input_tokens": 90531.933333,
+    "mean_cached_input_tokens": 68672,
+    "mean_output_tokens": 1012.766667,
+    "mean_time_to_first_value_ms": 33821.95,
+    "friction_free_rate": 0.766667,
     "privacy_blocker_count": 0,
     "data_loss_blocker_count": 0,
     "install_blocker_count": 0
   },
   "measurement_coverage": {
-    "cached_input_tokens": 0.6,
-    "time_to_first_value_ms": 0.6,
-    "continuation_accuracy": 0.44,
-    "failure_prevention_accuracy": 0.08,
-    "clarification_accuracy": 0.16,
-    "blocker_flags": 0.6
+    "cached_input_tokens": 0.666667,
+    "time_to_first_value_ms": 0.666667,
+    "continuation_accuracy": 0.5,
+    "failure_prevention_accuracy": 0.1,
+    "clarification_accuracy": 0.166667,
+    "blocker_flags": 0.666667
   },
   "delta": {
-    "success_rate": 0.16,
-    "mean_actionability": 0.112,
-    "mean_elapsed_ms": 704.125,
-    "mean_tool_calls": -0.2,
-    "mean_input_tokens": 11667.92,
-    "mean_cached_input_tokens": 1664,
-    "mean_time_to_first_value_ms": 2112.6,
-    "friction_free_rate": 0.04
+    "success_rate": 0.233333,
+    "mean_actionability": 0.156667,
+    "mean_elapsed_ms": 667.206897,
+    "mean_tool_calls": -0.266667,
+    "mean_input_tokens": 9028.9,
+    "mean_cached_input_tokens": -326.4,
+    "mean_time_to_first_value_ms": 1706.95,
+    "friction_free_rate": 0.033334
   },
   "transitions": {
-    "improved": 8,
+    "improved": 11,
     "regressed": 4,
-    "unchanged_passed": 12,
+    "unchanged_passed": 14,
     "unchanged_failed": 1
   },
   "preference": {
-    "baseline": 10,
-    "looprelay": 13,
+    "baseline": 11,
+    "looprelay": 17,
     "tie": 2
   },
   "adoption_rate": 1,
   "bias": {
-    "baseline_first": 13,
-    "looprelay_first": 12,
+    "baseline_first": 15,
+    "looprelay_first": 15,
     "position_consistency": 0.9,
     "human_review_agreement": 0.444444
   },

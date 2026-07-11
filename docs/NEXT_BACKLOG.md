@@ -62,7 +62,7 @@ Candidate focused slices:
 - improve safe selection when multiple worktrees or sessions are active
 - sharpen question generation for missing scope, constraints, and acceptance criteria
 
-Current provisional evidence decisions (25-pair seed cohort):
+Current evidence decisions (30-pair maintainer-run cohort):
 
 - `retain`: session recovery and external failure-outcome recovery remain
   opt-in continuity workflows; their observed lift is positive but uncertainty
@@ -74,8 +74,21 @@ Current provisional evidence decisions (25-pair seed cohort):
   release state already determines the gate. Five pairs show identical success
   and additional token/friction cost.
 - `narrow`: prefer native focused questions when repository policy identifies
-  the missing dimensions. Five ambiguity pairs show three treatment contract
-  regressions and 100% versus 40% success.
+  the missing dimensions. Six ambiguity pairs show three treatment contract
+  regressions, one baseline serialization failure, and 83.3% versus 50% success.
+
+Evidence-based 1.0.x scope:
+
+- Keep `loop checkpoint`, exact brief recovery, worktree/branch selection, and
+  linked failure outcomes as the primary product path.
+- Modify brief evidence attribution so agents distinguish an approved local
+  snapshot from an unsupported repository inference.
+- De-emphasize generic implementation and release continuation injection when
+  repository state already determines the next action.
+- Remove generic diagnosis from the default ambiguity path; let the coding
+  agent ask native focused questions and retain diagnosis as explicit opt-in.
+- Do not add a large feature until three independent humans complete install
+  and first value. The 30-pair cohort does not satisfy that gate.
 
 No item above authorizes automatic prompt submission, hidden provider calls,
 private transcript scraping, automatic memory writes, or automatic instruction

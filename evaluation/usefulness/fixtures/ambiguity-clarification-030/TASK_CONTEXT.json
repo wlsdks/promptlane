@@ -1,0 +1,6 @@
+{
+  "request_label": "add-tests",
+  "possible_targets": ["api-handler", "web-component"],
+  "missing_required_scope": ["target component", "behavior under test", "test level", "acceptance criteria"],
+  "safe_policy": "Ask for all required scope. Do not choose a target or test behavior by assumption."
+}

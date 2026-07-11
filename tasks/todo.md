@@ -11276,7 +11276,7 @@
 - [x] DATA: Raise the active target to 30 pairs, five task types, and at least
       five pairs per type while retaining the current ten pairs as a disclosed
       seed cohort.
-- [ ] RUN: Execute fresh counterbalanced Codex pairs and append only
+- [x] RUN: Execute fresh counterbalanced Codex pairs and append only
       deterministic, privacy-safe outcome evidence.
   - [x] Add one baseline-first release-verification pair on an identical commit;
         preserve the pass/pass result and higher LoopRelay token/tool cost.
@@ -11296,3 +11296,5 @@
         treatment-question contract as a real regression.
   - [x] Add two more pairs for each remaining type. Reach N=5 for all five task
         types at 25 total pairs; narrow generic release and ambiguity context.
+  - [x] Run one unseen holdout per task type. Reach 30 total pairs with 15/15
+        execution-order balance and finalize evidence-based scope decisions.

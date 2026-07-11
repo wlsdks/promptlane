@@ -15,17 +15,17 @@
 ![LoopRelay 미사용 대비 사용 조건 엔지니어링 결과](docs/assets/usefulness-results.svg)
 
 <!-- USEFULNESS_RESULTS_START -->
-현재 결과는 maintainer-run observational evidence이며 인과관계를 주장하지 않습니다. 25개 matched pair와 5개 작업 유형을 포함합니다. 독립 사용자 검증은 0/3명입니다. 별도의 독립 Codex agent operator는 3개이며 첫 가치 성공률은 100%입니다. Agent operator는 사람 사용자로 계산하지 않습니다.
+현재 결과는 maintainer-run observational evidence이며 인과관계를 주장하지 않습니다. 30개 matched pair와 5개 작업 유형을 포함합니다. 독립 사용자 검증은 0/3명입니다. 별도의 독립 Codex agent operator는 3개이며 첫 가치 성공률은 100%입니다. Agent operator는 사람 사용자로 계산하지 않습니다.
 
 | 작업 유형 | 쌍 | Baseline 성공률 | LoopRelay 성공률 | 차이 | 보수적 95% 범위 | Input token 차이 | 판단 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Ambiguity clarification | 5 | 100% | 40% | -60pp | -100..61.5pp | -4296.8 | Narrow |
-| Failure prevention | 5 | 0% | 100% | +100pp | -21.5..100pp | -7726.8 | Retain |
-| Implementation continuation | 5 | 100% | 80% | -20pp | -100..100pp | +59167.8 | Narrow |
-| Release verification continuity | 5 | 100% | 100% | 0pp | -100..100pp | +14435.8 | Narrow |
-| Session recovery | 5 | 20% | 80% | +60pp | -61.5..100pp | -3240.4 | Retain |
+| Ambiguity clarification | 6 | 83.3% | 50% | -33.3pp | -100..77.6pp | -8535.5 | Narrow |
+| Failure prevention | 6 | 0% | 100% | +100pp | -10.9..100pp | +1777.7 | Retain |
+| Implementation continuation | 6 | 100% | 83.3% | -16.7pp | -100..94.2pp | +34913.2 | Narrow |
+| Release verification continuity | 6 | 100% | 100% | 0pp | -100..100pp | +42178.2 | Narrow |
+| Session recovery | 6 | 16.7% | 83.3% | +66.7pp | -44.2..100pp | -25189 | Retain |
 
-전체 성공률은 64%에서 80%로 변했고 actionability는 76.4%에서 87.6%로 변했습니다. 평균 input token 비용은 14.5% 변했습니다. Cached token과 TTFV의 조건별 측정 coverage는 각각 60%, 60%이며 누락값을 0으로 해석하지 않습니다. 현재 5/5개 목표 유형만 유형별 최소 5쌍을 충족하므로 모든 유형별 판단은 충분한 표본 전까지 잠정적입니다. 일반 implementation continuation에서 회귀가 있으므로 LoopRelay를 모든 coding task에 기본 적용해서는 안 됩니다. 독립 사용자 검증 전까지 causal claim은 false입니다.
+전체 성공률은 60%에서 83.3%로 변했고 actionability는 74%에서 89.7%로 변했습니다. 평균 input token 비용은 11.1% 변했습니다. Cached token과 TTFV의 조건별 측정 coverage는 각각 66.7%, 66.7%이며 누락값을 0으로 해석하지 않습니다. 목표 5개 작업 유형 모두 유형별 최소 5쌍을 충족했습니다. 다만 maintainer-run evidence이며 독립 사용자 검증이 끝나지 않았으므로 판단은 directional입니다. 일반 implementation continuation에서 회귀가 있으므로 LoopRelay를 모든 coding task에 기본 적용해서는 안 됩니다. 독립 사용자 검증 전까지 causal claim은 false입니다.
 <!-- USEFULNESS_RESULTS_END -->
 
 이 그래프는 수작업 마케팅 수치가 아니라 commit된 raw-free matched-pair

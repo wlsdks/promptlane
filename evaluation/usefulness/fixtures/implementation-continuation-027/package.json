@@ -1,0 +1,1 @@
+{"name":"implementation-holdout-027","version":"1.0.0","private":true,"type":"module","scripts":{"test:slug":"node --test test/slug.test.js"}}

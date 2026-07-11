@@ -252,6 +252,12 @@ export function renderReadmeResultBlock(report, locale) {
       ? 0
       : (report.delta.mean_input_tokens / report.baseline.mean_input_tokens) *
         100;
+  const coverageEn = report.coverage.all_task_types_meet_pair_minimum
+    ? `All ${report.minimums.task_types} target task types meet the per-type minimum of ${report.coverage.required_pairs_per_task_type} pairs. Decisions remain directional because this is maintainer-run evidence and independent-user validation is incomplete.`
+    : `Only ${report.coverage.task_types_meeting_pair_minimum}/${report.minimums.task_types} target task types currently meet the per-type minimum of ${report.coverage.required_pairs_per_task_type} pairs, so every task-specific decision remains provisional until coverage is complete.`;
+  const coverageKo = report.coverage.all_task_types_meet_pair_minimum
+    ? `목표 ${report.minimums.task_types}개 작업 유형 모두 유형별 최소 ${report.coverage.required_pairs_per_task_type}쌍을 충족했습니다. 다만 maintainer-run evidence이며 독립 사용자 검증이 끝나지 않았으므로 판단은 directional입니다.`
+    : `현재 ${report.coverage.task_types_meeting_pair_minimum}/${report.minimums.task_types}개 목표 유형만 유형별 최소 ${report.coverage.required_pairs_per_task_type}쌍을 충족하므로 모든 유형별 판단은 충분한 표본 전까지 잠정적입니다.`;
 
   if (locale === "ko") {
     return `현재 결과는 maintainer-run observational evidence이며 인과관계를 주장하지 않습니다. ${report.pair_count}개 matched pair와 ${report.task_type_count}개 작업 유형을 포함합니다. 독립 사용자 검증은 ${report.independent_user_count}/${report.minimums.independent_users}명입니다. 별도의 독립 Codex agent operator는 ${report.independent_agent_operator_count}개이며 첫 가치 성공률은 ${report.independent_agent_operator_success_rate === null ? "N/A" : percent(report.independent_agent_operator_success_rate * 100)}입니다. Agent operator는 사람 사용자로 계산하지 않습니다.
@@ -260,7 +266,7 @@ export function renderReadmeResultBlock(report, locale) {
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 ${taskRows}
 
-전체 성공률은 ${percent(report.baseline.success_rate * 100)}에서 ${percent(report.looprelay.success_rate * 100)}로 변했고 actionability는 ${percent(report.baseline.mean_actionability * 100)}에서 ${percent(report.looprelay.mean_actionability * 100)}로 변했습니다. 평균 input token 비용은 ${round(tokenDeltaPercent)}% 변했습니다. Cached token과 TTFV의 조건별 측정 coverage는 각각 ${percent(report.measurement_coverage.cached_input_tokens * 100)}, ${percent(report.measurement_coverage.time_to_first_value_ms * 100)}이며 누락값을 0으로 해석하지 않습니다. 현재 ${report.coverage.task_types_meeting_pair_minimum}/${report.minimums.task_types}개 목표 유형만 유형별 최소 ${report.coverage.required_pairs_per_task_type}쌍을 충족하므로 모든 유형별 판단은 충분한 표본 전까지 잠정적입니다. 일반 implementation continuation에서 회귀가 있으므로 LoopRelay를 모든 coding task에 기본 적용해서는 안 됩니다. 독립 사용자 검증 전까지 causal claim은 false입니다.`;
+전체 성공률은 ${percent(report.baseline.success_rate * 100)}에서 ${percent(report.looprelay.success_rate * 100)}로 변했고 actionability는 ${percent(report.baseline.mean_actionability * 100)}에서 ${percent(report.looprelay.mean_actionability * 100)}로 변했습니다. 평균 input token 비용은 ${round(tokenDeltaPercent)}% 변했습니다. Cached token과 TTFV의 조건별 측정 coverage는 각각 ${percent(report.measurement_coverage.cached_input_tokens * 100)}, ${percent(report.measurement_coverage.time_to_first_value_ms * 100)}이며 누락값을 0으로 해석하지 않습니다. ${coverageKo} 일반 implementation continuation에서 회귀가 있으므로 LoopRelay를 모든 coding task에 기본 적용해서는 안 됩니다. 독립 사용자 검증 전까지 causal claim은 false입니다.`;
   }
 
   return `Current results are maintainer-run observational evidence, not a causal claim. They include ${report.pair_count} matched pairs across ${report.task_type_count} task types and ${report.independent_user_count}/${report.minimums.independent_users} independent users. A separate cohort has ${report.independent_agent_operator_count} independent agent operators with ${report.independent_agent_operator_success_rate === null ? "N/A" : percent(report.independent_agent_operator_success_rate * 100)} first-value success; agent operators do not count as human users.
@@ -269,7 +275,7 @@ ${taskRows}
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 ${taskRows}
 
-Aggregate success moved from ${percent(report.baseline.success_rate * 100)} to ${percent(report.looprelay.success_rate * 100)}, while actionability moved from ${percent(report.baseline.mean_actionability * 100)} to ${percent(report.looprelay.mean_actionability * 100)}. Mean input-token cost changed by ${round(tokenDeltaPercent)}%. Cached-token and TTFV condition coverage are ${percent(report.measurement_coverage.cached_input_tokens * 100)} and ${percent(report.measurement_coverage.time_to_first_value_ms * 100)} respectively; missing values are not interpreted as zero. Only ${report.coverage.task_types_meeting_pair_minimum}/${report.minimums.task_types} target task types currently meet the per-type minimum of ${report.coverage.required_pairs_per_task_type} pairs, so every task-specific decision remains provisional until coverage is complete. Because ordinary implementation continuation regressed, LoopRelay should not intervene by default in every coding task. The causal claim remains false until independent-user validation is complete.`;
+Aggregate success moved from ${percent(report.baseline.success_rate * 100)} to ${percent(report.looprelay.success_rate * 100)}, while actionability moved from ${percent(report.baseline.mean_actionability * 100)} to ${percent(report.looprelay.mean_actionability * 100)}. Mean input-token cost changed by ${round(tokenDeltaPercent)}%. Cached-token and TTFV condition coverage are ${percent(report.measurement_coverage.cached_input_tokens * 100)} and ${percent(report.measurement_coverage.time_to_first_value_ms * 100)} respectively; missing values are not interpreted as zero. ${coverageEn} Because ordinary implementation continuation regressed, LoopRelay should not intervene by default in every coding task. The causal claim remains false until independent-user validation is complete.`;
 }
 
 function renderMetric(metric, y) {

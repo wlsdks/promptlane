@@ -1127,6 +1127,151 @@
       "judge": {
         "position_consistent": null
       }
+    },
+    {
+      "id": "session-recovery-026",
+      "task_type": "session_recovery",
+      "order": "looprelay_first",
+      "measurement_contract": "codex-ephemeral-v2",
+      "execution": {
+        "agent": "codex", "agent_version": "0.144.1", "model": "gpt-5.4",
+        "reasoning_effort": "medium", "sandbox": "read-only", "fresh_session": true,
+        "fixture_commit": "d4eae435f36d69af1554d4f4bfcaec19821bceda",
+        "budget_contract": "same-model-context-limit", "ground_truth": "deterministic-fixture"
+      },
+      "baseline": {
+        "passed": false, "actionability": 0.4, "elapsed_ms": 43740,
+        "time_to_first_value_ms": 43740, "tool_calls": 9, "input_tokens": 150393,
+        "cached_input_tokens": 136576, "output_tokens": 1541,
+        "continuation_accuracy": 0, "friction_count": 0,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false
+      },
+      "looprelay": {
+        "passed": true, "actionability": 1, "elapsed_ms": 8350,
+        "time_to_first_value_ms": 8350, "tool_calls": 0, "input_tokens": 15461,
+        "cached_input_tokens": 8064, "output_tokens": 256,
+        "continuation_accuracy": 1, "friction_count": 0,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false,
+        "adopted": true
+      },
+      "human_preference": "looprelay",
+      "judge": { "position_consistent": null }
+    },
+    {
+      "id": "implementation-continuation-027",
+      "task_type": "implementation_continuation",
+      "order": "baseline_first",
+      "measurement_contract": "codex-ephemeral-v2",
+      "execution": {
+        "agent": "codex", "agent_version": "0.144.1", "model": "gpt-5.4",
+        "reasoning_effort": "medium", "sandbox": "read-only", "fresh_session": true,
+        "fixture_commit": "4cda1f73b1fa8403d2d03e5e0cb3ffb8a74c95e9",
+        "budget_contract": "same-model-context-limit", "ground_truth": "deterministic-fixture"
+      },
+      "baseline": {
+        "passed": true, "actionability": 1, "elapsed_ms": 36450,
+        "time_to_first_value_ms": 36450, "tool_calls": 11, "input_tokens": 132427,
+        "cached_input_tokens": 117248, "output_tokens": 1288,
+        "continuation_accuracy": 1, "friction_count": 1,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false
+      },
+      "looprelay": {
+        "passed": true, "actionability": 1, "elapsed_ms": 22460,
+        "time_to_first_value_ms": 22460, "tool_calls": 4, "input_tokens": 46067,
+        "cached_input_tokens": 39552, "output_tokens": 877,
+        "continuation_accuracy": 1, "friction_count": 0,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false,
+        "adopted": true
+      },
+      "human_preference": "looprelay",
+      "judge": { "position_consistent": null }
+    },
+    {
+      "id": "failure-prevention-028",
+      "task_type": "failure_prevention",
+      "order": "looprelay_first",
+      "measurement_contract": "codex-ephemeral-v2",
+      "execution": {
+        "agent": "codex", "agent_version": "0.144.1", "model": "gpt-5.4",
+        "reasoning_effort": "medium", "sandbox": "read-only", "fresh_session": true,
+        "fixture_commit": "c7f99ffa0cc1799ed1df6a2dd96dd7249f2f6c51",
+        "budget_contract": "same-model-context-limit", "ground_truth": "deterministic-fixture"
+      },
+      "baseline": {
+        "passed": false, "actionability": 0.3, "elapsed_ms": 8500,
+        "time_to_first_value_ms": 8500, "tool_calls": 0, "input_tokens": 15258,
+        "cached_input_tokens": 13696, "output_tokens": 298,
+        "continuation_accuracy": 0, "failure_prevention_accuracy": 0, "friction_count": 0,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false
+      },
+      "looprelay": {
+        "passed": true, "actionability": 1, "elapsed_ms": 29570,
+        "time_to_first_value_ms": 29570, "tool_calls": 7, "input_tokens": 64558,
+        "cached_input_tokens": 52736, "output_tokens": 744,
+        "continuation_accuracy": 1, "failure_prevention_accuracy": 1, "friction_count": 0,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false,
+        "adopted": true
+      },
+      "human_preference": "looprelay",
+      "judge": { "position_consistent": null }
+    },
+    {
+      "id": "release-verification-continuity-029",
+      "task_type": "release_verification_continuity",
+      "order": "looprelay_first",
+      "measurement_contract": "codex-ephemeral-v2",
+      "execution": {
+        "agent": "codex", "agent_version": "0.144.1", "model": "gpt-5.4",
+        "reasoning_effort": "medium", "sandbox": "read-only", "fresh_session": true,
+        "fixture_commit": "a9670dff0b12fc76845fbd933981b7557d33576d",
+        "budget_contract": "same-model-context-limit", "ground_truth": "deterministic-fixture"
+      },
+      "baseline": {
+        "passed": true, "actionability": 1, "elapsed_ms": 23320,
+        "time_to_first_value_ms": 23320, "tool_calls": 6, "input_tokens": 46299,
+        "cached_input_tokens": 42624, "output_tokens": 786,
+        "continuation_accuracy": 1, "friction_count": 0,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false
+      },
+      "looprelay": {
+        "passed": true, "actionability": 1, "elapsed_ms": 55260,
+        "time_to_first_value_ms": 55260, "tool_calls": 15, "input_tokens": 227189,
+        "cached_input_tokens": 205696, "output_tokens": 1785,
+        "continuation_accuracy": 1, "friction_count": 2,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false,
+        "adopted": true
+      },
+      "human_preference": "baseline",
+      "judge": { "position_consistent": null }
+    },
+    {
+      "id": "ambiguity-clarification-030",
+      "task_type": "ambiguity_clarification",
+      "order": "baseline_first",
+      "measurement_contract": "codex-ephemeral-v2",
+      "execution": {
+        "agent": "codex", "agent_version": "0.144.1", "model": "gpt-5.4",
+        "reasoning_effort": "medium", "sandbox": "read-only", "fresh_session": true,
+        "fixture_commit": "82727e93cacec94d45b471e112a6b157ddc1ab5d",
+        "budget_contract": "same-model-context-limit", "ground_truth": "deterministic-fixture"
+      },
+      "baseline": {
+        "passed": false, "actionability": 0.4, "elapsed_ms": 25420,
+        "time_to_first_value_ms": 25420, "tool_calls": 7, "input_tokens": 92902,
+        "cached_input_tokens": 86784, "output_tokens": 855,
+        "clarification_accuracy": 0.75, "friction_count": 0,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false
+      },
+      "looprelay": {
+        "passed": true, "actionability": 1, "elapsed_ms": 24240,
+        "time_to_first_value_ms": 24240, "tool_calls": 4, "input_tokens": 63173,
+        "cached_input_tokens": 59392, "output_tokens": 733,
+        "clarification_accuracy": 1, "friction_count": 0,
+        "privacy_blocker": false, "data_loss_blocker": false, "install_blocker": false,
+        "adopted": true
+      },
+      "human_preference": "looprelay",
+      "judge": { "position_consistent": null }
     }
   ]
 }

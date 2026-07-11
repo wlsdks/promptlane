@@ -5,14 +5,13 @@ evidence workflows. It is not a causal product claim.
 
 ## Method
 
-Twenty-five matched pairs use fixed Codex model and reasoning settings, identical
+Thirty matched pairs use fixed Codex model and reasoning settings, identical
 fixture commits within each pair, a read-only boundary, one output schema, and
-the same model context limit. Thirteen pairs ran baseline first and twelve ran LoopRelay
-first. The seed corpus covers session recovery (5), implementation continuation
-(5), repeated-failure prevention (5), release-verification continuity (5), and
-ambiguity clarification (5). Every task type meets the per-type minimum, but the
-corpus is below the active threshold of 30 total pairs
-and five pairs per task type.
+the same model context limit. Fifteen pairs ran baseline first and fifteen ran
+LoopRelay first. The corpus covers session recovery (6), implementation
+continuation (6), repeated-failure prevention (6), release-verification
+continuity (6), and ambiguity clarification (6). It meets the active threshold
+of 30 total pairs and at least five pairs per task type.
 
 Human review used deterministic repository state and scored correct outcome,
 context recovery, blocker identification, next-step actionability, and operator
@@ -28,20 +27,20 @@ therefore a bias diagnostic, not the source of success labels.
 
 | Task type | Pairs | Baseline success | LoopRelay success | Difference |
 | --- | ---: | ---: | ---: | ---: |
-| Ambiguity clarification | 5 | 100% | 40% | -60pp |
-| Failure prevention | 5 | 0% | 100% | +100pp |
-| Implementation continuation | 5 | 100% | 80% | -20pp |
-| Release-verification continuity | 5 | 100% | 100% | 0pp |
-| Session recovery | 5 | 20% | 80% | +60pp |
-| **Aggregate** | **25** | **64%** | **80%** | **+16pp** |
+| Ambiguity clarification | 6 | 83.3% | 50% | -33.3pp |
+| Failure prevention | 6 | 0% | 100% | +100pp |
+| Implementation continuation | 6 | 100% | 83.3% | -16.7pp |
+| Release-verification continuity | 6 | 100% | 100% | 0pp |
+| Session recovery | 6 | 16.7% | 83.3% | +66.7pp |
+| **Aggregate** | **30** | **60%** | **83.3%** | **+23.3pp** |
 
-- Actionability increased from 76.4% to 87.6%.
-- Mean elapsed time increased by 0.70 seconds among runs with timing data.
-- Mean tool calls decreased from 5.52 to 5.32.
-- Mean input tokens increased from 80,312 to 91,980 (+14.5%).
-- Eight failures improved, four successful baselines regressed, twelve pairs
+- Actionability increased from 74.0% to 89.7%.
+- Mean elapsed time increased by 0.67 seconds among runs with timing data.
+- Mean tool calls decreased from 5.70 to 5.43.
+- Mean input tokens increased from 81,503 to 90,532 (+11.1%).
+- Eleven failures improved, four successful baselines regressed, fourteen pairs
   remained successful, and one pair remained failed.
-- Human preference was LoopRelay 13, baseline 10, tie 2.
+- Human preference was LoopRelay 17, baseline 11, tie 2.
 - Position-swapped judge choices were consistent for 9/10 pairs, but agreed
   with the ground-truth-based human preference on only 4/9 consistent pairs.
   This disagreement is evidence against using an ungrounded LLM preference as
@@ -69,7 +68,7 @@ evaluation harness assumed the wrong JSON nesting. It is recorded as excluded
 harness friction and does not contribute outcome metrics.
 
 Cached-token, TTFV, continuation-accuracy, and blocker flags are available for
-the fifteen new pairs only (60% condition coverage). The report exposes this
+the twenty new pairs only (66.7% condition coverage). The report exposes this
 coverage instead of silently treating missing historical measurements as zero.
 
 Two additional failure-prevention fixtures covered an upstream quota failure
@@ -105,6 +104,16 @@ regressions. The decision is `narrow`: when repository policy identifies the
 missing dimensions, prefer the agent's native focused questions over generic
 diagnosis metadata.
 
+The five final holdouts added one unseen fixture per task type and completed a
+15/15 execution-order balance. Session recovery and failure prevention again
+favored LoopRelay. The implementation holdout was pass/pass and unusually faster
+with LoopRelay, reducing but not reversing that type's accumulated cost. The
+release holdout was pass/pass with large treatment overhead. In ambiguity,
+baseline—not treatment—encoded questions as one JSON string, so LoopRelay
+recovered one failure. This confirms that question serialization is unstable
+across both conditions, while the accumulated result still favors narrowing
+generic diagnosis rather than making it the default.
+
 ## Interpretation And Scope
 
 The aggregate result is directional, not causal. The strongest signal is in
@@ -117,6 +126,8 @@ Keep current-project recovery, exact continuation briefs, and recurring-failure
 evidence. Reduce default intervention for ordinary implementation work and
 continue testing shorter briefs. Do not publish a claim of general coding-agent
 productivity improvement.
+The supported product claim is narrower: LoopRelay is useful when essential
+prior-session or prior-failure evidence is absent from Git.
 
 ## Independent Codex Operator Holdout
 
