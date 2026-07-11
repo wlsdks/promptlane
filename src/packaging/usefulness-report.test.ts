@@ -28,6 +28,8 @@ describe("usefulness report generator", () => {
       pair_count: 3,
       task_type_count: 3,
       independent_user_count: 0,
+      independent_agent_operator_count: 0,
+      independent_agent_operator_success_rate: null,
       public_readiness: {
         ready: false,
         reason: "independent_users_missing",
@@ -84,6 +86,7 @@ describe("usefulness report generator", () => {
     expect(markdown).toContain("maintainer-run observational evidence");
     expect(markdown).toContain("causal claim remains false");
     expect(markdown).toContain("0/3 independent users");
+    expect(markdown).toContain("0 independent agent operators");
   });
 
   it("rejects causal claims, prompt-bearing fields, secrets, and raw paths", () => {
@@ -154,6 +157,7 @@ function ledger() {
     causal_claim: false,
     minimums: { pairs: 10, task_types: 3, independent_users: 3 },
     independent_users: [],
+    independent_agent_operators: [],
     pairs: [
       pair("session_recovery", "baseline_first", true, true, 0.6, 0.8, 0, 0),
       pair(

@@ -4,7 +4,11 @@ import {
   createBenchmarkPairCandidateReport,
   type BenchmarkPairCandidateReport,
 } from "../../analysis/benchmark-pair-candidates.js";
-import { loadHookAuth, loadLoopRelayConfig } from "../../config/config.js";
+import {
+  initializeLoopRelay,
+  loadHookAuth,
+  loadLoopRelayConfig,
+} from "../../config/config.js";
 import {
   createLoopBrief,
   latestCompactBoundaryAfterSnapshot,
@@ -106,6 +110,37 @@ export function registerLoopCommand(program: Command): void {
     .option("--worktree <name>", "Worktree label to attach to the snapshot.")
     .action((options: LoopCliOptions) => {
       console.log(loopCollectForCli(options));
+    });
+
+  loop
+    .command("checkpoint")
+    .description(
+      "Create a privacy-safe first-session checkpoint and continuation brief.",
+    )
+    .requiredOption(
+      "--summary <summary>",
+      "Safe task state and next-step summary; prompt bodies are not stored.",
+    )
+    .option(
+      "--status <status>",
+      "Checkpoint status (unknown, in_progress, passed, failed, blocked, or abandoned).",
+      "in_progress",
+    )
+    .option(
+      "--evidence-ref <ref>",
+      "Privacy-safe evidence label; repeat for multiple labels.",
+      collectOptionValue,
+      [],
+    )
+    .option("--data-dir <path>", "Override the looprelay data directory.")
+    .option("--branch <name>", "Git branch label to attach to the checkpoint.")
+    .option(
+      "--worktree <name>",
+      "Safe worktree label to attach to the checkpoint.",
+    )
+    .option("--json", "Print JSON.")
+    .action((options: LoopCliOptions) => {
+      console.log(loopCheckpointForCli(options));
     });
 
   loop
@@ -279,6 +314,59 @@ export function loopCollectForCli(options: LoopCliOptions = {}): string {
   });
 }
 
+export function loopCheckpointForCli(options: LoopCliOptions = {}): string {
+  const parsed = parseLoopOutcomeInput({
+    status: options.status ?? "in_progress",
+    summary: options.summary,
+    evidenceRefs: options.evidenceRefs ?? options.evidenceRef,
+  });
+  if (!parsed.ok) {
+    throw new UserError(parsed.message);
+  }
+
+  initializeLoopRelay({ dataDir: options.dataDir });
+  return withStorage(options.dataDir, (storage, hmacSecret) => {
+    const cwd = options.cwd ?? process.cwd();
+    const snapshot = collectLoopSnapshot({
+      storage,
+      hmacSecret,
+      source: "cli",
+      now: options.now,
+      cwd,
+      cwdPrefix: options.cwdPrefix ?? cwd,
+      limit: parseLimit(options.limit),
+      branch: options.branch,
+      worktree: options.worktree,
+    });
+    const recorded = storage.recordLoopOutcome(snapshot.id, parsed.outcome);
+    if (!recorded) {
+      throw new UserError("Loop checkpoint could not be recorded.");
+    }
+    const brief = createLoopBrief({
+      snapshot: recorded,
+      approvedMemories: storage.listLoopMemories({
+        projectId: recorded.project_id,
+        limit: 3,
+      }).items,
+    });
+    const result = {
+      snapshot: recorded,
+      brief,
+      next_action: "copy the continuation brief into the next agent session",
+      privacy: {
+        local_only: true as const,
+        external_calls: false as const,
+        stores_prompt_bodies: false as const,
+        stores_raw_paths: false as const,
+      },
+    };
+
+    return options.json
+      ? JSON.stringify(result, null, 2)
+      : `Checkpoint recorded for ${recorded.cwd_label}.\n\n${brief.prompt}`;
+  });
+}
+
 export function loopStatusForCli(options: LoopCliOptions = {}): string {
   return withStorage(options.dataDir, (storage, hmacSecret) => {
     const allSnapshots = storage.listLoopSnapshots({ limit: 100 }).items;
@@ -317,11 +405,7 @@ export function loopStatusForCli(options: LoopCliOptions = {}): string {
       ? JSON.stringify(status, null, 2)
       : options.verbose
         ? formatVerboseLoopStatus(status)
-        : formatLoopStatus(
-            status,
-            pairReadiness,
-            options.allProjects === true,
-          );
+        : formatLoopStatus(status, pairReadiness, options.allProjects === true);
   });
 }
 
@@ -746,8 +830,10 @@ function formatLoopStatus(
     .find((action) => action.includes("looprelay loop outcome --snapshot-id"))
     ?.match(/looprelay loop outcome --snapshot-id [A-Za-z0-9_-]+/)?.[0];
   const nextAction =
-    latest && (latest.outcome_status === "unknown" || latest.outcome_status === "in_progress")
-      ? checkpointAction ?? status.next_action
+    latest &&
+    (latest.outcome_status === "unknown" ||
+      latest.outcome_status === "in_progress")
+      ? (checkpointAction ?? status.next_action)
       : status.next_action;
 
   return [
@@ -762,9 +848,7 @@ function formatLoopStatus(
   ].join("\n");
 }
 
-function formatPairReadiness(
-  readiness: BenchmarkPairCandidateReport,
-): string {
+function formatPairReadiness(readiness: BenchmarkPairCandidateReport): string {
   if (readiness.status === "ready") {
     return `${readiness.baseline_candidate_count} baseline · ${readiness.looprelay_candidate_count} LoopRelay · pair review ready`;
   }

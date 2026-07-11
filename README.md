@@ -20,7 +20,7 @@
 ![LoopRelay baseline versus assisted engineering results](docs/assets/usefulness-results.svg)
 
 <!-- USEFULNESS_RESULTS_START -->
-Current results are maintainer-run observational evidence, not a causal claim. They include 10 matched pairs across 3 task types and 0/3 independent users.
+Current results are maintainer-run observational evidence, not a causal claim. They include 10 matched pairs across 3 task types and 0/3 independent users. A separate cohort has 3 independent agent operators with 100% first-value success; agent operators do not count as human users.
 
 | Task type | Pairs | Baseline success | LoopRelay success | Delta |
 | --- | ---: | ---: | ---: | ---: |
@@ -51,7 +51,7 @@ After the npm package is published:
 npm install -g looprelay
 looprelay setup --profile coach --register-mcp --open-web
 # then collect and continue a real coding-agent loop:
-looprelay loop collect --tool codex
+looprelay loop collect
 looprelay loop brief
 ```
 
@@ -62,7 +62,7 @@ git clone https://github.com/wlsdks/looprelay.git
 cd looprelay
 pnpm install
 pnpm setup
-pnpm looprelay loop collect --tool codex
+pnpm looprelay loop collect
 pnpm looprelay loop brief
 ```
 
@@ -92,10 +92,9 @@ For most users, the happy path is:
 ```sh
 looprelay start --open-web
 looprelay setup --profile coach --register-mcp --open-web
-# do real work in Codex or Claude Code, then capture a safe checkpoint
-looprelay loop collect --tool codex
-# in the next session, request the selected continuation
-looprelay loop brief
+# During the installation session, record a safe task checkpoint immediately.
+looprelay loop checkpoint --summary "Verify the empty-result boundary before changing code." --branch "$(git branch --show-current)"
+# Copy the returned continuation brief into the next agent session.
 ```
 
 Skip `--open-web` if you do not want the web workspace to open automatically on

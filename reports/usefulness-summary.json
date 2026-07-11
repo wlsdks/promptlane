@@ -6,6 +6,8 @@
   "pair_count": 10,
   "task_type_count": 3,
   "independent_user_count": 0,
+  "independent_agent_operator_count": 3,
+  "independent_agent_operator_success_rate": 1,
   "public_readiness": {
     "ready": false,
     "reason": "independent_users_missing"

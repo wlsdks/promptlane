@@ -10,6 +10,7 @@ import { redactPrompt } from "../../redaction/redact.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
 import {
   loopBriefForCli,
+  loopCheckpointForCli,
   loopCollectForCli,
   loopInstructionPatchApplyForCli,
   loopInstructionPatchForCli,
@@ -31,6 +32,55 @@ afterEach(() => {
 });
 
 describe("loop CLI command", () => {
+  it("creates a first-session checkpoint and actionable brief without captured prompts", () => {
+    const dataDir = createTempDir();
+    const json = loopCheckpointForCli({
+      dataDir,
+      json: true,
+      cwd: "/Users/example/release-project",
+      cwdPrefix: "/Users/example/release-project",
+      branch: "validation",
+      worktree: "default",
+      status: "in_progress",
+      summary: "Confirm branch and clean state before any release command.",
+      evidenceRefs: ["git:branch-and-status"],
+      now: new Date("2026-07-11T07:00:00.000Z"),
+    });
+    const parsed = JSON.parse(json) as {
+      snapshot: { prompt_ids: string[]; outcome: { summary: string } };
+      brief: { prompt: string };
+      privacy: { stores_prompt_bodies: boolean; stores_raw_paths: boolean };
+    };
+
+    expect(parsed.snapshot.prompt_ids).toEqual([]);
+    expect(parsed.snapshot.outcome.summary).toBe(
+      "Confirm branch and clean state before any release command.",
+    );
+    expect(parsed.brief.prompt).toContain("branch: validation");
+    expect(parsed.brief.prompt).toContain(
+      "Confirm branch and clean state before any release command.",
+    );
+    expect(parsed.privacy).toEqual({
+      local_only: true,
+      external_calls: false,
+      stores_prompt_bodies: false,
+      stores_raw_paths: false,
+    });
+    expect(json).not.toContain("/Users/example");
+  });
+
+  it("rejects unsafe first-session checkpoint summaries before storage", () => {
+    expect(() =>
+      loopCheckpointForCli({
+        dataDir: "/Users/example/should-not-open",
+        status: "in_progress",
+        summary: "Inspect /Users/example/private.log next.",
+      }),
+    ).toThrow(
+      "Loop outcome summary and evidence refs must not include secrets or raw local paths.",
+    );
+  });
+
   it("collects a privacy-safe loop snapshot as JSON and text", async () => {
     const dataDir = createTempDir();
     await seedPrompts(dataDir);

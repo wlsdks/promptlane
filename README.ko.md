@@ -15,7 +15,7 @@
 ![LoopRelay 미사용 대비 사용 조건 엔지니어링 결과](docs/assets/usefulness-results.svg)
 
 <!-- USEFULNESS_RESULTS_START -->
-현재 결과는 maintainer-run observational evidence이며 인과관계를 주장하지 않습니다. 10개 matched pair와 3개 작업 유형을 포함합니다. 독립 사용자 검증은 0/3명입니다.
+현재 결과는 maintainer-run observational evidence이며 인과관계를 주장하지 않습니다. 10개 matched pair와 3개 작업 유형을 포함합니다. 독립 사용자 검증은 0/3명입니다. 별도의 독립 Codex agent operator는 3개이며 첫 가치 성공률은 100%입니다. Agent operator는 사람 사용자로 계산하지 않습니다.
 
 | 작업 유형 | 쌍 | Baseline 성공률 | LoopRelay 성공률 | 차이 |
 | --- | ---: | ---: | ---: | ---: |
@@ -47,7 +47,7 @@ npm package가 publish된 뒤:
 npm install -g looprelay
 looprelay setup --profile coach --register-mcp --open-web
 # 실제 작업 후 checkpoint를 수집하고 다음 세션에서 이어갑니다:
-looprelay loop collect --tool codex
+looprelay loop collect
 looprelay loop brief
 ```
 
@@ -58,7 +58,7 @@ git clone https://github.com/wlsdks/looprelay.git
 cd looprelay
 pnpm install
 pnpm setup
-pnpm looprelay loop collect --tool codex
+pnpm looprelay loop collect
 pnpm looprelay loop brief
 ```
 
@@ -87,10 +87,9 @@ LoopRelay을 자동 agent runtime, transcript scraper, merge bot으로 만들지
 ```sh
 looprelay start --open-web
 looprelay setup --profile coach --register-mcp --open-web
-# 실제 작업 뒤 안전한 checkpoint를 수집합니다
-looprelay loop collect --tool codex
-# 다음 session에서 선택한 작업을 이어갑니다
-looprelay loop brief
+# 설치 중인 현재 session에서도 안전한 task checkpoint를 즉시 기록합니다
+looprelay loop checkpoint --summary "코드 변경 전 빈 결과 경계를 검증한다." --branch "$(git branch --show-current)"
+# 반환된 continuation brief를 다음 agent session에 복사합니다
 ```
 
 새 agent session마다 웹 workspace가 자동으로 열리는 것이 싫다면

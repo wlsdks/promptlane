@@ -54,13 +54,38 @@ evidence. Reduce default intervention for ordinary implementation work and
 continue testing shorter briefs. Do not publish a claim of general coding-agent
 productivity improvement.
 
+## Independent Codex Operator Holdout
+
+Three fresh Codex CLI 0.142.5 / GPT-5.4 sessions acted as first-time operators
+in isolated git repositories with separate HOME, npm, and LoopRelay state. They
+received only a local tarball, `TASK.md`, installed CLI help, a 12-command
+budget, and one of three tasks: session recovery, rejected-approach prevention,
+or release-state recovery.
+
+Before remediation, first-value success was 0/3. One default sandbox could not
+fetch npm dependencies, one operator exhausted its budget discovering hook
+payload/quoting details, and one produced a generic zero-prompt brief that did
+not preserve the task. These failures motivated the prompt-body-free
+`looprelay loop checkpoint` command.
+
+The supported-runtime remediation cohort passed 3/3. Time to first value was
+101s, 82s, and 81s; command counts were 11, 11, and 9. Every operator found the
+new command through CLI help and produced a task-specific brief. One additional
+run selected unsupported Node 18 inside its isolated login shell and exceeded
+the command budget while recovering; it is retained as runtime friction but
+excluded from the Node 22 cohort.
+
+These are independent agent operators, not independent human users. They show
+that Codex can now install and operate the supported first-value flow, but they
+do not satisfy the human 3-user gate or justify a causal productivity claim.
+
 ## Reproduction And Remaining Gates
 
 Run `pnpm evidence:usefulness` to validate the raw-free ledger and regenerate
 the JSON summary, README result blocks, and SVG. The generated artifacts are
 `reports/usefulness-summary.json` and `docs/assets/usefulness-results.svg`.
 
-Three independent install-to-first-value sessions are still required. Rendered
+Three independent human install-to-first-value sessions are still required. Rendered
 desktop/mobile QA is also pending because the in-app browser runtime did not
 start in this session. Neither requirement may be replaced with maintainer
 dogfood. The full release gate must run only once, on the final candidate after

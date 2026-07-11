@@ -21,6 +21,7 @@ export function createUsefulnessReport(input) {
   const taskTypes = new Set(pairs.map((pair) => pair.task_type));
   const minimums = input.minimums;
   const independentUsers = input.independent_users ?? [];
+  const independentAgentOperators = input.independent_agent_operators ?? [];
   const enoughData =
     pairs.length >= minimums.pairs && taskTypes.size >= minimums.task_types;
 
@@ -32,6 +33,15 @@ export function createUsefulnessReport(input) {
     pair_count: pairs.length,
     task_type_count: taskTypes.size,
     independent_user_count: independentUsers.length,
+    independent_agent_operator_count: independentAgentOperators.length,
+    independent_agent_operator_success_rate:
+      independentAgentOperators.length === 0
+        ? null
+        : mean(
+            independentAgentOperators.map((operator) =>
+              operator.install_success && operator.first_value_success ? 1 : 0,
+            ),
+          ),
     public_readiness: publicReadiness(
       independentUsers,
       minimums.independent_users,
@@ -190,7 +200,7 @@ export function renderReadmeResultBlock(report, locale) {
         100;
 
   if (locale === "ko") {
-    return `현재 결과는 maintainer-run observational evidence이며 인과관계를 주장하지 않습니다. ${report.pair_count}개 matched pair와 ${report.task_type_count}개 작업 유형을 포함합니다. 독립 사용자 검증은 ${report.independent_user_count}/${report.minimums.independent_users}명입니다.
+    return `현재 결과는 maintainer-run observational evidence이며 인과관계를 주장하지 않습니다. ${report.pair_count}개 matched pair와 ${report.task_type_count}개 작업 유형을 포함합니다. 독립 사용자 검증은 ${report.independent_user_count}/${report.minimums.independent_users}명입니다. 별도의 독립 Codex agent operator는 ${report.independent_agent_operator_count}개이며 첫 가치 성공률은 ${report.independent_agent_operator_success_rate === null ? "N/A" : percent(report.independent_agent_operator_success_rate * 100)}입니다. Agent operator는 사람 사용자로 계산하지 않습니다.
 
 | 작업 유형 | 쌍 | Baseline 성공률 | LoopRelay 성공률 | 차이 |
 | --- | ---: | ---: | ---: | ---: |
@@ -199,7 +209,7 @@ ${taskRows}
 전체 성공률은 ${percent(report.baseline.success_rate * 100)}에서 ${percent(report.looprelay.success_rate * 100)}로 변했고 actionability는 ${percent(report.baseline.mean_actionability * 100)}에서 ${percent(report.looprelay.mean_actionability * 100)}로 변했습니다. 평균 input token 비용은 ${round(tokenDeltaPercent)}% 변했습니다. 일반 implementation continuation에서 회귀가 있으므로 LoopRelay를 모든 coding task에 기본 적용해서는 안 됩니다. 독립 사용자 검증 전까지 causal claim은 false입니다.`;
   }
 
-  return `Current results are maintainer-run observational evidence, not a causal claim. They include ${report.pair_count} matched pairs across ${report.task_type_count} task types and ${report.independent_user_count}/${report.minimums.independent_users} independent users.
+  return `Current results are maintainer-run observational evidence, not a causal claim. They include ${report.pair_count} matched pairs across ${report.task_type_count} task types and ${report.independent_user_count}/${report.minimums.independent_users} independent users. A separate cohort has ${report.independent_agent_operator_count} independent agent operators with ${report.independent_agent_operator_success_rate === null ? "N/A" : percent(report.independent_agent_operator_success_rate * 100)} first-value success; agent operators do not count as human users.
 
 | Task type | Pairs | Baseline success | LoopRelay success | Delta |
 | --- | ---: | ---: | ---: | ---: |
@@ -300,6 +310,12 @@ function validateLedger(input) {
     throw new Error("independent_users must be an array");
   }
   for (const user of input.independent_users) validateIndependentUser(user);
+  if (!Array.isArray(input.independent_agent_operators)) {
+    throw new Error("independent_agent_operators must be an array");
+  }
+  for (const operator of input.independent_agent_operators) {
+    validateAgentOperator(operator);
+  }
   const ids = new Set();
   for (const pair of input.pairs) {
     if (!/^[a-z0-9-]+$/.test(pair.id) || ids.has(pair.id)) {
@@ -329,6 +345,34 @@ function validateLedger(input) {
       )
     ) {
       throw new Error("invalid judge preference");
+    }
+  }
+}
+
+function validateAgentOperator(operator) {
+  if (!/^[a-z0-9-]+$/.test(operator?.id ?? "")) {
+    throw new Error("agent operator ids must be raw-free labels");
+  }
+  for (const key of [
+    "install_success",
+    "first_value_success",
+    "privacy_blocker",
+    "data_loss_blocker",
+  ]) {
+    if (typeof operator[key] !== "boolean") {
+      throw new Error(`agent operator field is required: ${key}`);
+    }
+  }
+  for (const key of [
+    "install_elapsed_ms",
+    "time_to_first_value_ms",
+    "command_count",
+    "input_tokens",
+    "recovery_count",
+    "friction_count",
+  ]) {
+    if (!Number.isFinite(operator[key]) || operator[key] < 0) {
+      throw new Error(`invalid agent operator metric: ${key}`);
     }
   }
 }

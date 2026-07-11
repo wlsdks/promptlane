@@ -1234,6 +1234,8 @@ describe("plugin packaging files", () => {
       expect(content).toContain(
         "looprelay setup --profile coach --register-mcp --open-web",
       );
+      expect(content).toContain("looprelay loop checkpoint --summary");
+      expect(content).not.toContain("loop collect --tool");
       expect(content).toContain("claude mcp add");
       expect(content).toContain("codex mcp add");
     }
@@ -3489,7 +3491,7 @@ describe("plugin packaging files", () => {
         join(process.cwd(), "scripts/package-install-smoke.mjs"),
         "utf8",
       ),
-    ).toContain('includes("outcome")');
+    ).toContain('["checkpoint", "outcome"]');
     expect(smoke).toContain("LOOPRELAY_FIRST_LOOP_SECRET");
     expect(smoke).toContain("assertNotIncludes");
     expect(smoke).toContain("first coach loop dogfood passed");

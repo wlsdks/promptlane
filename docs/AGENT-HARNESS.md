@@ -61,6 +61,14 @@ corepack pnpm looprelay loop memory-candidate --worktree <safe-worktree-label>
 corepack pnpm looprelay loop memory-approve --worktree <safe-worktree-label> --approved-by user
 ```
 
+When LoopRelay is installed inside an agent session that began before hooks
+were active, use the one-command raw-free checkpoint path instead of fabricating
+an imported prompt:
+
+```bash
+corepack pnpm looprelay loop checkpoint --summary "Verify the current blocker before changing code." --branch "$(git branch --show-current)"
+```
+
 Acceptance criteria:
 
 - Hook failures are fail-open.

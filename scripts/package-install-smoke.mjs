@@ -52,9 +52,31 @@ try {
       encoding: "utf8",
     },
   );
-  if (!loopHelp.stdout.includes("outcome")) {
-    throw new Error("installed loop CLI did not expose outcome recording");
+  for (const command of ["checkpoint", "outcome"]) {
+    if (!loopHelp.stdout.includes(command)) {
+      throw new Error(`installed loop CLI did not expose ${command}`);
+    }
   }
+  const checkpoint = run(
+    join(tempPrefix, "bin", "looprelay"),
+    [
+      "loop",
+      "checkpoint",
+      "--summary",
+      "Verify the supported first-value path before changing code.",
+      "--branch",
+      "package-smoke",
+      "--data-dir",
+      join(tempHome, "checkpoint-data"),
+      "--json",
+    ],
+    {
+      cwd: tempHome,
+      env: { ...process.env, HOME: tempHome },
+      encoding: "utf8",
+    },
+  );
+  validateCheckpoint(checkpoint.stdout);
   const benchmarkHelp = run(
     join(tempPrefix, "bin", "looprelay"),
     ["benchmark", "--help"],
@@ -283,7 +305,8 @@ try {
         status: "pass",
         tarball: basename(tarballPath),
         bins: ["looprelay", "lr-claude", "lr-codex"],
-        first_success: "looprelay start --open-web --json",
+        first_success:
+          'looprelay loop checkpoint --summary "<safe task state>" --branch "<branch>"',
         release_gate: "looprelay quality-evidence --require-complete",
         fixture_init:
           "looprelay benchmark init-fixture --output <operator-owned>",
@@ -362,6 +385,28 @@ function validateStartGuide(stdout) {
     if (!commands.includes(expectedCommand)) {
       throw new Error(`start guide did not include ${expectedCommand}`);
     }
+  }
+}
+
+function validateCheckpoint(stdout) {
+  const parsed = JSON.parse(stdout);
+  if (parsed?.snapshot?.outcome?.status !== "in_progress") {
+    throw new Error("installed checkpoint did not record in-progress state");
+  }
+  if (
+    !parsed?.brief?.prompt?.includes(
+      "Verify the supported first-value path before changing code.",
+    )
+  ) {
+    throw new Error(
+      "installed checkpoint did not preserve the safe task state",
+    );
+  }
+  if (
+    parsed?.privacy?.stores_prompt_bodies !== false ||
+    parsed?.privacy?.stores_raw_paths !== false
+  ) {
+    throw new Error("installed checkpoint violated privacy invariants");
   }
 }
 

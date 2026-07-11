@@ -11231,3 +11231,16 @@
       independent flows are recorded.
 - [ ] RELEASE: Run clean install and live compatibility checks, then the full
       release gate exactly once on the final candidate commit.
+
+## 2026-07-11 Independent Codex Operator Holdout
+
+- [x] RUN: Execute three fresh Codex 0.142.5 / GPT-5.4 operators in isolated
+      repositories and HOME/prefix state with a 12-command budget.
+- [x] RECORD: Preserve 0/3 first-value success: one sandboxed npm install
+      failure, one hook payload discovery/recovery failure, and one generic
+      zero-prompt brief that did not preserve the task.
+- [x] RED/GREEN: Add a prompt-body-free `loop checkpoint` command that creates
+      a safe outcome-bearing snapshot and actionable continuation brief in one
+      command, including first-use initialization.
+- [x] RERUN: Repeat the same three holdouts against the remediated tarball and
+      publish agent-operator results separately from human-user evidence.

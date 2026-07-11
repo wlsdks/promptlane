@@ -164,7 +164,11 @@ Snapshots may store:
 
 ### CLI
 
-`looprelay loop status`, `loop collect`, and `loop brief` may read snapshots.
+`looprelay loop status`, `loop collect`, `loop checkpoint`, and `loop brief` may
+read or create snapshots. `loop checkpoint` is the first-session path: it
+creates a prompt-body-free snapshot, records a validated safe outcome summary,
+and returns its continuation brief in one command when hooks cannot capture the
+already-running installation session.
 `looprelay loop outcome` may update one latest or explicitly selected snapshot.
 
 CLI output must:

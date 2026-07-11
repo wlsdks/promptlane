@@ -8,6 +8,47 @@
     "independent_users": 3
   },
   "independent_users": [],
+  "independent_agent_operators": [
+    {
+      "id": "agent-pagination-recovery",
+      "install_success": true,
+      "first_value_success": true,
+      "install_elapsed_ms": 7000,
+      "time_to_first_value_ms": 101000,
+      "command_count": 11,
+      "input_tokens": 352031,
+      "recovery_count": 1,
+      "friction_count": 2,
+      "privacy_blocker": false,
+      "data_loss_blocker": false
+    },
+    {
+      "id": "agent-failure-prevention",
+      "install_success": true,
+      "first_value_success": true,
+      "install_elapsed_ms": 7000,
+      "time_to_first_value_ms": 82000,
+      "command_count": 11,
+      "input_tokens": 319243,
+      "recovery_count": 1,
+      "friction_count": 1,
+      "privacy_blocker": false,
+      "data_loss_blocker": false
+    },
+    {
+      "id": "agent-release-recovery",
+      "install_success": true,
+      "first_value_success": true,
+      "install_elapsed_ms": 9000,
+      "time_to_first_value_ms": 81000,
+      "command_count": 9,
+      "input_tokens": 272180,
+      "recovery_count": 1,
+      "friction_count": 2,
+      "privacy_blocker": false,
+      "data_loss_blocker": false
+    }
+  ],
   "critical_blockers": 0,
   "pairs": [
     {

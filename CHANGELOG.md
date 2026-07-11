@@ -41,6 +41,8 @@ tools, benchmark/release validation, and an English/Korean web UI.
 
 #### Storage and recovery
 
+- `looprelay loop checkpoint` creates a prompt-body-free first-session
+  checkpoint and returns its task-specific continuation brief in one command.
 - Markdown source-of-truth archive with SQLite/FTS search index.
 - Hard delete across Markdown, DB rows, FTS, events, and drafts.
 - `looprelay rebuild-index` to reconstruct the SQLite index from the
