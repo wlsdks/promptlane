@@ -109,6 +109,14 @@ Post-run doctor reported verified recent ingest, HTTP 200, registered MCP, and
 raw paths. This is end-to-end agent-operation evidence, not independent-human
 evidence.
 
+Two fail-closed Codex MCP checks followed. An unrelated cwd returned
+`empty` with zero snapshots instead of falling back to LoopRelay project data,
+and a missing worktree returned `not_found` plus a recovery command. Neither
+response exposed a raw path or prompt body. The empty activity initially said
+to continue a current worktree despite having none; the shared status model,
+MCP schema, and web parser now agree on `create first local loop snapshot`.
+A fresh Codex MCP process confirmed that corrected structured response.
+
 ## Reproduction And Remaining Gates
 
 Run `pnpm evidence:usefulness` to validate the raw-free ledger and regenerate

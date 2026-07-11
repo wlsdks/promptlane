@@ -11258,3 +11258,7 @@
 - [x] MEMORY: After a newer hook snapshot exists, prove explicit worktree
       selection still recovers the passed checkpoint and proposes, but does not
       write, an eligible memory candidate.
+- [x] FAIL-CLOSED: Prove unrelated cwd and missing-worktree MCP requests do not
+      fall back to unrelated snapshots or expose raw paths/prompt bodies.
+- [x] EMPTY: Align empty activity guidance across domain, MCP schema, and web
+      parsing so zero worktrees means `create first local loop snapshot`.

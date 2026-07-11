@@ -125,6 +125,7 @@ export const GET_LOOPRELAY_LOOP_STATUS_TOOL_DEFINITION: LoopRelayMcpToolDefiniti
             next_action: {
               type: "string",
               enum: [
+                "create first local loop snapshot",
                 "compare loop snapshots by worktree before merging agent output",
                 "continue current worktree loop",
               ],

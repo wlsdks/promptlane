@@ -503,6 +503,7 @@ export type LoopListResponse = {
       latest_worktree?: string;
       needs_review: boolean;
       next_action:
+        | "create first local loop snapshot"
         | "compare loop snapshots by worktree before merging agent output"
         | "continue current worktree loop";
       recent_decisions?: Array<{
@@ -2736,8 +2737,9 @@ function isLoopStatusActivity(
     (activity.latest_worktree === undefined ||
       typeof activity.latest_worktree === "string") &&
     typeof activity.needs_review === "boolean" &&
-    (activity.next_action ===
-      "compare loop snapshots by worktree before merging agent output" ||
+    (activity.next_action === "create first local loop snapshot" ||
+      activity.next_action ===
+        "compare loop snapshots by worktree before merging agent output" ||
       activity.next_action === "continue current worktree loop") &&
     (activity.recent_decisions === undefined ||
       (Array.isArray(activity.recent_decisions) &&

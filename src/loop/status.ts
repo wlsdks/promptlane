@@ -121,6 +121,7 @@ export type LoopRelayStatusActivity = {
   latest_worktree?: string;
   needs_review: boolean;
   next_action:
+    | "create first local loop snapshot"
     | "compare loop snapshots by worktree before merging agent output"
     | "continue current worktree loop";
   recent_decisions?: LoopRelayStatusActivityRecentDecision[];
@@ -285,9 +286,11 @@ export function summarizeLoopActivity(
       ? { latest_worktree: latest.worktree_label }
       : {}),
     needs_review: needsReview,
-    next_action: needsReview
-      ? "compare loop snapshots by worktree before merging agent output"
-      : "continue current worktree loop",
+    next_action: !latest
+      ? "create first local loop snapshot"
+      : needsReview
+        ? "compare loop snapshots by worktree before merging agent output"
+        : "continue current worktree loop",
     ...(mergeDecisions.length > 0
       ? { recent_decisions: mergeDecisions.slice(0, 3).map(toRecentDecision) }
       : {}),

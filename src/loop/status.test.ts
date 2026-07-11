@@ -97,6 +97,10 @@ describe("createLoopRelayStatus", () => {
     expect(status).toMatchObject({
       status: "empty",
       snapshot_count: 0,
+      activity: {
+        active_worktrees: 0,
+        next_action: "create first local loop snapshot",
+      },
       next_action: "looprelay loop collect",
       next_actions: expect.arrayContaining([
         "Capture one Codex or Claude Code prompt, then run looprelay coach to confirm the first score.",
