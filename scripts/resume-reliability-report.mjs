@@ -72,6 +72,7 @@ export function createResumeReliabilityReport(input) {
   return {
     version: 1,
     design: "matched_observational",
+    cohort: input.cohort,
     causal_claim: false,
     status: completed ? "directional_evidence_ready" : "collecting",
     pair_count: pairs.length,
@@ -128,6 +129,9 @@ export function validateResumeReliabilityLedger(input) {
   }
   if (input.version !== 1 || input.design !== "matched_observational") {
     throw new Error("unsupported resume reliability ledger contract");
+  }
+  if (input.cohort !== "agent_native_blind_recovery") {
+    throw new Error("unsupported resume reliability cohort");
   }
   if (input.causal_claim !== false) {
     throw new Error("causal_claim must be false");

@@ -14,9 +14,12 @@ it does not establish causality.
   privacy boundary, and worktree resolution; a class records no task text.
 - Use fresh coding-agent sessions and the same repository state for both
   conditions in a pair.
-- The baseline receives the recovery task and ordinary repository evidence.
-- The LoopRelay condition receives the same task plus an explicit local
-  checkpoint or continuation brief. Mark `adopted` true only when supplied.
+- This is an agent-native blind-recovery cohort, not a human-adoption study.
+  Both conditions receive the same generic request to resume; the selected
+  recovery contract is intentionally absent from ordinary repository evidence.
+- The baseline receives only that request and ordinary repository evidence.
+  The LoopRelay condition receives the selected local checkpoint or
+  continuation brief. Mark `adopted` true only when supplied.
 
 ## Raw-free record
 

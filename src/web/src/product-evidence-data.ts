@@ -70,6 +70,7 @@ export const PRODUCT_EVIDENCE = {
 
 export const RESUME_RELIABILITY_PROGRAM = resumeReliabilityReport as {
   causal_claim: false;
+  cohort: "agent_native_blind_recovery";
   counterbalanced: boolean;
   intervention: {
     decision: "collect" | "narrow" | "retain_opt_in";

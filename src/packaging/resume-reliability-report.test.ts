@@ -11,6 +11,7 @@ describe("resume reliability report", () => {
 
     expect(report).toMatchObject({
       causal_claim: false,
+      cohort: "agent_native_blind_recovery",
       status: "collecting",
       pair_count: 0,
       pairs_remaining: 10,
@@ -124,6 +125,7 @@ function ledger(pairs: ReturnType<typeof pair>[]) {
     version: 1,
     design: "matched_observational",
     causal_claim: false,
+    cohort: "agent_native_blind_recovery",
     minimums: { pairs: 10, recovery_classes: 3 },
     pairs,
   };

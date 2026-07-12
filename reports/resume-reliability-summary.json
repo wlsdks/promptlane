@@ -1,24 +1,25 @@
 {
   "version": 1,
   "design": "matched_observational",
+  "cohort": "agent_native_blind_recovery",
   "causal_claim": false,
-  "status": "collecting",
-  "pair_count": 7,
+  "status": "directional_evidence_ready",
+  "pair_count": 10,
   "minimum_pairs": 10,
-  "pairs_remaining": 3,
-  "counterbalanced": false,
+  "pairs_remaining": 0,
+  "counterbalanced": true,
   "order": {
-    "baseline_first": 4,
-    "looprelay_first": 3
+    "baseline_first": 5,
+    "looprelay_first": 5
   },
   "recovery_class_coverage": {
     "observed": 6,
     "required": 3,
     "counts": {
       "checkpoint_focus": 2,
-      "policy_recovery": 1,
-      "worktree_resolution": 1,
-      "failure_outcome": 1,
+      "policy_recovery": 2,
+      "worktree_resolution": 2,
+      "failure_outcome": 2,
       "compaction_handoff": 1,
       "privacy_boundary": 1
     }
@@ -37,32 +38,32 @@
     "mean_wrong_target_count": 0
   },
   "looprelay": {
-    "success_rate": 0.857143,
+    "success_rate": 0.9,
     "correct_target_rate": 1,
-    "correct_first_action_rate": 0.857143,
-    "evidence_attached_rate": 0.857143,
+    "correct_first_action_rate": 0.9,
+    "evidence_attached_rate": 0.9,
     "mean_elapsed_ms": null,
-    "mean_friction_count": 0.714286,
+    "mean_friction_count": 0.7,
     "mean_wrong_target_count": 0
   },
   "delta": {
     "correct_target_rate": 0,
-    "correct_first_action_rate": 0.857143,
-    "evidence_attached_rate": -0.142857,
+    "correct_first_action_rate": 0.9,
+    "evidence_attached_rate": -0.1,
     "mean_elapsed_ms": null,
-    "mean_friction_count": 0.714286,
+    "mean_friction_count": 0.7,
     "mean_wrong_target_count": 0
   },
   "transitions": {
-    "improved": 6,
+    "improved": 9,
     "regressed": 0,
     "unchanged_passed": 0,
     "unchanged_failed": 1
   },
   "adoption_rate": 1,
   "intervention": {
-    "decision": "collect",
-    "rationale": "Collect 10 counterbalanced resume pairs before changing the default intervention policy."
+    "decision": "narrow",
+    "rationale": "Keep resume guidance opt-in and only for explicit recovery signals; the cohort does not support broader default intervention."
   },
   "privacy": {
     "raw_free": true,

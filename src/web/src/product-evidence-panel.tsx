@@ -85,6 +85,9 @@ export function ProductEvidencePanel() {
         <small>
           Scored from tool-event traces; model self-report excluded.
         </small>
+        <small>
+          Agent-native blind recovery cohort; not a human-adoption result.
+        </small>
         <small>{RESUME_RELIABILITY_PROGRAM.intervention.rationale}</small>
       </section>
 
