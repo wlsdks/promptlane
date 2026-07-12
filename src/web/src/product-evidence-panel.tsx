@@ -77,8 +77,10 @@ export function ProductEvidencePanel() {
         </small>
         <small>
           Recovery coverage:{" "}
-          {RESUME_RELIABILITY_PROGRAM.recovery_class_coverage.observed}/
-          {RESUME_RELIABILITY_PROGRAM.recovery_class_coverage.required} classes
+          {RESUME_RELIABILITY_PROGRAM.recovery_class_coverage.observed} classes
+          &nbsp;(≥
+          {RESUME_RELIABILITY_PROGRAM.recovery_class_coverage.required}{" "}
+          required)
         </small>
         <small>
           Scored from tool-event traces; model self-report excluded.

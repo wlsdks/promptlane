@@ -84,6 +84,32 @@
         "adopted": true
       },
       "preference": "looprelay"
+    },
+    {
+      "id": "resume-04",
+      "order": "looprelay_first",
+      "recovery_class": "failure_outcome",
+      "assessment": "tool_event_trace",
+      "baseline": {
+        "passed": false,
+        "correct_target": true,
+        "correct_first_action": false,
+        "evidence_attached": true,
+        "elapsed_ms": null,
+        "friction_count": 0,
+        "wrong_target_count": 0
+      },
+      "looprelay": {
+        "passed": true,
+        "correct_target": true,
+        "correct_first_action": true,
+        "evidence_attached": true,
+        "elapsed_ms": null,
+        "friction_count": 1,
+        "wrong_target_count": 0,
+        "adopted": true
+      },
+      "preference": "looprelay"
     }
   ]
 }
