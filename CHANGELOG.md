@@ -6,6 +6,15 @@ The format follows a simple reverse-chronological release log.
 
 ## Unreleased
 
+### Web performance
+
+- Reduced the production web entry chunk from 504.07 kB to 389.84 kB by moving
+  route-exclusive React views behind explicit lazy boundaries. Added a
+  fail-closed 500,000-byte entry budget so future growth fails the build instead
+  of returning as a non-blocking warning. The 368.86 kB chart bundle is also no
+  longer preloaded by the initial document and loads only on chart-bearing
+  Evidence or Insights views.
+
 ### Documentation and verification
 
 - Added a canonical, status-classified feature inventory covering all current

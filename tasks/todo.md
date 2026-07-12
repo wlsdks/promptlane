@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-12 Web Entry Bundle Budget
+
+- [x] RED: turn the 500 kB entry-chunk warning into a fail-closed production
+      build budget instead of raising or suppressing the threshold.
+- [x] SPLIT: move route-exclusive React views behind explicit lazy boundaries
+      while preserving direct imports for shared first-screen controls.
+- [x] VERIFY: pass focused route/render tests, lint, production build, and prove
+      the entry chunk is below budget with no large-chunk warning.
+- [x] BROWSER: rerun the repository desktop/mobile UI patrol and primary route
+      interactions without blank screens, overlays, console errors, or overflow.
+- [x] COMMIT: document the bundle boundary and land one verified performance
+      commit without running the final release gate.
+
 ## 2026-07-12 Action Inbox And Confirmed Failure Episodes
 
 - [x] RED: define raw-free action priority, local-outcome coverage, and

@@ -201,6 +201,13 @@ Current known large modules:
   writes require CSRF and shared failure validation.
 - `src/web/src/actions-page.tsx`: lazy route-level data boundary for the Actions
   workspace. Contract/query/view/style modules remain independently testable.
+- `src/web/src/lazy-views.tsx`: canonical route-level code-splitting boundary.
+  The archive/list shell and primary navigation stay eager; Actions, Overview,
+  Loops, MCP, Project workspace, Prompt detail, and chart implementations load
+  only when rendered. Chart code must not return to the initial module preload.
+- `vite.web.config.ts`: production web builds fail closed when any entry chunk
+  exceeds 500,000 bytes. Do not raise or suppress the budget to hide growth;
+  move route-exclusive code behind the canonical lazy boundary instead.
 
 ### Shared helpers
 

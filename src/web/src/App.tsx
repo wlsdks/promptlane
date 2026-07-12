@@ -1,12 +1,5 @@
 import { Copy, Download, RefreshCw, Search } from "lucide-react";
-import {
-  lazy,
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 
 import type { PromptImprovement } from "../../analysis/improve.js";
 import { selectReviewPrompts } from "./archive-review-model.js";
@@ -73,25 +66,17 @@ import {
   selectedLoopBriefErrorMessage,
 } from "./error-message.js";
 import { CoachFeedbackPanel } from "./coach-feedback-panel.js";
-import { InsightInventory } from "./insight-inventory.js";
 import { ProductEvidencePanel } from "./product-evidence-panel.js";
-import { CommandCenter } from "./command-center.js";
 import { createPromptHabitCoach } from "./habit-coach.js";
 import { HabitCoachPanel } from "./habit-coach-panel.js";
 import "./archive-effectiveness-summary.css";
 import { getQueueNavigation, getVisibleChrome } from "./app-view.js";
-import { LoopsView, type CommandCenterBriefSelection } from "./loops-view.js";
+import type { CommandCenterBriefSelection } from "./loops-view.js";
 import {
   createArchiveMeasurement,
   type ArchiveMeasurement,
 } from "./measurement.js";
-import { PromptDetailView } from "./prompt-detail-view.js";
 import { PrimaryNavigation } from "./primary-navigation.js";
-import {
-  GapRateChart,
-  QualityTrendChart,
-  ScoreDistributionChart,
-} from "./charts.js";
 import { copyTextToClipboard } from "./clipboard.js";
 import { copyFailureMessage } from "./copy-fallback-messages.js";
 import {
@@ -100,9 +85,7 @@ import {
   formatRulesFileCount,
   formatTrendDate,
 } from "./formatters.js";
-import { McpToolsView } from "./mcp-tools-view.js";
 import { getProjectEmptyState } from "./project-empty-state.js";
-import { ProjectWorkspace } from "./project-workspace.js";
 import { getPromptEmptyState } from "./prompt-empty-state.js";
 import {
   activeFilterChips,
@@ -141,13 +124,21 @@ import {
   readSidebarCollapsed,
 } from "./sidebar-storage.js";
 import { useWorkspaceQuery } from "./workspace-query.js";
+import {
+  ActionsPage,
+  CommandCenter,
+  GapRateChart,
+  InsightInventory,
+  LoopsView,
+  McpToolsView,
+  ProjectWorkspace,
+  PromptDetailView,
+  QualityTrendChart,
+  ScoreDistributionChart,
+} from "./lazy-views.js";
 import "./command-center.css";
 
 const LIVE_MEASUREMENT_REFRESH_MS = 12_000;
-const ActionsPage = lazy(async () => {
-  const module = await import("./actions-page.js");
-  return { default: module.ActionsPage };
-});
 export function App() {
   const [language, setLanguage] = useState<Language>(() =>
     detectInitialLanguage(),
@@ -934,114 +925,127 @@ export function App() {
           </>
         )}
         {view.name === "detail" && (
-          <PromptDetailView
-            copied={selected?.id === copiedPromptId}
-            copiedImprovement={selected?.id === copiedImprovementId}
-            language={language}
-            manualCopyFallback={
-              selected?.id === manualCopyFallback?.promptId
-                ? manualCopyFallback
-                : undefined
-            }
-            savedImprovement={selected?.id === savedImprovementId}
-            onBookmark={toggleBookmark}
-            onBack={() => navigate({ name: "list" })}
-            onCloseManualCopyFallback={() => setManualCopyFallback(undefined)}
-            onCopy={copyPrompt}
-            onCopyImprovement={copyImprovedPrompt}
-            onCopySavedDraft={copySavedImprovementDraft}
-            onDelete={setPendingDelete}
-            onOpenQualityGap={(qualityGap) => {
-              setFilters({
-                isSensitive: "all",
-                focus: "quality-gap",
-                qualityGap,
-              });
-              navigate({ name: "list" });
-            }}
-            onNavigate={(id) => navigate({ name: "detail", id })}
-            onSaveImprovement={saveImprovementDraft}
-            prompt={selected}
-            queueNavigation={queueNavigation}
-          />
+          <Suspense fallback={<p className="empty-line">Loading detail…</p>}>
+            <PromptDetailView
+              copied={selected?.id === copiedPromptId}
+              copiedImprovement={selected?.id === copiedImprovementId}
+              language={language}
+              manualCopyFallback={
+                selected?.id === manualCopyFallback?.promptId
+                  ? manualCopyFallback
+                  : undefined
+              }
+              savedImprovement={selected?.id === savedImprovementId}
+              onBookmark={toggleBookmark}
+              onBack={() => navigate({ name: "list" })}
+              onCloseManualCopyFallback={() => setManualCopyFallback(undefined)}
+              onCopy={copyPrompt}
+              onCopyImprovement={copyImprovedPrompt}
+              onCopySavedDraft={copySavedImprovementDraft}
+              onDelete={setPendingDelete}
+              onOpenQualityGap={(qualityGap) => {
+                setFilters({
+                  isSensitive: "all",
+                  focus: "quality-gap",
+                  qualityGap,
+                });
+                navigate({ name: "list" });
+              }}
+              onNavigate={(id) => navigate({ name: "detail", id })}
+              onSaveImprovement={saveImprovementDraft}
+              prompt={selected}
+              queueNavigation={queueNavigation}
+            />
+          </Suspense>
         )}
         {view.name === "dashboard" && (
-          <CommandCenter
-            archiveScore={archiveScore}
-            dashboard={dashboard}
-            health={health}
-            loading={!dashboard}
-            loops={loops}
-            measurementBusy={measurementBusy}
-            onChangeTrendDays={(days) => {
-              setTrendDays(days);
-              setDashboard(undefined);
-            }}
-            onMeasure={() => void measureArchive()}
-            onOpenEvidence={() => navigate({ name: "scores" })}
-            onOpenInsights={() => navigate({ name: "coach" })}
-            onOpenLoop={(worktree, branch) =>
-              void openLoopWorktree({ worktree, ...(branch ? { branch } : {}) })
-            }
-            onOpenProjects={() => navigate({ name: "projects" })}
-            projects={projects}
-            trendDays={trendDays}
-          />
+          <Suspense fallback={<p className="empty-line">Loading overview…</p>}>
+            <CommandCenter
+              archiveScore={archiveScore}
+              dashboard={dashboard}
+              health={health}
+              loading={!dashboard}
+              loops={loops}
+              measurementBusy={measurementBusy}
+              onChangeTrendDays={(days) => {
+                setTrendDays(days);
+                setDashboard(undefined);
+              }}
+              onMeasure={() => void measureArchive()}
+              onOpenEvidence={() => navigate({ name: "scores" })}
+              onOpenInsights={() => navigate({ name: "coach" })}
+              onOpenLoop={(worktree, branch) =>
+                void openLoopWorktree({
+                  worktree,
+                  ...(branch ? { branch } : {}),
+                })
+              }
+              onOpenProjects={() => navigate({ name: "projects" })}
+              projects={projects}
+              trendDays={trendDays}
+            />
+          </Suspense>
         )}
         {view.name === "scores" && (
-          <DashboardView
-            archiveScore={archiveScore}
-            coachFeedback={coachFeedback}
-            dashboard={dashboard}
-            loading={!dashboard}
-            measurementBusy={measurementBusy}
-            measurementCheckedAt={measurementCheckedAt}
-            onOpenFilteredList={(nextFilters) => {
-              setFilters({ isSensitive: "all", ...nextFilters });
-              navigate({ name: "list" });
-            }}
-            onMeasure={() => void measureArchive()}
-            onRefreshArchiveScore={() => void refreshArchiveScore()}
-            onSelect={(id) => navigate({ name: "detail", id })}
-            trendDays={trendDays}
-            onChangeTrendDays={(days) => {
-              setTrendDays(days);
-              setDashboard(undefined);
-            }}
-          />
+          <Suspense fallback={<p className="empty-line">Loading evidence…</p>}>
+            <DashboardView
+              archiveScore={archiveScore}
+              coachFeedback={coachFeedback}
+              dashboard={dashboard}
+              loading={!dashboard}
+              measurementBusy={measurementBusy}
+              measurementCheckedAt={measurementCheckedAt}
+              onOpenFilteredList={(nextFilters) => {
+                setFilters({ isSensitive: "all", ...nextFilters });
+                navigate({ name: "list" });
+              }}
+              onMeasure={() => void measureArchive()}
+              onRefreshArchiveScore={() => void refreshArchiveScore()}
+              onSelect={(id) => navigate({ name: "detail", id })}
+              trendDays={trendDays}
+              onChangeTrendDays={(days) => {
+                setTrendDays(days);
+                setDashboard(undefined);
+              }}
+            />
+          </Suspense>
         )}
         {view.name === "coach" && (
-          <CoachView
-            archiveScore={archiveScore}
-            dashboard={dashboard}
-            loading={!dashboard}
-            onOpenEvidence={() => navigate({ name: "scores" })}
-            onOpenFilteredList={(nextFilters) => {
-              setFilters({ isSensitive: "all", ...nextFilters });
-              navigate({ name: "list" });
-            }}
-            onOpenProjects={() => navigate({ name: "projects" })}
-            onSelect={(id) => navigate({ name: "detail", id })}
-          />
+          <Suspense fallback={<p className="empty-line">Loading insights…</p>}>
+            <CoachView
+              archiveScore={archiveScore}
+              dashboard={dashboard}
+              loading={!dashboard}
+              onOpenEvidence={() => navigate({ name: "scores" })}
+              onOpenFilteredList={(nextFilters) => {
+                setFilters({ isSensitive: "all", ...nextFilters });
+                navigate({ name: "list" });
+              }}
+              onOpenProjects={() => navigate({ name: "projects" })}
+              onSelect={(id) => navigate({ name: "detail", id })}
+            />
+          </Suspense>
         )}
         {view.name === "loops" && (
-          <LoopsView
-            loops={loops}
-            loading={!loops}
-            onApproveMemoryCandidate={() => approveLatestLoopMemory()}
-            onApproveSelectedMemory={(snapshotId) =>
-              approveSelectedLoopMemory(snapshotId)
-            }
-            onCopyCommandCenterBrief={(selection) =>
-              copyCommandCenterLoopBrief(selection)
-            }
-            onCopySelectedBrief={(detail) => copySelectedLoopBrief(detail)}
-            onRecordOutcome={(snapshotId, input) =>
-              recordSelectedLoopOutcome(snapshotId, input)
-            }
-            onSelectWorktree={(worktree) => openLoopWorktree({ worktree })}
-            worktreeDetail={loopWorktree}
-          />
+          <Suspense fallback={<p className="empty-line">Loading loops…</p>}>
+            <LoopsView
+              loops={loops}
+              loading={!loops}
+              onApproveMemoryCandidate={() => approveLatestLoopMemory()}
+              onApproveSelectedMemory={(snapshotId) =>
+                approveSelectedLoopMemory(snapshotId)
+              }
+              onCopyCommandCenterBrief={(selection) =>
+                copyCommandCenterLoopBrief(selection)
+              }
+              onCopySelectedBrief={(detail) => copySelectedLoopBrief(detail)}
+              onRecordOutcome={(snapshotId, input) =>
+                recordSelectedLoopOutcome(snapshotId, input)
+              }
+              onSelectWorktree={(worktree) => openLoopWorktree({ worktree })}
+              worktreeDetail={loopWorktree}
+            />
+          </Suspense>
         )}
         {view.name === "actions" && (
           <Suspense fallback={<p className="empty-line">Loading actions…</p>}>
@@ -1062,33 +1066,35 @@ export function App() {
           />
         )}
         {view.name === "project" && (
-          <ProjectWorkspace
-            instructionBusy={Boolean(
-              selectedProject &&
-              projectInstructionBusy[selectedProject.project_id],
-            )}
-            loops={loops}
-            onAnalyzeInstructions={() => {
-              if (selectedProject) void analyzeProjectRules(selectedProject);
-            }}
-            onBack={() => navigate({ name: "projects" })}
-            onOpenLoop={(worktree, branch) => {
-              if (!worktree) {
-                navigate({ name: "loops" });
-                return;
-              }
-              void openLoopWorktree({
-                worktree,
-                ...(branch ? { branch } : {}),
-              });
-            }}
-            onUpdatePolicy={(patch) => {
-              if (selectedProject) {
-                void updateProjectWorkspacePolicy(selectedProject, patch);
-              }
-            }}
-            project={selectedProject}
-          />
+          <Suspense fallback={<p className="empty-line">Loading project…</p>}>
+            <ProjectWorkspace
+              instructionBusy={Boolean(
+                selectedProject &&
+                projectInstructionBusy[selectedProject.project_id],
+              )}
+              loops={loops}
+              onAnalyzeInstructions={() => {
+                if (selectedProject) void analyzeProjectRules(selectedProject);
+              }}
+              onBack={() => navigate({ name: "projects" })}
+              onOpenLoop={(worktree, branch) => {
+                if (!worktree) {
+                  navigate({ name: "loops" });
+                  return;
+                }
+                void openLoopWorktree({
+                  worktree,
+                  ...(branch ? { branch } : {}),
+                });
+              }}
+              onUpdatePolicy={(patch) => {
+                if (selectedProject) {
+                  void updateProjectWorkspacePolicy(selectedProject, patch);
+                }
+              }}
+              project={selectedProject}
+            />
+          </Suspense>
         )}
         {(view.name === "settings" ||
           view.name === "mcp" ||
@@ -1104,11 +1110,15 @@ export function App() {
                 <h2>MCP integration</h2>
                 <span>Setup commands, tool catalog</span>
               </summary>
-              <McpToolsView
-                dashboard={dashboard}
-                health={health}
-                settings={settings}
-              />
+              <Suspense
+                fallback={<p className="empty-line">Loading MCP tools…</p>}
+              >
+                <McpToolsView
+                  dashboard={dashboard}
+                  health={health}
+                  settings={settings}
+                />
+              </Suspense>
             </details>
             <details
               className="panel admin-fold"

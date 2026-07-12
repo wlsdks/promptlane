@@ -496,6 +496,7 @@ try {
   await page
     .getByRole("heading", { name: "Project workspace", level: 1 })
     .waitFor();
+  await page.getByLabel("Project workspace").waitFor();
   await assertText(
     page,
     "Local project policy",
