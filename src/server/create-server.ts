@@ -14,6 +14,9 @@ import type {
   CoachFeedbackStoragePort,
   CompactBoundaryStoragePort,
   ExportJobStoragePort,
+  FailureEpisodeStoragePort,
+  ContinuationReceiptStoragePort,
+  LoopMemoryStoragePort,
   LoopSnapshotStoragePort,
   ProjectInstructionStoragePort,
   ProjectPolicyStoragePort,
@@ -34,6 +37,7 @@ import { registerPromptRoutes } from "./routes/prompts.js";
 import { registerProjectRoutes } from "./routes/projects.js";
 import { registerSessionRoutes } from "./routes/session.js";
 import { registerSettingsRoutes } from "./routes/settings.js";
+import { registerActionRoutes } from "./routes/actions.js";
 import { registerStaticRoutes, type WebAssets } from "./routes/static.js";
 
 export type CreateServerOptions = {
@@ -48,7 +52,10 @@ export type CreateServerOptions = {
     Partial<CoachFeedbackStoragePort> &
     Partial<AgentRunStoragePort> &
     Partial<LoopSnapshotStoragePort> &
-    Partial<CompactBoundaryStoragePort>;
+    Partial<CompactBoundaryStoragePort> &
+    Partial<ContinuationReceiptStoragePort> &
+    Partial<LoopMemoryStoragePort> &
+    Partial<FailureEpisodeStoragePort>;
   redactionMode: RedactionPolicy;
   excludedProjectRoots?: string[];
   maxBodyBytes?: number;
@@ -196,6 +203,10 @@ export function createServer(options: CreateServerOptions): FastifyInstance {
     storage: options.storage,
   });
   registerLoopRoutes(server, {
+    auth: options.auth,
+    storage: options.storage,
+  });
+  registerActionRoutes(server, {
     auth: options.auth,
     storage: options.storage,
   });

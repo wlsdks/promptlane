@@ -5,6 +5,7 @@ import {
   FileText,
   FolderCog,
   ListChecks,
+  Inbox,
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
@@ -71,6 +72,12 @@ export function PrimaryNavigation({
         icon={<ListChecks size={16} />}
         label="Loops"
         onClick={() => onNavigate({ name: "loops" })}
+      />
+      <NavigationButton
+        active={view.name === "actions"}
+        icon={<Inbox size={16} />}
+        label="Actions"
+        onClick={() => onNavigate({ name: "actions" })}
       />
 
       <p className="nav-group-label sidebar-label">Learn</p>

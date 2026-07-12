@@ -1,5 +1,12 @@
 import { Copy, Download, RefreshCw, Search } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import type { PromptImprovement } from "../../analysis/improve.js";
 import { selectReviewPrompts } from "./archive-review-model.js";
@@ -137,6 +144,10 @@ import { useWorkspaceQuery } from "./workspace-query.js";
 import "./command-center.css";
 
 const LIVE_MEASUREMENT_REFRESH_MS = 12_000;
+const ActionsPage = lazy(async () => {
+  const module = await import("./actions-page.js");
+  return { default: module.ActionsPage };
+});
 export function App() {
   const [language, setLanguage] = useState<Language>(() =>
     detectInitialLanguage(),
@@ -1031,6 +1042,11 @@ export function App() {
             onSelectWorktree={(worktree) => openLoopWorktree({ worktree })}
             worktreeDetail={loopWorktree}
           />
+        )}
+        {view.name === "actions" && (
+          <Suspense fallback={<p className="empty-line">Loading actions…</p>}>
+            <ActionsPage onError={setError} />
+          </Suspense>
         )}
         {view.name === "projects" && (
           <ProjectsView

@@ -206,7 +206,7 @@ uses the exact CLI path from the current installation.
 looprelay mcp
 ```
 
-This server exposes 25 model-controlled tools:
+This server exposes 27 model-controlled tools:
 
 - `get_looprelay_status`
 - `coach_prompt`
@@ -216,6 +216,8 @@ This server exposes 25 model-controlled tools:
 - `ask_clarifying_questions`
 - `record_clarifications`
 - `record_continuation_receipt`
+- `get_looprelay_action_inbox`
+- `record_failure_episode`
 - `get_looprelay_loop_status`
 - `get_benchmark_candidates`
 - `get_paired_benchmark_candidates`
@@ -242,6 +244,15 @@ counts, latest prompt metadata, available tool names, and next actions.
 `get_looprelay_loop_status` checks whether local loop snapshots exist and
 returns safe latest-loop metadata. It also reports safe compact-boundary
 metadata when a compact happened after the latest snapshot.
+`get_looprelay_action_inbox` returns current operator-local action debt and
+recent outcomes from only the latest snapshot per active loop. It does not mix
+bundled product studies into local results or claim causality. Confirmed
+failure episodes are also aggregated by category and lifecycle status so a
+recurring cross-session pattern is visible only after confirmed episodes span
+two explicit agent sessions. Session IDs are not returned; only their count is.
+`record_failure_episode` confirms category/intervention and resolution or
+wont-fix state for a failed/blocked snapshot; it never infers episodes from
+prompt text or transcripts.
 `get_benchmark_candidates` reads at most the latest 100 snapshots and returns
 only staged readiness counts, opaque candidate ids, status, and next actions;
 it never returns outcome summaries, evidence refs, prompt bodies, or raw paths.
@@ -276,6 +287,7 @@ raw paths.
 
 The local CLI mirrors that loop surface with `looprelay loop status`,
 `looprelay loop collect`, `looprelay loop brief`, `looprelay loop close`, and
+`looprelay loop actions`, `looprelay loop failure`, and
 `looprelay loop memory-candidate`; approved memories are recorded with
 `looprelay loop memory-approve`. `looprelay loop brief` accepts optional
 `--worktree`, `--session`, and `--branch` filters so Codex or Claude Code can

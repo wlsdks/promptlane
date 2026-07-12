@@ -40,7 +40,7 @@ import { getLoopRelayPaths, supportsPosixMode } from "./paths.js";
 import { buildPromptFilters } from "./sqlite-prompt-filters.js";
 import * as agentRuns from "./agent-runs.js";
 import * as continuationReceipts from "./continuation-receipts.js";
-import * as loopClose from "./loop-close.js";
+import { createLoopEvidenceStorage } from "./loop-evidence-storage.js";
 import {
   markPromptImprovementDraftCopied,
   readPromptImprovementDrafts,
@@ -211,7 +211,7 @@ export function createSqlitePromptStorage(
       continuationReceipts.updateContinuationReceipt(db, id, input, now()),
     listContinuationReceipts: (input = {}) =>
       continuationReceipts.listContinuationReceipts(db, input),
-    closeLoop: (input) => loopClose.closeLoop(db, input, now()),
+    ...createLoopEvidenceStorage(db, now),
     listPrompts(options) {
       return listPrompts(db, options);
     },

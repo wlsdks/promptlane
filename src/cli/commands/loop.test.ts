@@ -22,6 +22,11 @@ import {
   loopStatusForCli,
 } from "./loop.js";
 import { loopCloseForCli } from "./loop-close.js";
+import { loopActionsForCli } from "./loop-actions.js";
+import {
+  loopFailureListForCli,
+  loopFailureRecordForCli,
+} from "./loop-failure.js";
 import { loopReceiptForCli } from "./loop-receipt.js";
 
 const tempDirs: string[] = [];
@@ -648,6 +653,77 @@ describe("loop CLI command", () => {
     ).toThrow(
       "Select the loop to close with --snapshot-id or worktree/session/branch filters.",
     );
+  });
+
+  it("shows local action debt and clears a confirmed failure action", async () => {
+    const dataDir = createTempDir();
+    await seedPrompts(dataDir);
+    const snapshot = JSON.parse(
+      loopCollectForCli({
+        dataDir,
+        json: true,
+        cwdPrefix: "/Users/example/private-project",
+        cwd: "/Users/example/private-project",
+        worktree: "failure-worktree",
+      }),
+    ) as { id: string };
+    loopOutcomeForCli({
+      dataDir,
+      snapshotId: snapshot.id,
+      status: "failed",
+      summary: "Focused validation failed.",
+      evidenceRefs: ["test:focused"],
+    });
+
+    expect(
+      JSON.parse(loopActionsForCli({ dataDir, json: true })).items,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: "confirm_failure",
+          snapshot_id: snapshot.id,
+        }),
+      ]),
+    );
+    const recorded = JSON.parse(
+      loopFailureRecordForCli({
+        dataDir,
+        json: true,
+        snapshotId: snapshot.id,
+        category: "validation",
+        status: "open",
+        intervention: "Run the focused contract before the build.",
+        confirmedBy: "user",
+      }),
+    );
+    expect(recorded.episode).toMatchObject({
+      snapshot_id: snapshot.id,
+      category: "validation",
+      status: "open",
+    });
+    expect(loopActionsForCli({ dataDir })).toContain(
+      "validation: 1 confirmed · 1 session · 1 open · 0 resolved",
+    );
+    expect(
+      JSON.parse(loopActionsForCli({ dataDir, json: true })).failure_patterns,
+    ).toEqual([
+      expect.objectContaining({
+        category: "validation",
+        total: 1,
+        session_count: 1,
+        recurring: false,
+      }),
+    ]);
+    expect(
+      JSON.parse(loopActionsForCli({ dataDir, json: true })).items,
+    ).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: "confirm_failure" }),
+      ]),
+    );
+    expect(
+      JSON.parse(loopFailureListForCli({ dataDir, json: true })).total,
+    ).toBe(1);
   });
 
   it("prints compact-aware loop status without prompt bodies or raw paths", async () => {

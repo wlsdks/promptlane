@@ -75,7 +75,7 @@ prompt-score optimization without better outcomes.
 
 Candidate focused slices:
 
-- show recurring failure patterns in CLI, MCP, and Loops UI consistently
+- add bounded time-window and project filters to confirmed failure patterns
 - measure continuation-brief reuse and time saved without storing prompt bodies
 - make outcome recording faster while preserving explicit attribution
 - improve safe selection when multiple worktrees or sessions are active
@@ -96,11 +96,17 @@ Candidate focused slices:
    optional Guide attribution, rejects implicit global-latest selection, and
    never infers or auto-approves an outcome. Retain only if critical false-ready
    remains 0 and observed median closeout time falls below 15 seconds.
-3. **Action Inbox + Local Outcomes.** Aggregate existing evidence debt and
-   receipt/outcome coverage before adding new chart families. Keep bundled
-   product studies visually and semantically separate from operator-local data.
-4. **Confirmed failure episodes.** Replace exact prompt-gap counting with a
-   small operator-confirmed taxonomy, recurrence, intervention, and resolution.
+3. **Action Inbox + Local Outcomes — implemented 2026-07-12.** The dedicated
+   Actions workspace, CLI, MCP, and HTTP contract aggregate the latest active
+   loop's continuity, evidence, failure, and memory debt. Operator-local
+   outcomes remain visually and semantically separate from bundled studies.
+4. **Confirmed failure episodes — implemented 2026-07-12.** Failed or blocked
+   snapshots now require an operator-confirmed category and intervention, then
+   remain actionable until resolved or explicitly marked wont-fix. No episode
+   is inferred from prompt text or transcripts. The Actions report and MCP
+   contract aggregate category-level total/open/resolved/wont-fix counts and
+   mark categories recurring only after confirmed episodes span two distinct,
+   explicit agent session IDs. Missing session metadata fails closed.
 5. **Agent Guide calibration.** Do not rank or automate models until at least
    20 raw-free outcomes across three task types include recommendation,
    selection, rejection/switch reason, attempts, TTFV, and focused tests.

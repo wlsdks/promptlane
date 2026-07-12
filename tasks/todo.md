@@ -1,5 +1,22 @@
 # 작업 계획
 
+## 2026-07-12 Action Inbox And Confirmed Failure Episodes
+
+- [x] RED: define raw-free action priority, local-outcome coverage, and
+      operator-confirmed failure-episode contracts before implementation.
+- [x] STORAGE: persist confirmed failure category, intervention, resolution,
+      and lifecycle without prompt bodies, transcripts, secrets, or raw paths.
+- [x] SURFACES: expose one consistent inbox through CLI, MCP, HTTP, and a
+      dedicated Actions workspace in the primary navigation.
+- [x] UX: separate operator-local outcomes from bundled product studies and
+      make each inbox item lead to an explicit, non-automatic next action.
+- [x] PATTERNS: aggregate operator-confirmed failure categories across sessions
+      and expose recurrence through the Actions report, UI, and MCP contract.
+- [x] QA: pass focused privacy/storage/CLI/MCP/web tests, lint, build, and real
+      desktop/mobile browser interaction checks without the final release gate.
+- [x] DOCS: update schema, architecture, feature inventory, README, changelog,
+      and evidence-first backlog in the same verified commit.
+
 ## 2026-07-12 Agent-Native Release Validation
 
 - [x] POLICY: replace the unavailable-human gate with a bounded agent-native

@@ -28,6 +28,9 @@ describe("routing", () => {
     stubLocation("/loops");
     expect(routeFromLocation()).toEqual({ name: "loops" });
 
+    stubLocation("/actions");
+    expect(routeFromLocation()).toEqual({ name: "actions" });
+
     stubLocation("/loops", "?worktree=agent-loop-worktree");
     expect(routeFromLocation()).toEqual({
       name: "loops",
@@ -99,6 +102,7 @@ describe("routing", () => {
       "/projects/proj%20local%2F1",
     );
     expect(pathForView({ name: "loops" })).toBe("/loops");
+    expect(pathForView({ name: "actions" })).toBe("/actions");
     expect(
       pathForView({ name: "loops", worktree: "agent loop/worktree" }),
     ).toBe("/loops?worktree=agent+loop%2Fworktree");

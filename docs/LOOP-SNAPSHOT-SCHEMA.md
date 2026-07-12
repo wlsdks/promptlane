@@ -1,6 +1,6 @@
 # Loop Snapshot Schema
 
-Last updated: 2026-07-05
+Last updated: 2026-07-12
 
 This document defines the privacy-safe loop snapshot contract used by LoopRelay.
 It reflects the current `src/loop/types.ts` domain model and the SQLite
@@ -63,6 +63,14 @@ type LoopSnapshot = {
     summary: string;
     evidence_refs: string[];
     used_improvement_prompt_ids?: string[];
+    typed_evidence?: Array<{
+      kind: "test" | "commit" | "build" | "review" | "external";
+      label: string;
+      observed_at: string;
+      result: "passed" | "failed" | "unknown";
+      verification: "declared" | "locally_verified";
+      head_hash?: string;
+    }>;
   };
   next_brief: {
     generated: boolean;
@@ -102,6 +110,7 @@ document in the same PR when the public schema contract changes.
 | `outcome.summary`                     | Safe local outcome summary                                  | Must be raw-free before broad status exposure                      |
 | `outcome.evidence_refs`               | User-provided evidence references                           | Keep out of aggregate status summaries unless explicitly scoped    |
 | `outcome.used_improvement_prompt_ids` | Prompt ids whose LoopRelay improvements were actually used | Optional ids only; every id must belong to `prompt_ids`            |
+| `outcome.typed_evidence`              | Structured engineering observation and provenance          | Safe label/time/result only; optional hexadecimal HEAD hash        |
 | `next_brief`                          | Continuation brief metadata                                 | Summary metadata only; generated brief text is returned on request |
 | `privacy`                             | Invariant flags                                             | Must stay `false`, `false`, `true` respectively                    |
 
@@ -136,6 +145,14 @@ Current storage operations:
 - get latest snapshot
 - list recent snapshots with bounded limit
 - update outcome metadata by snapshot id
+- atomically close one exact snapshot with its continuation receipt
+
+Related raw-free tables are deliberately separate from `loop_snapshots`:
+
+- `continuation_receipts` records generated/copy/delivery/use lineage, target
+  and first-action correctness, time to first value, and friction.
+- `loop_failure_episodes` records one operator-confirmed category,
+  intervention, and resolution/wont-fix lifecycle per failed/blocked snapshot.
 
 ## Privacy Invariants
 
@@ -251,6 +268,16 @@ Hook/service collection must:
 Evidence refs are local review hints. They should be safe labels such as test
 names, command names, PR numbers, or artifact ids. Do not store full logs, raw
 paths, transcript excerpts, or secrets as evidence refs.
+
+Typed evidence adds kind, safe label, ISO observation time, passed/failed/
+unknown result, declared versus locally verified provenance, and an optional
+hexadecimal HEAD hash. Declared evidence must not be presented as locally
+verified. Compatibility evidence refs remain supported.
+
+Failure episodes are never inferred from prompt gaps or transcripts. A failed
+or blocked snapshot stays in the action inbox until an operator confirms its
+category and intervention; an open episode remains actionable until the
+operator records a resolution or explicit wont-fix decision.
 
 The shared outcome validator runs at CLI/MCP entrypoints and again at the
 storage boundary. It requires an allowed status and non-empty summary, trims

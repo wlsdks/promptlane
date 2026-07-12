@@ -1,7 +1,7 @@
 # LoopRelay Feature Inventory
 
 Status: canonical product capability inventory  
-Reviewed against: `83b1c6f2` plus the typed-evidence/loop-close working slice
+Reviewed against: `d72fb340` plus the action-inbox/failure-episode working slice
 Last reviewed: 2026-07-12
 
 This is the source of truth for what LoopRelay currently does. It separates
@@ -47,10 +47,11 @@ cloud account/synchronization service.
 | Long-loop continuity        | Active                 | Snapshot collection, checkpoint, compact boundary, selected-loop brief         |
 | Continuation receipts       | Active                 | Brief generation, copy/delivery/use lineage, raw-free recovery outcome         |
 | Outcome evidence            | Active                 | Typed test/build/commit/review/external evidence plus compatibility references |
+| Action and failure control  | Active                 | Operator-local inbox, outcomes, confirmed failure lifecycle                    |
 | Memory and instructions     | Active, approval-gated | Candidate proposal, approval, patch proposal, explicit apply                   |
 | Adaptive Agent Guide        | Active, non-binding    | Role/model guidance, switch condition, selected-loop run capture               |
 | Prompt archive and coaching | Active                 | Search, score, improve, clarify, bookmark, reuse and pattern analysis          |
-| Admin workspace             | Active                 | Overview, Loops, Evidence, Insights, Archive, Projects, Integrations, Settings |
+| Admin workspace             | Active                 | Overview, Loops, Actions, Evidence, Insights, Archive, Projects and settings   |
 | Automatic judging           | Opt-in                 | Local Claude/Codex subprocess judging, disabled by default                     |
 | Export and import           | Dormant                | Implemented and maintained, not part of the current core workflow              |
 | Effectiveness studies       | Validation             | Matched pairs, clean-install smoke, operator runs, generated reports           |
@@ -124,7 +125,8 @@ cloud account/synchronization service.
 - projects, sessions, prompts, prompt analysis, tags, and prompt-tag links;
 - prompt usage events, bookmarks, improvement drafts, and ask events;
 - redaction events and project policy audit events;
-- loop snapshots, compact boundaries, loop memories, and merge decisions;
+- loop snapshots, compact boundaries, loop memories, merge decisions, and
+  operator-confirmed failure episodes;
 - loop outcomes, evidence references, and improvement attribution;
 - project instruction reviews and instruction-patch evidence;
 - judge scores, agent prompt judgments, coach feedback, and agent runs;
@@ -132,7 +134,7 @@ cloud account/synchronization service.
 
 ### Logical SQLite tables
 
-The initialized schema contains 30 logical tables. SQLite's five internal FTS
+The initialized schema contains 31 logical tables. SQLite's five internal FTS
 support tables are implementation details and are not counted separately.
 
 - `agent_prompt_judgments`
@@ -145,6 +147,7 @@ support tables are implementation details and are not counted separately.
 - `import_jobs`
 - `import_records`
 - `loop_memories`
+- `loop_failure_episodes`
 - `loop_merge_decisions`
 - `loop_snapshots`
 - `policy_audit_events`
@@ -248,6 +251,15 @@ support tables are implementation details and are not counted separately.
   evidence actions on the Overview and Evidence surfaces.
 - Preserve negative and null findings; generated usefulness reports keep
   `causal_claim` false.
+- Derive one operator-local action inbox from only the latest snapshot per
+  active loop so intermediate hook snapshots do not become a false backlog.
+- Confirm failed/blocked episodes with an explicit category, intervention,
+  resolution or wont-fix decision; LoopRelay does not infer episodes from a
+  transcript.
+- Aggregate operator-confirmed episodes by category, lifecycle count, distinct
+  explicit session count, and last confirmation time. A category is recurring
+  only after confirmation in at least two distinct agent sessions; missing
+  session metadata fails closed instead of implying recurrence.
 
 ## 7. Memory and repository-instruction promotion
 
@@ -313,6 +325,9 @@ and desktop/mobile layouts.
 - **Loops** (`/loops`): worktree/session/branch selection, continuation brief,
   outcome entry, memory approval, instruction patching, merge decisions,
   benchmark readiness, and Agent Guide/run capture.
+- **Actions** (`/actions`): prioritized continuity/evidence/memory debt,
+  operator-confirmed failure lifecycle, and recent operator-local outcomes.
+  Product studies remain separate on Evidence.
 
 ### Learn
 
@@ -346,6 +361,7 @@ and desktop/mobile layouts.
 - `view:dashboard` — `/dashboard`
 - `view:coach` — `/coach`
 - `view:loops` — `/loops` with optional worktree/session/branch query
+- `view:actions` — `/actions`
 - `view:scores` — `/scores`
 - `view:projects` — `/projects`
 - `view:project` — `/projects/:id`
@@ -359,7 +375,7 @@ to the archive view; they are not separate active product pages.
 
 ## 11. Complete CLI command tree
 
-The current Commander tree contains 70 command paths. Parent commands are
+The current Commander tree contains 74 command paths. Parent commands are
 listed because they provide their own help and, in some cases, behavior.
 
 ### Setup, runtime, and integrations
@@ -398,6 +414,10 @@ listed because they provide their own help and, in some cases, behavior.
 - `loop brief`
 - `loop receipt`
 - `loop close`
+- `loop actions`
+- `loop failure`
+- `loop failure record`
+- `loop failure list`
 - `loop outcome`
 - `loop memory-candidate`
 - `loop memory-approve`
@@ -446,7 +466,7 @@ listed because they provide their own help and, in some cases, behavior.
 
 ## 12. Complete MCP tool inventory
 
-The MCP server exposes 25 tools. Tool names are a compatibility surface.
+The MCP server exposes 27 tools. Tool names are a compatibility surface.
 
 ### Readiness, coaching, and clarification
 
@@ -463,6 +483,8 @@ The MCP server exposes 25 tools. Tool names are a compatibility surface.
 - `get_looprelay_loop_status`
 - `prepare_loop_brief`
 - `record_continuation_receipt`
+- `get_looprelay_action_inbox`
+- `record_failure_episode`
 - `record_loop_outcome`
 - `propose_loop_memory_candidate`
 - `record_loop_memory`
@@ -493,7 +515,7 @@ The MCP server exposes 25 tools. Tool names are a compatibility surface.
 These are authenticated local implementation routes, not a hosted public API.
 Browser mutation routes require application authentication and CSRF; ingest
 mutations use the separate ingest bearer token.
-The route source contains 39 product API routes and 16 static delivery routes.
+The route source contains 42 product API routes and 17 static delivery routes.
 
 ### Runtime and ingest
 
@@ -534,6 +556,9 @@ The route source contains 39 product API routes and 16 static delivery routes.
 - `POST /api/v1/loops/:id/outcome`
 - `POST /api/v1/loops/memory/approve`
 - `GET /api/v1/loops/instruction-patch`
+- `GET /api/v1/actions`
+- `GET /api/v1/failure-episodes`
+- `POST /api/v1/failure-episodes`
 
 ### Agent Guide, settings, and transfer
 
@@ -556,6 +581,7 @@ The route source contains 39 product API routes and 16 static delivery routes.
 - `GET /benchmark`
 - `GET /insights`
 - `GET /loops`
+- `GET /actions`
 - `GET /projects`
 - `GET /mcp`
 - `GET /exports`

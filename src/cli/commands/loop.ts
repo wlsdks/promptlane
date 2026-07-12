@@ -52,6 +52,8 @@ import {
 import { registerLoopScheduleCommand } from "./loop-schedule.js";
 import { registerLoopReceiptCommand } from "./loop-receipt.js";
 import { registerLoopCloseCommand } from "./loop-close.js";
+import { registerLoopActionsCommand } from "./loop-actions.js";
+import { registerLoopFailureCommand } from "./loop-failure.js";
 import { UserError } from "../user-error.js";
 
 type LoopCliOptions = {
@@ -171,6 +173,8 @@ export function registerLoopCommand(program: Command): void {
 
   registerLoopReceiptCommand(loop);
   registerLoopCloseCommand(loop);
+  registerLoopActionsCommand(loop);
+  registerLoopFailureCommand(loop);
 
   loop
     .command("outcome")

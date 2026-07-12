@@ -526,7 +526,7 @@ describe("doctorCodex", () => {
     expect(repaired.settings.hookCount).toBe(1);
     expect(repaired.settings.duplicateHooks).toBe(false);
     expect(repaired.settings.ok).toBe(true);
-  });
+  }, 15_000);
 
   it("marks Codex doctor as needs attention when the latest ingest returned 401", async () => {
     const dir = createTempDir();

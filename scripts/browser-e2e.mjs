@@ -739,6 +739,45 @@ try {
   await assertBrowserSafe(page, "selected loop memory approval");
   await captureScreenshot(page, "loops-selected-memory-desktop");
 
+  step("Verify action inbox failure confirmation and resolution");
+  const actionFailure = seedActionFailure();
+  await page.goto(`${serverBaseUrl}/actions`);
+  await page.getByRole("heading", { name: "Actions", level: 1 }).waitFor();
+  await page.getByRole("button", { name: "Confirm failure" }).click();
+  await page.getByLabel("Failure category").selectOption("tooling");
+  await page
+    .getByLabel("Confirmed intervention")
+    .fill("Retry the focused browser contract after checking local readiness.");
+  await page.getByRole("button", { name: "Confirm episode" }).click();
+  await page.getByRole("button", { name: "Resolve failure" }).waitFor();
+  await page.getByRole("button", { name: "Resolve failure" }).click();
+  await page
+    .locator("label")
+    .filter({ hasText: "Resolution status" })
+    .locator("select")
+    .selectOption("resolved");
+  await page
+    .getByLabel("Resolution evidence", { exact: true })
+    .fill("The focused browser interaction and local API checks passed.");
+  await page.getByRole("button", { name: "Confirm episode" }).click();
+  await page
+    .getByRole("button", { name: "Resolve failure" })
+    .waitFor({ state: "detached" });
+  const actionReport = await page.evaluate(async () => {
+    const response = await fetch("/api/v1/actions");
+    return response.json();
+  });
+  assert(
+    actionReport.data?.outcomes?.some(
+      (outcome) =>
+        outcome.snapshot_id === actionFailure.snapshot.id &&
+        outcome.failure_episode_status === "resolved",
+    ),
+    "Action inbox should retain the operator-confirmed resolved failure outcome.",
+  );
+  await assertBrowserSafe(page, "action inbox");
+  await captureScreenshot(page, "actions-desktop");
+
   // Export is now a sub-route of Settings (/exports); same reason as MCP.
   await page.goto(`${serverBaseUrl}/exports`);
   await page
@@ -827,6 +866,18 @@ try {
   await page.goto(`${serverBaseUrl}/settings`);
   await page.getByRole("heading", { name: "Settings" }).waitFor();
   await captureScreenshot(page, "settings-mobile");
+
+  await page.goto(`${serverBaseUrl}/actions`);
+  await page.getByRole("heading", { name: "Actions", level: 1 }).waitFor();
+  const actionViewport = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    innerWidth: window.innerWidth,
+  }));
+  assert(
+    actionViewport.scrollWidth <= actionViewport.innerWidth,
+    `Mobile actions should not overflow horizontally. scrollWidth=${actionViewport.scrollWidth}, innerWidth=${actionViewport.innerWidth}.`,
+  );
+  await captureScreenshot(page, "actions-mobile");
 
   assertEqual(
     consoleErrors.length,
@@ -1029,6 +1080,28 @@ function seedSelectedMemoryWorktrees() {
   }
 
   return { ...selected, worktree_label: "browser-selected-memory" };
+}
+
+function seedActionFailure() {
+  return JSON.parse(
+    runCli([
+      "loop",
+      "checkpoint",
+      "--data-dir",
+      dataDir,
+      "--worktree",
+      "browser-action-failure",
+      "--branch",
+      "codex/browser-action-failure",
+      "--status",
+      "failed",
+      "--summary",
+      "Focused browser validation failed and needs operator confirmation.",
+      "--evidence-ref",
+      "test:browser-actions",
+      "--json",
+    ]),
+  );
 }
 
 function readUsedImprovementPromptIds(snapshotId) {

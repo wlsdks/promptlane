@@ -33,6 +33,7 @@ export function registerStaticRoutes(
   );
   server.get("/insights", async (_request, reply) => sendIndex(reply, options));
   server.get("/loops", async (_request, reply) => sendIndex(reply, options));
+  server.get("/actions", async (_request, reply) => sendIndex(reply, options));
   server.get("/projects", async (_request, reply) => sendIndex(reply, options));
   server.get("/mcp", async (_request, reply) => sendIndex(reply, options));
   server.get("/exports", async (_request, reply) => sendIndex(reply, options));

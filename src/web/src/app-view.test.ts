@@ -12,6 +12,10 @@ describe("app view model", () => {
       eyebrow: "Agent loop memory",
       title: "Loops",
     });
+    expect(getVisibleChrome({ name: "actions" })).toEqual({
+      eyebrow: "Operator-local outcomes and debt",
+      title: "Actions",
+    });
     expect(getVisibleChrome({ name: "mcp" })).toEqual({
       eyebrow: "Agent-native coach tools",
       title: "MCP tools",

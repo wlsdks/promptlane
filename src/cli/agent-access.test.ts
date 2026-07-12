@@ -72,18 +72,18 @@ describe("mcpRegistrationSpec with an explicit entry", () => {
     expect(
       mcpRegistrationCommand("codex", {
         command: "/usr/local/bin/node",
-        args: ["/Users/example/Prompt Lane/dist/cli/index.js"],
+        args: ["/Users/example/LoopRelay Workspace/dist/cli/index.js"],
       }),
     ).toBe(
-      "codex mcp add looprelay -- /usr/local/bin/node '/Users/example/Prompt Lane/dist/cli/index.js' mcp",
+      "codex mcp add looprelay -- /usr/local/bin/node '/Users/example/LoopRelay Workspace/dist/cli/index.js' mcp",
     );
     expect(
       mcpRegistrationCommand("claude-code", {
         command: "/usr/local/bin/node",
-        args: ["/Users/example/Prompt Lane/dist/cli/index.js"],
+        args: ["/Users/example/LoopRelay Workspace/dist/cli/index.js"],
       }),
     ).toBe(
-      "claude mcp add --transport stdio looprelay -- /usr/local/bin/node '/Users/example/Prompt Lane/dist/cli/index.js' mcp",
+      "claude mcp add --transport stdio looprelay -- /usr/local/bin/node '/Users/example/LoopRelay Workspace/dist/cli/index.js' mcp",
     );
   });
 });

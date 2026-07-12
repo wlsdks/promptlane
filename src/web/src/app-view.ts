@@ -37,6 +37,9 @@ export function getVisibleChrome(view: View): VisibleChrome {
   if (view.name === "loops") {
     return { eyebrow: "Agent loop memory", title: "Loops" };
   }
+  if (view.name === "actions") {
+    return { eyebrow: "Operator-local outcomes and debt", title: "Actions" };
+  }
   if (view.name === "scores") {
     return { eyebrow: "Observed outcomes and coverage", title: "Evidence" };
   }

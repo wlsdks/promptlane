@@ -5,6 +5,7 @@ import { applyAgentRunMigration } from "./agent-runs.js";
 import { applyCoachFeedbackMigration } from "./coach-feedback.js";
 import { applyCompactBoundaryMigration } from "./compact-boundaries.js";
 import { applyContinuationReceiptMigration } from "./continuation-receipts.js";
+import { applyFailureEpisodeMigration } from "./failure-episodes.js";
 import { applyJudgeScoreMigration } from "./judge-score.js";
 import { applyLoopMergeDecisionMigration } from "./loop-decisions.js";
 import { applyLoopMemoryMigration } from "./loop-memories.js";
@@ -42,6 +43,7 @@ export function applyMigrations(db: Database.Database): void {
   applyLoopMergeDecisionMigration(db);
   applyAgentRunMigration(db);
   applyContinuationReceiptMigration(db);
+  applyFailureEpisodeMigration(db);
 }
 
 function applyLoopSnapshotMigration(db: Database.Database): void {

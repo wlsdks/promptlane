@@ -103,6 +103,15 @@ import type {
   RecordAgentRewriteToolArguments,
 } from "./agent-rewrite-tool-types.js";
 import type { LoopRelayMcpServerOptions } from "./server.js";
+import {
+  GET_LOOPRELAY_ACTION_INBOX_TOOL_DEFINITION,
+  getLoopRelayActionInboxTool,
+} from "./get-action-inbox-tool.js";
+import {
+  RECORD_FAILURE_EPISODE_TOOL_DEFINITION,
+  recordFailureEpisodeTool,
+  type RecordFailureEpisodeToolArguments,
+} from "./record-failure-episode-tool.js";
 
 export type LoopRelayToolHandler = (
   args: Record<string, unknown>,
@@ -164,6 +173,18 @@ export const LOOPRELAY_MCP_TOOL_REGISTRY: readonly RegisteredLoopRelayTool[] = [
     handler: (args, options) =>
       recordContinuationReceiptTool(
         args as RecordContinuationReceiptToolArguments,
+        options,
+      ),
+  },
+  {
+    definition: GET_LOOPRELAY_ACTION_INBOX_TOOL_DEFINITION,
+    handler: (args, options) => getLoopRelayActionInboxTool(args, options),
+  },
+  {
+    definition: RECORD_FAILURE_EPISODE_TOOL_DEFINITION,
+    handler: (args, options) =>
+      recordFailureEpisodeTool(
+        args as RecordFailureEpisodeToolArguments,
         options,
       ),
   },

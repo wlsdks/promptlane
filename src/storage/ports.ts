@@ -34,6 +34,11 @@ import type {
   UpdateContinuationReceiptInput,
 } from "./continuation-receipts.js";
 import type { CloseLoopInput, CloseLoopResult } from "./loop-close.js";
+import type {
+  FailureEpisode,
+  FailureEpisodeStatus,
+  RecordFailureEpisodeInput,
+} from "../loop/failure-episode.js";
 
 export type {
   CoachFeedbackEntry,
@@ -220,6 +225,15 @@ export type ContinuationReceiptStoragePort = {
 
 export type LoopCloseStoragePort = {
   closeLoop(input: CloseLoopInput): CloseLoopResult | undefined;
+};
+
+export type FailureEpisodeStoragePort = {
+  recordFailureEpisode(input: RecordFailureEpisodeInput): FailureEpisode;
+  listFailureEpisodes(options?: {
+    projectId?: string;
+    status?: FailureEpisodeStatus;
+    limit?: number;
+  }): FailureEpisode[];
 };
 
 export type DeletePromptResult = {

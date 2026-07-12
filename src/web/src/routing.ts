@@ -6,6 +6,7 @@ export type View =
   | { name: "detail"; id: string }
   | { name: "dashboard" }
   | { name: "coach" }
+  | { name: "actions" }
   | { name: "loops"; worktree?: string; session?: string; branch?: string }
   | { name: "scores" }
   | { name: "projects" }
@@ -23,6 +24,10 @@ export function routeFromLocation(): View {
 
   if (window.location.pathname === "/coach") {
     return { name: "coach" };
+  }
+
+  if (window.location.pathname === "/actions") {
+    return { name: "actions" };
   }
 
   if (window.location.pathname === "/loops") {
@@ -75,6 +80,7 @@ export function pathForView(view: View): string {
   if (view.name === "detail") return `/prompts/${encodeURIComponent(view.id)}`;
   if (view.name === "dashboard") return "/dashboard";
   if (view.name === "coach") return "/coach";
+  if (view.name === "actions") return "/actions";
   if (view.name === "scores") return "/scores";
   if (view.name === "loops") {
     if (!view.worktree) return "/loops";

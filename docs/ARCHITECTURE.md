@@ -146,6 +146,10 @@ Current known large modules:
 - `src/storage/loop-close.ts`: one transaction for exact-snapshot outcome and
   continuation-receipt closeout. A receipt from another snapshot aborts the
   entire write.
+- `src/storage/failure-episodes.ts`: one operator-confirmed failure lifecycle
+  per failed/blocked snapshot, including its migration and raw-free validation.
+- `src/storage/loop-evidence-storage.ts`: narrow SQLite composition for atomic
+  closeout and failure-episode ports; keeps `sqlite.ts` below its line budget.
 - `src/storage/sqlite-rows.ts`: SQLite result-row contracts only. Do not add
   queries or mappers here.
 - `src/storage/sqlite-json.ts`: defensive JSON decoding for SQLite JSON
@@ -190,6 +194,13 @@ Current known large modules:
   global latest snapshot or auto-approve memory.
 - `src/loop/evidence.ts` and `src/web/src/loop-evidence-contract.ts`: matching
   server and web contracts for raw-free typed engineering evidence.
+- `src/loop/action-inbox.ts`: pure latest-loop aggregation for explicit
+  continuity, evidence, failure, and memory debt plus local outcome coverage.
+  It never counts every intermediate hook snapshot as backlog.
+- `src/server/routes/actions.ts`: authenticated action/failure HTTP boundary;
+  writes require CSRF and shared failure validation.
+- `src/web/src/actions-page.tsx`: lazy route-level data boundary for the Actions
+  workspace. Contract/query/view/style modules remain independently testable.
 
 ### Shared helpers
 

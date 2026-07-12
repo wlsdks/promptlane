@@ -31,6 +31,15 @@ The format follows a simple reverse-chronological release log.
 - Added `looprelay loop close`, which requires an explicit snapshot or
   worktree/session/branch selection and atomically records outcome evidence with
   exact continuation-receipt use without approving memory.
+- Added an operator-local Actions workspace plus `looprelay loop actions` and
+  `get_looprelay_action_inbox` for prioritized continuity, evidence, failure,
+  and memory debt without turning intermediate hook snapshots into backlog.
+- Added operator-confirmed failure episodes across SQLite, CLI, MCP, HTTP, and
+  web UI. Episodes record category, intervention, resolution/wont-fix state,
+  never infer transcript content, and stay actionable until closed. The Actions
+  report now exposes raw-free category counts and recurring cross-session
+  patterns without causal claims. Recurrence fails closed unless at least two
+  distinct explicit agent sessions are represented.
 
 ## 1.0.0 - 2026-07-08
 

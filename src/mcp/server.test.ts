@@ -111,6 +111,12 @@ describe("MCP stdio server", () => {
             name: "record_continuation_receipt",
           }),
           expect.objectContaining({
+            name: "get_looprelay_action_inbox",
+          }),
+          expect.objectContaining({
+            name: "record_failure_episode",
+          }),
+          expect.objectContaining({
             name: "get_looprelay_loop_status",
             outputSchema: expect.objectContaining({
               properties: expect.objectContaining({
@@ -312,7 +318,7 @@ describe("MCP stdio server", () => {
 
     const tools = (response?.result as { tools: Array<unknown> }).tools;
 
-    expect(tools).toHaveLength(25);
+    expect(tools).toHaveLength(27);
     for (const tool of tools.filter(
       (tool) =>
         ![
@@ -321,6 +327,7 @@ describe("MCP stdio server", () => {
           "record_agent_run",
           "record_clarifications",
           "record_continuation_receipt",
+          "record_failure_episode",
           "record_loop_outcome",
           "record_loop_memory",
           "prepare_loop_brief",

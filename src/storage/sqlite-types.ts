@@ -8,6 +8,7 @@ import type {
   CompactBoundaryStoragePort,
   ContinuationReceiptStoragePort,
   ExportJobStoragePort,
+  FailureEpisodeStoragePort,
   ImportJobStoragePort,
   JudgeScoreStoragePort,
   LoopMemoryStoragePort,
@@ -46,6 +47,7 @@ export type SqlitePromptStorage = PromptStoragePort &
   LoopMergeDecisionStoragePort &
   AgentRunStoragePort &
   ContinuationReceiptStoragePort &
+  FailureEpisodeStoragePort &
   LoopCloseStoragePort & {
     close(): void;
     getAppliedMigrations(): AppliedMigration[];

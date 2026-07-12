@@ -73,6 +73,15 @@ function translateText(value: string): string {
 }
 
 function translateDynamic(value: string): string | undefined {
+  if (/^\d+ recurring$/.test(value)) {
+    return value.replace(/^(\d+) recurring$/, "반복 유형 $1개");
+  }
+  if (/^\d+ confirmed episodes$/.test(value)) {
+    return value.replace(/^(\d+) confirmed episodes$/, "확인된 episode $1개");
+  }
+  if (/^\d+ sessions?$/.test(value)) {
+    return value.replace(/^(\d+) sessions?$/, "세션 $1개");
+  }
   if (/^\d+ benchmark candidates? ready$/.test(value)) {
     return value.replace(
       /^(\d+) benchmark candidates? ready$/,
@@ -1017,4 +1026,62 @@ const UI_TRANSLATIONS: Record<string, string> = {
     "같은 저장 본문이 반복되면 여기에 표시됩니다.",
   "Try adding verification criteria, output format, and scope.":
     "검증 기준, 출력 형식, 범위를 명시해보세요.",
+  Actions: "조치",
+  "Operator-local outcomes and debt": "운영자 로컬 outcome과 미처리 항목",
+  "Operator-local control plane": "운영자 로컬 제어면",
+  "actions need review": "개의 조치 검토 필요",
+  "Resolve continuity, evidence, failure, and memory debt without exposing prompts or inferring outcomes.":
+    "프롬프트를 노출하거나 outcome을 추론하지 않고 continuity, evidence, failure, memory 미처리 항목을 해결합니다.",
+  Refresh: "새로고침",
+  Refreshing: "새로고침 중",
+  Critical: "치명적",
+  Failures: "실패",
+  Continuation: "연속성",
+  Memory: "메모리",
+  "Do next": "다음 조치",
+  "Action inbox": "조치함",
+  "Operator local": "운영자 로컬",
+  "Loading actions…": "조치 불러오는 중…",
+  "Inbox clear": "조치함 비어 있음",
+  "No current loop requires an explicit operator action.":
+    "명시적인 운영자 조치가 필요한 현재 loop가 없습니다.",
+  "Confirm failure": "실패 확인",
+  "Resolve failure": "실패 해결",
+  "Observed, not causal": "관찰 데이터, 인과 주장 아님",
+  "Local outcomes": "로컬 outcome",
+  "Operator-local work stays separate from bundled product studies on the Evidence page.":
+    "운영자 로컬 작업은 Evidence 화면의 번들 제품 연구와 분리됩니다.",
+  Verified: "로컬 검증",
+  Declared: "선언됨",
+  Failure: "실패",
+  "not recorded": "미기록",
+  "not applicable": "해당 없음",
+  "Completed local outcomes will appear here.":
+    "완료된 로컬 outcome이 여기에 표시됩니다.",
+  "Across confirmed episodes": "확인된 episode 전체",
+  "Recurring failure patterns": "반복 실패 패턴",
+  Recurring: "반복됨",
+  "Observed once": "1회 관찰",
+  Open: "열림",
+  "No confirmed failure patterns yet.": "아직 확인된 실패 패턴이 없습니다.",
+  "Failure category": "실패 유형",
+  "Confirmed intervention": "확인된 개입",
+  "Describe the raw-free next intervention.":
+    "raw-free 다음 개입을 설명하세요.",
+  Confirming: "확인 중",
+  "Confirm episode": "episode 확인",
+  "Resolution status": "해결 상태",
+  Resolved: "해결됨",
+  "Won't fix": "수정하지 않음",
+  "Resolution evidence": "해결 evidence",
+  "Record verified resolution evidence or the decision reason.":
+    "검증된 해결 evidence 또는 결정 이유를 기록하세요.",
+  Validation: "검증",
+  Setup: "설정",
+  "Context loss": "컨텍스트 손실",
+  "Wrong selection": "잘못된 선택",
+  Permission: "권한",
+  Tooling: "도구",
+  "Data integrity": "데이터 무결성",
+  Other: "기타",
 };

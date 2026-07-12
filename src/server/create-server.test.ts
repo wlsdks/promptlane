@@ -2511,6 +2511,7 @@ describe("createServer P2 ingest boundary", () => {
       "/benchmark",
       "/insights",
       "/loops",
+      "/actions",
       "/projects",
       "/mcp",
       "/exports",

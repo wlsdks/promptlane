@@ -940,7 +940,7 @@ Codex, or any MCP client through a stdio MCP server:
 looprelay mcp
 ```
 
-The MCP server exposes 25 tools:
+The MCP server exposes 27 tools:
 
 - `get_looprelay_status`: check whether the local archive is initialized,
   whether prompts have been captured, and which MCP tool to call next.
@@ -984,6 +984,13 @@ The MCP server exposes 25 tools:
 - `record_continuation_receipt`: record whether an exact continuation brief was
   copied, delivered, followed, partially followed, or ignored, plus declared
   target, first-action, TTFV, and friction metadata without transcript capture.
+- `get_looprelay_action_inbox`: return prioritized operator-local continuity,
+  evidence, failure, and memory debt, recent local outcomes, and category-level
+  recurring failure counts. It uses only the latest snapshot per active loop
+  and makes no causal claim.
+- `record_failure_episode`: confirm or resolve one failed/blocked snapshot with
+  a raw-free category, intervention, resolution, or wont-fix decision. It never
+  infers a failure episode from prompt text or transcripts.
 - `get_looprelay_loop_status`: check whether local LoopRelay loop snapshots
   exist and return safe latest-loop metadata plus compact-boundary awareness
   when a compact happened after the latest snapshot.
@@ -1036,7 +1043,7 @@ The MCP server exposes 25 tools:
 
 The matching local CLI surface is `looprelay loop status`,
 `looprelay loop collect`, `looprelay loop brief`, `looprelay loop close`,
-`looprelay loop outcome`,
+`looprelay loop actions`, `looprelay loop failure`, `looprelay loop outcome`,
 and `looprelay loop memory-candidate`; approved memories are recorded with
 `looprelay loop memory-approve`. Record a verified result before proposing a
 memory:
@@ -1052,6 +1059,10 @@ looprelay loop outcome --status passed --summary "Focused checks passed." \
 looprelay loop close --snapshot-id "$SNAPSHOT_ID" --receipt-id "$RECEIPT_ID" \
   --status passed --summary "Focused checks passed." \
   --typed-evidence '{"kind":"test","label":"focused checks","observed_at":"2026-07-12T04:00:00.000Z","result":"passed","verification":"locally_verified"}'
+looprelay loop actions
+looprelay loop failure record --snapshot-id "$SNAPSHOT_ID" \
+  --category validation --status open \
+  --intervention "Run the focused contract before the build."
 looprelay loop memory-candidate
 looprelay loop memory-approve --approved-by user
 ```
@@ -1077,6 +1088,10 @@ falling back to an unrelated latest snapshot. Use
 `looprelay loop close` when outcome, typed evidence, and exact receipt use must
 be recorded together; unlike `loop outcome`, close requires an explicit target
 and never falls back to the global latest snapshot. Use
+the dedicated web **Actions** workspace or `looprelay loop actions` to review
+only current operator-local debt and local outcomes. Failed/blocked work remains
+visible until its episode is confirmed and then resolved or marked wont-fix;
+bundled usefulness studies remain separate on Evidence. Use
 `looprelay loop instruction-patch --target-file AGENTS.md` to generate the
 review-only instruction patch from the latest approved memory. Use
 `looprelay loop instruction-apply --target-file AGENTS.md --confirm-apply`
