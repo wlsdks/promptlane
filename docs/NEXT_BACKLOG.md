@@ -1,6 +1,6 @@
 # LoopRelay Next Backlog
 
-Last updated: 2026-07-11
+Last updated: 2026-07-12
 
 LoopRelay is in identity-consolidation and usefulness-validation mode. Large new
 features remain frozen while agent-native usefulness evidence is collected and
@@ -46,19 +46,22 @@ Primary value:
   `reports/independent-user-candidate.json`. Its isolated maintainer smoke
   passed installation in 6.396 seconds and install-to-first-value in 7.098
   seconds with zero raw-path hits.
-- The agent-native gate now has three fresh MCP runs across Codex and Claude
-  Code, including one continuation brief. Two shell-first agent onboarding
-  runs failed at sandbox/non-interactive boundaries and remain retained as
-  friction, not product-install blockers.
+- Fresh live Codex and Claude Code sessions have each ingested a new prompt,
+  called the read-only `get_looprelay_status` MCP tool, and produced a `doctor`
+  result with `status: ready`. A Claude Code run with an unrealistically low
+  US$0.10 budget was retained as a client-execution failure; a later
+  permission-scoped run completed. This validates the configured local path,
+  not external-user adoption.
 - Collect unseen real-task pairs; do not inflate confidence with additional
   repeats of the current synthetic fixtures.
 - Separate baseline work from LoopRelay-assisted work explicitly.
 - Record completion rate, failure transition, continuation reuse, adopted
   guidance, time to first value, and user friction.
-- The next cohort is `resume reliability`: collect 10 counterbalanced pairs
-  before broadening intervention. Measure correct target selection, correct
-  first action, evidence attachment, elapsed time, wrong-target count, and
-  friction without storing prompts, paths, branches, worktrees, or sessions.
+- The `resume reliability` cohort is complete: 10 counterbalanced agent-native
+  blind-recovery pairs spanning six recovery classes. It measures correct target
+  selection, correct first action, evidence attachment, elapsed time,
+  wrong-target count, and friction without storing prompts, paths, branches,
+  worktrees, or sessions.
 - Treat results as observational evidence (`causal_claim: false`).
 - Include negative and null results in the report.
 
@@ -125,6 +128,42 @@ Current real-task decisions (11-pair maintainer-run cohort):
 - `hold`: all large feature work unless new real-task evidence changes the
   narrow scope above. Agent-native readiness does not establish human adoption
   or causality.
+
+Current resume-reliability decisions (10-pair agent-native cohort):
+
+- `retain`: explicit recovery guidance improves the scored correct-first-action
+  rate from 0.0% to 90.0%; keep it limited to checkpoint, failure, blocked, or
+  compaction signals.
+- `narrow`: correct-target selection stayed at 100.0% in both conditions, while
+  evidence attachment fell from 100.0% to 90.0% and mean friction rose from 0.0
+  to 0.7. Do not turn generic continuation intervention on by default.
+- `retain`: show recovery-class coverage, retained regressions, and the
+  raw-free data boundary in the product so the operator can judge the result
+  rather than infer a broad productivity claim.
+- `retain`: project-level recommendation feedback, outcome attribution, and
+  lifecycle settings remain explicit local controls. A retention review date
+  is not deletion; external-analysis permission does not perform a request.
+
+## Evidence-Driven 1.0.x Queue
+
+1. **Release blocker — independent install/first value.** Obtain three
+   independent install-to-first-continuation flows. Record failures, recovery,
+   elapsed time, and friction; do not substitute agent-native sessions for
+   human adoption.
+2. **Release blocker — final immutable release evidence.** On the final commit
+   only, run the complete release gate, publish npm and GitHub Release from the
+   same commit, and never move `v1.0.0`.
+3. **Collect, do not automate — adopted recommendation outcomes.** Accumulate
+   accepted/not-helpful/wrong feedback plus explicit outcome attribution across
+   real work. Keep the dashboard language non-causal until an appropriate
+   independent study exists.
+4. **Modify only if observed — MCP execution friction.** Retain client budget,
+   permission, and deferred-tool-discovery failures as setup observations. Add
+   guidance only when it reduces a repeated, reproducible failure; do not add
+   provider auto-configuration or model auto-switching.
+5. **Do not build.** No large feature, automatic prompt submission, hidden
+   provider call, transcript scraping, automatic memory write, or automatic
+   instruction-file edit is authorized by the current evidence.
 
 No item above authorizes automatic prompt submission, hidden provider calls,
 private transcript scraping, automatic memory writes, or automatic instruction
