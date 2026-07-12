@@ -31,6 +31,10 @@ For each condition, retain only booleans and aggregate counts:
 Never record prompt text, transcript text, paths, branch names, worktree
 labels, session ids, secrets, or credentials.
 
+If a fresh tool-event trace ends before the required evidence-bearing result,
+retain the observation as failed with `evidence_attached: false`; do not rerun
+it to replace an unfavorable treatment trace.
+
 ## Decision rule
 
 Until all ten pairs, the 5/5 order balance, and three recovery classes are
