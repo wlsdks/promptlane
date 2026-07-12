@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "design": "matched_observational",
+  "causal_claim": false,
+  "minimums": {
+    "pairs": 10
+  },
+  "pairs": []
+}

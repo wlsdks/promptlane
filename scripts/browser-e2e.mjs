@@ -378,6 +378,11 @@ try {
     "No causal claim",
     "Evidence should not overstate matched-pair results as causal proof.",
   );
+  await assertText(
+    page,
+    "Resume reliability",
+    "Evidence should show the next 10-pair resume reliability program.",
+  );
   await assertBrowserSafe(page, "evidence");
   await captureScreenshot(page, "evidence-desktop");
   await page

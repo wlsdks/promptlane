@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "design": "matched_observational",
+  "causal_claim": false,
+  "status": "collecting",
+  "pair_count": 0,
+  "minimum_pairs": 10,
+  "pairs_remaining": 10,
+  "order": {
+    "baseline_first": 0,
+    "looprelay_first": 0
+  },
+  "baseline": {
+    "success_rate": null,
+    "correct_target_rate": null,
+    "correct_first_action_rate": null,
+    "evidence_attached_rate": null,
+    "mean_elapsed_ms": null,
+    "mean_friction_count": null,
+    "mean_wrong_target_count": null
+  },
+  "looprelay": {
+    "success_rate": null,
+    "correct_target_rate": null,
+    "correct_first_action_rate": null,
+    "evidence_attached_rate": null,
+    "mean_elapsed_ms": null,
+    "mean_friction_count": null,
+    "mean_wrong_target_count": null
+  },
+  "delta": {
+    "correct_target_rate": null,
+    "correct_first_action_rate": null,
+    "evidence_attached_rate": null,
+    "mean_elapsed_ms": null,
+    "mean_friction_count": null,
+    "mean_wrong_target_count": null
+  },
+  "transitions": {
+    "improved": 0,
+    "regressed": 0,
+    "unchanged_passed": 0,
+    "unchanged_failed": 0
+  },
+  "adoption_rate": null,
+  "intervention": {
+    "decision": "collect",
+    "rationale": "Collect 10 counterbalanced resume pairs before changing the default intervention policy."
+  },
+  "privacy": {
+    "raw_free": true,
+    "stores_prompt_bodies": false,
+    "stores_raw_paths": false,
+    "stores_branch_names": false,
+    "stores_worktree_names": false
+  },
+  "note": "Observed matched-pair evidence only. A completed cohort remains non-causal and retains regressions."
+}

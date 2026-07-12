@@ -55,6 +55,10 @@ Primary value:
 - Separate baseline work from LoopRelay-assisted work explicitly.
 - Record completion rate, failure transition, continuation reuse, adopted
   guidance, time to first value, and user friction.
+- The next cohort is `resume reliability`: collect 10 counterbalanced pairs
+  before broadening intervention. Measure correct target selection, correct
+  first action, evidence attachment, elapsed time, wrong-target count, and
+  friction without storing prompts, paths, branches, worktrees, or sessions.
 - Treat results as observational evidence (`causal_claim: false`).
 - Include negative and null results in the report.
 

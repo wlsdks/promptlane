@@ -24,6 +24,7 @@ describe("createLoopBrief", () => {
     });
 
     expect(brief.prompt).toContain("## Selected Continuation Contract");
+    expect(brief.prompt).toContain("## Agent Strategy (advisory)");
     expect(brief.prompt).toContain("authority: explicit local checkpoint");
     expect(brief.prompt).toContain(
       "priority: follow this contract exactly; do not insert fallback steps between its stated actions.",
@@ -83,6 +84,7 @@ describe("createLoopBrief", () => {
     });
     expect(brief.prompt).not.toContain("/Users/example");
     expect(brief.prompt).not.toContain("Make this better");
+    expect(brief.prompt).not.toContain("## Agent Strategy (advisory)");
   });
 
   it("includes approved loop memories without prompt bodies, raw paths, or secrets", () => {

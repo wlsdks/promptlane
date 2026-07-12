@@ -1,6 +1,7 @@
 import mainReport from "../../../reports/usefulness-summary.json" with { type: "json" };
 import realTaskReport from "../../../reports/usefulness-real-task-summary.json" with { type: "json" };
 import solTerraReport from "../../../reports/usefulness-sol-terra-summary.json" with { type: "json" };
+import resumeReliabilityReport from "../../../reports/resume-reliability-summary.json" with { type: "json" };
 
 type DirectionalReport = {
   causal_claim: boolean;
@@ -66,3 +67,15 @@ export const PRODUCT_EVIDENCE = {
     },
   ],
 } as const;
+
+export const RESUME_RELIABILITY_PROGRAM = resumeReliabilityReport as {
+  causal_claim: false;
+  intervention: {
+    decision: "collect" | "narrow" | "retain_opt_in";
+    rationale: string;
+  };
+  minimum_pairs: number;
+  pair_count: number;
+  pairs_remaining: number;
+  status: "collecting" | "directional_evidence_ready";
+};

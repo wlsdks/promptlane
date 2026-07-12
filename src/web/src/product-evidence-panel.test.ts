@@ -15,6 +15,9 @@ describe("ProductEvidencePanel", () => {
     expect(html).toContain("5 matched pairs");
     expect(html).toContain("Strict success");
     expect(html).toContain("Outcome transitions");
+    expect(html).toContain("Resume reliability");
+    expect(html).toContain("0/10 pairs");
+    expect(html).toContain("Collect 10 counterbalanced resume pairs");
     expect(html).toContain("Scope decisions");
     expect(html).toContain("failure prevention");
     expect(html).toContain("0 independent users");

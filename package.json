@@ -146,6 +146,7 @@
     "evidence:quality": "node scripts/quality-95-evidence.mjs",
     "evidence:usefulness": "node scripts/usefulness-report.mjs",
     "evidence:real-task": "node scripts/usefulness-report.mjs reports/usefulness-real-task-pairs.json docs/assets/usefulness-real-task-results.svg reports/usefulness-real-task-summary.json --skip-readme",
+    "evidence:resume-reliability": "node scripts/resume-reliability-report.mjs reports/resume-reliability-pairs.json reports/resume-reliability-summary.json",
     "evidence:codex-metrics": "node scripts/usefulness-codex-metrics.mjs",
     "evidence:participant-intake": "node scripts/usefulness-participant-intake.mjs",
     "npm-publish:preflight": "node scripts/npm-publish-preflight.mjs",

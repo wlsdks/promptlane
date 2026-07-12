@@ -1,6 +1,9 @@
 import { ArrowUpRight, CircleAlert, ShieldCheck } from "lucide-react";
 
-import { PRODUCT_EVIDENCE } from "./product-evidence-data.js";
+import {
+  PRODUCT_EVIDENCE,
+  RESUME_RELIABILITY_PROGRAM,
+} from "./product-evidence-data.js";
 
 export function ProductEvidencePanel() {
   const report = PRODUCT_EVIDENCE.primary;
@@ -48,6 +51,26 @@ export function ProductEvidencePanel() {
           </div>
         ))}
       </div>
+
+      <section
+        className="resume-reliability-program"
+        aria-label="Resume reliability program"
+      >
+        <div>
+          <p className="eyebrow">Next evidence program</p>
+          <h3>Resume reliability</h3>
+          <p>
+            Correct target, correct first action, and evidence attachment are
+            measured separately from generic prompt quality.
+          </p>
+        </div>
+        <strong>
+          {RESUME_RELIABILITY_PROGRAM.pair_count}/
+          {RESUME_RELIABILITY_PROGRAM.minimum_pairs} pairs
+        </strong>
+        <span>{RESUME_RELIABILITY_PROGRAM.status}</span>
+        <small>{RESUME_RELIABILITY_PROGRAM.intervention.rationale}</small>
+      </section>
 
       <div className="product-evidence-metrics">
         <EvidenceMetric
