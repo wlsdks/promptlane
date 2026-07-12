@@ -259,7 +259,8 @@ support tables are implementation details and are not counted separately.
 - Aggregate operator-confirmed episodes by category, lifecycle count, distinct
   explicit session count, and last confirmation time. A category is recurring
   only after confirmation in at least two distinct agent sessions; missing
-  session metadata fails closed instead of implying recurrence.
+  session metadata fails closed instead of implying recurrence. This aggregate
+  spans the local episode history rather than the 100-item action-list window.
 
 ## 7. Memory and repository-instruction promotion
 

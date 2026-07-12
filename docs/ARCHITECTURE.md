@@ -147,7 +147,9 @@ Current known large modules:
   continuation-receipt closeout. A receipt from another snapshot aborts the
   entire write.
 - `src/storage/failure-episodes.ts`: one operator-confirmed failure lifecycle
-  per failed/blocked snapshot, including its migration and raw-free validation.
+  per failed/blocked snapshot, including its migration, raw-free validation,
+  and complete category-level aggregate. Action queues may be windowed, but
+  recurrence counts must never be derived from a UI list limit.
 - `src/storage/loop-evidence-storage.ts`: narrow SQLite composition for atomic
   closeout and failure-episode ports; keeps `sqlite.ts` below its line budget.
 - `src/storage/sqlite-rows.ts`: SQLite result-row contracts only. Do not add

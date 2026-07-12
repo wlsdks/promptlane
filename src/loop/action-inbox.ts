@@ -2,6 +2,7 @@ import type { LoopSnapshot } from "./types.js";
 import { detectSensitiveValues } from "../redaction/detectors.js";
 import type {
   FailureEpisodeCategory,
+  FailureEpisodePatternCounts,
   FailureEpisodeStatus,
 } from "./failure-episode.js";
 
@@ -111,6 +112,7 @@ export function createActionInboxReport(input: {
   receipts: readonly ReceiptSummary[];
   memories: readonly MemorySummary[];
   failureEpisodes: readonly FailureEpisodeSummary[];
+  failurePatternCounts?: readonly FailureEpisodePatternCounts[];
 }): ActionInboxReport {
   const latestSnapshots = latestPerLoop(input.snapshots);
   const receiptBySnapshot = latestBySnapshot(input.receipts);
@@ -247,10 +249,9 @@ export function createActionInboxReport(input: {
   outcomes.sort((left, right) =>
     right.created_at.localeCompare(left.created_at),
   );
-  const failurePatterns = createFailurePatterns(
-    input.failureEpisodes,
-    input.snapshots,
-  );
+  const failurePatterns = input.failurePatternCounts
+    ? createFailurePatternsFromCounts(input.failurePatternCounts)
+    : createFailurePatterns(input.failureEpisodes, input.snapshots);
   return {
     generated_at: input.now.toISOString(),
     summary: {
@@ -316,7 +317,24 @@ function createFailurePatterns(
     }
     patterns.set(episode.category, pattern);
   }
-  return [...patterns.values()].sort(
+  return sortFailurePatterns([...patterns.values()]);
+}
+
+function createFailurePatternsFromCounts(
+  counts: readonly FailureEpisodePatternCounts[],
+): FailurePatternSummary[] {
+  return sortFailurePatterns(
+    counts.map((count) => ({
+      ...count,
+      recurring: count.session_count >= 2,
+    })),
+  );
+}
+
+function sortFailurePatterns(
+  patterns: readonly FailurePatternSummary[],
+): FailurePatternSummary[] {
+  return [...patterns].sort(
     (left, right) =>
       Number(right.recurring) - Number(left.recurring) ||
       right.total - left.total ||

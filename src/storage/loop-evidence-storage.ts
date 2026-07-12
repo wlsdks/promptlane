@@ -16,6 +16,8 @@ export function createLoopEvidenceStorage(
       failureEpisodes.recordFailureEpisode(db, input, now()),
     listFailureEpisodes: (input = {}) =>
       failureEpisodes.listFailureEpisodes(db, input),
+    getFailureEpisodePatternCounts: (input = {}) =>
+      failureEpisodes.getFailureEpisodePatternCounts(db, input),
     closeLoop: (input) => loopClose.closeLoop(db, input, now()),
   };
 }

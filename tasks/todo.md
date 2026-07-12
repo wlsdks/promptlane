@@ -1,5 +1,18 @@
 # 작업 계획
 
+## 2026-07-12 Whole-System Improvement Audit
+
+- [x] BASELINE: inspect current branch, architectural rules, public-surface
+      inventory, dependency health, quality budgets, and existing evidence.
+- [x] AUDIT: run structural, privacy, dead-code, dependency, and route-flow
+      checks; classify every finding as fix-now, tracked risk, or false positive.
+- [x] IMPLEMENT: use focused regression tests to correct only high-confidence
+      defects or maintainability friction found by the audit.
+- [x] VERIFY: run focused tests first, then full tests, lint, build, package
+      dry-run, and desktop/mobile UI patrol without the final release gate.
+- [x] DOCUMENT: record verified changes, evidence, retained risks, and one
+      intentional commit without publishing or pushing.
+
 ## 2026-07-12 Web Entry Bundle Budget
 
 - [x] RED: turn the 500 kB entry-chunk warning into a fail-closed production

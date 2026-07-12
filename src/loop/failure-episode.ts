@@ -12,6 +12,16 @@ export type FailureEpisodeCategory =
 
 export type FailureEpisodeStatus = "open" | "resolved" | "wont_fix";
 
+export type FailureEpisodePatternCounts = {
+  category: FailureEpisodeCategory;
+  total: number;
+  session_count: number;
+  open: number;
+  resolved: number;
+  wont_fix: number;
+  last_confirmed_at: string;
+};
+
 export type FailureEpisode = {
   id: string;
   snapshot_id: string;

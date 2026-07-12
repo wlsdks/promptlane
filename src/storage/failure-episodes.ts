@@ -5,6 +5,7 @@ import {
   failureEpisodePrivacy,
   parseFailureEpisodeInput,
   type FailureEpisode,
+  type FailureEpisodePatternCounts,
   type FailureEpisodeCategory,
   type FailureEpisodeStatus,
   type RecordFailureEpisodeInput,
@@ -126,6 +127,36 @@ export function listFailureEpisodes(
     )
     .all(...params, limit) as FailureEpisodeRow[];
   return rows.map(failureEpisodeFromRow);
+}
+
+export function getFailureEpisodePatternCounts(
+  db: Database.Database,
+  options: { projectId?: string } = {},
+): FailureEpisodePatternCounts[] {
+  const clauses: string[] = [];
+  const params: string[] = [];
+  if (options.projectId) {
+    clauses.push("episodes.project_id = ?");
+    params.push(options.projectId);
+  }
+  const where = clauses.length > 0 ? `WHERE ${clauses.join(" AND ")}` : "";
+  const rows = db
+    .prepare(
+      `SELECT episodes.category,
+        COUNT(*) AS total,
+        COUNT(DISTINCT NULLIF(snapshots.session_id, '')) AS session_count,
+        SUM(CASE WHEN episodes.status = 'open' THEN 1 ELSE 0 END) AS open,
+        SUM(CASE WHEN episodes.status = 'resolved' THEN 1 ELSE 0 END) AS resolved,
+        SUM(CASE WHEN episodes.status = 'wont_fix' THEN 1 ELSE 0 END) AS wont_fix,
+        MAX(episodes.confirmed_at) AS last_confirmed_at
+       FROM loop_failure_episodes AS episodes
+       INNER JOIN loop_snapshots AS snapshots ON snapshots.id = episodes.snapshot_id
+       ${where}
+       GROUP BY episodes.category
+       ORDER BY total DESC, last_confirmed_at DESC, episodes.category ASC`,
+    )
+    .all(...params) as FailureEpisodePatternCounts[];
+  return rows;
 }
 
 function getFailureEpisodeBySnapshot(

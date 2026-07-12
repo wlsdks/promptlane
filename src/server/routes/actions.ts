@@ -117,6 +117,7 @@ function requireActionStorage(
       "listContinuationReceipts",
       "listLoopMemories",
       "listFailureEpisodes",
+      "getFailureEpisodePatternCounts",
     ],
     { label: "Action inbox storage", instance },
   );

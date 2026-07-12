@@ -36,6 +36,7 @@ import type {
 import type { CloseLoopInput, CloseLoopResult } from "./loop-close.js";
 import type {
   FailureEpisode,
+  FailureEpisodePatternCounts,
   FailureEpisodeStatus,
   RecordFailureEpisodeInput,
 } from "../loop/failure-episode.js";
@@ -229,6 +230,9 @@ export type LoopCloseStoragePort = {
 
 export type FailureEpisodeStoragePort = {
   recordFailureEpisode(input: RecordFailureEpisodeInput): FailureEpisode;
+  getFailureEpisodePatternCounts(options?: {
+    projectId?: string;
+  }): FailureEpisodePatternCounts[];
   listFailureEpisodes(options?: {
     projectId?: string;
     status?: FailureEpisodeStatus;

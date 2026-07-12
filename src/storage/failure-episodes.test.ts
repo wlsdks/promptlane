@@ -87,6 +87,41 @@ describe("failure episode storage", () => {
     ).toThrow("must not include secrets or raw local paths");
     storage.close();
   });
+
+  it("aggregates all failure episodes without applying the list limit", () => {
+    const storage = fixture();
+    for (let index = 0; index < 101; index += 1) {
+      const snapshotId = `loop_pattern_${index}`;
+      storage.createLoopSnapshot(
+        snapshot({
+          id: snapshotId,
+          session_id: `session_pattern_${index}`,
+        }),
+      );
+      storage.recordFailureEpisode({
+        snapshot_id: snapshotId,
+        category: "tooling",
+        status: "open",
+        intervention: "Retry the focused local tool call.",
+        confirmed_by: "user",
+      });
+    }
+
+    expect(storage.listFailureEpisodes({ limit: 100 })).toHaveLength(100);
+    const patterns = storage.getFailureEpisodePatternCounts();
+    expect(patterns).toEqual([
+      expect.objectContaining({
+        category: "tooling",
+        total: 101,
+        session_count: 101,
+        open: 101,
+        resolved: 0,
+        wont_fix: 0,
+      }),
+    ]);
+    expect(JSON.stringify(patterns)).not.toContain("session_pattern_");
+    storage.close();
+  });
 });
 
 function fixture() {

@@ -15,7 +15,10 @@ export type ActionInboxStorage = Pick<
 > &
   Pick<ContinuationReceiptStoragePort, "listContinuationReceipts"> &
   Pick<LoopMemoryStoragePort, "listLoopMemories"> &
-  Pick<FailureEpisodeStoragePort, "listFailureEpisodes">;
+  Pick<
+    FailureEpisodeStoragePort,
+    "getFailureEpisodePatternCounts" | "listFailureEpisodes"
+  >;
 
 export function createActionInboxFromStorage(
   storage: ActionInboxStorage,
@@ -27,5 +30,6 @@ export function createActionInboxFromStorage(
     receipts: storage.listContinuationReceipts({ limit: 100 }),
     memories: storage.listLoopMemories({ limit: 100 }).items,
     failureEpisodes: storage.listFailureEpisodes({ limit: 100 }),
+    failurePatternCounts: storage.getFailureEpisodePatternCounts(),
   });
 }

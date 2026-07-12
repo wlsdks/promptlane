@@ -49,6 +49,9 @@ The format follows a simple reverse-chronological release log.
   report now exposes raw-free category counts and recurring cross-session
   patterns without causal claims. Recurrence fails closed unless at least two
   distinct explicit agent sessions are represented.
+- Corrected failure-pattern aggregation so recurrence is computed across the
+  full local episode history, while the operator action list remains bounded to
+  recent records. No session IDs or failure narratives are returned.
 
 ## 1.0.0 - 2026-07-08
 

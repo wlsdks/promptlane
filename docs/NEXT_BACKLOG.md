@@ -106,7 +106,9 @@ Candidate focused slices:
    is inferred from prompt text or transcripts. The Actions report and MCP
    contract aggregate category-level total/open/resolved/wont-fix counts and
    mark categories recurring only after confirmed episodes span two distinct,
-   explicit agent session IDs. Missing session metadata fails closed.
+   explicit agent session IDs. Missing session metadata fails closed. The
+   pattern aggregate spans all local episodes; only the actionable queue is
+   windowed to recent records.
 5. **Agent Guide calibration.** Do not rank or automate models until at least
    20 raw-free outcomes across three task types include recommendation,
    selection, rejection/switch reason, attempts, TTFV, and focused tests.
