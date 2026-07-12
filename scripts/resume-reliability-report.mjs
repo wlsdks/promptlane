@@ -7,6 +7,14 @@ const FORBIDDEN_KEY =
   /(?:prompt|body|query|response|output|transcript|path|cwd|branch|worktree|session)/i;
 const SENSITIVE_VALUE =
   /(?:\/Users\/[^\s]+|\bAKIA[0-9A-Z]{16}\b|\bsk-(?:proj-)?[A-Za-z0-9_-]{8,}\b|\bgh[opusr]_[A-Za-z0-9]{12,}\b)/;
+const RECOVERY_CLASSES = new Set([
+  "checkpoint_focus",
+  "compaction_handoff",
+  "failure_outcome",
+  "policy_recovery",
+  "privacy_boundary",
+  "worktree_resolution",
+]);
 
 export function createResumeReliabilityReport(input) {
   validateResumeReliabilityLedger(input);
@@ -19,6 +27,12 @@ export function createResumeReliabilityReport(input) {
       .length,
     looprelay_first: pairs.filter((pair) => pair.order === "looprelay_first")
       .length,
+  };
+  const recoveryClassCounts = countRecoveryClasses(pairs);
+  const recoveryClassCoverage = {
+    observed: Object.keys(recoveryClassCounts).length,
+    required: input.minimums.recovery_classes,
+    counts: recoveryClassCounts,
   };
   const transitions = pairs.reduce(
     (summary, pair) => {
@@ -36,7 +50,10 @@ export function createResumeReliabilityReport(input) {
     Number.isInteger(requiredPerOrder) &&
     order.baseline_first >= requiredPerOrder &&
     order.looprelay_first >= requiredPerOrder;
-  const completed = pairs.length >= minimumPairs && counterbalanced;
+  const completed =
+    pairs.length >= minimumPairs &&
+    counterbalanced &&
+    recoveryClassCoverage.observed >= recoveryClassCoverage.required;
   const targetDelta = nullableDelta(
     looprelay.correct_target_rate,
     baseline.correct_target_rate,
@@ -62,6 +79,11 @@ export function createResumeReliabilityReport(input) {
     pairs_remaining: Math.max(minimumPairs - pairs.length, 0),
     counterbalanced,
     order,
+    recovery_class_coverage: recoveryClassCoverage,
+    scoring: {
+      method: "tool_event_trace",
+      model_self_report_used: false,
+    },
     baseline,
     looprelay,
     delta: {
@@ -113,6 +135,12 @@ export function validateResumeReliabilityLedger(input) {
   if (!Number.isInteger(input.minimums?.pairs) || input.minimums.pairs < 1) {
     throw new Error("minimums.pairs must be a positive integer");
   }
+  if (
+    !Number.isInteger(input.minimums?.recovery_classes) ||
+    input.minimums.recovery_classes < 1
+  ) {
+    throw new Error("minimums.recovery_classes must be a positive integer");
+  }
   if (!Array.isArray(input.pairs)) {
     throw new Error("pairs must be an array");
   }
@@ -126,12 +154,27 @@ export function validateResumeReliabilityLedger(input) {
     if (!new Set(["baseline_first", "looprelay_first"]).has(pair.order)) {
       throw new Error("pair order must be baseline_first or looprelay_first");
     }
+    if (!RECOVERY_CLASSES.has(pair.recovery_class)) {
+      throw new Error("pair recovery_class must be a supported raw-free class");
+    }
+    if (pair.assessment !== "tool_event_trace") {
+      throw new Error(
+        "pair assessment must be an independent tool event trace",
+      );
+    }
     validateCondition(pair.baseline, false);
     validateCondition(pair.looprelay, true);
     if (!new Set(["baseline", "looprelay", "tie"]).has(pair.preference)) {
       throw new Error("pair preference must be baseline, looprelay, or tie");
     }
   }
+}
+
+function countRecoveryClasses(pairs) {
+  return pairs.reduce((counts, pair) => {
+    counts[pair.recovery_class] = (counts[pair.recovery_class] ?? 0) + 1;
+    return counts;
+  }, {});
 }
 
 function validateCondition(condition, treatment) {

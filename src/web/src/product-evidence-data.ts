@@ -82,5 +82,13 @@ export const RESUME_RELIABILITY_PROGRAM = resumeReliabilityReport as {
     baseline_first: number;
     looprelay_first: number;
   };
+  recovery_class_coverage: {
+    observed: number;
+    required: number;
+  };
+  scoring: {
+    method: "tool_event_trace";
+    model_self_report_used: false;
+  };
   status: "collecting" | "directional_evidence_ready";
 };

@@ -3,13 +3,26 @@
   "design": "matched_observational",
   "causal_claim": false,
   "status": "collecting",
-  "pair_count": 2,
+  "pair_count": 3,
   "minimum_pairs": 10,
-  "pairs_remaining": 8,
+  "pairs_remaining": 7,
   "counterbalanced": false,
   "order": {
-    "baseline_first": 1,
+    "baseline_first": 2,
     "looprelay_first": 1
+  },
+  "recovery_class_coverage": {
+    "observed": 3,
+    "required": 3,
+    "counts": {
+      "checkpoint_focus": 1,
+      "policy_recovery": 1,
+      "worktree_resolution": 1
+    }
+  },
+  "scoring": {
+    "method": "tool_event_trace",
+    "model_self_report_used": false
   },
   "baseline": {
     "success_rate": 0,
@@ -26,7 +39,7 @@
     "correct_first_action_rate": 1,
     "evidence_attached_rate": 1,
     "mean_elapsed_ms": null,
-    "mean_friction_count": 0.5,
+    "mean_friction_count": 0.666667,
     "mean_wrong_target_count": 0
   },
   "delta": {
@@ -34,11 +47,11 @@
     "correct_first_action_rate": 1,
     "evidence_attached_rate": 0,
     "mean_elapsed_ms": null,
-    "mean_friction_count": 0.5,
+    "mean_friction_count": 0.666667,
     "mean_wrong_target_count": 0
   },
   "transitions": {
-    "improved": 2,
+    "improved": 3,
     "regressed": 0,
     "unchanged_passed": 0,
     "unchanged_failed": 0

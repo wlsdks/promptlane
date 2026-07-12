@@ -75,6 +75,14 @@ export function ProductEvidencePanel() {
           {RESUME_RELIABILITY_PROGRAM.order.looprelay_first}
           /5 LoopRelay first
         </small>
+        <small>
+          Recovery coverage:{" "}
+          {RESUME_RELIABILITY_PROGRAM.recovery_class_coverage.observed}/
+          {RESUME_RELIABILITY_PROGRAM.recovery_class_coverage.required} classes
+        </small>
+        <small>
+          Scored from tool-event traces; model self-report excluded.
+        </small>
         <small>{RESUME_RELIABILITY_PROGRAM.intervention.rationale}</small>
       </section>
 

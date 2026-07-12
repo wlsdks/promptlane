@@ -9,6 +9,9 @@ it does not establish causality.
 - Collect exactly 10 distinct session-recovery pairs before changing the
   default intervention policy.
 - Counterbalance order: five `baseline_first`, five `looprelay_first`.
+- Cover at least three raw-free recovery classes. The current classes are
+  checkpoint focus, compaction handoff, failure outcome, policy recovery,
+  privacy boundary, and worktree resolution; a class records no task text.
 - Use fresh coding-agent sessions and the same repository state for both
   conditions in a pair.
 - The baseline receives the recovery task and ordinary repository evidence.
@@ -30,8 +33,9 @@ labels, session ids, secrets, or credentials.
 
 ## Decision rule
 
-Until all ten pairs are present, the policy is `collect`: LoopRelay remains
-opt-in and no broad default intervention is justified. After ten pairs,
+Until all ten pairs, the 5/5 order balance, and three recovery classes are
+present, the policy is `collect`: LoopRelay remains opt-in and no broad default
+intervention is justified. After that,
 retain opt-in resume guidance only when both correct-target and correct-first-
 action rates improve without more regressions than improvements. Otherwise
 narrow it to explicit recovery signals.
