@@ -915,7 +915,7 @@ describe("plugin packaging files", () => {
     expect(packageInstallSmoke).toContain("requires_real_outcomes !== true");
   });
 
-  it("keeps the public release surface on 1.0.0", () => {
+  it("keeps the public release surface on 1.0.1", () => {
     const packageJson = JSON.parse(
       readFileSync(join(process.cwd(), "package.json"), "utf8"),
     ) as { version: string };
@@ -961,11 +961,12 @@ describe("plugin packaging files", () => {
     const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
     const readmeKo = readFileSync(join(process.cwd(), "README.ko.md"), "utf8");
 
-    expect(packageJson.version).toBe("1.0.0");
+    expect(packageJson.version).toBe("1.0.1");
     for (const content of [sharedVersion, claudePlugin, claudeMarketplace]) {
-      expect(content).toContain("1.0.0");
+      expect(content).toContain("1.0.1");
       expect(content).not.toContain("0.1.0-beta.0");
     }
+    expect(changelog).toContain("## 1.0.1 - 2026-07-12");
     expect(changelog).toContain("## 1.0.0 - 2026-07-08");
     expect(changelog).not.toContain("currently pre-release");
     expect(changelog).toContain(
@@ -1047,9 +1048,9 @@ describe("plugin packaging files", () => {
       }
     }
     expect(releaseStability).toContain("looprelay-1.0.0.tgz");
-    expect(readme).toContain("LoopRelay 1.0.0");
+    expect(readme).toContain("LoopRelay 1.0.1");
     expect(readme).not.toContain("pre-release software");
-    expect(readmeKo).toContain("LoopRelay 1.0.0");
+    expect(readmeKo).toContain("LoopRelay 1.0.1");
     expect(readmeKo).not.toContain("pre-release");
   });
 

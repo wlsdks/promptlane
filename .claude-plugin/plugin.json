@@ -1,7 +1,7 @@
 {
   "name": "looprelay",
   "description": "Local continuity and evidence for long-running Claude Code and Codex loops.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "LoopRelay contributors",
     "url": "https://github.com/wlsdks/looprelay"

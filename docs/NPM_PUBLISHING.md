@@ -81,9 +81,9 @@ If that file is absent, preflight adds a separate `real benchmark fixtures are
 missing` warning. This warning does not block publish after the release gates
 pass; it blocks overclaiming real-user effectiveness trends.
 
-## Recommended First Stable Publish
+## Recommended Next Stable Publish
 
-Publish 1.0.0 to the default `latest` npm dist-tag after the full local release
+Publish 1.0.1 to the default `latest` npm dist-tag after the full local release
 gate passes:
 
 ```sh
@@ -133,7 +133,7 @@ Recommended version:
 
 ```json
 {
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
 ```
 

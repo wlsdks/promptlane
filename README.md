@@ -268,7 +268,7 @@ export.
 
 ## Status
 
-LoopRelay 1.0.0 is the first stable public release line for local-first
+LoopRelay 1.0.1 is the first stable public release line for local-first
 Claude Code and Codex loop memory workflows.
 
 - Claude Code support: MVP path

@@ -203,7 +203,7 @@ Confirm `corepack pnpm pack:dry-run` excludes:
 
 ## Deferred For Broader Platform Claims
 
-LoopRelay 1.0.0 can publish from the local-first release gate above. Do not make broad platform claims before platform-specific smoke is complete:
+LoopRelay 1.0.1 can publish from the local-first release gate above. Do not make broad platform claims before platform-specific smoke is complete:
 
 - [ ] `better-sqlite3` install/open/WAL/FTS5 smoke on each claimed release platform.
 - [ ] Hook install, doctor, MCP registration, and browser smoke on each claimed release platform.

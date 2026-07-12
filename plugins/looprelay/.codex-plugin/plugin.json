@@ -1,6 +1,6 @@
 {
   "name": "looprelay",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Local continuity and evidence for long-running Codex and Claude Code loops.",
   "author": {
     "name": "LoopRelay contributors",

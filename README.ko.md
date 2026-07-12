@@ -258,7 +258,7 @@ looprelay setup --profile coach --register-mcp --open-web
 
 ## 상태
 
-LoopRelay 1.0.0은 local-first Claude Code 및 Codex loop memory workflow를
+LoopRelay 1.0.1은 local-first Claude Code 및 Codex loop memory workflow를
 위한 첫 stable public release 라인입니다.
 
 - Claude Code 지원: MVP 경로

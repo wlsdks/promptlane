@@ -6,6 +6,13 @@ The format follows a simple reverse-chronological release log.
 
 ## Unreleased
 
+## 1.0.1 - 2026-07-12
+
+This is the first LoopRelay public-release candidate after the immutable
+pre-rename `v1.0.0` tag. It preserves the existing tag and publishes only from
+a new matching package version, annotated tag, npm artifact, and GitHub Release
+commit.
+
 ### Web performance
 
 - Reduced the production web entry chunk from 504.07 kB to 389.84 kB by moving

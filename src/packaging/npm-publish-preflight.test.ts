@@ -694,11 +694,11 @@ exit 1
       check.label.endsWith("tag exists and points at HEAD"),
     );
     expect(tagCheck).toMatchObject({ ok: false });
-    expect(tagCheck?.detail).toContain("git checkout v1.0.0");
+    expect(tagCheck?.detail).toContain("git checkout v1.0.1");
     expect(tagCheck?.detail).toContain("immutable");
     expect(tagCheck?.detail).toContain("bump version and create a new tag");
-    expect(parsed.next_action).toContain("v1.0.0 tag does not point at HEAD");
-    expect(parsed.next_action).toContain("git checkout v1.0.0");
+    expect(parsed.next_action).toContain("v1.0.1 tag does not point at HEAD");
+    expect(parsed.next_action).toContain("git checkout v1.0.1");
     expect(parsed.next_action).toContain("bump version");
     expect(tagCheck?.detail).not.toContain("manual npm checks");
     expect(tagCheck?.detail).not.toContain("predates this preflight");
@@ -756,7 +756,7 @@ exit 1
     expect(annotatedTagCheck).toMatchObject({ ok: false });
     expect(annotatedTagCheck?.detail).toContain("bump the package version");
     expect(annotatedTagCheck?.detail).toContain("annotated release tag");
-    expect(parsed.next_action).toContain("v1.0.0 tag is not annotated");
+    expect(parsed.next_action).toContain("v1.0.1 tag is not annotated");
     expect(parsed.next_action).toContain("bump the package version");
   });
 
@@ -815,9 +815,9 @@ exit 1
     );
     expect(originTagCheck).toMatchObject({ ok: false });
     expect(originTagCheck?.detail).toContain("must not be moved");
-    expect(originTagCheck?.detail).toContain("origin/v1.0.0");
+    expect(originTagCheck?.detail).toContain("origin/v1.0.1");
     expect(parsed.next_action).toContain(
-      "origin v1.0.0 tag does not match local v1.0.0",
+      "origin v1.0.1 tag does not match local v1.0.1",
     );
     expect(parsed.next_action).toContain("bump the package version");
   });
@@ -1055,7 +1055,7 @@ exit 1
     );
   });
 
-  it("tells the operator to bump version instead of retargeting v1.0.0 after publish", () => {
+  it("tells the operator to bump version instead of retargeting the current tag after publish", () => {
     const binDir = mkdtempSync(join(tmpdir(), "looprelay-fake-npm-"));
     const fakeNpm = join(binDir, "npm");
     writeFileSync(
@@ -1066,7 +1066,7 @@ if [ "$1" = "whoami" ]; then
   exit 0
 fi
 if [ "$1" = "view" ]; then
-  printf '%s\n' '["0.9.0","1.0.0"]'
+  printf '%s\n' '["0.9.0","1.0.0","1.0.1"]'
   exit 0
 fi
 echo "unexpected npm command: $*" >&2
@@ -1104,9 +1104,9 @@ exit 1
     );
     expect(versionCheck).toMatchObject({ ok: false });
     expect(versionCheck?.detail).toContain(
-      "looprelay@1.0.0 is already published",
+      "looprelay@1.0.1 is already published",
     );
-    expect(versionCheck?.detail).toContain("do not retarget v1.0.0");
+    expect(versionCheck?.detail).toContain("do not retarget v1.0.1");
     expect(versionCheck?.detail).toContain("bump package.json");
     expect(versionCheck?.detail).toContain("src/shared/version.ts");
     expect(parsed.next_action).toContain("Bump package.json");

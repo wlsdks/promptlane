@@ -2,7 +2,7 @@
 
 Date: 2026-05-01
 
-Status: 1.0.0 stable release candidate
+Status: 1.0.1 stable release candidate
 
 Related docs:
 

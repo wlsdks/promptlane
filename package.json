@@ -1,6 +1,6 @@
 {
   "name": "looprelay",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "LoopRelay local continuity and evidence layer for long-running coding-agent loops.",
   "type": "module",
   "license": "MIT",
