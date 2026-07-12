@@ -410,9 +410,9 @@ export const GET_LOOPRELAY_LOOP_STATUS_TOOL_DEFINITION: LoopRelayMcpToolDefiniti
 export const PREPARE_LOOP_BRIEF_TOOL_DEFINITION: LoopRelayMcpToolDefinition = {
   name: "prepare_loop_brief",
   description:
-    "Prepare a copy-ready continuation prompt from a local LoopRelay snapshot. Use this when Codex or Claude Code is resuming an agent loop, handing off work across sessions/worktrees, or needs the next prompt after `looprelay loop collect`. Omit filters for the latest snapshot, or pass worktree/session/branch filters to continue a selected loop. This is read-only and never auto-submits the prompt. It returns prompt ids and loop metadata only, never prompt bodies, raw paths, secrets, transcripts, or external LLM results.",
+    "Prepare a copy-ready continuation prompt from a local LoopRelay snapshot. Use this when Codex or Claude Code is resuming an agent loop, handing off work across sessions/worktrees, or needs the next prompt after `looprelay loop collect`. Omit filters for the latest snapshot, or pass worktree/session/branch filters to continue a selected loop. It records one raw-free generated receipt against the selected snapshot and never auto-submits the prompt. It returns prompt ids and loop metadata only, never prompt bodies, raw paths, secrets, transcripts, or external LLM results.",
   annotations: {
-    ...LOCAL_LOOP_READ_ONLY_TOOL_ANNOTATIONS,
+    ...LOCAL_LOOP_WRITE_TOOL_ANNOTATIONS,
     title: "Prepare LoopRelay continuation brief",
   },
   inputSchema: {
@@ -461,6 +461,42 @@ export const PREPARE_LOOP_BRIEF_TOOL_DEFINITION: LoopRelayMcpToolDefinition = {
         additionalProperties: false,
       },
       snapshot_id: { type: "string" },
+      receipt: {
+        type: "object",
+        required: [
+          "id",
+          "snapshot_id",
+          "policy_version",
+          "created_at",
+          "status",
+        ],
+        properties: {
+          id: { type: "string" },
+          snapshot_id: { type: "string" },
+          policy_version: { type: "string" },
+          created_at: { type: "string" },
+          status: { const: "generated" },
+        },
+      },
+      recovery: {
+        type: "object",
+        required: [
+          "policy_version",
+          "authority",
+          "selected_target",
+          "outcome_status",
+          "evidence_count",
+          "compact_boundary_after_snapshot",
+        ],
+        properties: {
+          policy_version: { type: "string" },
+          authority: { enum: ["explicit_checkpoint", "snapshot_metadata"] },
+          selected_target: { type: "object" },
+          outcome_status: { type: "string" },
+          evidence_count: { type: "integer", minimum: 0 },
+          compact_boundary_after_snapshot: { type: "boolean" },
+        },
+      },
       title: { type: "string" },
       prompt: { type: "string" },
       next_action: { type: "string" },
@@ -481,6 +517,8 @@ export const PREPARE_LOOP_BRIEF_TOOL_DEFINITION: LoopRelayMcpToolDefinition = {
         required: [
           "source",
           "snapshot_id",
+          "receipt",
+          "recovery",
           "title",
           "prompt",
           "next_action",

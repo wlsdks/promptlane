@@ -10,6 +10,7 @@ import type { LoopSnapshot } from "../loop/types.js";
 import type { AgentRun } from "../storage/agent-runs.js";
 import { createServer } from "./create-server.js";
 import type { CompactBoundary } from "../storage/compact-boundaries.js";
+import type { ContinuationReceipt } from "../storage/continuation-receipts.js";
 import type { LoopMergeDecision } from "../storage/loop-decisions.js";
 import type { LoopMemory } from "../storage/loop-memories.js";
 import type {
@@ -1011,6 +1012,57 @@ describe("createServer P2 ingest boundary", () => {
     expect(serialized).not.toContain("Make this better");
     expect(serialized).not.toContain("Compact summary with sk-proj-secret");
     expect(serialized).not.toContain("/Users/example");
+  });
+
+  it("creates and updates a selected continuation receipt without global fallback", async () => {
+    const storage = createMemoryStorage();
+    storage.loopSnapshots.push(
+      loopSnapshot({
+        id: "loop_selected_receipt",
+        worktree_label: "selected-worktree",
+      }),
+      loopSnapshot({
+        id: "loop_newer_receipt",
+        created_at: "2026-07-04T02:00:00.000Z",
+        worktree_label: "newer-worktree",
+      }),
+    );
+    const server = createTestServer({ storage });
+
+    const created = await server.inject({
+      method: "POST",
+      url: "/api/v1/loops/brief",
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+      payload: { worktree: "selected-worktree" },
+    });
+    expect(created.statusCode).toBe(200);
+    const receipt = created.json<{ data: { receipt: ContinuationReceipt } }>()
+      .data.receipt;
+    expect(receipt).toMatchObject({
+      snapshot_id: "loop_selected_receipt",
+      status: "generated",
+    });
+
+    const copied = await server.inject({
+      method: "PATCH",
+      url: `/api/v1/loops/receipts/${receipt.id}`,
+      headers: {
+        authorization: "Bearer app-token",
+        host: "127.0.0.1:17373",
+      },
+      payload: { status: "copied" },
+    });
+    expect(copied.statusCode).toBe(200);
+    expect(copied.json()).toMatchObject({
+      data: {
+        id: receipt.id,
+        snapshot_id: "loop_selected_receipt",
+        status: "copied",
+      },
+    });
   });
 
   it("guides web loop brief users to capture the first loop before retrying", async () => {
@@ -3376,6 +3428,7 @@ function createMemoryStorage() {
     created_at: string;
   }> = [];
   const agentRuns: AgentRun[] = [];
+  const continuationReceipts: ContinuationReceipt[] = [];
 
   return {
     events,
@@ -3386,6 +3439,7 @@ function createMemoryStorage() {
     loopMemories,
     loopMergeDecisions,
     agentRuns,
+    continuationReceipts,
     exportJobs,
     instructionReviews,
     policyForIngest: undefined as
@@ -3529,6 +3583,47 @@ function createMemoryStorage() {
       });
       agentRuns.push(run);
       return run;
+    },
+    recordContinuationReceipt(input: { snapshot_id: string }) {
+      const snapshot = loopSnapshots.find(
+        (item) => item.id === input.snapshot_id,
+      );
+      if (!snapshot)
+        throw new Error("Continuation receipt snapshot not found.");
+      const receipt: ContinuationReceipt = {
+        id: `brief_memory_${continuationReceipts.length + 1}`,
+        snapshot_id: snapshot.id,
+        project_id: snapshot.project_id,
+        policy_version: "recovery-packet-v2",
+        created_at: "2026-07-12T00:00:00.000Z",
+        status: "generated",
+        privacy: {
+          local_only: true,
+          stores_prompt_bodies: false,
+          stores_raw_paths: false,
+          stores_transcripts: false,
+        },
+      };
+      continuationReceipts.unshift(receipt);
+      return receipt;
+    },
+    updateContinuationReceipt(
+      id: string,
+      input: { status: ContinuationReceipt["status"] },
+    ) {
+      const index = continuationReceipts.findIndex((item) => item.id === id);
+      if (index < 0) return undefined;
+      continuationReceipts[index] = {
+        ...continuationReceipts[index]!,
+        status: input.status,
+        ...(input.status === "copied"
+          ? { copied_at: "2026-07-12T00:00:01.000Z" }
+          : {}),
+      };
+      return continuationReceipts[index];
+    },
+    listContinuationReceipts() {
+      return continuationReceipts;
     },
     getLatestLoopSnapshot() {
       return loopSnapshots.at(0);

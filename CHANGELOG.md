@@ -18,6 +18,15 @@ The format follows a simple reverse-chronological release log.
 - Marked the 2026-05-02 feature audit as a historical snapshot rather than
   current release evidence.
 
+### Continuity and evidence
+
+- Added `recovery-packet-v2` metadata to continuation briefs and raw-free,
+  selected-snapshot continuation receipts across CLI, MCP, and explicit Web
+  copy flows.
+- Added `looprelay loop receipt` and the
+  `record_continuation_receipt` MCP tool for copy, delivery, followed, partial,
+  and ignored lineage without transcript or prompt-body capture.
+
 ## 1.0.0 - 2026-07-08
 
 This is the first stable public release. The release covers local capture, storage,

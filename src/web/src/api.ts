@@ -1,3 +1,11 @@
+import {
+  isGeneratedContinuationReceipt,
+  isLoopBriefRecovery,
+  type LoopBrief,
+} from "./loop-brief-contract.js";
+
+export type { LoopBrief } from "./loop-brief-contract.js";
+
 export type PromptSummary = {
   id: string;
   tool: string;
@@ -1463,24 +1471,14 @@ export type LoopWorktreeResponse = {
   };
 };
 
-export type LoopBrief = {
-  title: string;
-  prompt: string;
-  source_snapshot_id: string;
-  compact_boundary?: LoopSummary["compact_boundary"];
-  privacy: {
-    local_only: true;
-    returns_prompt_bodies: false;
-    returns_raw_paths: false;
-  };
-};
-
 function parseLoopBriefResponse(
   body: {
     data?: {
       title?: unknown;
       prompt?: unknown;
       source_snapshot_id?: unknown;
+      recovery?: unknown;
+      receipt?: unknown;
       compact_boundary?: unknown;
       privacy?: {
         local_only?: unknown;
@@ -1495,6 +1493,9 @@ function parseLoopBriefResponse(
     typeof body.data?.title !== "string" ||
     typeof body.data.prompt !== "string" ||
     typeof body.data.source_snapshot_id !== "string" ||
+    !isLoopBriefRecovery(body.data.recovery) ||
+    (body.data.receipt !== undefined &&
+      !isGeneratedContinuationReceipt(body.data.receipt)) ||
     (body.data.compact_boundary !== undefined &&
       !isLoopCompactBoundary(body.data.compact_boundary)) ||
     body.data.privacy?.local_only !== true ||
@@ -3498,12 +3499,15 @@ export async function listLoops(): Promise<LoopListResponse> {
 
 export async function getLoopBrief(id: string): Promise<LoopBrief> {
   await ensureSession();
-  const response = await fetch(
-    `/api/v1/loops/${encodeURIComponent(id)}/brief`,
-    {
-      credentials: "same-origin",
+  const response = await fetch("/api/v1/loops/brief", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "content-type": "application/json",
+      "x-csrf-token": csrfToken ?? "",
     },
-  );
+    body: JSON.stringify({ snapshot_id: id }),
+  });
 
   if (!response.ok) {
     await failApi(response, "Loop brief failed");
@@ -3521,11 +3525,18 @@ export async function getSelectedLoopBrief(options: {
   sessionId?: string;
 }): Promise<LoopBrief> {
   await ensureSession();
-  const params = new URLSearchParams({ worktree: options.worktree });
-  if (options.sessionId) params.set("session_id", options.sessionId);
-  if (options.branch) params.set("branch", options.branch);
-  const response = await fetch(`/api/v1/loops/brief?${params}`, {
+  const response = await fetch("/api/v1/loops/brief", {
+    method: "POST",
     credentials: "same-origin",
+    headers: {
+      "content-type": "application/json",
+      "x-csrf-token": csrfToken ?? "",
+    },
+    body: JSON.stringify({
+      worktree: options.worktree,
+      ...(options.sessionId ? { session_id: options.sessionId } : {}),
+      ...(options.branch ? { branch: options.branch } : {}),
+    }),
   });
 
   if (!response.ok) {
@@ -3536,6 +3547,26 @@ export async function getSelectedLoopBrief(options: {
     typeof parseLoopBriefResponse
   >[0];
   return parseLoopBriefResponse(body, "Selected loop brief failed");
+}
+
+export async function markContinuationReceipt(
+  id: string,
+  status: "copied" | "delivered" | "followed" | "partial" | "ignored",
+): Promise<void> {
+  await ensureSession();
+  const response = await fetch(
+    `/api/v1/loops/receipts/${encodeURIComponent(id)}`,
+    {
+      method: "PATCH",
+      credentials: "same-origin",
+      headers: {
+        "content-type": "application/json",
+        "x-csrf-token": csrfToken ?? "",
+      },
+      body: JSON.stringify({ status }),
+    },
+  );
+  if (!response.ok) await failApi(response, "Continuation receipt failed");
 }
 
 export async function getLoopWorktree(

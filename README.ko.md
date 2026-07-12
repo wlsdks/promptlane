@@ -18,17 +18,19 @@
 ![LoopRelay 미사용 대비 사용 조건 엔지니어링 결과](docs/assets/usefulness-results.svg)
 
 <!-- USEFULNESS_RESULTS_START -->
+
 현재 결과는 maintainer-run observational evidence이며 인과관계를 주장하지 않습니다. 30개 matched pair와 5개 작업 유형을 포함합니다. 사람 사용성 관찰은 0건이며 agent-native gate에는 포함하지 않습니다. Agent operator는 8건 관찰됐고, checksum-pinned clean install과 fresh MCP session을 분리 검증한 성공 run은 3/3건, client 다양성은 2/2, continuation brief 성공은 1/1건입니다.
 
-| 작업 유형 | 쌍 | Baseline 성공률 | LoopRelay 성공률 | 차이 | 보수적 95% 범위 | Input token 차이 | 판단 |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Ambiguity clarification | 6 | 83.3% | 50% | -33.3pp | -100..77.6pp | -8535.5 | Narrow |
-| Failure prevention | 6 | 0% | 100% | +100pp | -10.9..100pp | +1777.7 | Narrow |
-| Implementation continuation | 6 | 100% | 83.3% | -16.7pp | -100..94.2pp | +34913.2 | Narrow |
-| Release verification continuity | 6 | 100% | 100% | 0pp | -100..100pp | +42178.2 | Narrow |
-| Session recovery | 6 | 16.7% | 83.3% | +66.7pp | -44.2..100pp | -25189 | Retain |
+| 작업 유형                       |  쌍 | Baseline 성공률 | LoopRelay 성공률 |    차이 | 보수적 95% 범위 | Input token 차이 | 판단   |
+| ------------------------------- | --: | --------------: | ---------------: | ------: | --------------: | ---------------: | ------ |
+| Ambiguity clarification         |   6 |           83.3% |              50% | -33.3pp |    -100..77.6pp |          -8535.5 | Narrow |
+| Failure prevention              |   6 |              0% |             100% |  +100pp |    -10.9..100pp |          +1777.7 | Narrow |
+| Implementation continuation     |   6 |            100% |            83.3% | -16.7pp |    -100..94.2pp |         +34913.2 | Narrow |
+| Release verification continuity |   6 |            100% |             100% |     0pp |     -100..100pp |         +42178.2 | Narrow |
+| Session recovery                |   6 |           16.7% |            83.3% | +66.7pp |    -44.2..100pp |           -25189 | Retain |
 
 전체 성공률은 60%에서 83.3%로 변했고 actionability는 74%에서 89.7%로 변했습니다. 평균 input token 비용은 11.1% 변했습니다. Cached token과 TTFV의 조건별 측정 coverage는 각각 66.7%, 66.7%이며 누락값을 0으로 해석하지 않습니다. Matched pair에서 관찰된 blocker는 0건이며, remediation이 기록된 사례는 0건, 공개를 막는 미해결 사례는 0건입니다. Agent-native gate는 checksum-pinned clean install과 Codex/Claude Code의 fresh MCP 성공 run 3건, 서로 다른 client 2개, continuation brief 1건을 요구합니다. 목표 5개 작업 유형 모두 유형별 최소 5쌍을 충족했습니다. 다만 maintainer-run evidence이며 agent-native gate가 사람 사용성을 증명하지 않으므로 판단은 directional입니다. 일반 implementation continuation에서 회귀가 있으므로 LoopRelay를 모든 coding task에 기본 적용해서는 안 됩니다. 사람 사용성은 미측정이며 causal claim은 false입니다.
+
 <!-- USEFULNESS_RESULTS_END -->
 
 이 그래프는 수작업 마케팅 수치가 아니라 commit된 raw-free matched-pair
@@ -822,7 +824,7 @@ privacy/safety, 보고 규칙을 보는 deterministic local rubric입니다.
 looprelay mcp
 ```
 
-MCP server는 24개의 tool을 제공합니다.
+MCP server는 25개의 tool을 제공합니다.
 
 - `get_looprelay_status`: 로컬 archive가 초기화되었는지, prompt가 캡처되었는지, 다음에 어떤 MCP tool을 호출하면 좋은지 확인합니다.
 - `coach_prompt`: Claude Code/Codex 안에서 로컬 readiness, 최신 prompt 점수, gap 진단과 확인 질문, 누적 습관, 프로젝트 규칙, 다음 요청 가이드를 한 번에 받습니다.
@@ -831,6 +833,7 @@ MCP server는 24개의 tool을 제공합니다.
 - `apply_clarifications`: 사용자가 직접 답한 답변(각 항목은 `origin: "user"` 필수)을 받아 최종 승인용 draft를 합성합니다. agent가 자기 ask UI로 답을 모은 뒤 호출합니다.
 - `ask_clarifying_questions`: looprelay가 ask-then-apply 흐름 자체를 주도합니다. 클라이언트가 elicitation capability를 광고하면(Claude Code 2.1.76+) MCP `elicitation/create`로 직접 사용자에게 묻고 final draft를 합성하며, 미지원 / 거부 / 타임아웃 시 clarifying_questions metadata로 fallback합니다. rewrite를 자동 제출하지 않습니다. 비대화형 Claude Code print 실행(`claude -p`)에서는 MCP tool routing이 성공해도 사용자가 답하지 않으면 `interaction_status: declined`가 반환될 수 있습니다. 이 경우 실패로 보지 말고 반환된 `clarifying_questions`를 agent의 native ask UI로 다시 물은 뒤, 먼저 `apply_clarifications`로 최종 승인용 draft를 채팅에 보여주고, 사용자가 저장도 원할 때만 `record_clarifications`를 호출합니다.
 - `record_clarifications`: 사용자가 답한 verbatim 답변과 합성된 최종 draft를 prompt id에 묶어 로컬 archive(`prompt_improvement_drafts`)에 영구 저장합니다. 응답에는 metadata(`draft_id`, `answers_count`, `changed_sections` 등)만 들어가고 prompt body나 draft 본문은 echo하지 않습니다.
+- `record_continuation_receipt`: continuation brief의 고유 receipt가 복사·전달·사용·부분 사용·무시됐는지와 target/첫 행동/TTFV/friction을 transcript 없이 기록합니다.
 - `get_looprelay_loop_status`: 로컬 loop snapshot 존재 여부, 최신 loop metadata, compact-boundary 상태를 prompt body/raw path 없이 확인합니다.
 - `get_benchmark_candidates`: 최근 loop snapshot에서 body-free real benchmark readiness, 단계별 count, safe candidate id, 다음 evidence 행동을 확인합니다.
 - `get_paired_benchmark_candidates`: operator가 task 동등성을 검토하고 paired fixture를 만들기 전에 body-free baseline과 명시적으로 귀속된 LoopRelay 후보 그룹을 확인합니다. snapshot id와 outcome content를 반환하지 않고 인과성을 추정하지 않습니다.

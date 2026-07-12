@@ -33,6 +33,7 @@ import {
 } from "../../loop/snapshot-selection.js";
 import { createLoopRelayStatus } from "../../loop/status.js";
 import type { LoopSnapshotSource } from "../../loop/types.js";
+import { toGeneratedReceiptSummary } from "../../loop/continuation.js";
 import type { LoopMergeDecisionValue } from "../../storage/loop-decisions.js";
 import { createProjectKey } from "../../storage/project-id.js";
 import { createSqlitePromptStorage } from "../../storage/sqlite.js";
@@ -49,6 +50,7 @@ import {
   formatVerboseLoopStatus,
 } from "./loop-formatters.js";
 import { registerLoopScheduleCommand } from "./loop-schedule.js";
+import { registerLoopReceiptCommand } from "./loop-receipt.js";
 import { UserError } from "../user-error.js";
 
 type LoopCliOptions = {
@@ -165,6 +167,8 @@ export function registerLoopCommand(program: Command): void {
     .action((options: LoopCliOptions) => {
       console.log(loopBriefForCli(options));
     });
+
+  registerLoopReceiptCommand(loop);
 
   loop
     .command("outcome")
@@ -345,6 +349,9 @@ export function loopCheckpointForCli(options: LoopCliOptions = {}): string {
     }
     const brief = createLoopBrief({
       snapshot: recorded,
+      receipt: toGeneratedReceiptSummary(
+        storage.recordContinuationReceipt({ snapshot_id: recorded.id }),
+      ),
       approvedMemories: storage.listLoopMemories({
         projectId: recorded.project_id,
         limit: 3,
@@ -450,6 +457,9 @@ export function loopBriefForCli(options: LoopCliOptions = {}): string {
       snapshot,
       compactBoundary,
       approvedMemories,
+      receipt: toGeneratedReceiptSummary(
+        storage.recordContinuationReceipt({ snapshot_id: snapshot.id }),
+      ),
     });
     return options.json
       ? JSON.stringify(brief, null, 2)

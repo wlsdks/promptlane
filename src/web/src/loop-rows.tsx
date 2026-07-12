@@ -2,7 +2,7 @@ import { Copy, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 
 import type { LoopSummary, LoopWorktreeResponse } from "./api.js";
-import { getLoopBrief } from "./api.js";
+import { getLoopBrief, markContinuationReceipt } from "./api.js";
 import { copyTextToClipboard } from "./clipboard.js";
 import { formatDate } from "./formatters.js";
 
@@ -80,6 +80,9 @@ function LoopRow({ loop }: { loop: LoopSummary }) {
       const brief = await getLoopBrief(loop.id);
       const didCopy = await copyTextToClipboard(brief.prompt);
       if (!didCopy) return;
+      if (brief.receipt) {
+        await markContinuationReceipt(brief.receipt.id, "copied");
+      }
 
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2_500);

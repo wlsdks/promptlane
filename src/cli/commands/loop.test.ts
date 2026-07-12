@@ -21,6 +21,7 @@ import {
   loopOutcomeForCli,
   loopStatusForCli,
 } from "./loop.js";
+import { loopReceiptForCli } from "./loop-receipt.js";
 
 const tempDirs: string[] = [];
 
@@ -511,6 +512,54 @@ describe("loop CLI command", () => {
     expect(text).toContain("Run looprelay loop collect again");
     expect(text).not.toContain("Compact summary with sk-proj-secret");
     expect(text).not.toContain("/Users/example");
+  });
+
+  it("records continuation delivery and use against the generated receipt", async () => {
+    const dataDir = createTempDir();
+    await seedPrompts(dataDir);
+    loopCollectForCli({
+      dataDir,
+      cwdPrefix: "/Users/example/private-project",
+      cwd: "/Users/example/private-project",
+      worktree: "selected-worktree",
+    });
+    const brief = JSON.parse(
+      loopBriefForCli({
+        dataDir,
+        cwd: "/Users/example/private-project",
+        worktree: "selected-worktree",
+        json: true,
+      }),
+    ) as { receipt: { id: string; snapshot_id: string; status: string } };
+
+    expect(brief.receipt).toMatchObject({
+      snapshot_id: expect.stringMatching(/^loop_/),
+      status: "generated",
+    });
+    expect(
+      JSON.parse(
+        loopReceiptForCli({
+          dataDir,
+          receiptId: brief.receipt.id,
+          status: "followed",
+          targetCorrect: "yes",
+          firstActionCorrect: "yes",
+          firstValueSeconds: "12",
+          frictionScore: "0",
+          json: true,
+        }),
+      ),
+    ).toMatchObject({
+      recorded: true,
+      receipt: {
+        id: brief.receipt.id,
+        status: "followed",
+        target_correct: true,
+        first_action_correct: true,
+        first_value_seconds: 12,
+        friction_score: 0,
+      },
+    });
   });
 
   it("prints compact-aware loop status without prompt bodies or raw paths", async () => {

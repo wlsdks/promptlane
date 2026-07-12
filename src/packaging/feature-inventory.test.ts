@@ -92,7 +92,7 @@ describe("canonical feature inventory", () => {
   it("lists every CLI command path exposed by Commander", () => {
     const commandPaths = collectCommandPaths(createProgram());
 
-    expect(commandPaths).toHaveLength(68);
+    expect(commandPaths).toHaveLength(69);
     for (const commandPath of commandPaths) {
       expect(inventory, `missing CLI command: ${commandPath}`).toContain(
         `\`${commandPath}\``,
@@ -103,7 +103,7 @@ describe("canonical feature inventory", () => {
   it("lists every MCP tool exposed by the registry", () => {
     const toolNames = listLoopRelayMcpToolNames();
 
-    expect(toolNames).toHaveLength(24);
+    expect(toolNames).toHaveLength(25);
     for (const toolName of toolNames) {
       expect(inventory, `missing MCP tool: ${toolName}`).toContain(
         `\`${toolName}\``,
@@ -114,7 +114,7 @@ describe("canonical feature inventory", () => {
   it("lists every HTTP API, SPA, and asset route registered by the server", () => {
     const routes = collectHttpRoutes();
 
-    expect(routes).toHaveLength(53);
+    expect(routes).toHaveLength(55);
     for (const route of routes) {
       expect(inventory, `missing HTTP route: ${route}`).toContain(
         `\`${route}\``,
@@ -150,7 +150,7 @@ describe("canonical feature inventory", () => {
   it("lists every logical SQLite table in a freshly initialized schema", () => {
     const tableNames = collectLogicalTableNames();
 
-    expect(tableNames).toHaveLength(29);
+    expect(tableNames).toHaveLength(30);
     for (const tableName of tableNames) {
       expect(inventory, `missing logical table: ${tableName}`).toContain(
         `\`${tableName}\``,

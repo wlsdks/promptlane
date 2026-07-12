@@ -24,6 +24,22 @@ describe("createLoopBrief", () => {
     });
 
     expect(brief.prompt).toContain("## Selected Continuation Contract");
+    expect(brief.prompt).toContain("## Recovery Packet");
+    expect(brief.prompt).toContain("policy: recovery-packet-v2");
+    expect(brief.recovery).toEqual({
+      policy_version: "recovery-packet-v2",
+      authority: "explicit_checkpoint",
+      selected_target: {
+        project: "private-project",
+        tool: "codex",
+        session: "session-a",
+        branch: "codex/agent-loop-memory-design",
+        worktree: "worktree-agent-loop",
+      },
+      outcome_status: "in_progress",
+      evidence_count: 1,
+      compact_boundary_after_snapshot: false,
+    });
     expect(brief.prompt).toContain("## Agent Strategy (advisory)");
     expect(brief.prompt).toContain("authority: explicit local checkpoint");
     expect(brief.prompt).toContain(

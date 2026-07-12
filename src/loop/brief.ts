@@ -1,6 +1,10 @@
 import type { LoopSnapshot } from "./types.js";
 import { recommendAgentStrategy } from "../agent-guide/recommendation.js";
 import { decideResumeIntervention } from "./intervention-policy.js";
+import {
+  CONTINUATION_POLICY_VERSION,
+  type ContinuationReceiptSummary,
+} from "./continuation.js";
 
 export type LoopBriefCompactBoundary = {
   id: string;
@@ -16,6 +20,21 @@ export type LoopBrief = {
   title: string;
   prompt: string;
   source_snapshot_id: string;
+  recovery: {
+    policy_version: string;
+    authority: "explicit_checkpoint" | "snapshot_metadata";
+    selected_target: {
+      project: string;
+      tool: string;
+      session?: string;
+      branch?: string;
+      worktree?: string;
+    };
+    outcome_status: LoopSnapshot["outcome"]["status"];
+    evidence_count: number;
+    compact_boundary_after_snapshot: boolean;
+  };
+  receipt?: ContinuationReceiptSummary;
   compact_boundary?: LoopBriefCompactBoundary;
   privacy: {
     local_only: true;
@@ -34,6 +53,7 @@ export function createLoopBrief(input: {
   snapshot: LoopSnapshot;
   compactBoundary?: LoopBriefCompactBoundary;
   approvedMemories?: readonly LoopBriefApprovedMemory[];
+  receipt?: ContinuationReceiptSummary;
 }): LoopBrief {
   const snapshot = input.snapshot;
   const explicitCheckpoint =
@@ -71,9 +91,36 @@ export function createLoopBrief(input: {
   return {
     title: `Continue agent loop ${snapshot.id}`,
     source_snapshot_id: snapshot.id,
+    recovery: {
+      policy_version: CONTINUATION_POLICY_VERSION,
+      authority: explicitCheckpoint
+        ? "explicit_checkpoint"
+        : "snapshot_metadata",
+      selected_target: {
+        project: snapshot.cwd_label,
+        tool: snapshot.tool,
+        ...(snapshot.session_id ? { session: snapshot.session_id } : {}),
+        ...(snapshot.branch ? { branch: snapshot.branch } : {}),
+        ...(snapshot.worktree_label
+          ? { worktree: snapshot.worktree_label }
+          : {}),
+      },
+      outcome_status: snapshot.outcome.status,
+      evidence_count: snapshot.outcome.evidence_refs.filter(
+        (reference) => !looksUnsafe(reference),
+      ).length,
+      compact_boundary_after_snapshot: input.compactBoundary !== undefined,
+    },
+    ...(input.receipt ? { receipt: input.receipt } : {}),
     prompt: [
       "## Goal",
       "Continue the current coding-agent loop using the local LoopRelay snapshot.",
+      "",
+      "## Recovery Packet",
+      `policy: ${CONTINUATION_POLICY_VERSION}`,
+      `source snapshot: ${snapshot.id}`,
+      `authority: ${explicitCheckpoint ? "explicit local checkpoint" : "snapshot metadata"}`,
+      ...(input.receipt ? [`receipt: ${input.receipt.id}`] : []),
       "",
       ...(explicitCheckpoint
         ? [

@@ -14,6 +14,7 @@ import {
   getCoachFeedbackSummary,
   getHealth,
   getSelectedLoopBrief,
+  markContinuationReceipt,
   getLoopWorktree,
   getPrompt,
   getQualityDashboard,
@@ -408,6 +409,9 @@ export function App() {
         setError("Could not copy selected loop brief.");
         throw new Error("clipboard copy failed");
       }
+      if (brief.receipt) {
+        await markContinuationReceipt(brief.receipt.id, "copied");
+      }
     } catch {
       setError("Could not copy selected loop brief.");
       throw new Error("selected loop brief copy failed");
@@ -430,6 +434,9 @@ export function App() {
       if (!copied) {
         setError("Could not copy command center loop brief.");
         throw new Error("clipboard copy failed");
+      }
+      if (brief.receipt) {
+        await markContinuationReceipt(brief.receipt.id, "copied");
       }
     } catch {
       setError("Could not copy command center loop brief.");

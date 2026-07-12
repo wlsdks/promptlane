@@ -30,6 +30,7 @@ import {
 } from "../loop/status.js";
 import { createSqlitePromptStorage } from "../storage/sqlite.js";
 import { createProjectKey } from "../storage/project-id.js";
+import { toGeneratedReceiptSummary } from "../loop/continuation.js";
 import { MCP_FIRST_PROMPT_NEXT_STEP } from "./first-prompt-next-step.js";
 import type { ScorePromptToolOptions } from "./score-tool-types.js";
 import type {
@@ -53,6 +54,7 @@ import { storageUnavailableMessage } from "./storage-unavailable.js";
 const LOOP_TOOL_NAMES = [
   "get_looprelay_loop_status",
   "prepare_loop_brief",
+  "record_continuation_receipt",
   "record_loop_outcome",
   "propose_loop_memory_candidate",
   "record_loop_memory",
@@ -168,6 +170,9 @@ export function prepareLoopBriefTool(
       const brief = createLoopBrief({
         snapshot,
         compactBoundary,
+        receipt: toGeneratedReceiptSummary(
+          storage.recordContinuationReceipt({ snapshot_id: snapshot.id }),
+        ),
         approvedMemories: storage.listLoopMemories({
           projectId: snapshot.project_id,
           limit: 3,
@@ -175,6 +180,8 @@ export function prepareLoopBriefTool(
       });
       const baseResult = {
         snapshot_id: snapshot.id,
+        receipt: brief.receipt!,
+        recovery: brief.recovery,
         title: brief.title,
         prompt: brief.prompt,
         ...(brief.compact_boundary

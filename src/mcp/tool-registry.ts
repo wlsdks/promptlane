@@ -57,6 +57,11 @@ import {
   type RecordClarificationsToolArguments,
 } from "./record-clarifications-tool.js";
 import {
+  RECORD_CONTINUATION_RECEIPT_TOOL_DEFINITION,
+  recordContinuationReceiptTool,
+  type RecordContinuationReceiptToolArguments,
+} from "./continuation-receipt-tool.js";
+import {
   COACH_PROMPT_TOOL_DEFINITION,
   GET_LOOPRELAY_STATUS_TOOL_DEFINITION,
   IMPROVE_PROMPT_TOOL_DEFINITION,
@@ -151,6 +156,14 @@ export const LOOPRELAY_MCP_TOOL_REGISTRY: readonly RegisteredLoopRelayTool[] = [
     handler: (args, options) =>
       recordClarificationsTool(
         args as RecordClarificationsToolArguments,
+        options,
+      ),
+  },
+  {
+    definition: RECORD_CONTINUATION_RECEIPT_TOOL_DEFINITION,
+    handler: (args, options) =>
+      recordContinuationReceiptTool(
+        args as RecordContinuationReceiptToolArguments,
         options,
       ),
   },

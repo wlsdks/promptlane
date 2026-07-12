@@ -28,6 +28,11 @@ import type {
 } from "./coach-feedback.js";
 import type { JudgeScoreEntry, JudgeTool } from "./judge-score.js";
 import type { AgentRun, RecordAgentRunInput } from "./agent-runs.js";
+import type {
+  ContinuationReceipt,
+  RecordContinuationReceiptInput,
+  UpdateContinuationReceiptInput,
+} from "./continuation-receipts.js";
 
 export type {
   CoachFeedbackEntry,
@@ -195,6 +200,21 @@ export type AgentRunStoragePort = {
     taskType?: import("../agent-guide/recommendation.js").AgentGuideTaskType;
     limit?: number;
   }): AgentRun[];
+};
+
+export type ContinuationReceiptStoragePort = {
+  recordContinuationReceipt(
+    input: RecordContinuationReceiptInput,
+  ): ContinuationReceipt;
+  updateContinuationReceipt(
+    id: string,
+    input: UpdateContinuationReceiptInput,
+  ): ContinuationReceipt | undefined;
+  listContinuationReceipts(options?: {
+    snapshotId?: string;
+    projectId?: string;
+    limit?: number;
+  }): ContinuationReceipt[];
 };
 
 export type DeletePromptResult = {

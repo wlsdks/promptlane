@@ -746,6 +746,7 @@ describe("SQLite prompt storage", () => {
       { version: 18, name: "018_loop_memories" },
       { version: 19, name: "019_loop_merge_decisions" },
       { version: 20, name: "020_agent_runs" },
+      { version: 21, name: "021_continuation_receipts" },
     ]);
     const db = new Database(join(dataDir, "looprelay.sqlite"));
     try {

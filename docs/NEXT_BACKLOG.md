@@ -81,6 +81,28 @@ Candidate focused slices:
 - improve safe selection when multiple worktrees or sessions are active
 - sharpen question generation for missing scope, constraints, and acceptance criteria
 
+## Active Evidence-First Sequence
+
+1. **Recovery Packet v2 + Continuation Receipt — implemented 2026-07-12.**
+   Selected CLI, MCP, and explicit Web brief flows now issue a raw-free receipt
+   bound to the exact snapshot. Copy, delivery, followed, partial, and ignored
+   states can be recorded without transcript capture. Retain only if unseen
+   recovery keeps wrong-target at 0 and evidence attachment reaches at least
+   95% without raising mean friction above 0.3.
+2. **Typed Evidence + `loop close` — next.** Add compatible structured evidence
+   (`kind`, `result`, `observed_at`, `head_hash`, `verification`) and one
+   explicit closeout flow that records outcome, evidence, receipt use, and
+   optional Guide attribution. Critical false-ready must remain 0; median
+   closeout time must fall below 15 seconds without automatic outcome inference.
+3. **Action Inbox + Local Outcomes.** Aggregate existing evidence debt and
+   receipt/outcome coverage before adding new chart families. Keep bundled
+   product studies visually and semantically separate from operator-local data.
+4. **Confirmed failure episodes.** Replace exact prompt-gap counting with a
+   small operator-confirmed taxonomy, recurrence, intervention, and resolution.
+5. **Agent Guide calibration.** Do not rank or automate models until at least
+   20 raw-free outcomes across three task types include recommendation,
+   selection, rejection/switch reason, attempts, TTFV, and focused tests.
+
 Current evidence decisions (30-pair maintainer-run cohort):
 
 - `retain`: session recovery remains an opt-in continuity workflow.

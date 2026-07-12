@@ -1,5 +1,6 @@
 import type { LoopOutcomeStatus } from "../loop/types.js";
-import type { LoopBriefCompactBoundary } from "../loop/brief.js";
+import type { LoopBrief, LoopBriefCompactBoundary } from "../loop/brief.js";
+import type { ContinuationReceiptSummary } from "../loop/continuation.js";
 import type { LoopRelayStatus } from "../loop/status.js";
 import type {
   InstructionPatchApplyResult,
@@ -80,6 +81,8 @@ export type PrepareLoopBriefToolResult =
   | {
       source: "latest";
       snapshot_id: string;
+      receipt: ContinuationReceiptSummary;
+      recovery: LoopBrief["recovery"];
       title: string;
       prompt: string;
       compact_boundary?: LoopBriefCompactBoundary;
@@ -96,6 +99,8 @@ export type PrepareLoopBriefToolResult =
         branch?: string;
       };
       snapshot_id: string;
+      receipt: ContinuationReceiptSummary;
+      recovery: LoopBrief["recovery"];
       title: string;
       prompt: string;
       compact_boundary?: LoopBriefCompactBoundary;

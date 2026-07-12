@@ -25,17 +25,19 @@ opt-in, validation-only, dormant, and reserved product surface.
 ![LoopRelay baseline versus assisted engineering results](docs/assets/usefulness-results.svg)
 
 <!-- USEFULNESS_RESULTS_START -->
+
 Current results are maintainer-run observational evidence, not a causal claim. They include 30 matched pairs across 5 task types. Human usability has 0 observed flows and is not part of this agent-native gate. The operator cohort has 8 observed runs; 3/3 combine a checksum-pinned clean install with a successful fresh MCP session across 2/2 client families, including 1/1 continuation-brief runs.
 
-| Task type | Pairs | Baseline success | LoopRelay success | Delta | Conservative 95% bound | Input-token delta | Decision |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Ambiguity clarification | 6 | 83.3% | 50% | -33.3pp | -100..77.6pp | -8535.5 | Narrow |
-| Failure prevention | 6 | 0% | 100% | +100pp | -10.9..100pp | +1777.7 | Narrow |
-| Implementation continuation | 6 | 100% | 83.3% | -16.7pp | -100..94.2pp | +34913.2 | Narrow |
-| Release verification continuity | 6 | 100% | 100% | 0pp | -100..100pp | +42178.2 | Narrow |
-| Session recovery | 6 | 16.7% | 83.3% | +66.7pp | -44.2..100pp | -25189 | Retain |
+| Task type                       | Pairs | Baseline success | LoopRelay success |   Delta | Conservative 95% bound | Input-token delta | Decision |
+| ------------------------------- | ----: | ---------------: | ----------------: | ------: | ---------------------: | ----------------: | -------- |
+| Ambiguity clarification         |     6 |            83.3% |               50% | -33.3pp |           -100..77.6pp |           -8535.5 | Narrow   |
+| Failure prevention              |     6 |               0% |              100% |  +100pp |           -10.9..100pp |           +1777.7 | Narrow   |
+| Implementation continuation     |     6 |             100% |             83.3% | -16.7pp |           -100..94.2pp |          +34913.2 | Narrow   |
+| Release verification continuity |     6 |             100% |              100% |     0pp |            -100..100pp |          +42178.2 | Narrow   |
+| Session recovery                |     6 |            16.7% |             83.3% | +66.7pp |           -44.2..100pp |            -25189 | Retain   |
 
 Aggregate success moved from 60% to 83.3%, while actionability moved from 74% to 89.7%. Mean input-token cost changed by 11.1%. Cached-token and TTFV condition coverage are 66.7% and 66.7% respectively; missing values are not interpreted as zero. Matched pairs observed 0 blocker-bearing cases: 0 documented as remediated and 0 unresolved cases that block public readiness. The agent-native gate requires 3 qualified runs across 2 client families and 1 continuation brief. All 5 target task types meet the per-type minimum of 5 pairs. Decisions remain directional because this is maintainer-run evidence and the agent-native gate does not establish human usability. Because ordinary implementation continuation regressed, LoopRelay should not intervene by default in every coding task. Human usability remains unmeasured and the causal claim remains false.
+
 <!-- USEFULNESS_RESULTS_END -->
 
 This chart is generated from the committed raw-free matched-pair ledger, not
@@ -938,7 +940,7 @@ Codex, or any MCP client through a stdio MCP server:
 looprelay mcp
 ```
 
-The MCP server exposes 24 tools:
+The MCP server exposes 25 tools:
 
 - `get_looprelay_status`: check whether the local archive is initialized,
   whether prompts have been captured, and which MCP tool to call next.
@@ -979,6 +981,9 @@ The MCP server exposes 24 tools:
   (`prompt_improvement_drafts`). Returns metadata only (`draft_id`,
   `answers_count`, `changed_sections`, …) — the prompt body and the draft
   text are never echoed in the response. Local-only write tool.
+- `record_continuation_receipt`: record whether an exact continuation brief was
+  copied, delivered, followed, partially followed, or ignored, plus declared
+  target, first-action, TTFV, and friction metadata without transcript capture.
 - `get_looprelay_loop_status`: check whether local LoopRelay loop snapshots
   exist and return safe latest-loop metadata plus compact-boundary awareness
   when a compact happened after the latest snapshot.
@@ -994,7 +999,8 @@ The MCP server exposes 24 tools:
   `worktree`, `session_id`, and `branch` filters, without returning prompt
   bodies or raw paths. If the selected snapshot is older than a compact
   boundary, the brief says to refresh the loop snapshot but does not include
-  compact summaries or custom compact instructions.
+  compact summaries or custom compact instructions. Generated briefs return a
+  raw-free `recovery-packet-v2` receipt.
 - `record_loop_outcome`: store user-approved loop outcome metadata for a
   LoopRelay snapshot without storing prompt bodies or raw paths. Pass
   `used_improvement_prompt_ids` only for snapshot prompts whose LoopRelay

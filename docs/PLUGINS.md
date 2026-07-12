@@ -206,7 +206,7 @@ uses the exact CLI path from the current installation.
 looprelay mcp
 ```
 
-This server exposes 24 model-controlled tools:
+This server exposes 25 model-controlled tools:
 
 - `get_looprelay_status`
 - `coach_prompt`
@@ -215,6 +215,7 @@ This server exposes 24 model-controlled tools:
 - `apply_clarifications`
 - `ask_clarifying_questions`
 - `record_clarifications`
+- `record_continuation_receipt`
 - `get_looprelay_loop_status`
 - `get_benchmark_candidates`
 - `get_paired_benchmark_candidates`

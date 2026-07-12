@@ -33,6 +33,7 @@ import {
 } from "../../loop/snapshot-selection.js";
 import type {
   CompactBoundaryStoragePort,
+  ContinuationReceiptStoragePort,
   LoopMergeDecisionStoragePort,
   LoopMemoryStoragePort,
   LoopSnapshotStoragePort,
@@ -60,7 +61,8 @@ export type LoopRouteOptions = {
       CompactBoundaryStoragePort &
       LoopMemoryStoragePort &
       LoopMergeDecisionStoragePort &
-      PromptReadStoragePort
+      PromptReadStoragePort &
+      ContinuationReceiptStoragePort
   >;
 };
 
@@ -86,6 +88,9 @@ type LoopReadRouteStorage = Pick<LoopSnapshotStoragePort, "listLoopSnapshots"> &
   Pick<LoopMemoryStoragePort, "listLoopMemories"> &
   Pick<LoopMergeDecisionStoragePort, "listLoopMergeDecisions">;
 
+type LoopBriefRouteStorage = LoopReadRouteStorage &
+  Pick<ContinuationReceiptStoragePort, "recordContinuationReceipt">;
+
 const LoopMemoryApprovalBodySchema = z.object({
   approved_by: z.string().trim().min(1).max(80).optional(),
   snapshot_id: z.string().trim().min(1).max(120).optional(),
@@ -102,6 +107,13 @@ const LoopOutcomeBodySchema = z.object({
 });
 
 const LoopBriefSelectionQuerySchema = z.object({
+  worktree: z.string().trim().min(1).optional(),
+  session_id: z.string().trim().min(1).optional(),
+  branch: z.string().trim().min(1).optional(),
+});
+
+const LoopBriefCreateBodySchema = z.object({
+  snapshot_id: z.string().trim().min(1).max(120).optional(),
   worktree: z.string().trim().min(1).optional(),
   session_id: z.string().trim().min(1).optional(),
   branch: z.string().trim().min(1).optional(),
@@ -421,6 +433,112 @@ export function registerLoopRoutes(
     };
   });
 
+  server.post("/api/v1/loops/brief", async (request) => {
+    requireAppAccess(request, options.auth, { csrf: true });
+    const storage = requireLoopBriefStorage(options.storage, request.url);
+    const body = LoopBriefCreateBodySchema.parse(request.body ?? {});
+    const selection = {
+      worktree: body.worktree,
+      sessionId: body.session_id,
+      branch: body.branch,
+    };
+    if (body.snapshot_id && hasLoopSnapshotSelection(selection)) {
+      throw problem(
+        400,
+        "Bad Request",
+        "Use either snapshot_id or worktree/session/branch filters, not both.",
+        request.url,
+      );
+    }
+    const snapshots = storage.listLoopSnapshots({ limit: 100 }).items;
+    const snapshot = body.snapshot_id
+      ? snapshots.find((item) => item.id === body.snapshot_id)
+      : hasLoopSnapshotSelection(selection)
+        ? selectLoopSnapshot(snapshots, selection)
+        : snapshots.at(0);
+    if (!snapshot) {
+      throw problem(
+        404,
+        "Not Found",
+        hasLoopSnapshotSelection(selection)
+          ? selectedLoopSnapshotNotFoundMessage(selection)
+          : loopBriefNoSnapshotCliMessage(),
+        request.url,
+      );
+    }
+    const receipt = storage.recordContinuationReceipt({
+      snapshot_id: snapshot.id,
+    });
+    return {
+      data: createLoopBrief({
+        snapshot,
+        compactBoundary: latestCompactBoundaryAfterSnapshot(
+          snapshot,
+          storage.listCompactBoundaries({ limit: 100 }).items,
+        ),
+        approvedMemories: storage.listLoopMemories({
+          projectId: snapshot.project_id,
+          limit: 3,
+        }).items,
+        receipt: {
+          id: receipt.id,
+          snapshot_id: receipt.snapshot_id,
+          policy_version: receipt.policy_version,
+          created_at: receipt.created_at,
+          status: "generated",
+        },
+      }),
+    };
+  });
+
+  server.patch("/api/v1/loops/receipts/:id", async (request) => {
+    requireAppAccess(request, options.auth, { csrf: true });
+    const storage = requireStorageCapabilities(
+      options.storage,
+      ["updateContinuationReceipt"],
+      { label: "Continuation receipt storage", instance: request.url },
+    );
+    const params = request.params as { id: string };
+    const body = z
+      .object({
+        status: z.enum([
+          "copied",
+          "delivered",
+          "followed",
+          "partial",
+          "ignored",
+        ]),
+        target_correct: z.boolean().optional(),
+        first_action_correct: z.boolean().optional(),
+        deviation_reason: z.string().trim().max(500).optional(),
+        first_value_seconds: z.number().int().min(0).optional(),
+        friction_score: z.number().int().min(0).max(3).optional(),
+      })
+      .parse(request.body ?? {});
+    let receipt;
+    try {
+      receipt = storage.updateContinuationReceipt(params.id, body);
+    } catch (error) {
+      throw problem(
+        400,
+        "Bad Request",
+        error instanceof Error
+          ? error.message
+          : "Invalid continuation receipt.",
+        request.url,
+      );
+    }
+    if (!receipt) {
+      throw problem(
+        404,
+        "Not Found",
+        "Continuation receipt not found.",
+        request.url,
+      );
+    }
+    return { data: receipt };
+  });
+
   server.get("/api/v1/loops/instruction-patch", async (request) => {
     requireAppAccess(request, options.auth);
     const storage = requireLoopMemoryReadStorage(options.storage, request.url);
@@ -641,6 +759,24 @@ function requireLoopReadStorage(
       "listLoopMergeDecisions",
     ],
     { label: "Loop read storage", instance },
+  );
+}
+
+function requireLoopBriefStorage(
+  storage: LoopRouteOptions["storage"],
+  instance: string,
+): LoopBriefRouteStorage {
+  return requireStorageCapabilities(
+    storage,
+    [
+      "listLoopSnapshots",
+      "getPrompt",
+      "listCompactBoundaries",
+      "listLoopMemories",
+      "listLoopMergeDecisions",
+      "recordContinuationReceipt",
+    ],
+    { label: "Loop brief storage", instance },
   );
 }
 

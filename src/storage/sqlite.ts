@@ -39,6 +39,7 @@ import {
 import { getLoopRelayPaths, supportsPosixMode } from "./paths.js";
 import { buildPromptFilters } from "./sqlite-prompt-filters.js";
 import * as agentRuns from "./agent-runs.js";
+import * as continuationReceipts from "./continuation-receipts.js";
 import {
   markPromptImprovementDraftCopied,
   readPromptImprovementDrafts,
@@ -154,6 +155,7 @@ export function createSqlitePromptStorage(
   db.pragma("foreign_keys = ON");
   applyMigrations(db);
   restrictDatabaseFileMode(paths.databasePath);
+  const now = () => options.now?.() ?? new Date();
 
   return {
     async storePrompt(input) {
@@ -202,6 +204,12 @@ export function createSqlitePromptStorage(
     recordAgentRun: (input) =>
       agentRuns.recordAgentRun(db, input, options.now?.() ?? new Date()),
     listAgentRuns: (input) => agentRuns.listAgentRuns(db, input),
+    recordContinuationReceipt: (input) =>
+      continuationReceipts.recordContinuationReceipt(db, input, now()),
+    updateContinuationReceipt: (id, input) =>
+      continuationReceipts.updateContinuationReceipt(db, id, input, now()),
+    listContinuationReceipts: (input = {}) =>
+      continuationReceipts.listContinuationReceipts(db, input),
     listPrompts(options) {
       return listPrompts(db, options);
     },

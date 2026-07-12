@@ -1,7 +1,7 @@
 # LoopRelay Feature Inventory
 
 Status: canonical product capability inventory  
-Reviewed against: `ab0fdf09` (`codex/adaptive-model-guide`)  
+Reviewed against: `36511155` plus the continuation-receipt working slice
 Last reviewed: 2026-07-12
 
 This is the source of truth for what LoopRelay currently does. It separates
@@ -11,13 +11,13 @@ does not by itself make a feature active.
 
 ## Status legend
 
-| Status | Meaning |
-| --- | --- |
-| **Active** | Available through a supported CLI, MCP, hook, or web flow. |
-| **Opt-in** | Implemented, but disabled until the operator explicitly enables or invokes it. |
-| **Validation** | Used to measure LoopRelay itself; not a normal product workflow. |
-| **Dormant** | Kept working but intentionally not developed or promoted in the current solo phase. |
-| **Reserved** | Schema, directory, or policy surface exists without an active execution path. |
+| Status         | Meaning                                                                             |
+| -------------- | ----------------------------------------------------------------------------------- |
+| **Active**     | Available through a supported CLI, MCP, hook, or web flow.                          |
+| **Opt-in**     | Implemented, but disabled until the operator explicitly enables or invokes it.      |
+| **Validation** | Used to measure LoopRelay itself; not a normal product workflow.                    |
+| **Dormant**    | Kept working but intentionally not developed or promoted in the current solo phase. |
+| **Reserved**   | Schema, directory, or policy surface exists without an active execution path.       |
 
 ## Product boundary
 
@@ -40,20 +40,21 @@ cloud account/synchronization service.
 
 ## Capability map
 
-| Area | Status | What ships |
-| --- | --- | --- |
-| Agent setup and readiness | Active | Guided setup, doctor, hook/MCP/service checks, recent-ingest readiness |
-| Prompt capture and privacy | Active | Codex/Claude Code ingest, redaction, exclusions, deduplication |
-| Long-loop continuity | Active | Snapshot collection, checkpoint, compact boundary, selected-loop brief |
-| Outcome evidence | Active | Passed/failed/blocked/unknown outcome and evidence-reference capture |
-| Memory and instructions | Active, approval-gated | Candidate proposal, approval, patch proposal, explicit apply |
-| Adaptive Agent Guide | Active, non-binding | Role/model guidance, switch condition, selected-loop run capture |
-| Prompt archive and coaching | Active | Search, score, improve, clarify, bookmark, reuse and pattern analysis |
-| Admin workspace | Active | Overview, Loops, Evidence, Insights, Archive, Projects, Integrations, Settings |
-| Automatic judging | Opt-in | Local Claude/Codex subprocess judging, disabled by default |
-| Export and import | Dormant | Implemented and maintained, not part of the current core workflow |
-| Effectiveness studies | Validation | Matched pairs, clean-install smoke, operator runs, generated reports |
-| Quarantine and spool | Reserved | Owner-only empty directories; no active writer or recovery queue |
+| Area                        | Status                 | What ships                                                                     |
+| --------------------------- | ---------------------- | ------------------------------------------------------------------------------ |
+| Agent setup and readiness   | Active                 | Guided setup, doctor, hook/MCP/service checks, recent-ingest readiness         |
+| Prompt capture and privacy  | Active                 | Codex/Claude Code ingest, redaction, exclusions, deduplication                 |
+| Long-loop continuity        | Active                 | Snapshot collection, checkpoint, compact boundary, selected-loop brief         |
+| Continuation receipts       | Active                 | Brief generation, copy/delivery/use lineage, raw-free recovery outcome         |
+| Outcome evidence            | Active                 | Passed/failed/blocked/unknown outcome and evidence-reference capture           |
+| Memory and instructions     | Active, approval-gated | Candidate proposal, approval, patch proposal, explicit apply                   |
+| Adaptive Agent Guide        | Active, non-binding    | Role/model guidance, switch condition, selected-loop run capture               |
+| Prompt archive and coaching | Active                 | Search, score, improve, clarify, bookmark, reuse and pattern analysis          |
+| Admin workspace             | Active                 | Overview, Loops, Evidence, Insights, Archive, Projects, Integrations, Settings |
+| Automatic judging           | Opt-in                 | Local Claude/Codex subprocess judging, disabled by default                     |
+| Export and import           | Dormant                | Implemented and maintained, not part of the current core workflow              |
+| Effectiveness studies       | Validation             | Matched pairs, clean-install smoke, operator runs, generated reports           |
+| Quarantine and spool        | Reserved               | Owner-only empty directories; no active writer or recovery queue               |
 
 ## 1. Installation, process, and client integration
 
@@ -131,13 +132,14 @@ cloud account/synchronization service.
 
 ### Logical SQLite tables
 
-The initialized schema contains 29 logical tables. SQLite's five internal FTS
+The initialized schema contains 30 logical tables. SQLite's five internal FTS
 support tables are implementation details and are not counted separately.
 
 - `agent_prompt_judgments`
 - `agent_runs`
 - `coach_feedback`
 - `compact_boundaries`
+- `continuation_receipts`
 - `export_jobs`
 - `import_errors`
 - `import_jobs`
@@ -216,6 +218,11 @@ support tables are implementation details and are not counted separately.
 - Show current loop status and worktree drill-down.
 - Record an explicit checkpoint before handoff or compaction.
 - Generate an evidence-backed continuation brief by snapshot ID or selection.
+- Attach a `recovery-packet-v2` contract and generated receipt to CLI, MCP, and
+  explicit Web copy flows.
+- Record copied, delivered, followed, partial, or ignored receipt state without
+  transcript capture, including declared target/first-action correctness, TTFV,
+  friction, and a raw-free deviation reason.
 - Copy an exact next-session continuation command/brief from the web workspace.
 - Detect stale or unsafe continuation evidence and surface it rather than
   presenting uncertain state as ready.
@@ -348,7 +355,7 @@ to the archive view; they are not separate active product pages.
 
 ## 11. Complete CLI command tree
 
-The current Commander tree contains 68 command paths. Parent commands are
+The current Commander tree contains 69 command paths. Parent commands are
 listed because they provide their own help and, in some cases, behavior.
 
 ### Setup, runtime, and integrations
@@ -385,6 +392,7 @@ listed because they provide their own help and, in some cases, behavior.
 - `loop collect`
 - `loop checkpoint`
 - `loop brief`
+- `loop receipt`
 - `loop outcome`
 - `loop memory-candidate`
 - `loop memory-approve`
@@ -433,7 +441,7 @@ listed because they provide their own help and, in some cases, behavior.
 
 ## 12. Complete MCP tool inventory
 
-The MCP server exposes 24 tools. Tool names are a compatibility surface.
+The MCP server exposes 25 tools. Tool names are a compatibility surface.
 
 ### Readiness, coaching, and clarification
 
@@ -449,6 +457,7 @@ The MCP server exposes 24 tools. Tool names are a compatibility surface.
 
 - `get_looprelay_loop_status`
 - `prepare_loop_brief`
+- `record_continuation_receipt`
 - `record_loop_outcome`
 - `propose_loop_memory_candidate`
 - `record_loop_memory`
@@ -479,7 +488,7 @@ The MCP server exposes 24 tools. Tool names are a compatibility surface.
 These are authenticated local implementation routes, not a hosted public API.
 Browser mutation routes require application authentication and CSRF; ingest
 mutations use the separate ingest bearer token.
-The route source contains 37 product API routes and 16 static delivery routes.
+The route source contains 39 product API routes and 16 static delivery routes.
 
 ### Runtime and ingest
 
@@ -514,7 +523,9 @@ The route source contains 37 product API routes and 16 static delivery routes.
 - `GET /api/v1/loops`
 - `GET /api/v1/loops/worktrees/:worktree`
 - `GET /api/v1/loops/brief`
+- `POST /api/v1/loops/brief`
 - `GET /api/v1/loops/:id/brief`
+- `PATCH /api/v1/loops/receipts/:id`
 - `POST /api/v1/loops/:id/outcome`
 - `POST /api/v1/loops/memory/approve`
 - `GET /api/v1/loops/instruction-patch`

@@ -140,6 +140,9 @@ Current known large modules:
   orchestrator plus the in-file `apply*Migration` helpers. Per-domain
   migrations (`agent-judgments.ts`, `coach-feedback.ts`, `judge-score.ts`)
   keep their migrations next to their domain code and are imported here.
+- `src/storage/continuation-receipts.ts`: selected-snapshot continuation
+  lineage, status transitions, privacy validation, and its colocated migration.
+  Receipt payloads remain raw-free and never store prompt or transcript text.
 - `src/storage/sqlite-rows.ts`: SQLite result-row contracts only. Do not add
   queries or mappers here.
 - `src/storage/sqlite-json.ts`: defensive JSON decoding for SQLite JSON
@@ -176,6 +179,9 @@ Current known large modules:
   orchestration. Its user-visible terminal rendering lives in
   `src/cli/commands/loop-formatters.ts`; keep new text-only formatting there
   so storage selection and CLI wiring remain independently reviewable.
+- `src/cli/commands/loop-receipt.ts`: continuation receipt registration,
+  option parsing, and raw-free status recording. Keep this out of the already
+  broad loop command orchestrator.
 
 ### Shared helpers
 
