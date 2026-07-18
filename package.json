@@ -174,7 +174,7 @@
     "@vitejs/plugin-react": "^6.0.3",
     "esbuild": "0.28.1",
     "lucide-react": "^1.14.0",
-    "playwright": "^1.59.1",
+    "playwright": "^1.61.1",
     "prettier": "^3.5.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
